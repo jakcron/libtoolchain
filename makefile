@@ -4,7 +4,7 @@ PROGRAM_DIR = $(PROJECT_DIR)/tests
 BIN_DIR = $(PROJECT_DIR)/bin
 
 LIBS = libtoolchain
-PROGS = 
+PROGS = SharedPtr-test
 
 main: build
 
