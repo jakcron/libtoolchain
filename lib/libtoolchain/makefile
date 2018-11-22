@@ -1,5 +1,5 @@
 # Sources
-SRC_DIR = source source/unicode
+SRC_DIR = source source/unicode source/fs
 OBJS = $(foreach dir,$(SRC_DIR),$(subst .cpp,.o,$(wildcard $(dir)/*.cpp))) $(foreach dir,$(SRC_DIR),$(subst .c,.o,$(wildcard $(dir)/*.c)))
 
 # External dependencies
