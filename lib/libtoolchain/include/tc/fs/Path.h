@@ -56,7 +56,7 @@ namespace filesystem
 		void operator=(const Path& other);
 
 		/// Addition operator
-		Path operator+(const Path& other);
+		Path operator+(const Path& other) const;
 
 		/// Append operator
 		void operator+=(const Path& other);

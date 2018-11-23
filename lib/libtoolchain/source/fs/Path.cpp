@@ -41,7 +41,7 @@ void tc::filesystem::Path::operator=(const Path& other)
 	mUnicodePath = other.mUnicodePath;
 }
 
-tc::filesystem::Path tc::filesystem::Path::operator+(const Path& other)
+tc::filesystem::Path tc::filesystem::Path::operator+(const Path& other) const
 {
 	Path new_path = *this;
 	new_path.appendPath(other.getPathElementList());
