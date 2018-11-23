@@ -6,8 +6,11 @@
  * \brief Represents a unicode path for a filesystem
  *
  * This stores a path as a vector of path elements.
- * Constructors exist for string, u16string and u32string which transcode and split the string.
+ * Constructors exist for std::string, std::u16string and std::u32string which transcode and split the string on the path delimeter character ('/' or '\').
  * 
+ * Due to differences in FileSystem character restrictions, no filtering is done by this class.
+ * 
+ * However when using the constructor for std::[u16|u32]string, the path delimeter character ('/' or '\') is detected automatically, and there cannot be mix of both backward and forward slashes.
  * 
  * \author Jack (jakcron)
  * \version 0.1

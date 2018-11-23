@@ -6,13 +6,14 @@
  * \brief An interface for implementing a basic FileSystem handler.
  *
  * Defines expected functionality including:
- * - File access (open,remove)
+ * - File access (open,delete)
  * - Directory travesal (get current directory, change current directory)
  * - Directory management (create,remove)
  * - Directory listing
  * 
+ * IFileSystem uses the tc::filesystem::Path class to represent a path, not as a literal string.
+ * It's up to the implementation of IFileSystem to validate and process the tc::filesystem::Path objects.
  * 
- * \note All strings are UTF-8
  * \author Jack (jakcron)
  * \version 0.1
  * \date 2018/11/10
