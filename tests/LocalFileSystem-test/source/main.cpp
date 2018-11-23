@@ -154,7 +154,6 @@ void testNotPresentFileReadOnly()
 	catch (const tc::Exception& e) 
 	{
 		std::cout << "[LocalFileSystem-test] testNotPresentFileReadOnly() : PASS (" << e.error() << ")" << std::endl;
-		return;
 	}
 }
 
@@ -171,7 +170,6 @@ void testNotPresentFileEdit()
 	catch (const tc::Exception& e) 
 	{
 		std::cout << "[LocalFileSystem-test] testNotPresentFileEdit() : PASS (" << e.error() << ")" << std::endl;
-		return;
 	}
 }
 
