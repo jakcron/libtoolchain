@@ -26,7 +26,6 @@ tc::filesystem::LocalFile::~LocalFile()
 	CloseHandle(mFileHandle);
 #else
 	close(mFileHandle);
-	//fclose(mFileHandle);
 #endif
 }
 
@@ -179,7 +178,6 @@ void tc::filesystem::LocalFile::read(byte_t* data, size_t len)
 		);
 	}
 #else
-	//fread(data, len, 1, mFileHandle);
 	if (::read(mFileHandle, data, len) == -1)
 	{
 		throw tc::Exception(kClassName, "Failed to read file (" + std::string(strerror(errno)) + ")");
@@ -231,7 +229,6 @@ void tc::filesystem::LocalFile::write(const byte_t* data, size_t len)
 		);
 	}
 #else
-	//fwrite(data, len, 1, mFileHandle);
 	if (::write(mFileHandle, data, len) == -1)
 	{
 		throw tc::Exception(kClassName, "Failed to write file (" + std::string(strerror(errno)) + ")");
