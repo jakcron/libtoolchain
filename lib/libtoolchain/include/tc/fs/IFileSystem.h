@@ -7,7 +7,7 @@
  *
  * Defines expected functionality including:
  * - File access (open,delete)
- * - Directory travesal (get current directory, change current directory)
+ * - Directory traversal (get current directory, change current directory)
  * - Directory management (create,remove)
  * - Directory listing
  * 
