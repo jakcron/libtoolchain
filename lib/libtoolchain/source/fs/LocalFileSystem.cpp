@@ -191,8 +191,7 @@ void tc::filesystem::LocalFileSystem::getDirectoryInfo(const tc::filesystem::Pat
 	child_dir_name_list.clear();
 	child_file_name_list.clear();
 	
-	// since errno can be set by external sources it will be cleared, since the conditions for errno being set aren't specific to failure
-
+	// since errno can be set by external sources it will be cleared, since the conditions for checking errno being set aren't specific to failure
 	errno = 0;
 	for (struct dirent *ep = readdir(dp); ep != nullptr && errno == 0; ep = readdir(dp))
 	{
