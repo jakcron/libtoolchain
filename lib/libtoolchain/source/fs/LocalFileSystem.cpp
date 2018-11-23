@@ -52,8 +52,6 @@ tc::filesystem::IFile* tc::filesystem::LocalFileSystem::openFile(const tc::files
 	std::string unicode_path;
 	pathToUnixUtf8(path, unicode_path);
 
-	std::cout << "path: " << unicode_path << std::endl;
-
 	fs_handle_t file_handle = open(unicode_path.c_str(), getOpenModeFlag(mode), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
 	if (file_handle == -1)
