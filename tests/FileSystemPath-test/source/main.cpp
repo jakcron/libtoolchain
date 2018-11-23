@@ -4,14 +4,6 @@
 #include <iostream>
 #include <sstream>
 
-static std::string kDirPath = "./testdir";
-static std::string kUtf8DirPath = "./ЀЁЂЃЄЅテスト";
-static std::string kAsciiFilePath = "LocalFileTest.bin";
-static std::string kUtf8TestPath = "ЀЁЂЃЄЅ-מבחן-тест-テスト.bin";
-static std::string kNotExistFilePath = "ThisDoesNotExist.bin";
-static std::string kTestPhrase = "Hello world!\n";
-static std::string kRandomString = "uUkMx4MYhJdwUnr38Jk7nZvXQnW0IhGNQqjMRyKoRuxXwmxBS3p2Alzrv7BijPN2LDI1QGkEfQ3vrpoOGwKciwidTyuOPRRg9sj8QggPk7QSvJrrWKN3PfzN7JvEwax3vX3QaHIoX0afJtUiulzVf9SMlotimwrdOHbeAhLzQUSCAz6moIHhZd6DO0hFxjCxGpHUnDKE";
-
 void pathToUnixUtf8(const tc::filesystem::Path& path, std::string& out)
 {
 	std::stringstream out_stream;
