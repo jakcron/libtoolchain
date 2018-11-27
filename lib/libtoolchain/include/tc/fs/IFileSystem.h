@@ -63,9 +63,9 @@ namespace filesystem
 		virtual void deleteFile(const tc::filesystem::Path& path) = 0;
 
 		/** \brief Get the full path of the current directory
-		 *  \return const tc::filesystem::Path&
+		 *  \param path tc::filesystem::Path& Path object to be populated with current directory path
 		 */
-		virtual const tc::filesystem::Path& getCurrentDirectory() = 0;
+		virtual void getCurrentDirectory(tc::filesystem::Path& path) = 0;
 
 		/** \brief Change the current directory
 		 *  \param path const tc::filesystem::Path& Path to directory

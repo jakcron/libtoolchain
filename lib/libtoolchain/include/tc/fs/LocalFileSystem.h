@@ -67,9 +67,9 @@ namespace filesystem
 		void deleteFile(const tc::filesystem::Path& path);
 
 		/** \brief Get the full path of the current directory
-		 *  \return const tc::filesystem::Path&
+		 *  \param path tc::filesystem::Path& Path object to be populated with current directory path
 		 */
-		const tc::filesystem::Path& getCurrentDirectory();
+		void getCurrentDirectory(tc::filesystem::Path& path);
 
 		/** \brief Change the current directory
 		 *  \param path const tc::filesystem::Path& Path to directory
@@ -102,9 +102,6 @@ namespace filesystem
 
 	private:
 		const std::string kClassName = "tc::filesystem::LocalFileSystem";
-
-		tc::filesystem::Path mCurrentDirectory;
-
 #ifdef _WIN32
 		DWORD getOpenModeFlag(FileAccessMode mode) const;
 		DWORD getShareModeFlag(FileAccessMode mode) const;

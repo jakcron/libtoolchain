@@ -18,11 +18,8 @@
 
 #include <iostream>
 
-tc::filesystem::LocalFileSystem::LocalFileSystem() :
-	mCurrentDirectory(Path("."))
+tc::filesystem::LocalFileSystem::LocalFileSystem()
 {
-
-	setCurrentDirectory(mCurrentDirectory);
 }
 
 tc::filesystem::LocalFileSystem::~LocalFileSystem()
@@ -99,7 +96,7 @@ void tc::filesystem::LocalFileSystem::deleteFile(const tc::filesystem::Path& pat
 #endif
 }
 
-const tc::filesystem::Path& tc::filesystem::LocalFileSystem::getCurrentDirectory()
+void tc::filesystem::LocalFileSystem::getCurrentDirectory(tc::filesystem::Path& path)
 {
 #ifdef _WIN32
 
@@ -117,9 +114,7 @@ const tc::filesystem::Path& tc::filesystem::LocalFileSystem::getCurrentDirectory
 		throw tc::Exception(kClassName, "Failed to get current working directory (getcwd)" + std::string(strerror(error_no)) + ")");
 	}
 
-	mCurrentDirectory = Path(*raw_current_working_directory);
-
-	return mCurrentDirectory;
+	path = Path(*raw_current_working_directory);
 #endif
 }
 
@@ -247,16 +242,17 @@ void tc::filesystem::LocalFileSystem::getDirectoryInfo(const tc::filesystem::Pat
 	closedir(dp);
 
 	// save current dir for later
-	Path current_dir = getCurrentDirectory();
+	Path prev_current_dir;
+	getCurrentDirectory(prev_current_dir);
 
 	// change the directory
 	setCurrentDirectory(path);
 
 	// save the path
-	current_directory_path = getCurrentDirectory();
+	getCurrentDirectory(current_directory_path);
 
 	// restore current directory
-	setCurrentDirectory(current_dir);
+	setCurrentDirectory(prev_current_dir);
 #endif
 	info.setDirectoryPath(current_directory_path);
 	info.setChildDirectoryList(child_dir_name_list);

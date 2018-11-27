@@ -476,7 +476,8 @@ void testChangeDirectory()
 {
 	tc::filesystem::LocalFileSystem fs;
 	
-	tc::filesystem::Path old_dir = fs.getCurrentDirectory();
+	tc::filesystem::Path old_dir;
+	fs.getCurrentDirectory(old_dir);
 
 	try 
 	{
