@@ -101,16 +101,45 @@ void tc::filesystem::LocalFileSystem::deleteFile(const tc::filesystem::Path& pat
 
 const tc::filesystem::Path& tc::filesystem::LocalFileSystem::getCurrentDirectory()
 {
+#ifdef _WIN32
+
+#else
+	setCurrentDirectory(Path("."));
+
+	tc::SharedPtr<char> raw_current_working_directory = new char[PATH_MAX];
+
+	if (getcwd(*raw_current_working_directory, PATH_MAX) == nullptr)
+	{
+		int error_no = errno;
+		errno = 0;
+		
+		// throw exception
+		throw tc::Exception(kClassName, "Failed to get current working directory (getcwd)" + std::string(strerror(error_no)) + ")");
+	}
+
+	mCurrentDirectory = Path(*raw_current_working_directory);
+
 	return mCurrentDirectory;
+#endif
 }
 
 void tc::filesystem::LocalFileSystem::setCurrentDirectory(const tc::filesystem::Path& path)
 {
-	DirectoryInfo info;
+#ifdef _WIN32
 
-	getDirectoryInfo(path, info);
+#else
+	// convert Path to unicode string
+	std::string unicode_path;
+	pathToUnixUtf8(path, unicode_path);
 
-	mCurrentDirectory = info.getDirectoryPath();
+	// get full path to directory
+	if (chdir(unicode_path.c_str()) != 0)
+	{
+		int error_no = errno;
+		errno = 0;
+		throw tc::Exception(kClassName, "Failed to get directory info (chdir)(" + std::string(strerror(error_no)) + ")");
+	}
+#endif
 }
 
 void tc::filesystem::LocalFileSystem::createDirectory(const tc::filesystem::Path& path)
@@ -197,11 +226,11 @@ void tc::filesystem::LocalFileSystem::getDirectoryInfo(const tc::filesystem::Pat
 	{
 		if (ep->d_type == DT_DIR)
 		{
-			child_dir_name_list.push_back(std::string(ep->d_name, ep->d_namlen));
+			child_dir_name_list.push_back(std::string(ep->d_name));
 		}
 		else if (ep->d_type == DT_REG)
 		{
-			child_file_name_list.push_back(std::string(ep->d_name, ep->d_namlen));
+			child_file_name_list.push_back(std::string(ep->d_name));
 		}
 	}
 
@@ -217,33 +246,17 @@ void tc::filesystem::LocalFileSystem::getDirectoryInfo(const tc::filesystem::Pat
 	// close dp
 	closedir(dp);
 
-	
-	// get full path to directory
-	if (chdir(unicode_path.c_str()) != 0)
-	{
-		int error_no = errno;
-		errno = 0;
-		throw tc::Exception(kClassName, "Failed to get directory info (chdir)(" + std::string(strerror(error_no)) + ")");
-	}
+	// save current dir for later
+	Path current_dir = getCurrentDirectory();
 
+	// change the directory
+	setCurrentDirectory(path);
 
-	tc::SharedPtr<char> raw_current_working_directory = new char[PATH_MAX];
+	// save the path
+	current_directory_path = getCurrentDirectory();
 
-	if (getcwd(*raw_current_working_directory, PATH_MAX) == nullptr)
-	{
-		int error_no = errno;
-		errno = 0;
-
-		restoreCurrentWorkingDirectory();
-		
-		// throw exception
-		throw tc::Exception(kClassName, "Failed to get directory info (getcwd)" + std::string(strerror(error_no)) + ")");
-	}
-
-	current_directory_path = Path(*raw_current_working_directory);
-
-	// restore current working directory since chdir was used to get the absolute path
-	restoreCurrentWorkingDirectory();
+	// restore current directory
+	setCurrentDirectory(current_dir);
 #endif
 	info.setDirectoryPath(current_directory_path);
 	info.setChildDirectoryList(child_dir_name_list);
@@ -359,16 +372,3 @@ void tc::filesystem::LocalFileSystem::pathToUnixUtf8(const tc::filesystem::Path&
 	}
 }
 #endif
-
-void tc::filesystem::LocalFileSystem::restoreCurrentWorkingDirectory()
-{
-	// restore current directory
-	std::string original_directory_utf8;
-	pathToUnixUtf8(mCurrentDirectory, original_directory_utf8);
-	if (chdir(original_directory_utf8.c_str()) != 0)
-	{
-		int error_no = errno;
-		errno = 0;
-		throw tc::Exception(kClassName, "Failed to get directory info (chdir)(" + std::string(strerror(error_no)) + ")");
-	}
-}

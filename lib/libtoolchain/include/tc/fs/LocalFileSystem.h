@@ -116,8 +116,6 @@ namespace filesystem
 
 		void pathToUnixUtf8(const tc::filesystem::Path& path, std::string& out);
 #endif
-
-		void restoreCurrentWorkingDirectory();
 	};
 }
 }
