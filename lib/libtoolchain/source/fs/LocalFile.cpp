@@ -5,8 +5,6 @@
 #include <direct.h>
 #include <cstdlib>
 #else
-#define _LARGEFILE64_SOURCE
-#define _FILE_OFFSET_BITS 64
 #include <sys/stat.h>
 #include <errno.h>
 #include <unistd.h>
