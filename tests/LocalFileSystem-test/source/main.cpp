@@ -389,6 +389,109 @@ void testRemoveDirectoryThatHasChildren()
 	fs.removeDirectory(kDirPath);
 }
 
+void testGetDirectoryListing()
+{
+	tc::filesystem::LocalFileSystem fs;
+
+	std::vector<std::string> file_list;
+	std::vector<std::string> dir_list;
+	
+	file_list.push_back("fileA.bin");
+	file_list.push_back("fileB.bin");
+	file_list.push_back("fileC.bin");
+	file_list.push_back("fileD.bin");
+
+	dir_list.push_back("dir000");
+	dir_list.push_back("dir001");
+	dir_list.push_back("dir002");
+	dir_list.push_back("dir003");
+
+	fs.createDirectory(kDirPath);
+
+	for (size_t i = 0; i < file_list.size(); i++)
+	{
+		tc::filesystem::IFile* fp = fs.openFile(tc::filesystem::Path(kDirPath) + tc::filesystem::Path(file_list[i]), tc::filesystem::FAM_CREATE);
+		delete fp;
+	}
+
+	for (size_t i = 0; i < dir_list.size(); i++)
+	{
+		fs.createDirectory(tc::filesystem::Path(kDirPath) + tc::filesystem::Path(dir_list[i]));
+	}
+
+	try
+	{
+		tc::filesystem::DirectoryInfo info;
+
+		fs.getDirectoryInfo(kDirPath, info);
+		
+		// + 2 for "." & ".."
+		if (info.getChildDirectoryList().size() != (dir_list.size() + 2))
+		{
+			throw tc::Exception("main.cpp", "Unexpected directory count");
+		}
+
+		if (info.getChildFileList().size() != file_list.size())
+		{
+			throw tc::Exception("main.cpp", "Unexpected file count");
+		}
+
+		std::cout << "[LocalFileSystem-test] testGetDirectoryListing() : PASS" << std::endl;
+	}
+	catch (const tc::Exception& e)
+	{
+		std::cout << "[LocalFileSystem-test] testGetDirectoryListing() : FAIL (" << e.error() << ")" << std::endl;
+	}
+
+	for (size_t i = 0; i < file_list.size(); i++)
+	{
+		fs.deleteFile(tc::filesystem::Path(kDirPath) + tc::filesystem::Path(file_list[i]));
+	}
+
+	for (size_t i = 0; i < dir_list.size(); i++)
+	{
+		fs.removeDirectory(tc::filesystem::Path(kDirPath) + tc::filesystem::Path(dir_list[i]));
+	}
+
+	fs.removeDirectory(tc::filesystem::Path(kDirPath));
+}
+
+void testGetDirectoryListingWhereDirectoryDoesNotExist()
+{
+	tc::filesystem::LocalFileSystem fs;
+	
+	try 
+	{
+		tc::filesystem::DirectoryInfo info;
+		fs.getDirectoryInfo(kNotExistFilePath, info);
+		std::cout << "[LocalFileSystem-test] testGetDirectoryListingWhereDirectoryDoesNotExist() : FAIL (did not throw exception on expected error)" << std::endl;
+	}
+	catch (const tc::Exception& e) 
+	{
+		std::cout << "[LocalFileSystem-test] testGetDirectoryListingWhereDirectoryDoesNotExist() : PASS (" << e.error() << ")" << std::endl;
+	}
+}
+
+void testChangeDirectory()
+{
+	tc::filesystem::LocalFileSystem fs;
+	
+	tc::filesystem::Path old_dir = fs.getCurrentDirectory();
+
+	try 
+	{
+		fs.createDirectory(kDirPath);
+		fs.setCurrentDirectory(kDirPath);
+		std::cout << "[LocalFileSystem-test] testChangeDirectory() : PASS" << std::endl;
+	}
+	catch (const tc::Exception& e) 
+	{
+		std::cout << "[LocalFileSystem-test] testChangeDirectory() : FAIL (" << e.error() << ")" << std::endl;
+	}
+
+	fs.setCurrentDirectory(old_dir);
+	fs.removeDirectory(tc::filesystem::Path(kDirPath));
+}
 
 int main(int argc, char** argv)
 {
@@ -411,4 +514,8 @@ int main(int argc, char** argv)
 	testRemoveDirectoryWithUnicodePath();
 	testRemoveDirectoryThatIsActuallyAFile();
 	testRemoveDirectoryThatHasChildren();
+	testGetDirectoryListing();
+	testGetDirectoryListingWhereDirectoryDoesNotExist();
+	testChangeDirectory();
+
 }
