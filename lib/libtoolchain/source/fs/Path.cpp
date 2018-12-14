@@ -68,6 +68,19 @@ const std::vector<std::string>& tc::filesystem::Path::getPathElementList() const
 	return mUnicodePath;
 }
 
+void tc::filesystem::Path::setPathElementList(const std::vector<std::string>& list)
+{
+	for (size_t i = 0; i < list.size(); i++)
+	{
+		for (size_t j = 0; j < list[i].size(); j++)
+		{
+			if (list[i].c_str()[j] == '/' || list[i].c_str()[j] == '\\')
+				throw tc::Exception(kClassName, "Path delimiter detected in path element list");
+		}
+	}
+	mUnicodePath = list;
+}
+
 void tc::filesystem::Path::initialisePath(const std::string& src)
 {
 	size_t windows_slash_count = 0;

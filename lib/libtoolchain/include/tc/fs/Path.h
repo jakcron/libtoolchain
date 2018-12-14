@@ -71,6 +71,11 @@ namespace filesystem
 		 *  \return const std::vector<std::string>&
 		 */
 		const std::vector<std::string>& getPathElementList() const;
+
+		/** \brief Set the vector of path elements
+		 *  \param list const std::vector<std::string>& vector of path elements
+		 */
+		void setPathElementList(const std::vector<std::string>& list);
 	private:
 		const std::string kClassName = "tc::filesystem::Path";
 
