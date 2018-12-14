@@ -220,7 +220,7 @@ void testDeleteAsciiFile()
 		fs.deleteFile(kAsciiFilePath);
 		std::cout << "[LocalFileSystem-test] testDeleteAsciiFile() : PASS" << std::endl;
 	}
-	catch (const tc::Exception& e) 
+	catch (const tc::Exception&) 
 	{
 		std::cout << "[LocalFileSystem-test] testDeleteAsciiFile() : FAIL" << std::endl;
 	}
@@ -235,7 +235,7 @@ void testDeleteUnicodeFile()
 		fs.deleteFile(kUtf8TestPath);
 		std::cout << "[LocalFileSystem-test] testDeleteUnicodeFile() : PASS" << std::endl;
 	}
-	catch (const tc::Exception& e) 
+	catch (const tc::Exception&) 
 	{
 		std::cout << "[LocalFileSystem-test] testDeleteUnicodeFile() : FAIL" << std::endl;
 	}
