@@ -31,20 +31,14 @@ uint64_t tc::filesystem::LocalFile::size()
 {
 	uint64_t fsize = 0;
 #ifdef _WIN32
-	if (mMode != FAM_CREATE)
+	LARGE_INTEGER win_fsize;
+	if (GetFileSizeEx(mFileHandle, &win_fsize) == false)
 	{
-		LARGE_INTEGER win_fsize;
-		if (GetFileSizeEx(mFileHandle, &win_fsize) == false)
-		{
-			throw tc::Exception(kClassName, "Failed to get file sizee");
-		}
+		throw tc::Exception(kClassName, "Failed to get file size (" + std::to_string(GetLastError()) + ")");
+	}
 
-		fsize = win_fsize.QuadPart;
-	}
-	else
-	{
-		fsize = 0;
-	}
+	fsize = win_fsize.QuadPart;
+
 #else
 	int64_t cur_pos = lseek(mFileHandle, 0, SEEK_CUR);
 	if (cur_pos == -1)
@@ -89,7 +83,7 @@ void tc::filesystem::LocalFile::seek(uint64_t offset)
 		FILE_BEGIN
 	) == false || out.QuadPart != win_pos.QuadPart)
 	{
-		throw tc::Exception(kClassName, "Failed to set file position");
+		throw tc::Exception(kClassName, "Failed to set file position (" + std::to_string(GetLastError()) + ")");
 	}
 #else
 	int64_t fpos = lseek(mFileHandle, offset, SEEK_SET);
@@ -113,7 +107,7 @@ uint64_t tc::filesystem::LocalFile::pos()
 		FILE_CURRENT
 	) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to get file position");
+		throw tc::Exception(kClassName, "Failed to get file position (" + std::to_string(GetLastError()) + ")");
 	}
 
 	return out.QuadPart;
@@ -138,42 +132,16 @@ void tc::filesystem::LocalFile::read(byte_t* data, size_t len)
 	}
 
 #ifdef _WIN32
-	LARGE_INTEGER win_len;
-	win_len.QuadPart = len;
+	DWORD bytes_read;
 
-	static const DWORD kDwordHalf = (MAXDWORD / (DWORD)2) + 1; // 0x80000000
-	static const LONG kDwordFull = (LONG)kDwordHalf * (LONG)2; // 0x100000000
-
-	// if the size is greater than a DWORD, read it in parts, 
-	for (LONG i = 0; i < win_len.HighPart; i++)
+	if (ReadFile(mFileHandle, data, (DWORD)len, &bytes_read, NULL) == false)
 	{
-		// since kDwordFull isn't a valid DWORD value, read in two parts
-		ReadFile(
-			mFileHandle,
-			data + i * kDwordFull,
-			kDwordHalf,
-			NULL,
-			NULL
-		);
-		ReadFile(
-			mFileHandle,
-			data + i * kDwordFull + kDwordHalf,
-			kDwordHalf,
-			NULL,
-			NULL
-		);
+		throw tc::Exception(kClassName, "Failed to read file (" + std::to_string(GetLastError()) + ")");
 	}
 
-	// read remainding low part
-	if (win_len.LowPart > 0)
+	if (bytes_read != len)
 	{
-		ReadFile(
-			mFileHandle,
-			data + win_len.HighPart * kDwordFull,
-			win_len.LowPart,
-			NULL,
-			NULL
-		);
+		throw tc::Exception(kClassName, "Failed to read file (bytes read was not correct length)");
 	}
 #else
 	if (::read(mFileHandle, data, len) == -1)
@@ -185,46 +153,17 @@ void tc::filesystem::LocalFile::read(byte_t* data, size_t len)
 
 void tc::filesystem::LocalFile::write(const byte_t* data, size_t len)
 {
-	if (mMode == FAM_READ)
-		throw tc::Exception(kClassName, "Failed to write file (File is READ_ONLY)");
-
 #ifdef _WIN32
-	LARGE_INTEGER win_len;
-	win_len.QuadPart = len;
+	DWORD bytes_written;
 
-	static const DWORD kDwordHalf = ((DWORD)MAXDWORD / (DWORD)2) + 1; // 0x80000000
-	static const size_t kDwordFull = (size_t)kDwordHalf * (size_t)2; // 0x100000000
-
-															   // if the size is greater than a DWORD, read it in parts, 
-	for (LONG i = 0; i < win_len.HighPart; i++)
+	if (WriteFile(mFileHandle, data, (DWORD)len, &bytes_written, NULL) == false)
 	{
-		// since kDwordFull isn't a valid DWORD value, read in two parts
-		WriteFile(
-			mFileHandle,
-			data + i * kDwordFull,
-			kDwordHalf,
-			NULL,
-			NULL
-		);
-		WriteFile(
-			mFileHandle,
-			data + i * kDwordFull + kDwordHalf,
-			kDwordHalf,
-			NULL,
-			NULL
-		);
+		throw tc::Exception(kClassName, "Failed to read file (" + std::to_string(GetLastError()) + ")");
 	}
 
-	// read remainding low part
-	if (win_len.LowPart > 0)
+	if (bytes_written != len)
 	{
-		WriteFile(
-			mFileHandle,
-			data + win_len.HighPart * kDwordFull,
-			win_len.LowPart,
-			NULL,
-			NULL
-		);
+		throw tc::Exception(kClassName, "Failed to read file (bytes written was not correct length)");
 	}
 #else
 	if (::write(mFileHandle, data, len) == -1)

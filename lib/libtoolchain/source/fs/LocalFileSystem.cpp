@@ -43,10 +43,11 @@ tc::filesystem::IFile* tc::filesystem::LocalFileSystem::openFile(const tc::files
 							  getCreationModeFlag(mode),
 							  FILE_ATTRIBUTE_NORMAL,
 							  NULL);
+		
 	// check file handle
 	if (file_handle == INVALID_HANDLE_VALUE)
 	{
-		throw tc::Exception(kClassName, "Failed to open file.");
+		throw tc::Exception(kClassName, "Failed to open file (" + std::to_string(GetLastError()) + ")");
 	}
 
 	ifile_ptr = new LocalFile(mode, file_handle);
@@ -80,7 +81,7 @@ void tc::filesystem::LocalFileSystem::deleteFile(const tc::filesystem::Path& pat
 	// delete file
 	if (DeleteFileW((LPCWSTR)unicode_path.c_str()) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to delete file");
+		throw tc::Exception(kClassName, "Failed to delete file (" + std::to_string(GetLastError()) + ")");
 	}	
 #else
 	// convert Path to unicode string
@@ -99,7 +100,15 @@ void tc::filesystem::LocalFileSystem::deleteFile(const tc::filesystem::Path& pat
 void tc::filesystem::LocalFileSystem::getCurrentDirectory(tc::filesystem::Path& path)
 {
 #ifdef _WIN32
+	tc::SharedPtr<char16_t> raw_char16_path = new char16_t[MAX_PATH];
 
+	// get current directory
+	if (GetCurrentDirectoryW(MAX_PATH, (LPWSTR)(*raw_char16_path)) == false)
+	{
+		throw tc::Exception(kClassName, "Failed to get current directory (" + std::to_string(GetLastError()) + ")");
+	}
+
+	path = Path(*raw_char16_path);
 #else
 	setCurrentDirectory(Path("."));
 
@@ -121,7 +130,15 @@ void tc::filesystem::LocalFileSystem::getCurrentDirectory(tc::filesystem::Path& 
 void tc::filesystem::LocalFileSystem::setCurrentDirectory(const tc::filesystem::Path& path)
 {
 #ifdef _WIN32
+	// convert Path to unicode string
+	std::u16string unicode_path;
+	pathToWindowsUtf16(path, unicode_path);
 
+	// delete file
+	if (SetCurrentDirectoryW((LPCWSTR)unicode_path.c_str()) == false)
+	{
+		throw tc::Exception(kClassName, "Failed to set current directory (" + std::to_string(GetLastError()) + ")");
+	}
 #else
 	// convert Path to unicode string
 	std::string unicode_path;
@@ -145,9 +162,9 @@ void tc::filesystem::LocalFileSystem::createDirectory(const tc::filesystem::Path
 	pathToWindowsUtf16(path, unicode_path);
 
 	// create directory
-	if (CreateDirectoryW((LPCWSTR)unicode_path.c_str(), nullptr) != 0)
+	if (CreateDirectoryW((LPCWSTR)unicode_path.c_str(), nullptr) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to create directory.");
+		throw tc::Exception(kClassName, "Failed to create directory (" + std::to_string(GetLastError()) + ")");
 	}
 #else
 	// convert Path to unicode string
@@ -170,9 +187,9 @@ void tc::filesystem::LocalFileSystem::removeDirectory(const tc::filesystem::Path
 	std::u16string unicode_path;
 	pathToWindowsUtf16(path, unicode_path);
 
-	if (RemoveDirectoryW((wchar_t*)unicode_path.c_str()) != true)
+	if (RemoveDirectoryW((wchar_t*)unicode_path.c_str()) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to remove directory");
+		throw tc::Exception(kClassName, "Failed to remove directory (" + std::to_string(GetLastError()) + ")");
 	}
 #else
 	// convert Path to unicode string
@@ -194,7 +211,58 @@ void tc::filesystem::LocalFileSystem::getDirectoryInfo(const tc::filesystem::Pat
 	std::vector<std::string> child_file_name_list;
 	Path current_directory_path;
 #ifdef _WIN32
+	Path wildcard_path = path + tc::filesystem::Path("*");
 
+	// convert Path to unicode string
+	std::u16string unicode_path;
+	pathToWindowsUtf16(wildcard_path, unicode_path);
+
+	HANDLE dir_handle = INVALID_HANDLE_VALUE;
+	WIN32_FIND_DATAW dir_entry;
+
+
+
+	dir_handle = FindFirstFileW((LPCWSTR)unicode_path.c_str(), &dir_entry);
+	if (dir_handle == INVALID_HANDLE_VALUE) 
+	{
+		throw tc::Exception(kClassName, "Failed to open directory (" + std::to_string(GetLastError()) + ")");
+	}
+
+	do {
+		std::string utf8_name;
+		tc::unicode::transcodeUtf16ToUtf8((char16_t*)dir_entry.cFileName, utf8_name);
+
+		if (dir_entry.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
+		{
+			child_dir_name_list.push_back(utf8_name);
+		}
+		else 
+		{
+			child_file_name_list.push_back(utf8_name);
+		}
+	} while (FindNextFileW(dir_handle, &dir_entry) != 0);
+
+	if (GetLastError() != ERROR_NO_MORE_FILES) 
+	{
+		FindClose(dir_handle);
+		throw tc::Exception(kClassName, "Failed to open directory (" + std::to_string(GetLastError()) + ")");
+	}
+
+	FindClose(dir_handle);
+	
+
+	// save current dir for later
+	Path prev_current_dir;
+	getCurrentDirectory(prev_current_dir);
+
+	// change the directory
+	setCurrentDirectory(path);
+
+	// save the path
+	getCurrentDirectory(current_directory_path);
+
+	// restore current directory
+	setCurrentDirectory(prev_current_dir);
 #else
 	std::string unicode_path;
 	DIR *dp;
@@ -325,12 +393,12 @@ void tc::filesystem::LocalFileSystem::pathToWindowsUtf16(const tc::filesystem::P
 	out.clear();
 	for (size_t i = 0; i < path.getPathElementList().size(); i++)
 	{
-		tc::unicode::transcodeUtf8toUtf16(path.getPathElementList()[i], utf16_element);
+		tc::unicode::transcodeUtf8ToUtf16(path.getPathElementList()[i], utf16_element);
 		out += utf16_element;
 		if (i+1 < path.getPathElementList().size())
-			out += "\\";
-		else if (element == "" || i == 0)
-			out += "\\";
+			out += std::u16string(u"\\");
+		if (utf16_element == std::u16string(u"") && i == 0)
+			out += std::u16string(u"\\");
 	}
 }
 #else
