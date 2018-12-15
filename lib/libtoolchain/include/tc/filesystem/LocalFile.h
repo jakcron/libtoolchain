@@ -13,7 +13,7 @@
  *
  */
 #pragma once
-#include <tc/fs/LocalFileSystem.h>
+#include <tc/filesystem/LocalFileSystem.h>
 
 namespace tc
 {

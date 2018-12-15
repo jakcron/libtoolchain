@@ -18,7 +18,7 @@
  */
 #pragma once
 #include <tc/types.h>
-#include <tc/fs/Path.h>
+#include <tc/filesystem/Path.h>
 
 namespace tc
 {

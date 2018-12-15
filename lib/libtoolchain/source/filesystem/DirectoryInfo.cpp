@@ -1,4 +1,4 @@
-#include <tc/fs/DirectoryInfo.h>
+#include <tc/filesystem/DirectoryInfo.h>
 
 tc::filesystem::DirectoryInfo::DirectoryInfo() :
 	mDirPath(),

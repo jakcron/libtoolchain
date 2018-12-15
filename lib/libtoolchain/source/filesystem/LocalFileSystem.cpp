@@ -1,5 +1,5 @@
-#include <tc/fs/LocalFileSystem.h>
-#include <tc/fs/LocalFile.h>
+#include <tc/filesystem/LocalFileSystem.h>
+#include <tc/filesystem/LocalFile.h>
 #include <tc/Exception.h>
 #include <tc/unicode.h>
 #include <tc/SharedPtr.h>
