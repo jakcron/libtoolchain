@@ -13,8 +13,8 @@
  * However when using the constructor for std::[u16|u32]string, the path delimeter character ('/' or '\') is detected automatically, and there cannot be mix of both backward and forward slashes.
  * 
  * \author Jack (jakcron)
- * \version 0.1
- * \date 2018/11/22
+ * \version 0.2
+ * \date 2018/12/14
  *
  * Contact: jakcron.dev@gmail.com
  *
