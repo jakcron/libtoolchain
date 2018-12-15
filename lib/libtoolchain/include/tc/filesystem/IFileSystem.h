@@ -12,7 +12,7 @@
  * - Directory listing
  * 
  * IFileSystem uses the tc::filesystem::Path class to represent a path, not as a literal string.
- * It's up to the implementation of IFileSystem to validate and process the tc::filesystem::Path objects.
+ * It is up to the implementation of IFileSystem to validate and process the tc::filesystem::Path objects.
  * 
  * \author Jack (jakcron)
  * \version 0.1
