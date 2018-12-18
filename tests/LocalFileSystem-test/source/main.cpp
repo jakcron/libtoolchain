@@ -271,6 +271,22 @@ void testCreateDirectory()
 	}
 }
 
+void testRemoveDirectory()
+{
+	tc::filesystem::LocalFileSystem fs;
+
+	try
+	{
+		fs.removeDirectory(kDirPath);
+		std::cout << "[LocalFileSystem-test] testRemoveDirectory() : PASS" << std::endl;
+	}
+	catch (const tc::Exception& e)
+	{
+		std::cout << "[LocalFileSystem-test] testRemoveDirectory() : FAIL (" << e.error() << ")" << std::endl;
+	}
+}
+
+
 void testCreateDirectoryWhereDirectoryAlreadyExists()
 {
 	tc::filesystem::LocalFileSystem fs;
@@ -278,28 +294,17 @@ void testCreateDirectoryWhereDirectoryAlreadyExists()
 	try 
 	{
 		fs.createDirectory(kDirPath);
-		std::cout << "[LocalFileSystem-test] testCreateDirectoryWhereDirectoryAlreadyExists() : FAIL (did not throw exception on expected error)" << std::endl;
+		fs.createDirectory(kDirPath);
+		std::cout << "[LocalFileSystem-test] testCreateDirectoryWhereDirectoryAlreadyExists() : PASS" << std::endl;
 	}
 	catch (const tc::Exception& e) 
 	{
-		std::cout << "[LocalFileSystem-test] testCreateDirectoryWhereDirectoryAlreadyExists() : PASS (" << e.error() << ")" << std::endl;
+		std::cout << "[LocalFileSystem-test] testCreateDirectoryWhereDirectoryAlreadyExists() : FAIL (" << e.error() << ")" << std::endl;
 	}
+
+	fs.removeDirectory(kDirPath);
 }
 
-void testRemoveDirectory()
-{
-	tc::filesystem::LocalFileSystem fs;
-	
-	try 
-	{
-		fs.removeDirectory(kDirPath);
-		std::cout << "[LocalFileSystem-test] testRemoveDirectory() : PASS" << std::endl;
-	}
-	catch (const tc::Exception& e) 
-	{
-		std::cout << "[LocalFileSystem-test] testRemoveDirectory() : FAIL (" << e.error() << ")" << std::endl;
-	}
-}
 
 void testRemoveDirectoryWhereDirectoryDoesNotExist()
 {
@@ -508,8 +513,8 @@ int main(int argc, char** argv)
 	testDeleteUnicodeFile();
 	testDeleteFileThatDoesNotExist();
 	testCreateDirectory();
-	testCreateDirectoryWhereDirectoryAlreadyExists();
 	testRemoveDirectory();
+	testCreateDirectoryWhereDirectoryAlreadyExists();
 	testRemoveDirectoryWhereDirectoryDoesNotExist();
 	testCreateDirectoryWithUnicodePath();
 	testRemoveDirectoryWithUnicodePath();
