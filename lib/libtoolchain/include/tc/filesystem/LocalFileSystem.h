@@ -44,7 +44,6 @@ namespace filesystem
 		 */
 		LocalFileSystem();
 
-
 		/** \brief Open a file
 		 *  \param path const tc::filesystem::Path& Path to file
 		 *  \param mode tc::filesystem::FileAccessMode 
