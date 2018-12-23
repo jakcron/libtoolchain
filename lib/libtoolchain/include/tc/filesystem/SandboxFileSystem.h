@@ -75,8 +75,7 @@ namespace filesystem
 
 		/** \brief Populate a DirectoryInfo object for a specified path
 		 *  \param path const tc::filesystem::Path& Path to directory
-		 *  \param info DirectoryInfo& reference to DirectoryInfo object to be populated
-		 *  \return const DirectoryInfo& 
+		 *  \param info tc::filesystem::DirectoryInfo& reference to DirectoryInfo object to be populated
 		 * 
 		 *  If the directory cannot be accessed (invalid path, or access rights) an exception will be thrown
 		 */

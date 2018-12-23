@@ -22,7 +22,14 @@ namespace filesystem
 	class LocalFile : public IFile
 	{
 	public:
-		LocalFile(FileAccessMode mode, LocalFileSystem::fs_handle_t file_handle);
+		/** \brief Default constuctor
+		 *  \param mode tc::filesystem::FileAccessMode Access mode 
+		 *  \param root_path const tc::filesystem::Path& The path to the subdirectory used as the sandboxed root directory.
+		 */
+		LocalFile(tc::filesystem::FileAccessMode mode, LocalFileSystem::fs_handle_t file_handle);
+	
+		/** \brief Destructor
+		 */
 		~LocalFile();
 
 		/** \brief Get size of the file
@@ -59,8 +66,8 @@ namespace filesystem
 	private:
 		const std::string kClassName = "tc::filesystem::LocalFile";
 
-		FileAccessMode mMode;
-		LocalFileSystem::fs_handle_t mFileHandle;
+		tc::filesystem::FileAccessMode mMode;
+		tc::filesystem::LocalFileSystem::fs_handle_t mFileHandle;
 	};
 }
 }
