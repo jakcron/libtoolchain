@@ -22,10 +22,6 @@ tc::filesystem::LocalFileSystem::LocalFileSystem()
 {
 }
 
-tc::filesystem::LocalFileSystem::~LocalFileSystem()
-{
-}
-
 tc::filesystem::IFile* tc::filesystem::LocalFileSystem::openFile(const tc::filesystem::Path& path, FileAccessMode mode)
 {
 	tc::filesystem::IFile* ifile_ptr = nullptr;
