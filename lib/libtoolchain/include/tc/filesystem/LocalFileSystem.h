@@ -14,8 +14,8 @@
  * 
  * \note All strings are UTF-8
  * \author Jack (jakcron)
- * \version 0.1
- * \date 2018/11/11
+ * \version 0.2
+ * \date 2018/12/23
  *
  * Contact: jakcron.dev@gmail.com
  *
@@ -38,26 +38,23 @@ namespace filesystem
 #ifdef _WIN32
 		typedef HANDLE fs_handle_t;
 #else
-		//typedef FILE* fs_handle_t;
 		typedef int fs_handle_t;
 #endif
-
-		/// Constructor
+		/** \brief Default Constructor
+		 */
 		LocalFileSystem();
 
-		/// Destructor
-		~LocalFileSystem();
 
 		/** \brief Open a file
 		 *  \param path const tc::filesystem::Path& Path to file
-		 *  \param mode FileAccessMode 
-		 *  \return IFile* pointer to IFile object
+		 *  \param mode tc::filesystem::FileAccessMode 
+		 *  \return tc::filesystem::IFile* pointer to IFile object
 		 * 
 		 *  IFile object will auto-close the file when destructor is called (when deleted)
 		 * 
 		 *  If the file cannot be accessed (invalid path, or access rights) an exception will be thrown
 		 */
-		IFile* openFile(const tc::filesystem::Path& path, FileAccessMode mode);
+		IFile* openFile(const tc::filesystem::Path& path, tc::filesystem::FileAccessMode mode);
 
 		/** \brief Delete a file
 		 *  \param path const tc::filesystem::Path& Path to file
@@ -93,23 +90,22 @@ namespace filesystem
 
 		/** \brief Populate a DirectoryInfo object for a specified path
 		 *  \param path const tc::filesystem::Path& Path to directory
-		 *  \param info DirectoryInfo& reference to DirectoryInfo object to be populated
-		 *  \return const DirectoryInfo& 
+		 *  \param info tc::filesystem::DirectoryInfo& reference to DirectoryInfo object to be populated
 		 * 
 		 *  If the directory cannot be accessed (invalid path, or access rights) an exception will be thrown
 		 */
-		void getDirectoryInfo(const tc::filesystem::Path& path, DirectoryInfo& info);
+		void getDirectoryInfo(const tc::filesystem::Path& path, tc::filesystem::DirectoryInfo& info);
 
 	private:
 		const std::string kClassName = "tc::filesystem::LocalFileSystem";
 #ifdef _WIN32
-		DWORD getOpenModeFlag(FileAccessMode mode) const;
-		DWORD getShareModeFlag(FileAccessMode mode) const;
-		DWORD getCreationModeFlag(FileAccessMode mode) const;
+		DWORD getOpenModeFlag(tc::filesystem::FileAccessMode mode) const;
+		DWORD getShareModeFlag(tc::filesystem::FileAccessMode mode) const;
+		DWORD getCreationModeFlag(tc::filesystem::FileAccessMode mode) const;
 
 		void pathToWindowsUtf16(const tc::filesystem::Path& path, std::u16string& out);
 #else
-		int getOpenModeFlag(FileAccessMode mode) const;
+		int getOpenModeFlag(tc::filesystem::FileAccessMode mode) const;
 
 		void pathToUnixUtf8(const tc::filesystem::Path& path, std::string& out);
 #endif

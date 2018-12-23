@@ -15,8 +15,8 @@
  * It is up to the implementation of IFileSystem to validate and process the tc::filesystem::Path objects.
  * 
  * \author Jack (jakcron)
- * \version 0.1
- * \date 2018/11/10
+ * \version 0.2
+ * \date 2018/12/23
  *
  * Contact: jakcron.dev@gmail.com
  *
@@ -47,13 +47,13 @@ namespace filesystem
 
 		/** \brief Open a file
 		 *  \param path const tc::filesystem::Path& Path to file
-		 *  \param mode FileAccessMode 
-		 *  \return IFile* pointer to IFile object
+		 *  \param mode tc::filesystem::FileAccessMode 
+		 *  \return tc::filesystem::IFile* pointer to IFile object
 		 * 
 		 *  If the file cannot be accessed (invalid path, or access rights) an exception will be thrown
 		 *  It is up to the implementation to enforce FileAccessMode
 		 */
-		virtual IFile* openFile(const tc::filesystem::Path& path, FileAccessMode mode) = 0;
+		virtual tc::filesystem::IFile* openFile(const tc::filesystem::Path& path, tc::filesystem::FileAccessMode mode) = 0;
 
 		/** \brief Delete a file
 		 *  \param path const tc::filesystem::Path& Path to file
@@ -89,12 +89,11 @@ namespace filesystem
 
 		/** \brief Populate a DirectoryInfo object for a specified path
 		 *  \param path const tc::filesystem::Path& Path to directory
-		 *  \param info DirectoryInfo& reference to DirectoryInfo object to be populated
-		 *  \return const DirectoryInfo& 
+		 *  \param info tc::filesystem::DirectoryInfo& reference to DirectoryInfo object to be populated
 		 * 
 		 *  If the directory cannot be accessed (invalid path, or access rights) an exception will be thrown
 		 */
-		virtual void getDirectoryInfo(const tc::filesystem::Path& path, DirectoryInfo& info) = 0;
+		virtual void getDirectoryInfo(const tc::filesystem::Path& path, tc::filesystem::DirectoryInfo& info) = 0;
 	};
 }
 }
