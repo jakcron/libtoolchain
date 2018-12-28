@@ -9,7 +9,7 @@
 #include <tc/filesystem/IFileSystem.h>
 
 // Sandboxed IFile & IFileSystem
-//#include <tc/filesystem/SandboxFile.h>
+#include <tc/filesystem/SandboxFile.h>
 #include <tc/filesystem/SandboxFileSystem.h>
 
 // Local FileSystem
