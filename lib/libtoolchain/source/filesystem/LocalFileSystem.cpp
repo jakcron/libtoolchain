@@ -95,23 +95,23 @@ void tc::filesystem::LocalFileSystem::getCurrentDirectory(tc::filesystem::Path& 
 	tc::SharedPtr<char16_t> raw_char16_path = new char16_t[MAX_PATH];
 
 	// get current directory
-	if (GetCurrentDirectoryW(MAX_PATH, (LPWSTR)(*raw_char16_path)) == false)
+	if (GetCurrentDirectoryW(MAX_PATH, (LPWSTR)(raw_char16_path.get())) == false)
 	{
 		throw tc::Exception(kClassName, "Failed to get current directory (" + std::to_string(GetLastError()) + ")");
 	}
 
-	path = Path(*raw_char16_path);
+	path = Path(raw_char16_path.get());
 #else
 	setCurrentDirectory(Path("."));
 
 	tc::SharedPtr<char> raw_current_working_directory = new char[PATH_MAX];
 
-	if (getcwd(*raw_current_working_directory, PATH_MAX) == nullptr)
+	if (getcwd(raw_current_working_directory.get(), PATH_MAX) == nullptr)
 	{
 		throw tc::Exception(kClassName, "Failed to get current working directory (getcwd)" + std::string(strerror(errno)) + ")");
 	}
 
-	path = Path(*raw_current_working_directory);
+	path = Path(raw_current_working_directory.get());
 #endif
 }
 
