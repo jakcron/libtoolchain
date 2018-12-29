@@ -20,15 +20,15 @@ void testFileCreate()
 	{
 		tc::SharedPtr<tc::filesystem::IFile> file = fs.openFile(kAsciiFilePath, tc::filesystem::FAM_CREATE);
 
-		if ((*file)->size() != 0)
+		if (file->size() != 0)
 		{
 			throw tc::Exception("main.cpp", "file opened in create mode does not have a size of 0");
 		}
 
-		(*file)->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 
 		
-		if ((*file)->size() != kRandomString.length())
+		if (file->size() != kRandomString.length())
 		{
 			throw tc::Exception("main.cpp", "after writing data, file size is not correct");
 		}
@@ -50,15 +50,15 @@ void testFileRead()
 	{
 		tc::SharedPtr<tc::filesystem::IFile> file = fs.openFile(kAsciiFilePath, tc::filesystem::FAM_READ);
 
-		if ((*file)->size() != kRandomString.length())
+		if (file->size() != kRandomString.length())
 		{
 			throw tc::Exception("main.cpp", "Unexpected file size");
 		}
 
 		tc::SharedPtr<byte_t> check = new byte_t[kRandomString.length()];
-		(*file)->read(*check, kRandomString.length());
+		file->read(check.get(), kRandomString.length());
 
-		if (memcmp(*check, kRandomString.c_str(), kRandomString.size()) != 0)
+		if (memcmp(check.get(), kRandomString.c_str(), kRandomString.size()) != 0)
 		{
 			throw tc::Exception("main.cpp", "Data in file was not correct");
 		}
@@ -79,32 +79,32 @@ void testFileEdit()
 	{
 		tc::SharedPtr<tc::filesystem::IFile> file = fs.openFile(kAsciiFilePath, tc::filesystem::FAM_EDIT);
 
-		if ((*file)->size() != kRandomString.length())
+		if (file->size() != kRandomString.length())
 		{
 			throw tc::Exception("main.cpp", "Unexpected file size");
 		}
 
-		(*file)->seek(kRandomString.length());
-		(*file)->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		file->seek(kRandomString.length());
+		file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 
-		(*file)->seek(7);
-		(*file)->write((const byte_t*)kTestPhrase.c_str(), kTestPhrase.length());
+		file->seek(7);
+		file->write((const byte_t*)kTestPhrase.c_str(), kTestPhrase.length());
 
 		tc::SharedPtr<byte_t> check = new byte_t[kRandomString.length()*2];
-		(*file)->seek(0);
-		(*file)->read(*check, kRandomString.length()*2);
+		file->seek(0);
+		file->read(check.get(), kRandomString.length()*2);
 
-		if (memcmp(*check + kRandomString.length(), kRandomString.c_str(), kRandomString.size()) != 0)
+		if (memcmp(check.get() + kRandomString.length(), kRandomString.c_str(), kRandomString.size()) != 0)
 		{
 			throw tc::Exception("main.cpp", "Data(kRandomStr[1][:]) in file was not correct");
 		}
 
-		if (memcmp(*check + 7, kTestPhrase.c_str(), kTestPhrase.size()) != 0)
+		if (memcmp(check.get() + 7, kTestPhrase.c_str(), kTestPhrase.size()) != 0)
 		{
 			throw tc::Exception("main.cpp", "Data(kTestPhrase[:]) in file was not correct");
 		}
 
-		if (memcmp(*check, kRandomString.c_str(), 7) != 0)
+		if (memcmp(check.get(), kRandomString.c_str(), 7) != 0)
 		{
 			throw tc::Exception("main.cpp", "Data(kRandomStr[0][0:7]) in file was not correct");
 		}
@@ -125,12 +125,12 @@ void testUnicodePath()
 	{
 		tc::SharedPtr<tc::filesystem::IFile> file = fs.openFile(kUtf8TestPath, tc::filesystem::FAM_CREATE);
 
-		if ((*file)->size() != 0)
+		if (file->size() != 0)
 		{
 			throw tc::Exception("main.cpp", "file opened in create mode does not have a size of 0\n");
 		}
 
-		(*file)->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 
 
 		std::cout << "[LocalFileSystem-test] testUnicodePath() : PASS" << std::endl;
@@ -181,7 +181,7 @@ void testTryWriteInReadOnlyMode()
 	{
 		tc::SharedPtr<tc::filesystem::IFile> file = fs.openFile(kAsciiFilePath, tc::filesystem::FAM_READ);
 
-		(*file)->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 
 		std::cout << "[LocalFileSystem-test] testTryWriteInReadOnlyMode() : FAIL (Did not throw exception when write() was called)" << std::endl;
 	}
@@ -201,7 +201,7 @@ void testTryReadBeyondFileSize()
 
 		tc::SharedPtr<byte_t> buffer = new byte_t[0x10000];
 
-		(*file)->read(*buffer, 0x10000);
+		file->read(buffer.get(), 0x10000);
 
 		std::cout << "[LocalFileSystem-test] testTryReadBeyondFileSize() : FAIL (Did not throw exception when read() attemped to read beyond file size)" << std::endl;
 	}

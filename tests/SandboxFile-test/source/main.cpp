@@ -65,7 +65,7 @@ void testSize()
 			// get sandbox filesystem
 			tc::SharedPtr<tc::filesystem::IFile> sb_file = new tc::filesystem::SandboxFile(file, sandbox_offset, sandbox_size);
 
-			if ((*sb_file)->size() != sandbox_size)
+			if (sb_file->size() != sandbox_size)
 			{
 				throw tc::Exception("main.cpp", "Unexpected file size");
 			}
@@ -114,16 +114,16 @@ void testSeekPos()
 			tc::SharedPtr<tc::filesystem::IFile> sb_file = new tc::filesystem::SandboxFile(file, sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
-			(*sb_file)->seek(offset_to_seek);
+			sb_file->seek(offset_to_seek);
 
-			if ((*sb_file)->pos() != offset_to_seek)
+			if (sb_file->pos() != offset_to_seek)
 			{
 				throw tc::Exception("main.cpp", "Was not able to seek as expected");
 			}
 
-			(*sb_file)->read(nullptr, 0x20);
+			sb_file->read(nullptr, 0x20);
 
-			if ((*sb_file)->pos() != offset_to_seek + 0x20)
+			if (sb_file->pos() != offset_to_seek + 0x20)
 			{
 				throw tc::Exception("main.cpp", "Was not able to seek as expected");
 			}
@@ -178,12 +178,12 @@ void testRead()
 			tc::SharedPtr<tc::filesystem::IFile> sb_file = new tc::filesystem::SandboxFile(file, sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
-			(*sb_file)->seek(offset_to_seek);
+			sb_file->seek(offset_to_seek);
 
 			byte_t* dummy_ptr = (byte_t*)0xcafe;
 			size_t dummy_read_len = 0xdeadbabe;
 
-			(*sb_file)->read(dummy_ptr, dummy_read_len);
+			sb_file->read(dummy_ptr, dummy_read_len);
 
 			std::cout << "[SandboxFile-test] testRead() : PASS" << std::endl;
 		}
@@ -233,12 +233,12 @@ void testWrite()
 			tc::SharedPtr<tc::filesystem::IFile> sb_file = new tc::filesystem::SandboxFile(file, sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
-			(*sb_file)->seek(offset_to_seek);
+			sb_file->seek(offset_to_seek);
 
 			byte_t* dummy_ptr = (byte_t*)0xcafe;
 			size_t dummy_read_len = 0xdeadbabe;
 
-			(*sb_file)->write(dummy_ptr, dummy_read_len);
+			sb_file->write(dummy_ptr, dummy_read_len);
 
 			std::cout << "[SandboxFile-test] testWrite() : PASS" << std::endl;
 		}

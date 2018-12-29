@@ -7,8 +7,8 @@ tc::filesystem::SandboxFileSystem::SandboxFileSystem(const tc::SharedPtr<tc::fil
 	mCurrentDirectory("/")
 {
 	// get full path of root
-	(*mFileSystem)->setCurrentDirectory(root_path);
-	(*mFileSystem)->getCurrentDirectory(mRootPath);
+	mFileSystem->setCurrentDirectory(root_path);
+	mFileSystem->getCurrentDirectory(mRootPath);
 }
 
 tc::filesystem::IFile* tc::filesystem::SandboxFileSystem::openFile(const tc::filesystem::Path& path, FileAccessMode mode)
@@ -18,7 +18,7 @@ tc::filesystem::IFile* tc::filesystem::SandboxFileSystem::openFile(const tc::fil
 	sandboxPathToRealPath(path, real_path);
 
 	// open file
-	return (*mFileSystem)->openFile(real_path, mode);
+	return mFileSystem->openFile(real_path, mode);
 }
 
 void tc::filesystem::SandboxFileSystem::deleteFile(const tc::filesystem::Path& path)
@@ -28,7 +28,7 @@ void tc::filesystem::SandboxFileSystem::deleteFile(const tc::filesystem::Path& p
 	sandboxPathToRealPath(path, real_path);
 
 	// delete file
-	(*mFileSystem)->deleteFile(real_path);
+	mFileSystem->deleteFile(real_path);
 }
 
 void tc::filesystem::SandboxFileSystem::getCurrentDirectory(tc::filesystem::Path& path)
@@ -43,7 +43,7 @@ void tc::filesystem::SandboxFileSystem::setCurrentDirectory(const tc::filesystem
 	sandboxPathToRealPath(path, real_path);
 
 	// set current directory
-	(*mFileSystem)->setCurrentDirectory(real_path);
+	mFileSystem->setCurrentDirectory(real_path);
 
 	// save current directory
 	realPathToSandboxPath(real_path, mCurrentDirectory);
@@ -56,7 +56,7 @@ void tc::filesystem::SandboxFileSystem::createDirectory(const tc::filesystem::Pa
 	sandboxPathToRealPath(path, real_path);
 
 	// create directory
-	(*mFileSystem)->createDirectory(real_path);
+	mFileSystem->createDirectory(real_path);
 }
 
 void tc::filesystem::SandboxFileSystem::removeDirectory(const tc::filesystem::Path& path)
@@ -66,7 +66,7 @@ void tc::filesystem::SandboxFileSystem::removeDirectory(const tc::filesystem::Pa
 	sandboxPathToRealPath(path, real_path);
 
 	// remove directory
-	(*mFileSystem)->removeDirectory(real_path);
+	mFileSystem->removeDirectory(real_path);
 }
 
 void tc::filesystem::SandboxFileSystem::getDirectoryInfo(const tc::filesystem::Path& path, DirectoryInfo& info)
@@ -77,7 +77,7 @@ void tc::filesystem::SandboxFileSystem::getDirectoryInfo(const tc::filesystem::P
 
 	// get real directory info
 	tc::filesystem::DirectoryInfo real_info;
-	(*mFileSystem)->getDirectoryInfo(real_path, real_info);
+	mFileSystem->getDirectoryInfo(real_path, real_info);
 
 	// convert directory absolute path
 	tc::filesystem::Path sandbox_dir_path;

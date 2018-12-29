@@ -77,8 +77,8 @@ void testSandboxRootPath()
 
 			// save sandbox real path
 			tc::filesystem::Path sandbox_real_root;
-			(*sb_fs)->setCurrentDirectory(tc::filesystem::Path("/"));
-			(*fs)->getCurrentDirectory(sandbox_real_root);
+			sb_fs->setCurrentDirectory(tc::filesystem::Path("/"));
+			fs->getCurrentDirectory(sandbox_real_root);
 
 			// check the sandbox is generating the correct path
 			if (sandbox_real_root != dummyfs_curdir + sandbox_relative_root)
@@ -141,7 +141,7 @@ void testCreateFile()
 			tc::SharedPtr<tc::filesystem::IFileSystem> sb_fs = new tc::filesystem::SandboxFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to create file
-			(*sb_fs)->openFile(tc::filesystem::Path("/a_dir/testfile"), tc::filesystem::FAM_CREATE);
+			sb_fs->openFile(tc::filesystem::Path("/a_dir/testfile"), tc::filesystem::FAM_CREATE);
 			
 			std::cout << "[SandboxFileSystem-test] testCreateFile() : PASS" << std::endl;
 		}
@@ -196,7 +196,7 @@ void testOpenFile()
 			tc::SharedPtr<tc::filesystem::IFileSystem> sb_fs = new tc::filesystem::SandboxFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to open file
-			(*sb_fs)->openFile(tc::filesystem::Path("/a_dir/testfile"), tc::filesystem::FAM_READ);
+			sb_fs->openFile(tc::filesystem::Path("/a_dir/testfile"), tc::filesystem::FAM_READ);
 			
 			std::cout << "[SandboxFileSystem-test] testOpenFile() : PASS" << std::endl;
 		}
@@ -246,7 +246,7 @@ void testRemoveFile()
 			tc::SharedPtr<tc::filesystem::IFileSystem> sb_fs = new tc::filesystem::SandboxFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to delete file
-			(*sb_fs)->deleteFile(tc::filesystem::Path("/a_dir/testfile"));
+			sb_fs->deleteFile(tc::filesystem::Path("/a_dir/testfile"));
 
 			std::cout << "[SandboxFileSystem-test] testRemoveFile() : PASS" << std::endl;
 		}
@@ -297,7 +297,7 @@ void testCreateDirectory()
 			tc::SharedPtr<tc::filesystem::IFileSystem> sb_fs = new tc::filesystem::SandboxFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to create directory
-			(*sb_fs)->createDirectory(tc::filesystem::Path("/a_dir/testdir/hey"));
+			sb_fs->createDirectory(tc::filesystem::Path("/a_dir/testdir/hey"));
 
 			std::cout << "[SandboxFileSystem-test] testCreateDirectory() : PASS" << std::endl;
 		}
@@ -347,7 +347,7 @@ void testRemoveDirectory()
 			tc::SharedPtr<tc::filesystem::IFileSystem> sb_fs = new tc::filesystem::SandboxFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to remove directory
-			(*sb_fs)->removeDirectory(tc::filesystem::Path("/a_dir/testdir/hey"));
+			sb_fs->removeDirectory(tc::filesystem::Path("/a_dir/testdir/hey"));
 
 			std::cout << "[SandboxFileSystem-test] testRemoveDirectory() : PASS" << std::endl;
 		}
@@ -402,11 +402,11 @@ void testGetDirectoryListing()
 
 			// save sandbox dir info
 			tc::filesystem::DirectoryInfo sb_dir_info;
-			(*sb_fs)->getDirectoryInfo(tc::filesystem::Path("/a_dir/testdir/hey"), sb_dir_info);
+			sb_fs->getDirectoryInfo(tc::filesystem::Path("/a_dir/testdir/hey"), sb_dir_info);
 
 			// save real dir info
 			tc::filesystem::DirectoryInfo real_dir_info;
-			(*fs)->getDirectoryInfo(dummyfs_curdir + tc::filesystem::Path("testdir/a_dir/testdir/hey"), real_dir_info);
+			fs->getDirectoryInfo(dummyfs_curdir + tc::filesystem::Path("testdir/a_dir/testdir/hey"), real_dir_info);
 
 			if (sb_dir_info.getChildFileList() != real_dir_info.getChildFileList())
 			{
@@ -494,14 +494,14 @@ void testNavigateUpSandboxEscape()
 
 			// get info about current directory
 			tc::filesystem::DirectoryInfo dir_info;
-			(*sb_fs)->getDirectoryInfo(tc::filesystem::Path("./../../../../../../../../../../../../../..///./././"), dir_info);
+			sb_fs->getDirectoryInfo(tc::filesystem::Path("./../../../../../../../../../../../../../..///./././"), dir_info);
 			
 			if (dir_info.getDirectoryPath() != tc::filesystem::Path("/"))
 			{
 				throw tc::Exception("main.cpp", "Sandbox directory path not as expected");
 			}
 
-			if (((DummyFileSystem*)(*fs))->getLastUsedPath() != dummyfs_curdir + sandbox_relative_root)
+			if (((DummyFileSystem*)fs.operator->())->getLastUsedPath() != dummyfs_curdir + sandbox_relative_root)
 			{
 				throw tc::Exception("main.cpp", "Real directory path not as expected");
 			}
@@ -565,8 +565,8 @@ void testOpenFileOutsideSandbox()
 			tc::SharedPtr<tc::filesystem::IFileSystem> sb_fs = new tc::filesystem::SandboxFileSystem(fs, dummyfs_curdir + sandbox_relative_root);
 			  
 			// try to open the file just outside the sandbox
-			(*sb_fs)->setCurrentDirectory(tc::filesystem::Path("/"));
-			tc::SharedPtr<tc::filesystem::IFile> inacessible_file = (*sb_fs)->openFile(tc::filesystem::Path("../inaccessible_file0"), tc::filesystem::FAM_READ);
+			sb_fs->setCurrentDirectory(tc::filesystem::Path("/"));
+			tc::SharedPtr<tc::filesystem::IFile> inacessible_file = sb_fs->openFile(tc::filesystem::Path("../inaccessible_file0"), tc::filesystem::FAM_READ);
 
 			std::cout << "[SandboxFileSystem-test] testOpenFileOutsideSandbox() : PASS" << std::endl;
 		}
