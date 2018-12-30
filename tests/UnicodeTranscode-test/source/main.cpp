@@ -13,6 +13,7 @@ static std::u16string kUtf16Str = std::u16string((const char16_t*)kUtf16Raw, kUt
 
 void testUtf8ToUtf16()
 {
+	std::cout << "[UnicodeTranscode-test] testUtf8ToUtf16 : ";
 	try
 	{
 		std::u16string utf16_str;
@@ -23,19 +24,20 @@ void testUtf8ToUtf16()
 		{
 			if (kUtf16Raw[i] != utf16_str.c_str()[i])
 			{
-				throw tc::Exception("main.cpp", "unexpected UTF-16 char");
+				throw tc::Exception("unexpected UTF-16 char");
 			}
 		}
-		std::cout << "[UnicodeTranscode-test] testUtf8ToUtf16() : PASS" << std::endl;
+		std::cout << "PASS" << std::endl;
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "[UnicodeTranscode-test] testUtf8ToUtf16() : FAIL (" << e.error() << ")" << std::endl;
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
 	}
 }
 
 void testUtf16ToUtf8()
 {
+	std::cout << "[UnicodeTranscode-test] testUtf16ToUtf8 : ";
 	try
 	{
 		std::string utf8_str;
@@ -46,14 +48,14 @@ void testUtf16ToUtf8()
 		{
 			if ((kUtf8Raw[i] & 0xff) != (utf8_str.c_str()[i] & 0xff))
 			{
-				throw tc::Exception("main.cpp", "unexpected UTF-8 char");
+				throw tc::Exception("unexpected UTF-8 char");
 			}
 		}
-		std::cout << "[UnicodeTranscode-test] testUtf16ToUtf8() : PASS" << std::endl;
+		std::cout << "PASS" << std::endl;
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "[UnicodeTranscode-test] testUtf16ToUtf8() : FAIL (" << e.error() << ")" << std::endl;
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
 	}
 }
 

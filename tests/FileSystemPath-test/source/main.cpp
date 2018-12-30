@@ -38,8 +38,15 @@ void pathToWindowsUtf8(const tc::filesystem::Path& path, std::string& out)
 	out = out_stream.str();
 }
 
-void testPathComposition(const std::string& test_name, const std::string& raw_path, const std::string& expected_path, size_t expected_element_count, bool is_unix)
+enum PathType
 {
+	UNIX_PATH,
+	WIN32_PATH
+};
+
+void testPathComposition(const std::string& test_name, const std::string& raw_path, const std::string& expected_path, size_t expected_element_count, PathType path_type)
+{
+	std::cout << "[FileSystemPath-test] " << test_name << " : ";
 	try
 	{
 		tc::filesystem::Path path(raw_path);
@@ -47,82 +54,84 @@ void testPathComposition(const std::string& test_name, const std::string& raw_pa
 
 		if (path.getPathElementList().size() != expected_element_count)
 		{
-			throw tc::Exception("main.cpp", "Path did not have expected element count");
+			throw tc::Exception("Path did not have expected element count");
 		}
 
-		if (is_unix)
+		if (path_type == UNIX_PATH)
 			pathToUnixUtf8(path, utf8_path);
-		else
+		else 
 			pathToWindowsUtf8(path, utf8_path);
 
 		if (utf8_path != expected_path)
 		{
-			throw tc::Exception("main.cpp", "Composed path did not match expected output");
+			throw tc::Exception("Composed path did not match expected output");
 		}
 
-		std::cout << "[FileSystemPath-test] " << test_name << "() : PASS" << std::endl;
+		std::cout << "PASS" << std::endl;
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "[FileSystemPath-test] " << test_name << "() : FAIL (" << e.error() << ")" << std::endl;
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
 	}
 }
 
-void testPathComposition(const std::string& test_name, const std::string& raw_path, size_t expected_element_count, bool is_unix)
+void testPathComposition(const std::string& test_name, const std::string& raw_path, size_t expected_element_count, PathType path_type)
 {
-	testPathComposition(test_name, raw_path, raw_path, expected_element_count, is_unix);
+	testPathComposition(test_name, raw_path, raw_path, expected_element_count, path_type);
 }
 
 
 void testEqualComparisonOperator()
 {
-	std::string raw_path_0 = "a directory/a subdirectory";
-
+	std::cout << "[FileSystemPath-test] testEqualComparisonOperator : ";
 	try
 	{
+		std::string raw_path_0 = "a directory/a subdirectory";
+
 		tc::filesystem::Path path_a(raw_path_0);
 		tc::filesystem::Path path_b(raw_path_0);
 
 		if ((path_a == path_b) == false)
-			throw tc::Exception("main.cpp", "operator==() did not return true for equal Path objects");
+			throw tc::Exception("operator==() did not return true for equal Path objects");
 
-		std::cout << "[FileSystemPath-test] testEqualComparisonOperator() : PASS"  << std::endl;
+		std::cout << "PASS"  << std::endl;
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "[FileSystemPath-test] testEqualComparisonOperator() : FAIL (" << e.error() << ")" << std::endl;
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
 	}
 }
 
 void testUnequalComparisonOperator()
 {
-	std::string raw_path_0 = "a directory/a subdirectory";
-	std::string raw_path_1 = "a different directory/a different subdirectory";
-
+	std::cout << "[FileSystemPath-test] testUnequalComparisonOperator : ";
 	try
 	{
+		std::string raw_path_0 = "a directory/a subdirectory";
+		std::string raw_path_1 = "a different directory/a different subdirectory";
 		tc::filesystem::Path path_a(raw_path_0);
 		tc::filesystem::Path path_b(raw_path_1);
 
 		if ((path_a != path_b) == false)
-			throw tc::Exception("main.cpp", "operator!=() did not return true for unequal Path objects");
+			throw tc::Exception("operator!=() did not return true for unequal Path objects");
 
-		std::cout << "[FileSystemPath-test] testUnequalComparisonOperator() : PASS"  << std::endl;
+		std::cout << "PASS"  << std::endl;
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "[FileSystemPath-test] testUnequalComparisonOperator() : FAIL (" << e.error() << ")" << std::endl;
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
 	}
 }
 
 void testAdditionOperator()
 {
-	const std::string raw_path_a = "foo/bar/";
-	const std::string raw_path_b = "file.txt";
-	const std::string raw_path_ab = raw_path_a + raw_path_b;
-
+	std::cout << "[FileSystemPath-test] testAdditionOperator : ";
 	try
 	{
+		const std::string raw_path_a = "foo/bar/";
+		const std::string raw_path_b = "file.txt";
+		const std::string raw_path_ab = raw_path_a + raw_path_b;
+
 		tc::filesystem::Path path_a(raw_path_a);
 		tc::filesystem::Path path_b(raw_path_b);
 		tc::filesystem::Path path_ab = path_a + path_b;
@@ -132,25 +141,26 @@ void testAdditionOperator()
 
 		if (test_path != raw_path_ab)
 		{
-			throw tc::Exception("main.cpp", "operator+() did not operate produce expected output");
+			throw tc::Exception("operator+() did not operate produce expected output");
 		}
 
-		std::cout << "[FileSystemPath-test] testAdditionOperator() : PASS"  << std::endl;
+		std::cout << "PASS"  << std::endl;
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "[FileSystemPath-test] testAdditionOperator() : FAIL (" << e.error() << ")" << std::endl;
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
 	}
 }
 
 void testAppendOperator()
 {
-	const std::string raw_path_a = "foo/bar/";
-	const std::string raw_path_b = "file.txt";
-	const std::string raw_path_ab = raw_path_a + raw_path_b;
-
+	std::cout << "[FileSystemPath-test] testAppendOperator : ";
 	try
 	{
+		const std::string raw_path_a = "foo/bar/";
+		const std::string raw_path_b = "file.txt";
+		const std::string raw_path_ab = raw_path_a + raw_path_b;
+
 		tc::filesystem::Path path_a(raw_path_a);
 		tc::filesystem::Path path_b(raw_path_b);
 		path_a += path_b;
@@ -160,26 +170,27 @@ void testAppendOperator()
 
 		if (test_path != raw_path_ab)
 		{
-			throw tc::Exception("main.cpp", "operator+() did not operate produce expected output");
+			throw tc::Exception("operator+() did not operate produce expected output");
 		}
 
-		std::cout << "[FileSystemPath-test] testAppendOperator() : PASS"  << std::endl;
+		std::cout << "PASS"  << std::endl;
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "[FileSystemPath-test] testAppendOperator() : FAIL (" << e.error() << ")" << std::endl;
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
 	}
 }
 
 void testAppendStressTest()
 {
-	const std::string raw_dir_path = "foo/bar/";
-	const std::string raw_file_path = "file.txt";
-	size_t append_itteration_count = 1000;
-	size_t expected_element_count = (append_itteration_count * 2) + 1;
-
+	std::cout << "[FileSystemPath-test] testAppendStressTest : ";
 	try
 	{
+		const std::string raw_dir_path = "foo/bar/";
+		const std::string raw_file_path = "file.txt";
+		size_t append_itteration_count = 1000;
+		size_t expected_element_count = (append_itteration_count * 2) + 1;
+	
 		tc::filesystem::Path path;
 		tc::filesystem::Path path_dir(raw_dir_path);
 
@@ -190,70 +201,40 @@ void testAppendStressTest()
 
 		if (path.getPathElementList().size() != expected_element_count)
 		{
-			throw tc::Exception("main.cpp", "unexpected number of path elements");
+			throw tc::Exception("unexpected number of path elements");
 		}
 
 		if (path.getPathElementList()[expected_element_count-1] != "file.txt")
 		{
-			throw tc::Exception("main.cpp", "Unexpected value for tested path element");
+			throw tc::Exception("Unexpected value for tested path element");
 		}
 
 		if (path.getPathElementList()[expected_element_count-2] != "bar")
 		{
-			throw tc::Exception("main.cpp", "Unexpected value for tested path element");
+			throw tc::Exception("Unexpected value for tested path element");
 		}
 
 		if (path.getPathElementList()[expected_element_count-3] != "foo")
 		{
-			throw tc::Exception("main.cpp", "Unexpected value for tested path element");
+			throw tc::Exception("Unexpected value for tested path element");
 		}
 
-		std::cout << "[FileSystemPath-test] testAppendStressTest() : PASS"  << std::endl;
+		std::cout << "PASS"  << std::endl;
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "[FileSystemPath-test] testAppendStressTest() : FAIL (" << e.error() << ")" << std::endl;
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
 	}
 }
 
-/*
-void testAppendToPath()
-{
-	tc::filesystem::Path path("a directory/a subdirectory");
-
-	path += tc::filesystem::Path("a file");
-
-	std::string utf8_path;
-
-	pathToUnixUtf8(path, utf8_path);
-
-	std::cout << "[testAppendToPath] \"" << utf8_path << "\"" << std::endl;
-}
-
-void testAppendToPathStressTest()
-{
-	tc::filesystem::Path path("a directory/a subdirectory");
-
-
-	for (size_t i = 0; i < 100; i++)
-		path += tc::filesystem::Path("a dir");
-
-	std::string utf8_path;
-
-	pathToUnixUtf8(path, utf8_path);
-
-	std::cout << "[testAppendToPathStressTest] \"" << utf8_path << "\"" << std::endl;
-}
-*/
-
 int main(int argc, char** argv)
 {
-	testPathComposition("testEmptyPath", "", 0, true);
-	testPathComposition("testRootPath", "/", 1, true);
-	testPathComposition("testLastCharIsSlash", "some/path/ends/in/slash/", "some/path/ends/in/slash", 5, true);
-	testPathComposition("testRelativePath", "a dir/a subdir", 2, true);
-	testPathComposition("testAbsoluteUnixPath", "/usr/bin/bash", 4, true);
-	testPathComposition("testAbsoluteWindowsPath", "C:\\Users\\TestUser\\Desktop\\hi.txt", 5, false);
+	testPathComposition("testEmptyPath", "", 0, UNIX_PATH);
+	testPathComposition("testRootPath", "/", 1, UNIX_PATH);
+	testPathComposition("testLastCharIsSlash", "some/path/ends/in/slash/", "some/path/ends/in/slash", 5, UNIX_PATH);
+	testPathComposition("testRelativePath", "a dir/a subdir", 2, UNIX_PATH);
+	testPathComposition("testAbsoluteUnixPath", "/usr/bin/bash", 4, UNIX_PATH);
+	testPathComposition("testAbsoluteWindowsPath", "C:\\Users\\TestUser\\Desktop\\hi.txt", 5, WIN32_PATH);
 	testEqualComparisonOperator();
 	testUnequalComparisonOperator();
 	testAdditionOperator();

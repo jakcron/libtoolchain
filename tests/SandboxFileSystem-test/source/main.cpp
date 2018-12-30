@@ -52,16 +52,17 @@ private:
 
 void testSandboxRootPath()
 {
-	class DummyFileSystem : public DummyFileSystemBase
-	{
-	public:
-		DummyFileSystem()
-		{
-		}
-	};
-
+	std::cout << "[SandboxFileSystem] testSandboxRootPath : ";
 	try
 	{
+		class DummyFileSystem : public DummyFileSystemBase
+		{
+		public:
+			DummyFileSystem()
+			{
+			}
+		};
+
 		tc::SharedPtr<tc::filesystem::IFileSystem> fs = new DummyFileSystem();
 
 		// define directory names
@@ -83,51 +84,53 @@ void testSandboxRootPath()
 			// check the sandbox is generating the correct path
 			if (sandbox_real_root != dummyfs_curdir + sandbox_relative_root)
 			{
-				throw tc::Exception("main.cpp", "Sandbox root directory did not have expected absolute real path");
+				throw tc::Exception("Sandbox root directory did not have expected absolute real path");
 			}
 
-			std::cout << "[SandboxFileSystem-test] testSandboxRootPath() : PASS" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "[SandboxFileSystem-test] testSandboxRootPath() : FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 
 	
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "[SandboxFileSystem-test] testSandboxRootPath() : UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
 }
 
 void testCreateFile()
 {
-	class DummyFileSystem : public DummyFileSystemBase
-	{
-	public:
-		DummyFileSystem()
-		{
-		}
-
-		tc::filesystem::IFile* openFile(const tc::filesystem::Path& path, tc::filesystem::FileAccessMode mode)
-		{
-			getCurrentDirectory(mCurDir);
-			if (mode != tc::filesystem::FAM_CREATE)
-			{
-				throw tc::Exception("DummyFileSystem", "file had incorrect access permissions");
-			}
-			if (path != mCurDir + tc::filesystem::Path("a_dir/testfile"))
-			{
-				throw tc::Exception("DummyFileSystem", "file had incorrect path");
-			}
-			return nullptr;
-		}
-	private:
-		tc::filesystem::Path mCurDir;
-	};
+	std::cout << "[SandboxFileSystem] testCreateFile : ";
 	try
 	{
+		class DummyFileSystem : public DummyFileSystemBase
+		{
+		public:
+			DummyFileSystem()
+			{
+			}
+
+			tc::filesystem::IFile* openFile(const tc::filesystem::Path& path, tc::filesystem::FileAccessMode mode)
+			{
+				getCurrentDirectory(mCurDir);
+				if (mode != tc::filesystem::FAM_CREATE)
+				{
+					throw tc::Exception("DummyFileSystem", "file had incorrect access permissions");
+				}
+				if (path != mCurDir + tc::filesystem::Path("a_dir/testfile"))
+				{
+					throw tc::Exception("DummyFileSystem", "file had incorrect path");
+				}
+				return nullptr;
+			}
+		private:
+			tc::filesystem::Path mCurDir;
+		};
+
 		tc::SharedPtr<tc::filesystem::IFileSystem> fs = new DummyFileSystem();
 
 		// define directory names
@@ -143,46 +146,48 @@ void testCreateFile()
 			// attempt to create file
 			sb_fs->openFile(tc::filesystem::Path("/a_dir/testfile"), tc::filesystem::FAM_CREATE);
 			
-			std::cout << "[SandboxFileSystem-test] testCreateFile() : PASS" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "[SandboxFileSystem-test] testCreateFile() : FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "[SandboxFileSystem-test] testCreateFile() : UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
 }
 
 void testOpenFile()
 {
-	class DummyFileSystem : public DummyFileSystemBase
-	{
-	public:
-		DummyFileSystem()
-		{
-		}
-
-		tc::filesystem::IFile* openFile(const tc::filesystem::Path& path, tc::filesystem::FileAccessMode mode)
-		{
-			getCurrentDirectory(mCurDir);
-			if (mode != tc::filesystem::FAM_READ)
-			{
-				throw tc::Exception("DummyFileSystem", "file had incorrect access permissions");
-			}
-			if (path != mCurDir + tc::filesystem::Path("a_dir/testfile"))
-			{
-				throw tc::Exception("DummyFileSystem", "file had incorrect path");
-			}
-			return nullptr;
-		}
-	private:
-		tc::filesystem::Path mCurDir;
-	};
+	std::cout << "[SandboxFileSystem] testOpenFile : ";
 	try
 	{
+		class DummyFileSystem : public DummyFileSystemBase
+		{
+		public:
+			DummyFileSystem()
+			{
+			}
+
+			tc::filesystem::IFile* openFile(const tc::filesystem::Path& path, tc::filesystem::FileAccessMode mode)
+			{
+				getCurrentDirectory(mCurDir);
+				if (mode != tc::filesystem::FAM_READ)
+				{
+					throw tc::Exception("DummyFileSystem", "file had incorrect access permissions");
+				}
+				if (path != mCurDir + tc::filesystem::Path("a_dir/testfile"))
+				{
+					throw tc::Exception("DummyFileSystem", "file had incorrect path");
+				}
+				return nullptr;
+			}
+		private:
+			tc::filesystem::Path mCurDir;
+		};
+
 		tc::SharedPtr<tc::filesystem::IFileSystem> fs = new DummyFileSystem();
 
 		// define directory names
@@ -198,41 +203,43 @@ void testOpenFile()
 			// attempt to open file
 			sb_fs->openFile(tc::filesystem::Path("/a_dir/testfile"), tc::filesystem::FAM_READ);
 			
-			std::cout << "[SandboxFileSystem-test] testOpenFile() : PASS" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "[SandboxFileSystem-test] testOpenFile() : FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "[SandboxFileSystem-test] testOpenFile() : UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
 }
 
 void testRemoveFile()
 {
-	class DummyFileSystem : public DummyFileSystemBase
-	{
-	public:
-		DummyFileSystem()
-		{
-		}
-
-		void deleteFile(const tc::filesystem::Path& path)
-		{
-			getCurrentDirectory(mCurDir);
-			if (path != mCurDir + tc::filesystem::Path("a_dir/testfile"))
-			{
-				throw tc::Exception("DummyFileSystem", "file had incorrect path");
-			}
-		}
-	private:
-		tc::filesystem::Path mCurDir;
-	};
+	std::cout << "[SandboxFileSystem] testRemoveFile : ";
 	try
 	{
+		class DummyFileSystem : public DummyFileSystemBase
+		{
+		public:
+			DummyFileSystem()
+			{
+			}
+
+			void deleteFile(const tc::filesystem::Path& path)
+			{
+				getCurrentDirectory(mCurDir);
+				if (path != mCurDir + tc::filesystem::Path("a_dir/testfile"))
+				{
+					throw tc::Exception("DummyFileSystem", "file had incorrect path");
+				}
+			}
+		private:
+			tc::filesystem::Path mCurDir;
+		};
+	
 		tc::SharedPtr<tc::filesystem::IFileSystem> fs = new DummyFileSystem();
 
 		// define directory names
@@ -248,42 +255,44 @@ void testRemoveFile()
 			// attempt to delete file
 			sb_fs->deleteFile(tc::filesystem::Path("/a_dir/testfile"));
 
-			std::cout << "[SandboxFileSystem-test] testRemoveFile() : PASS" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "[SandboxFileSystem-test] testRemoveFile() : FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "[SandboxFileSystem-test] testRemoveFile() : UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
 }
 
 
 void testCreateDirectory()
 {
-	class DummyFileSystem : public DummyFileSystemBase
-	{
-	public:
-		DummyFileSystem()
-		{
-		}
-
-		void createDirectory(const tc::filesystem::Path& path)
-		{
-			getCurrentDirectory(mCurDir);
-			if (path != mCurDir + tc::filesystem::Path("a_dir/testdir/hey"))
-			{
-				throw tc::Exception("DummyFileSystem", "dir had incorrect path");
-			}
-		}
-	private:
-		tc::filesystem::Path mCurDir;
-	};
+	std::cout << "[SandboxFileSystem] testCreateDirectory : ";
 	try
 	{
+		class DummyFileSystem : public DummyFileSystemBase
+		{
+		public:
+			DummyFileSystem()
+			{
+			}
+
+			void createDirectory(const tc::filesystem::Path& path)
+			{
+				getCurrentDirectory(mCurDir);
+				if (path != mCurDir + tc::filesystem::Path("a_dir/testdir/hey"))
+				{
+					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
+				}
+			}
+		private:
+			tc::filesystem::Path mCurDir;
+		};
+
 		tc::SharedPtr<tc::filesystem::IFileSystem> fs = new DummyFileSystem();
 
 		// define directory names
@@ -299,41 +308,43 @@ void testCreateDirectory()
 			// attempt to create directory
 			sb_fs->createDirectory(tc::filesystem::Path("/a_dir/testdir/hey"));
 
-			std::cout << "[SandboxFileSystem-test] testCreateDirectory() : PASS" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "[SandboxFileSystem-test] testCreateDirectory() : FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "[SandboxFileSystem-test] testCreateDirectory() : UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
 }
 
 void testRemoveDirectory()
 {
-	class DummyFileSystem : public DummyFileSystemBase
-	{
-	public:
-		DummyFileSystem()
-		{
-		}
-
-		void removeDirectory(const tc::filesystem::Path& path)
-		{
-			getCurrentDirectory(mCurDir);
-			if (path != mCurDir + tc::filesystem::Path("a_dir/testdir/hey"))
-			{
-				throw tc::Exception("DummyFileSystem", "dir had incorrect path");
-			}
-		}
-	private:
-		tc::filesystem::Path mCurDir;
-	};
+	std::cout << "[SandboxFileSystem] testRemoveDirectory : ";
 	try
 	{
+		class DummyFileSystem : public DummyFileSystemBase
+		{
+		public:
+			DummyFileSystem()
+			{
+			}
+
+			void removeDirectory(const tc::filesystem::Path& path)
+			{
+				getCurrentDirectory(mCurDir);
+				if (path != mCurDir + tc::filesystem::Path("a_dir/testdir/hey"))
+				{
+					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
+				}
+			}
+		private:
+			tc::filesystem::Path mCurDir;
+		};
+
 		tc::SharedPtr<tc::filesystem::IFileSystem> fs = new DummyFileSystem();
 
 		// define directory names
@@ -349,45 +360,47 @@ void testRemoveDirectory()
 			// attempt to remove directory
 			sb_fs->removeDirectory(tc::filesystem::Path("/a_dir/testdir/hey"));
 
-			std::cout << "[SandboxFileSystem-test] testRemoveDirectory() : PASS" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "[SandboxFileSystem-test] testRemoveDirectory() : FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "[SandboxFileSystem-test] testRemoveDirectory() : UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
 }
 
 void testGetDirectoryListing()
 {
-	class DummyFileSystem : public DummyFileSystemBase
-	{
-	public:
-		DummyFileSystem()
-		{
-		}
-
-		void getDirectoryInfo(const tc::filesystem::Path& path, tc::filesystem::DirectoryInfo& dir_info)
-		{
-			getCurrentDirectory(mCurDir);
-			if (path != mCurDir + tc::filesystem::Path("a_dir/testdir/hey"))
-			{
-				throw tc::Exception("DummyFileSystem", "dir had incorrect path");
-			}
-
-			dir_info.setDirectoryPath(path);
-			dir_info.setChildDirectoryList(std::vector<std::string>({ "dir0", "dir1", "dir2" }));
-			dir_info.setChildFileList(std::vector<std::string>({ "file0", "file1" }));
-		}
-	private:
-		tc::filesystem::Path mCurDir;
-	};
+	std::cout << "[SandboxFileSystem] testGetDirectoryListing : ";
 	try
 	{
+		class DummyFileSystem : public DummyFileSystemBase
+		{
+		public:
+			DummyFileSystem()
+			{
+			}
+
+			void getDirectoryInfo(const tc::filesystem::Path& path, tc::filesystem::DirectoryInfo& dir_info)
+			{
+				getCurrentDirectory(mCurDir);
+				if (path != mCurDir + tc::filesystem::Path("a_dir/testdir/hey"))
+				{
+					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
+				}
+
+				dir_info.setDirectoryPath(path);
+				dir_info.setChildDirectoryList(std::vector<std::string>({ "dir0", "dir1", "dir2" }));
+				dir_info.setChildFileList(std::vector<std::string>({ "file0", "file1" }));
+			}
+		private:
+			tc::filesystem::Path mCurDir;
+		};
+
 		tc::SharedPtr<tc::filesystem::IFileSystem> fs = new DummyFileSystem();
 
 		// define directory names
@@ -437,46 +450,48 @@ void testGetDirectoryListing()
 				throw tc::Exception("DummyFileSystem", "Directory path was not as expected");
 			}
 
-			std::cout << "[SandboxFileSystem-test] testGetDirectoryListing() : PASS" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "[SandboxFileSystem-test] testGetDirectoryListing() : FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "[SandboxFileSystem-test] testGetDirectoryListing() : UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
 }
 
 
 void testNavigateUpSandboxEscape()
 {
-	class DummyFileSystem : public DummyFileSystemBase
-	{
-	public:
-		DummyFileSystem()
-		{
-		}
-
-		void getDirectoryInfo(const tc::filesystem::Path& path, tc::filesystem::DirectoryInfo& dir_info)
-		{			
-			dir_info.setDirectoryPath(path);
-			mLastUsedPath = path;
-		}
-
-		const tc::filesystem::Path& getLastUsedPath()
-		{
-			return mLastUsedPath;
-		}
-
-	private:
-		tc::filesystem::Path mLastUsedPath;
-		tc::filesystem::Path mCurDir;
-	};
+	std::cout << "[SandboxFileSystem] testNavigateUpSandboxEscape : ";
 	try
 	{
+		class DummyFileSystem : public DummyFileSystemBase
+		{
+		public:
+			DummyFileSystem()
+			{
+			}
+
+			void getDirectoryInfo(const tc::filesystem::Path& path, tc::filesystem::DirectoryInfo& dir_info)
+			{			
+				dir_info.setDirectoryPath(path);
+				mLastUsedPath = path;
+			}
+
+			const tc::filesystem::Path& getLastUsedPath()
+			{
+				return mLastUsedPath;
+			}
+
+		private:
+			tc::filesystem::Path mLastUsedPath;
+			tc::filesystem::Path mCurDir;
+		};
+
 		tc::SharedPtr<tc::filesystem::IFileSystem> fs = new DummyFileSystem();
 
 		// save the current directory
@@ -498,58 +513,60 @@ void testNavigateUpSandboxEscape()
 			
 			if (dir_info.getDirectoryPath() != tc::filesystem::Path("/"))
 			{
-				throw tc::Exception("main.cpp", "Sandbox directory path not as expected");
+				throw tc::Exception("Sandbox directory path not as expected");
 			}
 
 			if (((DummyFileSystem*)fs.operator->())->getLastUsedPath() != dummyfs_curdir + sandbox_relative_root)
 			{
-				throw tc::Exception("main.cpp", "Real directory path not as expected");
+				throw tc::Exception("Real directory path not as expected");
 			}
 
-			std::cout << "[SandboxFileSystem-test] testNavigateUpSandboxEscape() : PASS" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "[SandboxFileSystem-test] testNavigateUpSandboxEscape() : FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "[SandboxFileSystem-test] testNavigateUpSandboxEscape() : UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
 }
 
 void testOpenFileOutsideSandbox()
 {
-	class DummyFileSystem : public DummyFileSystemBase
-	{
-	public:
-		DummyFileSystem()
-		{
-		}
-
-		tc::filesystem::IFile* openFile(const tc::filesystem::Path& path, tc::filesystem::FileAccessMode mode)
-		{
-			getCurrentDirectory(mCurDir);
-			if (mode != tc::filesystem::FAM_READ)
-			{
-				throw tc::Exception("DummyFileSystem", "file had incorrect access mode");
-			}
-			if (path == tc::filesystem::Path("/home/jakcron/source/LibToolChain/testdir/inaccessible_file0"))
-			{
-				throw tc::Exception("DummyFileSystem", "escaped sandbox");
-			}
-			if (path != tc::filesystem::Path("/home/jakcron/source/LibToolChain/testdir/sandbox/inaccessible_file0"))
-			{
-				throw tc::Exception("DummyFileSystem", "sandbox path was not as expected");
-			}
-			return nullptr;
-		}
-	private:
-		tc::filesystem::Path mCurDir;
-	};
+	std::cout << "[SandboxFileSystem] testOpenFileOutsideSandbox : ";
 	try
 	{
+		class DummyFileSystem : public DummyFileSystemBase
+		{
+		public:
+			DummyFileSystem()
+			{
+			}
+
+			tc::filesystem::IFile* openFile(const tc::filesystem::Path& path, tc::filesystem::FileAccessMode mode)
+			{
+				getCurrentDirectory(mCurDir);
+				if (mode != tc::filesystem::FAM_READ)
+				{
+					throw tc::Exception("DummyFileSystem", "file had incorrect access mode");
+				}
+				if (path == tc::filesystem::Path("/home/jakcron/source/LibToolChain/testdir/inaccessible_file0"))
+				{
+					throw tc::Exception("DummyFileSystem", "escaped sandbox");
+				}
+				if (path != tc::filesystem::Path("/home/jakcron/source/LibToolChain/testdir/sandbox/inaccessible_file0"))
+				{
+					throw tc::Exception("DummyFileSystem", "sandbox path was not as expected");
+				}
+				return nullptr;
+			}
+		private:
+			tc::filesystem::Path mCurDir;
+		};
+
 		tc::SharedPtr<tc::filesystem::IFileSystem> fs = new DummyFileSystem();
 
 		// save the current directory
@@ -568,16 +585,16 @@ void testOpenFileOutsideSandbox()
 			sb_fs->setCurrentDirectory(tc::filesystem::Path("/"));
 			tc::SharedPtr<tc::filesystem::IFile> inacessible_file = sb_fs->openFile(tc::filesystem::Path("../inaccessible_file0"), tc::filesystem::FAM_READ);
 
-			std::cout << "[SandboxFileSystem-test] testOpenFileOutsideSandbox() : PASS" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "[SandboxFileSystem-test] testOpenFileOutsideSandbox() : FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "[SandboxFileSystem-test] testOpenFileOutsideSandbox() : UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
 }
 
