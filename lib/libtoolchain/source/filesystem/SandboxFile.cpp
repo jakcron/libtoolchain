@@ -28,10 +28,10 @@ uint64_t tc::filesystem::SandboxFile::pos()
 void tc::filesystem::SandboxFile::read(byte_t* out, size_t len)
 {
 	// assert proper position in file
-	(*mFile)->seek(mVirtualOffset + mFileBaseOffset);
+	mFile->seek(mVirtualOffset + mFileBaseOffset);
 
 	// read data
-	(*mFile)->read(out, len);
+	mFile->read(out, len);
 
 	// update virtual offset
 	seek(mVirtualOffset + len);
@@ -40,10 +40,10 @@ void tc::filesystem::SandboxFile::read(byte_t* out, size_t len)
 void tc::filesystem::SandboxFile::write(const byte_t* out, size_t len)
 {
 	// assert proper position in file
-	(*mFile)->seek(mVirtualOffset + mFileBaseOffset);
+	mFile->seek(mVirtualOffset + mFileBaseOffset);
 
 	// write data
-	(*mFile)->write(out, len);
+	mFile->write(out, len);
 
 	// update virtual offset
 	seek(mVirtualOffset + len);

@@ -9,8 +9,8 @@
  * 
  * 
  * \author Jack (jakcron)
- * \version 0.1
- * \date 2018/11/10
+ * \version 0.2
+ * \date 2018/12/30
  *
  * Contact: jakcron.dev@gmail.com
  *
@@ -42,12 +42,36 @@ namespace tc
 		/// Operator to duplicate another SharedPtr
 		void operator=(const SharedPtr<T>& other);
 
-		/// Direct const access to pointer
-		const T* operator*() const;
+		/** \brief Dereference the managed pointer
+		 *  \return T& Derefenced pointer
+		 * 
+		 * This has undefined behavour when the managed pointer is null.
+		 */
+		T& operator*() const;
 
-		/// Direct access to pointer
-		T* operator*();
+		/** \brief Access members of the managed pointer
+		 *  \return T* raw pointer
+		 * 
+		 * This has undefined behavour when the managed pointer is null.
+		 */
+		T* operator->() const;
 
+		/** \brief Access the managed pointer
+		 *  \return T* raw pointer
+		 */
+		T* get() const;
+
+		/** \brief Determine if the managed pointer is null
+		 *  \return bool true if the managed ptr is nullptr
+		 */
+		bool isNull() const;
+
+		/** \brief Release the managed pointer
+		 * 
+		 * Only if this is the last instance of SharedPtr managing this pointer, will the pointer be deleted.
+		 * After calling this method, the managed pointer shall become null.
+		 */
+		void release();
 	private:
 		T* mPtr;
 		size_t* mRefCnt;
@@ -58,9 +82,8 @@ namespace tc
 	template <class T>
 	inline SharedPtr<T>::SharedPtr() :
 		mPtr(nullptr),
-		mRefCnt(new size_t)
+		mRefCnt(nullptr)
 	{
-		*mRefCnt = 0;
 	}
 
 	template <class T>
@@ -96,8 +119,7 @@ namespace tc
 		else
 		{
 			mPtr = nullptr;
-			mRefCnt = new size_t;
-			*mRefCnt = 0;
+			mRefCnt = nullptr;
 		}
 		
 	}
@@ -107,37 +129,60 @@ namespace tc
 	{
 		deletePtr();
 
-		mPtr = other.mPtr;
-		mRefCnt = other.mRefCnt;
-		*mRefCnt += 1;
+		if (other.mPtr != nullptr)
+		{
+			mPtr = other.mPtr;
+			mRefCnt = other.mRefCnt;
+			*mRefCnt += 1;
+		}
+		else
+		{
+			mPtr = nullptr;
+			mRefCnt = nullptr;
+		}
+		
 	}
 
 	template <class T>
-	inline const T* SharedPtr<T>::operator*() const
+	inline T& SharedPtr<T>::operator*() const
+	{
+		return *mPtr;
+	}
+
+	template <class T>
+	inline T* SharedPtr<T>::operator->() const
 	{
 		return mPtr;
 	}
 
 	template <class T>
-	inline T* SharedPtr<T>::operator*()
+	inline T* SharedPtr<T>::get() const
 	{
 		return mPtr;
+	}
+
+	template <class T>
+	inline bool SharedPtr<T>::isNull() const
+	{
+		return mPtr == nullptr;
+	}
+
+	template <class T>
+	inline void SharedPtr<T>::release()
+	{
+		deletePtr();
 	}
 
 	template <class T>
 	inline void SharedPtr<T>::deletePtr()
 	{
-		// if this is not the last reference
-		if (*mRefCnt > 1)
+		// if this is an empty refernce
+		if (mRefCnt == nullptr)
 		{
-			// decrement reference count
-			*mRefCnt -= 1;
-
-			// make ptrs null
 			mPtr = nullptr;
 			mRefCnt = nullptr;
 		}
-		// if this is the last refeference
+		// else if this is the last reference
 		else if (*mRefCnt == 1)
 		{
 			// delete memory
@@ -148,11 +193,13 @@ namespace tc
 			mPtr = nullptr;
 			mRefCnt = nullptr;
 		}
-		// else if this is an empty refernce
-		else if (*mRefCnt == 0)
+		// else if this is not the last reference
+		else if (*mRefCnt > 1)
 		{
-			delete mRefCnt;
+			// decrement reference count
+			*mRefCnt -= 1;
 
+			// make ptrs null
 			mPtr = nullptr;
 			mRefCnt = nullptr;
 		}
