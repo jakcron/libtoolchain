@@ -47,18 +47,21 @@ private:
 
 void testSize()
 {
-	class DummyFile : public DummyFileBase
-	{
-	public:
-		DummyFile()
-		{
-		}
-	};
+	std::cout << "[SandboxFile-test] testSize : ";
 	try
 	{
-		tc::SharedPtr<tc::filesystem::IFile> file = new DummyFile();
+		class DummyFile : public DummyFileBase
+		{
+		public:
+			DummyFile()
+			{
+			}
+		};
+
 		try
 		{
+			tc::SharedPtr<tc::filesystem::IFile> file = new DummyFile();
+
 			uint64_t sandbox_offset = 0x56;
 			uint64_t sandbox_size = 0x1000;
 
@@ -67,46 +70,49 @@ void testSize()
 
 			if (sb_file->size() != sandbox_size)
 			{
-				throw tc::Exception("main.cpp", "Unexpected file size");
+				throw tc::Exception("Unexpected file size");
 			}
 
 
-			std::cout << "[SandboxFile-test] testSize() : PASS" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "[SandboxFile-test] testSize() : FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "[SandboxFile-test] testSize() : UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
 }
 
 void testSeekPos()
 {
-	class DummyFile : public DummyFileBase
-	{
-	public:
-		DummyFile()
-		{
-
-		}
-
-		void read(byte_t* data, size_t len)
-		{
-			if (this->pos() != (0x56 + 0x337))
-			{
-				throw tc::Exception("Real file file offset was not as expected");
-			}
-		}
-	};
+	std::cout << "[SandboxFile-test] testSeekPos : ";
 	try
 	{
-		tc::SharedPtr<tc::filesystem::IFile> file = new DummyFile();
+		class DummyFile : public DummyFileBase
+		{
+		public:
+			DummyFile()
+			{
+
+			}
+
+			void read(byte_t* data, size_t len)
+			{
+				if (this->pos() != (0x56 + 0x337))
+				{
+					throw tc::Exception("Real file file offset was not as expected");
+				}
+			}
+		};
+
 		try
 		{
+			tc::SharedPtr<tc::filesystem::IFile> file = new DummyFile();
+
 			uint64_t sandbox_offset = 0x56;
 			uint64_t sandbox_size = 0x1000;
 
@@ -118,59 +124,62 @@ void testSeekPos()
 
 			if (sb_file->pos() != offset_to_seek)
 			{
-				throw tc::Exception("main.cpp", "Was not able to seek as expected");
+				throw tc::Exception("Was not able to seek as expected");
 			}
 
 			sb_file->read(nullptr, 0x20);
 
 			if (sb_file->pos() != offset_to_seek + 0x20)
 			{
-				throw tc::Exception("main.cpp", "Was not able to seek as expected");
+				throw tc::Exception("Was not able to seek as expected");
 			}
 
 
 
-			std::cout << "[SandboxFile-test] testSeekPos() : PASS" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "[SandboxFile-test] testSeekPos() : FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "[SandboxFile-test] testSeekPos() : UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
 }
 
 void testRead()
 {
-	class DummyFile : public DummyFileBase
-	{
-	public:
-		DummyFile()
-		{
-
-		}
-
-		void read(byte_t* data, size_t len)
-		{
-			if (data != (byte_t*)0xcafe)
-			{
-				throw tc::Exception("'data' pointer was passed to base IFile object not as expected");
-			}
-
-			if (len != 0xdeadbabe)
-			{
-				throw tc::Exception("'len' parameter was passed to base IFile object not as expected");
-			}
-		}
-	};
+	std::cout << "[SandboxFile-test] testRead : ";
 	try
 	{
-		tc::SharedPtr<tc::filesystem::IFile> file = new DummyFile();
+		class DummyFile : public DummyFileBase
+		{
+		public:
+			DummyFile()
+			{
+
+			}
+
+			void read(byte_t* data, size_t len)
+			{
+				if (data != (byte_t*)0xcafe)
+				{
+					throw tc::Exception("'data' pointer was passed to base IFile object not as expected");
+				}
+
+				if (len != 0xdeadbabe)
+				{
+					throw tc::Exception("'len' parameter was passed to base IFile object not as expected");
+				}
+			}
+		};
+
 		try
 		{
+			tc::SharedPtr<tc::filesystem::IFile> file = new DummyFile();
+
 			uint64_t sandbox_offset = 0x56;
 			uint64_t sandbox_size = 0x1000;
 
@@ -185,47 +194,50 @@ void testRead()
 
 			sb_file->read(dummy_ptr, dummy_read_len);
 
-			std::cout << "[SandboxFile-test] testRead() : PASS" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "[SandboxFile-test] testRead() : FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "[SandboxFile-test] testRead() : UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
 }
 
 void testWrite()
 {
-	class DummyFile : public DummyFileBase
-	{
-	public:
-		DummyFile()
-		{
-
-		}
-
-		void write(const byte_t* data, size_t len)
-		{
-			if (data != (const byte_t*)0xcafe)
-			{
-				throw tc::Exception("'data' pointer was passed to base IFile object not as expected");
-			}
-
-			if (len != 0xdeadbabe)
-			{
-				throw tc::Exception("'len' parameter was passed to base IFile object not as expected");
-			}
-		}
-	};
+	std::cout << "[SandboxFile-test] testWrite : ";
 	try
 	{
-		tc::SharedPtr<tc::filesystem::IFile> file = new DummyFile();
+		class DummyFile : public DummyFileBase
+		{
+		public:
+			DummyFile()
+			{
+
+			}
+
+			void write(const byte_t* data, size_t len)
+			{
+				if (data != (const byte_t*)0xcafe)
+				{
+					throw tc::Exception("'data' pointer was passed to base IFile object not as expected");
+				}
+
+				if (len != 0xdeadbabe)
+				{
+					throw tc::Exception("'len' parameter was passed to base IFile object not as expected");
+				}
+			}
+		};
+
 		try
 		{
+			tc::SharedPtr<tc::filesystem::IFile> file = new DummyFile();
+
 			uint64_t sandbox_offset = 0x56;
 			uint64_t sandbox_size = 0x1000;
 
@@ -240,16 +252,16 @@ void testWrite()
 
 			sb_file->write(dummy_ptr, dummy_read_len);
 
-			std::cout << "[SandboxFile-test] testWrite() : PASS" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "[SandboxFile-test] testWrite() : FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "[SandboxFile-test] testWrite() : UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
 }
 
