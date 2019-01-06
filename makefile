@@ -4,7 +4,7 @@ PROGRAM_DIR = $(PROJECT_DIR)/tests
 BIN_DIR = $(PROJECT_DIR)/bin
 
 LIBS = libtoolchain
-PROGS = SharedPtr-test UnicodeTranscode-test FileSystemPath-test LocalFileSystem-test SandboxFileSystem-test SandboxFile-test 
+PROGS = SharedPtr-test Optional-test UnicodeTranscode-test FileSystemPath-test LocalFileSystem-test SandboxFileSystem-test SandboxFile-test 
 
 main: build
 
