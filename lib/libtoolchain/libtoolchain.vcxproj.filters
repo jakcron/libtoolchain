@@ -39,6 +39,12 @@
     <ClInclude Include="include\tc\endian.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\tc\filesystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tc\Optional.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="include\tc\types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -77,9 +83,6 @@
     </ClInclude>
     <ClInclude Include="include\tc\unicode\transcode.h">
       <Filter>Header Files\unicode</Filter>
-    </ClInclude>
-    <ClInclude Include="include\tc\filesystem.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

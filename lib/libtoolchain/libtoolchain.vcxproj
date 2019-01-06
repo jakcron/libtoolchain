@@ -125,6 +125,7 @@
     <ClInclude Include="include\tc\SharedPtr.h" />
     <ClInclude Include="include\tc\endian.h" />
     <ClInclude Include="include\tc\filesystem.h" />
+    <ClInclude Include="include\tc\Optional.h" />
     <ClInclude Include="include\tc\types.h" />
     <ClInclude Include="include\tc\unicode.h" />
     <ClInclude Include="include\tc\filesystem\DirectoryInfo.h" />
