@@ -24,15 +24,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharedPtr-test", "tests\Sha
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Optional-test", "tests\Optional-test\Optional-test.vcxproj", "{B1BA8046-1C4A-43A7-B0C9-69626EEEA22A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnicodeTranscode-test", "tests\UnicodeTranscode-test\UnicodeTranscode-test.vcxproj", "{06638701-1184-4821-AC3A-CA53719B1CAF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utf-Transcode-test", "tests\utf-Transcode-test\utf-Transcode-test.vcxproj", "{06638701-1184-4821-AC3A-CA53719B1CAF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FileSystemPath-test", "tests\FileSystemPath-test\FileSystemPath-test.vcxproj", "{5B5745FA-E258-4E81-9194-58F1A7CC28E9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fs-Path-test", "tests\fs-Path-test\fs-Path-test.vcxproj", "{5B5745FA-E258-4E81-9194-58F1A7CC28E9}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LocalFileSystem-test", "tests\LocalFileSystem-test\LocalFileSystem-test.vcxproj", "{2F42BCD6-CEB5-4B0B-9AC2-060118860B73}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fs-LocalFileSystem-test", "tests\fs-LocalFileSystem-test\fs-LocalFileSystem-test.vcxproj", "{2F42BCD6-CEB5-4B0B-9AC2-060118860B73}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SandboxFileSystem-test", "tests\SandboxFileSystem-test\SandboxFileSystem-test.vcxproj", "{B95E3374-537E-4553-8DFC-7490CF6D3A69}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fs-SandboxedIFileSystem-test", "tests\fs-SandboxedIFileSystem-test\fs-SandboxedIFileSystem-test.vcxproj", "{B95E3374-537E-4553-8DFC-7490CF6D3A69}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SandboxFile-test", "tests\SandboxFile-test\SandboxFile-test.vcxproj", "{FDDDE6CC-BFF0-473A-92B5-471198E8903E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fs-SandboxedIFile-test", "tests\fs-SandboxedIFile-test\fs-SandboxedIFile-test.vcxproj", "{FDDDE6CC-BFF0-473A-92B5-471198E8903E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

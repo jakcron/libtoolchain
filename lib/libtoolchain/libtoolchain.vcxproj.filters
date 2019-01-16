@@ -13,16 +13,16 @@
       <UniqueIdentifier>{E37475C6-78F5-498B-800E-0ADB72C8DAEF}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\filesystem">
+    <Filter Include="Header Files\fs">
       <UniqueIdentifier>{bf67319e-361c-41a7-8883-0f307e52d1e8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\unicode">
+    <Filter Include="Header Files\utf">
       <UniqueIdentifier>{b902853a-8237-4396-a9ee-1eb3b63e0144}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\filesystem">
+    <Filter Include="Source Files\fs">
       <UniqueIdentifier>{d41395ac-1422-4814-892e-4d23d9a2a2ef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\unicode">
+    <Filter Include="Source Files\utf">
       <UniqueIdentifier>{fd2c4944-3bb6-43c2-a965-f070281c9b3a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -39,7 +39,7 @@
     <ClInclude Include="include\tc\endian.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\tc\filesystem.h">
+    <ClInclude Include="include\tc\fs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\tc\Optional.h">
@@ -48,67 +48,67 @@
     <ClInclude Include="include\tc\types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\tc\unicode.h">
+    <ClInclude Include="include\tc\utf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\tc\filesystem\DirectoryInfo.h">
-      <Filter>Header Files\filesystem</Filter>
+    <ClInclude Include="include\tc\fs\DirectoryInfo.h">
+      <Filter>Header Files\fs</Filter>
     </ClInclude>
-    <ClInclude Include="include\tc\filesystem\IFile.h">
-      <Filter>Header Files\filesystem</Filter>
+    <ClInclude Include="include\tc\fs\IFile.h">
+      <Filter>Header Files\fs</Filter>
     </ClInclude>
-    <ClInclude Include="include\tc\filesystem\IFileSystem.h">
-      <Filter>Header Files\filesystem</Filter>
+    <ClInclude Include="include\tc\fs\IFileSystem.h">
+      <Filter>Header Files\fs</Filter>
     </ClInclude>
-    <ClInclude Include="include\tc\filesystem\LocalFile.h">
-      <Filter>Header Files\filesystem</Filter>
+    <ClInclude Include="include\tc\fs\LocalFile.h">
+      <Filter>Header Files\fs</Filter>
     </ClInclude>
-    <ClInclude Include="include\tc\filesystem\LocalFileSystem.h">
-      <Filter>Header Files\filesystem</Filter>
+    <ClInclude Include="include\tc\fs\LocalFileSystem.h">
+      <Filter>Header Files\fs</Filter>
     </ClInclude>
-    <ClInclude Include="include\tc\filesystem\SandboxFile.h">
-      <Filter>Header Files\filesystem</Filter>
+    <ClInclude Include="include\tc\fs\SandboxedIFile.h">
+      <Filter>Header Files\fs</Filter>
     </ClInclude>
-    <ClInclude Include="include\tc\filesystem\SandboxFileSystem.h">
-      <Filter>Header Files\filesystem</Filter>
+    <ClInclude Include="include\tc\fs\SandboxedIFileSystem.h">
+      <Filter>Header Files\fs</Filter>
     </ClInclude>
-    <ClInclude Include="include\tc\filesystem\Path.h">
-      <Filter>Header Files\filesystem</Filter>
+    <ClInclude Include="include\tc\fs\Path.h">
+      <Filter>Header Files\fs</Filter>
     </ClInclude>
-    <ClInclude Include="include\tc\unicode\utf8.h">
-      <Filter>Header Files\unicode</Filter>
+    <ClInclude Include="include\tc\utf\utf8.h">
+      <Filter>Header Files\utf</Filter>
     </ClInclude>
-    <ClInclude Include="include\tc\unicode\utf16.h">
-      <Filter>Header Files\unicode</Filter>
+    <ClInclude Include="include\tc\utf\utf16.h">
+      <Filter>Header Files\utf</Filter>
     </ClInclude>
-    <ClInclude Include="include\tc\unicode\transcode.h">
-      <Filter>Header Files\unicode</Filter>
+    <ClInclude Include="include\tc\utf\transcode.h">
+      <Filter>Header Files\utf</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\filesystem\DirectoryInfo.cpp">
-      <Filter>Source Files\filesystem</Filter>
+    <ClCompile Include="source\fs\DirectoryInfo.cpp">
+      <Filter>Source Files\fs</Filter>
     </ClCompile>
-    <ClCompile Include="source\filesystem\LocalFile.cpp">
-      <Filter>Source Files\filesystem</Filter>
+    <ClCompile Include="source\fs\LocalFile.cpp">
+      <Filter>Source Files\fs</Filter>
     </ClCompile>
-    <ClCompile Include="source\filesystem\LocalFileSystem.cpp">
-      <Filter>Source Files\filesystem</Filter>
+    <ClCompile Include="source\fs\LocalFileSystem.cpp">
+      <Filter>Source Files\fs</Filter>
     </ClCompile>
-    <ClCompile Include="source\filesystem\Path.cpp">
-      <Filter>Source Files\filesystem</Filter>
+    <ClCompile Include="source\fs\Path.cpp">
+      <Filter>Source Files\fs</Filter>
     </ClCompile>
-    <ClCompile Include="source\filesystem\SandboxFile.cpp">
-      <Filter>Source Files\filesystem</Filter>
+    <ClCompile Include="source\fs\SandboxedIFile.cpp">
+      <Filter>Source Files\fs</Filter>
     </ClCompile>
-    <ClCompile Include="source\filesystem\SandboxFileSystem.cpp">
-      <Filter>Source Files\filesystem</Filter>
+    <ClCompile Include="source\fs\SandboxedIFileSystem.cpp">
+      <Filter>Source Files\fs</Filter>
     </ClCompile>
-    <ClCompile Include="source\unicode\transcode.cpp">
-      <Filter>Source Files\unicode</Filter>
+    <ClCompile Include="source\utf\transcode.cpp">
+      <Filter>Source Files\utf</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

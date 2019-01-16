@@ -1,3 +1,10 @@
+/**
+ * @file endian.h
+ * @brief Declaration of macros and classes to unwrap primatives in an endian agnostic way
+ * @author Jack (jakcron)
+ * @version 0.1
+ * @date 2019/01/15
+ */
 #pragma once
 #include <cinttypes>
 

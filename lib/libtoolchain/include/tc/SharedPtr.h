@@ -1,25 +1,21 @@
 /**
- * \class SharedPtr
- *
- * \ingroup LibToolChain
- *
- * \brief A smart pointer which auto-deletes the embedded ptr when all references are gone
- *
- * This smart pointer counts all the copies of itself that exist, and when all copies are destroyed, then the ptr is deleted.
- * 
- * 
- * \author Jack (jakcron)
- * \version 0.2
- * \date 2018/12/30
- *
- * Contact: jakcron.dev@gmail.com
- *
+ * @file SharedPtr.h
+ * @brief Declaration of tc::SharedPtr
+ * @author Jack (jakcron)
+ * @version 0.2
+ * @date 2018/12/30
  */
 #pragma once
 #include <tc/types.h>
 
-namespace tc
-{
+namespace tc {
+
+	/**
+	 * @class SharedPtr
+	 * @brief A smart pointer which auto-deletes the embedded ptr when all references are gone
+	 *
+	 * This smart pointer counts all the copies of itself that exist, and when all copies are destroyed, then the ptr is deleted.
+	 */
 	template <class T>
 	class SharedPtr
 	{
@@ -42,31 +38,31 @@ namespace tc
 		/// Operator to duplicate another SharedPtr
 		void operator=(const SharedPtr<T>& other);
 
-		/** \brief Dereference the managed pointer
-		 *  \return T& Derefenced pointer
+		/** @brief Dereference the managed pointer
+		 *  @return T& Derefenced pointer
 		 * 
 		 * This has undefined behavour when the managed pointer is null.
 		 */
 		T& operator*() const;
 
-		/** \brief Access members of the managed pointer
-		 *  \return T* raw pointer
+		/** @brief Access members of the managed pointer
+		 *  @return T* raw pointer
 		 * 
 		 * This has undefined behavour when the managed pointer is null.
 		 */
 		T* operator->() const;
 
-		/** \brief Access the managed pointer
-		 *  \return T* raw pointer
+		/** @brief Access the managed pointer
+		 *  @return T* raw pointer
 		 */
 		T* get() const;
 
-		/** \brief Determine if the managed pointer is null
-		 *  \return bool true if the managed ptr is nullptr
+		/** @brief Determine if the managed pointer is null
+		 *  @return bool true if the managed ptr is nullptr
 		 */
 		bool isNull() const;
 
-		/** \brief Release the managed pointer
+		/** @brief Release the managed pointer
 		 * 
 		 * Only if this is the last instance of SharedPtr managing this pointer, will the pointer be deleted.
 		 * After calling this method, the managed pointer shall become null.
@@ -204,4 +200,5 @@ namespace tc
 			mRefCnt = nullptr;
 		}
 	}
-}
+
+} // namespace tc

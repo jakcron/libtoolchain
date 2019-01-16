@@ -1,9 +1,16 @@
+/**
+ * @file Exception.h
+ * @brief Declaration of tc::Exception
+ * @author Jack (jakcron)
+ * @version 0.1
+ * @date 2019/01/15
+ */
 #pragma once
 #include <exception>
 #include <string>
 
-namespace tc
-{
+namespace tc {
+
 	class Exception : public std::exception
 	{
 	public:
@@ -19,4 +26,5 @@ namespace tc
 		std::string module_;
 		std::string error_;
 	};
-}
+
+} // namespace tc
