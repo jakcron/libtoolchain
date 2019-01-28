@@ -17,11 +17,10 @@ This library aims to help with the busy work that is common to many toolchain de
 * `Makefile` - Root makefile (GNU/Unix build system file)
 * `LICENCE` - Distribution License 
 * `Doxyfile`  -  Doxygen config
-* `bin/` - Compiled example/test programs
+* `bin/` - Compiled binaries
 * `build/visualstudio/` - Visual Studio Project files
 * `docs/` - Doxygen Generated API Documentation
 * `include/` - Public headers
-* `lib/` - Compiled library files
 * `src/` - Library source code & private headers
 * `test/` - Test program source code
 
