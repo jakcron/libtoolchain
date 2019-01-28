@@ -14,15 +14,15 @@ This library aims to help with the busy work that is common to many toolchain de
 * Cryptographic Algorithms (AES, RSA, Eliptic Curve, SHA, etc)
 
 # File tree
-* `Makefile` - Root makefile (GNU/Unix build system file)
-* `LICENCE` - Distribution License 
-* `Doxyfile`  -  Doxygen config
 * `bin/` - Compiled binaries
 * `build/visualstudio/` - Visual Studio Project files
 * `docs/` - Doxygen Generated API Documentation
 * `include/` - Public headers
 * `src/` - Library source code & private headers
 * `test/` - Test program source code
+* `Makefile` - Root makefile (GNU/Unix build system file)
+* `LICENCE` - Distribution License 
+* `Doxyfile`  -  Doxygen config
 
 # Building
 For GNU/unix systems `make` can be used. For native Windows, Visual Studio project files are provided.
