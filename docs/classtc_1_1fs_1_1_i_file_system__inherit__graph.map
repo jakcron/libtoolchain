@@ -1,0 +1,4 @@
+<map id="tc::fs::IFileSystem" name="tc::fs::IFileSystem">
+<area shape="rect" id="node2" href="$classtc_1_1fs_1_1_local_file_system.html" title="An IFileSystem wrapper around the existing OS FileSystem API. " alt="" coords="5,233,163,413"/>
+<area shape="rect" id="node3" href="$classtc_1_1fs_1_1_sandboxed_i_file_system.html" title="A wrapper around an existing IFileSystem object that exposes a subset of the wrapped IFileSystem dire..." alt="" coords="187,233,381,413"/>
+</map>

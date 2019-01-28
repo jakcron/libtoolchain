@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\private">
+      <UniqueIdentifier>{946439fe-8be3-4727-a06b-ba156a3923a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\public">
+      <UniqueIdentifier>{6da5d070-2e06-4ac4-a8d6-b63a48173e14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\public\fs">
+      <UniqueIdentifier>{9824df4a-c13c-4643-b49b-497b47572477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\public\string">
+      <UniqueIdentifier>{d4011998-c73d-4ec4-a10d-4ef12f84577c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\private\fs">
+      <UniqueIdentifier>{061bbcea-b345-4a4e-9295-5a9e6709f1fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\private\string">
+      <UniqueIdentifier>{a0b38501-540c-4267-97c0-8909d09d30fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\fs">
+      <UniqueIdentifier>{8ecef8dd-2a48-45cd-940d-7ce8fbdabfd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\string">
+      <UniqueIdentifier>{4cbaa4ea-b95c-4672-90a0-27412d8f98ac}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\tc\endian.h">
+      <Filter>Header Files\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\Exception.h">
+      <Filter>Header Files\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\fs.h">
+      <Filter>Header Files\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\Optional.h">
+      <Filter>Header Files\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\SharedPtr.h">
+      <Filter>Header Files\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\string.h">
+      <Filter>Header Files\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\tc.h">
+      <Filter>Header Files\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\types.h">
+      <Filter>Header Files\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\fs\DirectoryInfo.h">
+      <Filter>Header Files\public\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\fs\IFile.h">
+      <Filter>Header Files\public\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\fs\IFileSystem.h">
+      <Filter>Header Files\public\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\fs\LocalFileSystem.h">
+      <Filter>Header Files\public\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\fs\Path.h">
+      <Filter>Header Files\public\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\fs\SandboxedIFile.h">
+      <Filter>Header Files\public\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\fs\SandboxedIFileSystem.h">
+      <Filter>Header Files\public\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\string\transcode.h">
+      <Filter>Header Files\public\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\fs\LocalFile.h">
+      <Filter>Header Files\private\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\string\utf8.h">
+      <Filter>Header Files\private\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\string\utf16.h">
+      <Filter>Header Files\private\string</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\Exception.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fs\DirectoryInfo.cpp">
+      <Filter>Source Files\fs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fs\LocalFile.cpp">
+      <Filter>Source Files\fs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fs\LocalFileSystem.cpp">
+      <Filter>Source Files\fs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fs\Path.cpp">
+      <Filter>Source Files\fs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fs\SandboxedIFile.cpp">
+      <Filter>Source Files\fs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fs\SandboxedIFileSystem.cpp">
+      <Filter>Source Files\fs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\string\transcode.cpp">
+      <Filter>Source Files\string</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
