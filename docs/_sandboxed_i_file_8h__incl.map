@@ -1,0 +1,6 @@
+<map id="tc/fs/SandboxedIFile.h" name="tc/fs/SandboxedIFile.h">
+<area shape="rect" id="node2" href="$_i_file_8h.html" title="Declaration of tc::fs::IFile. " alt="" coords="94,80,182,107"/>
+<area shape="rect" id="node10" href="$_shared_ptr_8h.html" title="Declaration of tc::SharedPtr. " alt="" coords="206,80,313,107"/>
+<area shape="rect" id="node3" href="$types_8h.html" title="Declaration of generic types used by libtoolchain. " alt="" coords="158,155,238,181"/>
+<area shape="rect" id="node8" href="$endian_8h.html" title="Declaration of macros and classes to unwrap primatives in an endian agnostic way. ..." alt="" coords="339,229,425,256"/>
+</map>

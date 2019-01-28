@@ -1,0 +1,8 @@
+<map id="tc/fs/LocalFileSystem.h" name="tc/fs/LocalFileSystem.h">
+<area shape="rect" id="node2" href="$_i_file_system_8h.html" title="Declaration of tc::fs::IFileSystem. " alt="" coords="78,80,211,107"/>
+<area shape="rect" id="node3" href="$types_8h.html" title="Declaration of generic types used by libtoolchain. " alt="" coords="158,304,238,331"/>
+<area shape="rect" id="node10" href="$_i_file_8h.html" title="Declaration of tc::fs::IFile. " alt="" coords="114,229,202,256"/>
+<area shape="rect" id="node11" href="$_directory_info_8h.html" title="Declaration of tc::fs::DirectoryInfo. " alt="" coords="182,155,321,181"/>
+<area shape="rect" id="node8" href="$endian_8h.html" title="Declaration of macros and classes to unwrap primatives in an endian agnostic way. ..." alt="" coords="339,379,425,405"/>
+<area shape="rect" id="node12" href="$_path_8h.html" title="Declaration of tc::fs::Path. " alt="" coords="277,229,367,256"/>
+</map>
