@@ -8,11 +8,12 @@
 * Typical GNU compatible development tools (e.g. `clang`, `g++`, `c++`, `ar` etc) with __C++11__ support
 
 ### Using Makefile
-* `make` (default) - Compile library & self-test program & generate documentation
+* `make` (default) - Compile library & self-test program
 * `make lib` - Compile library
-* `make selftest` - Compile self-test program
+* `make test_program` - Compile self-test program
+* `make clean` - Remove all object files, compiled programs
 * `make docs` - Generate documentation
-* `make clean` - Remove all object files, compiled programs and documentation
+* `make clean_docs` - Remove all documentation
 
 ## Native Win32 - Visual Studio
 ### Requirements
