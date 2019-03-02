@@ -31,7 +31,7 @@ PROJECT_SONAME = $(PROJECT_NAME).so.$(PROJECT_SO_VER_MAJOR)
 PROJECT_SO_FILENAME = $(PROJECT_SONAME).$(PROJECT_SO_VER_MINOR).$(PROJECT_SO_VER_PATCH)
 
 # Project Dependencies
-PROJECT_DEPEND_LOCAL = polarssl lz4
+PROJECT_DEPEND_LOCAL =
 PROJECT_DEPEND_EXTERNAL =
 
 # Generate compiler flags for including project include path
@@ -105,7 +105,7 @@ TESTSRC_OBJ = $(foreach dir,$(PROJECT_TESTSRC_SUBDIRS),$(subst .cpp,.o,$(wildcar
 #	- 'program' for building the program
 #	- 'test_program' for building the test program
 # These can typically be used together however *_lib and program should not be used together
-all: static_lib
+all: static_lib test_program
 	
 clean: clean_object_files remove_binary_dir
 
