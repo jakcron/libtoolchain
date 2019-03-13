@@ -5,6 +5,7 @@
 #include "Optional_TestClass.h"
 #include "SharedPtr_TestClass.h"
 #include "string_transcode_TestClass.h"
+#include "endian_TestClass.h"
 
 void runTest(ITestClass* testClass)
 {
@@ -21,4 +22,5 @@ int main(int argc, char** argv)
 	runTest(new Optional_TestClass());
 	runTest(new SharedPtr_TestClass());
 	runTest(new string_transcode_TestClass());
+	runTest(new endian_TestClass());
 }
