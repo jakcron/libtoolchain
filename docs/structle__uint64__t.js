@@ -1,5 +1,5 @@
 var structle__uint64__t =
 [
-    [ "get", "structle__uint64__t.html#a818aeb25f4938e816b9bee7141352a37", null ],
-    [ "set", "structle__uint64__t.html#af1032f67835e6a3012874e1cd4567f30", null ]
+    [ "unwrap", "structle__uint64__t.html#a2d2d412c4bf672e378a42fdd1cf885ce", null ],
+    [ "wrap", "structle__uint64__t.html#ade8b1aa54109d88962882d9899a40d4e", null ]
 ];
