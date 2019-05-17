@@ -1,7 +1,5 @@
 #include <tc/fs/FileStream.h>
 
-#include <iostream>
-
 tc::fs::FileStream::FileStream() :
 	mFile()
 {
