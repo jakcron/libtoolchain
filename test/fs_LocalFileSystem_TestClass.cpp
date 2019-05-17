@@ -21,18 +21,18 @@ void fs_LocalFileSystem_TestClass::testFileCreate()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file;
+		tc::fs::FileStream file;
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, file);
 
-		if (file->size() != 0)
+		if (file.size() != 0)
 		{
 			throw tc::Exception("file opened in create mode does not have a size of 0");
 		}
 
-		file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 
 		
-		if (file->size() != kRandomString.length())
+		if (file.size() != kRandomString.length())
 		{
 			throw tc::Exception("after writing data, file size is not correct");
 		}
@@ -53,16 +53,16 @@ void fs_LocalFileSystem_TestClass::testFileRead()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file;
+		tc::fs::FileStream file;
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
 
-		if (file->size() != kRandomString.length())
+		if (file.size() != kRandomString.length())
 		{
 			throw tc::Exception("Unexpected file size");
 		}
 
 		tc::SharedPtr<byte_t> check = new byte_t[kRandomString.length()];
-		file->read(check.get(), kRandomString.length());
+		file.read(check.get(), kRandomString.length());
 
 		if (memcmp(check.get(), kRandomString.c_str(), kRandomString.size()) != 0)
 		{
@@ -73,7 +73,7 @@ void fs_LocalFileSystem_TestClass::testFileRead()
 	}
 	catch (const tc::Exception& e) 
 	{
-		std::cout << "FAIL (Test opening file in read mode and confirming the data is correct(" << e.what() << "))" << std::endl;
+		std::cout << "FAIL (Test opening file in read mode and confirming the data is correct (" << e.what() << "))" << std::endl;
 	}
 }
 
@@ -84,23 +84,23 @@ void fs_LocalFileSystem_TestClass::testFileEdit()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file;
+		tc::fs::FileStream file;
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_EDIT, file);
 
-		if (file->size() != kRandomString.length())
+		if (file.size() != kRandomString.length())
 		{
 			throw tc::Exception("Unexpected file size");
 		}
 
-		file->seek(kRandomString.length());
-		file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		file.seek(kRandomString.length());
+		file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 
-		file->seek(7);
-		file->write((const byte_t*)kTestPhrase.c_str(), kTestPhrase.length());
+		file.seek(7);
+		file.write((const byte_t*)kTestPhrase.c_str(), kTestPhrase.length());
 
 		tc::SharedPtr<byte_t> check = new byte_t[kRandomString.length()*2];
-		file->seek(0);
-		file->read(check.get(), kRandomString.length()*2);
+		file.seek(0);
+		file.read(check.get(), kRandomString.length()*2);
 
 		if (memcmp(check.get() + kRandomString.length(), kRandomString.c_str(), kRandomString.size()) != 0)
 		{
@@ -132,15 +132,15 @@ void fs_LocalFileSystem_TestClass::testUnicodePath()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file;
+		tc::fs::FileStream file;
 		fs.openFile(kUtf8TestPath, tc::fs::FILEACCESS_CREATE, file);
 
-		if (file->size() != 0)
+		if (file.size() != 0)
 		{
 			throw tc::Exception("file opened in create mode does not have a size of 0\n");
 		}
 
-		file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 
 
 		std::cout << "PASS" << std::endl;
@@ -158,7 +158,7 @@ void fs_LocalFileSystem_TestClass::testNotPresentFileReadOnly()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file;
+		tc::fs::FileStream file;
 		fs.openFile(kNotExistFilePath, tc::fs::FILEACCESS_READ, file);
 
 		std::cout << "FAIL (Did not throw on failure to open for read access file)" << std::endl;
@@ -176,7 +176,7 @@ void fs_LocalFileSystem_TestClass::testNotPresentFileEdit()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file;
+		tc::fs::FileStream file;
 		fs.openFile(kNotExistFilePath, tc::fs::FILEACCESS_EDIT, file);
 
 		std::cout << "FAIL (Did not throw on failure to open for edit access file)" << std::endl;
@@ -194,10 +194,10 @@ void fs_LocalFileSystem_TestClass::testTryWriteInReadOnlyMode()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file;
+		tc::fs::FileStream file;
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
 
-		file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 
 		std::cout << "FAIL (Did not throw exception when write() was called)" << std::endl;
 	}
@@ -214,12 +214,12 @@ void fs_LocalFileSystem_TestClass::testTryReadBeyondFileSize()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file;
+		tc::fs::FileStream file;
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
 
 		tc::SharedPtr<byte_t> buffer = new byte_t[0x10000];
 
-		file->read(buffer.get(), 0x10000);
+		file.read(buffer.get(), 0x10000);
 
 		std::cout << "FAIL (Did not throw exception when read() attemped to read beyond file size)" << std::endl;
 	}

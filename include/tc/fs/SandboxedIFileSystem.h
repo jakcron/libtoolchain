@@ -28,7 +28,7 @@ public:
 	
 	void createFile(const tc::fs::Path& path);
 	void removeFile(const tc::fs::Path& path);
-	void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::SharedPtr<tc::fs::IFile>& file);
+	void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileStream& file);
 	void createDirectory(const tc::fs::Path& path);
 	void removeDirectory(const tc::fs::Path& path);
 	void getWorkingDirectory(tc::fs::Path& path);

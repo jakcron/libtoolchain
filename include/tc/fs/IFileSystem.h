@@ -7,7 +7,7 @@
 	 */
 #pragma once
 #include <tc/types.h>
-#include <tc/fs/IFile.h>
+#include <tc/fs/FileStream.h>
 #include <tc/SharedPtr.h>
 #include <tc/fs/Path.h>
 
@@ -88,7 +88,7 @@ public:
 		 *	
 		 * @throws tc::Exception If the file cannot be opened (invalid path, or access rights)
 		 */
-	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::SharedPtr<tc::fs::IFile>& file) = 0;
+	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileStream& file) = 0;
 	
 		/** 
 		 * @brief Create a new directory
