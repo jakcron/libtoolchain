@@ -63,10 +63,10 @@
     <ClInclude Include="..\..\..\include\tc\types.h">
       <Filter>Header Files\public</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\FileStream.h">
+    <ClInclude Include="..\..\..\include\tc\fs\FileObject.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\IFile.h">
+    <ClInclude Include="..\..\..\include\tc\fs\IFileObject.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\fs\IFileSystem.h">
@@ -101,7 +101,7 @@
     <ClCompile Include="..\..\..\src\Exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\FileStream.cpp">
+    <ClCompile Include="..\..\..\src\fs\FileObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\fs\LocalFile.cpp">

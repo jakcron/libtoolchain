@@ -1,13 +1,13 @@
 /**
- * @file LocalFile.h
- * @brief Declaration of tc::fs::LocalFile
+ * @file LocalFileObject.h
+ * @brief Declaration of tc::fs::LocalFileObject
  * @author Jack (jakcron)
  * @version	0.1
  * @date 2018/11/10
  * @note Private Class
  */
 #pragma once
-#include <tc/fs/IFile.h>
+#include <tc/fs/IFileObject.h>
 #include <tc/fs/IFileSystem.h>
 
 #ifdef _WIN32
@@ -28,10 +28,10 @@ namespace tc { namespace fs {
 #endif
 
 	/**
-	 * @class LocalFile
-	 * @brief An implementation of IFile as a wrapper to local OS file access functions.
+	 * @class LocalFileObject
+	 * @brief An implementation of IFileObject as a wrapper to local OS file access functions.
 	 */
-	class LocalFile : public IFile
+	class LocalFileObject : public IFileObject
 	{
 	public:
 		/** 
@@ -39,9 +39,9 @@ namespace tc { namespace fs {
 		 * @param[in] mode Access mode
 		 * @param[in] file_handle Native file handle 
 		 */
-		LocalFile(tc::fs::FileAccessMode mode, fs_handle_t file_handle);
+		LocalFileObject(tc::fs::FileAccessMode mode, fs_handle_t file_handle);
 	
-		~LocalFile();
+		~LocalFileObject();
 		uint64_t size();
 		void seek(uint64_t offset);
 		uint64_t pos();
@@ -49,7 +49,7 @@ namespace tc { namespace fs {
 		void write(const byte_t* data, size_t len);
 	
 	private:
-		const std::string kClassName = "tc::fs::LocalFile";
+		const std::string kClassName = "tc::fs::LocalFileObject";
 
 		tc::fs::FileAccessMode mMode;
 		tc::fs::fs_handle_t mFileHandle;

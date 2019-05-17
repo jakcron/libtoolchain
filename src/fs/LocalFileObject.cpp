@@ -1,4 +1,4 @@
-#include "LocalFile.h"
+#include "LocalFileObject.h"
 #include <tc/Exception.h>
 
 #ifdef _WIN32
@@ -11,14 +11,14 @@
 #endif
 
 
-tc::fs::LocalFile::LocalFile(FileAccessMode mode, fs_handle_t file_handle) :
+tc::fs::LocalFileObject::LocalFileObject(FileAccessMode mode, fs_handle_t file_handle) :
 	mMode(mode),
 	mFileHandle(file_handle)
 {
 	
 }
 
-tc::fs::LocalFile::~LocalFile()
+tc::fs::LocalFileObject::~LocalFileObject()
 {
 #ifdef _WIN32
 	CloseHandle(mFileHandle);
@@ -27,7 +27,7 @@ tc::fs::LocalFile::~LocalFile()
 #endif
 }
 
-uint64_t tc::fs::LocalFile::size()
+uint64_t tc::fs::LocalFileObject::size()
 {
 	uint64_t fsize = 0;
 #ifdef _WIN32
@@ -63,7 +63,7 @@ uint64_t tc::fs::LocalFile::size()
 	return fsize;
 }
 
-void tc::fs::LocalFile::seek(uint64_t offset)
+void tc::fs::LocalFileObject::seek(uint64_t offset)
 {
 	// limit seek to the file size
 	uint64_t fsize = size();
@@ -95,7 +95,7 @@ void tc::fs::LocalFile::seek(uint64_t offset)
 #endif
 }
 
-uint64_t tc::fs::LocalFile::pos()
+uint64_t tc::fs::LocalFileObject::pos()
 {
 #ifdef _WIN32
 	LARGE_INTEGER win_pos, out;
@@ -123,7 +123,7 @@ uint64_t tc::fs::LocalFile::pos()
 #endif
 }
 
-void tc::fs::LocalFile::read(byte_t* data, size_t len)
+void tc::fs::LocalFileObject::read(byte_t* data, size_t len)
 {
 	// prevent excessive read()
 	if ((pos() + len) > size())
@@ -151,7 +151,7 @@ void tc::fs::LocalFile::read(byte_t* data, size_t len)
 #endif
 }
 
-void tc::fs::LocalFile::write(const byte_t* data, size_t len)
+void tc::fs::LocalFileObject::write(const byte_t* data, size_t len)
 {
 #ifdef _WIN32
 	DWORD bytes_written;

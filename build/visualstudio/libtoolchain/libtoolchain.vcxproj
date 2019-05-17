@@ -122,8 +122,8 @@
     <ClInclude Include="..\..\..\include\tc\endian.h" />
     <ClInclude Include="..\..\..\include\tc\Exception.h" />
     <ClInclude Include="..\..\..\include\tc\fs.h" />
-    <ClInclude Include="..\..\..\include\tc\fs\FileStream.h" />
-    <ClInclude Include="..\..\..\include\tc\fs\IFile.h" />
+    <ClInclude Include="..\..\..\include\tc\fs\FileObject.h" />
+    <ClInclude Include="..\..\..\include\tc\fs\IFileObject.h" />
     <ClInclude Include="..\..\..\include\tc\fs\IFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\fs\LocalFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\fs\Path.h" />
@@ -141,7 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Exception.cpp" />
-    <ClInclude Include="..\..\..\src\fs\FileStream.cpp" />
+    <ClInclude Include="..\..\..\src\fs\FileObject.cpp" />
     <ClCompile Include="..\..\..\src\fs\LocalFile.cpp" />
     <ClCompile Include="..\..\..\src\fs\LocalFileSystem.cpp" />
     <ClCompile Include="..\..\..\src\fs\Path.cpp" />

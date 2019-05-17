@@ -1,5 +1,5 @@
 #include <tc/fs/LocalFileSystem.h>
-#include "LocalFile.h"
+#include "LocalFileObject.h"
 #include <tc/Exception.h>
 #include <tc/string.h>
 #include <tc/SharedPtr.h>
@@ -85,7 +85,7 @@ void tc::fs::LocalFileSystem::removeFile(const tc::fs::Path& path)
 #endif
 }
 
-void tc::fs::LocalFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, tc::fs::FileStream& file)
+void tc::fs::LocalFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, tc::fs::FileObject& file)
 {
 #ifdef _WIN32
 	// convert Path to unicode string
@@ -107,7 +107,7 @@ void tc::fs::LocalFileSystem::openFile(const tc::fs::Path& path, FileAccessMode 
 		throw tc::Exception(kClassName, "Failed to open file (" + std::to_string(GetLastError()) + ")");
 	}
 
-	file = tc::fs::FileStream(new LocalFile(mode, file_handle));
+	file = tc::fs::FileObject(new LocalFileObject(mode, file_handle));
 #else
 	// convert Path to unicode string
 	std::string unicode_path;
@@ -120,7 +120,7 @@ void tc::fs::LocalFileSystem::openFile(const tc::fs::Path& path, FileAccessMode 
 		throw tc::Exception(kClassName, "Failed to open file (" + std::string(strerror(errno)) + ")");
 	}
 
-	file = new LocalFile(mode, file_handle);
+	file = new LocalFileObject(mode, file_handle);
 #endif
 }
 

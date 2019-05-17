@@ -120,7 +120,7 @@ void fs_SandboxedFileSystem_TestClass::testOpenFile()
 			{
 			}
 
-			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileStream& file)
+			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileObject& file)
 			{
 				getWorkingDirectory(mCurDir);
 				if (mode != tc::fs::FILEACCESS_READ)
@@ -149,7 +149,7 @@ void fs_SandboxedFileSystem_TestClass::testOpenFile()
 			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to open file
-			tc::fs::FileStream file;
+			tc::fs::FileObject file;
 			sb_fs->openFile(tc::fs::Path("/a_dir/testfile"), tc::fs::FILEACCESS_READ, file);
 			
 			std::cout << "PASS" << std::endl;
@@ -492,7 +492,7 @@ void fs_SandboxedFileSystem_TestClass::testOpenFileOutsideSandbox()
 			{
 			}
 
-			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileStream& file)
+			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileObject& file)
 			{
 				getWorkingDirectory(mCurDir);
 				if (mode != tc::fs::FILEACCESS_READ)
@@ -528,7 +528,7 @@ void fs_SandboxedFileSystem_TestClass::testOpenFileOutsideSandbox()
 			  
 			// try to open the file just outside the sandbox
 			sb_fs->setWorkingDirectory(tc::fs::Path("/"));
-			tc::fs::FileStream inaccessible_file;
+			tc::fs::FileObject inaccessible_file;
 			sb_fs->openFile(tc::fs::Path("../inaccessible_file0"), tc::fs::FILEACCESS_READ, inaccessible_file);
 
 			std::cout << "PASS" << std::endl;

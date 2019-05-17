@@ -31,7 +31,7 @@ void tc::fs::SandboxedFileSystem::removeFile(const tc::fs::Path& path)
 	mFileSystem->removeFile(real_path);
 }
 
-void tc::fs::SandboxedFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, tc::fs::FileStream& file)
+void tc::fs::SandboxedFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, tc::fs::FileObject& file)
 {
 	// convert sandbox path to real path
 	tc::fs::Path real_path;

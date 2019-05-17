@@ -34,7 +34,7 @@ void tc::fs::FileSystem::removeFile(const tc::fs::Path& path)
 		mFileSystem->removeFile(path);
 }
 
-void tc::fs::FileSystem::openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileStream& file)
+void tc::fs::FileSystem::openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileObject& file)
 {
 	if (mFileSystem.isNull() == false)
 		mFileSystem->openFile(path, mode, file);

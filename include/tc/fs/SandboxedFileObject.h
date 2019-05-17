@@ -6,27 +6,27 @@
 	 * @date 2018/12/18
 	 */
 #pragma once
-#include <tc/fs/IFile.h>
+#include <tc/fs/IFileObject.h>
 #include <tc/SharedPtr.h>
 
 namespace tc { namespace fs {
 
 	/**
 	 * @class SandboxedFileObject
-	 * @brief A wrapper around an existing IFile object that exposes a carve out (user specified offset & size) of the IFile object.
+	 * @brief A wrapper around an existing IFileObject object that exposes a carve out (user specified offset & size) of the IFileObject object.
 	 */
-class SandboxedFileObject : public IFile
+class SandboxedFileObject : public IFileObject
 {
 public:
 		/** 
 		 * @brief Default constuctor
-		 * @param[in] file_ptr Pointer to IFile object to be sandboxed
+		 * @param[in] file_ptr Pointer to IFileObject object to be sandboxed
 		 * @param[in] file_base_offset Offset in the base file that serves as offset 0 in the sandbox file
 		 * @param[in] virtual_size Artificial size of the sandbox file
 		 * 
 		 * @pre The carve out presented by the sandbox should exist in the base file.
 		 */
-	SandboxedFileObject(const tc::SharedPtr<tc::fs::IFile>& file_ptr, uint64_t file_base_offset, uint64_t virtual_size);
+	SandboxedFileObject(const tc::SharedPtr<tc::fs::IFileObject>& file_ptr, uint64_t file_base_offset, uint64_t virtual_size);
 
 	uint64_t size();
 	void seek(uint64_t offset);
@@ -37,7 +37,7 @@ public:
 private:
 	const std::string kClassName = "tc::fs::SandboxedFileObject";
 
-	tc::SharedPtr<tc::fs::IFile> mFile;
+	tc::SharedPtr<tc::fs::IFileObject> mFile;
 	uint64_t mFileBaseOffset;
 	uint64_t mVirtualSize;
 

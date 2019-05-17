@@ -7,7 +7,7 @@
 	 */
 #pragma once
 #include <tc/types.h>
-#include <tc/fs/FileStream.h>
+#include <tc/fs/FileObject.h>
 #include <tc/SharedPtr.h>
 #include <tc/fs/Path.h>
 
@@ -84,11 +84,11 @@ public:
 		 * @brief Open a file
 		 * @param[in] path Path to file
 		 * @param[in] mode Access mode
-		 * @param[out] file Pointer to IFile object to be instantiated
+		 * @param[out] file Pointer to IFileObject object to be instantiated
 		 *	
 		 * @throws tc::Exception If the file cannot be opened (invalid path, or access rights)
 		 */
-	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileStream& file) = 0;
+	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileObject& file) = 0;
 	
 		/** 
 		 * @brief Create a new directory

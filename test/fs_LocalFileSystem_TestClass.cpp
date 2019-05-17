@@ -21,7 +21,7 @@ void fs_LocalFileSystem_TestClass::testFileCreate()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::fs::FileStream file;
+		tc::fs::FileObject file;
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, file);
 
 		if (file.size() != 0)
@@ -53,7 +53,7 @@ void fs_LocalFileSystem_TestClass::testFileRead()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::fs::FileStream file;
+		tc::fs::FileObject file;
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
 
 		if (file.size() != kRandomString.length())
@@ -84,7 +84,7 @@ void fs_LocalFileSystem_TestClass::testFileEdit()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::fs::FileStream file;
+		tc::fs::FileObject file;
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_EDIT, file);
 
 		if (file.size() != kRandomString.length())
@@ -132,7 +132,7 @@ void fs_LocalFileSystem_TestClass::testUnicodePath()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::fs::FileStream file;
+		tc::fs::FileObject file;
 		fs.openFile(kUtf8TestPath, tc::fs::FILEACCESS_CREATE, file);
 
 		if (file.size() != 0)
@@ -158,7 +158,7 @@ void fs_LocalFileSystem_TestClass::testNotPresentFileReadOnly()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::fs::FileStream file;
+		tc::fs::FileObject file;
 		fs.openFile(kNotExistFilePath, tc::fs::FILEACCESS_READ, file);
 
 		std::cout << "FAIL (Did not throw on failure to open for read access file)" << std::endl;
@@ -176,7 +176,7 @@ void fs_LocalFileSystem_TestClass::testNotPresentFileEdit()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::fs::FileStream file;
+		tc::fs::FileObject file;
 		fs.openFile(kNotExistFilePath, tc::fs::FILEACCESS_EDIT, file);
 
 		std::cout << "FAIL (Did not throw on failure to open for edit access file)" << std::endl;
@@ -194,7 +194,7 @@ void fs_LocalFileSystem_TestClass::testTryWriteInReadOnlyMode()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::fs::FileStream file;
+		tc::fs::FileObject file;
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
 
 		file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
@@ -214,7 +214,7 @@ void fs_LocalFileSystem_TestClass::testTryReadBeyondFileSize()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::fs::FileStream file;
+		tc::fs::FileObject file;
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
 
 		tc::SharedPtr<byte_t> buffer = new byte_t[0x10000];

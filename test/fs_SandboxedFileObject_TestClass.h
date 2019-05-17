@@ -9,7 +9,7 @@ class fs_SandboxedFileObject_TestClass : public ITestClass
 public:
 	void runAllTests();
 private:
-	class DummyFileBase : public tc::fs::IFile
+	class DummyFileBase : public tc::fs::IFileObject
 	{
 	public:
 		DummyFileBase()

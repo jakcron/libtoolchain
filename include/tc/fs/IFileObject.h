@@ -1,6 +1,6 @@
 	/**
-	 * @file IFile.h
-	 * @brief Declaration of tc::fs::IFile
+	 * @file IFileObject.h
+	 * @brief Declaration of tc::fs::IFileObject
 	 * @author Jack (jakcron)
 	 * @version	0.1
 	 * @date 2018/11/10
@@ -11,7 +11,7 @@
 namespace tc { namespace fs {
 
 	/**
-	 * @class IFile
+	 * @class IFileObject
 	 * @brief An interface for implementing a basic File handler.
 	 *
 	 * Defines expcted functionality required to process/access a file.
@@ -23,13 +23,13 @@ namespace tc { namespace fs {
 	 * true sizes of the files, while also working with-in the limitations of the operating system
 	 * by using size_t where memory is processed.
 	 */
-class IFile
+class IFileObject
 {
 public:
 		/**
 		 * @brief Destructor
 		 */
-	virtual ~IFile() = default;
+	virtual ~IFileObject() = default;
 
 		/**
 		 * @brief Get size of the file

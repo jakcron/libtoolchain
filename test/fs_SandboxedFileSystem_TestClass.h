@@ -26,7 +26,7 @@ private:
 			throw tc::Exception(kClassName, "removeFile() not implemented");
 		}
 
-		void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileStream& file)
+		void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileObject& file)
 		{
 			throw tc::Exception(kClassName, "openFile() not implemented");
 		}

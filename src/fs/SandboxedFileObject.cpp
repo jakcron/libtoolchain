@@ -1,6 +1,6 @@
 #include <tc/fs/SandboxedFileObject.h>
 
-tc::fs::SandboxedFileObject::SandboxedFileObject(const tc::SharedPtr<tc::fs::IFile>& file_ptr, uint64_t file_base_offset, uint64_t virtual_size) :
+tc::fs::SandboxedFileObject::SandboxedFileObject(const tc::SharedPtr<tc::fs::IFileObject>& file_ptr, uint64_t file_base_offset, uint64_t virtual_size) :
 	mFile(file_ptr),
 	mFileBaseOffset(file_base_offset),
 	mVirtualSize(virtual_size),

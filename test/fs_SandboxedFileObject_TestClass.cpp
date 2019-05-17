@@ -18,13 +18,13 @@ void fs_SandboxedFileObject_TestClass::testSize()
 
 		try
 		{
-			tc::SharedPtr<tc::fs::IFile> file = new DummyFile();
+			tc::SharedPtr<tc::fs::IFileObject> file = new DummyFile();
 
 			uint64_t sandbox_offset = 0x56;
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFile> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
+			tc::SharedPtr<tc::fs::IFileObject> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
 
 			if (sb_file->size() != sandbox_size)
 			{
@@ -69,13 +69,13 @@ void fs_SandboxedFileObject_TestClass::testSeekPos()
 
 		try
 		{
-			tc::SharedPtr<tc::fs::IFile> file = new DummyFile();
+			tc::SharedPtr<tc::fs::IFileObject> file = new DummyFile();
 
 			uint64_t sandbox_offset = 0x56;
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFile> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
+			tc::SharedPtr<tc::fs::IFileObject> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file->seek(offset_to_seek);
@@ -124,25 +124,25 @@ void fs_SandboxedFileObject_TestClass::testRead()
 			{
 				if (data != (byte_t*)0xcafe)
 				{
-					throw tc::Exception("'data' pointer was passed to base IFile object not as expected");
+					throw tc::Exception("'data' pointer was passed to base IFileObject object not as expected");
 				}
 
 				if (len != 0xdeadbabe)
 				{
-					throw tc::Exception("'len' parameter was passed to base IFile object not as expected");
+					throw tc::Exception("'len' parameter was passed to base IFileObject object not as expected");
 				}
 			}
 		};
 
 		try
 		{
-			tc::SharedPtr<tc::fs::IFile> file = new DummyFile();
+			tc::SharedPtr<tc::fs::IFileObject> file = new DummyFile();
 
 			uint64_t sandbox_offset = 0x56;
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFile> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
+			tc::SharedPtr<tc::fs::IFileObject> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file->seek(offset_to_seek);
@@ -182,25 +182,25 @@ void fs_SandboxedFileObject_TestClass::testWrite()
 			{
 				if (data != (const byte_t*)0xcafe)
 				{
-					throw tc::Exception("'data' pointer was passed to base IFile object not as expected");
+					throw tc::Exception("'data' pointer was passed to base IFileObject object not as expected");
 				}
 
 				if (len != 0xdeadbabe)
 				{
-					throw tc::Exception("'len' parameter was passed to base IFile object not as expected");
+					throw tc::Exception("'len' parameter was passed to base IFileObject object not as expected");
 				}
 			}
 		};
 
 		try
 		{
-			tc::SharedPtr<tc::fs::IFile> file = new DummyFile();
+			tc::SharedPtr<tc::fs::IFileObject> file = new DummyFile();
 
 			uint64_t sandbox_offset = 0x56;
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFile> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
+			tc::SharedPtr<tc::fs::IFileObject> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file->seek(offset_to_seek);
