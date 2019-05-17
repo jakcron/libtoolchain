@@ -1,0 +1,93 @@
+IDataStream
+read()
+write()
+size()
+IFileStream : public IDataStream
+// seek&pos exist because a file stream has a body that is being reflected in runtime, so the "cursor" should be adjustable
+seek()
+pos()
+
+
+PaddingStream a(0x00, 0x100)
+AesCtrWrappedFileStream(wrapped, Aes128Key, AesCtrIv)
+
+VirtualFileStream vF(0x1000);
+
+FileStream(FileSystemObject, path, access_permissions) -> these call FileSystemObject methods
+FileStream(FileSystemObject, ref);
+
+FileSystemObject-> implements file io methods somehow
+
+FileSystem
+
+openFile() -> FileObject()
+read(...)
+	mFsObject.read(mHandle, ...)
+write(...)
+	mFsObject.write(mHandle, ...)
+
+FileSystemObject()
+// public methods
+
+IFileSystemService
+- This can refer to a :
+	virtual file system (created at run-time)
+	parsed file system (processed at run-time, like a ZIP or RAR)
+	wrapped file system (wrapper around an IFileSystemService or otherwise existing filesystem like native)
+- So these IFileSystemService are:
+	NativeFSService: wrapped -> depends OS functionality
+	FtpFSService: parsed -> depends access to 
+	ZipArchiveReader: parsed -> depends access to source file/device
+- The important detail is that all of these services mediate access to navigation and file access
+	File access must be through the filesystem object (uint32_t reference)
+	FileStream(FSServiceObject, reference): IDataStream
+
+
+IFileSession
+read
+write
+size
+seek
+pos
+
+FileStream(IFileSession& session)
+
+
+
+createFile(path): Result
+removeFile(path): Result
+openFile(path, flags, handle): Result #ref: file handle
+closeFile(handle)
+getFileInfo(path, info): Result #ref: sFileInfo{mParentDirectoryPath: Path, name: Path, size, access_permissions}
+createDirectory(path): Result
+removeDirectory(path): Result
+getDirectoryListing(path, listing): Result #ref: sDirectoryListing{mParentDirectoryPath: Path, name: Path, files: Vector<std::string>, dirs: Vector<std::string>}
+
+
+
+
+
+PFS0ArchiveReader reader;
+
+FileStream file_stream == nullptr;
+if ((res = reader.openFile(Path("control.nacp"), file_stream)).isError())
+{
+	throw client exception
+}
+
+file_stream.is_error()
+file_stream.error()
+
+reader.closeFile(file_session);
+
+FileStream file(IFileSession*, IFileSystemSe);
+FileStream file(reader, Path("./control.nacp"), READ);
+
+FileSystemService fs(IFileSystemService* fs);
+file.isError()
+
+tc::SharedPtr<IFileSystemService>& fs;
+
+typedef 
+
+FileSystemHandler fs()

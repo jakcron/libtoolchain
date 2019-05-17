@@ -1,11 +1,11 @@
 #include <tc/Exception.h>
 #include <iostream>
 
-#include "fs_SandboxedIFile_TestClass.h"
+#include "fs_SandboxedFileObject_TestClass.h"
 
-void fs_SandboxedIFile_TestClass::testSize()
+void fs_SandboxedFileObject_TestClass::testSize()
 {
-	std::cout << "[tc::fs::SandboxedIFile] testSize : ";
+	std::cout << "[tc::fs::SandboxedFileObject] testSize : ";
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -24,7 +24,7 @@ void fs_SandboxedIFile_TestClass::testSize()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFile> sb_file = new tc::fs::SandboxedIFile(file, sandbox_offset, sandbox_size);
+			tc::SharedPtr<tc::fs::IFile> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
 
 			if (sb_file->size() != sandbox_size)
 			{
@@ -45,9 +45,9 @@ void fs_SandboxedIFile_TestClass::testSize()
 	}
 }
 
-void fs_SandboxedIFile_TestClass::testSeekPos()
+void fs_SandboxedFileObject_TestClass::testSeekPos()
 {
-	std::cout << "[tc::fs::SandboxedIFile] testSeekPos : ";
+	std::cout << "[tc::fs::SandboxedFileObject] testSeekPos : ";
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -75,7 +75,7 @@ void fs_SandboxedIFile_TestClass::testSeekPos()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFile> sb_file = new tc::fs::SandboxedIFile(file, sandbox_offset, sandbox_size);
+			tc::SharedPtr<tc::fs::IFile> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file->seek(offset_to_seek);
@@ -107,9 +107,9 @@ void fs_SandboxedIFile_TestClass::testSeekPos()
 	}
 }
 
-void fs_SandboxedIFile_TestClass::testRead()
+void fs_SandboxedFileObject_TestClass::testRead()
 {
-	std::cout << "[tc::fs::SandboxedIFile] testRead : ";
+	std::cout << "[tc::fs::SandboxedFileObject] testRead : ";
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -142,7 +142,7 @@ void fs_SandboxedIFile_TestClass::testRead()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFile> sb_file = new tc::fs::SandboxedIFile(file, sandbox_offset, sandbox_size);
+			tc::SharedPtr<tc::fs::IFile> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file->seek(offset_to_seek);
@@ -165,9 +165,9 @@ void fs_SandboxedIFile_TestClass::testRead()
 	}
 }
 
-void fs_SandboxedIFile_TestClass::testWrite()
+void fs_SandboxedFileObject_TestClass::testWrite()
 {
-	std::cout << "[tc::fs::SandboxedIFile] testWrite : ";
+	std::cout << "[tc::fs::SandboxedFileObject] testWrite : ";
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -200,7 +200,7 @@ void fs_SandboxedIFile_TestClass::testWrite()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFile> sb_file = new tc::fs::SandboxedIFile(file, sandbox_offset, sandbox_size);
+			tc::SharedPtr<tc::fs::IFile> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file->seek(offset_to_seek);
@@ -223,7 +223,7 @@ void fs_SandboxedIFile_TestClass::testWrite()
 	}
 }
 
-void fs_SandboxedIFile_TestClass::runAllTests(void)
+void fs_SandboxedFileObject_TestClass::runAllTests(void)
 {
 	testSize();
 	testSeekPos();

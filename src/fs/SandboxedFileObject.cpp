@@ -1,6 +1,6 @@
-#include <tc/fs/SandboxedIFile.h>
+#include <tc/fs/SandboxedFileObject.h>
 
-tc::fs::SandboxedIFile::SandboxedIFile(const tc::SharedPtr<tc::fs::IFile>& file_ptr, uint64_t file_base_offset, uint64_t virtual_size) :
+tc::fs::SandboxedFileObject::SandboxedFileObject(const tc::SharedPtr<tc::fs::IFile>& file_ptr, uint64_t file_base_offset, uint64_t virtual_size) :
 	mFile(file_ptr),
 	mFileBaseOffset(file_base_offset),
 	mVirtualSize(virtual_size),
@@ -8,24 +8,24 @@ tc::fs::SandboxedIFile::SandboxedIFile(const tc::SharedPtr<tc::fs::IFile>& file_
 {
 }
 
-uint64_t tc::fs::SandboxedIFile::size()
+uint64_t tc::fs::SandboxedFileObject::size()
 {
 	return mVirtualSize;
 }
 
-void tc::fs::SandboxedIFile::seek(uint64_t offset)
+void tc::fs::SandboxedFileObject::seek(uint64_t offset)
 {
 #define _MIN(x,y) (x < y? x : y)
 	mVirtualOffset = _MIN(offset, mVirtualSize);
 #undef _MIN
 }
 
-uint64_t tc::fs::SandboxedIFile::pos()
+uint64_t tc::fs::SandboxedFileObject::pos()
 {
 	return mVirtualOffset;
 }
 
-void tc::fs::SandboxedIFile::read(byte_t* out, size_t len)
+void tc::fs::SandboxedFileObject::read(byte_t* out, size_t len)
 {
 	// assert proper position in file
 	mFile->seek(mVirtualOffset + mFileBaseOffset);
@@ -37,7 +37,7 @@ void tc::fs::SandboxedIFile::read(byte_t* out, size_t len)
 	seek(mVirtualOffset + len);
 }
 
-void tc::fs::SandboxedIFile::write(const byte_t* out, size_t len)
+void tc::fs::SandboxedFileObject::write(const byte_t* out, size_t len)
 {
 	// assert proper position in file
 	mFile->seek(mVirtualOffset + mFileBaseOffset);

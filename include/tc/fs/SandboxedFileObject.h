@@ -1,6 +1,6 @@
 	/**
-	 * @file SandboxedIFile.h
-	 * @brief Declaration of tc::fs::SandboxedIFile
+	 * @file SandboxedFileObject.h
+	 * @brief Declaration of tc::fs::SandboxedFileObject
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2018/12/18
@@ -12,10 +12,10 @@
 namespace tc { namespace fs {
 
 	/**
-	 * @class SandboxedIFile
+	 * @class SandboxedFileObject
 	 * @brief A wrapper around an existing IFile object that exposes a carve out (user specified offset & size) of the IFile object.
 	 */
-class SandboxedIFile : public IFile
+class SandboxedFileObject : public IFile
 {
 public:
 		/** 
@@ -26,7 +26,7 @@ public:
 		 * 
 		 * @pre The carve out presented by the sandbox should exist in the base file.
 		 */
-	SandboxedIFile(const tc::SharedPtr<tc::fs::IFile>& file_ptr, uint64_t file_base_offset, uint64_t virtual_size);
+	SandboxedFileObject(const tc::SharedPtr<tc::fs::IFile>& file_ptr, uint64_t file_base_offset, uint64_t virtual_size);
 
 	uint64_t size();
 	void seek(uint64_t offset);
@@ -35,7 +35,7 @@ public:
 	void write(const byte_t* data, size_t len);
 
 private:
-	const std::string kClassName = "tc::fs::SandboxedIFile";
+	const std::string kClassName = "tc::fs::SandboxedFileObject";
 
 	tc::SharedPtr<tc::fs::IFile> mFile;
 	uint64_t mFileBaseOffset;

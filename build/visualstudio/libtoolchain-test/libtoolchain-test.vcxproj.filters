@@ -24,7 +24,7 @@
     <ClCompile Include="..\..\..\test\fs_Path_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\fs_SandboxedIFile_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\fs_SandboxedFileObject_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\fs_SandboxedFileSystem_TestClass.cpp">
@@ -53,7 +53,7 @@
     <ClInclude Include="..\..\..\test\fs_Path_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\fs_SandboxedIFile_TestClass.h">
+    <ClInclude Include="..\..\..\test\fs_SandboxedFileObject_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\fs_SandboxedFileSystem_TestClass.h">

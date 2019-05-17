@@ -13,6 +13,6 @@
 #include <tc/fs/Path.h>
 #include <tc/fs/IFile.h>
 #include <tc/fs/IFileSystem.h>
-#include <tc/fs/SandboxedIFile.h>
+#include <tc/fs/SandboxedFileObject.h>
 #include <tc/fs/SandboxedFileSystem.h>
 #include <tc/fs/LocalFileSystem.h>

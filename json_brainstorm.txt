@@ -1,0 +1,82 @@
+JSON_Value
+{
+	enum Type
+	{
+		Object
+		Array,
+		String,
+		Boolean,
+		Null
+	};
+
+	getType(): Type
+}
+
+JSON_Array : JSON_Value
+{
+	getType(): Type = Array
+	getValue(string): JSON_Value* 
+	getValueList(): [{JSON_String*,JSON_Value*}]
+}
+
+JSON_StreamedArray(IFileStream*) : JSON_Array
+{
+
+}
+
+JSON_Object : JSON_Value
+{
+	getType(): Type = Object
+	getValue(string): JSON_Value* 
+	getDictionary(): [{JSON_String*,JSON_Value*}]
+}
+
+JSON_StreamedObject(IFileStream*) : JSON_Object
+{
+	
+}
+
+JSON_String : JSON_Value
+{
+	getType(): Type = String
+	getValue(): std::string
+}
+
+JSON_IntegerNode : JSON_Node
+{
+	getType(): Type = Integer
+	getValue(): int
+}
+
+JSON_DictionaryNode : JSON_Node
+{
+	getType(): Type = Dictionary
+	getNode(key): JSON_Node*
+}
+
+JsonSerialiserStream(JSON_Node* root_node, WriteMode{VisualFormatting,MachineFormatting}) : IFileStream
+{
+	size(): deterministic from travsering the tree
+	read(): relies on cache
+	pos(): deterministic position
+	seek(): throws exception on all but position==0
+	write(): throws exception
+	byte_t* cache = new byte_t[2mb];
+}
+
+// the idea here is that it doesn't load child Dictionaries, keeps prevents the memory footprint from expanding, unlike a raw JSON_DictionaryNode
+JSON_StreamedDictionaryNode(IFileStream*) : JSON_DictionaryNode
+{
+	root_file_pos
+}
+
+{
+	"KeyForString": "I'm a string",
+	"KeyForInteger": 43,
+	"KeyForDictionary":
+	{
+		"Svc",
+		"Hey,
+
+	}
+}
