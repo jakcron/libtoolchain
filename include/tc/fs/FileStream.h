@@ -3,7 +3,7 @@
 	 * @brief Declaration of tc::fs::FileStream
 	 * @author Jack (jakcron)
 	 * @version	0.1
-	 * @date 2018/11/10
+	 * @date 2019/05/17
 	 */
 #pragma once
 #include <tc/fs/IFile.h>
