@@ -13,7 +13,7 @@ PROJECT_INCLUDE_PATH = include
 PROJECT_TESTSRC_PATH = test
 PROJECT_TESTSRC_SUBDIRS = $(PROJECT_TESTSRC_PATH)
 PROJECT_BIN_PATH = bin
-PROJECT_DOCS_PATH = docs                                                                                                                                    
+PROJECT_DOCS_PATH = docs
 PROJECT_DOXYFILE_PATH = Doxyfile
 
 # Determine if the root makefile has been established, and if not establish this makefile as the root makefile
