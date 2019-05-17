@@ -136,7 +136,12 @@ inline SharedPtr<T>::~SharedPtr()
 template <class T>
 inline void SharedPtr<T>::operator=(T* ptr)
 {
+	// ensure the internal pointers aren't the same before "taking ownership of the pointer"
+	if (ptr == mPtr)
+		return;
+
 	deletePtr();
+
 	if (ptr != nullptr)
 	{
 		mPtr = ptr;
@@ -154,6 +159,10 @@ inline void SharedPtr<T>::operator=(T* ptr)
 template <class T>
 inline SharedPtr<T>& SharedPtr<T>::operator=(const SharedPtr<T>& other)
 {
+	// ensure the internal pointers aren't the same before "copying"
+	if (other.mPtr == mPtr)
+		return *this;
+
 	deletePtr();
 
 	if (other.mPtr != nullptr)
@@ -174,6 +183,10 @@ inline SharedPtr<T>& SharedPtr<T>::operator=(const SharedPtr<T>& other)
 template <class T>
 inline SharedPtr<T>& SharedPtr<T>::operator=(SharedPtr<T>&& other)
 {
+	// ensure the internal pointers aren't the same before "moving"
+	if (other.mPtr == mPtr)
+		return *this;
+
 	deletePtr();
 
 	// re-assign members
