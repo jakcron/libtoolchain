@@ -1,7 +1,7 @@
 #include "fs_LocalFileSystem_TestClass.h"
 #include "fs_Path_TestClass.h"
 #include "fs_SandboxedIFile_TestClass.h"
-#include "fs_SandboxedIFileSystem_TestClass.h"
+#include "fs_SandboxedFileSystem_TestClass.h"
 #include "Optional_TestClass.h"
 #include "SharedPtr_TestClass.h"
 #include "string_transcode_TestClass.h"
@@ -22,5 +22,5 @@ int main(int argc, char** argv)
 	runTest(new fs_Path_TestClass());
 	runTest(new fs_LocalFileSystem_TestClass());
 	runTest(new fs_SandboxedIFile_TestClass());
-	runTest(new fs_SandboxedIFileSystem_TestClass());
+	runTest(new fs_SandboxedFileSystem_TestClass());
 }

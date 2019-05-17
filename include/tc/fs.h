@@ -14,5 +14,5 @@
 #include <tc/fs/IFile.h>
 #include <tc/fs/IFileSystem.h>
 #include <tc/fs/SandboxedIFile.h>
-#include <tc/fs/SandboxedIFileSystem.h>
+#include <tc/fs/SandboxedFileSystem.h>
 #include <tc/fs/LocalFileSystem.h>

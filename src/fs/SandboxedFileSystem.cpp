@@ -1,7 +1,7 @@
-#include <tc/fs/SandboxedIFileSystem.h>
+#include <tc/fs/SandboxedFileSystem.h>
 #include <tc/Exception.h>
 
-tc::fs::SandboxedIFileSystem::SandboxedIFileSystem(const tc::SharedPtr<tc::fs::IFileSystem>& fs_ptr, const tc::fs::Path& root_path) :
+tc::fs::SandboxedFileSystem::SandboxedFileSystem(const tc::SharedPtr<tc::fs::IFileSystem>& fs_ptr, const tc::fs::Path& root_path) :
 	mFileSystem(fs_ptr),
 	mRootPath(root_path),
 	mWorkingDirectory("/")
@@ -11,7 +11,7 @@ tc::fs::SandboxedIFileSystem::SandboxedIFileSystem(const tc::SharedPtr<tc::fs::I
 	mFileSystem->getWorkingDirectory(mRootPath);
 }
 
-void tc::fs::SandboxedIFileSystem::createFile(const tc::fs::Path& path)
+void tc::fs::SandboxedFileSystem::createFile(const tc::fs::Path& path)
 {
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
@@ -21,7 +21,7 @@ void tc::fs::SandboxedIFileSystem::createFile(const tc::fs::Path& path)
 	mFileSystem->createFile(real_path);
 }
 
-void tc::fs::SandboxedIFileSystem::removeFile(const tc::fs::Path& path)
+void tc::fs::SandboxedFileSystem::removeFile(const tc::fs::Path& path)
 {
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
@@ -31,7 +31,7 @@ void tc::fs::SandboxedIFileSystem::removeFile(const tc::fs::Path& path)
 	mFileSystem->removeFile(real_path);
 }
 
-void tc::fs::SandboxedIFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, tc::fs::FileStream& file)
+void tc::fs::SandboxedFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, tc::fs::FileStream& file)
 {
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
@@ -41,7 +41,7 @@ void tc::fs::SandboxedIFileSystem::openFile(const tc::fs::Path& path, FileAccess
 	return mFileSystem->openFile(real_path, mode, file);
 }
 
-void tc::fs::SandboxedIFileSystem::createDirectory(const tc::fs::Path& path)
+void tc::fs::SandboxedFileSystem::createDirectory(const tc::fs::Path& path)
 {
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
@@ -51,7 +51,7 @@ void tc::fs::SandboxedIFileSystem::createDirectory(const tc::fs::Path& path)
 	mFileSystem->createDirectory(real_path);
 }
 
-void tc::fs::SandboxedIFileSystem::removeDirectory(const tc::fs::Path& path)
+void tc::fs::SandboxedFileSystem::removeDirectory(const tc::fs::Path& path)
 {
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
@@ -61,12 +61,12 @@ void tc::fs::SandboxedIFileSystem::removeDirectory(const tc::fs::Path& path)
 	mFileSystem->removeDirectory(real_path);
 }
 
-void tc::fs::SandboxedIFileSystem::getWorkingDirectory(tc::fs::Path& path)
+void tc::fs::SandboxedFileSystem::getWorkingDirectory(tc::fs::Path& path)
 {
 	path = mWorkingDirectory;
 }
 
-void tc::fs::SandboxedIFileSystem::setWorkingDirectory(const tc::fs::Path& path)
+void tc::fs::SandboxedFileSystem::setWorkingDirectory(const tc::fs::Path& path)
 {
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
@@ -79,7 +79,7 @@ void tc::fs::SandboxedIFileSystem::setWorkingDirectory(const tc::fs::Path& path)
 	realPathToSandboxPath(real_path, mWorkingDirectory);
 }
 
-void tc::fs::SandboxedIFileSystem::getDirectoryListing(const tc::fs::Path& path, sDirectoryListing& info)
+void tc::fs::SandboxedFileSystem::getDirectoryListing(const tc::fs::Path& path, sDirectoryListing& info)
 {
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
@@ -100,7 +100,7 @@ void tc::fs::SandboxedIFileSystem::getDirectoryListing(const tc::fs::Path& path,
 	info = real_info;
 }
 
-void tc::fs::SandboxedIFileSystem::sandboxPathToRealPath(const tc::fs::Path& sandbox_path, tc::fs::Path& real_path)
+void tc::fs::SandboxedFileSystem::sandboxPathToRealPath(const tc::fs::Path& sandbox_path, tc::fs::Path& real_path)
 {
 	tc::fs::Path sandbox_current_dir;
 	tc::fs::Path sandbox_path_;
@@ -125,7 +125,7 @@ void tc::fs::SandboxedIFileSystem::sandboxPathToRealPath(const tc::fs::Path& san
 	real_path = mRootPath + safe_sandbox_path;
 }
 
-void tc::fs::SandboxedIFileSystem::realPathToSandboxPath(const tc::fs::Path& real_path, tc::fs::Path& sandbox_path)
+void tc::fs::SandboxedFileSystem::realPathToSandboxPath(const tc::fs::Path& real_path, tc::fs::Path& sandbox_path)
 {
 	// get iterator for real path
 	tc::fs::Path::const_iterator real_path_itr = real_path.begin();
@@ -155,7 +155,7 @@ void tc::fs::SandboxedIFileSystem::realPathToSandboxPath(const tc::fs::Path& rea
 	}
 }
 
-void tc::fs::SandboxedIFileSystem::sanitiseInputPath(const tc::fs::Path& unsafe_path, tc::fs::Path& safe_path) const
+void tc::fs::SandboxedFileSystem::sanitiseInputPath(const tc::fs::Path& unsafe_path, tc::fs::Path& safe_path) const
 {
 	//for (size_t i = 0; i < unsafe_path.getPathElementList().size(); i++)
 	for (tc::fs::Path::const_iterator itr = unsafe_path.begin(); itr != unsafe_path.end(); itr++)

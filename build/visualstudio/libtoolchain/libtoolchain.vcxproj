@@ -122,12 +122,13 @@
     <ClInclude Include="..\..\..\include\tc\endian.h" />
     <ClInclude Include="..\..\..\include\tc\Exception.h" />
     <ClInclude Include="..\..\..\include\tc\fs.h" />
+    <ClInclude Include="..\..\..\include\tc\fs\FileStream.h" />
     <ClInclude Include="..\..\..\include\tc\fs\IFile.h" />
     <ClInclude Include="..\..\..\include\tc\fs\IFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\fs\LocalFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\fs\Path.h" />
     <ClInclude Include="..\..\..\include\tc\fs\SandboxedIFile.h" />
-    <ClInclude Include="..\..\..\include\tc\fs\SandboxedIFileSystem.h" />
+    <ClInclude Include="..\..\..\include\tc\fs\SandboxedFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\Optional.h" />
     <ClInclude Include="..\..\..\include\tc\SharedPtr.h" />
     <ClInclude Include="..\..\..\include\tc\string.h" />
@@ -140,11 +141,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Exception.cpp" />
+    <ClInclude Include="..\..\..\src\fs\FileStream.cpp" />
     <ClCompile Include="..\..\..\src\fs\LocalFile.cpp" />
     <ClCompile Include="..\..\..\src\fs\LocalFileSystem.cpp" />
     <ClCompile Include="..\..\..\src\fs\Path.cpp" />
     <ClCompile Include="..\..\..\src\fs\SandboxedIFile.cpp" />
-    <ClCompile Include="..\..\..\src\fs\SandboxedIFileSystem.cpp" />
+    <ClCompile Include="..\..\..\src\fs\SandboxedFileSystem.cpp" />
     <ClCompile Include="..\..\..\src\string\transcode.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

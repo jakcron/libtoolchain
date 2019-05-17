@@ -127,7 +127,7 @@
     <ClCompile Include="..\..\..\test\endian_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\fs_LocalFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\fs_Path_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\fs_SandboxedIFileSystem_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\fs_SandboxedFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\fs_SandboxedIFile_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\main.cpp" />
     <ClCompile Include="..\..\..\test\Optional_TestClass.cpp" />
@@ -138,7 +138,7 @@
     <ClInclude Include="..\..\..\test\endian_TestClass.h" />
     <ClInclude Include="..\..\..\test\fs_LocalFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\fs_Path_TestClass.h" />
-    <ClInclude Include="..\..\..\test\fs_SandboxedIFileSystem_TestClass.h" />
+    <ClInclude Include="..\..\..\test\fs_SandboxedFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\fs_SandboxedIFile_TestClass.h" />
     <ClInclude Include="..\..\..\test\ITestClass.h" />
     <ClInclude Include="..\..\..\test\Optional_TestClass.h" />

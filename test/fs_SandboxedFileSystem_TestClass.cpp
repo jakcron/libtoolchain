@@ -1,12 +1,12 @@
 #include <tc/Exception.h>
 #include <iostream>
 
-#include "fs_SandboxedIFileSystem_TestClass.h"
+#include "fs_SandboxedFileSystem_TestClass.h"
 
 
-void fs_SandboxedIFileSystem_TestClass::testSandboxRootPath()
+void fs_SandboxedFileSystem_TestClass::testSandboxRootPath()
 {
-	std::cout << "[tc::fs::SandboxedIFileSystem] testSandboxRootPath : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testSandboxRootPath : ";
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -28,7 +28,7 @@ void fs_SandboxedIFileSystem_TestClass::testSandboxRootPath()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + sandbox_relative_root);
+			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + sandbox_relative_root);
 
 			// save sandbox real path
 			tc::fs::Path sandbox_real_root;
@@ -56,9 +56,9 @@ void fs_SandboxedIFileSystem_TestClass::testSandboxRootPath()
 	}
 }
 
-void fs_SandboxedIFileSystem_TestClass::testCreateFile()
+void fs_SandboxedFileSystem_TestClass::testCreateFile()
 {
-	std::cout << "[tc::fs::SandboxedIFileSystem] testCreateFile : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testCreateFile : ";
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -90,7 +90,7 @@ void fs_SandboxedIFileSystem_TestClass::testCreateFile()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + testdir_path);
+			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to create file
 			sb_fs->createFile(tc::fs::Path("/a_dir/testfile"));
@@ -108,9 +108,9 @@ void fs_SandboxedIFileSystem_TestClass::testCreateFile()
 	}
 }
 
-void fs_SandboxedIFileSystem_TestClass::testOpenFile()
+void fs_SandboxedFileSystem_TestClass::testOpenFile()
 {
-	std::cout << "[tc::fs::SandboxedIFileSystem] testOpenFile : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testOpenFile : ";
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -146,7 +146,7 @@ void fs_SandboxedIFileSystem_TestClass::testOpenFile()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + testdir_path);
+			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to open file
 			tc::fs::FileStream file;
@@ -165,9 +165,9 @@ void fs_SandboxedIFileSystem_TestClass::testOpenFile()
 	}
 }
 
-void fs_SandboxedIFileSystem_TestClass::testRemoveFile()
+void fs_SandboxedFileSystem_TestClass::testRemoveFile()
 {
-	std::cout << "[tc::fs::SandboxedIFileSystem] testRemoveFile : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testRemoveFile : ";
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -199,7 +199,7 @@ void fs_SandboxedIFileSystem_TestClass::testRemoveFile()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + testdir_path);
+			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to delete file
 			sb_fs->removeFile(tc::fs::Path("/a_dir/testfile"));
@@ -218,9 +218,9 @@ void fs_SandboxedIFileSystem_TestClass::testRemoveFile()
 }
 
 
-void fs_SandboxedIFileSystem_TestClass::testCreateDirectory()
+void fs_SandboxedFileSystem_TestClass::testCreateDirectory()
 {
-	std::cout << "[tc::fs::SandboxedIFileSystem] testCreateDirectory : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testCreateDirectory : ";
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -252,7 +252,7 @@ void fs_SandboxedIFileSystem_TestClass::testCreateDirectory()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + testdir_path);
+			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to create directory
 			sb_fs->createDirectory(tc::fs::Path("/a_dir/testdir/hey"));
@@ -270,9 +270,9 @@ void fs_SandboxedIFileSystem_TestClass::testCreateDirectory()
 	}
 }
 
-void fs_SandboxedIFileSystem_TestClass::testRemoveDirectory()
+void fs_SandboxedFileSystem_TestClass::testRemoveDirectory()
 {
-	std::cout << "[tc::fs::SandboxedIFileSystem] testRemoveDirectory : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testRemoveDirectory : ";
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -304,7 +304,7 @@ void fs_SandboxedIFileSystem_TestClass::testRemoveDirectory()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + testdir_path);
+			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to remove directory
 			sb_fs->removeDirectory(tc::fs::Path("/a_dir/testdir/hey"));
@@ -322,9 +322,9 @@ void fs_SandboxedIFileSystem_TestClass::testRemoveDirectory()
 	}
 }
 
-void fs_SandboxedIFileSystem_TestClass::testGetDirectoryListing()
+void fs_SandboxedFileSystem_TestClass::testGetDirectoryListing()
 {
-	std::cout << "[tc::fs::SandboxedIFileSystem] testGetDirectoryListing : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testGetDirectoryListing : ";
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -360,7 +360,7 @@ void fs_SandboxedIFileSystem_TestClass::testGetDirectoryListing()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + testdir_path);
+			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// save sandbox dir info
 			tc::fs::sDirectoryListing sb_dir_info;
@@ -410,9 +410,9 @@ void fs_SandboxedIFileSystem_TestClass::testGetDirectoryListing()
 }
 
 
-void fs_SandboxedIFileSystem_TestClass::testNavigateUpSandboxEscape()
+void fs_SandboxedFileSystem_TestClass::testNavigateUpSandboxEscape()
 {
-	std::cout << "[tc::fs::SandboxedIFileSystem] testNavigateUpSandboxEscape : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testNavigateUpSandboxEscape : ";
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -451,7 +451,7 @@ void fs_SandboxedIFileSystem_TestClass::testNavigateUpSandboxEscape()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + sandbox_relative_root);
+			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + sandbox_relative_root);
 
 			// get info about current directory
 			tc::fs::sDirectoryListing dir_info;
@@ -480,9 +480,9 @@ void fs_SandboxedIFileSystem_TestClass::testNavigateUpSandboxEscape()
 	}
 }
 
-void fs_SandboxedIFileSystem_TestClass::testOpenFileOutsideSandbox()
+void fs_SandboxedFileSystem_TestClass::testOpenFileOutsideSandbox()
 {
-	std::cout << "[tc::fs::SandboxedIFileSystem] testOpenFileOutsideSandbox : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testOpenFileOutsideSandbox : ";
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -524,7 +524,7 @@ void fs_SandboxedIFileSystem_TestClass::testOpenFileOutsideSandbox()
 		// test accessing file outside of sandbox
 		try {
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + sandbox_relative_root);
+			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + sandbox_relative_root);
 			  
 			// try to open the file just outside the sandbox
 			sb_fs->setWorkingDirectory(tc::fs::Path("/"));
@@ -544,7 +544,7 @@ void fs_SandboxedIFileSystem_TestClass::testOpenFileOutsideSandbox()
 	}
 }
 
-void fs_SandboxedIFileSystem_TestClass::runAllTests(void)
+void fs_SandboxedFileSystem_TestClass::runAllTests(void)
 {
 	testSandboxRootPath();
 	testCreateFile();

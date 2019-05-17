@@ -63,6 +63,9 @@
     <ClInclude Include="..\..\..\include\tc\types.h">
       <Filter>Header Files\public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\fs\FileStream.h">
+      <Filter>Header Files\public\fs</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\fs\IFile.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
@@ -78,7 +81,7 @@
     <ClInclude Include="..\..\..\include\tc\fs\SandboxedIFile.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\SandboxedIFileSystem.h">
+    <ClInclude Include="..\..\..\include\tc\fs\SandboxedFileSystem.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\string\transcode.h">
@@ -98,6 +101,9 @@
     <ClCompile Include="..\..\..\src\Exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\fs\FileStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\fs\LocalFile.cpp">
       <Filter>Source Files\fs</Filter>
     </ClCompile>
@@ -110,7 +116,7 @@
     <ClCompile Include="..\..\..\src\fs\SandboxedIFile.cpp">
       <Filter>Source Files\fs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\SandboxedIFileSystem.cpp">
+    <ClCompile Include="..\..\..\src\fs\SandboxedFileSystem.cpp">
       <Filter>Source Files\fs</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\string\transcode.cpp">

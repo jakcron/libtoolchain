@@ -4,7 +4,7 @@
 #include <tc/fs.h>
 #include <tc/SharedPtr.h>
 
-class fs_SandboxedIFileSystem_TestClass : public ITestClass
+class fs_SandboxedFileSystem_TestClass : public ITestClass
 {
 public:
 	void runAllTests();

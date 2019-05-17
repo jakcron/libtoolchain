@@ -1,6 +1,6 @@
 	/**
-	 * @file SandboxedIFileSystem.h
-	 * @brief Declaration of tc::fs::SandboxedIFileSystem
+	 * @file SandboxedFileSystem.h
+	 * @brief Declaration of tc::fs::SandboxedFileSystem
 	 * @author Jack (jakcron)
 	 * @version 0.2
 	 * @date 2019/05/17
@@ -12,10 +12,10 @@
 namespace tc { namespace fs {
 
 	/**
-	 * @class SandboxedIFileSystem
+	 * @class SandboxedFileSystem
 	 * @brief A wrapper around an existing IFileSystem object that exposes a subset of the wrapped IFileSystem directory tree.
 	 */
-class SandboxedIFileSystem : public IFileSystem
+class SandboxedFileSystem : public IFileSystem
 {
 public:
 		/** 
@@ -23,7 +23,7 @@ public:
 		 * @param[in] fs_ptr Pointer to IFileSystem object to be sandboxed
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	SandboxedIFileSystem(const tc::SharedPtr<tc::fs::IFileSystem>& fs_ptr, const tc::fs::Path& root_path);
+	SandboxedFileSystem(const tc::SharedPtr<tc::fs::IFileSystem>& fs_ptr, const tc::fs::Path& root_path);
 
 	
 	void createFile(const tc::fs::Path& path);
@@ -36,7 +36,7 @@ public:
 	void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& info);
 
 private:
-	const std::string kClassName = "tc::fs::SandboxedIFileSystem";
+	const std::string kClassName = "tc::fs::SandboxedFileSystem";
 
 	tc::SharedPtr<tc::fs::IFileSystem> mFileSystem;
 	tc::fs::Path mRootPath;
