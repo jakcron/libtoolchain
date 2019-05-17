@@ -16,25 +16,19 @@ private:
 		{
 		}
 
-		tc::fs::IFile* openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode)
+		void createFile(const tc::fs::Path& path)
+		{
+			throw tc::Exception(kClassName, "createFile() not implemented");
+		}
+
+		void removeFile(const tc::fs::Path& path)
+		{
+			throw tc::Exception(kClassName, "removeFile() not implemented");
+		}
+
+		void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::SharedPtr<tc::fs::IFile>& file)
 		{
 			throw tc::Exception(kClassName, "openFile() not implemented");
-			return nullptr;
-		}
-
-		void deleteFile(const tc::fs::Path& path)
-		{
-			throw tc::Exception(kClassName, "deleteFile() not implemented");
-		}
-
-		void getCurrentDirectory(tc::fs::Path& path)
-		{
-			path = mCurDir;
-		}
-
-		void setCurrentDirectory(const tc::fs::Path& path)
-		{
-			mCurDir = path;
 		}
 
 		void createDirectory(const tc::fs::Path& path)
@@ -42,12 +36,22 @@ private:
 			throw tc::Exception(kClassName, "createDirectory() not implemented");
 		}
 
-		void deleteDirectory(const tc::fs::Path& path)
+		void removeDirectory(const tc::fs::Path& path)
 		{
-			throw tc::Exception(kClassName, "deleteDirectory() not implemented");
+			throw tc::Exception(kClassName, "removeDirectory() not implemented");
 		}
 
-		void getDirectoryListing(const tc::fs::Path& path, tc::fs::DirectoryInfo& info)
+		void getWorkingDirectory(tc::fs::Path& path)
+		{
+			path = mCurDir;
+		}
+
+		void setWorkingDirectory(const tc::fs::Path& path)
+		{
+			mCurDir = path;
+		}
+
+		void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& info)
 		{
 			throw tc::Exception(kClassName, "getDirectoryListing() not implemented");
 		}
@@ -61,7 +65,7 @@ private:
 	void testOpenFile();
 	void testRemoveFile();
 	void testCreateDirectory();
-	void testdeleteDirectory();
+	void testRemoveDirectory();
 	void testGetDirectoryListing();
 	void testNavigateUpSandboxEscape();
 	void testOpenFileOutsideSandbox();

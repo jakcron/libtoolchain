@@ -21,7 +21,8 @@ void fs_LocalFileSystem_TestClass::testFileCreate()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file = fs.openFile(kAsciiFilePath, tc::fs::FAM_CREATE);
+		tc::SharedPtr<tc::fs::IFile> file;
+		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, file);
 
 		if (file->size() != 0)
 		{
@@ -52,7 +53,8 @@ void fs_LocalFileSystem_TestClass::testFileRead()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file = fs.openFile(kAsciiFilePath, tc::fs::FAM_READ);
+		tc::SharedPtr<tc::fs::IFile> file;
+		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
 
 		if (file->size() != kRandomString.length())
 		{
@@ -82,7 +84,8 @@ void fs_LocalFileSystem_TestClass::testFileEdit()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file = fs.openFile(kAsciiFilePath, tc::fs::FAM_EDIT);
+		tc::SharedPtr<tc::fs::IFile> file;
+		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_EDIT, file);
 
 		if (file->size() != kRandomString.length())
 		{
@@ -129,7 +132,8 @@ void fs_LocalFileSystem_TestClass::testUnicodePath()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file = fs.openFile(kUtf8TestPath, tc::fs::FAM_CREATE);
+		tc::SharedPtr<tc::fs::IFile> file;
+		fs.openFile(kUtf8TestPath, tc::fs::FILEACCESS_CREATE, file);
 
 		if (file->size() != 0)
 		{
@@ -154,7 +158,8 @@ void fs_LocalFileSystem_TestClass::testNotPresentFileReadOnly()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file = fs.openFile(kNotExistFilePath, tc::fs::FAM_READ);
+		tc::SharedPtr<tc::fs::IFile> file;
+		fs.openFile(kNotExistFilePath, tc::fs::FILEACCESS_READ, file);
 
 		std::cout << "FAIL (Did not throw on failure to open for read access file)" << std::endl;
 	}
@@ -171,7 +176,8 @@ void fs_LocalFileSystem_TestClass::testNotPresentFileEdit()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file = fs.openFile(kNotExistFilePath, tc::fs::FAM_EDIT);
+		tc::SharedPtr<tc::fs::IFile> file;
+		fs.openFile(kNotExistFilePath, tc::fs::FILEACCESS_EDIT, file);
 
 		std::cout << "FAIL (Did not throw on failure to open for edit access file)" << std::endl;
 	}
@@ -188,7 +194,8 @@ void fs_LocalFileSystem_TestClass::testTryWriteInReadOnlyMode()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file = fs.openFile(kAsciiFilePath, tc::fs::FAM_READ);
+		tc::SharedPtr<tc::fs::IFile> file;
+		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
 
 		file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 
@@ -207,7 +214,8 @@ void fs_LocalFileSystem_TestClass::testTryReadBeyondFileSize()
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::SharedPtr<tc::fs::IFile> file = fs.openFile(kAsciiFilePath, tc::fs::FAM_READ);
+		tc::SharedPtr<tc::fs::IFile> file;
+		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
 
 		tc::SharedPtr<byte_t> buffer = new byte_t[0x10000];
 
@@ -221,14 +229,14 @@ void fs_LocalFileSystem_TestClass::testTryReadBeyondFileSize()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::testDeleteAsciiFile()
+void fs_LocalFileSystem_TestClass::testRemoveAsciiFile()
 {
-	std::cout << "[tc::fs::LocalFileSystem] testDeleteAsciiFile : ";
+	std::cout << "[tc::fs::LocalFileSystem] testRemoveAsciiFile : ";
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
 
-		fs.deleteFile(kAsciiFilePath);
+		fs.removeFile(kAsciiFilePath);
 		std::cout << "PASS" << std::endl;
 	}
 	catch (const tc::Exception& e) 
@@ -237,14 +245,14 @@ void fs_LocalFileSystem_TestClass::testDeleteAsciiFile()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::testDeleteUnicodeFile()
+void fs_LocalFileSystem_TestClass::testRemoveUnicodeFile()
 {
-	std::cout << "[tc::fs::LocalFileSystem] testDeleteUnicodeFile : ";
+	std::cout << "[tc::fs::LocalFileSystem] testRemoveUnicodeFile : ";
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
 
-		fs.deleteFile(kUtf8TestPath);
+		fs.removeFile(kUtf8TestPath);
 		std::cout << "PASS" << std::endl;
 	}
 	catch (const tc::Exception& e) 
@@ -253,14 +261,14 @@ void fs_LocalFileSystem_TestClass::testDeleteUnicodeFile()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::testDeleteFileThatDoesNotExist()
+void fs_LocalFileSystem_TestClass::testRemoveFileThatDoesNotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] testDeleteFileThatDoesNotExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] testRemoveFileThatDoesNotExist : ";
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
 
-		fs.deleteFile(kNotExistFilePath);
+		fs.removeFile(kNotExistFilePath);
 		std::cout << "FAIL (Did not throw exception when file was not present on FS)" << std::endl;
 	}
 	catch (const tc::Exception& e) 
@@ -285,14 +293,14 @@ void fs_LocalFileSystem_TestClass::testCreateDirectory()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::testDeleteDirectory()
+void fs_LocalFileSystem_TestClass::testRemoveDirectory()
 {
-	std::cout << "[tc::fs::LocalFileSystem] testDeleteDirectory : ";
-	tc::fs::LocalFileSystem fs;
-
+	std::cout << "[tc::fs::LocalFileSystem] testRemoveDirectory : ";
 	try
 	{
-		fs.deleteDirectory(kDirPath);
+		tc::fs::LocalFileSystem fs;
+
+		fs.removeDirectory(kDirPath);
 		std::cout << "PASS" << std::endl;
 	}
 	catch (const tc::Exception& e)
@@ -320,7 +328,7 @@ void fs_LocalFileSystem_TestClass::testCreateDirectoryWhereDirectoryAlreadyExist
 			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 
-		fs.deleteDirectory(kDirPath);
+		fs.removeDirectory(kDirPath);
 	}
 	catch (const std::exception& e)
 	{
@@ -330,14 +338,14 @@ void fs_LocalFileSystem_TestClass::testCreateDirectoryWhereDirectoryAlreadyExist
 }
 
 
-void fs_LocalFileSystem_TestClass::testDeleteDirectoryWhereDirectoryDoesNotExist()
+void fs_LocalFileSystem_TestClass::testRemoveDirectoryWhereDirectoryDoesNotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] testDeleteDirectoryWhereDirectoryDoesNotExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] testRemoveDirectoryWhereDirectoryDoesNotExist : ";
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
 
-		fs.deleteDirectory(kDirPath);
+		fs.removeDirectory(kDirPath);
 		std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
 	}
 	catch (const tc::Exception& e) 
@@ -362,14 +370,14 @@ void fs_LocalFileSystem_TestClass::testCreateDirectoryWithUnicodePath()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::testDeleteDirectoryWithUnicodePath()
+void fs_LocalFileSystem_TestClass::testRemoveDirectoryWithUnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] testDeleteDirectoryWithUnicodePath : ";
+	std::cout << "[tc::fs::LocalFileSystem] testRemoveDirectoryWithUnicodePath : ";
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
 
-		fs.deleteDirectory(kUtf8DirPath);
+		fs.removeDirectory(kUtf8DirPath);
 		std::cout << "PASS" << std::endl;
 	}
 	catch (const tc::Exception& e) 
@@ -378,16 +386,16 @@ void fs_LocalFileSystem_TestClass::testDeleteDirectoryWithUnicodePath()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::testDeleteDirectoryThatIsActuallyAFile()
+void fs_LocalFileSystem_TestClass::testRemoveDirectoryThatIsActuallyAFile()
 {
-	std::cout << "[tc::fs::LocalFileSystem] testDeleteDirectoryThatIsActuallyAFile : ";
+	std::cout << "[tc::fs::LocalFileSystem] testRemoveDirectoryThatIsActuallyAFile : ";
 	try
 	{
 		tc::fs::LocalFileSystem fs;
 		try 
 		{
-			tc::SharedPtr<tc::fs::IFile> file = fs.openFile(kAsciiFilePath, tc::fs::FAM_CREATE);
-			fs.deleteDirectory(kAsciiFilePath);
+			fs.createFile(kAsciiFilePath);
+			fs.removeDirectory(kAsciiFilePath);
 			std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
 		}
 		catch (const tc::Exception& e) 
@@ -395,7 +403,7 @@ void fs_LocalFileSystem_TestClass::testDeleteDirectoryThatIsActuallyAFile()
 			std::cout << "PASS (" << e.error() << ")" << std::endl;
 		}
 
-		fs.deleteFile(kAsciiFilePath);
+		fs.removeFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -403,9 +411,9 @@ void fs_LocalFileSystem_TestClass::testDeleteDirectoryThatIsActuallyAFile()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::testDeleteDirectoryThatHasChildren()
+void fs_LocalFileSystem_TestClass::testRemoveDirectoryThatHasChildren()
 {
-	std::cout << "[tc::fs::LocalFileSystem] testDeleteDirectoryThatHasChildren : ";
+	std::cout << "[tc::fs::LocalFileSystem] testRemoveDirectoryThatHasChildren : ";
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -417,8 +425,8 @@ void fs_LocalFileSystem_TestClass::testDeleteDirectoryThatHasChildren()
 		{
 			fs.createDirectory(kDirPath);
 			fs.createDirectory(dir_child_path);
-			tc::SharedPtr<tc::fs::IFile> file = fs.openFile(file_child_path, tc::fs::FAM_CREATE);
-			fs.deleteDirectory(kDirPath);
+			fs.createFile(file_child_path);
+			fs.removeDirectory(kDirPath);
 			std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
 		}
 		catch (const tc::Exception& e) 
@@ -426,9 +434,9 @@ void fs_LocalFileSystem_TestClass::testDeleteDirectoryThatHasChildren()
 			std::cout << "PASS (" << e.error() << ")" << std::endl;
 		}
 
-		fs.deleteDirectory(dir_child_path);
-		fs.deleteFile(file_child_path);
-		fs.deleteDirectory(kDirPath);
+		fs.removeDirectory(dir_child_path);
+		fs.removeFile(file_child_path);
+		fs.removeDirectory(kDirPath);
 	}
 	catch (const std::exception& e)
 	{
@@ -460,8 +468,7 @@ void fs_LocalFileSystem_TestClass::testGetDirectoryListing()
 
 		for (size_t i = 0; i < file_list.size(); i++)
 		{
-			tc::fs::IFile* fp = fs.openFile(tc::fs::Path(kDirPath) + tc::fs::Path(file_list[i]), tc::fs::FAM_CREATE);
-			delete fp;
+			fs.createFile(tc::fs::Path(kDirPath) + tc::fs::Path(file_list[i]));
 		}
 
 		for (size_t i = 0; i < dir_list.size(); i++)
@@ -471,17 +478,17 @@ void fs_LocalFileSystem_TestClass::testGetDirectoryListing()
 
 		try
 		{
-			tc::fs::DirectoryInfo info;
+			tc::fs::sDirectoryListing info;
 
 			fs.getDirectoryListing(kDirPath, info);
 			
 			// + 2 for "." & ".."
-			if (info.getDirectoryList().size() != (dir_list.size() + 2))
+			if (info.dir_list.size() != (dir_list.size() + 2))
 			{
 				throw tc::Exception("Unexpected directory count");
 			}
 
-			if (info.getFileList().size() != file_list.size())
+			if (info.file_list.size() != file_list.size())
 			{
 				throw tc::Exception("Unexpected file count");
 			}
@@ -495,15 +502,15 @@ void fs_LocalFileSystem_TestClass::testGetDirectoryListing()
 
 		for (size_t i = 0; i < file_list.size(); i++)
 		{
-			fs.deleteFile(tc::fs::Path(kDirPath) + tc::fs::Path(file_list[i]));
+			fs.removeFile(tc::fs::Path(kDirPath) + tc::fs::Path(file_list[i]));
 		}
 
 		for (size_t i = 0; i < dir_list.size(); i++)
 		{
-			fs.deleteDirectory(tc::fs::Path(kDirPath) + tc::fs::Path(dir_list[i]));
+			fs.removeDirectory(tc::fs::Path(kDirPath) + tc::fs::Path(dir_list[i]));
 		}
 
-		fs.deleteDirectory(tc::fs::Path(kDirPath));
+		fs.removeDirectory(tc::fs::Path(kDirPath));
 	}
 	catch (const std::exception& e)
 	{
@@ -518,7 +525,7 @@ void fs_LocalFileSystem_TestClass::testGetDirectoryListingWhereDirectoryDoesNotE
 	{
 		tc::fs::LocalFileSystem fs;
 
-		tc::fs::DirectoryInfo info;
+		tc::fs::sDirectoryListing info;
 		fs.getDirectoryListing(kNotExistFilePath, info);
 		std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
 	}
@@ -536,12 +543,12 @@ void fs_LocalFileSystem_TestClass::testChangeDirectory()
 		tc::fs::LocalFileSystem fs;
 		
 		tc::fs::Path old_dir;
-		fs.getCurrentDirectory(old_dir);
+		fs.getWorkingDirectory(old_dir);
 
 		try 
 		{
 			fs.createDirectory(kDirPath);
-			fs.setCurrentDirectory(kDirPath);
+			fs.setWorkingDirectory(kDirPath);
 			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e) 
@@ -549,8 +556,8 @@ void fs_LocalFileSystem_TestClass::testChangeDirectory()
 			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 
-		fs.setCurrentDirectory(old_dir);
-		fs.deleteDirectory(tc::fs::Path(kDirPath));
+		fs.setWorkingDirectory(old_dir);
+		fs.removeDirectory(tc::fs::Path(kDirPath));
 	}
 	catch (const std::exception& e)
 	{
@@ -568,17 +575,17 @@ void fs_LocalFileSystem_TestClass::runAllTests(void)
 	testNotPresentFileEdit();
 	testTryWriteInReadOnlyMode();
 	testTryReadBeyondFileSize();
-	testDeleteAsciiFile();
-	testDeleteUnicodeFile();
-	testDeleteFileThatDoesNotExist();
+	testRemoveAsciiFile();
+	testRemoveUnicodeFile();
+	testRemoveFileThatDoesNotExist();
 	testCreateDirectory();
-	testDeleteDirectory();
+	testRemoveDirectory();
 	testCreateDirectoryWhereDirectoryAlreadyExists();
-	testDeleteDirectoryWhereDirectoryDoesNotExist();
+	testRemoveDirectoryWhereDirectoryDoesNotExist();
 	testCreateDirectoryWithUnicodePath();
-	testDeleteDirectoryWithUnicodePath();
-	testDeleteDirectoryThatIsActuallyAFile();
-	testDeleteDirectoryThatHasChildren();
+	testRemoveDirectoryWithUnicodePath();
+	testRemoveDirectoryThatIsActuallyAFile();
+	testRemoveDirectoryThatHasChildren();
 	testGetDirectoryListing();
 	testGetDirectoryListingWhereDirectoryDoesNotExist();
 	testChangeDirectory();

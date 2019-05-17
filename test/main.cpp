@@ -15,12 +15,12 @@ void runTest(ITestClass* testClass)
 
 int main(int argc, char** argv)
 {
-	runTest(new fs_LocalFileSystem_TestClass());
-	runTest(new fs_Path_TestClass());
-	runTest(new fs_SandboxedIFile_TestClass());
-	runTest(new fs_SandboxedIFileSystem_TestClass());
-	runTest(new Optional_TestClass());
-	runTest(new SharedPtr_TestClass());
 	runTest(new string_transcode_TestClass());
 	runTest(new endian_TestClass());
+	runTest(new SharedPtr_TestClass());
+	runTest(new Optional_TestClass());
+	runTest(new fs_Path_TestClass());
+	runTest(new fs_LocalFileSystem_TestClass());
+	runTest(new fs_SandboxedIFile_TestClass());
+	runTest(new fs_SandboxedIFileSystem_TestClass());
 }

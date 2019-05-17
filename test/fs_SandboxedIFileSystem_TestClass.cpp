@@ -32,8 +32,8 @@ void fs_SandboxedIFileSystem_TestClass::testSandboxRootPath()
 
 			// save sandbox real path
 			tc::fs::Path sandbox_real_root;
-			sb_fs->setCurrentDirectory(tc::fs::Path("/"));
-			fs->getCurrentDirectory(sandbox_real_root);
+			sb_fs->setWorkingDirectory(tc::fs::Path("/"));
+			fs->getWorkingDirectory(sandbox_real_root);
 
 			// check the sandbox is generating the correct path
 			if (sandbox_real_root != dummyfs_curdir + sandbox_relative_root)
@@ -68,18 +68,13 @@ void fs_SandboxedIFileSystem_TestClass::testCreateFile()
 			{
 			}
 
-			tc::fs::IFile* openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode)
+			void createFile(const tc::fs::Path& path)
 			{
-				getCurrentDirectory(mCurDir);
-				if (mode != tc::fs::FAM_CREATE)
-				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect access permissions");
-				}
+				getWorkingDirectory(mCurDir);
 				if (path != mCurDir + tc::fs::Path("a_dir/testfile"))
 				{
 					throw tc::Exception("DummyFileSystem", "file had incorrect path");
 				}
-				return nullptr;
 			}
 		private:
 			tc::fs::Path mCurDir;
@@ -98,7 +93,7 @@ void fs_SandboxedIFileSystem_TestClass::testCreateFile()
 			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to create file
-			sb_fs->openFile(tc::fs::Path("/a_dir/testfile"), tc::fs::FAM_CREATE);
+			sb_fs->createFile(tc::fs::Path("/a_dir/testfile"));
 			
 			std::cout << "PASS" << std::endl;
 		}
@@ -125,10 +120,10 @@ void fs_SandboxedIFileSystem_TestClass::testOpenFile()
 			{
 			}
 
-			tc::fs::IFile* openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode)
+			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::SharedPtr<tc::fs::IFile>& file)
 			{
-				getCurrentDirectory(mCurDir);
-				if (mode != tc::fs::FAM_READ)
+				getWorkingDirectory(mCurDir);
+				if (mode != tc::fs::FILEACCESS_READ)
 				{
 					throw tc::Exception("DummyFileSystem", "file had incorrect access permissions");
 				}
@@ -136,7 +131,6 @@ void fs_SandboxedIFileSystem_TestClass::testOpenFile()
 				{
 					throw tc::Exception("DummyFileSystem", "file had incorrect path");
 				}
-				return nullptr;
 			}
 		private:
 			tc::fs::Path mCurDir;
@@ -155,7 +149,8 @@ void fs_SandboxedIFileSystem_TestClass::testOpenFile()
 			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to open file
-			sb_fs->openFile(tc::fs::Path("/a_dir/testfile"), tc::fs::FAM_READ);
+			tc::SharedPtr<tc::fs::IFile> file;
+			sb_fs->openFile(tc::fs::Path("/a_dir/testfile"), tc::fs::FILEACCESS_READ, file);
 			
 			std::cout << "PASS" << std::endl;
 		}
@@ -182,9 +177,9 @@ void fs_SandboxedIFileSystem_TestClass::testRemoveFile()
 			{
 			}
 
-			void deleteFile(const tc::fs::Path& path)
+			void removeFile(const tc::fs::Path& path)
 			{
-				getCurrentDirectory(mCurDir);
+				getWorkingDirectory(mCurDir);
 				if (path != mCurDir + tc::fs::Path("a_dir/testfile"))
 				{
 					throw tc::Exception("DummyFileSystem", "file had incorrect path");
@@ -207,7 +202,7 @@ void fs_SandboxedIFileSystem_TestClass::testRemoveFile()
 			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to delete file
-			sb_fs->deleteFile(tc::fs::Path("/a_dir/testfile"));
+			sb_fs->removeFile(tc::fs::Path("/a_dir/testfile"));
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -237,7 +232,7 @@ void fs_SandboxedIFileSystem_TestClass::testCreateDirectory()
 
 			void createDirectory(const tc::fs::Path& path)
 			{
-				getCurrentDirectory(mCurDir);
+				getWorkingDirectory(mCurDir);
 				if (path != mCurDir + tc::fs::Path("a_dir/testdir/hey"))
 				{
 					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
@@ -275,9 +270,9 @@ void fs_SandboxedIFileSystem_TestClass::testCreateDirectory()
 	}
 }
 
-void fs_SandboxedIFileSystem_TestClass::testdeleteDirectory()
+void fs_SandboxedIFileSystem_TestClass::testRemoveDirectory()
 {
-	std::cout << "[tc::fs::SandboxedIFileSystem] testdeleteDirectory : ";
+	std::cout << "[tc::fs::SandboxedIFileSystem] testRemoveDirectory : ";
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -287,9 +282,9 @@ void fs_SandboxedIFileSystem_TestClass::testdeleteDirectory()
 			{
 			}
 
-			void deleteDirectory(const tc::fs::Path& path)
+			void removeDirectory(const tc::fs::Path& path)
 			{
-				getCurrentDirectory(mCurDir);
+				getWorkingDirectory(mCurDir);
 				if (path != mCurDir + tc::fs::Path("a_dir/testdir/hey"))
 				{
 					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
@@ -312,7 +307,7 @@ void fs_SandboxedIFileSystem_TestClass::testdeleteDirectory()
 			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to remove directory
-			sb_fs->deleteDirectory(tc::fs::Path("/a_dir/testdir/hey"));
+			sb_fs->removeDirectory(tc::fs::Path("/a_dir/testdir/hey"));
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -339,17 +334,17 @@ void fs_SandboxedIFileSystem_TestClass::testGetDirectoryListing()
 			{
 			}
 
-			void getDirectoryListing(const tc::fs::Path& path, tc::fs::DirectoryInfo& dir_info)
+			void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& dir_info)
 			{
-				getCurrentDirectory(mCurDir);
+				getWorkingDirectory(mCurDir);
 				if (path != mCurDir + tc::fs::Path("a_dir/testdir/hey"))
 				{
 					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
 				}
 
-				dir_info.setPath(path);
-				dir_info.setDirectoryList(std::vector<std::string>({ "dir0", "dir1", "dir2" }));
-				dir_info.setFileList(std::vector<std::string>({ "file0", "file1" }));
+				dir_info.abs_path = path;
+				dir_info.dir_list = std::vector<std::string>({ "dir0", "dir1", "dir2" });
+				dir_info.file_list = std::vector<std::string>({ "file0", "file1" });
 			}
 		private:
 			tc::fs::Path mCurDir;
@@ -368,38 +363,35 @@ void fs_SandboxedIFileSystem_TestClass::testGetDirectoryListing()
 			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + testdir_path);
 
 			// save sandbox dir info
-			tc::fs::DirectoryInfo sb_dir_info;
+			tc::fs::sDirectoryListing sb_dir_info;
 			sb_fs->getDirectoryListing(tc::fs::Path("/a_dir/testdir/hey"), sb_dir_info);
 
 			// save real dir info
-			tc::fs::DirectoryInfo real_dir_info;
+			tc::fs::sDirectoryListing real_dir_info;
 			fs->getDirectoryListing(dummyfs_curdir + tc::fs::Path("testdir/a_dir/testdir/hey"), real_dir_info);
 
-			if (sb_dir_info.getFileList() != real_dir_info.getFileList())
+			if (sb_dir_info.file_list != real_dir_info.file_list)
 			{
 				throw tc::Exception("DummyFileSystem", "File list was not as expected");
 			}
 
-			if (sb_dir_info.getDirectoryList() != real_dir_info.getDirectoryList())
+			if (sb_dir_info.dir_list != real_dir_info.dir_list)
 			{
 				throw tc::Exception("DummyFileSystem", "Directory list was not as expected");
 			}
 
-			std::vector<std::string> raw_sandbox_path;
-			for (size_t i = 0; i < sb_dir_info.getPath().getPathElementList().size(); i++)
+			tc::fs::Path fixed_sandbox_path;
+			for (tc::fs::Path::const_iterator itr = sb_dir_info.abs_path.begin(); itr != sb_dir_info.abs_path.end(); itr++)
 			{
-				if (sb_dir_info.getPath().getPathElementList()[i] == "" && i == 0)
+				if (*itr == "" && itr == sb_dir_info.abs_path.begin())
 				{
 					continue;
 				}
 
-				raw_sandbox_path.push_back(sb_dir_info.getPath().getPathElementList()[i]);
+				fixed_sandbox_path.push_back(*itr);
 			}
 
-			tc::fs::Path fixed_sandbox_path;
-			fixed_sandbox_path.setPathElementList(raw_sandbox_path);
-
-			if ((dummyfs_curdir + testdir_path + fixed_sandbox_path) != real_dir_info.getPath())
+			if ((dummyfs_curdir + testdir_path + fixed_sandbox_path) != real_dir_info.abs_path)
 			{
 				throw tc::Exception("DummyFileSystem", "Directory path was not as expected");
 			}
@@ -430,9 +422,9 @@ void fs_SandboxedIFileSystem_TestClass::testNavigateUpSandboxEscape()
 			{
 			}
 
-			void getDirectoryListing(const tc::fs::Path& path, tc::fs::DirectoryInfo& dir_info)
+			void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& dir_info)
 			{			
-				dir_info.setPath(path);
+				dir_info.abs_path = path;
 				mLastUsedPath = path;
 			}
 
@@ -462,10 +454,10 @@ void fs_SandboxedIFileSystem_TestClass::testNavigateUpSandboxEscape()
 			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + sandbox_relative_root);
 
 			// get info about current directory
-			tc::fs::DirectoryInfo dir_info;
+			tc::fs::sDirectoryListing dir_info;
 			sb_fs->getDirectoryListing(tc::fs::Path("./../../../../../../../../../../../../../..///./././"), dir_info);
 			
-			if (dir_info.getPath() != tc::fs::Path("/"))
+			if (dir_info.abs_path != tc::fs::Path("/"))
 			{
 				throw tc::Exception("Sandbox directory path not as expected");
 			}
@@ -500,10 +492,10 @@ void fs_SandboxedIFileSystem_TestClass::testOpenFileOutsideSandbox()
 			{
 			}
 
-			tc::fs::IFile* openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode)
+			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::SharedPtr<tc::fs::IFile>& file)
 			{
-				getCurrentDirectory(mCurDir);
-				if (mode != tc::fs::FAM_READ)
+				getWorkingDirectory(mCurDir);
+				if (mode != tc::fs::FILEACCESS_READ)
 				{
 					throw tc::Exception("DummyFileSystem", "file had incorrect access mode");
 				}
@@ -515,7 +507,6 @@ void fs_SandboxedIFileSystem_TestClass::testOpenFileOutsideSandbox()
 				{
 					throw tc::Exception("DummyFileSystem", "sandbox path was not as expected");
 				}
-				return nullptr;
 			}
 		private:
 			tc::fs::Path mCurDir;
@@ -536,8 +527,9 @@ void fs_SandboxedIFileSystem_TestClass::testOpenFileOutsideSandbox()
 			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedIFileSystem(fs, dummyfs_curdir + sandbox_relative_root);
 			  
 			// try to open the file just outside the sandbox
-			sb_fs->setCurrentDirectory(tc::fs::Path("/"));
-			tc::SharedPtr<tc::fs::IFile> inacessible_file = sb_fs->openFile(tc::fs::Path("../inaccessible_file0"), tc::fs::FAM_READ);
+			sb_fs->setWorkingDirectory(tc::fs::Path("/"));
+			tc::SharedPtr<tc::fs::IFile> inaccessible_file;
+			sb_fs->openFile(tc::fs::Path("../inaccessible_file0"), tc::fs::FILEACCESS_READ, inaccessible_file);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -559,7 +551,7 @@ void fs_SandboxedIFileSystem_TestClass::runAllTests(void)
 	testOpenFile();
 	testRemoveFile();
 	testCreateDirectory();
-	testdeleteDirectory();
+	testRemoveDirectory();
 	testGetDirectoryListing();
 	testNavigateUpSandboxEscape();
 	testOpenFileOutsideSandbox();

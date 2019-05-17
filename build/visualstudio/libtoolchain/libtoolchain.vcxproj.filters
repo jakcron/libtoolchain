@@ -63,9 +63,6 @@
     <ClInclude Include="..\..\..\include\tc\types.h">
       <Filter>Header Files\public</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\DirectoryInfo.h">
-      <Filter>Header Files\public\fs</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\fs\IFile.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
@@ -100,9 +97,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Exception.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\DirectoryInfo.cpp">
-      <Filter>Source Files\fs</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\fs\LocalFile.cpp">
       <Filter>Source Files\fs</Filter>

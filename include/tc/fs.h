@@ -11,7 +11,6 @@
  * @brief       Namespace of the filesystem library
  */
 #include <tc/fs/Path.h>
-#include <tc/fs/DirectoryInfo.h>
 #include <tc/fs/IFile.h>
 #include <tc/fs/IFileSystem.h>
 #include <tc/fs/SandboxedIFile.h>

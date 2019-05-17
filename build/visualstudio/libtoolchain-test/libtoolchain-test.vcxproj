@@ -124,16 +124,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\test\fs_LocalFileSystem_TestClass.h" />
-    <ClInclude Include="..\..\..\test\fs_Path_TestClass.h" />
-    <ClInclude Include="..\..\..\test\fs_SandboxedIFileSystem_TestClass.h" />
-    <ClInclude Include="..\..\..\test\fs_SandboxedIFile_TestClass.h" />
-    <ClInclude Include="..\..\..\test\ITestClass.h" />
-    <ClInclude Include="..\..\..\test\Optional_TestClass.h" />
-    <ClInclude Include="..\..\..\test\SharedPtr_TestClass.h" />
-    <ClInclude Include="..\..\..\test\string_transcode_TestClass.h" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="..\..\..\test\endian_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\fs_LocalFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\fs_Path_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\fs_SandboxedIFileSystem_TestClass.cpp" />
@@ -142,6 +133,17 @@
     <ClCompile Include="..\..\..\test\Optional_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\SharedPtr_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\string_transcode_TestClass.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\test\endian_TestClass.h" />
+    <ClInclude Include="..\..\..\test\fs_LocalFileSystem_TestClass.h" />
+    <ClInclude Include="..\..\..\test\fs_Path_TestClass.h" />
+    <ClInclude Include="..\..\..\test\fs_SandboxedIFileSystem_TestClass.h" />
+    <ClInclude Include="..\..\..\test\fs_SandboxedIFile_TestClass.h" />
+    <ClInclude Include="..\..\..\test\ITestClass.h" />
+    <ClInclude Include="..\..\..\test\Optional_TestClass.h" />
+    <ClInclude Include="..\..\..\test\SharedPtr_TestClass.h" />
+    <ClInclude Include="..\..\..\test\string_transcode_TestClass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

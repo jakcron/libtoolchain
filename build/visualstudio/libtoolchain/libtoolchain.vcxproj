@@ -122,7 +122,6 @@
     <ClInclude Include="..\..\..\include\tc\endian.h" />
     <ClInclude Include="..\..\..\include\tc\Exception.h" />
     <ClInclude Include="..\..\..\include\tc\fs.h" />
-    <ClInclude Include="..\..\..\include\tc\fs\DirectoryInfo.h" />
     <ClInclude Include="..\..\..\include\tc\fs\IFile.h" />
     <ClInclude Include="..\..\..\include\tc\fs\IFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\fs\LocalFileSystem.h" />
@@ -141,7 +140,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Exception.cpp" />
-    <ClCompile Include="..\..\..\src\fs\DirectoryInfo.cpp" />
     <ClCompile Include="..\..\..\src\fs\LocalFile.cpp" />
     <ClCompile Include="..\..\..\src\fs\LocalFileSystem.cpp" />
     <ClCompile Include="..\..\..\src\fs\Path.cpp" />

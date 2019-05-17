@@ -14,7 +14,6 @@ static const char kNativePathDelimiter = tc::fs::Path::kUnixPathDelimiter; /**< 
 tc::fs::Path::Path() :
 	mUnicodePath()
 {
-
 }
 
 tc::fs::Path::Path(const Path& other) :
@@ -26,13 +25,6 @@ tc::fs::Path::Path(Path&& other) :
 	mUnicodePath(std::move(other.mUnicodePath))
 {
 }
-
-tc::fs::Path::Path(const std::vector<std::string>& path_elements) :
-	Path()
-{
-	setPathElementList(path_elements);
-}
-
 
 tc::fs::Path::Path(const std::string& path)
 {
@@ -68,7 +60,7 @@ tc::fs::Path& tc::fs::Path::operator=(Path&& other)
 tc::fs::Path tc::fs::Path::operator+(const Path& other) const
 {
 	Path new_path = *this;
-	new_path.appendPath(other.getPathElementList());
+	new_path.appendPath(other.mUnicodePath);
 	return new_path;
 }
 
@@ -87,22 +79,49 @@ bool tc::fs::Path::operator!=(const Path& other) const
 	return !(this->operator==(other));
 }
 
-const std::vector<std::string>& tc::fs::Path::getPathElementList() const
+tc::fs::Path::const_iterator tc::fs::Path::begin() const
 {
-	return mUnicodePath;
+	return mUnicodePath.begin();
 }
 
-void tc::fs::Path::setPathElementList(const std::vector<std::string>& list)
+tc::fs::Path::iterator tc::fs::Path::begin()
 {
-	for (size_t i = 0; i < list.size(); i++)
-	{
-		for (size_t j = 0; j < list[i].size(); j++)
-		{
-			if (list[i].c_str()[j] == '/' || list[i].c_str()[j] == '\\')
-				throw tc::Exception(kClassName, "Path delimiter detected in path element list");
-		}
-	}
-	mUnicodePath = list;
+	return mUnicodePath.begin();
+}
+
+tc::fs::Path::const_iterator tc::fs::Path::end() const
+{
+	return mUnicodePath.end();
+}
+
+tc::fs::Path::iterator tc::fs::Path::end()
+{
+	return mUnicodePath.end();
+}
+
+void tc::fs::Path::pop_front()
+{
+	mUnicodePath.pop_front();
+}
+
+void tc::fs::Path::pop_back()
+{
+	mUnicodePath.pop_back();
+}
+
+void tc::fs::Path::push_front(const std::string& str)
+{
+	mUnicodePath.push_front(str);
+}
+
+void tc::fs::Path::push_back(const std::string& str)
+{
+	mUnicodePath.push_back(str);
+}
+
+size_t tc::fs::Path::size() const
+{
+	return mUnicodePath.size();
 }
 
 void tc::fs::Path::initialisePath(const std::string& src)
@@ -138,10 +157,10 @@ void tc::fs::Path::initialisePath(const std::string& src)
 	}
 }
 
-void tc::fs::Path::appendPath(const std::vector<std::string>& other)
+void tc::fs::Path::appendPath(const std::list<std::string>& other)
 {
-	for (size_t i = 0; i < other.size(); i++)
+	for (std::list<std::string>::const_iterator itr = other.begin(); itr != other.end(); itr++)
 	{
-		mUnicodePath.push_back(other[i]);
+		mUnicodePath.push_back(*itr);
 	}
 }

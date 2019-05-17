@@ -8,13 +8,16 @@ void fs_Path_TestClass::pathToUnixUtf8(const tc::fs::Path& path, std::string& ou
 {
 	std::stringstream out_stream;
 
-	for (size_t i = 0; i < path.getPathElementList().size(); i++)
+	//for (size_t i = 0; i < path.size(); i++)
+	for (tc::fs::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
 	{
-		const std::string& element = path.getPathElementList()[i];
-		out_stream << element;
-		if (i+1 < path.getPathElementList().size())
+		//const std::string& element = path.getPathElementList()[i];
+		out_stream << *itr;
+		//if (i+1 < path.size())
+		if (itr != --path.end())
 			out_stream << "/";
-		else if (element == "" && i == 0)
+		//else if (element == "" && i == 0)
+		else if (*itr == "" && itr == path.begin())
 			out_stream << "/";
 	}
 
@@ -25,13 +28,16 @@ void fs_Path_TestClass::pathToWindowsUtf8(const tc::fs::Path& path, std::string&
 {
 	std::stringstream out_stream;
 
-	for (size_t i = 0; i < path.getPathElementList().size(); i++)
+	//for (size_t i = 0; i < path.size(); i++)
+	for (tc::fs::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
 	{
-		const std::string& element = path.getPathElementList()[i];
-		out_stream << element;
-		if (i+1 < path.getPathElementList().size())
+		//const std::string& element = path.getPathElementList()[i];
+		out_stream << *itr;
+		//if (i+1 < path.size())
+		if (itr != --path.end())
 			out_stream << "\\";
-		else if (element == "" && i == 0)
+		//else if (element == "" && i == 0)
+		else if (*itr == "" && itr == path.begin())
 			out_stream << "\\";
 	}
 
@@ -48,7 +54,7 @@ void fs_Path_TestClass::testPathComposition(const std::string& test_name, const 
 		tc::fs::Path path(raw_path);
 		std::string utf8_path;
 
-		if (path.getPathElementList().size() != expected_element_count)
+		if (path.size() != expected_element_count)
 		{
 			throw tc::Exception("Path did not have expected element count");
 		}
@@ -195,22 +201,23 @@ void fs_Path_TestClass::testAppendStressTest()
 
 		path += tc::fs::Path(raw_file_path);
 
-		if (path.getPathElementList().size() != expected_element_count)
+		if (path.size() != expected_element_count)
 		{
 			throw tc::Exception("unexpected number of path elements");
 		}
 
-		if (path.getPathElementList()[expected_element_count-1] != "file.txt")
+		tc::fs::Path::const_iterator itr = path.end();
+		if (*(--itr) != "file.txt")
 		{
 			throw tc::Exception("Unexpected value for tested path element");
 		}
 
-		if (path.getPathElementList()[expected_element_count-2] != "bar")
+		if (*(--itr) != "bar")
 		{
 			throw tc::Exception("Unexpected value for tested path element");
 		}
 
-		if (path.getPathElementList()[expected_element_count-3] != "foo")
+		if (*(--itr) != "foo")
 		{
 			throw tc::Exception("Unexpected value for tested path element");
 		}
