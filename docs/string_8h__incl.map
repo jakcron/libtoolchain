@@ -1,5 +1,0 @@
-<map id="tc/string.h" name="tc/string.h">
-<area shape="rect" id="node2" href="$types_8h.html" title="Declaration of generic types used by libtoolchain. " alt="" coords="179,80,259,107"/>
-<area shape="rect" id="node9" href="$transcode_8h.html" title="Declaration of functions to transcode between UTF&#45;8/UTF&#45;16/UTF&#45;32. " alt="" coords="5,80,147,107"/>
-<area shape="rect" id="node7" href="$endian_8h.html" title="Declaration of macros and classes to unwrap primatives in an endian agnostic way. ..." alt="" coords="367,155,454,181"/>
-</map>
