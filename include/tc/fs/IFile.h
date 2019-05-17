@@ -1,10 +1,10 @@
-/**
- * @file IFile.h
- * @brief Declaration of tc::fs::IFile
- * @author Jack (jakcron)
- * @version	0.1
- * @date 2018/11/10
- */
+	/**
+	 * @file IFile.h
+	 * @brief Declaration of tc::fs::IFile
+	 * @author Jack (jakcron)
+	 * @version	0.1
+	 * @date 2018/11/10
+	 */
 #pragma once
 #include <tc/types.h>
 
@@ -23,32 +23,32 @@ namespace tc { namespace fs {
 	 * true sizes of the files, while also working with-in the limitations of the operating system
 	 * by using size_t where memory is processed.
 	 */
-	class IFile
-	{
-	public:
+class IFile
+{
+public:
 		/**
 		 * @brief Destructor
 		 */
-		virtual ~IFile() = default;
+	virtual ~IFile() = default;
 
 		/**
 		 * @brief Get size of the file
 		 * @return file size
 		 */
-		virtual uint64_t size() = 0;
+	virtual uint64_t size() = 0;
 
 		/** 
 		 * @brief Set the file position
 		 * @param[in] offset file position
 		 * @post If the offset is beyond the file size, the position will be at the end of file.
 		 */
-		virtual void seek(uint64_t offset) = 0;
+	virtual void seek(uint64_t offset) = 0;
 
 		/** 
 		 * @brief Get the file position
 		 * @return file position
 		 */
-		virtual uint64_t pos() = 0;
+	virtual uint64_t pos() = 0;
 
 		/** 
 		 * @brief Read data from the file
@@ -57,14 +57,14 @@ namespace tc { namespace fs {
 		 * 
 		 * @throws tc::Exception If read length exceeds file capacity
 		 */
-		virtual void read(byte_t* data, size_t len) = 0;
+	virtual void read(byte_t* data, size_t len) = 0;
 
 		/** 
 		 * @brief Write data to the file
 		 * @param[in] data Pointer to memory where data will be sourced from
 		 * @param[in] len Length of data to write
 		 */
-		virtual void write(const byte_t* data, size_t len) = 0;
-	};
+	virtual void write(const byte_t* data, size_t len) = 0;
+};
 
 }}

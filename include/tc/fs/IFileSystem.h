@@ -1,10 +1,10 @@
-/**
- * @file IFileSystem.h
- * @brief Declaration of tc::fs::IFileSystem
- * @author Jack (jakcron)
- * @version 0.4
- * @date 2019/05/17
- */
+	/**
+	 * @file IFileSystem.h
+	 * @brief Declaration of tc::fs::IFileSystem
+	 * @author Jack (jakcron)
+	 * @version 0.4
+	 * @date 2019/05/17
+	 */
 #pragma once
 #include <tc/types.h>
 #include <tc/fs/IFile.h>
@@ -13,15 +13,16 @@
 
 namespace tc { namespace fs {
 
-	/** FileAccessMode
-	 *  This enum is used with openFile() to determine the access mode
+	/** 
+	 * @enum FileAccessMode
+	 * @brief This enum is used with openFile() to determine the access mode
 	 */
-	enum FileAccessMode
-	{
-		FILEACCESS_READ, /**< Access file with READ-ONLY permissions */
-		FILEACCESS_EDIT, /**< Access file with READ-WRITE permissions */
-		FILEACCESS_CREATE /**< Create a new file or overwrite an existing file (READ-WRITE permissions) */
-	};
+enum FileAccessMode
+{
+	FILEACCESS_READ, /**< Access file with READ-ONLY permissions */
+	FILEACCESS_EDIT, /**< Access file with READ-WRITE permissions */
+	FILEACCESS_CREATE /**< Create a new file or overwrite an existing file (READ-WRITE permissions) */
+};
 
 
 	/**
