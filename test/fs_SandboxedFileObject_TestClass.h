@@ -16,37 +16,47 @@ private:
 		{
 		}
 
-		void setSize(uint64_t size)
+		virtual void setSize(uint64_t size)
 		{
 			mSize = size;
 		}
 
-		uint64_t size()
+		virtual uint64_t size()
 		{
 			return mSize;
 		}
 		
-		void seek(uint64_t offset)
+		virtual void seek(uint64_t offset)
 		{
 			mOffset = offset;
 		}
 
-		uint64_t pos()
+		virtual uint64_t pos()
 		{
 			return mOffset;
 		}
 
-		void read(byte_t* data, size_t len)
+		virtual void read(byte_t* data, size_t len)
 		{
 			throw tc::Exception(kClassName, "read() not implemented");
 		}
 
-		void write(const byte_t* data, size_t len)
+		virtual void write(const byte_t* data, size_t len)
 		{
 			throw tc::Exception(kClassName, "write() not implemented");
 		}
+
+		virtual tc::fs::IFileObject* copyInstance() const
+		{
+			return new DummyFileBase(*this);
+		}
+
+		virtual tc::fs::IFileObject* moveInstance()
+		{
+			return new DummyFileBase(*this);
+		}
 	private:
-		const std::string kClassName = "DummyFileBase";
+		static const std::string kClassName;
 		uint64_t mOffset;
 		uint64_t mSize;
 	};

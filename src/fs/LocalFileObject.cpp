@@ -10,21 +10,13 @@
 #include <unistd.h>
 #endif
 
+const std::string tc::fs::LocalFileObject::kClassName = "tc::fs::LocalFileObject";
 
 tc::fs::LocalFileObject::LocalFileObject(FileAccessMode mode, fs_handle_t file_handle) :
 	mMode(mode),
-	mFileHandle(file_handle)
+	mFileHandle(new LocalFileHandle(file_handle))
 {
 	
-}
-
-tc::fs::LocalFileObject::~LocalFileObject()
-{
-#ifdef _WIN32
-	CloseHandle(mFileHandle);
-#else
-	close(mFileHandle);
-#endif
 }
 
 uint64_t tc::fs::LocalFileObject::size()
@@ -32,7 +24,7 @@ uint64_t tc::fs::LocalFileObject::size()
 	uint64_t fsize = 0;
 #ifdef _WIN32
 	LARGE_INTEGER win_fsize;
-	if (GetFileSizeEx(mFileHandle, &win_fsize) == false)
+	if (GetFileSizeEx(mFileHandle->getHandle(), &win_fsize) == false)
 	{
 		throw tc::Exception(kClassName, "Failed to get file size (" + std::to_string(GetLastError()) + ")");
 	}
@@ -40,20 +32,20 @@ uint64_t tc::fs::LocalFileObject::size()
 	fsize = win_fsize.QuadPart;
 
 #else
-	int64_t cur_pos = lseek(mFileHandle, 0, SEEK_CUR);
+	int64_t cur_pos = lseek(mFileHandle->getHandle(), 0, SEEK_CUR);
 	if (cur_pos == -1)
 	{
 		throw tc::Exception(kClassName, "Failed to get file size (" + std::string(strerror(errno)) + ")");
 	}
 
-	int64_t end_pos = lseek(mFileHandle, 0, SEEK_END);
+	int64_t end_pos = lseek(mFileHandle->getHandle(), 0, SEEK_END);
 	if (end_pos == -1)
 	{
 		throw tc::Exception(kClassName, "Failed to get file size (" + std::string(strerror(errno)) + ")");
 	}
 	fsize = (uint64_t)end_pos;
 
-	int64_t ret = lseek(mFileHandle, cur_pos, SEEK_SET);
+	int64_t ret = lseek(mFileHandle->getHandle(), cur_pos, SEEK_SET);
 	if (ret == -1)
 	{
 		throw tc::Exception(kClassName, "Failed to get file size (" + std::string(strerror(errno)) + ")");
@@ -77,7 +69,7 @@ void tc::fs::LocalFileObject::seek(uint64_t offset)
 	LARGE_INTEGER win_pos, out;
 	win_pos.QuadPart = offset;
 	if (SetFilePointerEx(
-		mFileHandle,
+		mFileHandle->getHandle(),
 		win_pos,
 		&out,
 		FILE_BEGIN
@@ -86,7 +78,7 @@ void tc::fs::LocalFileObject::seek(uint64_t offset)
 		throw tc::Exception(kClassName, "Failed to set file position (" + std::to_string(GetLastError()) + ")");
 	}
 #else
-	int64_t fpos = lseek(mFileHandle, offset, SEEK_SET);
+	int64_t fpos = lseek(mFileHandle->getHandle(), offset, SEEK_SET);
 
 	if (fpos == -1)
 	{
@@ -101,7 +93,7 @@ uint64_t tc::fs::LocalFileObject::pos()
 	LARGE_INTEGER win_pos, out;
 	win_pos.QuadPart = 0;
 	if (SetFilePointerEx(
-		mFileHandle,
+		mFileHandle->getHandle(),
 		win_pos,
 		&out,
 		FILE_CURRENT
@@ -112,7 +104,7 @@ uint64_t tc::fs::LocalFileObject::pos()
 
 	return out.QuadPart;
 #else
-	int64_t fpos = lseek(mFileHandle, 0, SEEK_CUR);
+	int64_t fpos = lseek(mFileHandle->getHandle(), 0, SEEK_CUR);
 
 	if (fpos == -1)
 	{
@@ -134,7 +126,7 @@ void tc::fs::LocalFileObject::read(byte_t* data, size_t len)
 #ifdef _WIN32
 	DWORD bytes_read;
 
-	if (ReadFile(mFileHandle, data, (DWORD)len, &bytes_read, NULL) == false)
+	if (ReadFile(mFileHandle->getHandle(), data, (DWORD)len, &bytes_read, NULL) == false)
 	{
 		throw tc::Exception(kClassName, "Failed to read file (" + std::to_string(GetLastError()) + ")");
 	}
@@ -144,7 +136,7 @@ void tc::fs::LocalFileObject::read(byte_t* data, size_t len)
 		throw tc::Exception(kClassName, "Failed to read file (bytes read was not correct length)");
 	}
 #else
-	if (::read(mFileHandle, data, len) == -1)
+	if (::read(mFileHandle->getHandle(), data, len) == -1)
 	{
 		throw tc::Exception(kClassName, "Failed to read file (" + std::string(strerror(errno)) + ")");
 	}
@@ -156,7 +148,7 @@ void tc::fs::LocalFileObject::write(const byte_t* data, size_t len)
 #ifdef _WIN32
 	DWORD bytes_written;
 
-	if (WriteFile(mFileHandle, data, (DWORD)len, &bytes_written, NULL) == false)
+	if (WriteFile(mFileHandle->getHandle(), data, (DWORD)len, &bytes_written, NULL) == false)
 	{
 		throw tc::Exception(kClassName, "Failed to read file (" + std::to_string(GetLastError()) + ")");
 	}
@@ -166,9 +158,18 @@ void tc::fs::LocalFileObject::write(const byte_t* data, size_t len)
 		throw tc::Exception(kClassName, "Failed to read file (bytes written was not correct length)");
 	}
 #else
-	if (::write(mFileHandle, data, len) == -1)
+	if (::write(mFileHandle->getHandle(), data, len) == -1)
 	{
 		throw tc::Exception(kClassName, "Failed to write file (" + std::string(strerror(errno)) + ")");
 	}
 #endif
+}
+
+tc::fs::IFileObject* tc::fs::LocalFileObject::copyInstance() const
+{
+	return new LocalFileObject(*this);
+}
+tc::fs::IFileObject* tc::fs::LocalFileObject::moveInstance()
+{
+	return new LocalFileObject(std::move(*this));
 }

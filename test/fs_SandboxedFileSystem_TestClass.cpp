@@ -3,6 +3,7 @@
 
 #include "fs_SandboxedFileSystem_TestClass.h"
 
+const std::string fs_SandboxedFileSystem_TestClass::DummyFileSystemBase::kClassName = "DummyFileSystemBase";
 
 void fs_SandboxedFileSystem_TestClass::testSandboxRootPath()
 {
@@ -15,9 +16,19 @@ void fs_SandboxedFileSystem_TestClass::testSandboxRootPath()
 			DummyFileSystem()
 			{
 			}
+
+			virtual tc::fs::IFileSystem* copyInstance() const
+			{
+				return new DummyFileSystem(*this);
+			}
+
+			virtual tc::fs::IFileSystem* moveInstance()
+			{
+				return new DummyFileSystem(std::move(*this));
+			}
 		};
 
-		tc::SharedPtr<tc::fs::IFileSystem> fs = new DummyFileSystem();
+		DummyFileSystem fs;
 
 		// define directory names
 		tc::fs::Path dummyfs_curdir = tc::fs::Path("/home/jakcron/source/LibToolChain");
@@ -28,12 +39,12 @@ void fs_SandboxedFileSystem_TestClass::testSandboxRootPath()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + sandbox_relative_root);
+			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + sandbox_relative_root);
 
 			// save sandbox real path
 			tc::fs::Path sandbox_real_root;
-			sb_fs->setWorkingDirectory(tc::fs::Path("/"));
-			fs->getWorkingDirectory(sandbox_real_root);
+			sb_fs.setWorkingDirectory(tc::fs::Path("/"));
+			fs.getWorkingDirectory(sandbox_real_root);
 
 			// check the sandbox is generating the correct path
 			if (sandbox_real_root != dummyfs_curdir + sandbox_relative_root)
@@ -70,17 +81,26 @@ void fs_SandboxedFileSystem_TestClass::testCreateFile()
 
 			void createFile(const tc::fs::Path& path)
 			{
-				getWorkingDirectory(mCurDir);
-				if (path != mCurDir + tc::fs::Path("a_dir/testfile"))
+				tc::fs::Path cur_dir;
+				getWorkingDirectory(cur_dir);
+				if (path != cur_dir + tc::fs::Path("a_dir/testfile"))
 				{
 					throw tc::Exception("DummyFileSystem", "file had incorrect path");
 				}
 			}
-		private:
-			tc::fs::Path mCurDir;
+
+			virtual tc::fs::IFileSystem* copyInstance() const
+			{
+				return new DummyFileSystem(*this);
+			}
+
+			virtual tc::fs::IFileSystem* moveInstance()
+			{
+				return new DummyFileSystem(std::move(*this));
+			}
 		};
 
-		tc::SharedPtr<tc::fs::IFileSystem> fs = new DummyFileSystem();
+		DummyFileSystem fs;
 
 		// define directory names
 		tc::fs::Path dummyfs_curdir = tc::fs::Path("/home/jakcron/source/LibToolChain");
@@ -90,10 +110,10 @@ void fs_SandboxedFileSystem_TestClass::testCreateFile()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + testdir_path);
+			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to create file
-			sb_fs->createFile(tc::fs::Path("/a_dir/testfile"));
+			sb_fs.createFile(tc::fs::Path("/a_dir/testfile"));
 			
 			std::cout << "PASS" << std::endl;
 		}
@@ -120,23 +140,32 @@ void fs_SandboxedFileSystem_TestClass::testOpenFile()
 			{
 			}
 
-			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileObject& file)
+			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::GenericFileObject& file)
 			{
-				getWorkingDirectory(mCurDir);
+				tc::fs::Path cur_dir;
+				getWorkingDirectory(cur_dir);
 				if (mode != tc::fs::FILEACCESS_READ)
 				{
 					throw tc::Exception("DummyFileSystem", "file had incorrect access permissions");
 				}
-				if (path != mCurDir + tc::fs::Path("a_dir/testfile"))
+				if (path != cur_dir + tc::fs::Path("a_dir/testfile"))
 				{
 					throw tc::Exception("DummyFileSystem", "file had incorrect path");
 				}
 			}
-		private:
-			tc::fs::Path mCurDir;
+
+			virtual tc::fs::IFileSystem* copyInstance() const
+			{
+				return new DummyFileSystem(*this);
+			}
+
+			virtual tc::fs::IFileSystem* moveInstance()
+			{
+				return new DummyFileSystem(std::move(*this));
+			}
 		};
 
-		tc::SharedPtr<tc::fs::IFileSystem> fs = new DummyFileSystem();
+		DummyFileSystem fs;
 
 		// define directory names
 		tc::fs::Path dummyfs_curdir = tc::fs::Path("/home/jakcron/source/LibToolChain");
@@ -146,11 +175,11 @@ void fs_SandboxedFileSystem_TestClass::testOpenFile()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + testdir_path);
+			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to open file
-			tc::fs::FileObject file;
-			sb_fs->openFile(tc::fs::Path("/a_dir/testfile"), tc::fs::FILEACCESS_READ, file);
+			tc::fs::GenericFileObject file;
+			sb_fs.openFile(tc::fs::Path("/a_dir/testfile"), tc::fs::FILEACCESS_READ, file);
 			
 			std::cout << "PASS" << std::endl;
 		}
@@ -179,17 +208,26 @@ void fs_SandboxedFileSystem_TestClass::testRemoveFile()
 
 			void removeFile(const tc::fs::Path& path)
 			{
-				getWorkingDirectory(mCurDir);
-				if (path != mCurDir + tc::fs::Path("a_dir/testfile"))
+				tc::fs::Path cur_dir;
+				getWorkingDirectory(cur_dir);
+				if (path != cur_dir + tc::fs::Path("a_dir/testfile"))
 				{
 					throw tc::Exception("DummyFileSystem", "file had incorrect path");
 				}
 			}
-		private:
-			tc::fs::Path mCurDir;
+
+			virtual tc::fs::IFileSystem* copyInstance() const
+			{
+				return new DummyFileSystem(*this);
+			}
+
+			virtual tc::fs::IFileSystem* moveInstance()
+			{
+				return new DummyFileSystem(std::move(*this));
+			}
 		};
 	
-		tc::SharedPtr<tc::fs::IFileSystem> fs = new DummyFileSystem();
+		DummyFileSystem fs;
 
 		// define directory names
 		tc::fs::Path dummyfs_curdir = tc::fs::Path("/home/jakcron/source/LibToolChain");
@@ -199,10 +237,10 @@ void fs_SandboxedFileSystem_TestClass::testRemoveFile()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + testdir_path);
+			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to delete file
-			sb_fs->removeFile(tc::fs::Path("/a_dir/testfile"));
+			sb_fs.removeFile(tc::fs::Path("/a_dir/testfile"));
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -232,17 +270,26 @@ void fs_SandboxedFileSystem_TestClass::testCreateDirectory()
 
 			void createDirectory(const tc::fs::Path& path)
 			{
-				getWorkingDirectory(mCurDir);
-				if (path != mCurDir + tc::fs::Path("a_dir/testdir/hey"))
+				tc::fs::Path cur_dir;
+				getWorkingDirectory(cur_dir);
+				if (path != cur_dir + tc::fs::Path("a_dir/testdir/hey"))
 				{
 					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
 				}
 			}
-		private:
-			tc::fs::Path mCurDir;
+
+			virtual tc::fs::IFileSystem* copyInstance() const
+			{
+				return new DummyFileSystem(*this);
+			}
+
+			virtual tc::fs::IFileSystem* moveInstance()
+			{
+				return new DummyFileSystem(std::move(*this));
+			}
 		};
 
-		tc::SharedPtr<tc::fs::IFileSystem> fs = new DummyFileSystem();
+		DummyFileSystem fs;
 
 		// define directory names
 		tc::fs::Path dummyfs_curdir = tc::fs::Path("/home/jakcron/source/LibToolChain");
@@ -252,10 +299,10 @@ void fs_SandboxedFileSystem_TestClass::testCreateDirectory()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + testdir_path);
+			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to create directory
-			sb_fs->createDirectory(tc::fs::Path("/a_dir/testdir/hey"));
+			sb_fs.createDirectory(tc::fs::Path("/a_dir/testdir/hey"));
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -284,17 +331,26 @@ void fs_SandboxedFileSystem_TestClass::testRemoveDirectory()
 
 			void removeDirectory(const tc::fs::Path& path)
 			{
-				getWorkingDirectory(mCurDir);
-				if (path != mCurDir + tc::fs::Path("a_dir/testdir/hey"))
+				tc::fs::Path cur_dir;
+				getWorkingDirectory(cur_dir);
+				if (path != cur_dir + tc::fs::Path("a_dir/testdir/hey"))
 				{
 					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
 				}
 			}
-		private:
-			tc::fs::Path mCurDir;
+
+			virtual tc::fs::IFileSystem* copyInstance() const
+			{
+				return new DummyFileSystem(*this);
+			}
+
+			virtual tc::fs::IFileSystem* moveInstance()
+			{
+				return new DummyFileSystem(std::move(*this));
+			}			
 		};
 
-		tc::SharedPtr<tc::fs::IFileSystem> fs = new DummyFileSystem();
+		DummyFileSystem fs;
 
 		// define directory names
 		tc::fs::Path dummyfs_curdir = tc::fs::Path("/home/jakcron/source/LibToolChain");
@@ -304,10 +360,10 @@ void fs_SandboxedFileSystem_TestClass::testRemoveDirectory()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + testdir_path);
+			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + testdir_path);
 
 			// attempt to remove directory
-			sb_fs->removeDirectory(tc::fs::Path("/a_dir/testdir/hey"));
+			sb_fs.removeDirectory(tc::fs::Path("/a_dir/testdir/hey"));
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -336,8 +392,9 @@ void fs_SandboxedFileSystem_TestClass::testGetDirectoryListing()
 
 			void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& dir_info)
 			{
-				getWorkingDirectory(mCurDir);
-				if (path != mCurDir + tc::fs::Path("a_dir/testdir/hey"))
+				tc::fs::Path cur_dir;
+				getWorkingDirectory(cur_dir);
+				if (path != cur_dir + tc::fs::Path("a_dir/testdir/hey"))
 				{
 					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
 				}
@@ -346,11 +403,19 @@ void fs_SandboxedFileSystem_TestClass::testGetDirectoryListing()
 				dir_info.dir_list = std::vector<std::string>({ "dir0", "dir1", "dir2" });
 				dir_info.file_list = std::vector<std::string>({ "file0", "file1" });
 			}
-		private:
-			tc::fs::Path mCurDir;
+
+			virtual tc::fs::IFileSystem* copyInstance() const
+			{
+				return new DummyFileSystem(*this);
+			}
+
+			virtual tc::fs::IFileSystem* moveInstance()
+			{
+				return new DummyFileSystem(std::move(*this));
+			}
 		};
 
-		tc::SharedPtr<tc::fs::IFileSystem> fs = new DummyFileSystem();
+		DummyFileSystem fs;
 
 		// define directory names
 		tc::fs::Path dummyfs_curdir = tc::fs::Path("/home/jakcron/source/LibToolChain");
@@ -360,15 +425,15 @@ void fs_SandboxedFileSystem_TestClass::testGetDirectoryListing()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + testdir_path);
+			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + testdir_path);
 
 			// save sandbox dir info
 			tc::fs::sDirectoryListing sb_dir_info;
-			sb_fs->getDirectoryListing(tc::fs::Path("/a_dir/testdir/hey"), sb_dir_info);
+			sb_fs.getDirectoryListing(tc::fs::Path("/a_dir/testdir/hey"), sb_dir_info);
 
 			// save real dir info
 			tc::fs::sDirectoryListing real_dir_info;
-			fs->getDirectoryListing(dummyfs_curdir + tc::fs::Path("testdir/a_dir/testdir/hey"), real_dir_info);
+			fs.getDirectoryListing(dummyfs_curdir + tc::fs::Path("testdir/a_dir/testdir/hey"), real_dir_info);
 
 			if (sb_dir_info.file_list != real_dir_info.file_list)
 			{
@@ -418,27 +483,36 @@ void fs_SandboxedFileSystem_TestClass::testNavigateUpSandboxEscape()
 		class DummyFileSystem : public DummyFileSystemBase
 		{
 		public:
-			DummyFileSystem()
+			DummyFileSystem() :
+				mLastUsedPath(new tc::fs::Path())
 			{
 			}
 
 			void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& dir_info)
 			{			
 				dir_info.abs_path = path;
-				mLastUsedPath = path;
+				*mLastUsedPath = path;
 			}
 
 			const tc::fs::Path& getLastUsedPath()
 			{
-				return mLastUsedPath;
+				return *mLastUsedPath;
 			}
 
+			virtual tc::fs::IFileSystem* copyInstance() const
+			{
+				return new DummyFileSystem(*this);
+			}
+
+			virtual tc::fs::IFileSystem* moveInstance()
+			{
+				return new DummyFileSystem(std::move(*this));
+			}
 		private:
-			tc::fs::Path mLastUsedPath;
-			tc::fs::Path mCurDir;
+			tc::SharedPtr<tc::fs::Path> mLastUsedPath;
 		};
 
-		tc::SharedPtr<tc::fs::IFileSystem> fs = new DummyFileSystem();
+		DummyFileSystem fs;
 
 		// save the current directory
 		tc::fs::Path dummyfs_curdir = tc::fs::Path("/home/jakcron/source/LibToolChain");
@@ -451,18 +525,18 @@ void fs_SandboxedFileSystem_TestClass::testNavigateUpSandboxEscape()
 		try
 		{
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + sandbox_relative_root);
+			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + sandbox_relative_root);
 
 			// get info about current directory
 			tc::fs::sDirectoryListing dir_info;
-			sb_fs->getDirectoryListing(tc::fs::Path("./../../../../../../../../../../../../../..///./././"), dir_info);
+			sb_fs.getDirectoryListing(tc::fs::Path("./../../../../../../../../../../../../../..///./././"), dir_info);
 			
 			if (dir_info.abs_path != tc::fs::Path("/"))
 			{
 				throw tc::Exception("Sandbox directory path not as expected");
 			}
 
-			if (((DummyFileSystem*)fs.operator->())->getLastUsedPath() != dummyfs_curdir + sandbox_relative_root)
+			if (fs.getLastUsedPath() != dummyfs_curdir + sandbox_relative_root)
 			{
 				throw tc::Exception("Real directory path not as expected");
 			}
@@ -492,8 +566,9 @@ void fs_SandboxedFileSystem_TestClass::testOpenFileOutsideSandbox()
 			{
 			}
 
-			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileObject& file)
+			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::GenericFileObject& file)
 			{
+				tc::fs::Path mCurDir;
 				getWorkingDirectory(mCurDir);
 				if (mode != tc::fs::FILEACCESS_READ)
 				{
@@ -508,11 +583,19 @@ void fs_SandboxedFileSystem_TestClass::testOpenFileOutsideSandbox()
 					throw tc::Exception("DummyFileSystem", "sandbox path was not as expected");
 				}
 			}
-		private:
-			tc::fs::Path mCurDir;
+
+			virtual tc::fs::IFileSystem* copyInstance() const
+			{
+				return new DummyFileSystem(*this);
+			}
+
+			virtual tc::fs::IFileSystem* moveInstance()
+			{
+				return new DummyFileSystem(std::move(*this));
+			}
 		};
 
-		tc::SharedPtr<tc::fs::IFileSystem> fs = new DummyFileSystem();
+		DummyFileSystem fs;
 
 		// save the current directory
 		tc::fs::Path dummyfs_curdir = tc::fs::Path("/home/jakcron/source/LibToolChain");
@@ -524,12 +607,12 @@ void fs_SandboxedFileSystem_TestClass::testOpenFileOutsideSandbox()
 		// test accessing file outside of sandbox
 		try {
 			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileSystem> sb_fs = new tc::fs::SandboxedFileSystem(fs, dummyfs_curdir + sandbox_relative_root);
+			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + sandbox_relative_root);
 			  
 			// try to open the file just outside the sandbox
-			sb_fs->setWorkingDirectory(tc::fs::Path("/"));
-			tc::fs::FileObject inaccessible_file;
-			sb_fs->openFile(tc::fs::Path("../inaccessible_file0"), tc::fs::FILEACCESS_READ, inaccessible_file);
+			sb_fs.setWorkingDirectory(tc::fs::Path("/"));
+			tc::fs::GenericFileObject inaccessible_file;
+			sb_fs.openFile(tc::fs::Path("../inaccessible_file0"), tc::fs::FILEACCESS_READ, inaccessible_file);
 
 			std::cout << "PASS" << std::endl;
 		}

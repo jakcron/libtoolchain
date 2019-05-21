@@ -2,8 +2,8 @@
 	 * @file IFileObject.h
 	 * @brief Declaration of tc::fs::IFileObject
 	 * @author Jack (jakcron)
-	 * @version	0.1
-	 * @date 2018/11/10
+	 * @version	0.2
+	 * @date 2019/05/21
 	 */
 #pragma once
 #include <tc/types.h>
@@ -65,6 +65,20 @@ public:
 		 * @param[in] len Length of data to write
 		 */
 	virtual void write(const byte_t* data, size_t len) = 0;
+
+		/**
+		 * @brief Create a new instance of this object as a copy. This allows this instance to be copied even when the type isn't known.
+		 * This is required by @ref tc::fs::GenericFileObject
+		 * @return new instance of IFileObject (dynamically allocated)
+		 */
+	virtual IFileObject* copyInstance() const = 0;
+
+		/**
+		 * @brief Create a new instance of this object and move elements to the new instance. This allows this instance to be moved even when the type isn't known.
+		 * This is required by @ref tc::fs::GenericFileObject
+		 * @return new instance of IFileObject (dynamically allocated)
+		 */
+	virtual IFileObject* moveInstance() = 0;
 };
 
 }}

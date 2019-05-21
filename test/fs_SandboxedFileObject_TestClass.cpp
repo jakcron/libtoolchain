@@ -3,6 +3,8 @@
 
 #include "fs_SandboxedFileObject_TestClass.h"
 
+const std::string fs_SandboxedFileObject_TestClass::DummyFileBase::kClassName = "DummyFileBase";
+
 void fs_SandboxedFileObject_TestClass::testSize()
 {
 	std::cout << "[tc::fs::SandboxedFileObject] testSize : ";
@@ -14,19 +16,27 @@ void fs_SandboxedFileObject_TestClass::testSize()
 			DummyFile()
 			{
 			}
+
+			virtual tc::fs::IFileObject* copyInstance() const
+			{
+				return new DummyFile(*this);
+			}
+
+			virtual tc::fs::IFileObject* moveInstance()
+			{
+				return new DummyFile(*this);
+			}
 		};
 
 		try
 		{
-			tc::SharedPtr<tc::fs::IFileObject> file = new DummyFile();
-
 			uint64_t sandbox_offset = 0x56;
 			uint64_t sandbox_size = 0x1000;
 
-			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileObject> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
+			// get sandbox file
+			tc::fs::SandboxedFileObject sb_file(DummyFile(), sandbox_offset, sandbox_size);
 
-			if (sb_file->size() != sandbox_size)
+			if (sb_file.size() != sandbox_size)
 			{
 				throw tc::Exception("Unexpected file size");
 			}
@@ -58,36 +68,46 @@ void fs_SandboxedFileObject_TestClass::testSeekPos()
 
 			}
 
-			void read(byte_t* data, size_t len)
+			virtual void read(byte_t* data, size_t len)
 			{
 				if (this->pos() != (0x56 + 0x337))
 				{
 					throw tc::Exception("Real file file offset was not as expected");
 				}
 			}
+
+			virtual tc::fs::IFileObject* copyInstance() const
+			{
+				return new DummyFile(*this);
+			}
+
+			virtual tc::fs::IFileObject* moveInstance()
+			{
+				return new DummyFile(*this);
+			}
 		};
 
 		try
 		{
-			tc::SharedPtr<tc::fs::IFileObject> file = new DummyFile();
-
 			uint64_t sandbox_offset = 0x56;
 			uint64_t sandbox_size = 0x1000;
 
-			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileObject> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
+			DummyFile file;
+
+			// get sandbox file
+			tc::fs::SandboxedFileObject sb_file(file, sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
-			sb_file->seek(offset_to_seek);
+			sb_file.seek(offset_to_seek);
 
-			if (sb_file->pos() != offset_to_seek)
+			if (sb_file.pos() != offset_to_seek)
 			{
 				throw tc::Exception("Was not able to seek as expected");
 			}
 
-			sb_file->read(nullptr, 0x20);
+			sb_file.read(nullptr, 0x20);
 
-			if (sb_file->pos() != offset_to_seek + 0x20)
+			if (sb_file.pos() != offset_to_seek + 0x20)
 			{
 				throw tc::Exception("Was not able to seek as expected");
 			}
@@ -120,7 +140,7 @@ void fs_SandboxedFileObject_TestClass::testRead()
 
 			}
 
-			void read(byte_t* data, size_t len)
+			virtual void read(byte_t* data, size_t len)
 			{
 				if (data != (byte_t*)0xcafe)
 				{
@@ -132,25 +152,33 @@ void fs_SandboxedFileObject_TestClass::testRead()
 					throw tc::Exception("'len' parameter was passed to base IFileObject object not as expected");
 				}
 			}
+
+			virtual tc::fs::IFileObject* copyInstance() const
+			{
+				return new DummyFile(*this);
+			}
+
+			virtual tc::fs::IFileObject* moveInstance()
+			{
+				return new DummyFile(*this);
+			}
 		};
 
 		try
 		{
-			tc::SharedPtr<tc::fs::IFileObject> file = new DummyFile();
-
 			uint64_t sandbox_offset = 0x56;
 			uint64_t sandbox_size = 0x1000;
 
-			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileObject> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
+			// get sandbox file
+			tc::fs::SandboxedFileObject sb_file(DummyFile(), sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
-			sb_file->seek(offset_to_seek);
+			sb_file.seek(offset_to_seek);
 
 			byte_t* dummy_ptr = (byte_t*)0xcafe;
 			size_t dummy_read_len = 0xdeadbabe;
 
-			sb_file->read(dummy_ptr, dummy_read_len);
+			sb_file.read(dummy_ptr, dummy_read_len);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -178,7 +206,7 @@ void fs_SandboxedFileObject_TestClass::testWrite()
 
 			}
 
-			void write(const byte_t* data, size_t len)
+			virtual void write(const byte_t* data, size_t len)
 			{
 				if (data != (const byte_t*)0xcafe)
 				{
@@ -190,25 +218,33 @@ void fs_SandboxedFileObject_TestClass::testWrite()
 					throw tc::Exception("'len' parameter was passed to base IFileObject object not as expected");
 				}
 			}
+
+			virtual tc::fs::IFileObject* copyInstance() const
+			{
+				return new DummyFile(*this);
+			}
+
+			virtual tc::fs::IFileObject* moveInstance()
+			{
+				return new DummyFile(*this);
+			}
 		};
 
 		try
 		{
-			tc::SharedPtr<tc::fs::IFileObject> file = new DummyFile();
-
 			uint64_t sandbox_offset = 0x56;
 			uint64_t sandbox_size = 0x1000;
 
-			// get sandbox filesystem
-			tc::SharedPtr<tc::fs::IFileObject> sb_file = new tc::fs::SandboxedFileObject(file, sandbox_offset, sandbox_size);
+			// get sandbox file
+			tc::fs::SandboxedFileObject sb_file(DummyFile(), sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
-			sb_file->seek(offset_to_seek);
+			sb_file.seek(offset_to_seek);
 
 			byte_t* dummy_ptr = (byte_t*)0xcafe;
 			size_t dummy_read_len = 0xdeadbabe;
 
-			sb_file->write(dummy_ptr, dummy_read_len);
+			sb_file.write(dummy_ptr, dummy_read_len);
 
 			std::cout << "PASS" << std::endl;
 		}

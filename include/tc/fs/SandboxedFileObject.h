@@ -6,7 +6,7 @@
 	 * @date 2018/12/18
 	 */
 #pragma once
-#include <tc/fs/IFileObject.h>
+#include <tc/fs/GenericFileObject.h>
 #include <tc/SharedPtr.h>
 
 namespace tc { namespace fs {
@@ -19,25 +19,41 @@ class SandboxedFileObject : public IFileObject
 {
 public:
 		/** 
-		 * @brief Default constuctor
-		 * @param[in] file_ptr Pointer to IFileObject object to be sandboxed
+		 * @brief Wrap (copy) constuctor
+		 * @param[in] file IFileObject object to be sandboxed
 		 * @param[in] file_base_offset Offset in the base file that serves as offset 0 in the sandbox file
 		 * @param[in] virtual_size Artificial size of the sandbox file
 		 * 
 		 * @pre The carve out presented by the sandbox should exist in the base file.
 		 */
-	SandboxedFileObject(const tc::SharedPtr<tc::fs::IFileObject>& file_ptr, uint64_t file_base_offset, uint64_t virtual_size);
+	SandboxedFileObject(const tc::fs::IFileObject& file, uint64_t file_base_offset, uint64_t virtual_size);
 
-	uint64_t size();
-	void seek(uint64_t offset);
-	uint64_t pos();
-	void read(byte_t* data, size_t len);
-	void write(const byte_t* data, size_t len);
+		/** 
+		 * @brief Wrap (move) constuctor
+		 * @param[in] file IFileObject object to be sandboxed
+		 * @param[in] file_base_offset Offset in the base file that serves as offset 0 in the sandbox file
+		 * @param[in] virtual_size Artificial size of the sandbox file
+		 * 
+		 * @pre The carve out presented by the sandbox should exist in the base file.
+		 */
+	SandboxedFileObject(tc::fs::IFileObject&& file, uint64_t file_base_offset, uint64_t virtual_size);
+
+	virtual uint64_t size();
+	virtual void seek(uint64_t offset);
+	virtual uint64_t pos();
+	virtual void read(byte_t* data, size_t len);
+	virtual void write(const byte_t* data, size_t len);
+
+	virtual tc::fs::IFileObject* copyInstance() const;
+	virtual tc::fs::IFileObject* moveInstance();
 
 private:
-	const std::string kClassName = "tc::fs::SandboxedFileObject";
+	static const std::string kClassName;
 
-	tc::SharedPtr<tc::fs::IFileObject> mFile;
+	// private so it cannot be used
+	SandboxedFileObject();
+
+	tc::fs::GenericFileObject mFile;
 	uint64_t mFileBaseOffset;
 	uint64_t mVirtualSize;
 

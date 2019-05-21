@@ -2,12 +2,12 @@
 	 * @file IFileSystem.h
 	 * @brief Declaration of tc::fs::IFileSystem
 	 * @author Jack (jakcron)
-	 * @version 0.4
-	 * @date 2019/05/17
+	 * @version 0.5
+	 * @date 2019/05/21
 	 */
 #pragma once
 #include <tc/types.h>
-#include <tc/fs/FileObject.h>
+#include <tc/fs/GenericFileObject.h>
 #include <tc/SharedPtr.h>
 #include <tc/fs/Path.h>
 
@@ -88,7 +88,7 @@ public:
 		 *	
 		 * @throws tc::Exception If the file cannot be opened (invalid path, or access rights)
 		 */
-	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileObject& file) = 0;
+	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::GenericFileObject& file) = 0;
 	
 		/** 
 		 * @brief Create a new directory
@@ -132,6 +132,20 @@ public:
 		 * @post tc::Result::isSuccess() on success
 		 */
 	virtual void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& info) = 0;
+
+		/**
+		 * @brief Create a new instance of this object as a copy
+		 * This is required by @ref tc::fs::GenericFileSystem
+		 * @return new instance of IFileSystem (dynamically allocated)
+		 */
+	virtual IFileSystem* copyInstance() const = 0;
+
+		/**
+		 * @brief Create a new instance of this object and move elements to the new instance
+		 * This is required by @ref tc::fs::GenericFileSystem
+		 * @return new instance of IFileSystem (dynamically allocated)
+		 */
+	virtual IFileSystem* moveInstance() = 0;
 };
 
 }} // namespace tc::fs

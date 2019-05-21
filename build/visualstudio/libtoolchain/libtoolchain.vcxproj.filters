@@ -63,7 +63,10 @@
     <ClInclude Include="..\..\..\include\tc\types.h">
       <Filter>Header Files\public</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\FileObject.h">
+    <ClInclude Include="..\..\..\include\tc\fs\GenericFileObject.h">
+      <Filter>Header Files\public\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\fs\GenericFileSystem.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\fs\IFileObject.h">
@@ -87,7 +90,10 @@
     <ClInclude Include="..\..\..\include\tc\string\transcode.h">
       <Filter>Header Files\public\string</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\fs\LocalFile.h">
+    <ClInclude Include="..\..\..\src\fs\LocalFileHandle.h">
+      <Filter>Header Files\private\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\fs\LocalFileObject.h">
       <Filter>Header Files\private\fs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\string\utf8.h">
@@ -101,10 +107,16 @@
     <ClCompile Include="..\..\..\src\Exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\FileObject.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\..\src\fs\GenericFileObject.cpp">
+      <Filter>Source Files\fs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\LocalFile.cpp">
+    <ClCompile Include="..\..\..\src\fs\GenericFileSystem.cpp">
+      <Filter>Source Files\fs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fs\LocalFileHandle.cpp">
+      <Filter>Source Files\fs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\fs\LocalFileObject.cpp">
       <Filter>Source Files\fs</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\fs\LocalFileSystem.cpp">

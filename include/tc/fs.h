@@ -15,8 +15,8 @@
 #include <tc/fs/IFileObject.h>
 #include <tc/fs/IFileSystem.h>
 
-#include <tc/fs/FileObject.h>
-#include <tc/fs/FileSystem.h>
+#include <tc/fs/GenericFileObject.h>
+#include <tc/fs/GenericFileSystem.h>
 
 #include <tc/fs/LocalFileSystem.h>
 

@@ -11,20 +11,10 @@ static const char kNativePathDelimiter = tc::fs::Path::kWindowsPathDelimiter; /*
 static const char kNativePathDelimiter = tc::fs::Path::kUnixPathDelimiter; /**< Path delimiter for the native OS */
 #endif
 
-tc::fs::Path::Path() :
-	mUnicodePath()
-{
-}
+const std::string tc::fs::Path::kClassName = "tc::fs::Path";
 
-tc::fs::Path::Path(const Path& other) :
-	mUnicodePath(other.mUnicodePath)
-{
-}
-
-tc::fs::Path::Path(Path&& other) :
-	mUnicodePath(std::move(other.mUnicodePath))
-{
-}
+tc::fs::Path::Path()
+{}
 
 tc::fs::Path::Path(const std::string& path)
 {
@@ -43,18 +33,6 @@ tc::fs::Path::Path(const std::u32string& path)
 	std::string utf8_path;
 	string::transcodeUTF32ToUTF8(path, utf8_path);
 	initialisePath(utf8_path);
-}
-
-tc::fs::Path& tc::fs::Path::operator=(const Path& other)
-{
-	mUnicodePath = other.mUnicodePath;
-	return *this;
-}
-
-tc::fs::Path& tc::fs::Path::operator=(Path&& other)
-{
-	mUnicodePath = std::move(other.mUnicodePath);
-	return *this;
 }
 
 tc::fs::Path tc::fs::Path::operator+(const Path& other) const

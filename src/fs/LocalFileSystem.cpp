@@ -18,9 +18,10 @@
 
 #include <iostream>
 
+const std::string tc::fs::LocalFileSystem::kClassName = "tc::fs::LocalFileSystem";
+
 tc::fs::LocalFileSystem::LocalFileSystem()
-{
-}
+{}
 
 void tc::fs::LocalFileSystem::createFile(const tc::fs::Path& path)
 {
@@ -85,7 +86,7 @@ void tc::fs::LocalFileSystem::removeFile(const tc::fs::Path& path)
 #endif
 }
 
-void tc::fs::LocalFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, tc::fs::FileObject& file)
+void tc::fs::LocalFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, tc::fs::GenericFileObject& file)
 {
 #ifdef _WIN32
 	// convert Path to unicode string
@@ -107,7 +108,7 @@ void tc::fs::LocalFileSystem::openFile(const tc::fs::Path& path, FileAccessMode 
 		throw tc::Exception(kClassName, "Failed to open file (" + std::to_string(GetLastError()) + ")");
 	}
 
-	file = tc::fs::FileObject(new LocalFileObject(mode, file_handle));
+	file = LocalFileObject(mode, file_handle);
 #else
 	// convert Path to unicode string
 	std::string unicode_path;
@@ -120,7 +121,7 @@ void tc::fs::LocalFileSystem::openFile(const tc::fs::Path& path, FileAccessMode 
 		throw tc::Exception(kClassName, "Failed to open file (" + std::string(strerror(errno)) + ")");
 	}
 
-	file = new LocalFileObject(mode, file_handle);
+	file = LocalFileObject(mode, file_handle);
 #endif
 }
 
@@ -447,3 +448,13 @@ void tc::fs::LocalFileSystem::pathToUnixUTF8(const tc::fs::Path& path, std::stri
 	}
 }
 #endif
+
+tc::fs::IFileSystem* tc::fs::LocalFileSystem::copyInstance() const
+{
+	return new LocalFileSystem();	
+}
+
+tc::fs::IFileSystem* tc::fs::LocalFileSystem::moveInstance()
+{
+	return new LocalFileSystem();
+}

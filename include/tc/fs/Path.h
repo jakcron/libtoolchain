@@ -32,12 +32,6 @@ public:
 		/// Default Constructor
 	Path();
 
-		/// Copy constructor
-	Path(const Path& other);
-
-		/// Move constructor
-	Path(Path&& other);
-
 		/**
 		 * @brief Create Path from a literal UTF-8 encoded string
 		 * 
@@ -75,12 +69,6 @@ public:
 		 * No filtering or processing of special characters is done (e.g. '.', '~')
 		 */
 	Path(const std::u32string& path);
-
-		/// Copy operator
-	Path& operator=(const Path& other);
-
-		/// Move operator
-	Path& operator=(Path&& other);
 
 		/// Addition operator
 	Path operator+(const Path& other) const;
@@ -121,7 +109,7 @@ public:
 		/// Get number of path elements
 	size_t size() const;	
 private:
-	const std::string kClassName = "tc::fs::Path";
+	static const std::string kClassName;
 
 	std::list<std::string> mUnicodePath;
 

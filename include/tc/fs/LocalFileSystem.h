@@ -2,8 +2,8 @@
 	 * @file LocalFileSystem.h
 	 * @brief Declaration of tc::fs::LocalFileSystem
 	 * @author Jack (jakcron)
-	 * @version 0.3
-	 * @date 2019/05/17
+	 * @version 0.4
+	 * @date 2019/05/21
 	 */
 #pragma once
 #include <tc/fs/IFileSystem.h>
@@ -21,22 +21,23 @@ namespace tc { namespace fs {
 class LocalFileSystem : public IFileSystem
 {
 public:
-		/** 
-		 * @brief Default Constructor
-		 */
+		/// Default Constructor
 	LocalFileSystem();
 
-	void createFile(const tc::fs::Path& path);
-	void removeFile(const tc::fs::Path& path);
-	void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileObject& file);
-	void createDirectory(const tc::fs::Path& path);
-	void removeDirectory(const tc::fs::Path& path);
-	void getWorkingDirectory(tc::fs::Path& path);
-	void setWorkingDirectory(const tc::fs::Path& path);
-	void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& info);
+	virtual void createFile(const tc::fs::Path& path);
+	virtual void removeFile(const tc::fs::Path& path);
+	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::GenericFileObject& file);
+	virtual void createDirectory(const tc::fs::Path& path);
+	virtual void removeDirectory(const tc::fs::Path& path);
+	virtual void getWorkingDirectory(tc::fs::Path& path);
+	virtual void setWorkingDirectory(const tc::fs::Path& path);
+	virtual void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& info);
+
+	virtual tc::fs::IFileSystem* copyInstance() const;
+	virtual tc::fs::IFileSystem* moveInstance();
 
 private:
-	const std::string kClassName = "tc::fs::LocalFileSystem";
+	static const std::string kClassName;
 
 	bool validateFileAccessMode(tc::fs::FileAccessMode mode) const;
 #ifdef _WIN32

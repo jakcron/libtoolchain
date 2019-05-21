@@ -12,52 +12,63 @@ private:
 	class DummyFileSystemBase : public tc::fs::IFileSystem
 	{
 	public:
-		DummyFileSystemBase()
+		DummyFileSystemBase() :
+			mCurDir(new tc::fs::Path())
 		{
 		}
 
-		void createFile(const tc::fs::Path& path)
+		virtual void createFile(const tc::fs::Path& path)
 		{
 			throw tc::Exception(kClassName, "createFile() not implemented");
 		}
 
-		void removeFile(const tc::fs::Path& path)
+		virtual void removeFile(const tc::fs::Path& path)
 		{
 			throw tc::Exception(kClassName, "removeFile() not implemented");
 		}
 
-		void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::FileObject& file)
+		virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::GenericFileObject& file)
 		{
 			throw tc::Exception(kClassName, "openFile() not implemented");
 		}
 
-		void createDirectory(const tc::fs::Path& path)
+		virtual void createDirectory(const tc::fs::Path& path)
 		{
 			throw tc::Exception(kClassName, "createDirectory() not implemented");
 		}
 
-		void removeDirectory(const tc::fs::Path& path)
+		virtual void removeDirectory(const tc::fs::Path& path)
 		{
 			throw tc::Exception(kClassName, "removeDirectory() not implemented");
 		}
 
-		void getWorkingDirectory(tc::fs::Path& path)
+		virtual void getWorkingDirectory(tc::fs::Path& path)
 		{
-			path = mCurDir;
+			path = *mCurDir;
 		}
 
-		void setWorkingDirectory(const tc::fs::Path& path)
+		virtual void setWorkingDirectory(const tc::fs::Path& path)
 		{
-			mCurDir = path;
+			*mCurDir = path;
 		}
 
-		void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& info)
+		virtual void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& info)
 		{
 			throw tc::Exception(kClassName, "getDirectoryListing() not implemented");
 		}
+
+		virtual tc::fs::IFileSystem* copyInstance() const
+		{
+			return new DummyFileSystemBase(*this);
+		}
+
+		virtual tc::fs::IFileSystem* moveInstance()
+		{
+			return new DummyFileSystemBase(std::move(*this));
+		}
 	private:
-		const std::string kClassName = "DummyFileSystemBase";
-		tc::fs::Path mCurDir;
+		static const std::string kClassName;
+		tc::SharedPtr<tc::fs::Path> mCurDir;
 	};
 
 	void testSandboxRootPath();
