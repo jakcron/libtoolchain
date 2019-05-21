@@ -125,6 +125,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\test\endian_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\fs_GenericFileObject_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\fs_GenericFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\fs_LocalFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\fs_Path_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\fs_SandboxedFileSystem_TestClass.cpp" />
@@ -136,6 +138,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\test\endian_TestClass.h" />
+    <ClInclude Include="..\..\..\test\fs_GenericFileObject_TestClass.h" />
+    <ClInclude Include="..\..\..\test\fs_GenericFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\fs_LocalFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\fs_Path_TestClass.h" />
     <ClInclude Include="..\..\..\test\fs_SandboxedFileSystem_TestClass.h" />
