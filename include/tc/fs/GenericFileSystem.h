@@ -80,6 +80,9 @@ public:
 	virtual tc::fs::IFileSystem* copyInstance() const;
 	virtual tc::fs::IFileSystem* moveInstance();
 
+		/// Determine if this object is uninitialised
+	bool isNull() const;
+
 private:
 	static const std::string kClassName;
 
