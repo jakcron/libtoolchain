@@ -14,13 +14,23 @@ private:
 		WIN32_PATH
 	};
 	
+	// helpers
 	void pathToUnixUtf8(const tc::fs::Path& path, std::string& out);
 	void pathToWindowsUtf8(const tc::fs::Path& path, std::string& out);
+	
+	// generic tests
 	void testPathComposition(const std::string& test_name, const std::string& raw_path, const std::string& expected_path, size_t expected_element_count, PathType path_type);
 	void testPathComposition(const std::string& test_name, const std::string& raw_path, size_t expected_element_count, PathType path_type);
-	void testEqualComparisonOperator();
-	void testUnequalComparisonOperator();
-	void testAdditionOperator();
-	void testAppendOperator();
-	void testAppendStressTest();
+	
+	// specific tests
+	void test_Constructor_Default();
+	void test_Method_pop_front();
+	void test_Method_pop_back();
+	void test_Method_push_front();
+	void test_Method_push_back();
+	void test_Operator_Addition();
+	void test_Operator_Append();
+	void test_Scenario_AppendStressTest();
+	void test_Operator_EqualityTest();
+	void test_Operator_InequalityTest();
 };
