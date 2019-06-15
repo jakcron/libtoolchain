@@ -77,6 +77,9 @@ public:
 	virtual tc::fs::IFileObject* copyInstance() const;
 	virtual tc::fs::IFileObject* moveInstance();
 
+		/// Determine if this object is uninitialised
+	bool isNull() const;
+	
 private:
 	static const std::string kClassName;
 
