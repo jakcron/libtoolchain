@@ -19,6 +19,7 @@ void fs_Path_TestClass::runAllTests(void)
 	test_Method_pop_back();
 	test_Method_push_front();
 	test_Method_push_back();
+	test_Method_clear();
 	test_Operator_Addition();
 	test_Operator_Append();
 	test_Scenario_AppendStressTest();
@@ -186,14 +187,18 @@ void fs_Path_TestClass::test_Method_push_front()
 	std::cout << "[tc::fs::Path] test_Method_push_front : ";
 	try
 	{
-		tc::fs::Path path("a/b/c/d/e/f/g/h/i/j");
-		std::list<std::string> expectedElements = {"a","b","c","d","e","f","g","h","i","j"};
+		tc::fs::Path path("");
+		std::list<std::string> expectedElements = {};
 
-		for (size_t i = 0; i < 10; i++, path.pop_back(), expectedElements.pop_back())
+		std::list<std::string> pushCue = {"a","b","c","d","e","f","g","h","i","j"};
+
+		for (size_t i = 0; i < 10; i++, pushCue.pop_front())
 		{
-			if (*(--path.end()) != *(--expectedElements.end()))
+			path.push_front(*(pushCue.begin()));
+			expectedElements.push_front(*(pushCue.begin()));
+			if (*(path.begin()) != *(expectedElements.begin()))
 			{
-				throw tc::Exception("pop_back() did not place expected element at (--end())");
+				throw tc::Exception("push_front() did not place expected element at *(begin())");
 			}
 		}
 
@@ -207,7 +212,57 @@ void fs_Path_TestClass::test_Method_push_front()
 
 void fs_Path_TestClass::test_Method_push_back()
 {
+	std::cout << "[tc::fs::Path] test_Method_push_back : ";
+	try
+	{
+		tc::fs::Path path("");
+		std::list<std::string> expectedElements = {};
 
+		std::list<std::string> pushCue = {"a","b","c","d","e","f","g","h","i","j"};
+
+		for (size_t i = 0; i < 10; i++, pushCue.pop_front())
+		{
+			path.push_back(*(pushCue.begin()));
+			expectedElements.push_back(*(pushCue.begin()));
+			if (*(--path.end()) != *(--expectedElements.end()))
+			{
+				throw tc::Exception("push_back() did not place expected element at *(--end())");
+			}
+		}
+
+		std::cout << "PASS"  << std::endl;
+	}
+	catch (const tc::Exception& e)
+	{
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+	}
+}
+
+void fs_Path_TestClass::test_Method_clear()
+{
+	std::cout << "[tc::fs::Path] test_Method_clear : ";
+	try
+	{
+		tc::fs::Path path("a/b/c/d/e/f/g/h/i/j");
+		
+		path.clear();
+
+		if (path.size() != 0)
+		{
+			throw tc::Exception(".size() did not have expected value of 0 after .clear()");
+		}
+
+		if (path.begin() != path.end())
+		{
+			throw tc::Exception(".begin() != .end() after .clear()");
+		}
+
+		std::cout << "PASS"  << std::endl;
+	}
+	catch (const tc::Exception& e)
+	{
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+	}
 }
 
 void fs_Path_TestClass::test_Operator_Addition()

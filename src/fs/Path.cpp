@@ -97,6 +97,11 @@ void tc::fs::Path::push_back(const std::string& str)
 	mUnicodePath.push_back(str);
 }
 
+void tc::fs::Path::clear()
+{
+	mUnicodePath.clear();
+}
+
 size_t tc::fs::Path::size() const
 {
 	return mUnicodePath.size();

@@ -106,6 +106,9 @@ public:
 		/// Insert path element at the back of the path
 	void push_back(const std::string& str);
 
+		/// Clear all elements from the path
+	void clear();
+
 		/// Get number of path elements
 	size_t size() const;	
 private:

@@ -28,6 +28,7 @@ private:
 	void test_Method_pop_back();
 	void test_Method_push_front();
 	void test_Method_push_back();
+	void test_Method_clear();
 	void test_Operator_Addition();
 	void test_Operator_Append();
 	void test_Scenario_AppendStressTest();
