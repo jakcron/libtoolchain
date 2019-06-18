@@ -134,8 +134,6 @@ public:
 		 * @param[in] path Path to directory
 		 * 
 		 * @throws tc::Exception If the directory cannot be removed (invalid path, or access rights)
-		 * 
-		 * @post tc::Result::isSuccess() on success
 		 */
 	virtual void removeDirectory(const tc::fs::Path& path) = 0;
 
@@ -157,8 +155,6 @@ public:
 		 * @param[out] info sDirectoryListing object to populate
 		 * 
 		 * @throws tc::Exception If the directory cannot be accessed (invalid path, or access rights)
-		 * 
-		 * @post tc::Result::isSuccess() on success
 		 */
 	virtual void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& info) = 0;
 };
