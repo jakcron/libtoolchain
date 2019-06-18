@@ -12,7 +12,7 @@ namespace tc {
 
 	/**
 	 * @enum ResourceStateFlag
-	 * @brief Flags for @ref ResourceState
+	 * @brief Flags for ResourceState
 	 */
 enum ResourceStateFlag
 {
