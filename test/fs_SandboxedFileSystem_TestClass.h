@@ -12,9 +12,37 @@ private:
 	class DummyFileSystemBase : public tc::fs::IFileSystem
 	{
 	public:
-		DummyFileSystemBase() :
-			mCurDir(new tc::fs::Path())
+		DummyFileSystemBase()
 		{
+			initFs();
+		}
+
+		virtual tc::fs::IFileSystem* copyInstance() const
+		{
+			return new DummyFileSystemBase(*this);
+		}
+
+		virtual tc::fs::IFileSystem* moveInstance()
+		{
+			return new DummyFileSystemBase(std::move(*this));
+		}
+
+		virtual tc::ResourceState getFsState()
+		{
+			return mState;
+		}
+
+		void initFs()
+		{
+			closeFs();
+			mCurDir = new tc::fs::Path();
+			mState.set(tc::RESFLAG_READY);
+		}
+
+		virtual void closeFs()
+		{
+			mState = 0;
+			(*mCurDir).clear();
 		}
 
 		virtual void createFile(const tc::fs::Path& path)
@@ -56,18 +84,9 @@ private:
 		{
 			throw tc::Exception(kClassName, "getDirectoryListing() not implemented");
 		}
-
-		virtual tc::fs::IFileSystem* copyInstance() const
-		{
-			return new DummyFileSystemBase(*this);
-		}
-
-		virtual tc::fs::IFileSystem* moveInstance()
-		{
-			return new DummyFileSystemBase(std::move(*this));
-		}
 	private:
 		static const std::string kClassName;
+		tc::ResourceState mState;
 		tc::SharedPtr<tc::fs::Path> mCurDir;
 	};
 

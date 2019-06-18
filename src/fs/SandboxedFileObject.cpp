@@ -2,20 +2,81 @@
 
 const std::string tc::fs::SandboxedFileObject::kClassName = "tc::fs::SandboxedFileObject";
 
-tc::fs::SandboxedFileObject::SandboxedFileObject(const tc::fs::IFileObject& file, uint64_t file_base_offset, uint64_t virtual_size) :
-	mFile(file),
-	mFileBaseOffset(file_base_offset),
-	mVirtualSize(virtual_size),
+tc::fs::SandboxedFileObject::SandboxedFileObject() :
+	mFile(),
+	mFileBaseOffset(0),
+	mVirtualSize(0),
 	mVirtualOffset(0)
+{}
+	
+
+tc::fs::SandboxedFileObject::SandboxedFileObject(const tc::fs::IFileObject& file, uint64_t file_base_offset, uint64_t virtual_size) :
+	SandboxedFileObject()
 {
+	initialise(file, file_base_offset, virtual_size);
 }
 
 tc::fs::SandboxedFileObject::SandboxedFileObject(tc::fs::IFileObject&& file, uint64_t file_base_offset, uint64_t virtual_size) :
-	mFile(std::move(file)),
-	mFileBaseOffset(file_base_offset),
-	mVirtualSize(virtual_size),
-	mVirtualOffset(0)
+	SandboxedFileObject()
 {
+	initialise(std::move(file), file_base_offset, virtual_size);
+}
+
+tc::fs::IFileObject* tc::fs::SandboxedFileObject::copyInstance() const
+{
+	return new SandboxedFileObject(*this);	
+}
+
+tc::fs::IFileObject* tc::fs::SandboxedFileObject::moveInstance()
+{
+	return new SandboxedFileObject(std::move(*this));
+}
+
+tc::ResourceState tc::fs::SandboxedFileObject::state()
+{
+	return mFile.state();
+}
+
+void tc::fs::SandboxedFileObject::initialise(const tc::fs::IFileObject& file, uint64_t file_base_offset, uint64_t virtual_size)
+{
+	close();
+
+	mFile = file;
+	if (mFile.state().test(RESFLAG_READY))
+	{
+		mFileBaseOffset = file_base_offset;
+		mVirtualSize = virtual_size;
+		mVirtualOffset = 0;
+	}
+	else
+	{
+		mFile.close();
+	}
+}
+
+void tc::fs::SandboxedFileObject::initialise(tc::fs::IFileObject&& file, uint64_t file_base_offset, uint64_t virtual_size)
+{
+	close();
+
+	mFile = std::move(file);
+	if (mFile.state().test(RESFLAG_READY))
+	{
+		mFileBaseOffset = file_base_offset;
+		mVirtualSize = virtual_size;
+		mVirtualOffset = 0;
+	}
+	else
+	{
+		mFile.close();
+	}
+}
+
+void tc::fs::SandboxedFileObject::close()
+{
+	mFile.close();
+	mFileBaseOffset = 0;
+	mVirtualSize = 0;
+	mVirtualOffset = 0;
 }
 
 uint64_t tc::fs::SandboxedFileObject::size()
@@ -57,14 +118,4 @@ void tc::fs::SandboxedFileObject::write(const byte_t* out, size_t len)
 
 	// update virtual offset
 	seek(mVirtualOffset + len);
-}
-
-tc::fs::IFileObject* tc::fs::SandboxedFileObject::copyInstance() const
-{
-	return new SandboxedFileObject(*this);	
-}
-
-tc::fs::IFileObject* tc::fs::SandboxedFileObject::moveInstance()
-{
-	return new SandboxedFileObject(std::move(*this));
 }

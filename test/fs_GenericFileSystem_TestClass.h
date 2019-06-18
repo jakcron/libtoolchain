@@ -15,6 +15,26 @@ private:
 		{
 		}
 
+		virtual tc::fs::IFileObject* copyInstance() const
+		{
+			throw tc::Exception("DummyFileBase", "copyInstance() not implemented");
+		}
+
+		virtual tc::fs::IFileObject* moveInstance()
+		{
+			throw tc::Exception("DummyFileBase", "copyInstance() not implemented");
+		}
+
+		virtual tc::ResourceState state()
+		{
+			throw tc::Exception("DummyFileBase", "state() not implemented");
+		}
+
+		virtual void close()
+		{
+			throw tc::Exception("DummyFileBase", "close() not implemented");
+		}
+
 		virtual uint64_t size()
 		{
 			throw tc::Exception("DummyFileBase", "size() not implemented");
@@ -39,16 +59,6 @@ private:
 		{
 			throw tc::Exception("DummyFileBase", "write() not implemented");
 		}
-
-		virtual tc::fs::IFileObject* copyInstance() const
-		{
-			return new DummyFileBase(*this);
-		}
-
-		virtual tc::fs::IFileObject* moveInstance()
-		{
-			return new DummyFileBase(*this);
-		}
 	};
 
 	class DummyFileSystemBase : public tc::fs::IFileSystem
@@ -56,6 +66,26 @@ private:
 	public:
 		DummyFileSystemBase()
 		{
+		}
+
+		virtual tc::fs::IFileSystem* copyInstance() const
+		{
+			throw tc::Exception("DummyFileSystemBase", "copyInstance() not implemented");
+		}
+
+		virtual tc::fs::IFileSystem* moveInstance()
+		{
+			throw tc::Exception("DummyFileSystemBase", "copyInstance() not implemented");
+		}
+
+		virtual tc::ResourceState getFsState()
+		{
+			throw tc::Exception("DummyFileSystemBase", "getFsState() not implemented");
+		}
+
+		virtual void closeFs()
+		{
+			throw tc::Exception("DummyFileSystemBase", "closeFs() not implemented");
 		}
 
 		virtual void createFile(const tc::fs::Path& path)
@@ -97,16 +127,6 @@ private:
 		{
 			throw tc::Exception("DummyFileSystemBase", "getDirectoryListing() not implemented");
 		}
-
-		virtual tc::fs::IFileSystem* copyInstance() const
-		{
-			return new DummyFileSystemBase(*this);
-		}
-
-		virtual tc::fs::IFileSystem* moveInstance()
-		{
-			return new DummyFileSystemBase(std::move(*this));
-		}
 	};
 
 	void test_DefaultConstructor_IsNull();
@@ -117,4 +137,5 @@ private:
 	void test_CopyOperator();
 	void test_MoveOperator();
 	void test_Generic_Passthrough();
+	void test_Close();
 };

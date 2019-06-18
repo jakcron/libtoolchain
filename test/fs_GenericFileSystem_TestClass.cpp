@@ -16,6 +16,7 @@ void fs_GenericFileSystem_TestClass::runAllTests()
 	test_CopyOperator();
 	test_MoveOperator();
 	test_Generic_Passthrough();
+	test_Close();
 }
 
 void fs_GenericFileSystem_TestClass::test_DefaultConstructor_IsNull()
@@ -26,9 +27,9 @@ void fs_GenericFileSystem_TestClass::test_DefaultConstructor_IsNull()
 		bool threwException = false;
 		tc::fs::GenericFileSystem fs;
 
-		if (fs.isNull() != true)
+		if (fs.getFsState().test(tc::RESFLAG_READY) == true)
 		{
-			throw tc::Exception("isNull() returned false on uninitialised GenericFileSystem");
+			throw tc::Exception("getFsState().test(tc::RESFLAG_READY) returned true on uninitialised GenericFileSystem");
 		}
 
 		try {
@@ -135,7 +136,17 @@ void fs_GenericFileSystem_TestClass::test_GenericCopyConstructor()
 	class DummyFileSystem : public DummyFileSystemBase
 	{
 	public:
-		DummyFileSystem() : mPath() {}
+		DummyFileSystem() : mState(1 << tc::RESFLAG_READY), mPath() {}
+
+		virtual tc::ResourceState getFsState()
+		{
+			return mState;
+		}
+
+		virtual void closeFs()
+		{
+			mState = 0;
+		}
 
 		virtual void getWorkingDirectory(tc::fs::Path& path)
 		{
@@ -157,6 +168,7 @@ void fs_GenericFileSystem_TestClass::test_GenericCopyConstructor()
 			return new DummyFileSystem(std::move(*this));
 		}
 	private:
+		tc::ResourceState mState;
 		tc::fs::Path mPath;
 	};
 
@@ -174,9 +186,9 @@ void fs_GenericFileSystem_TestClass::test_GenericCopyConstructor()
 		tc::fs::GenericFileSystem genFS(dummyFS);
 
 		// check isNull
-		if (genFS.isNull() == true)
+		if (genFS.getFsState().test(tc::RESFLAG_READY) == false)
 		{
-			throw tc::Exception("isNull() returned true on initialised GenericFileSystem");
+			throw tc::Exception("getFsState().test(tc::RESFLAG_READY) returned false on initialised GenericFileSystem");
 		}
 		
 		// confirm workdir is correct
@@ -206,7 +218,17 @@ void fs_GenericFileSystem_TestClass::test_GenericMoveConstructor()
 	class DummyFileSystem : public DummyFileSystemBase
 	{
 	public:
-		DummyFileSystem() : mPath() {}
+		DummyFileSystem() : mState(1 << tc::RESFLAG_READY), mPath() {}
+
+		virtual tc::ResourceState getFsState()
+		{
+			return mState;
+		}
+
+		virtual void closeFs()
+		{
+			mState = 0;
+		}
 
 		virtual void getWorkingDirectory(tc::fs::Path& path)
 		{
@@ -228,6 +250,7 @@ void fs_GenericFileSystem_TestClass::test_GenericMoveConstructor()
 			return new DummyFileSystem(std::move(*this));
 		}
 	private:
+		tc::ResourceState mState;
 		tc::fs::Path mPath;
 	};
 
@@ -245,9 +268,9 @@ void fs_GenericFileSystem_TestClass::test_GenericMoveConstructor()
 		tc::fs::GenericFileSystem genFS(std::move(dummyFS));
 
 		// check isNull
-		if (genFS.isNull() == true)
+		if (genFS.getFsState().test(tc::RESFLAG_READY) == false)
 		{
-			throw tc::Exception("isNull() returned true on initialised GenericFileSystem");
+			throw tc::Exception("getFsState().test(tc::RESFLAG_READY) returned false on initialised GenericFileSystem");
 		}
 		
 		// confirm workdir is correct
@@ -277,7 +300,17 @@ void fs_GenericFileSystem_TestClass::test_CopyConstructor()
 	class DummyFileSystem : public DummyFileSystemBase
 	{
 	public:
-		DummyFileSystem() : mPath() {}
+		DummyFileSystem() : mState(1 << tc::RESFLAG_READY), mPath() {}
+
+		virtual tc::ResourceState getFsState()
+		{
+			return mState;
+		}
+
+		virtual void closeFs()
+		{
+			mState = 0;
+		}
 
 		virtual void getWorkingDirectory(tc::fs::Path& path)
 		{
@@ -299,6 +332,7 @@ void fs_GenericFileSystem_TestClass::test_CopyConstructor()
 			return new DummyFileSystem(std::move(*this));
 		}
 	private:
+		tc::ResourceState mState;
 		tc::fs::Path mPath;
 	};
 
@@ -319,15 +353,15 @@ void fs_GenericFileSystem_TestClass::test_CopyConstructor()
 		tc::fs::GenericFileSystem newgenFS(genFS);
 
 		// check isNull
-		if (genFS.isNull() == true)
+		if (genFS.getFsState().test(tc::RESFLAG_READY) == false)
 		{
-			throw tc::Exception("isNull() returned true on initialised GenericFileSystem");
+			throw tc::Exception("getFsState().test(tc::RESFLAG_READY) returned false on initialised GenericFileSystem");
 		}
 
 		// check isNull
-		if (newgenFS.isNull() == true)
+		if (newgenFS.getFsState().test(tc::RESFLAG_READY) == false)
 		{
-			throw tc::Exception("isNull() returned true on initialised GenericFileSystem");
+			throw tc::Exception("getFsState().test(tc::RESFLAG_READY) returned false on initialised GenericFileSystem");
 		}
 		
 		// confirm workdir is correct
@@ -364,7 +398,17 @@ void fs_GenericFileSystem_TestClass::test_MoveConstructor()
 	class DummyFileSystem : public DummyFileSystemBase
 	{
 	public:
-		DummyFileSystem() : mPath() {}
+		DummyFileSystem() : mState(1 << tc::RESFLAG_READY), mPath() {}
+
+		virtual tc::ResourceState getFsState()
+		{
+			return mState;
+		}
+
+		virtual void closeFs()
+		{
+			mState = 0;
+		}
 
 		virtual void getWorkingDirectory(tc::fs::Path& path)
 		{
@@ -386,6 +430,7 @@ void fs_GenericFileSystem_TestClass::test_MoveConstructor()
 			return new DummyFileSystem(std::move(*this));
 		}
 	private:
+		tc::ResourceState mState;
 		tc::fs::Path mPath;
 	};
 
@@ -406,15 +451,15 @@ void fs_GenericFileSystem_TestClass::test_MoveConstructor()
 		tc::fs::GenericFileSystem newgenFS(std::move(genFS));
 
 		// check isNull
-		if (genFS.isNull() == false)
+		if (genFS.getFsState().test(tc::RESFLAG_READY) == true)
 		{
-			throw tc::Exception("isNull() returned false on uninitialised GenericFileSystem");
+			throw tc::Exception("getFsState().test(tc::RESFLAG_READY) returned true on uninitialised GenericFileSystem");
 		}
 
 		// check isNull
-		if (newgenFS.isNull() == true)
+		if (newgenFS.getFsState().test(tc::RESFLAG_READY) == false)
 		{
-			throw tc::Exception("isNull() returned true on initialised GenericFileSystem");
+			throw tc::Exception("getFsState().test(tc::RESFLAG_READY) returned false on initialised GenericFileSystem");
 		}
 
 		// confirm workdir is correct
@@ -444,7 +489,17 @@ void fs_GenericFileSystem_TestClass::test_CopyOperator()
 	class DummyFileSystem : public DummyFileSystemBase
 	{
 	public:
-		DummyFileSystem() : mPath() {}
+		DummyFileSystem() : mState(1 << tc::RESFLAG_READY), mPath() {}
+
+		virtual tc::ResourceState getFsState()
+		{
+			return mState;
+		}
+
+		virtual void closeFs()
+		{
+			mState = 0;
+		}
 
 		virtual void getWorkingDirectory(tc::fs::Path& path)
 		{
@@ -466,6 +521,7 @@ void fs_GenericFileSystem_TestClass::test_CopyOperator()
 			return new DummyFileSystem(std::move(*this));
 		}
 	private:
+		tc::ResourceState mState;
 		tc::fs::Path mPath;
 	};
 
@@ -487,15 +543,15 @@ void fs_GenericFileSystem_TestClass::test_CopyOperator()
 		newgenFS = genFS;
 
 		// check isNull
-		if (genFS.isNull() == true)
+		if (genFS.getFsState().test(tc::RESFLAG_READY) == false)
 		{
-			throw tc::Exception("isNull() returned true on initialised GenericFileSystem");
+			throw tc::Exception("getFsState().test(tc::RESFLAG_READY) returned false on initialised GenericFileSystem");
 		}
 
 		// check isNull
-		if (newgenFS.isNull() == true)
+		if (newgenFS.getFsState().test(tc::RESFLAG_READY) == false)
 		{
-			throw tc::Exception("isNull() returned true on initialised GenericFileSystem");
+			throw tc::Exception("getFsState().test(tc::RESFLAG_READY) returned false on initialised GenericFileSystem");
 		}
 		
 		// confirm workdir is correct
@@ -532,7 +588,17 @@ void fs_GenericFileSystem_TestClass::test_MoveOperator()
 	class DummyFileSystem : public DummyFileSystemBase
 	{
 	public:
-		DummyFileSystem() : mPath() {}
+		DummyFileSystem() : mState(1 << tc::RESFLAG_READY), mPath() {}
+
+		virtual tc::ResourceState getFsState()
+		{
+			return mState;
+		}
+
+		virtual void closeFs()
+		{
+			mState = 0;
+		}
 
 		virtual void getWorkingDirectory(tc::fs::Path& path)
 		{
@@ -554,6 +620,7 @@ void fs_GenericFileSystem_TestClass::test_MoveOperator()
 			return new DummyFileSystem(std::move(*this));
 		}
 	private:
+		tc::ResourceState mState;
 		tc::fs::Path mPath;
 	};
 
@@ -575,15 +642,15 @@ void fs_GenericFileSystem_TestClass::test_MoveOperator()
 		newgenFS = std::move(genFS);
 
 		// check isNull
-		if (genFS.isNull() == false)
+		if (genFS.getFsState().test(tc::RESFLAG_READY) == true)
 		{
-			throw tc::Exception("isNull() returned false on uninitialised GenericFileSystem");
+			throw tc::Exception("getFsState().test(tc::RESFLAG_READY) returned true on uninitialised GenericFileSystem");
 		}
 
 		// check isNull
-		if (newgenFS.isNull() == true)
+		if (newgenFS.getFsState().test(tc::RESFLAG_READY) == false)
 		{
-			throw tc::Exception("isNull() returned true on initialised GenericFileSystem");
+			throw tc::Exception("getFsState().test(tc::RESFLAG_READY) returned false on initialised GenericFileSystem");
 		}
 
 		// confirm workdir is correct
@@ -627,7 +694,17 @@ void fs_GenericFileSystem_TestClass::test_Generic_Passthrough()
 	public:
 		DummyFile() : DummyFile(0) {}
 
-		DummyFile(uint64_t size) : mSize(size) {}
+		DummyFile(uint64_t size) : mState(1 << tc::RESFLAG_READY), mSize(size) {}
+
+		virtual tc::ResourceState state()
+		{
+			return mState;
+		}
+
+		virtual void close()
+		{
+			mState = 0;
+		}
 
 		virtual uint64_t size()
 		{
@@ -644,14 +721,23 @@ void fs_GenericFileSystem_TestClass::test_Generic_Passthrough()
 			return new DummyFile(std::move(*this));
 		}
 	private:
+		tc::ResourceState mState;
 		uint64_t mSize;
 	};
 
 	class DummyFileSystem : public DummyFileSystemBase
 	{
 	public:
-		DummyFileSystem()
+		DummyFileSystem() : mState(1 << tc::RESFLAG_READY) {}
+
+		virtual tc::ResourceState getFsState()
 		{
+			return mState;
+		}
+
+		virtual void closeFs()
+		{
+			mState = 0;
 		}
 
 		virtual void createFile(const tc::fs::Path& path)
@@ -680,7 +766,7 @@ void fs_GenericFileSystem_TestClass::test_Generic_Passthrough()
 			{
 				throw tc::Exception("GenericFileSystem passthrough failed for openFile() for parameter mode");
 			}
-			if (file.isNull() == true || file.size() != kOpenFileExpectedFileSize)
+			if (file.state().test(tc::RESFLAG_READY) == false || file.size() != kOpenFileExpectedFileSize)
 			{
 				throw tc::Exception("GenericFileSystem passthrough failed for openFile() for parameter file");
 			}
@@ -742,6 +828,8 @@ void fs_GenericFileSystem_TestClass::test_Generic_Passthrough()
 		{
 			return new DummyFileSystem(*this);
 		}
+	private:
+		tc::ResourceState mState;
 	};
 
 	std::cout << "[tc::fs::GenericFileSystem] test_Generic_Passthrough : ";
@@ -767,6 +855,89 @@ void fs_GenericFileSystem_TestClass::test_Generic_Passthrough()
 		
 		tc::fs::sDirectoryListing listing = kGetDirectoryListingExpectedListing;
 		fs.getDirectoryListing(kGetDirectoryListingExpectedPath, listing);
+
+		std::cout << "PASS" << std::endl;
+	}
+	catch (const tc::Exception& e)
+	{
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+	}
+}
+
+void fs_GenericFileSystem_TestClass::test_Close()
+{
+	class DummyFileSystem : public DummyFileSystemBase
+	{
+	public:
+		DummyFileSystem() : mState(1 << tc::RESFLAG_READY), mPath() {}
+
+		virtual tc::ResourceState getFsState()
+		{
+			return mState;
+		}
+
+		virtual void closeFs()
+		{
+			mState = 0;
+		}
+
+		virtual void getWorkingDirectory(tc::fs::Path& path)
+		{
+			path = mPath;
+		}
+
+		virtual void setWorkingDirectory(const tc::fs::Path& path)
+		{
+			mPath = path;
+		}
+
+		virtual tc::fs::IFileSystem* copyInstance() const
+		{
+			return new DummyFileSystem(*this);
+		}
+
+		virtual tc::fs::IFileSystem* moveInstance()
+		{
+			return new DummyFileSystem(std::move(*this));
+		}
+	private:
+		tc::ResourceState mState;
+		tc::fs::Path mPath;
+	};
+
+	std::cout << "[tc::fs::GenericFileSystem] test_Close : ";
+	try
+	{
+		tc::fs::Path working_dir;
+		static const tc::fs::Path kExpectedWorkingDir("test_Close");
+		
+		// init dummyFS
+		DummyFileSystem dummyFS;
+		dummyFS.setWorkingDirectory(kExpectedWorkingDir);
+
+		// copy construct genFS
+		tc::fs::GenericFileSystem genFS(dummyFS);
+
+		// check isNull
+		if (genFS.getFsState().test(tc::RESFLAG_READY) == false)
+		{
+			throw tc::Exception("getFsState().test(tc::RESFLAG_READY) returned false on initialised GenericFileSystem");
+		}
+		
+		// confirm workdir is correct
+		genFS.getWorkingDirectory(working_dir);
+		if (working_dir != kExpectedWorkingDir)
+		{
+			throw tc::Exception("GenericFileSystem::getWorkingDirectory() did not return expected value");
+		}
+
+		genFS.closeFs();
+
+		// check isNull
+		if (genFS.getFsState().test(tc::RESFLAG_READY) == true)
+		{
+			throw tc::Exception("getFsState().test(tc::RESFLAG_READY) returned true on uninitialised GenericFileSystem");
+		}
 
 		std::cout << "PASS" << std::endl;
 	}

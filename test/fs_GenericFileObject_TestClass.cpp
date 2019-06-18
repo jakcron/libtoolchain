@@ -16,6 +16,7 @@ void fs_GenericFileObject_TestClass::runAllTests()
 	test_CopyOperator();
 	test_MoveOperator();
 	test_Generic_Passthrough();
+	test_Close();
 }
 
 void fs_GenericFileObject_TestClass::test_DefaultConstructor_IsNull()
@@ -26,7 +27,7 @@ void fs_GenericFileObject_TestClass::test_DefaultConstructor_IsNull()
 		bool threwException = false;
 		tc::fs::GenericFileObject file;
 
-		if (file.isNull() != true)
+		if (file.state().test(tc::RESFLAG_READY) == true)
 		{
 			throw tc::Exception("isNull() returned false on uninitialised GenericFileObject");
 		}
@@ -99,7 +100,17 @@ void fs_GenericFileObject_TestClass::test_GenericCopyConstructor()
 	class DummyFile : public DummyFileBase
 	{
 	public:
-		DummyFile() : mSize(0) {}
+		DummyFile() : mState(1 << tc::RESFLAG_READY), mSize(0) {}
+
+		virtual tc::ResourceState state()
+		{
+			return mState;
+		}
+
+		virtual void close()
+		{
+			mState = 0;
+		}
 
 		void setSize(uint64_t size)
 		{
@@ -119,10 +130,12 @@ void fs_GenericFileObject_TestClass::test_GenericCopyConstructor()
 		virtual tc::fs::IFileObject* moveInstance()
 		{
 			tc::fs::IFileObject* obj = new DummyFile(*this);
+			mState = 0;
 			mSize = 0;
 			return obj;
 		}
 	private:
+		tc::ResourceState mState;
 		uint64_t mSize;
 	};
 
@@ -136,7 +149,7 @@ void fs_GenericFileObject_TestClass::test_GenericCopyConstructor()
 
 		tc::fs::GenericFileObject file(dummyfile);
 
-		if (file.isNull() != false)
+		if (file.state().test(tc::RESFLAG_READY) == false)
 		{
 			throw tc::Exception("isNull() returned true on initialised GenericFileObject");
 		}
@@ -164,7 +177,17 @@ void fs_GenericFileObject_TestClass::test_GenericMoveConstructor()
 	class DummyFile : public DummyFileBase
 	{
 	public:
-		DummyFile() : mSize(0) {}
+		DummyFile() : mState(1 << tc::RESFLAG_READY), mSize(0) {}
+
+		virtual tc::ResourceState state()
+		{
+			return mState;
+		}
+
+		virtual void close()
+		{
+			mState = 0;
+		}
 
 		void setSize(uint64_t size)
 		{
@@ -184,10 +207,12 @@ void fs_GenericFileObject_TestClass::test_GenericMoveConstructor()
 		virtual tc::fs::IFileObject* moveInstance()
 		{
 			tc::fs::IFileObject* obj = new DummyFile(*this);
+			mState = 0;
 			mSize = 0;
 			return obj;
 		}
 	private:
+		tc::ResourceState mState;
 		uint64_t mSize;
 	};
 
@@ -201,7 +226,7 @@ void fs_GenericFileObject_TestClass::test_GenericMoveConstructor()
 
 		tc::fs::GenericFileObject file(std::move(dummyfile));
 
-		if (file.isNull() != false)
+		if (file.state().test(tc::RESFLAG_READY) == false)
 		{
 			throw tc::Exception("isNull() returned true on initialised GenericFileObject");
 		}
@@ -229,7 +254,17 @@ void fs_GenericFileObject_TestClass::test_CopyConstructor()
 	class DummyFile : public DummyFileBase
 	{
 	public:
-		DummyFile() : mSize(0) {}
+		DummyFile() : mState(1 << tc::RESFLAG_READY), mSize(0) {}
+
+		virtual tc::ResourceState state()
+		{
+			return mState;
+		}
+
+		virtual void close()
+		{
+			mState = 0;
+		}
 
 		void setSize(uint64_t size)
 		{
@@ -249,10 +284,12 @@ void fs_GenericFileObject_TestClass::test_CopyConstructor()
 		virtual tc::fs::IFileObject* moveInstance()
 		{
 			tc::fs::IFileObject* obj = new DummyFile(*this);
+			mState = 0;
 			mSize = 0;
 			return obj;
 		}
 	private:
+		tc::ResourceState mState;
 		uint64_t mSize;
 	};
 
@@ -267,7 +304,7 @@ void fs_GenericFileObject_TestClass::test_CopyConstructor()
 		tc::fs::GenericFileObject file(dummyfile);
 		tc::fs::GenericFileObject newfile(file);
 
-		if (file.isNull() != false)
+		if (file.state().test(tc::RESFLAG_READY) == false)
 		{
 			throw tc::Exception("isNull() returned true on initialised GenericFileObject");
 		}
@@ -277,7 +314,7 @@ void fs_GenericFileObject_TestClass::test_CopyConstructor()
 			throw tc::Exception("Source GenericFileObject did not have expected state after it was copied");
 		}
 
-		if (newfile.isNull() != false)
+		if (newfile.state().test(tc::RESFLAG_READY) == false)
 		{
 			throw tc::Exception("isNull() returned true on initialised GenericFileObject");
 		}
@@ -300,7 +337,17 @@ void fs_GenericFileObject_TestClass::test_MoveConstructor()
 	class DummyFile : public DummyFileBase
 	{
 	public:
-		DummyFile() : mSize(0) {}
+		DummyFile() : mState(1 << tc::RESFLAG_READY), mSize(0) {}
+
+		virtual tc::ResourceState state()
+		{
+			return mState;
+		}
+
+		virtual void close()
+		{
+			mState = 0;
+		}
 
 		void setSize(uint64_t size)
 		{
@@ -320,10 +367,12 @@ void fs_GenericFileObject_TestClass::test_MoveConstructor()
 		virtual tc::fs::IFileObject* moveInstance()
 		{
 			tc::fs::IFileObject* obj = new DummyFile(*this);
+			mState = 0;
 			mSize = 0;
 			return obj;
 		}
 	private:
+		tc::ResourceState mState;
 		uint64_t mSize;
 	};
 
@@ -338,12 +387,12 @@ void fs_GenericFileObject_TestClass::test_MoveConstructor()
 		tc::fs::GenericFileObject file(dummyfile);
 		tc::fs::GenericFileObject newfile(std::move(file));
 
-		if (file.isNull() == false)
+		if (file.state().test(tc::RESFLAG_READY) == true)
 		{
 			throw tc::Exception("Source GenericFileObject was not null when it should have moved");
 		}
 
-		if (newfile.isNull() != false)
+		if (newfile.state().test(tc::RESFLAG_READY) == false)
 		{
 			throw tc::Exception("isNull() returned true on initialised GenericFileObject");
 		}
@@ -366,7 +415,17 @@ void fs_GenericFileObject_TestClass::test_CopyOperator()
 	class DummyFile : public DummyFileBase
 	{
 	public:
-		DummyFile() : mSize(0) {}
+		DummyFile() : mState(1 << tc::RESFLAG_READY), mSize(0) {}
+
+		virtual tc::ResourceState state()
+		{
+			return mState;
+		}
+
+		virtual void close()
+		{
+			mState = 0;
+		}
 
 		void setSize(uint64_t size)
 		{
@@ -386,10 +445,12 @@ void fs_GenericFileObject_TestClass::test_CopyOperator()
 		virtual tc::fs::IFileObject* moveInstance()
 		{
 			tc::fs::IFileObject* obj = new DummyFile(*this);
+			mState = 0;
 			mSize = 0;
 			return obj;
 		}
 	private:
+		tc::ResourceState mState;
 		uint64_t mSize;
 	};
 
@@ -405,7 +466,7 @@ void fs_GenericFileObject_TestClass::test_CopyOperator()
 		tc::fs::GenericFileObject newfile;
 		newfile = file;
 
-		if (file.isNull() != false)
+		if (file.state().test(tc::RESFLAG_READY) == false)
 		{
 			throw tc::Exception("isNull() returned true on initialised GenericFileObject");
 		}
@@ -415,7 +476,7 @@ void fs_GenericFileObject_TestClass::test_CopyOperator()
 			throw tc::Exception("Source GenericFileObject did not have expected state after it was copied");
 		}
 
-		if (newfile.isNull() != false)
+		if (newfile.state().test(tc::RESFLAG_READY) == false)
 		{
 			throw tc::Exception("isNull() returned true on initialised GenericFileObject");
 		}
@@ -438,7 +499,17 @@ void fs_GenericFileObject_TestClass::test_MoveOperator()
 	class DummyFile : public DummyFileBase
 	{
 	public:
-		DummyFile() : mSize(0) {}
+		DummyFile() : mState(1 << tc::RESFLAG_READY), mSize(0) {}
+
+		virtual tc::ResourceState state()
+		{
+			return mState;
+		}
+
+		virtual void close()
+		{
+			mState = 0;
+		}
 
 		void setSize(uint64_t size)
 		{
@@ -458,10 +529,12 @@ void fs_GenericFileObject_TestClass::test_MoveOperator()
 		virtual tc::fs::IFileObject* moveInstance()
 		{
 			tc::fs::IFileObject* obj = new DummyFile(*this);
+			mState = 0;
 			mSize = 0;
 			return obj;
 		}
 	private:
+		tc::ResourceState mState;
 		uint64_t mSize;
 	};
 
@@ -477,12 +550,12 @@ void fs_GenericFileObject_TestClass::test_MoveOperator()
 		tc::fs::GenericFileObject newfile;
 		newfile = std::move(file);
 
-		if (file.isNull() == false)
+		if (file.state().test(tc::RESFLAG_READY) == true)
 		{
 			throw tc::Exception("Source GenericFileObject was not null when it should have moved");
 		}
 
-		if (newfile.isNull() != false)
+		if (newfile.state().test(tc::RESFLAG_READY) == false)
 		{
 			throw tc::Exception("isNull() returned true on initialised GenericFileObject");
 		}
@@ -516,6 +589,33 @@ void fs_GenericFileObject_TestClass::test_Generic_Passthrough()
 	public:
 		DummyFile()
 		{
+			init();
+		}
+
+		virtual tc::fs::IFileObject* copyInstance() const
+		{
+			return new DummyFile(*this);
+		}
+
+		virtual tc::fs::IFileObject* moveInstance()
+		{
+			return new DummyFile(*this);
+		}
+
+		virtual tc::ResourceState state()
+		{
+			return mState;
+		}
+
+		void init()
+		{
+			close();
+			mState.set(tc::RESFLAG_READY);
+		}
+
+		virtual void close()
+		{
+			mState = 0;
 		}
 
 		virtual uint64_t size()
@@ -545,16 +645,8 @@ void fs_GenericFileObject_TestClass::test_Generic_Passthrough()
 			if (data != kExpectedWritePtr || len != kExpectedWriteLen)
 				throw tc::Exception("GenericFileObject passthrough failed for write()");
 		}
-
-		virtual tc::fs::IFileObject* copyInstance() const
-		{
-			return new DummyFile(*this);
-		}
-
-		virtual tc::fs::IFileObject* moveInstance()
-		{
-			return new DummyFile(*this);
-		}
+	private:
+		tc::ResourceState mState;
 	};
 
 	std::cout << "[tc::fs::GenericFileObject] test_Generic_Passthrough : ";
@@ -577,6 +669,85 @@ void fs_GenericFileObject_TestClass::test_Generic_Passthrough()
 		file.read((byte_t*)kExpectedReadPtr, kExpectedReadLen);
 
 		file.write((byte_t*)kExpectedWritePtr, kExpectedWriteLen);
+
+		std::cout << "PASS" << std::endl;
+	}
+	catch (const tc::Exception& e)
+	{
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+	}
+}
+
+void fs_GenericFileObject_TestClass::test_Close()
+{
+	class DummyFile : public DummyFileBase
+	{
+	public:
+		DummyFile() : mState(1 << tc::RESFLAG_READY), mSize(0) {}
+
+		virtual tc::ResourceState state()
+		{
+			return mState;
+		}
+
+		virtual void close()
+		{
+			mState = 0;
+		}
+
+		void setSize(uint64_t size)
+		{
+			mSize = size;
+		}
+
+		virtual uint64_t size()
+		{
+			return mSize;
+		}
+
+		virtual tc::fs::IFileObject* copyInstance() const
+		{
+			return new DummyFile(*this);
+		}
+
+		virtual tc::fs::IFileObject* moveInstance()
+		{
+			tc::fs::IFileObject* obj = new DummyFile(*this);
+			mState = 0;
+			mSize = 0;
+			return obj;
+		}
+	private:
+		tc::ResourceState mState;
+		uint64_t mSize;
+	};
+
+	std::cout << "[tc::fs::GenericFileObject] test_Close : ";
+	try
+	{
+		static const uint64_t kTestVal = 1337;
+		DummyFile dummyfile;
+
+		dummyfile.setSize(kTestVal);
+
+		tc::fs::GenericFileObject file(dummyfile);
+
+		if (file.state().test(tc::RESFLAG_READY) == false)
+		{
+			throw tc::Exception("isNull() returned true on initialised GenericFileObject");
+		}
+
+		if (file.size() != kTestVal)
+		{
+			throw tc::Exception("Source GenericFileObject did not have expected state after it was copied");
+		}
+
+		file.close();
+
+		if (file.state().test(tc::RESFLAG_READY) == true)
+		{
+			throw tc::Exception("isNull() returned false on initialised GenericFileObject");
+		}
 
 		std::cout << "PASS" << std::endl;
 	}

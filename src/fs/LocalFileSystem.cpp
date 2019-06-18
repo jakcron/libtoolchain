@@ -1,5 +1,6 @@
 #include <tc/fs/LocalFileSystem.h>
-#include "LocalFileObject.h"
+#include <tc/fs/LocalFileObject.h>
+#include <tc/fs/PathUtils.h>
 #include <tc/Exception.h>
 #include <tc/string.h>
 #include <tc/SharedPtr.h>
@@ -20,8 +21,36 @@
 
 const std::string tc::fs::LocalFileSystem::kClassName = "tc::fs::LocalFileSystem";
 
-tc::fs::LocalFileSystem::LocalFileSystem()
-{}
+tc::fs::LocalFileSystem::LocalFileSystem() :
+	mState()
+{
+	openFs();
+}
+
+tc::fs::IFileSystem* tc::fs::LocalFileSystem::copyInstance() const
+{
+	return new LocalFileSystem();	
+}
+
+tc::fs::IFileSystem* tc::fs::LocalFileSystem::moveInstance()
+{
+	return new LocalFileSystem();                                                                                                                                                                                                                                                 
+}
+
+tc::ResourceState tc::fs::LocalFileSystem::getFsState()
+{
+	return mState;
+}
+
+void tc::fs::LocalFileSystem::openFs()
+{
+	mState = (1 << tc::RESFLAG_READY);
+}
+
+void tc::fs::LocalFileSystem::closeFs()
+{
+	mState = 0;
+}
 
 void tc::fs::LocalFileSystem::createFile(const tc::fs::Path& path)
 {
@@ -31,11 +60,11 @@ void tc::fs::LocalFileSystem::createFile(const tc::fs::Path& path)
 	pathToWindowsUTF16(path, unicode_path);
 
 	// open file
-	fs_handle_t file_handle = CreateFileW((LPCWSTR)unicode_path.c_str(),
-							  getOpenModeFlag(FILEACCESS_CREATE),
-							  getShareModeFlag(FILEACCESS_CREATE),
+	HANDLE file_handle = CreateFileW((LPCWSTR)unicode_path.c_str(),
+							  GENERIC_WRITE,
 							  0,
-							  getCreationModeFlag(FILEACCESS_CREATE),
+							  0,
+							  CREATE_ALWAYS,
 							  FILE_ATTRIBUTE_NORMAL,
 							  NULL);
 		
@@ -51,7 +80,7 @@ void tc::fs::LocalFileSystem::createFile(const tc::fs::Path& path)
 	std::string unicode_path;
 	pathToUnixUTF8(path, unicode_path);
 
-	fs_handle_t file_handle = open(unicode_path.c_str(), getOpenModeFlag(FILEACCESS_CREATE), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	int file_handle = open(unicode_path.c_str(), O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
 	if (file_handle == -1)
 	{
@@ -88,41 +117,7 @@ void tc::fs::LocalFileSystem::removeFile(const tc::fs::Path& path)
 
 void tc::fs::LocalFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, tc::fs::GenericFileObject& file)
 {
-#ifdef _WIN32
-	// convert Path to unicode string
-	std::u16string unicode_path;
-	pathToWindowsUTF16(path, unicode_path);
-
-	// open file
-	fs_handle_t file_handle = CreateFileW((LPCWSTR)unicode_path.c_str(),
-							  getOpenModeFlag(mode),
-							  getShareModeFlag(mode),
-							  0,
-							  getCreationModeFlag(mode),
-							  FILE_ATTRIBUTE_NORMAL,
-							  NULL);
-		
-	// check file handle
-	if (file_handle == INVALID_HANDLE_VALUE)
-	{
-		throw tc::Exception(kClassName, "Failed to open file (" + std::to_string(GetLastError()) + ")");
-	}
-
-	file = LocalFileObject(mode, file_handle);
-#else
-	// convert Path to unicode string
-	std::string unicode_path;
-	pathToUnixUTF8(path, unicode_path);
-
-	fs_handle_t file_handle = open(unicode_path.c_str(), getOpenModeFlag(mode), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-
-	if (file_handle == -1)
-	{
-		throw tc::Exception(kClassName, "Failed to open file (" + std::string(strerror(errno)) + ")");
-	}
-
-	file = LocalFileObject(mode, file_handle);
-#endif
+	file = tc::fs::LocalFileObject(path, mode);
 }
 
 void tc::fs::LocalFileSystem::createDirectory(const tc::fs::Path& path)
@@ -339,122 +334,3 @@ void tc::fs::LocalFileSystem::getDirectoryListing(const tc::fs::Path& path, sDir
 	info.file_list = child_file_name_list;
 }
 
-#ifdef _WIN32
-DWORD tc::fs::LocalFileSystem::getOpenModeFlag(FileAccessMode mode) const
-{
-	DWORD flag = 0;
-	switch (mode)
-	{
-		case (FILEACCESS_READ):
-			flag = GENERIC_READ;
-			break;
-		case (FILEACCESS_EDIT):
-			flag = GENERIC_READ | GENERIC_WRITE;
-			break;
-		case (FILEACCESS_CREATE):
-			flag = GENERIC_WRITE;
-			break;
-		default:
-			throw tc::Exception(kClassName, "Unknown open mode");
-	}
-	return flag;
-}
-DWORD tc::fs::LocalFileSystem::getShareModeFlag(FileAccessMode mode) const
-{
-	DWORD flag = 0;
-	switch (mode)
-	{
-		case (FILEACCESS_READ):
-			flag = FILE_SHARE_READ;
-			break;
-		case (FILEACCESS_EDIT):
-			flag = FILE_SHARE_READ;
-			break;
-		case (FILEACCESS_CREATE):
-			flag = 0;
-			break;
-		default:
-			throw tc::Exception(kClassName, "Unknown open mode");
-	}
-	return flag;
-}
-DWORD tc::fs::LocalFileSystem::getCreationModeFlag(FileAccessMode mode) const
-{
-	DWORD flag = 0;
-	switch (mode)
-	{
-		case (FILEACCESS_READ):
-			flag = OPEN_EXISTING;
-			break;
-		case (FILEACCESS_EDIT):
-			flag = OPEN_EXISTING;
-			break;
-		case (FILEACCESS_CREATE):
-			flag = CREATE_ALWAYS;
-			break;
-		default:
-			throw tc::Exception(kClassName, "Unknown open mode");
-	}
-	return flag;
-}
-
-void tc::fs::LocalFileSystem::pathToWindowsUTF16(const tc::fs::Path& path, std::u16string& out)
-{
-	std::u16string utf16_element;
-
-	out.clear();
-	for (tc::fs::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
-	{
-		tc::string::transcodeUTF8ToUTF16(*itr, utf16_element);
-
-		out += utf16_element;
-		if (itr != --path.end())
-			out += std::u16string(u"\\");
-		if (utf16_element == std::u16string(u"") && itr == path.begin())
-			out += std::u16string(u"\\");
-	}
-}
-#else
-int tc::fs::LocalFileSystem::getOpenModeFlag(FileAccessMode mode) const
-{
-	int flag = 0;
-	switch (mode)
-	{
-		case (FILEACCESS_READ):
-			flag = O_RDONLY;
-			break;
-		case (FILEACCESS_EDIT):
-			flag = O_RDWR;
-			break;
-		case (FILEACCESS_CREATE):
-			flag = O_CREAT | O_TRUNC | O_WRONLY;
-			break;
-		default:
-			throw tc::Exception(kClassName, "Unknown open mode");
-	}
-	return flag;
-}
-
-void tc::fs::LocalFileSystem::pathToUnixUTF8(const tc::fs::Path& path, std::string& out)
-{
-	out.clear();
-	for (tc::fs::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
-	{
-		out += *itr;
-		if (itr != --path.end())
-			out += "/";
-		else if (*itr == "" && itr == path.begin())
-			out += "/";
-	}
-}
-#endif
-
-tc::fs::IFileSystem* tc::fs::LocalFileSystem::copyInstance() const
-{
-	return new LocalFileSystem();	
-}
-
-tc::fs::IFileSystem* tc::fs::LocalFileSystem::moveInstance()
-{
-	return new LocalFileSystem();
-}

@@ -2,8 +2,8 @@
 	 * @file GenericFileSystem.h
 	 * @brief Declaration of tc::fs::GenericFileSystem
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2019/05/21
+	 * @version 0.2
+	 * @date 2019/06/18
 	 */
 #pragma once
 #include <tc/fs/IFileSystem.h>
@@ -68,6 +68,12 @@ public:
 		 */
 	GenericFileSystem& operator=(tc::fs::GenericFileSystem&& other);
 
+	virtual tc::fs::IFileSystem* copyInstance() const;
+	virtual tc::fs::IFileSystem* moveInstance();
+
+	virtual tc::ResourceState getFsState();
+
+	virtual void closeFs();
 	virtual void createFile(const tc::fs::Path& path);
 	virtual void removeFile(const tc::fs::Path& path);
 	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::GenericFileObject& file);
@@ -76,19 +82,10 @@ public:
 	virtual void getWorkingDirectory(tc::fs::Path& path);
 	virtual void setWorkingDirectory(const tc::fs::Path& path);
 	virtual void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& info);
-
-	virtual tc::fs::IFileSystem* copyInstance() const;
-	virtual tc::fs::IFileSystem* moveInstance();
-
-		/// Determine if this object is uninitialised
-	bool isNull() const;
-
 private:
 	static const std::string kClassName;
 
-	tc::fs::IFileSystem* mPtr;
-
-	void deletePtr();
+	tc::SharedPtr<tc::fs::IFileSystem> mPtr;
 };
 
 }} // namespace tc::fs

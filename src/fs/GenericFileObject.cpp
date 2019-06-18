@@ -24,27 +24,33 @@ tc::fs::GenericFileObject::GenericFileObject(tc::fs::GenericFileObject&& other) 
 tc::fs::GenericFileObject::GenericFileObject(const tc::fs::IFileObject& other) :
 	mPtr(other.copyInstance())
 {
+	// don't allow GenericFileObject to adopt dead FileObjects
+	if (mPtr.isNull() == false && mPtr->state().test(RESFLAG_READY) == false)
+	{
+		mPtr.release();
+	}
 }
 
 tc::fs::GenericFileObject::GenericFileObject(tc::fs::IFileObject&& other) :
 	mPtr(other.moveInstance())
 {
+	// don't allow GenericFileObject to adopt dead FileObjects
+	if (mPtr.isNull() == false && mPtr->state().test(RESFLAG_READY) == false)
+	{
+		mPtr.release();
+	}
 }
 
 tc::fs::GenericFileObject::~GenericFileObject()
 {
-	deletePtr();
+	mPtr.release();
 }
 
 tc::fs::GenericFileObject& tc::fs::GenericFileObject::operator=(const tc::fs::GenericFileObject& other)
 {
 	if (this != &other)
 	{
-		deletePtr();
-		if (other.mPtr != nullptr)
-		{
-			mPtr = other.mPtr->copyInstance();
-		}
+		mPtr = other.mPtr;
 	}
 	return *this;
 }
@@ -53,64 +59,9 @@ tc::fs::GenericFileObject& tc::fs::GenericFileObject::operator=(tc::fs::GenericF
 {
 	if (this != &other)
 	{
-		deletePtr();
-		if (other.mPtr != nullptr)
-		{
-			mPtr = other.mPtr->moveInstance();
-			other.deletePtr();
-		}
+		mPtr = std::move(other.mPtr);
 	}
 	return *this;
-}
-
-uint64_t tc::fs::GenericFileObject::size()
-{
-	if (mPtr == nullptr)
-	{
-		throw tc::Exception(kClassName, "size() called on NullObject");
-	}
-
-	return mPtr->size();
-}
-
-void tc::fs::GenericFileObject::seek(uint64_t offset)
-{
-	if (mPtr == nullptr)
-	{
-		throw tc::Exception(kClassName, "seek() called on NullObject");
-	}
-
-	mPtr->seek(offset);
-}
-
-uint64_t tc::fs::GenericFileObject::pos()
-{
-	if (mPtr == nullptr)
-	{
-		throw tc::Exception(kClassName, "pos() called on NullObject");
-	}
-
-	return mPtr->pos();
-}
-
-void tc::fs::GenericFileObject::read(byte_t* data, size_t len)
-{
-	if (mPtr == nullptr)
-	{
-		throw tc::Exception(kClassName, "read() called on NullObject");
-	}
-
-	mPtr->read(data, len);
-}
-
-void tc::fs::GenericFileObject::write(const byte_t* data, size_t len)
-{
-	if (mPtr == nullptr)
-	{
-		throw tc::Exception(kClassName, "write() called on NullObject");
-	}
-
-	mPtr->write(data, len);
 }
 
 tc::fs::IFileObject* tc::fs::GenericFileObject::copyInstance() const
@@ -123,16 +74,62 @@ tc::fs::IFileObject* tc::fs::GenericFileObject::moveInstance()
 	return new GenericFileObject(std::move(*this));
 }
 
-bool tc::fs::GenericFileObject::isNull() const
+tc::ResourceState tc::fs::GenericFileObject::state()
 {
-	return mPtr == nullptr;
+	return mPtr.isNull() ? tc::ResourceState(0) :  mPtr->state();
 }
 
-void tc::fs::GenericFileObject::deletePtr()
+void tc::fs::GenericFileObject::close()
 {
-	if (mPtr != nullptr)
+	mPtr.release();
+}
+
+uint64_t tc::fs::GenericFileObject::size()
+{
+	if (mPtr.isNull())
 	{
-		delete mPtr;
-		mPtr = nullptr;
+		throw tc::Exception(kClassName, "size() called on NullObject");
 	}
+
+	return mPtr->size();
+}
+
+void tc::fs::GenericFileObject::seek(uint64_t offset)
+{
+	if (mPtr.isNull())
+	{
+		throw tc::Exception(kClassName, "seek() called on NullObject");
+	}
+
+	mPtr->seek(offset);
+}
+
+uint64_t tc::fs::GenericFileObject::pos()
+{
+	if (mPtr.isNull())
+	{
+		throw tc::Exception(kClassName, "pos() called on NullObject");
+	}
+
+	return mPtr->pos();
+}
+
+void tc::fs::GenericFileObject::read(byte_t* data, size_t len)
+{
+	if (mPtr.isNull())
+	{
+		throw tc::Exception(kClassName, "read() called on NullObject");
+	}
+
+	mPtr->read(data, len);
+}
+
+void tc::fs::GenericFileObject::write(const byte_t* data, size_t len)
+{
+	if (mPtr.isNull())
+	{
+		throw tc::Exception(kClassName, "write() called on NullObject");
+	}
+
+	mPtr->write(data, len);
 }

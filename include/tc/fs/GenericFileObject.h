@@ -2,8 +2,8 @@
 	 * @file GenericFileObject.h
 	 * @brief Declaration of tc::fs::GenericFileObject
 	 * @author Jack (jakcron)
-	 * @version	0.1
-	 * @date 2019/05/21
+	 * @version	0.2
+	 * @date 2019/06/18
 	 */
 #pragma once
 #include <tc/fs/IFileObject.h>
@@ -67,25 +67,22 @@ public:
 		 * @return this object
 		 */
 	GenericFileObject& operator=(tc::fs::GenericFileObject&& other);
+	
+	virtual tc::fs::IFileObject* copyInstance() const;
+	virtual tc::fs::IFileObject* moveInstance();
 
+	virtual tc::ResourceState state();
+
+	virtual void close();
 	virtual uint64_t size();
 	virtual void seek(uint64_t offset);
 	virtual uint64_t pos();
 	virtual void read(byte_t* data, size_t len);
-	virtual void write(const byte_t* data, size_t len);
-
-	virtual tc::fs::IFileObject* copyInstance() const;
-	virtual tc::fs::IFileObject* moveInstance();
-
-		/// Determine if this object is uninitialised
-	bool isNull() const;
-	
+	virtual void write(const byte_t* data, size_t len);	
 private:
 	static const std::string kClassName;
 
-	tc::fs::IFileObject* mPtr;
-
-	void deletePtr();
+	tc::SharedPtr<tc::fs::IFileObject> mPtr;
 };
 
 }} // namespace tc::fs

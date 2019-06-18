@@ -14,6 +14,36 @@ private:
 	public:
 		DummyFileBase()
 		{
+			init();
+		}
+
+		virtual tc::fs::IFileObject* copyInstance() const
+		{
+			return new DummyFileBase(*this);
+		}
+
+		virtual tc::fs::IFileObject* moveInstance()
+		{
+			return new DummyFileBase(*this);
+		}
+
+		virtual tc::ResourceState state()
+		{
+			return mState;
+		}
+
+		void init()
+		{
+			mState.set(tc::RESFLAG_READY);
+			mOffset = 0;
+			mSize = 0;
+		}
+
+		virtual void close()
+		{
+			mState = 0;
+			mOffset = 0;
+			mSize = 0;
 		}
 
 		virtual void setSize(uint64_t size)
@@ -45,18 +75,9 @@ private:
 		{
 			throw tc::Exception(kClassName, "write() not implemented");
 		}
-
-		virtual tc::fs::IFileObject* copyInstance() const
-		{
-			return new DummyFileBase(*this);
-		}
-
-		virtual tc::fs::IFileObject* moveInstance()
-		{
-			return new DummyFileBase(*this);
-		}
 	private:
 		static const std::string kClassName;
+		tc::ResourceState mState;
 		uint64_t mOffset;
 		uint64_t mSize;
 	};

@@ -2,11 +2,12 @@
 	 * @file IFileObject.h
 	 * @brief Declaration of tc::fs::IFileObject
 	 * @author Jack (jakcron)
-	 * @version	0.2
-	 * @date 2019/05/21
+	 * @version	0.3
+	 * @date 2019/06/16
 	 */
 #pragma once
 #include <tc/types.h>
+#include <tc/ResourceState.h>
 
 namespace tc { namespace fs {
 
@@ -30,6 +31,31 @@ public:
 		 * @brief Destructor
 		 */
 	virtual ~IFileObject() = default;
+
+		/**
+		 * @brief Create a new instance of this object as a copy. This allows this instance to be copied even when the type isn't known.
+		 * This is required by @ref tc::fs::GenericFileObject
+		 * @return new instance of IFileObject (dynamically allocated)
+		 */
+	virtual IFileObject* copyInstance() const = 0;
+
+		/**
+		 * @brief Create a new instance of this object and move elements to the new instance. This allows this instance to be moved even when the type isn't known.
+		 * This is required by @ref tc::fs::GenericFileObject
+		 * @return new instance of IFileObject (dynamically allocated)
+		 */
+	virtual IFileObject* moveInstance() = 0;
+
+		/**
+		 * @brief Get state of IFileObject
+		 * @return ResourceState
+		 */
+	virtual tc::ResourceState state() = 0;
+
+		/**
+		 * @brief Close the file
+		 */
+	virtual void close() = 0;
 
 		/**
 		 * @brief Get size of the file
@@ -65,20 +91,6 @@ public:
 		 * @param[in] len Length of data to write
 		 */
 	virtual void write(const byte_t* data, size_t len) = 0;
-
-		/**
-		 * @brief Create a new instance of this object as a copy. This allows this instance to be copied even when the type isn't known.
-		 * This is required by @ref tc::fs::GenericFileObject
-		 * @return new instance of IFileObject (dynamically allocated)
-		 */
-	virtual IFileObject* copyInstance() const = 0;
-
-		/**
-		 * @brief Create a new instance of this object and move elements to the new instance. This allows this instance to be moved even when the type isn't known.
-		 * This is required by @ref tc::fs::GenericFileObject
-		 * @return new instance of IFileObject (dynamically allocated)
-		 */
-	virtual IFileObject* moveInstance() = 0;
 };
 
 }}

@@ -3,24 +3,85 @@
 
 const std::string tc::fs::SandboxedFileSystem::kClassName = "tc::fs::SandboxedFileSystem";
 
-tc::fs::SandboxedFileSystem::SandboxedFileSystem(const tc::fs::IFileSystem& fs, const tc::fs::Path& root_path) :
-	mFileSystem(fs),
-	mRootPath(root_path),
-	mWorkingDirectory("/")
+tc::fs::SandboxedFileSystem::SandboxedFileSystem() :
+	mFileSystem(),
+	mRootPath(),
+	mWorkingDirectory()
 {
-	// get full path of root
-	mFileSystem.setWorkingDirectory(root_path);
-	mFileSystem.getWorkingDirectory(mRootPath);
+}
+
+tc::fs::SandboxedFileSystem::SandboxedFileSystem(const tc::fs::IFileSystem& fs, const tc::fs::Path& root_path) :
+	SandboxedFileSystem()
+{
+	initialiseFs(fs, root_path);
 }
 
 tc::fs::SandboxedFileSystem::SandboxedFileSystem(tc::fs::IFileSystem&& fs, const tc::fs::Path& root_path) :
-	mFileSystem(std::move(fs)),
-	mRootPath(root_path),
-	mWorkingDirectory("/")
+	SandboxedFileSystem()
 {
-	// get full path of root
-	mFileSystem.setWorkingDirectory(root_path);
-	mFileSystem.getWorkingDirectory(mRootPath);
+	initialiseFs(std::move(fs), root_path);
+}
+
+tc::fs::IFileSystem* tc::fs::SandboxedFileSystem::copyInstance() const
+{
+	return new SandboxedFileSystem(*this);	
+}
+
+tc::fs::IFileSystem* tc::fs::SandboxedFileSystem::moveInstance()
+{
+	return new SandboxedFileSystem(std::move(*this));
+}
+
+tc::ResourceState tc::fs::SandboxedFileSystem::getFsState()
+{
+	return mFileSystem.getFsState();
+}
+
+void tc::fs::SandboxedFileSystem::initialiseFs(const tc::fs::IFileSystem& fs, const tc::fs::Path& root_path)
+{
+	closeFs();
+
+	mFileSystem = fs;
+	if (mFileSystem.getFsState().test(RESFLAG_READY))
+	{
+		mRootPath = root_path; 
+		mWorkingDirectory = tc::fs::Path("/");
+
+		// get full path of root
+		mFileSystem.setWorkingDirectory(root_path);
+		mFileSystem.getWorkingDirectory(mRootPath);
+	}
+	else
+	{
+		mFileSystem.closeFs();
+	}
+}
+
+void tc::fs::SandboxedFileSystem::initialiseFs(tc::fs::IFileSystem&& fs, const tc::fs::Path& root_path)
+{
+	closeFs();
+
+	mFileSystem = std::move(fs);
+	if (mFileSystem.getFsState().test(RESFLAG_READY))
+	{
+		mRootPath = root_path; 
+		mWorkingDirectory = tc::fs::Path("/");
+
+		// get full path of root
+		mFileSystem.setWorkingDirectory(root_path);
+		mFileSystem.getWorkingDirectory(mRootPath);
+	}
+	else
+	{
+		mFileSystem.closeFs();
+	}
+}
+
+void tc::fs::SandboxedFileSystem::closeFs()
+{
+	mFileSystem.closeFs();
+	mRootPath.clear();
+	mWorkingDirectory.clear();
 }
 
 void tc::fs::SandboxedFileSystem::createFile(const tc::fs::Path& path)
@@ -199,14 +260,4 @@ void tc::fs::SandboxedFileSystem::sanitiseInputPath(const tc::fs::Path& unsafe_p
 			safe_path.push_back(*itr);
 		}
 	}
-}
-
-tc::fs::IFileSystem* tc::fs::SandboxedFileSystem::copyInstance() const
-{
-	return new SandboxedFileSystem(*this);	
-}
-
-tc::fs::IFileSystem* tc::fs::SandboxedFileSystem::moveInstance()
-{
-	return new SandboxedFileSystem(std::move(*this));
 }
