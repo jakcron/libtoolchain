@@ -42,7 +42,7 @@ private:
 		virtual void closeFs()
 		{
 			mState = 0;
-			(*mCurDir).clear();
+			mCurDir.release();
 		}
 
 		virtual void createFile(const tc::fs::Path& path)
