@@ -11,6 +11,7 @@
 	 * @brief       Namespace of the filesystem library
 	 */
 #include <tc/fs/Path.h>
+#include <tc/fs/PathUtils.h>
 
 #include <tc/fs/IFileObject.h>
 #include <tc/fs/IFileSystem.h>
@@ -18,6 +19,7 @@
 #include <tc/fs/GenericFileObject.h>
 #include <tc/fs/GenericFileSystem.h>
 
+#include <tc/fs/LocalFileObject.h>
 #include <tc/fs/LocalFileSystem.h>
 
 #include <tc/fs/PartitionedFileObject.h>
