@@ -1,0 +1,11 @@
+<map id="tc/fs/SandboxedFileSystem.h" name="tc/fs/SandboxedFileSystem.h">
+<area shape="rect" id="node2" href="$_generic_file_system_8h.html" title="Declaration of tc::fs::GenericFileSystem. " alt="" coords="78,80,253,107"/>
+<area shape="rect" id="node15" href="$_shared_ptr_8h.html" title="Declaration of tc::SharedPtr. " alt="" coords="88,304,195,331"/>
+<area shape="rect" id="node3" href="$_i_file_system_8h.html" title="Declaration of tc::fs::IFileSystem. " alt="" coords="256,155,389,181"/>
+<area shape="rect" id="node4" href="$types_8h.html" title="Declaration of generic types used by libtoolchain. " alt="" coords="247,379,327,405"/>
+<area shape="rect" id="node11" href="$_resource_state_8h.html" title="Declaration of tc::ResourceState. " alt="" coords="478,379,613,405"/>
+<area shape="rect" id="node13" href="$_generic_file_object_8h.html" title="Declaration of tc::fs::GenericFileObject. " alt="" coords="179,229,346,256"/>
+<area shape="rect" id="node16" href="$_path_8h.html" title="Declaration of tc::fs::Path. " alt="" coords="421,229,512,256"/>
+<area shape="rect" id="node9" href="$endian_8h.html" title="Declaration of macros and classes to unwrap primatives in an endian agnostic way. ..." alt="" coords="67,453,154,480"/>
+<area shape="rect" id="node14" href="$_i_file_object_8h.html" title="Declaration of tc::fs::IFileObject. " alt="" coords="219,304,346,331"/>
+</map>

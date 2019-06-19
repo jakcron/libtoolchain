@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classtc_1_1fs_1_1_i_file_system.html" title="An interface for implementing a basic FileSystem handler. " alt="" coords="5,56,136,83"/>
+<area shape="rect" id="node2" href="$classtc_1_1fs_1_1_generic_file_system.html" title="A realisation of IFileSystem that can be assigned (copy or move) the value of another IFileSystem obj..." alt="" coords="194,5,365,32"/>
+<area shape="rect" id="node3" href="$classtc_1_1fs_1_1_local_file_system.html" title="An IFileSystem wrapper around the existing OS FileSystem API. " alt="" coords="201,56,358,83"/>
+<area shape="rect" id="node4" href="$classtc_1_1fs_1_1_sandboxed_file_system.html" title="A wrapper around an existing IFileSystem object that exposes a subset of the wrapped IFileSystem dire..." alt="" coords="184,107,375,133"/>
+</map>

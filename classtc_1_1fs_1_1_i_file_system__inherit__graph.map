@@ -1,0 +1,5 @@
+<map id="tc::fs::IFileSystem" name="tc::fs::IFileSystem">
+<area shape="rect" id="node2" href="$classtc_1_1fs_1_1_generic_file_system.html" title="A realisation of IFileSystem that can be assigned (copy or move) the value of another IFileSystem obj..." alt="" coords="5,329,176,553"/>
+<area shape="rect" id="node3" href="$classtc_1_1fs_1_1_local_file_system.html" title="An IFileSystem wrapper around the existing OS FileSystem API. " alt="" coords="201,307,362,575"/>
+<area shape="rect" id="node4" href="$classtc_1_1fs_1_1_sandboxed_file_system.html" title="A wrapper around an existing IFileSystem object that exposes a subset of the wrapped IFileSystem dire..." alt="" coords="386,329,577,553"/>
+</map>

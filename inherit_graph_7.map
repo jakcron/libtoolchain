@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classtc_1_1fs_1_1_i_file_object.html" title="An interface for implementing a basic File handler. " alt="" coords="5,56,128,83"/>
+<area shape="rect" id="node2" href="$classtc_1_1fs_1_1_generic_file_object.html" title="A realisation of IFileObject that can be assigned (copy or move) the value of another IFileObject obj..." alt="" coords="185,5,349,32"/>
+<area shape="rect" id="node3" href="$classtc_1_1fs_1_1_local_file_object.html" title="An implementation of IFileObject as a wrapper to local OS file access functions. " alt="" coords="191,56,342,83"/>
+<area shape="rect" id="node4" href="$classtc_1_1fs_1_1_partitioned_file_object.html" title="A wrapper around an existing IFileObject object that exposes are partition (user specified offset &amp; s..." alt="" coords="176,107,357,133"/>
+</map>
