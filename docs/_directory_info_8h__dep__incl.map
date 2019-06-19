@@ -1,7 +1,0 @@
-<map id="tc/fs/DirectoryInfo.h" name="tc/fs/DirectoryInfo.h">
-<area shape="rect" id="node2" href="$_i_file_system_8h.html" title="Declaration of tc::fs::IFileSystem. " alt="" coords="204,80,337,107"/>
-<area shape="rect" id="node4" href="$fs_8h.html" title="Declaration of the filesystem library. " alt="" coords="241,229,300,256"/>
-<area shape="rect" id="node3" href="$_local_file_system_8h.html" title="Declaration of tc::fs::LocalFileSystem. " alt="" coords="5,155,165,181"/>
-<area shape="rect" id="node6" href="$_sandboxed_i_file_system_8h.html" title="Declaration of tc::fs::SandboxedIFileSystem. " alt="" coords="239,155,438,181"/>
-<area shape="rect" id="node5" href="$tc_8h.html" title="Declaration of the libtoolchain namespace. " alt="" coords="241,304,300,331"/>
-</map>
