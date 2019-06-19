@@ -5,9 +5,24 @@
 
 const std::string fs_SandboxedFileSystem_TestClass::DummyFileSystemBase::kClassName = "DummyFileSystemBase";
 
+void fs_SandboxedFileSystem_TestClass::runAllTests(void)
+{
+	std::cout << "[tc::fs::SandboxedFileSystem] START" << std::endl;
+	testSandboxRootPath();
+	testCreateFile();
+	testOpenFile();
+	testRemoveFile();
+	testCreateDirectory();
+	testRemoveDirectory();
+	testGetDirectoryListing();
+	testNavigateUpSandboxEscape();
+	testOpenFileOutsideSandbox();
+	std::cout << "[tc::fs::SandboxedFileSystem] END" << std::endl;
+}
+
 void fs_SandboxedFileSystem_TestClass::testSandboxRootPath()
 {
-	std::cout << "[tc::fs::SandboxedFileSystem] testSandboxRootPath : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testSandboxRootPath : " << std::flush;
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -69,7 +84,7 @@ void fs_SandboxedFileSystem_TestClass::testSandboxRootPath()
 
 void fs_SandboxedFileSystem_TestClass::testCreateFile()
 {
-	std::cout << "[tc::fs::SandboxedFileSystem] testCreateFile : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testCreateFile : " << std::flush;
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -130,7 +145,7 @@ void fs_SandboxedFileSystem_TestClass::testCreateFile()
 
 void fs_SandboxedFileSystem_TestClass::testOpenFile()
 {
-	std::cout << "[tc::fs::SandboxedFileSystem] testOpenFile : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testOpenFile : " << std::flush;
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -196,7 +211,7 @@ void fs_SandboxedFileSystem_TestClass::testOpenFile()
 
 void fs_SandboxedFileSystem_TestClass::testRemoveFile()
 {
-	std::cout << "[tc::fs::SandboxedFileSystem] testRemoveFile : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testRemoveFile : " << std::flush;
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -258,7 +273,7 @@ void fs_SandboxedFileSystem_TestClass::testRemoveFile()
 
 void fs_SandboxedFileSystem_TestClass::testCreateDirectory()
 {
-	std::cout << "[tc::fs::SandboxedFileSystem] testCreateDirectory : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testCreateDirectory : " << std::flush;
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -319,7 +334,7 @@ void fs_SandboxedFileSystem_TestClass::testCreateDirectory()
 
 void fs_SandboxedFileSystem_TestClass::testRemoveDirectory()
 {
-	std::cout << "[tc::fs::SandboxedFileSystem] testRemoveDirectory : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testRemoveDirectory : " << std::flush;
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -380,7 +395,7 @@ void fs_SandboxedFileSystem_TestClass::testRemoveDirectory()
 
 void fs_SandboxedFileSystem_TestClass::testGetDirectoryListing()
 {
-	std::cout << "[tc::fs::SandboxedFileSystem] testGetDirectoryListing : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testGetDirectoryListing : " << std::flush;
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -477,7 +492,7 @@ void fs_SandboxedFileSystem_TestClass::testGetDirectoryListing()
 
 void fs_SandboxedFileSystem_TestClass::testNavigateUpSandboxEscape()
 {
-	std::cout << "[tc::fs::SandboxedFileSystem] testNavigateUpSandboxEscape : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testNavigateUpSandboxEscape : " << std::flush;
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -556,7 +571,7 @@ void fs_SandboxedFileSystem_TestClass::testNavigateUpSandboxEscape()
 
 void fs_SandboxedFileSystem_TestClass::testOpenFileOutsideSandbox()
 {
-	std::cout << "[tc::fs::SandboxedFileSystem] testOpenFileOutsideSandbox : ";
+	std::cout << "[tc::fs::SandboxedFileSystem] testOpenFileOutsideSandbox : " << std::flush;
 	try
 	{
 		class DummyFileSystem : public DummyFileSystemBase
@@ -625,17 +640,4 @@ void fs_SandboxedFileSystem_TestClass::testOpenFileOutsideSandbox()
 	{
 		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
-}
-
-void fs_SandboxedFileSystem_TestClass::runAllTests(void)
-{
-	testSandboxRootPath();
-	testCreateFile();
-	testOpenFile();
-	testRemoveFile();
-	testCreateDirectory();
-	testRemoveDirectory();
-	testGetDirectoryListing();
-	testNavigateUpSandboxEscape();
-	testOpenFileOutsideSandbox();
 }

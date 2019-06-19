@@ -15,6 +15,7 @@ static std::string kRandomString = "uUkMx4MYhJdwUnr38Jk7nZvXQnW0IhGNQqjMRyKoRuxX
 
 void fs_LocalFileSystem_TestClass::runAllTests(void)
 {
+	std::cout << "[tc::fs::LocalFileSystem] START" << std::endl;
 	test_CreateFile_NotExist();
 	test_CreateFile_DoesExist();
 	test_CreateFile_UnicodePath();
@@ -46,11 +47,12 @@ void fs_LocalFileSystem_TestClass::runAllTests(void)
 	test_ChangeWorkingDirectory_DoesExist();
 	test_ChangeWorkingDirectory_NotExist();
 	test_ChangeWorkingDirectory_UnicodePath();
+	std::cout << "[tc::fs::LocalFileSystem] END" << std::endl;
 }
 
 void fs_LocalFileSystem_TestClass::test_CreateFile_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_CreateFile_NotExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_CreateFile_NotExist : " << std::flush;
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
@@ -67,7 +69,7 @@ void fs_LocalFileSystem_TestClass::test_CreateFile_NotExist()
 
 void fs_LocalFileSystem_TestClass::test_CreateFile_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_CreateFile_DoesExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_CreateFile_DoesExist : " << std::flush;
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
@@ -84,7 +86,7 @@ void fs_LocalFileSystem_TestClass::test_CreateFile_DoesExist()
 
 void fs_LocalFileSystem_TestClass::test_CreateFile_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_CreateFile_UnicodePath : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_CreateFile_UnicodePath : " << std::flush;
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
@@ -101,7 +103,7 @@ void fs_LocalFileSystem_TestClass::test_CreateFile_UnicodePath()
 
 void fs_LocalFileSystem_TestClass::test_RemoveFile_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveFile_DoesExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_RemoveFile_DoesExist : " << std::flush;
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
@@ -118,7 +120,7 @@ void fs_LocalFileSystem_TestClass::test_RemoveFile_DoesExist()
 
 void fs_LocalFileSystem_TestClass::test_RemoveFile_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveFile_NotExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_RemoveFile_NotExist : " << std::flush;
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
@@ -134,7 +136,7 @@ void fs_LocalFileSystem_TestClass::test_RemoveFile_NotExist()
 
 void fs_LocalFileSystem_TestClass::test_RemoveFile_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveFile_UnicodePath : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_RemoveFile_UnicodePath : " << std::flush;
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
@@ -151,7 +153,7 @@ void fs_LocalFileSystem_TestClass::test_RemoveFile_UnicodePath()
 
 void fs_LocalFileSystem_TestClass::test_OpenFileCreate_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileCreate_NotExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileCreate_NotExist : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -189,7 +191,7 @@ void fs_LocalFileSystem_TestClass::test_OpenFileCreate_NotExist()
 
 void fs_LocalFileSystem_TestClass::test_OpenFileCreate_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileCreate_DoesExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileCreate_DoesExist : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -229,7 +231,7 @@ void fs_LocalFileSystem_TestClass::test_OpenFileCreate_DoesExist()
 
 void fs_LocalFileSystem_TestClass::test_OpenFileRead_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_DoesExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_DoesExist : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -274,7 +276,7 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_DoesExist()
 
 void fs_LocalFileSystem_TestClass::test_OpenFileRead_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_NotExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_NotExist : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -292,7 +294,7 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_NotExist()
 
 void fs_LocalFileSystem_TestClass::test_OpenFileRead_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_UnicodePath : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_UnicodePath : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -337,7 +339,7 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_UnicodePath()
 
 void fs_LocalFileSystem_TestClass::test_OpenFileRead_TryWrite()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_TryWrite : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_TryWrite : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -373,7 +375,7 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_TryWrite()
 
 void fs_LocalFileSystem_TestClass::test_OpenFileRead_TryReadBeyondEnd()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_TryReadBeyondEnd : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_TryReadBeyondEnd : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -410,7 +412,7 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_TryReadBeyondEnd()
 
 void fs_LocalFileSystem_TestClass::test_OpenFileEdit_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileEdit_DoesExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileEdit_DoesExist : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -472,7 +474,7 @@ void fs_LocalFileSystem_TestClass::test_OpenFileEdit_DoesExist()
 
 void fs_LocalFileSystem_TestClass::test_OpenFileEdit_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileEdit_NotExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileEdit_NotExist : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -490,7 +492,7 @@ void fs_LocalFileSystem_TestClass::test_OpenFileEdit_NotExist()
 
 void fs_LocalFileSystem_TestClass::test_CreateDirectory_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_CreateDirectory_NotExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_CreateDirectory_NotExist : " << std::flush;
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
@@ -506,7 +508,7 @@ void fs_LocalFileSystem_TestClass::test_CreateDirectory_NotExist()
 
 void fs_LocalFileSystem_TestClass::test_CreateDirectory_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_CreateDirectory_DoesExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_CreateDirectory_DoesExist : " << std::flush;
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
@@ -522,7 +524,7 @@ void fs_LocalFileSystem_TestClass::test_CreateDirectory_DoesExist()
 
 void fs_LocalFileSystem_TestClass::test_CreateDirectory_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_CreateDirectory_UnicodePath : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_CreateDirectory_UnicodePath : " << std::flush;
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
@@ -538,7 +540,7 @@ void fs_LocalFileSystem_TestClass::test_CreateDirectory_UnicodePath()
 
 void fs_LocalFileSystem_TestClass::test_RemoveDirectory_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_DoesExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_DoesExist : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -554,7 +556,7 @@ void fs_LocalFileSystem_TestClass::test_RemoveDirectory_DoesExist()
 
 void fs_LocalFileSystem_TestClass::test_RemoveDirectory_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_NotExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_NotExist : " << std::flush;
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
@@ -570,7 +572,7 @@ void fs_LocalFileSystem_TestClass::test_RemoveDirectory_NotExist()
 
 void fs_LocalFileSystem_TestClass::test_RemoveDirectory_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_UnicodePath : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_UnicodePath : " << std::flush;
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
@@ -586,7 +588,7 @@ void fs_LocalFileSystem_TestClass::test_RemoveDirectory_UnicodePath()
 
 void fs_LocalFileSystem_TestClass::test_RemoveDirectory_HasChildren()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_HasChildren : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_HasChildren : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -619,7 +621,7 @@ void fs_LocalFileSystem_TestClass::test_RemoveDirectory_HasChildren()
 
 void fs_LocalFileSystem_TestClass::test_RemoveDirectory_NotDirectoryActuallyFile()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_NotDirectoryActuallyFile : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_NotDirectoryActuallyFile : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -644,7 +646,7 @@ void fs_LocalFileSystem_TestClass::test_RemoveDirectory_NotDirectoryActuallyFile
 
 void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_GetDirectoryListing_DoesExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_GetDirectoryListing_DoesExist : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -718,7 +720,7 @@ void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_DoesExist()
 
 void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_GetDirectoryListing_NotExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_GetDirectoryListing_NotExist : " << std::flush;
 	try 
 	{
 		tc::fs::LocalFileSystem fs;
@@ -735,7 +737,7 @@ void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_NotExist()
 
 void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_GetDirectoryListing_UnicodePath : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_GetDirectoryListing_UnicodePath : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -809,7 +811,7 @@ void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_UnicodePath()
 
 void fs_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_ChangeWorkingDirectory_DoesExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_ChangeWorkingDirectory_DoesExist : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -839,7 +841,7 @@ void fs_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_DoesExist()
 
 void fs_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_ChangeWorkingDirectory_NotExist : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_ChangeWorkingDirectory_NotExist : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;
@@ -855,7 +857,7 @@ void fs_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_NotExist()
 
 void fs_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_ChangeWorkingDirectory_UnicodePath : ";
+	std::cout << "[tc::fs::LocalFileSystem] test_ChangeWorkingDirectory_UnicodePath : " << std::flush;
 	try
 	{
 		tc::fs::LocalFileSystem fs;

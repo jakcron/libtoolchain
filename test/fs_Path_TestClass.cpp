@@ -8,6 +8,7 @@
 
 void fs_Path_TestClass::runAllTests(void)
 {
+	std::cout << "[tc::fs::Path] START" << std::endl;
 	test_Constructor_Default();
 	testPathComposition("test_PathComposition_EmptyPath", "", 0, UNIX_PATH);
 	testPathComposition("test_PathComposition_RootPath", "/", 1, UNIX_PATH);
@@ -25,6 +26,7 @@ void fs_Path_TestClass::runAllTests(void)
 	test_Scenario_AppendStressTest();
 	test_Operator_EqualityTest();
 	test_Operator_InequalityTest();
+	std::cout << "[tc::fs::Path] END" << std::endl;
 }
 
 //---------------------------------------------------------
@@ -73,7 +75,7 @@ void fs_Path_TestClass::pathToWindowsUtf8(const tc::fs::Path& path, std::string&
 
 void fs_Path_TestClass::testPathComposition(const std::string& test_name, const std::string& raw_path, const std::string& expected_path, size_t expected_element_count, PathType path_type)
 {
-	std::cout << "[tc::fs::Path] " << test_name << " : ";
+	std::cout << "[tc::fs::Path] " << test_name << " : " << std::flush;
 	try
 	{
 		tc::fs::Path path(raw_path);
@@ -111,7 +113,7 @@ void fs_Path_TestClass::testPathComposition(const std::string& test_name, const 
 
 void fs_Path_TestClass::test_Constructor_Default()
 {
-	std::cout << "[tc::fs::Path] test_Constructor_Default : ";
+	std::cout << "[tc::fs::Path] test_Constructor_Default : " << std::flush;
 	try
 	{
 		tc::fs::Path path_empty;
@@ -136,7 +138,7 @@ void fs_Path_TestClass::test_Constructor_Default()
 
 void fs_Path_TestClass::test_Method_pop_front()
 {
-	std::cout << "[tc::fs::Path] test_Method_pop_front : ";
+	std::cout << "[tc::fs::Path] test_Method_pop_front : " << std::flush;
 	try
 	{
 		tc::fs::Path path("a/b/c/d/e/f/g/h/i/j");
@@ -160,7 +162,7 @@ void fs_Path_TestClass::test_Method_pop_front()
 
 void fs_Path_TestClass::test_Method_pop_back()
 {
-	std::cout << "[tc::fs::Path] test_Method_pop_back : ";
+	std::cout << "[tc::fs::Path] test_Method_pop_back : " << std::flush;
 	try
 	{
 		tc::fs::Path path("a/b/c/d/e/f/g/h/i/j");
@@ -184,7 +186,7 @@ void fs_Path_TestClass::test_Method_pop_back()
 
 void fs_Path_TestClass::test_Method_push_front()
 {
-	std::cout << "[tc::fs::Path] test_Method_push_front : ";
+	std::cout << "[tc::fs::Path] test_Method_push_front : " << std::flush;
 	try
 	{
 		tc::fs::Path path("");
@@ -212,7 +214,7 @@ void fs_Path_TestClass::test_Method_push_front()
 
 void fs_Path_TestClass::test_Method_push_back()
 {
-	std::cout << "[tc::fs::Path] test_Method_push_back : ";
+	std::cout << "[tc::fs::Path] test_Method_push_back : " << std::flush;
 	try
 	{
 		tc::fs::Path path("");
@@ -240,7 +242,7 @@ void fs_Path_TestClass::test_Method_push_back()
 
 void fs_Path_TestClass::test_Method_clear()
 {
-	std::cout << "[tc::fs::Path] test_Method_clear : ";
+	std::cout << "[tc::fs::Path] test_Method_clear : " << std::flush;
 	try
 	{
 		tc::fs::Path path("a/b/c/d/e/f/g/h/i/j");
@@ -267,7 +269,7 @@ void fs_Path_TestClass::test_Method_clear()
 
 void fs_Path_TestClass::test_Operator_Addition()
 {
-	std::cout << "[tc::fs::Path] test_Operator_Addition : ";
+	std::cout << "[tc::fs::Path] test_Operator_Addition : " << std::flush;
 	try
 	{
 		const std::string raw_path_a = "foo/bar/";
@@ -296,7 +298,7 @@ void fs_Path_TestClass::test_Operator_Addition()
 
 void fs_Path_TestClass::test_Operator_Append()
 {
-	std::cout << "[tc::fs::Path] test_Operator_Append : ";
+	std::cout << "[tc::fs::Path] test_Operator_Append : " << std::flush;
 	try
 	{
 		const std::string raw_path_a = "foo/bar/";
@@ -325,7 +327,7 @@ void fs_Path_TestClass::test_Operator_Append()
 
 void fs_Path_TestClass::test_Scenario_AppendStressTest()
 {
-	std::cout << "[tc::fs::Path] test_Scenario_AppendStressTest : ";
+	std::cout << "[tc::fs::Path] test_Scenario_AppendStressTest : " << std::flush;
 	try
 	{
 		const std::string raw_dir_path = "foo/bar/";
@@ -372,7 +374,7 @@ void fs_Path_TestClass::test_Scenario_AppendStressTest()
 
 void fs_Path_TestClass::test_Operator_EqualityTest()
 {
-	std::cout << "[tc::fs::Path] test_Operator_EqualityTest : ";
+	std::cout << "[tc::fs::Path] test_Operator_EqualityTest : " << std::flush;
 	try
 	{
 		std::string raw_path_0 = "a directory/a subdirectory";
@@ -393,7 +395,7 @@ void fs_Path_TestClass::test_Operator_EqualityTest()
 
 void fs_Path_TestClass::test_Operator_InequalityTest()
 {
-	std::cout << "[tc::fs::Path] test_Operator_InequalityTest : ";
+	std::cout << "[tc::fs::Path] test_Operator_InequalityTest : " << std::flush;
 	try
 	{
 		std::string raw_path_0 = "a directory/a subdirectory";

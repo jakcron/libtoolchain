@@ -8,6 +8,7 @@
 
 void fs_GenericFileObject_TestClass::runAllTests()
 {
+	std::cout << "[tc::fs::GenericFileObject] START" << std::endl;
 	test_DefaultConstructor_IsNull();
 	test_GenericCopyConstructor();
 	test_GenericMoveConstructor();
@@ -17,11 +18,12 @@ void fs_GenericFileObject_TestClass::runAllTests()
 	test_MoveOperator();
 	test_Generic_Passthrough();
 	test_Close();
+	std::cout << "[tc::fs::GenericFileObject] END" << std::endl;
 }
 
 void fs_GenericFileObject_TestClass::test_DefaultConstructor_IsNull()
 {
-	std::cout << "[tc::fs::GenericFileObject] test_DefaultConstructor_IsNull : ";
+	std::cout << "[tc::fs::GenericFileObject] test_DefaultConstructor_IsNull : " << std::flush;
 	try
 	{
 		bool threwException = false;
@@ -139,7 +141,7 @@ void fs_GenericFileObject_TestClass::test_GenericCopyConstructor()
 		uint64_t mSize;
 	};
 
-	std::cout << "[tc::fs::GenericFileObject] test_GenericCopyConstructor : ";
+	std::cout << "[tc::fs::GenericFileObject] test_GenericCopyConstructor : " << std::flush;
 	try
 	{
 		static const uint64_t kTestVal = 1337;
@@ -216,7 +218,7 @@ void fs_GenericFileObject_TestClass::test_GenericMoveConstructor()
 		uint64_t mSize;
 	};
 
-	std::cout << "[tc::fs::GenericFileObject] test_GenericMoveConstructor : ";
+	std::cout << "[tc::fs::GenericFileObject] test_GenericMoveConstructor : " << std::flush;
 	try
 	{
 		static const uint64_t kTestVal = 1337;
@@ -293,7 +295,7 @@ void fs_GenericFileObject_TestClass::test_CopyConstructor()
 		uint64_t mSize;
 	};
 
-	std::cout << "[tc::fs::GenericFileObject] test_CopyConstructor : ";
+	std::cout << "[tc::fs::GenericFileObject] test_CopyConstructor : " << std::flush;
 	try
 	{
 		static const uint64_t kTestVal = 1337;
@@ -376,7 +378,7 @@ void fs_GenericFileObject_TestClass::test_MoveConstructor()
 		uint64_t mSize;
 	};
 
-	std::cout << "[tc::fs::GenericFileObject] test_MoveConstructor : ";
+	std::cout << "[tc::fs::GenericFileObject] test_MoveConstructor : " << std::flush;
 	try
 	{
 		static const uint64_t kTestVal = 1337;
@@ -454,7 +456,7 @@ void fs_GenericFileObject_TestClass::test_CopyOperator()
 		uint64_t mSize;
 	};
 
-	std::cout << "[tc::fs::GenericFileObject] test_CopyOperator : ";
+	std::cout << "[tc::fs::GenericFileObject] test_CopyOperator : " << std::flush;
 	try
 	{
 		static const uint64_t kTestVal = 1337;
@@ -538,7 +540,7 @@ void fs_GenericFileObject_TestClass::test_MoveOperator()
 		uint64_t mSize;
 	};
 
-	std::cout << "[tc::fs::GenericFileObject] test_MoveOperator : ";
+	std::cout << "[tc::fs::GenericFileObject] test_MoveOperator : " << std::flush;
 	try
 	{
 		static const uint64_t kTestVal = 1337;
@@ -649,7 +651,7 @@ void fs_GenericFileObject_TestClass::test_Generic_Passthrough()
 		tc::ResourceState mState;
 	};
 
-	std::cout << "[tc::fs::GenericFileObject] test_Generic_Passthrough : ";
+	std::cout << "[tc::fs::GenericFileObject] test_Generic_Passthrough : " << std::flush;
 	try
 	{
 		tc::fs::GenericFileObject file(std::move(DummyFile()));
@@ -722,7 +724,7 @@ void fs_GenericFileObject_TestClass::test_Close()
 		uint64_t mSize;
 	};
 
-	std::cout << "[tc::fs::GenericFileObject] test_Close : ";
+	std::cout << "[tc::fs::GenericFileObject] test_Close : " << std::flush;
 	try
 	{
 		static const uint64_t kTestVal = 1337;

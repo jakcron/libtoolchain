@@ -8,6 +8,7 @@
 
 void fs_GenericFileSystem_TestClass::runAllTests()
 {
+	std::cout << "[tc::fs::GenericFileSystem] START" << std::endl;
 	test_DefaultConstructor_IsNull();
 	test_GenericCopyConstructor();
 	test_GenericMoveConstructor();
@@ -17,11 +18,12 @@ void fs_GenericFileSystem_TestClass::runAllTests()
 	test_MoveOperator();
 	test_Generic_Passthrough();
 	test_Close();
+	std::cout << "[tc::fs::GenericFileSystem] END" << std::endl;
 }
 
 void fs_GenericFileSystem_TestClass::test_DefaultConstructor_IsNull()
 {
-	std::cout << "[tc::fs::GenericFileSystem] test_DefaultConstructor_IsNull : ";
+	std::cout << "[tc::fs::GenericFileSystem] test_DefaultConstructor_IsNull : " << std::flush;
 	try
 	{
 		bool threwException = false;
@@ -172,7 +174,7 @@ void fs_GenericFileSystem_TestClass::test_GenericCopyConstructor()
 		tc::fs::Path mPath;
 	};
 
-	std::cout << "[tc::fs::GenericFileSystem] test_GenericCopyConstructor : ";
+	std::cout << "[tc::fs::GenericFileSystem] test_GenericCopyConstructor : " << std::flush;
 	try
 	{
 		tc::fs::Path working_dir;
@@ -254,7 +256,7 @@ void fs_GenericFileSystem_TestClass::test_GenericMoveConstructor()
 		tc::fs::Path mPath;
 	};
 
-	std::cout << "[tc::fs::GenericFileSystem] test_GenericMoveConstructor : ";
+	std::cout << "[tc::fs::GenericFileSystem] test_GenericMoveConstructor : " << std::flush;
 	try
 	{
 		tc::fs::Path working_dir;
@@ -336,7 +338,7 @@ void fs_GenericFileSystem_TestClass::test_CopyConstructor()
 		tc::fs::Path mPath;
 	};
 
-	std::cout << "[tc::fs::GenericFileSystem] test_GenericCopyConstructor : ";
+	std::cout << "[tc::fs::GenericFileSystem] test_GenericCopyConstructor : " << std::flush;
 	try
 	{
 		tc::fs::Path working_dir;
@@ -434,7 +436,7 @@ void fs_GenericFileSystem_TestClass::test_MoveConstructor()
 		tc::fs::Path mPath;
 	};
 
-	std::cout << "[tc::fs::GenericFileSystem] test_GenericCopyConstructor : ";
+	std::cout << "[tc::fs::GenericFileSystem] test_GenericCopyConstructor : " << std::flush;
 	try
 	{
 		tc::fs::Path working_dir;
@@ -525,7 +527,7 @@ void fs_GenericFileSystem_TestClass::test_CopyOperator()
 		tc::fs::Path mPath;
 	};
 
-	std::cout << "[tc::fs::GenericFileSystem] test_GenericCopyOperator : ";
+	std::cout << "[tc::fs::GenericFileSystem] test_GenericCopyOperator : " << std::flush;
 	try
 	{
 		tc::fs::Path working_dir;
@@ -624,7 +626,7 @@ void fs_GenericFileSystem_TestClass::test_MoveOperator()
 		tc::fs::Path mPath;
 	};
 
-	std::cout << "[tc::fs::GenericFileSystem] test_GenericMoveOperator : ";
+	std::cout << "[tc::fs::GenericFileSystem] test_GenericMoveOperator : " << std::flush;
 	try
 	{
 		tc::fs::Path working_dir;
@@ -832,7 +834,7 @@ void fs_GenericFileSystem_TestClass::test_Generic_Passthrough()
 		tc::ResourceState mState;
 	};
 
-	std::cout << "[tc::fs::GenericFileSystem] test_Generic_Passthrough : ";
+	std::cout << "[tc::fs::GenericFileSystem] test_Generic_Passthrough : " << std::flush;
 	try
 	{
 		tc::fs::GenericFileSystem fs(std::move(DummyFileSystem()));
@@ -905,7 +907,7 @@ void fs_GenericFileSystem_TestClass::test_Close()
 		tc::fs::Path mPath;
 	};
 
-	std::cout << "[tc::fs::GenericFileSystem] test_Close : ";
+	std::cout << "[tc::fs::GenericFileSystem] test_Close : " << std::flush;
 	try
 	{
 		tc::fs::Path working_dir;

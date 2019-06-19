@@ -3,9 +3,46 @@
 
 #include "SharedPtr_TestClass.h"
 
+void SharedPtr_TestClass::runAllTests(void)
+{
+	std::cout << "[tc::SharedPtr] START" << std::endl;
+	testDefaultConstructor();
+	testPrimPtrConstructor();
+	testPrimPtrAssignmentOperator();
+	testPrimPtrCopyConstructor();
+	testPrimPtrCopyOperator();
+	testStructPtrConstructor();
+	testStructPtrAssignmentOperator();
+	testStructPtrCopyConstructor();
+	testStructPtrCopyOperator();
+	testPrimArrayPtrConstructor();
+	testPrimArrayPtrAssignmentOperator();
+	testPrimArrayPtrCopyConstructor();
+	testPrimArrayPtrCopyOperator();
+	testArrayStructPtrConstructor();
+	testStructArrayPtrAssignmentOperator();
+	testStructArrayPtrCopyConstructor();
+	testStructArrayPtrCopyOperator();
+	testNullPtrConstructor();
+	testNullPtrAssignmentOperator();
+	testNullPtrCopyConstructor();
+	testNullPtrCopyOperator();
+	testRepeatedAssignment();
+	testReleasePtr();
+	testReleaseNullPtr();
+	testDereferenceOperator();
+	testMemberAccessOperator();
+	testGetMethod();
+	testIsNullMethod();
+	testChildDestructorCalledOnPtrRelease();
+	testChildDestructorCalledOnSharedPtrDestructor();
+	testLargeReferenceCount();
+	std::cout << "[tc::SharedPtr] START" << std::endl;
+}
+
 void SharedPtr_TestClass::testDefaultConstructor()
 {
-	std::cout << "[tc::SharedPtr] testDefaultConstructor : ";
+	std::cout << "[tc::SharedPtr] testDefaultConstructor : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -24,7 +61,7 @@ void SharedPtr_TestClass::testDefaultConstructor()
 
 void SharedPtr_TestClass::testPrimPtrConstructor()
 {
-	std::cout << "[tc::SharedPtr] testPrimPtrConstructor : ";
+	std::cout << "[tc::SharedPtr] testPrimPtrConstructor : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -43,7 +80,7 @@ void SharedPtr_TestClass::testPrimPtrConstructor()
 
 void SharedPtr_TestClass::testPrimPtrAssignmentOperator()
 {
-	std::cout << "[tc::SharedPtr] testPrimPtrAssignmentOperator : ";
+	std::cout << "[tc::SharedPtr] testPrimPtrAssignmentOperator : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -62,7 +99,7 @@ void SharedPtr_TestClass::testPrimPtrAssignmentOperator()
 
 void SharedPtr_TestClass::testPrimPtrCopyConstructor()
 {
-	std::cout << "[tc::SharedPtr] testPrimPtrCopyConstructor : ";
+	std::cout << "[tc::SharedPtr] testPrimPtrCopyConstructor : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -82,7 +119,7 @@ void SharedPtr_TestClass::testPrimPtrCopyConstructor()
 
 void SharedPtr_TestClass::testPrimPtrCopyOperator()
 {
-	std::cout << "[tc::SharedPtr] testPrimPtrCopyOperator : ";
+	std::cout << "[tc::SharedPtr] testPrimPtrCopyOperator : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -102,7 +139,7 @@ void SharedPtr_TestClass::testPrimPtrCopyOperator()
 
 void SharedPtr_TestClass::testStructPtrConstructor()
 {
-	std::cout << "[tc::SharedPtr] testStructPtrConstructor : ";
+	std::cout << "[tc::SharedPtr] testStructPtrConstructor : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -128,7 +165,7 @@ void SharedPtr_TestClass::testStructPtrConstructor()
 
 void SharedPtr_TestClass::testStructPtrAssignmentOperator()
 {
-	std::cout << "[tc::SharedPtr] testStructPtrAssignmentOperator : ";
+	std::cout << "[tc::SharedPtr] testStructPtrAssignmentOperator : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -154,7 +191,7 @@ void SharedPtr_TestClass::testStructPtrAssignmentOperator()
 
 void SharedPtr_TestClass::testStructPtrCopyConstructor()
 {
-	std::cout << "[tc::SharedPtr] testStructPtrCopyConstructor : ";
+	std::cout << "[tc::SharedPtr] testStructPtrCopyConstructor : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -181,7 +218,7 @@ void SharedPtr_TestClass::testStructPtrCopyConstructor()
 
 void SharedPtr_TestClass::testStructPtrCopyOperator()
 {
-	std::cout << "[tc::SharedPtr] testStructPtrCopyOperator : ";
+	std::cout << "[tc::SharedPtr] testStructPtrCopyOperator : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -209,7 +246,7 @@ void SharedPtr_TestClass::testStructPtrCopyOperator()
 
 void SharedPtr_TestClass::testPrimArrayPtrConstructor()
 {
-	std::cout << "[tc::SharedPtr] testPrimArrayPtrConstructor : ";
+	std::cout << "[tc::SharedPtr] testPrimArrayPtrConstructor : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -228,7 +265,7 @@ void SharedPtr_TestClass::testPrimArrayPtrConstructor()
 
 void SharedPtr_TestClass::testPrimArrayPtrAssignmentOperator()
 {
-	std::cout << "[tc::SharedPtr] testPrimArrayPtrAssignmentOperator : ";
+	std::cout << "[tc::SharedPtr] testPrimArrayPtrAssignmentOperator : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -247,7 +284,7 @@ void SharedPtr_TestClass::testPrimArrayPtrAssignmentOperator()
 
 void SharedPtr_TestClass::testPrimArrayPtrCopyConstructor()
 {
-	std::cout << "[tc::SharedPtr] testPrimArrayPtrCopyConstructor : ";
+	std::cout << "[tc::SharedPtr] testPrimArrayPtrCopyConstructor : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -267,7 +304,7 @@ void SharedPtr_TestClass::testPrimArrayPtrCopyConstructor()
 
 void SharedPtr_TestClass::testPrimArrayPtrCopyOperator()
 {
-	std::cout << "[tc::SharedPtr] testPrimArrayPtrCopyOperator : ";
+	std::cout << "[tc::SharedPtr] testPrimArrayPtrCopyOperator : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -287,7 +324,7 @@ void SharedPtr_TestClass::testPrimArrayPtrCopyOperator()
 
 void SharedPtr_TestClass::testArrayStructPtrConstructor()
 {
-	std::cout << "[tc::SharedPtr] testArrayStructPtrConstructor : ";
+	std::cout << "[tc::SharedPtr] testArrayStructPtrConstructor : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -313,7 +350,7 @@ void SharedPtr_TestClass::testArrayStructPtrConstructor()
 
 void SharedPtr_TestClass::testStructArrayPtrAssignmentOperator()
 {
-	std::cout << "[tc::SharedPtr] testStructArrayPtrAssignmentOperator : ";
+	std::cout << "[tc::SharedPtr] testStructArrayPtrAssignmentOperator : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -339,7 +376,7 @@ void SharedPtr_TestClass::testStructArrayPtrAssignmentOperator()
 
 void SharedPtr_TestClass::testStructArrayPtrCopyConstructor()
 {
-	std::cout << "[tc::SharedPtr] testStructArrayPtrCopyConstructor : ";
+	std::cout << "[tc::SharedPtr] testStructArrayPtrCopyConstructor : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -366,7 +403,7 @@ void SharedPtr_TestClass::testStructArrayPtrCopyConstructor()
 
 void SharedPtr_TestClass::testStructArrayPtrCopyOperator()
 {
-	std::cout << "[tc::SharedPtr] testStructArrayPtrCopyOperator : ";
+	std::cout << "[tc::SharedPtr] testStructArrayPtrCopyOperator : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -393,7 +430,7 @@ void SharedPtr_TestClass::testStructArrayPtrCopyOperator()
 
 void SharedPtr_TestClass::testNullPtrConstructor()
 {
-	std::cout << "[tc::SharedPtr] testNullPtrConstructor : ";
+	std::cout << "[tc::SharedPtr] testNullPtrConstructor : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -412,7 +449,7 @@ void SharedPtr_TestClass::testNullPtrConstructor()
 
 void SharedPtr_TestClass::testNullPtrAssignmentOperator()
 {
-	std::cout << "[tc::SharedPtr] testNullPtrAssignmentOperator : ";
+	std::cout << "[tc::SharedPtr] testNullPtrAssignmentOperator : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -431,7 +468,7 @@ void SharedPtr_TestClass::testNullPtrAssignmentOperator()
 
 void SharedPtr_TestClass::testNullPtrCopyConstructor()
 {
-	std::cout << "[tc::SharedPtr] testNullPtrCopyConstructor : ";
+	std::cout << "[tc::SharedPtr] testNullPtrCopyConstructor : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -452,7 +489,7 @@ void SharedPtr_TestClass::testNullPtrCopyConstructor()
 
 void SharedPtr_TestClass::testNullPtrCopyOperator()
 {
-	std::cout << "[tc::SharedPtr] testNullPtrCopyOperator : ";
+	std::cout << "[tc::SharedPtr] testNullPtrCopyOperator : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -472,7 +509,7 @@ void SharedPtr_TestClass::testNullPtrCopyOperator()
 
 void SharedPtr_TestClass::testRepeatedAssignment()
 {
-	std::cout << "[tc::SharedPtr] testRepeatedAssignment : ";
+	std::cout << "[tc::SharedPtr] testRepeatedAssignment : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -500,7 +537,7 @@ void SharedPtr_TestClass::testRepeatedAssignment()
 
 void SharedPtr_TestClass::testReleasePtr()
 {
-	std::cout << "[tc::SharedPtr] testReleasePtr : ";
+	std::cout << "[tc::SharedPtr] testReleasePtr : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -520,7 +557,7 @@ void SharedPtr_TestClass::testReleasePtr()
 
 void SharedPtr_TestClass::testReleaseNullPtr()
 {
-	std::cout << "[tc::SharedPtr] testReleaseNullPtr : ";
+	std::cout << "[tc::SharedPtr] testReleaseNullPtr : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -540,7 +577,7 @@ void SharedPtr_TestClass::testReleaseNullPtr()
 
 void SharedPtr_TestClass::testDereferenceOperator()
 {
-	std::cout << "[tc::SharedPtr] testDereferenceOperator : ";
+	std::cout << "[tc::SharedPtr] testDereferenceOperator : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -565,7 +602,7 @@ void SharedPtr_TestClass::testDereferenceOperator()
 
 void SharedPtr_TestClass::testMemberAccessOperator()
 {
-	std::cout << "[tc::SharedPtr] testMemberAccessOperator : ";
+	std::cout << "[tc::SharedPtr] testMemberAccessOperator : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -597,7 +634,7 @@ void SharedPtr_TestClass::testMemberAccessOperator()
 
 void SharedPtr_TestClass::testGetMethod()
 {
-	std::cout << "[tc::SharedPtr] testGetMethod : ";
+	std::cout << "[tc::SharedPtr] testGetMethod : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -630,7 +667,7 @@ void SharedPtr_TestClass::testGetMethod()
 
 void SharedPtr_TestClass::testIsNullMethod()
 {
-	std::cout << "[tc::SharedPtr] testIsNullMethod : ";
+	std::cout << "[tc::SharedPtr] testIsNullMethod : " << std::flush;
 	try
 	{
 		tc::SharedPtr<int> foo = nullptr;
@@ -657,7 +694,7 @@ void SharedPtr_TestClass::testIsNullMethod()
 
 void SharedPtr_TestClass::testChildDestructorCalledOnPtrRelease()
 {
-	std::cout << "[tc::SharedPtr] testChildDestructorCalledOnPtrRelease : ";
+	std::cout << "[tc::SharedPtr] testChildDestructorCalledOnPtrRelease : " << std::flush;
 	class DummyClass
 	{
 	public:
@@ -697,7 +734,7 @@ void SharedPtr_TestClass::testChildDestructorCalledOnPtrRelease()
 
 void SharedPtr_TestClass::testChildDestructorCalledOnSharedPtrDestructor()
 {
-	std::cout << "[tc::SharedPtr] testChildDestructorCalledOnSharedPtrDestructor : ";
+	std::cout << "[tc::SharedPtr] testChildDestructorCalledOnSharedPtrDestructor : " << std::flush;
 	class DummyClass
 	{
 	public:
@@ -739,7 +776,7 @@ void SharedPtr_TestClass::testChildDestructorCalledOnSharedPtrDestructor()
 
 void SharedPtr_TestClass::testLargeReferenceCount()
 {
-	std::cout << "[tc::SharedPtr] testLargeReferenceCount : ";
+	std::cout << "[tc::SharedPtr] testLargeReferenceCount : " << std::flush;
 	class DummyClass
 	{
 	public:
@@ -794,39 +831,4 @@ void SharedPtr_TestClass::testLargeReferenceCount()
 	{
 		std::cout << "FAIL (" << e.what() << ")" << std::endl;
 	}
-}
-
-void SharedPtr_TestClass::runAllTests(void)
-{
-	testDefaultConstructor();
-	testPrimPtrConstructor();
-	testPrimPtrAssignmentOperator();
-	testPrimPtrCopyConstructor();
-	testPrimPtrCopyOperator();
-	testStructPtrConstructor();
-	testStructPtrAssignmentOperator();
-	testStructPtrCopyConstructor();
-	testStructPtrCopyOperator();
-	testPrimArrayPtrConstructor();
-	testPrimArrayPtrAssignmentOperator();
-	testPrimArrayPtrCopyConstructor();
-	testPrimArrayPtrCopyOperator();
-	testArrayStructPtrConstructor();
-	testStructArrayPtrAssignmentOperator();
-	testStructArrayPtrCopyConstructor();
-	testStructArrayPtrCopyOperator();
-	testNullPtrConstructor();
-	testNullPtrAssignmentOperator();
-	testNullPtrCopyConstructor();
-	testNullPtrCopyOperator();
-	testRepeatedAssignment();
-	testReleasePtr();
-	testReleaseNullPtr();
-	testDereferenceOperator();
-	testMemberAccessOperator();
-	testGetMethod();
-	testIsNullMethod();
-	testChildDestructorCalledOnPtrRelease();
-	testChildDestructorCalledOnSharedPtrDestructor();
-	testLargeReferenceCount();
 }

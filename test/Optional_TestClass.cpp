@@ -3,9 +3,24 @@
 
 #include "Optional_TestClass.h"
 
+void Optional_TestClass::runAllTests()
+{
+	std::cout << "[tc::Optional] START" << std::endl;
+	testDefaultConstructor();
+	testWrapConstructor();
+	testCopyConstructorFromNullOptional();
+	testCopyConstructorFromExistingOptional();
+	testWrapOperator();
+	testCopyOperatorFromNullOptional();
+	testCopyOperatorFromExistingOptional();
+	testMakeNullOnNullOptional();
+	testMakeNullOnExistingOptional();
+	std::cout << "[tc::Optional] END" << std::endl;
+}
+
 void Optional_TestClass::testDefaultConstructor()
 {
-	std::cout << "[tc::Optional] testDefaultConstructor : ";
+	std::cout << "[tc::Optional] testDefaultConstructor : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -30,7 +45,7 @@ void Optional_TestClass::testDefaultConstructor()
 
 void Optional_TestClass::testWrapConstructor()
 {
-	std::cout << "[tc::Optional] testWrapConstructor : ";
+	std::cout << "[tc::Optional] testWrapConstructor : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -61,7 +76,7 @@ void Optional_TestClass::testWrapConstructor()
 
 void Optional_TestClass::testCopyConstructorFromNullOptional()
 {
-	std::cout << "[tc::Optional] testCopyConstructorFromNullOptional : ";
+	std::cout << "[tc::Optional] testCopyConstructorFromNullOptional : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -86,7 +101,7 @@ void Optional_TestClass::testCopyConstructorFromNullOptional()
 
 void Optional_TestClass::testCopyConstructorFromExistingOptional()
 {
-	std::cout << "[tc::Optional] testCopyConstructorFromExistingOptional : ";
+	std::cout << "[tc::Optional] testCopyConstructorFromExistingOptional : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -118,7 +133,7 @@ void Optional_TestClass::testCopyConstructorFromExistingOptional()
 
 void Optional_TestClass::testWrapOperator()
 {
-	std::cout << "[tc::Optional] testWrapOperator : ";
+	std::cout << "[tc::Optional] testWrapOperator : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -151,7 +166,7 @@ void Optional_TestClass::testWrapOperator()
 
 void Optional_TestClass::testCopyOperatorFromNullOptional()
 {
-	std::cout << "[tc::Optional] testCopyOperatorFromNullOptional : ";
+	std::cout << "[tc::Optional] testCopyOperatorFromNullOptional : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -176,7 +191,7 @@ void Optional_TestClass::testCopyOperatorFromNullOptional()
 
 void Optional_TestClass::testCopyOperatorFromExistingOptional()
 {
-	std::cout << "[tc::Optional] testCopyOperatorFromExistingOptional : ";
+	std::cout << "[tc::Optional] testCopyOperatorFromExistingOptional : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -208,7 +223,7 @@ void Optional_TestClass::testCopyOperatorFromExistingOptional()
 
 void Optional_TestClass::testMakeNullOnNullOptional()
 {
-	std::cout << "[tc::Optional] testMakeNullOnNullOptional : ";
+	std::cout << "[tc::Optional] testMakeNullOnNullOptional : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -234,7 +249,7 @@ void Optional_TestClass::testMakeNullOnNullOptional()
 
 void Optional_TestClass::testMakeNullOnExistingOptional()
 {
-	std::cout << "[tc::Optional] testMakeNullOnExistingOptional : ";
+	std::cout << "[tc::Optional] testMakeNullOnExistingOptional : " << std::flush;
 	try
 	{
 		// if statement so that foo is out of scope so it can be created and destroyed implicitly
@@ -258,17 +273,4 @@ void Optional_TestClass::testMakeNullOnExistingOptional()
 	{
 		std::cout << "FAIL (" << e.what() << ")" << std::endl;
 	}
-}
-
-void Optional_TestClass::runAllTests()
-{
-	testDefaultConstructor();
-	testWrapConstructor();
-	testCopyConstructorFromNullOptional();
-	testCopyConstructorFromExistingOptional();
-	testWrapOperator();
-	testCopyOperatorFromNullOptional();
-	testCopyOperatorFromExistingOptional();
-	testMakeNullOnNullOptional();
-	testMakeNullOnExistingOptional();
 }
