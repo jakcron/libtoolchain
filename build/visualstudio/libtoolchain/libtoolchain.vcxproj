@@ -126,18 +126,19 @@
     <ClInclude Include="..\..\..\include\tc\fs\GenericFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\fs\IFileObject.h" />
     <ClInclude Include="..\..\..\include\tc\fs\IFileSystem.h" />
+    <ClInclude Include="..\..\..\include\tc\fs\LocalFileObject.h" />
     <ClInclude Include="..\..\..\include\tc\fs\LocalFileSystem.h" />
-    <ClInclude Include="..\..\..\include\tc\fs\Path.h" />
     <ClInclude Include="..\..\..\include\tc\fs\PartitionedFileObject.h" />
+    <ClInclude Include="..\..\..\include\tc\fs\Path.h" />
+    <ClInclude Include="..\..\..\include\tc\fs\PathUtils.h" />
     <ClInclude Include="..\..\..\include\tc\fs\SandboxedFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\Optional.h" />
+    <ClInclude Include="..\..\..\include\tc\ResourceState.h" />
     <ClInclude Include="..\..\..\include\tc\SharedPtr.h" />
     <ClInclude Include="..\..\..\include\tc\string.h" />
     <ClInclude Include="..\..\..\include\tc\string\transcode.h" />
     <ClInclude Include="..\..\..\include\tc\tc.h" />
     <ClInclude Include="..\..\..\include\tc\types.h" />
-    <ClInclude Include="..\..\..\src\fs\LocalFileHandle.h" />
-    <ClInclude Include="..\..\..\src\fs\LocalFileObject.h" />
     <ClInclude Include="..\..\..\src\string\utf16.h" />
     <ClInclude Include="..\..\..\src\string\utf8.h" />
   </ItemGroup>
@@ -145,11 +146,11 @@
     <ClCompile Include="..\..\..\src\Exception.cpp" />
     <ClCompile Include="..\..\..\src\fs\GenericFileObject.cpp" />
     <ClCompile Include="..\..\..\src\fs\GenericFileSystem.cpp" />
-    <ClCompile Include="..\..\..\src\fs\LocalFileHandle.cpp" />
     <ClCompile Include="..\..\..\src\fs\LocalFileObject.cpp" />
     <ClCompile Include="..\..\..\src\fs\LocalFileSystem.cpp" />
-    <ClCompile Include="..\..\..\src\fs\Path.cpp" />
     <ClCompile Include="..\..\..\src\fs\PartitionedFileObject.cpp" />
+    <ClCompile Include="..\..\..\src\fs\Path.cpp" />
+    <ClCompile Include="..\..\..\src\fs\PathUtils.cpp" />
     <ClCompile Include="..\..\..\src\fs\SandboxedFileSystem.cpp" />
     <ClCompile Include="..\..\..\src\string\transcode.cpp" />
   </ItemGroup>

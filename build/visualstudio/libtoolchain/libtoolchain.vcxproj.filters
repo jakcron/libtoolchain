@@ -25,9 +25,6 @@
     <Filter Include="Header Files\public\string">
       <UniqueIdentifier>{d4011998-c73d-4ec4-a10d-4ef12f84577c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\private\fs">
-      <UniqueIdentifier>{061bbcea-b345-4a4e-9295-5a9e6709f1fe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\private\string">
       <UniqueIdentifier>{a0b38501-540c-4267-97c0-8909d09d30fa}</UniqueIdentifier>
     </Filter>
@@ -49,6 +46,9 @@
       <Filter>Header Files\public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\Optional.h">
+      <Filter>Header Files\public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\ResourceState.h">
       <Filter>Header Files\public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\SharedPtr.h">
@@ -75,13 +75,19 @@
     <ClInclude Include="..\..\..\include\tc\fs\IFileSystem.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\fs\LocalFileObject.h">
+      <Filter>Header Files\public\fs</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\fs\LocalFileSystem.h">
+      <Filter>Header Files\public\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\fs\PartitionedFileObject.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\fs\Path.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\PartitionedFileObject.h">
+    <ClInclude Include="..\..\..\include\tc\fs\PathUtils.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\fs\SandboxedFileSystem.h">
@@ -89,12 +95,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\string\transcode.h">
       <Filter>Header Files\public\string</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\fs\LocalFileHandle.h">
-      <Filter>Header Files\private\fs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\fs\LocalFileObject.h">
-      <Filter>Header Files\private\fs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\string\utf8.h">
       <Filter>Header Files\private\string</Filter>
@@ -113,19 +113,19 @@
     <ClCompile Include="..\..\..\src\fs\GenericFileSystem.cpp">
       <Filter>Source Files\fs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\LocalFileHandle.cpp">
-      <Filter>Source Files\fs</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\fs\LocalFileObject.cpp">
       <Filter>Source Files\fs</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\fs\LocalFileSystem.cpp">
       <Filter>Source Files\fs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\fs\PartitionedFileObject.cpp">
+      <Filter>Source Files\fs</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\fs\Path.cpp">
       <Filter>Source Files\fs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\PartitionedFileObject.cpp">
+    <ClCompile Include="..\..\..\src\fs\PathUtils.cpp">
       <Filter>Source Files\fs</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\fs\SandboxedFileSystem.cpp">
