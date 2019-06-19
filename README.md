@@ -3,7 +3,7 @@
 ![Language](https://img.shields.io/badge/langauge-c++11-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-linux--64%20%7C%20linux--32%20%7C%20win--64%20%7C%20win--32%20%7C%20macos--64-lightgrey.svg)
 
-![Version](https://img.shields.io/badge/version-0.1.0%20%7C%20prerelease-green.svg)
+![Version](https://img.shields.io/badge/version-0.2.0%20%7C%20prerelease-green.svg)
 
 Library to ease the development of toolchain applications.
 
