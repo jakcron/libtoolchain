@@ -1,5 +1,5 @@
 var structle__uint16__t =
 [
-    [ "get", "structle__uint16__t.html#af71d4d2883a1ffba4f3ddd3e69597d13", null ],
-    [ "set", "structle__uint16__t.html#ac75066594e39c2ac55292363dd3becf4", null ]
+    [ "unwrap", "structle__uint16__t.html#a619d501185283b9eddae8d3df0f15ed4", null ],
+    [ "wrap", "structle__uint16__t.html#a19cc35adcd419f50f31d7fa6ea9e329e", null ]
 ];

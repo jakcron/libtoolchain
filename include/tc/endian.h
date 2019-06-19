@@ -49,9 +49,9 @@ static inline uint16_t __le_uint16(uint16_t a) { return __local_bswap16(a); }
 struct le_uint16_t {
 public:
 	/// Unwrap value
-	inline uint16_t get() const { return __le_uint16(mVar);}
+	inline uint16_t unwrap() const { return __le_uint16(mVar);}
 	/// Wrap value
-	inline void set(uint16_t var) { mVar = __le_uint16(var); }
+	inline void wrap(uint16_t var) { mVar = __le_uint16(var); }
 private:
 	uint16_t mVar;
 };
@@ -63,9 +63,9 @@ private:
 struct be_uint16_t {
 public:
 	/// Unwrap value
-	inline uint16_t get() const { return __be_uint16(mVar);}
+	inline uint16_t unwrap() const { return __be_uint16(mVar);}
 	/// Wrap value
-	inline void set(uint16_t var) { mVar = __be_uint16(var); }
+	inline void wrap(uint16_t var) { mVar = __be_uint16(var); }
 private:
 	uint16_t mVar;
 };
@@ -77,9 +77,9 @@ private:
 struct le_uint32_t {
 public:
 	/// Unwrap value
-	inline uint32_t get() const { return __le_uint32(mVar);}
+	inline uint32_t unwrap() const { return __le_uint32(mVar);}
 	/// Wrap value
-	inline void set(uint32_t var) { mVar = __le_uint32(var); }
+	inline void wrap(uint32_t var) { mVar = __le_uint32(var); }
 private:
 	uint32_t mVar;
 };
@@ -91,9 +91,9 @@ private:
 struct be_uint32_t {
 public:
 	/// Unwrap value
-	inline uint32_t get() const { return __be_uint32(mVar);}
+	inline uint32_t unwrap() const { return __be_uint32(mVar);}
 	/// Wrap value
-	inline void set(uint32_t var) { mVar = __be_uint32(var); }
+	inline void wrap(uint32_t var) { mVar = __be_uint32(var); }
 private:
 	uint32_t mVar;
 };
@@ -105,9 +105,9 @@ private:
 struct le_uint64_t {
 public:
 	/// Unwrap value
-	inline uint64_t get() const { return __le_uint64(mVar);}
+	inline uint64_t unwrap() const { return __le_uint64(mVar);}
 	/// Wrap value
-	inline void set(uint64_t var) { mVar = __le_uint64(var); }
+	inline void wrap(uint64_t var) { mVar = __le_uint64(var); }
 private:
 	uint64_t mVar;
 };
@@ -119,9 +119,9 @@ private:
 struct be_uint64_t {
 public:
 	/// Unwrap value
-	inline uint64_t get() const { return __be_uint64(mVar);}
+	inline uint64_t unwrap() const { return __be_uint64(mVar);}
 	/// Wrap value
-	inline void set(uint64_t var) { mVar = __be_uint64(var); }
+	inline void wrap(uint64_t var) { mVar = __be_uint64(var); }
 private:
 	uint64_t mVar;
 };
