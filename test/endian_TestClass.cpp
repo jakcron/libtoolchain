@@ -5,6 +5,7 @@
 
 void endian_TestClass::runAllTests()
 {
+	std::cout << "[:: endian] START" << std::endl;
 	testLocalBSwap16();
 	testLocalBSwap32();
 	testLocalBSwap64();
@@ -20,11 +21,12 @@ void endian_TestClass::runAllTests()
 	testLeUint64Class();
 	testLeUint32Class();
 	testLeUint16Class();
+	std::cout << "[:: endian] END" << std::endl;
 }
 
 void endian_TestClass::testLocalBSwap16()
 {
-	std::cout << "[::__local_bswap16] testLocalBSwap16 : ";
+	std::cout << "[::__local_bswap16] testLocalBSwap16 : " << std::flush;
 	try 
 	{
 		uint16_t x = 0xabcd;
@@ -45,7 +47,7 @@ void endian_TestClass::testLocalBSwap16()
 
 void endian_TestClass::testLocalBSwap32()
 {
-	std::cout << "[::__local_bswap32] testLocalBSwap32 : ";
+	std::cout << "[::__local_bswap32] testLocalBSwap32 : " << std::flush;
 	try 
 	{
 		uint32_t x = 0xabcd1234;
@@ -66,7 +68,7 @@ void endian_TestClass::testLocalBSwap32()
 
 void endian_TestClass::testLocalBSwap64()
 {
-	std::cout << "[::__local_bswap64] testLocalBSwap64 : ";
+	std::cout << "[::__local_bswap64] testLocalBSwap64 : " << std::flush;
 	try 
 	{
 		uint64_t x = 0x0123456789abcdef;
@@ -87,7 +89,7 @@ void endian_TestClass::testLocalBSwap64()
 
 void endian_TestClass::testBeUint64Inline()
 {
-	std::cout << "[::__be_uint64] testBeUint64Inline : ";
+	std::cout << "[::__be_uint64] testBeUint64Inline : " << std::flush;
 	try 
 	{
 		uint8_t x_raw[8] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef };
@@ -109,7 +111,7 @@ void endian_TestClass::testBeUint64Inline()
 
 void endian_TestClass::testBeUint32Inline()
 {
-	std::cout << "[::__be_uint32] testBeUint32Inline : ";
+	std::cout << "[::__be_uint32] testBeUint32Inline : " << std::flush;
 	try 
 	{
 		uint8_t x_raw[4] = { 0x01, 0x23, 0x45, 0x67 };
@@ -131,7 +133,7 @@ void endian_TestClass::testBeUint32Inline()
 
 void endian_TestClass::testBeUint16Inline()
 {
-	std::cout << "[::__be_uint16] testBeUint16Inline : ";
+	std::cout << "[::__be_uint16] testBeUint16Inline : " << std::flush;
 	try 
 	{
 		uint8_t x_raw[2] = { 0x01, 0x23 };
@@ -153,7 +155,7 @@ void endian_TestClass::testBeUint16Inline()
 
 void endian_TestClass::testLeUint64Inline()
 {
-	std::cout << "[::__le_uint64] testLeUint64Inline : ";
+	std::cout << "[::__le_uint64] testLeUint64Inline : " << std::flush;
 	try 
 	{
 		uint8_t x_raw[8] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef };
@@ -175,7 +177,7 @@ void endian_TestClass::testLeUint64Inline()
 
 void endian_TestClass::testLeUint32Inline()
 {
-	std::cout << "[::__le_uint32] testLeUint32Inline : ";
+	std::cout << "[::__le_uint32] testLeUint32Inline : " << std::flush;
 	try 
 	{
 		uint8_t x_raw[4] = { 0x01, 0x23, 0x45, 0x67 };
@@ -197,7 +199,7 @@ void endian_TestClass::testLeUint32Inline()
 
 void endian_TestClass::testLeUint16Inline()
 {
-	std::cout << "[::__le_uint16] testLeUint16Inline : ";
+	std::cout << "[::__le_uint16] testLeUint16Inline : " << std::flush;
 	try 
 	{
 		uint8_t x_raw[2] = { 0x01, 0x23 };
@@ -219,7 +221,7 @@ void endian_TestClass::testLeUint16Inline()
 
 void endian_TestClass::testBeUint64Class()
 {
-	std::cout << "[::be_uint64_t] testBeUint64Class : ";
+	std::cout << "[::be_uint64_t] testBeUint64Class : " << std::flush;
 	try 
 	{
 		uint8_t x_raw[sizeof(uint64_t)] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef };
@@ -254,7 +256,7 @@ void endian_TestClass::testBeUint64Class()
 
 void endian_TestClass::testBeUint32Class()
 {
-	std::cout << "[::be_uint32_t] testBeUint32Class : ";
+	std::cout << "[::be_uint32_t] testBeUint32Class : " << std::flush;
 	try 
 	{
 		uint8_t x_raw[sizeof(uint32_t)] = { 0x01, 0x23, 0x45, 0x67 };
@@ -289,7 +291,7 @@ void endian_TestClass::testBeUint32Class()
 
 void endian_TestClass::testBeUint16Class()
 {
-	std::cout << "[::be_uint16_t] testBeUint16Class : ";
+	std::cout << "[::be_uint16_t] testBeUint16Class : " << std::flush;
 	try 
 	{
 		uint8_t x_raw[sizeof(uint16_t)] = { 0x01, 0x23 };
@@ -324,7 +326,7 @@ void endian_TestClass::testBeUint16Class()
 
 void endian_TestClass::testLeUint64Class()
 {
-	std::cout << "[::le_uint64_t] testLeUint64Class : ";
+	std::cout << "[::le_uint64_t] testLeUint64Class : " << std::flush;
 	try 
 	{
 		uint8_t x_raw[sizeof(uint64_t)] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef };
@@ -359,7 +361,7 @@ void endian_TestClass::testLeUint64Class()
 
 void endian_TestClass::testLeUint32Class()
 {
-	std::cout << "[::le_uint32_t] testLeUint32Class : ";
+	std::cout << "[::le_uint32_t] testLeUint32Class : " << std::flush;
 	try 
 	{
 		uint8_t x_raw[sizeof(uint32_t)] = { 0x01, 0x23, 0x45, 0x67 };
@@ -394,7 +396,7 @@ void endian_TestClass::testLeUint32Class()
 
 void endian_TestClass::testLeUint16Class()
 {
-	std::cout << "[::le_uint16_t] testLeUint16Class : ";
+	std::cout << "[::le_uint16_t] testLeUint16Class : " << std::flush;
 	try 
 	{
 		uint8_t x_raw[sizeof(uint16_t)] = { 0x01, 0x23 };

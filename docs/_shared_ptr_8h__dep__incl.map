@@ -1,7 +1,0 @@
-<map id="tc/SharedPtr.h" name="tc/SharedPtr.h">
-<area shape="rect" id="node2" href="$_sandboxed_i_file_8h.html" title="Declaration of tc::fs::SandboxedIFile. " alt="" coords="5,80,159,107"/>
-<area shape="rect" id="node4" href="$tc_8h.html" title="Declaration of the libtoolchain namespace. " alt="" coords="389,229,447,256"/>
-<area shape="rect" id="node5" href="$_sandboxed_i_file_system_8h.html" title="Declaration of tc::fs::SandboxedIFileSystem. " alt="" coords="183,80,381,107"/>
-<area shape="rect" id="node6" href="$_optional_8h.html" title="Declaration of tc::Optional. " alt="" coords="455,155,551,181"/>
-<area shape="rect" id="node3" href="$fs_8h.html" title="Declaration of the filesystem library. " alt="" coords="253,155,311,181"/>
-</map>

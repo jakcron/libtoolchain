@@ -13,7 +13,7 @@ PROJECT_INCLUDE_PATH = include
 PROJECT_TESTSRC_PATH = test
 PROJECT_TESTSRC_SUBDIRS = $(PROJECT_TESTSRC_PATH)
 PROJECT_BIN_PATH = bin
-PROJECT_DOCS_PATH = docs                                                                                                                                    
+PROJECT_DOCS_PATH = docs
 PROJECT_DOXYFILE_PATH = Doxyfile
 
 # Determine if the root makefile has been established, and if not establish this makefile as the root makefile
@@ -25,7 +25,7 @@ endif
 
 # Shared Library Definitions
 PROJECT_SO_VER_MAJOR = 0
-PROJECT_SO_VER_MINOR = 1
+PROJECT_SO_VER_MINOR = 2
 PROJECT_SO_VER_PATCH = 0
 PROJECT_SONAME = $(PROJECT_NAME).so.$(PROJECT_SO_VER_MAJOR)
 PROJECT_SO_FILENAME = $(PROJECT_SONAME).$(PROJECT_SO_VER_MINOR).$(PROJECT_SO_VER_PATCH)

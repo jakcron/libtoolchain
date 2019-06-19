@@ -12,6 +12,14 @@ static uint16_t kUtf16Raw[kUtf16RawLen] = {0x2e, 0x2f, 0x400, 0x401, 0x402, 0x40
 static std::string kUtf8Str = std::string((const char*)kUtf8Raw, kUtf8RawLen);
 static std::u16string kUtf16Str = std::u16string((const char16_t*)kUtf16Raw, kUtf16RawLen);
 
+void string_transcode_TestClass::runAllTests(void)
+{
+	std::cout << "[tc::string::transcode] START" << std::endl;
+	testUtf8ToUtf16();
+	testUtf16ToUtf8();
+	std::cout << "[tc::string::transcode] END" << std::endl;
+}
+
 void string_transcode_TestClass::testUtf8ToUtf16()
 {
 	std::cout << "[tc::string::transcode] testUtf8ToUtf16 : ";
@@ -58,10 +66,4 @@ void string_transcode_TestClass::testUtf16ToUtf8()
 	{
 		std::cout << "FAIL (" << e.error() << ")" << std::endl;
 	}
-}
-
-void string_transcode_TestClass::runAllTests(void)
-{
-	testUtf8ToUtf16();
-	testUtf16ToUtf8();
 }

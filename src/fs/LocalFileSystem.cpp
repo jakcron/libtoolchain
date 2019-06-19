@@ -1,5 +1,6 @@
 #include <tc/fs/LocalFileSystem.h>
-#include "LocalFile.h"
+#include <tc/fs/LocalFileObject.h>
+#include <tc/fs/PathUtils.h>
 #include <tc/Exception.h>
 #include <tc/string.h>
 #include <tc/SharedPtr.h>
@@ -18,54 +19,79 @@
 
 #include <iostream>
 
-tc::fs::LocalFileSystem::LocalFileSystem()
+const std::string tc::fs::LocalFileSystem::kClassName = "tc::fs::LocalFileSystem";
+
+tc::fs::LocalFileSystem::LocalFileSystem() :
+	mState()
 {
+	openFs();
 }
 
-tc::fs::IFile* tc::fs::LocalFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode)
+tc::fs::IFileSystem* tc::fs::LocalFileSystem::copyInstance() const
 {
-	tc::fs::IFile* ifile_ptr = nullptr;
+	return new LocalFileSystem();	
+}
 
+tc::fs::IFileSystem* tc::fs::LocalFileSystem::moveInstance()
+{
+	return new LocalFileSystem();                                                                                                                                                                                                                                                 
+}
+
+tc::ResourceState tc::fs::LocalFileSystem::getFsState()
+{
+	return mState;
+}
+
+void tc::fs::LocalFileSystem::openFs()
+{
+	mState = (1 << tc::RESFLAG_READY);
+}
+
+void tc::fs::LocalFileSystem::closeFs()
+{
+	mState = 0;
+}
+
+void tc::fs::LocalFileSystem::createFile(const tc::fs::Path& path)
+{
 #ifdef _WIN32
 	// convert Path to unicode string
 	std::u16string unicode_path;
 	pathToWindowsUTF16(path, unicode_path);
 
 	// open file
-	fs_handle_t file_handle = CreateFileW((LPCWSTR)unicode_path.c_str(),
-							  getOpenModeFlag(mode),
-							  getShareModeFlag(mode),
+	HANDLE file_handle = CreateFileW((LPCWSTR)unicode_path.c_str(),
+							  GENERIC_WRITE,
 							  0,
-							  getCreationModeFlag(mode),
+							  0,
+							  CREATE_ALWAYS,
 							  FILE_ATTRIBUTE_NORMAL,
 							  NULL);
 		
 	// check file handle
 	if (file_handle == INVALID_HANDLE_VALUE)
 	{
-		throw tc::Exception(kClassName, "Failed to open file (" + std::to_string(GetLastError()) + ")");
+		throw tc::Exception(kClassName, "Failed to create file (" + std::to_string(GetLastError()) + ")");
 	}
 
-	ifile_ptr = new LocalFile(mode, file_handle);
+	CloseHandle(file_handle);
 #else
 	// convert Path to unicode string
 	std::string unicode_path;
 	pathToUnixUTF8(path, unicode_path);
 
-	fs_handle_t file_handle = open(unicode_path.c_str(), getOpenModeFlag(mode), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	int file_handle = open(unicode_path.c_str(), O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
 	if (file_handle == -1)
 	{
-		throw tc::Exception(kClassName, "Failed to open file (" + std::string(strerror(errno)) + ")");
+		throw tc::Exception(kClassName, "Failed to create file (" + std::string(strerror(errno)) + ")");
 	}
 
-	ifile_ptr = new LocalFile(mode, file_handle);
+	close(file_handle);
 #endif
-
-	return ifile_ptr;
 }
 
-void tc::fs::LocalFileSystem::deleteFile(const tc::fs::Path& path)
+void tc::fs::LocalFileSystem::removeFile(const tc::fs::Path& path)
 {
 #ifdef _WIN32
 	// convert Path to unicode string
@@ -89,55 +115,9 @@ void tc::fs::LocalFileSystem::deleteFile(const tc::fs::Path& path)
 #endif
 }
 
-void tc::fs::LocalFileSystem::getCurrentDirectory(tc::fs::Path& path)
+void tc::fs::LocalFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, tc::fs::GenericFileObject& file)
 {
-#ifdef _WIN32
-	tc::SharedPtr<char16_t> raw_char16_path = new char16_t[MAX_PATH];
-
-	// get current directory
-	if (GetCurrentDirectoryW(MAX_PATH, (LPWSTR)(raw_char16_path.get())) == false)
-	{
-		throw tc::Exception(kClassName, "Failed to get current directory (" + std::to_string(GetLastError()) + ")");
-	}
-
-	path = Path(raw_char16_path.get());
-#else
-	setCurrentDirectory(Path("."));
-
-	tc::SharedPtr<char> raw_current_working_directory = new char[PATH_MAX];
-
-	if (getcwd(raw_current_working_directory.get(), PATH_MAX) == nullptr)
-	{
-		throw tc::Exception(kClassName, "Failed to get current working directory (getcwd)" + std::string(strerror(errno)) + ")");
-	}
-
-	path = Path(raw_current_working_directory.get());
-#endif
-}
-
-void tc::fs::LocalFileSystem::setCurrentDirectory(const tc::fs::Path& path)
-{
-#ifdef _WIN32
-	// convert Path to unicode string
-	std::u16string unicode_path;
-	pathToWindowsUTF16(path, unicode_path);
-
-	// delete file
-	if (SetCurrentDirectoryW((LPCWSTR)unicode_path.c_str()) == false)
-	{
-		throw tc::Exception(kClassName, "Failed to set current directory (" + std::to_string(GetLastError()) + ")");
-	}
-#else
-	// convert Path to unicode string
-	std::string unicode_path;
-	pathToUnixUTF8(path, unicode_path);
-
-	// get full path to directory
-	if (chdir(unicode_path.c_str()) != 0)
-	{
-		throw tc::Exception(kClassName, "Failed to get directory info (chdir)(" + std::string(strerror(errno)) + ")");
-	}
-#endif
+	file = tc::fs::LocalFileObject(path, mode);
 }
 
 void tc::fs::LocalFileSystem::createDirectory(const tc::fs::Path& path)
@@ -164,7 +144,7 @@ void tc::fs::LocalFileSystem::createDirectory(const tc::fs::Path& path)
 #endif
 }
 
-void tc::fs::LocalFileSystem::deleteDirectory(const tc::fs::Path& path)
+void tc::fs::LocalFileSystem::removeDirectory(const tc::fs::Path& path)
 {
 #ifdef _WIN32
 	// convert Path to unicode string
@@ -187,7 +167,58 @@ void tc::fs::LocalFileSystem::deleteDirectory(const tc::fs::Path& path)
 #endif
 }
 
-void tc::fs::LocalFileSystem::getDirectoryListing(const tc::fs::Path& path, DirectoryInfo& info)
+void tc::fs::LocalFileSystem::getWorkingDirectory(tc::fs::Path& path)
+{
+#ifdef _WIN32
+	tc::SharedPtr<char16_t> raw_char16_path = new char16_t[MAX_PATH];
+
+	// get current directory
+	if (GetCurrentDirectoryW(MAX_PATH, (LPWSTR)(raw_char16_path.get())) == false)
+	{
+		throw tc::Exception(kClassName, "Failed to get current directory (" + std::to_string(GetLastError()) + ")");
+	}
+
+	path = Path(raw_char16_path.get());
+#else
+	setWorkingDirectory(Path("."));
+
+	tc::SharedPtr<char> raw_current_working_directory = new char[PATH_MAX];
+
+	if (getcwd(raw_current_working_directory.get(), PATH_MAX) == nullptr)
+	{
+		throw tc::Exception(kClassName, "Failed to get current working directory (getcwd)" + std::string(strerror(errno)) + ")");
+	}
+
+	path = Path(raw_current_working_directory.get());
+#endif
+}
+
+void tc::fs::LocalFileSystem::setWorkingDirectory(const tc::fs::Path& path)
+{
+#ifdef _WIN32
+	// convert Path to unicode string
+	std::u16string unicode_path;
+	pathToWindowsUTF16(path, unicode_path);
+
+	// delete file
+	if (SetCurrentDirectoryW((LPCWSTR)unicode_path.c_str()) == false)
+	{
+		throw tc::Exception(kClassName, "Failed to set current directory (" + std::to_string(GetLastError()) + ")");
+	}
+#else
+	// convert Path to unicode string
+	std::string unicode_path;
+	pathToUnixUTF8(path, unicode_path);
+
+	// get full path to directory
+	if (chdir(unicode_path.c_str()) != 0)
+	{
+		throw tc::Exception(kClassName, "Failed to get directory info (chdir)(" + std::string(strerror(errno)) + ")");
+	}
+#endif
+}
+
+void tc::fs::LocalFileSystem::getDirectoryListing(const tc::fs::Path& path, sDirectoryListing& info)
 {
 	std::vector<std::string> child_dir_name_list;
 	std::vector<std::string> child_file_name_list;
@@ -201,8 +232,6 @@ void tc::fs::LocalFileSystem::getDirectoryListing(const tc::fs::Path& path, Dire
 
 	HANDLE dir_handle = INVALID_HANDLE_VALUE;
 	WIN32_FIND_DATAW dir_entry;
-
-
 
 	dir_handle = FindFirstFileW((LPCWSTR)unicode_path.c_str(), &dir_entry);
 	if (dir_handle == INVALID_HANDLE_VALUE) 
@@ -235,16 +264,16 @@ void tc::fs::LocalFileSystem::getDirectoryListing(const tc::fs::Path& path, Dire
 
 	// save current dir for later
 	Path prev_current_dir;
-	getCurrentDirectory(prev_current_dir);
+	getWorkingDirectory(prev_current_dir);
 
 	// change the directory
-	setCurrentDirectory(path);
+	setWorkingDirectory(path);
 
 	// save the path
-	getCurrentDirectory(current_directory_path);
+	getWorkingDirectory(current_directory_path);
 
 	// restore current directory
-	setCurrentDirectory(prev_current_dir);
+	setWorkingDirectory(prev_current_dir);
 #else
 	std::string unicode_path;
 	DIR *dp;
@@ -289,128 +318,19 @@ void tc::fs::LocalFileSystem::getDirectoryListing(const tc::fs::Path& path, Dire
 
 	// save current dir for later
 	Path prev_current_dir;
-	getCurrentDirectory(prev_current_dir);
+	getWorkingDirectory(prev_current_dir);
 
 	// change the directory
-	setCurrentDirectory(path);
+	setWorkingDirectory(path);
 
 	// save the path
-	getCurrentDirectory(current_directory_path);
+	getWorkingDirectory(current_directory_path);
 
 	// restore current directory
-	setCurrentDirectory(prev_current_dir);
+	setWorkingDirectory(prev_current_dir);
 #endif
-	info.setPath(current_directory_path);
-	info.setDirectoryList(child_dir_name_list);
-	info.setFileList(child_file_name_list);
+	info.abs_path = current_directory_path;
+	info.dir_list = child_dir_name_list;
+	info.file_list = child_file_name_list;
 }
 
-#ifdef _WIN32
-DWORD tc::fs::LocalFileSystem::getOpenModeFlag(FileAccessMode mode) const
-{
-	DWORD flag = 0;
-	switch (mode)
-	{
-		case (FAM_READ):
-			flag = GENERIC_READ;
-			break;
-		case (FAM_EDIT):
-			flag = GENERIC_READ | GENERIC_WRITE;
-			break;
-		case (FAM_CREATE):
-			flag = GENERIC_WRITE;
-			break;
-		default:
-			throw tc::Exception(kClassName, "Unknown open mode");
-	}
-	return flag;
-}
-DWORD tc::fs::LocalFileSystem::getShareModeFlag(FileAccessMode mode) const
-{
-	DWORD flag = 0;
-	switch (mode)
-	{
-		case (FAM_READ):
-			flag = FILE_SHARE_READ;
-			break;
-		case (FAM_EDIT):
-			flag = FILE_SHARE_READ;
-			break;
-		case (FAM_CREATE):
-			flag = 0;
-			break;
-		default:
-			throw tc::Exception(kClassName, "Unknown open mode");
-	}
-	return flag;
-}
-DWORD tc::fs::LocalFileSystem::getCreationModeFlag(FileAccessMode mode) const
-{
-	DWORD flag = 0;
-	switch (mode)
-	{
-		case (FAM_READ):
-			flag = OPEN_EXISTING;
-			break;
-		case (FAM_EDIT):
-			flag = OPEN_EXISTING;
-			break;
-		case (FAM_CREATE):
-			flag = CREATE_ALWAYS;
-			break;
-		default:
-			throw tc::Exception(kClassName, "Unknown open mode");
-	}
-	return flag;
-}
-
-void tc::fs::LocalFileSystem::pathToWindowsUTF16(const tc::fs::Path& path, std::u16string& out)
-{
-	std::u16string utf16_element;
-
-	out.clear();
-	for (size_t i = 0; i < path.getPathElementList().size(); i++)
-	{
-		tc::string::transcodeUTF8ToUTF16(path.getPathElementList()[i], utf16_element);
-		out += utf16_element;
-		if (i+1 < path.getPathElementList().size())
-			out += std::u16string(u"\\");
-		if (utf16_element == std::u16string(u"") && i == 0)
-			out += std::u16string(u"\\");
-	}
-}
-#else
-int tc::fs::LocalFileSystem::getOpenModeFlag(FileAccessMode mode) const
-{
-	int flag = 0;
-	switch (mode)
-	{
-		case (FAM_READ):
-			flag = O_RDONLY;
-			break;
-		case (FAM_EDIT):
-			flag = O_RDWR;
-			break;
-		case (FAM_CREATE):
-			flag = O_CREAT | O_TRUNC | O_WRONLY;
-			break;
-		default:
-			throw tc::Exception(kClassName, "Unknown open mode");
-	}
-	return flag;
-}
-
-void tc::fs::LocalFileSystem::pathToUnixUTF8(const tc::fs::Path& path, std::string& out)
-{
-	out.clear();
-	for (size_t i = 0; i < path.getPathElementList().size(); i++)
-	{
-		const std::string& element = path.getPathElementList()[i];
-		out += element;
-		if (i+1 < path.getPathElementList().size())
-			out += "/";
-		else if (element == "" && i == 0)
-			out += "/";
-	}
-}
-#endif
