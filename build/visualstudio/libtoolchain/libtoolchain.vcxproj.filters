@@ -81,7 +81,7 @@
     <ClInclude Include="..\..\..\include\tc\fs\Path.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\SandboxedFileObject.h">
+    <ClInclude Include="..\..\..\include\tc\fs\PartitionedFileObject.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\fs\SandboxedFileSystem.h">
@@ -125,7 +125,7 @@
     <ClCompile Include="..\..\..\src\fs\Path.cpp">
       <Filter>Source Files\fs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\SandboxedFileObject.cpp">
+    <ClCompile Include="..\..\..\src\fs\PartitionedFileObject.cpp">
       <Filter>Source Files\fs</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\fs\SandboxedFileSystem.cpp">

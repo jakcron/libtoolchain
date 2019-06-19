@@ -1,13 +1,23 @@
 #include <tc/Exception.h>
 #include <iostream>
 
-#include "fs_SandboxedFileObject_TestClass.h"
+#include "fs_PartitionedFileObject_TestClass.h"
 
-const std::string fs_SandboxedFileObject_TestClass::DummyFileBase::kClassName = "DummyFileBase";
+const std::string fs_PartitionedFileObject_TestClass::DummyFileBase::kClassName = "DummyFileBase";
 
-void fs_SandboxedFileObject_TestClass::testSize()
+void fs_PartitionedFileObject_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::fs::SandboxedFileObject] testSize : ";
+	std::cout << "[tc::fs::PartitionedFileObject] START" << std::endl;
+	testSize();
+	testSeekPos();
+	testRead();
+	testWrite();
+	std::cout << "[tc::fs::PartitionedFileObject] END" << std::endl;
+}
+
+void fs_PartitionedFileObject_TestClass::testSize()
+{
+	std::cout << "[tc::fs::PartitionedFileObject] testSize : " << std::flush;
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -34,7 +44,7 @@ void fs_SandboxedFileObject_TestClass::testSize()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox file
-			tc::fs::SandboxedFileObject sb_file(DummyFile(), sandbox_offset, sandbox_size);
+			tc::fs::PartitionedFileObject sb_file(DummyFile(), sandbox_offset, sandbox_size);
 
 			if (sb_file.size() != sandbox_size)
 			{
@@ -55,9 +65,9 @@ void fs_SandboxedFileObject_TestClass::testSize()
 	}
 }
 
-void fs_SandboxedFileObject_TestClass::testSeekPos()
+void fs_PartitionedFileObject_TestClass::testSeekPos()
 {
-	std::cout << "[tc::fs::SandboxedFileObject] testSeekPos : ";
+	std::cout << "[tc::fs::PartitionedFileObject] testSeekPos : " << std::flush;
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -95,7 +105,7 @@ void fs_SandboxedFileObject_TestClass::testSeekPos()
 			DummyFile file;
 
 			// get sandbox file
-			tc::fs::SandboxedFileObject sb_file(file, sandbox_offset, sandbox_size);
+			tc::fs::PartitionedFileObject sb_file(file, sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file.seek(offset_to_seek);
@@ -127,9 +137,9 @@ void fs_SandboxedFileObject_TestClass::testSeekPos()
 	}
 }
 
-void fs_SandboxedFileObject_TestClass::testRead()
+void fs_PartitionedFileObject_TestClass::testRead()
 {
-	std::cout << "[tc::fs::SandboxedFileObject] testRead : ";
+	std::cout << "[tc::fs::PartitionedFileObject] testRead : " << std::flush;
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -170,7 +180,7 @@ void fs_SandboxedFileObject_TestClass::testRead()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox file
-			tc::fs::SandboxedFileObject sb_file(DummyFile(), sandbox_offset, sandbox_size);
+			tc::fs::PartitionedFileObject sb_file(DummyFile(), sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file.seek(offset_to_seek);
@@ -193,9 +203,9 @@ void fs_SandboxedFileObject_TestClass::testRead()
 	}
 }
 
-void fs_SandboxedFileObject_TestClass::testWrite()
+void fs_PartitionedFileObject_TestClass::testWrite()
 {
-	std::cout << "[tc::fs::SandboxedFileObject] testWrite : ";
+	std::cout << "[tc::fs::PartitionedFileObject] testWrite : " << std::flush;
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -236,7 +246,7 @@ void fs_SandboxedFileObject_TestClass::testWrite()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox file
-			tc::fs::SandboxedFileObject sb_file(DummyFile(), sandbox_offset, sandbox_size);
+			tc::fs::PartitionedFileObject sb_file(DummyFile(), sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file.seek(offset_to_seek);
@@ -257,12 +267,4 @@ void fs_SandboxedFileObject_TestClass::testWrite()
 	{
 		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
-}
-
-void fs_SandboxedFileObject_TestClass::runAllTests(void)
-{
-	testSize();
-	testSeekPos();
-	testRead();
-	testWrite();
 }

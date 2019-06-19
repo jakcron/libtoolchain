@@ -20,5 +20,5 @@
 
 #include <tc/fs/LocalFileSystem.h>
 
-#include <tc/fs/SandboxedFileObject.h>
+#include <tc/fs/PartitionedFileObject.h>
 #include <tc/fs/SandboxedFileSystem.h>

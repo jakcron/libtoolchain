@@ -6,7 +6,7 @@
 #include "fs_GenericFileObject_TestClass.h"
 #include "fs_GenericFileSystem_TestClass.h"
 #include "fs_LocalFileSystem_TestClass.h"
-#include "fs_SandboxedFileObject_TestClass.h"
+#include "fs_PartitionedFileObject_TestClass.h"
 #include "fs_SandboxedFileSystem_TestClass.h"
 
 void runTest(ITestClass* testClass)
@@ -25,6 +25,6 @@ int main(int argc, char** argv)
 	runTest(new fs_GenericFileObject_TestClass());
 	runTest(new fs_GenericFileSystem_TestClass());
 	runTest(new fs_LocalFileSystem_TestClass());
-	runTest(new fs_SandboxedFileObject_TestClass());
+	runTest(new fs_PartitionedFileObject_TestClass());
 	runTest(new fs_SandboxedFileSystem_TestClass());
 }
