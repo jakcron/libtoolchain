@@ -150,6 +150,10 @@ void fs_Path_TestClass::test_Method_pop_front()
 			{
 				throw tc::Exception("pop_front() did not place expected element at begin()");
 			}
+			if (path.front() != expectedElements.front())
+			{
+				throw tc::Exception("pop_front() did not place expected element at front()");
+			}
 		}
 
 		std::cout << "PASS"  << std::endl;
@@ -173,6 +177,10 @@ void fs_Path_TestClass::test_Method_pop_back()
 			if (*(--path.end()) != *(--expectedElements.end()))
 			{
 				throw tc::Exception("pop_back() did not place expected element at (--end())");
+			}
+			if (path.back() != expectedElements.back())
+			{
+				throw tc::Exception("pop_back() did not place expected element at back())");
 			}
 		}
 
@@ -202,6 +210,10 @@ void fs_Path_TestClass::test_Method_push_front()
 			{
 				throw tc::Exception("push_front() did not place expected element at *(begin())");
 			}
+			if (path.front() != expectedElements.front())
+			{
+				throw tc::Exception("push_front() did not place expected element at front()");
+			}
 		}
 
 		std::cout << "PASS"  << std::endl;
@@ -229,6 +241,10 @@ void fs_Path_TestClass::test_Method_push_back()
 			if (*(--path.end()) != *(--expectedElements.end()))
 			{
 				throw tc::Exception("push_back() did not place expected element at *(--end())");
+			}
+			if (path.back() != expectedElements.back())
+			{
+				throw tc::Exception("push_back() did not place expected element at back())");
 			}
 		}
 

@@ -82,17 +82,57 @@ public:
 		/// Inequality operator
 	bool operator!=(const Path& other) const;
 
-		/// Const Begin Iterator, points to front element
-	const_iterator begin() const;
+		/**
+		 * @brief Returns a reference to the first element in the container.
+		 * 
+		 * @return reference to the first element 
+		 * 
+		 * @note Calling front on an empty container is undefined.
+		 * @note For a Path p, the expression p.front() is equivalent to *p.begin(). 
+		 */
+	std::string& front();
+
+		/**
+		 * @brief Returns a const reference to the first element in the container.
+		 * 
+		 * @return const reference to the first element 
+		 * 
+		 * @note Calling front on an empty container is undefined.
+		 * @note For a Path p, the expression p.front() is equivalent to *p.begin(). 
+		 */
+	const std::string& front() const;
+
+		/**
+		 * @brief Returns a reference to the last element in the container.
+		 * 
+		 * @return reference to the last element 
+		 * 
+		 * @note Calling back on an empty container is undefined.
+		 * @note For a Path p, the expression p.back() is equivalent to *(--p.end()). 
+		 */
+	std::string& back();
+
+		/**
+		 * @brief Returns a const reference to the last element in the container.
+		 * 
+		 * @return const reference to the last element 
+		 * 
+		 * @note Calling back on an empty container is undefined.
+		 * @note For a Path p, the expression p.back() is equivalent to *(--p.end()). 
+		 */
+	const std::string& back() const;
 
 		/// Begin Iterator, points to front element
 	iterator begin();
 
-		/// Const End Iterator, points to after the last element
-	const_iterator end() const;
+		/// Const Begin Iterator, points to front element
+	const_iterator begin() const;
 
 		/// End Iterator, points to after the last element
 	iterator end();
+
+			/// Const End Iterator, points to after the last element
+	const_iterator end() const;
 
 		/// Remove element at the front of the path
 	void pop_front();
