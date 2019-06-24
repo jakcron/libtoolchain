@@ -57,22 +57,42 @@ bool tc::fs::Path::operator!=(const Path& other) const
 	return !(this->operator==(other));
 }
 
-tc::fs::Path::const_iterator tc::fs::Path::begin() const
-{
-	return mUnicodePath.begin();
-}
-
 tc::fs::Path::iterator tc::fs::Path::begin()
 {
 	return mUnicodePath.begin();
 }
 
-tc::fs::Path::const_iterator tc::fs::Path::end() const
+std::string& tc::fs::Path::front()
+{
+	return mUnicodePath.front();
+}
+
+const std::string& tc::fs::Path::front() const
+{
+	return mUnicodePath.front();
+}
+
+std::string& tc::fs::Path::back()
+{
+	return mUnicodePath.back();
+}
+
+const std::string& tc::fs::Path::back() const
+{
+	return mUnicodePath.back();
+}
+
+tc::fs::Path::const_iterator tc::fs::Path::begin() const
+{
+	return mUnicodePath.begin();
+}
+
+tc::fs::Path::iterator tc::fs::Path::end()
 {
 	return mUnicodePath.end();
 }
 
-tc::fs::Path::iterator tc::fs::Path::end()
+tc::fs::Path::const_iterator tc::fs::Path::end() const
 {
 	return mUnicodePath.end();
 }
