@@ -9,18 +9,6 @@ tc::fs::GenericFileSystem::GenericFileSystem():
 {
 }
 
-tc::fs::GenericFileSystem::GenericFileSystem(const tc::fs::GenericFileSystem& other) :
-	GenericFileSystem()
-{
-	*this = other;
-}
-
-tc::fs::GenericFileSystem::GenericFileSystem(tc::fs::GenericFileSystem&& other) :
-	GenericFileSystem()
-{
-	*this = std::move(other);
-}
-
 tc::fs::GenericFileSystem::GenericFileSystem(const tc::fs::IFileSystem& other) :
 	mPtr(other.copyInstance())
 {
@@ -39,29 +27,6 @@ tc::fs::GenericFileSystem::GenericFileSystem(tc::fs::IFileSystem&& other) :
 	{
 		mPtr.release();
 	}
-}
-
-tc::fs::GenericFileSystem::~GenericFileSystem()
-{
-	mPtr.release();
-}
-
-tc::fs::GenericFileSystem& tc::fs::GenericFileSystem::operator=(const tc::fs::GenericFileSystem& other)
-{
-	if (this != &other)
-	{
-		mPtr = other.mPtr;
-	}
-	return *this;
-}
-
-tc::fs::GenericFileSystem& tc::fs::GenericFileSystem::operator=(tc::fs::GenericFileSystem&& other)
-{
-	if (this != &other)
-	{
-		mPtr = std::move(other.mPtr);
-	}
-	return *this;
 }
 
 tc::fs::IFileSystem* tc::fs::GenericFileSystem::copyInstance() const

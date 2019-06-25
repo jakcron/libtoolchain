@@ -9,18 +9,6 @@ tc::fs::GenericFileObject::GenericFileObject() :
 {
 }
 
-tc::fs::GenericFileObject::GenericFileObject(const tc::fs::GenericFileObject& other) :
-	GenericFileObject()
-{
-	*this = other;
-}
-
-tc::fs::GenericFileObject::GenericFileObject(tc::fs::GenericFileObject&& other) :
-	GenericFileObject()
-{
-	*this = std::move(other);
-}
-
 tc::fs::GenericFileObject::GenericFileObject(const tc::fs::IFileObject& other) :
 	mPtr(other.copyInstance())
 {
@@ -39,29 +27,6 @@ tc::fs::GenericFileObject::GenericFileObject(tc::fs::IFileObject&& other) :
 	{
 		mPtr.release();
 	}
-}
-
-tc::fs::GenericFileObject::~GenericFileObject()
-{
-	mPtr.release();
-}
-
-tc::fs::GenericFileObject& tc::fs::GenericFileObject::operator=(const tc::fs::GenericFileObject& other)
-{
-	if (this != &other)
-	{
-		mPtr = other.mPtr;
-	}
-	return *this;
-}
-
-tc::fs::GenericFileObject& tc::fs::GenericFileObject::operator=(tc::fs::GenericFileObject&& other)
-{
-	if (this != &other)
-	{
-		mPtr = std::move(other.mPtr);
-	}
-	return *this;
 }
 
 tc::fs::IFileObject* tc::fs::GenericFileObject::copyInstance() const

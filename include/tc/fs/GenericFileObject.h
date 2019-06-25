@@ -36,37 +36,6 @@ public:
 		 * @param[in] other GenericFileObject object to move
 		 */
 	GenericFileObject(tc::fs::IFileObject&& other);
-
-		/**
-		 * @brief Copy Constructor
-		 * @param[in] other GenericFileObject object to copy
-		 */
-	GenericFileObject(const tc::fs::GenericFileObject& other);
-
-		/**
-		 * @brief Move Constructor
-		 * @param[in] other GenericFileObject object to move
-		 */
-	GenericFileObject(tc::fs::GenericFileObject&& other);
-
-		/// Destructor
-	~GenericFileObject();
-
-		/**
-		 * @brief Copy Assignment Operator
-		 * @param[in] other GenericFileObject object to copy
-		 * 
-		 * @return this object
-		 */
-	GenericFileObject& operator=(const tc::fs::GenericFileObject& other);
-
-		/**
-		 * @brief Move Assignment Operator
-		 * @param[in] other GenericFileObject object to move
-		 * 
-		 * @return this object
-		 */
-	GenericFileObject& operator=(tc::fs::GenericFileObject&& other);
 	
 	virtual tc::fs::IFileObject* copyInstance() const;
 	virtual tc::fs::IFileObject* moveInstance();
