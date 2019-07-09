@@ -10,6 +10,8 @@
 
 namespace tc { namespace string {
 
+void transcodeUTF8CharToUTF32Char(const char* src, size_t max_len, size_t& char_num, char32_t& dst);
+
 	/**
 	 * @brief Transcode a UTF-8 string to UTF-32.
 	 * @param[in] src Source UTF-8 string

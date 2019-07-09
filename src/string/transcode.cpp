@@ -4,61 +4,72 @@
 #include "utf8.h"
 #include "utf16.h"
 
+void tc::string::transcodeUTF8CharToUTF32Char(const char* src, size_t max_len, size_t& char_num, char32_t& dst)
+{
+	if (max_len == 0)
+	{
+		throw tc::Exception("not a UTF-8 char (length 0)");
+	}
+
+	uint8_t prefix = get_utf8_prefix(src[0]);
+	if (prefix == 1 || prefix > 4) // 1 is reserved for trailer bytes
+	{
+		throw tc::Exception("not a UTF-8 char (invalid prefix)");
+	}
+
+	// if there are no prefix bits, this is ASCII
+	if (prefix == 0)
+	{
+		dst = src[0];
+		char_num = 1;
+	}
+	// otherwise this is a multibyte character
+	else
+	{
+		// there must be enough characters
+		if (prefix > max_len)
+		{
+			throw tc::Exception("not a UTF-8 char (length did not match prefix)");
+		}
+
+		char32_t uni = get_utf8_data(prefix, src[0]);
+
+		for (uint8_t i = 1; i < prefix; i++)
+		{
+			if (utf8_has_prefix(1, src[i]) == false)
+			{
+				throw tc::Exception("not a UTF-8 char (trailer bytes did not have correct prefix)");
+			}
+
+			uni <<= 6;
+			uni |= get_utf8_data(1, src[i]);
+		}
+
+		if (uni >= kUtf16HighSurrogateStart && uni <= kUtf16LowSurrogateEnd)
+		{
+			throw tc::Exception("not a UTF-8 char (invalid decoded value)");
+		}
+			
+		if (uni > kUtf16EncodeMax)
+		{
+			throw tc::Exception("not a UTF-8 string (invalid decoded value)");
+		}
+			
+		dst = uni;
+		char_num = prefix;
+	}
+}
+
 void tc::string::transcodeUTF8ToUTF32(const std::string& src, std::u32string& dst)
 {
 	size_t done = 0;
+	char32_t uni;
 	dst.clear();
 	for (size_t i = 0; i < src.length(); i += done)
 	{
-		// get number of leading high bits in first byte
-		uint8_t prefix = get_utf8_prefix(src[i]);
-		if (prefix == 1 || prefix > 4) // 1 is reserved for trailer bytes
-		{
-			throw tc::Exception("not a UTF-8 string");
-		}
+		transcodeUTF8CharToUTF32Char(src.c_str() + i, src.length() - i, done, uni);
 
-		// if there are no prefix bits, this is ASCII
-		if (prefix == 0)
-		{
-			dst.push_back(src[i]);
-			done = 1;
-		}
-		// otherwise this is a multibyte character
-		else
-		{
-			// there must be enough characters
-			if ((i + prefix) > src.length())
-			{
-				throw tc::Exception("not a UTF-8 string");
-			}
-
-			char32_t uni = get_utf8_data(prefix, src[i]);
-
-			for (uint8_t j = 1; j < prefix; j++)
-			{
-				if (utf8_has_prefix(1, src[i + j]) == false)
-				{
-					throw tc::Exception("not a UTF-8 string");
-				}
-
-				uni <<= 6;
-				uni |= get_utf8_data(1, src[i + j]);
-			}
-
-			if (uni >= kUtf16HighSurrogateStart && uni <= kUtf16LowSurrogateEnd)
-			{
-				throw tc::Exception("not a UTF-8 string");
-			}
-				
-			if (uni > kUtf16EncodeMax)
-			{
-				throw tc::Exception("not a UTF-8 string");
-			}
-				
-			dst.push_back(uni);
-			done = prefix;
-		}
-
+		dst.push_back(uni);
 	}
 }
 
