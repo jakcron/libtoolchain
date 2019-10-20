@@ -39,6 +39,9 @@
     <ClCompile Include="..\..\..\test\json_JsonParser_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\json_JsonSerialiser_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\test\json_Number_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -81,6 +84,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\json_JsonParser_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\json_JsonSerialiser_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\json_Number_TestClass.h">
