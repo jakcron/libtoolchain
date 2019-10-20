@@ -99,6 +99,9 @@
     <ClInclude Include="..\..\..\include\tc\json\JsonParser.h">
       <Filter>Header Files\public\json</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\json\JsonSerialiser.h">
+      <Filter>Header Files\public\json</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\json\JsonType.h">
       <Filter>Header Files\public\json</Filter>
     </ClInclude>
@@ -156,6 +159,9 @@
       <Filter>Source Files\fs</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\json\JsonParser.cpp">
+      <Filter>Source Files\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\json\JsonSerialiser.cpp">
       <Filter>Source Files\json</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\json\Number.cpp">

@@ -134,6 +134,7 @@
     <ClInclude Include="..\..\..\include\tc\fs\SandboxedFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\json.h" />
     <ClInclude Include="..\..\..\include\tc\json\JsonParser.h" />
+    <ClInclude Include="..\..\..\include\tc\json\JsonSerialiser.h" />
     <ClInclude Include="..\..\..\include\tc\json\JsonType.h" />
     <ClInclude Include="..\..\..\include\tc\json\Number.h" />
     <ClInclude Include="..\..\..\include\tc\json\Value.h" />
@@ -159,6 +160,7 @@
     <ClCompile Include="..\..\..\src\fs\PathUtils.cpp" />
     <ClCompile Include="..\..\..\src\fs\SandboxedFileSystem.cpp" />
     <ClCompile Include="..\..\..\src\json\JsonParser.cpp" />
+    <ClCompile Include="..\..\..\src\json\JsonSerialiser.cpp" />
     <ClCompile Include="..\..\..\src\json\Number.cpp" />
     <ClCompile Include="..\..\..\src\json\Value.cpp" />
     <ClCompile Include="..\..\..\src\string\transcode.cpp" />
