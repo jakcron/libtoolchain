@@ -8,6 +8,9 @@
 #include "fs_LocalFileSystem_TestClass.h"
 #include "fs_PartitionedFileObject_TestClass.h"
 #include "fs_SandboxedFileSystem_TestClass.h"
+#include "json_JsonParser_TestClass.h"
+#include "json_Number_TestClass.h"
+#include "json_Value_TestClass.h"
 
 void runTest(ITestClass* testClass)
 {
@@ -27,4 +30,7 @@ int main(int argc, char** argv)
 	runTest(new fs_LocalFileSystem_TestClass());
 	runTest(new fs_PartitionedFileObject_TestClass());
 	runTest(new fs_SandboxedFileSystem_TestClass());
+	runTest(new json_JsonParser_TestClass());
+	runTest(new json_Number_TestClass());
+	runTest(new json_Value_TestClass());
 }
