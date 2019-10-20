@@ -1,5 +1,7 @@
 #include <tc/json/Value.h>
 
+const std::string tc::json::Value::kClassName = "tc::json::Value";
+
 tc::json::Value::Value() :
 	mType(tc::json::JsonType::JSON_NULL),
 	mObject(),
