@@ -14,3 +14,4 @@
 #include <tc/SharedPtr.h>
 #include <tc/string.h>
 #include <tc/fs.h>
+#include <tc/json.h>
