@@ -132,6 +132,7 @@
     <ClCompile Include="..\..\..\test\fs_Path_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\fs_SandboxedFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\json_JsonParser_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\json_JsonSerialiser_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\json_Number_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\json_Value_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\main.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="..\..\..\test\fs_Path_TestClass.h" />
     <ClInclude Include="..\..\..\test\fs_SandboxedFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\json_JsonParser_TestClass.h" />
+    <ClInclude Include="..\..\..\test\json_JsonSerialiser_TestClass.h" />
     <ClInclude Include="..\..\..\test\json_Number_TestClass.h" />
     <ClInclude Include="..\..\..\test\json_Value_TestClass.h" />
     <ClInclude Include="..\..\..\test\ITestClass.h" />

@@ -1,5 +1,7 @@
 #include <tc/json/Value.h>
 
+const std::string tc::json::Value::kClassName = "tc::json::Value";
+
 tc::json::Value::Value() :
 	mType(tc::json::JsonType::JSON_NULL),
 	mObject(),
@@ -68,9 +70,19 @@ tc::json::Value::object_t& tc::json::Value::asObject()
 	return mObject;
 }
 
+const tc::json::Value::object_t& tc::json::Value::asObject() const
+{
+	return mObject;
+}
+
 tc::json::Value::array_t& tc::json::Value::asArray()
 {
 	castAsType(tc::json::JsonType::JSON_ARRAY);
+	return mArray;
+}
+
+const tc::json::Value::array_t& tc::json::Value::asArray() const
+{
 	return mArray;
 }
 
@@ -80,15 +92,30 @@ std::string& tc::json::Value::asString()
 	return mString;
 }
 
+const std::string& tc::json::Value::asString() const
+{
+	return mString;
+}
+
 tc::json::Number& tc::json::Value::asNumber()
 {
 	castAsType(tc::json::JsonType::JSON_NUMBER);
 	return mNumber;
 }
 
+const tc::json::Number& tc::json::Value::asNumber() const
+{
+	return mNumber;
+}
+
 bool& tc::json::Value::asBoolean()
 {
 	castAsType(tc::json::JsonType::JSON_BOOLEAN);
+	return mBoolean;
+}
+
+bool tc::json::Value::asBoolean() const
+{
 	return mBoolean;
 }
 
