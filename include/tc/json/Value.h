@@ -2,8 +2,8 @@
 	 * @file Value.h
 	 * @brief Declaration of tc::json::Value
 	 * @author Jack (jakcron)
-	 * @version	0.1
-	 * @date 2019/10/15
+	 * @version	0.2
+	 * @date 2019/10/20
 	 */
 #pragma once
 #include <string>
@@ -53,42 +53,72 @@ public:
 		/**
 		 * @brief `Cast` this value as a JSON Object.
 		 * @return Reference to a @ref tc::json::Value::object_t containing the object members
-		 * @post This modifies the JSON value type: type() == JSON_OBJECT
-		 * @post Calling asObject() when type() != JSON_OBJECT will clear data stored as other JSON value types
+		 * @post This modifies the JSON value type: type() = JSON_OBJECT
 		 */
 	tc::json::Value::object_t& asObject();
 
 		/**
+		 * @brief Get the value from a JSON Object.
+		 * @return Reference (const) to a @ref tc::json::Value::object_t containing the object members
+		 * @pre type() == JSON_OBJECT
+		 */
+	const tc::json::Value::object_t& asObject() const;
+
+		/**
 		 * @brief `Cast` this value as a JSON Array.
 		 * @return Reference to a @ref tc::json::Value::array_t containing the array elements
-		 * @post This modifies the JSON value type: type() == JSON_ARRAY
-		 * @post Calling asArray() when type() != JSON_ARRAY will clear data stored as other JSON value types
+		 * @post This modifies the JSON value type: type() = JSON_ARRAY
 		 */
 	tc::json::Value::array_t& asArray();
 
 		/**
+		 * @brief Get the value from a JSON Array.
+		 * @return Reference (const) to a @ref tc::json::Value::array_t containing the array elements
+		 * @pre type() == JSON_ARRAY
+		 */
+	const tc::json::Value::array_t& asArray() const;
+
+		/**
 		 * @brief `Cast` this value as a JSON String.
 		 * @return Reference to a @ref tc::json::String containing the JSON string value
-		 * @post This modifies the JSON value type: type() == JSON_STRING
-		 * @post Calling asString() when type() != JSON_STRING will clear data stored as other JSON value types
+		 * @post This modifies the JSON value type: type() = JSON_STRING
 		 */
 	std::string& asString();
 
 		/**
+		 * @brief Get the value from a JSON String.
+		 * @return Reference (const) to a @ref tc::json::String containing the JSON string value
+		 * @pre type() == JSON_STRING
+		 */
+	const std::string& asString() const;
+
+		/**
 		 * @brief `Cast` this value as a JSON Number.
 		 * @return Reference to a @ref tc::json::Number containing the JSON number value
-		 * @post This modifies the JSON value type: type() == JSON_NUMBER
-		 * @post Calling asNumber() when type() != JSON_NUMBER will clear data stored as other JSON value types
+		 * @post This modifies the JSON value type: type() = JSON_NUMBER
 		 */
 	tc::json::Number& asNumber();
 
 		/**
+		 * @brief Get the value from a JSON Number.
+		 * @return Reference (const) to a @ref tc::json::Number containing the JSON number value
+		 * @pre type() == JSON_NUMBER
+		 */
+	const tc::json::Number& asNumber() const;
+
+		/**
 		 * @brief `Cast` this value as a JSON Boolean.
 		 * @return Reference to a @ref bool containing the JSON boolean value
-		 * @post This modifies the JSON value type: type() == JSON_BOOLEAN
-		 * @post Calling asBoolean() when type() != JSON_BOOLEAN will clear data stored as other JSON value types
+		 * @post This modifies the JSON value type: type() = JSON_BOOLEAN
 		 */
 	bool& asBoolean();
+
+		/**
+		 * @brief Get the value from a JSON Boolean.
+		 * @return Reference (const) to a @ref bool containing the JSON boolean value
+		 * @pre type() == JSON_BOOLEAN
+		 */
+	bool asBoolean() const;
 
 		/**
 		 * @brief `Cast` this value as a null JSON value.
