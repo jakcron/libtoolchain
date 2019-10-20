@@ -22,6 +22,12 @@
     <Filter Include="Header Files\public\fs">
       <UniqueIdentifier>{9824df4a-c13c-4643-b49b-497b47572477}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\public\json">
+      <UniqueIdentifier>{1e86cee3-3dae-4ef2-8370-7e618f9864ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\private\json">
+      <UniqueIdentifier>{0eb1dcb0-3830-4580-b70e-8500caeba061}/UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\public\string">
       <UniqueIdentifier>{d4011998-c73d-4ec4-a10d-4ef12f84577c}</UniqueIdentifier>
     </Filter>
@@ -30,6 +36,9 @@
     </Filter>
     <Filter Include="Source Files\fs">
       <UniqueIdentifier>{8ecef8dd-2a48-45cd-940d-7ce8fbdabfd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\json">
+      <UniqueIdentifier>{2cdf3385-77c8-4e46-abe2-850e42f75cb1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\string">
       <UniqueIdentifier>{4cbaa4ea-b95c-4672-90a0-27412d8f98ac}</UniqueIdentifier>
@@ -87,6 +96,18 @@
     <ClInclude Include="..\..\..\include\tc\fs\Path.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\json\JsonParser.h">
+      <Filter>Header Files\public\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\json\JsonType.h">
+      <Filter>Header Files\public\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\json\Number.h">
+      <Filter>Header Files\public\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\json\Value.h">
+      <Filter>Header Files\public\json</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\fs\PathUtils.h">
       <Filter>Header Files\public\fs</Filter>
     </ClInclude>
@@ -95,6 +116,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\string\transcode.h">
       <Filter>Header Files\public\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\json\JsonStringUtils.h">
+      <Filter>Header Files\private\json</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\string\utf8.h">
       <Filter>Header Files\private\string</Filter>
@@ -130,6 +154,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\fs\SandboxedFileSystem.cpp">
       <Filter>Source Files\fs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\json\JsonParser.cpp">
+      <Filter>Source Files\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\json\Number.cpp">
+      <Filter>Source Files\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\json\Value.cpp">
+      <Filter>Source Files\json</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\string\transcode.cpp">
       <Filter>Source Files\string</Filter>
