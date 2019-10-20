@@ -132,6 +132,11 @@
     <ClInclude Include="..\..\..\include\tc\fs\Path.h" />
     <ClInclude Include="..\..\..\include\tc\fs\PathUtils.h" />
     <ClInclude Include="..\..\..\include\tc\fs\SandboxedFileSystem.h" />
+    <ClInclude Include="..\..\..\include\tc\json.h" />
+    <ClInclude Include="..\..\..\include\tc\json\JsonParser.h" />
+    <ClInclude Include="..\..\..\include\tc\json\JsonType.h" />
+    <ClInclude Include="..\..\..\include\tc\json\Number.h" />
+    <ClInclude Include="..\..\..\include\tc\json\Value.h" />
     <ClInclude Include="..\..\..\include\tc\Optional.h" />
     <ClInclude Include="..\..\..\include\tc\ResourceState.h" />
     <ClInclude Include="..\..\..\include\tc\SharedPtr.h" />
@@ -139,6 +144,7 @@
     <ClInclude Include="..\..\..\include\tc\string\transcode.h" />
     <ClInclude Include="..\..\..\include\tc\tc.h" />
     <ClInclude Include="..\..\..\include\tc\types.h" />
+    <ClInclude Include="..\..\..\src\json\JsonStringUtils.h" />
     <ClInclude Include="..\..\..\src\string\utf16.h" />
     <ClInclude Include="..\..\..\src\string\utf8.h" />
   </ItemGroup>
@@ -152,6 +158,9 @@
     <ClCompile Include="..\..\..\src\fs\Path.cpp" />
     <ClCompile Include="..\..\..\src\fs\PathUtils.cpp" />
     <ClCompile Include="..\..\..\src\fs\SandboxedFileSystem.cpp" />
+    <ClCompile Include="..\..\..\src\json\JsonParser.cpp" />
+    <ClCompile Include="..\..\..\src\json\Number.cpp" />
+    <ClCompile Include="..\..\..\src\json\Value.cpp" />
     <ClCompile Include="..\..\..\src\string\transcode.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
