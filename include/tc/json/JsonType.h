@@ -3,7 +3,7 @@
 	 * @brief Declaration of tc::json::JsonType
 	 * @author Jack (jakcron)
 	 * @version	0.1
-	 * @date 2019/06/25
+	 * @date 2019/10/20
 	 */
 #pragma once
 
