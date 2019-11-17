@@ -12,7 +12,8 @@ tc::json::Number::Number() :
 
 }
 
-tc::json::Number::Number(double num, size_t fraction_digits)
+tc::json::Number::Number(double num, size_t fraction_digits) :
+	Number()
 {
 	if (num < 0)
 	{
