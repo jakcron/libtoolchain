@@ -196,7 +196,7 @@ void tc::json::JsonParser::parseString(const char* str, size_t str_len)
 			}
 
 			// convert parent from string key to parent object
-			if (mEventList[mParentEvent].type == JsonType::JSON_STRING)
+			if (mEventList[mParentEvent].type == ValueType::kString)
 			{
 				mCurrentEvent = mParentEvent;
 				mParentEvent = mEventList[mCurrentEvent].parent;
@@ -384,12 +384,12 @@ void tc::json::JsonParser::parseString(const char* str, size_t str_len)
 		// SubState Processing
 		if (mSubState == ParserState::OBJ_START)
 		{
-			mParentEvent = addEvent(sJsonEvent(JsonType::JSON_OBJECT, mParentEvent, i, 0));
+			mParentEvent = addEvent(sJsonEvent(ValueType::kObject, mParentEvent, i, 0));
 			mState = ParserState::OBJ_START;
 		}
 		else if (mSubState == ParserState::ARR_START)
 		{
-			mParentEvent = addEvent(sJsonEvent(JsonType::JSON_ARRAY, mParentEvent, i, 0));
+			mParentEvent = addEvent(sJsonEvent(ValueType::kArray, mParentEvent, i, 0));
 			mState = ParserState::ARR_START;
 		}
 		else if (mSubState == ParserState::OBJ_END || mSubState == ParserState::ARR_END)
@@ -404,13 +404,13 @@ void tc::json::JsonParser::parseString(const char* str, size_t str_len)
 				mState = ParserState::END;
 			}
 			// if the object parent is a string, then this was a Object Value, so indicate end of value
-			else if (mEventList[parent].type == JsonType::JSON_STRING)
+			else if (mEventList[parent].type == ValueType::kString)
 			{
 				mState = ParserState::OBJ_VAL_END;
 				mCurrentEvent = mParentEvent;
 				mParentEvent = parent;
 			}
-			else if (mEventList[parent].type == JsonType::JSON_ARRAY)
+			else if (mEventList[parent].type == ValueType::kArray)
 			{
 				mState = ParserState::ARR_ELEM_END;
 				mCurrentEvent = mParentEvent;
@@ -733,7 +733,7 @@ size_t tc::json::JsonParser::processStringSequence(const char* str, size_t pos, 
 		throw tc::Exception(kClassName, "Error processing JSON. Reason: Source string was not long enough");
 	}
 
-	size_t event_index = addEvent(sJsonEvent(JsonType::JSON_STRING, parent_index, pos, read_len));
+	size_t event_index = addEvent(sJsonEvent(ValueType::kString, parent_index, pos, read_len));
 
 	// if the string is more than open and close quotes, specifed the unquoted parameters
 	if (read_len > 2)
@@ -986,7 +986,7 @@ size_t tc::json::JsonParser::processNumberSequence(const char* str, size_t pos, 
 		throw tc::Exception(kClassName, "Error processing JSON. Reason: Source string was not long enough");
 	}
 
-	size_t event_index = addEvent(sJsonEvent(JsonType::JSON_NUMBER, parent_index, pos, read_len));
+	size_t event_index = addEvent(sJsonEvent(ValueType::kNumber, parent_index, pos, read_len));
 
 	mEventList[event_index].dec_sign_pos = dec_sign_pos;
 	mEventList[event_index].dec_pos = dec_pos;
@@ -1154,7 +1154,7 @@ size_t tc::json::JsonParser::processBooleanSequence(const char* str, size_t pos,
 		throw tc::Exception(kClassName, "Error processing JSON. Reason: Source string was not long enough");
 	}
 	
-	size_t event_index = addEvent(sJsonEvent(JsonType::JSON_BOOLEAN, parent_index, pos, read_len));
+	size_t event_index = addEvent(sJsonEvent(ValueType::kBoolean, parent_index, pos, read_len));
 
 	// configure event struct
 	mEventList[event_index].bool_value = bool_value;
@@ -1252,7 +1252,7 @@ size_t tc::json::JsonParser::processNullSequence(const char* str, size_t pos, si
 		throw tc::Exception(kClassName, "Error processing JSON. Reason: Source string was not long enough");
 	}
 
-	size_t event_index = addEvent(sJsonEvent(JsonType::JSON_NULL, parent_index, pos, read_len));
+	size_t event_index = addEvent(sJsonEvent(ValueType::kNull, parent_index, pos, read_len));
 
 	return event_index;
 }

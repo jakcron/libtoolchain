@@ -3,7 +3,7 @@
 const std::string tc::json::Value::kClassName = "tc::json::Value";
 
 tc::json::Value::Value() :
-	mType(tc::json::JsonType::JSON_NULL),
+	mType(tc::json::ValueType::kNull),
 	mObject(),
 	mArray(),
 	mString(),
@@ -30,27 +30,27 @@ bool tc::json::Value::operator==(const tc::json::Value& other) const
 
 	if (mType == other.mType)
 	{
-		if (mType == JsonType::JSON_OBJECT)
+		if (mType == ValueType::kObject)
 		{
 			isEqual = mObject == other.mObject;
 		}
-		else if (mType == JsonType::JSON_ARRAY)
+		else if (mType == ValueType::kArray)
 		{
 			isEqual = mArray == other.mArray;
 		}
-		else if (mType == JsonType::JSON_STRING)
+		else if (mType == ValueType::kString)
 		{
 			isEqual = mString == other.mString;
 		}
-		else if (mType == JsonType::JSON_NUMBER)
+		else if (mType == ValueType::kNumber)
 		{
 			isEqual = mNumber == other.mNumber;
 		}	
-		else if (mType == JsonType::JSON_BOOLEAN)
+		else if (mType == ValueType::kBoolean)
 		{
 			isEqual = mBoolean == other.mBoolean;
 		}
-		else if (mType == JsonType::JSON_NULL)
+		else if (mType == ValueType::kNull)
 		{
 			return true;
 		}
@@ -59,14 +59,14 @@ bool tc::json::Value::operator==(const tc::json::Value& other) const
 	return isEqual;
 }
 
-tc::json::JsonType tc::json::Value::type() const
+tc::json::ValueType tc::json::Value::type() const
 {
 	return mType;
 }
 
 tc::json::Value::object_t& tc::json::Value::asObject()
 {
-	castAsType(tc::json::JsonType::JSON_OBJECT);
+	castAsType(tc::json::ValueType::kObject);
 	return mObject;
 }
 
@@ -77,7 +77,7 @@ const tc::json::Value::object_t& tc::json::Value::asObject() const
 
 tc::json::Value::array_t& tc::json::Value::asArray()
 {
-	castAsType(tc::json::JsonType::JSON_ARRAY);
+	castAsType(tc::json::ValueType::kArray);
 	return mArray;
 }
 
@@ -86,59 +86,59 @@ const tc::json::Value::array_t& tc::json::Value::asArray() const
 	return mArray;
 }
 
-std::string& tc::json::Value::asString()
+tc::json::Value::string_t& tc::json::Value::asString()
 {
-	castAsType(tc::json::JsonType::JSON_STRING);
+	castAsType(tc::json::ValueType::kString);
 	return mString;
 }
 
-const std::string& tc::json::Value::asString() const
+const tc::json::Value::string_t& tc::json::Value::asString() const
 {
 	return mString;
 }
 
-tc::json::Number& tc::json::Value::asNumber()
+tc::json::Value::number_t& tc::json::Value::asNumber()
 {
-	castAsType(tc::json::JsonType::JSON_NUMBER);
+	castAsType(tc::json::ValueType::kNumber);
 	return mNumber;
 }
 
-const tc::json::Number& tc::json::Value::asNumber() const
+const tc::json::Value::number_t& tc::json::Value::asNumber() const
 {
 	return mNumber;
 }
 
-bool& tc::json::Value::asBoolean()
+tc::json::Value::boolean_t& tc::json::Value::asBoolean()
 {
-	castAsType(tc::json::JsonType::JSON_BOOLEAN);
+	castAsType(tc::json::ValueType::kBoolean);
 	return mBoolean;
 }
 
-bool tc::json::Value::asBoolean() const
+const tc::json::Value::boolean_t& tc::json::Value::asBoolean() const
 {
 	return mBoolean;
 }
 
 void tc::json::Value::asNull()
 {
-	castAsType(tc::json::JsonType::JSON_NULL);
+	castAsType(tc::json::ValueType::kNull);
 }
 
 void tc::json::Value::parseJson(tc::json::Value& json, const std::string& literal_json, const tc::json::JsonParser& p, size_t event_index)
 {
-	if (p.getEvent(event_index).type == JsonType::JSON_NULL)
+	if (p.getEvent(event_index).type == ValueType::kNull)
 	{
 		json.asNull();
 	}
-	else if (p.getEvent(event_index).type == JsonType::JSON_BOOLEAN)
+	else if (p.getEvent(event_index).type == ValueType::kBoolean)
 	{
 		json.asBoolean() = p.getEvent(event_index).bool_value;
 	}
-	else if (p.getEvent(event_index).type == JsonType::JSON_STRING)
+	else if (p.getEvent(event_index).type == ValueType::kString)
 	{
 		json.asString() = literal_json.substr(p.getEvent(event_index).str_unquoted_pos, p.getEvent(event_index).str_unquoted_len);
 	}
-	else if (p.getEvent(event_index).type == JsonType::JSON_NUMBER)
+	else if (p.getEvent(event_index).type == ValueType::kNumber)
 	{
 		// get decimal section
 		bool isPosDec = true;
@@ -171,7 +171,7 @@ void tc::json::Value::parseJson(tc::json::Value& json, const std::string& litera
 		num.e_val = strtoumax(exp.c_str(), nullptr, 10);
 		num.e_pos = isPosExp;
 	}
-	else if (p.getEvent(event_index).type == JsonType::JSON_ARRAY)
+	else if (p.getEvent(event_index).type == ValueType::kArray)
 	{
 		json.asNull();
 		json.asArray();
@@ -189,7 +189,7 @@ void tc::json::Value::parseJson(tc::json::Value& json, const std::string& litera
 		
 	}
 	
-	else if (p.getEvent(event_index).type == JsonType::JSON_OBJECT)
+	else if (p.getEvent(event_index).type == ValueType::kObject)
 	{
 		json.asNull();
 		json.asObject();
@@ -217,31 +217,31 @@ void tc::json::Value::parseJson(tc::json::Value& json, const std::string& litera
 	}
 }
 
-void tc::json::Value::castAsType(tc::json::JsonType type)
+void tc::json::Value::castAsType(tc::json::ValueType type)
 {
 	if (mType != type)
 	{
-		if (mType == JsonType::JSON_OBJECT)
+		if (mType == ValueType::kObject)
 		{
 			mObject.clear();
 		}
 
-		if (mType == JsonType::JSON_ARRAY)
+		if (mType == ValueType::kArray)
 		{
 			mArray.clear();
 		}
 
-		if (mType == JsonType::JSON_STRING)
+		if (mType == ValueType::kString)
 		{
 			mString.clear();
 		}
 
-		if (mType == JsonType::JSON_NUMBER)
+		if (mType == ValueType::kNumber)
 		{
 			mNumber = tc::json::Number();
 		}
 			
-		if (mType == JsonType::JSON_BOOLEAN)
+		if (mType == ValueType::kBoolean)
 		{
 			mBoolean = false;
 		}

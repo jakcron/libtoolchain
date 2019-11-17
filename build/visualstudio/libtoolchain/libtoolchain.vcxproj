@@ -135,7 +135,7 @@
     <ClInclude Include="..\..\..\include\tc\json.h" />
     <ClInclude Include="..\..\..\include\tc\json\JsonParser.h" />
     <ClInclude Include="..\..\..\include\tc\json\JsonSerialiser.h" />
-    <ClInclude Include="..\..\..\include\tc\json\JsonType.h" />
+    <ClInclude Include="..\..\..\include\tc\json\ValueType.h" />
     <ClInclude Include="..\..\..\include\tc\json\Number.h" />
     <ClInclude Include="..\..\..\include\tc\json\Value.h" />
     <ClInclude Include="..\..\..\include\tc\Optional.h" />

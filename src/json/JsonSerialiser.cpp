@@ -22,7 +22,7 @@ const std::string& tc::json::JsonSerialiser::getString() const
 
 void tc::json::JsonSerialiser::emitJson(std::ostream& stream, const tc::json::Value& json, size_t indent) const
 {
-    if (json.type() == tc::json::JsonType::JSON_NUMBER)
+    if (json.type() == tc::json::ValueType::kNumber)
 	{
 		stream << (json.asNumber().i_pos ? "" : "-") << std::dec << json.asNumber().i_val;
 		if (json.asNumber().f_digits > 0)
@@ -30,19 +30,19 @@ void tc::json::JsonSerialiser::emitJson(std::ostream& stream, const tc::json::Va
 		if (json.asNumber().e_val)
 			stream << "e" << (json.asNumber().e_pos ? "" : "-") << std::dec << json.asNumber().e_val;
 	}
-	if (json.type() == tc::json::JsonType::JSON_BOOLEAN)
+	if (json.type() == tc::json::ValueType::kBoolean)
 	{
 		stream << (json.asBoolean() ? "true" : "false");
 	}
-	if (json.type() == tc::json::JsonType::JSON_NULL)
+	if (json.type() == tc::json::ValueType::kNull)
 	{
 		stream << "null";
 	}
-	if (json.type() == tc::json::JsonType::JSON_STRING)
+	if (json.type() == tc::json::ValueType::kString)
 	{
 		stream << "\"" << json.asString() << "\""; 
 	}
-	if (json.type() == tc::json::JsonType::JSON_ARRAY)
+	if (json.type() == tc::json::ValueType::kArray)
 	{
 		stream << "[";
 		if (json.asArray().size() > 0)
@@ -71,7 +71,7 @@ void tc::json::JsonSerialiser::emitJson(std::ostream& stream, const tc::json::Va
 		}
 		stream << "]";
 	}
-	if (json.type() == tc::json::JsonType::JSON_OBJECT)
+	if (json.type() == tc::json::ValueType::kObject)
 	{
 		stream << "{";
 		if (json.asObject().size() > 0)

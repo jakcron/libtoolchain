@@ -11,7 +11,7 @@
 	 * @brief       Namespace of the filesystem library
 	 */
 
-#include <tc/json/JsonType.h>
+#include <tc/json/ValueType.h>
 #include <tc/json/JsonParser.h>
 #include <tc/json/Number.h>
 #include <tc/json/Value.h>
