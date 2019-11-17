@@ -7,7 +7,7 @@
 	 */
 #pragma once
 #include <tc/types.h>
-#include <tc/json/JsonType.h>
+#include <tc/json/ValueType.h>
 
 namespace tc { namespace json {
 
@@ -20,7 +20,7 @@ struct sJsonEvent
 	static const size_t kInvalidEvent = -1;
 
 	sJsonEvent() :
-		type(tc::json::JsonType::JSON_NULL),
+		type(tc::json::ValueType::kNull),
 		parent(kInvalidEvent),
 		sibling(kInvalidEvent),
 		child_front(kInvalidEvent),
@@ -40,7 +40,7 @@ struct sJsonEvent
 		bool_value(false)
 	{}
 
-	sJsonEvent(JsonType type, size_t parent, size_t str_pos, size_t str_len) :
+	sJsonEvent(ValueType type, size_t parent, size_t str_pos, size_t str_len) :
 		sJsonEvent()
 	{
 		this->type = type;
@@ -50,7 +50,7 @@ struct sJsonEvent
 	}
 
 	// JSON Value Type
-	JsonType type;
+	ValueType type;
 
 	// location of relative event entries
 	size_t parent;
@@ -219,7 +219,7 @@ private:
 	size_t addEvent(sJsonEvent&& event);
 
 	/*
-	mEventList.push_back(sJsonEvent(JsonType::JSON_BOOLEAN, mParentEvent, i, 0));
+	mEventList.push_back(sJsonEvent(ValueType::kBoolean, mParentEvent, i, 0));
 	mCurrentEvent = mEventList.size();
 	*/
 	size_t processStringSequence(const char* str, size_t pos, size_t str_len, size_t parent_index);
