@@ -829,7 +829,7 @@ size_t tc::json::JsonParser::processNumberSequence(const char* str, size_t pos, 
 				state = ParserState::NUM_INT_NUM;
 				dec_pos = i - pos;
 			}
-			if (isValidZero(chr))
+			else if (isValidZero(chr))
 			{
 				state = ParserState::NUM_INT_START_ZERO;
 				dec_pos = i - pos;
