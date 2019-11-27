@@ -10,6 +10,7 @@
 #include "fs_SandboxedFileSystem_TestClass.h"
 #include "json_JsonParser_TestClass.h"
 #include "json_Number_TestClass.h"
+#include "json_NumberUtils_TestClass.h"
 #include "json_Value_TestClass.h"
 #include "json_JsonSerialiser_TestClass.h"
 
@@ -33,6 +34,7 @@ int main(int argc, char** argv)
 	runTest(new fs_SandboxedFileSystem_TestClass());
 	runTest(new json_JsonParser_TestClass());
 	runTest(new json_Number_TestClass());
+	runTest(new json_NumberUtils_TestClass());
 	runTest(new json_Value_TestClass());
 	runTest(new json_JsonSerialiser_TestClass());
 }
