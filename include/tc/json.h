@@ -14,6 +14,7 @@
 #include <tc/json/ValueType.h>
 #include <tc/json/JsonParser.h>
 #include <tc/json/Number.h>
+#include <tc/json/NumberUtils.h>
 #include <tc/json/Value.h>
 #include <tc/json/JsonString.h>
 #include <tc/json/JsonNumber.h>

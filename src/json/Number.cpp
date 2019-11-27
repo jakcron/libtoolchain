@@ -1,5 +1,5 @@
 #include <tc/json/Number.h>
-#include <cmath>
+#include <tc/Exception.h>
 
 tc::json::Number::Number() :
 	i_val(0),
@@ -9,58 +9,28 @@ tc::json::Number::Number() :
 	e_val(0),
 	e_pos(true)
 {
-
 }
 
-tc::json::Number::Number(double num, size_t fraction_digits) :
-	Number()
+tc::json::Number::Number(uint64_t i_val, bool i_pos, uint64_t f_val, size_t f_digits, uint64_t e_val, bool e_pos) :
+	i_val(i_val),
+	i_pos(i_pos),
+	f_val(f_val),
+	f_digits(f_digits),
+	e_val(e_val),
+	e_pos(e_pos)
 {
-	if (num < 0)
-	{
-		num *= -1;
-		this->i_pos = false;
-	}
-
-	// save int val
-	this->i_val = (uint64_t)floor(num);
-
-	// save frac val
-	double fac = pow(10, fraction_digits);
-	this->f_val = (uint64_t)(double)(round(num * fac) - round(floor(num) * fac));
-	this->f_digits = fraction_digits;
-	
-	if ((this->f_val / fac) >= 1.0)
-	{
-		this->i_val++;
-	}
 }
 
-tc::json::Number::Number(double num, size_t fraction_digits, int64_t exp) :
-	Number(num, fraction_digits)
+tc::json::Number::Number(int64_t num)  :
+	i_val(llabs(num)),
+	i_pos(num >= 0),
+	f_val(0),
+	f_digits(0),
+	e_val(0),
+	e_pos(true)
 {
-	if (exp < 0)
-	{
-		exp *= -1;
-		this->e_pos = false;
-	}
-
-	// save int val
-	this->e_val = exp;
 }
 
-tc::json::Number::Number(int64_t num) :
-	Number()
-{
-	if (num < 0)
-	{
-		num *= -1;
-		this->i_pos = false;
-	}
-	
-	this->i_val = num;
-}
-
-	/// Equality Operator
 bool tc::json::Number::operator==(const tc::json::Number& other) const
 {
 	return 	(this->i_val == other.i_val \
@@ -71,40 +41,7 @@ bool tc::json::Number::operator==(const tc::json::Number& other) const
 		&&	this->e_pos == other.e_pos);
 }
 
-double tc::json::Number::toDouble() const
+bool tc::json::Number::operator!=(const tc::json::Number& other) const
 {
-	double dlb_ret = 0;
-
-	// handle fraction component	
-	if (this->f_val != 0)
-	{
-		dlb_ret = (double)this->f_val / (double)pow(10, this->f_digits);
-	}
-
-	// add integer component
-	dlb_ret += (double)this->i_val;
-
-	// handle exponent component
-	if (this->e_val != 0)
-	{
-		if (this->e_pos == true)
-		{
-			dlb_ret *= (double)pow(10, this->e_val);
-		}
-		else
-		{
-			dlb_ret /= (double)pow(10, this->e_val);
-		}
-		
-	}
-
-	if (this->i_pos == false)
-		dlb_ret *= -1;
-
-	return dlb_ret;
-}
-
-int64_t tc::json::Number::toInt() const
-{
-	return (uint64_t)floor(this->toDouble());
+	return !(*this == other);
 }

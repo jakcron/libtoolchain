@@ -40,19 +40,9 @@ struct Number
 	Number();
 
 		/**
-		 * @brief Construct from double
-		 * @param[in] num Double
-		 * @param[in] fraction_digits Number of decimal places to store
+		 * @brief Parametized Constructor
 		 */
-	Number(double num, size_t fraction_digits);
-
-		/**
-		 * @brief Construct from double and exponent
-		 * @param[in] num Int & Frac components as a Double
-		 * @param[in] fraction_digits Number of decimal places to store
-		 * @param[in] exp Exponent
-		 */
-	Number(double num, size_t fraction_digits, int64_t exp);
+	Number(uint64_t i_val, bool i_pos, uint64_t f_val, size_t f_digits, uint64_t e_val, bool e_pos);
 
 		/**
 		 * @brief Construct from integer
@@ -63,17 +53,8 @@ struct Number
 		/// Equality Operator
 	bool operator==(const tc::json::Number& other) const;
 
-		/**
-		 * @brief Get Number as a double
-		 * @return double
-		 */
-	double toDouble() const;
-
-		/**
-		 * @brief Get Number as a int64_t
-		 * @return int64_t
-		 */
-	int64_t toInt() const;
+		/// Inequality Operator
+	bool operator!=(const tc::json::Number& other) const;
 };
 
 }} // namespace tc::json
