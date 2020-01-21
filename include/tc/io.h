@@ -19,5 +19,5 @@
 #include <tc/io/LocalFileObject.h>
 #include <tc/io/LocalFileSystem.h>
 
-#include <tc/io/PartitionedFileObject.h>
+#include <tc/io/SubFileObject.h>
 #include <tc/io/SandboxedFileSystem.h>

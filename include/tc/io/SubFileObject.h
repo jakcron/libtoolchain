@@ -1,6 +1,6 @@
 	/**
-	 * @file PartitionedFileObject.h
-	 * @brief Declaration of tc::io::PartitionedFileObject
+	 * @file SubFileObject.h
+	 * @brief Declaration of tc::io::SubFileObject
 	 * @author Jack (jakcron)
 	 * @version 0.3
 	 * @date 2019/06/19
@@ -11,16 +11,16 @@
 namespace tc { namespace io {
 
 	/**
-	 * @class PartitionedFileObject
-	 * @brief A wrapper around an existing IFileObject object that exposes are partition (user specified offset & size) of the IFileObject object.
+	 * @class SubFileObject
+	 * @brief A wrapper around an existing IFileObject object that exposes a subset of the base the IFileObject object.
 	 */
-class PartitionedFileObject : public IFileObject
+class SubFileObject : public IFileObject
 {
 public:
 		/**
 		 * @brief Default constructor
 		 */
-	PartitionedFileObject();
+	SubFileObject();
 
 		/** 
 		 * @brief Wrap (by copy) constuctor
@@ -30,7 +30,7 @@ public:
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	PartitionedFileObject(const std::shared_ptr<tc::io::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size);
+	SubFileObject(const std::shared_ptr<tc::io::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 		/** 
 		 * @brief Wrap (by move) constuctor
@@ -40,7 +40,7 @@ public:
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	PartitionedFileObject(std::shared_ptr<tc::io::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size);
+	SubFileObject(std::shared_ptr<tc::io::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 	virtual tc::ResourceState state();
 

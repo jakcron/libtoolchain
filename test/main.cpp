@@ -3,7 +3,7 @@
 #include "Optional_TestClass.h"
 #include "io_Path_TestClass.h"
 #include "io_LocalFileSystem_TestClass.h"
-#include "io_PartitionedFileObject_TestClass.h"
+#include "io_SubFileObject_TestClass.h"
 #include "io_SandboxedFileSystem_TestClass.h"
 
 void runTest(ITestClass* testClass)
@@ -19,6 +19,6 @@ int main(int argc, char** argv)
 	runTest(new Optional_TestClass());
 	runTest(new io_Path_TestClass());
 	runTest(new io_LocalFileSystem_TestClass());
-	runTest(new io_PartitionedFileObject_TestClass());
+	runTest(new io_SubFileObject_TestClass());
 	runTest(new io_SandboxedFileSystem_TestClass());
 }
