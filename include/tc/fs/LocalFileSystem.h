@@ -24,9 +24,6 @@ public:
 		/// Default Constructor
 	LocalFileSystem();
 
-	virtual tc::fs::IFileSystem* copyInstance() const;
-	virtual tc::fs::IFileSystem* moveInstance();
-
 	virtual tc::ResourceState getFsState();
 
 		/// Open Local Filesystem
@@ -35,7 +32,7 @@ public:
 	virtual void closeFs();
 	virtual void createFile(const tc::fs::Path& path);
 	virtual void removeFile(const tc::fs::Path& path);
-	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::GenericFileObject& file);
+	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, std::shared_ptr<tc::fs::IFileObject>& file);
 	virtual void createDirectory(const tc::fs::Path& path);
 	virtual void removeDirectory(const tc::fs::Path& path);
 	virtual void getWorkingDirectory(tc::fs::Path& path);

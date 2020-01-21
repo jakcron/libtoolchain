@@ -31,16 +31,6 @@ void fs_SandboxedFileSystem_TestClass::testSandboxRootPath()
 			DummyFileSystem()
 			{
 			}
-
-			virtual tc::fs::IFileSystem* copyInstance() const
-			{
-				return new DummyFileSystem(*this);
-			}
-
-			virtual tc::fs::IFileSystem* moveInstance()
-			{
-				return new DummyFileSystem(std::move(*this));
-			}
 		};
 
 		DummyFileSystem fs;
@@ -54,7 +44,7 @@ void fs_SandboxedFileSystem_TestClass::testSandboxRootPath()
 		try
 		{
 			// get sandbox filesystem
-			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + sandbox_relative_root);
+			tc::fs::SandboxedFileSystem sb_fs(std::make_shared<DummyFileSystem>(fs), dummyfs_curdir + sandbox_relative_root);
 
 			// save sandbox real path
 			tc::fs::Path sandbox_real_root;
@@ -103,16 +93,6 @@ void fs_SandboxedFileSystem_TestClass::testCreateFile()
 					throw tc::Exception("DummyFileSystem", "file had incorrect path");
 				}
 			}
-
-			virtual tc::fs::IFileSystem* copyInstance() const
-			{
-				return new DummyFileSystem(*this);
-			}
-
-			virtual tc::fs::IFileSystem* moveInstance()
-			{
-				return new DummyFileSystem(std::move(*this));
-			}
 		};
 
 		DummyFileSystem fs;
@@ -125,7 +105,7 @@ void fs_SandboxedFileSystem_TestClass::testCreateFile()
 		try
 		{
 			// get sandbox filesystem
-			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + testdir_path);
+			tc::fs::SandboxedFileSystem sb_fs(std::make_shared<DummyFileSystem>(fs), dummyfs_curdir + testdir_path);
 
 			// attempt to create file
 			sb_fs.createFile(tc::fs::Path("/a_dir/testfile"));
@@ -155,7 +135,7 @@ void fs_SandboxedFileSystem_TestClass::testOpenFile()
 			{
 			}
 
-			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::GenericFileObject& file)
+			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, std::shared_ptr<tc::fs::IFileObject>& file)
 			{
 				tc::fs::Path cur_dir;
 				getWorkingDirectory(cur_dir);
@@ -167,16 +147,6 @@ void fs_SandboxedFileSystem_TestClass::testOpenFile()
 				{
 					throw tc::Exception("DummyFileSystem", "file had incorrect path");
 				}
-			}
-
-			virtual tc::fs::IFileSystem* copyInstance() const
-			{
-				return new DummyFileSystem(*this);
-			}
-
-			virtual tc::fs::IFileSystem* moveInstance()
-			{
-				return new DummyFileSystem(std::move(*this));
 			}
 		};
 
@@ -190,10 +160,10 @@ void fs_SandboxedFileSystem_TestClass::testOpenFile()
 		try
 		{
 			// get sandbox filesystem
-			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + testdir_path);
+			tc::fs::SandboxedFileSystem sb_fs(std::make_shared<DummyFileSystem>(fs), dummyfs_curdir + testdir_path);
 
 			// attempt to open file
-			tc::fs::GenericFileObject file;
+			std::shared_ptr<tc::fs::IFileObject> file;
 			sb_fs.openFile(tc::fs::Path("/a_dir/testfile"), tc::fs::FILEACCESS_READ, file);
 			
 			std::cout << "PASS" << std::endl;
@@ -230,16 +200,6 @@ void fs_SandboxedFileSystem_TestClass::testRemoveFile()
 					throw tc::Exception("DummyFileSystem", "file had incorrect path");
 				}
 			}
-
-			virtual tc::fs::IFileSystem* copyInstance() const
-			{
-				return new DummyFileSystem(*this);
-			}
-
-			virtual tc::fs::IFileSystem* moveInstance()
-			{
-				return new DummyFileSystem(std::move(*this));
-			}
 		};
 	
 		DummyFileSystem fs;
@@ -252,7 +212,7 @@ void fs_SandboxedFileSystem_TestClass::testRemoveFile()
 		try
 		{
 			// get sandbox filesystem
-			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + testdir_path);
+			tc::fs::SandboxedFileSystem sb_fs(std::make_shared<DummyFileSystem>(fs), dummyfs_curdir + testdir_path);
 
 			// attempt to delete file
 			sb_fs.removeFile(tc::fs::Path("/a_dir/testfile"));
@@ -292,16 +252,6 @@ void fs_SandboxedFileSystem_TestClass::testCreateDirectory()
 					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
 				}
 			}
-
-			virtual tc::fs::IFileSystem* copyInstance() const
-			{
-				return new DummyFileSystem(*this);
-			}
-
-			virtual tc::fs::IFileSystem* moveInstance()
-			{
-				return new DummyFileSystem(std::move(*this));
-			}
 		};
 
 		DummyFileSystem fs;
@@ -314,7 +264,7 @@ void fs_SandboxedFileSystem_TestClass::testCreateDirectory()
 		try
 		{
 			// get sandbox filesystem
-			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + testdir_path);
+			tc::fs::SandboxedFileSystem sb_fs(std::make_shared<DummyFileSystem>(fs), dummyfs_curdir + testdir_path);
 
 			// attempt to create directory
 			sb_fs.createDirectory(tc::fs::Path("/a_dir/testdir/hey"));
@@ -353,16 +303,6 @@ void fs_SandboxedFileSystem_TestClass::testRemoveDirectory()
 					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
 				}
 			}
-
-			virtual tc::fs::IFileSystem* copyInstance() const
-			{
-				return new DummyFileSystem(*this);
-			}
-
-			virtual tc::fs::IFileSystem* moveInstance()
-			{
-				return new DummyFileSystem(std::move(*this));
-			}			
 		};
 
 		DummyFileSystem fs;
@@ -375,7 +315,7 @@ void fs_SandboxedFileSystem_TestClass::testRemoveDirectory()
 		try
 		{
 			// get sandbox filesystem
-			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + testdir_path);
+			tc::fs::SandboxedFileSystem sb_fs(std::make_shared<DummyFileSystem>(fs), dummyfs_curdir + testdir_path);
 
 			// attempt to remove directory
 			sb_fs.removeDirectory(tc::fs::Path("/a_dir/testdir/hey"));
@@ -418,16 +358,6 @@ void fs_SandboxedFileSystem_TestClass::testGetDirectoryListing()
 				dir_info.dir_list = std::vector<std::string>({ "dir0", "dir1", "dir2" });
 				dir_info.file_list = std::vector<std::string>({ "file0", "file1" });
 			}
-
-			virtual tc::fs::IFileSystem* copyInstance() const
-			{
-				return new DummyFileSystem(*this);
-			}
-
-			virtual tc::fs::IFileSystem* moveInstance()
-			{
-				return new DummyFileSystem(std::move(*this));
-			}
 		};
 
 		DummyFileSystem fs;
@@ -440,7 +370,7 @@ void fs_SandboxedFileSystem_TestClass::testGetDirectoryListing()
 		try
 		{
 			// get sandbox filesystem
-			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + testdir_path);
+			tc::fs::SandboxedFileSystem sb_fs(std::make_shared<DummyFileSystem>(fs), dummyfs_curdir + testdir_path);
 
 			// save sandbox dir info
 			tc::fs::sDirectoryListing sb_dir_info;
@@ -513,18 +443,8 @@ void fs_SandboxedFileSystem_TestClass::testNavigateUpSandboxEscape()
 			{
 				return *mLastUsedPath;
 			}
-
-			virtual tc::fs::IFileSystem* copyInstance() const
-			{
-				return new DummyFileSystem(*this);
-			}
-
-			virtual tc::fs::IFileSystem* moveInstance()
-			{
-				return new DummyFileSystem(std::move(*this));
-			}
 		private:
-			tc::SharedPtr<tc::fs::Path> mLastUsedPath;
+			std::shared_ptr<tc::fs::Path> mLastUsedPath;
 		};
 
 		DummyFileSystem fs;
@@ -540,7 +460,7 @@ void fs_SandboxedFileSystem_TestClass::testNavigateUpSandboxEscape()
 		try
 		{
 			// get sandbox filesystem
-			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + sandbox_relative_root);
+			tc::fs::SandboxedFileSystem sb_fs(std::make_shared<DummyFileSystem>(fs), dummyfs_curdir + sandbox_relative_root);
 
 			// get info about current directory
 			tc::fs::sDirectoryListing dir_info;
@@ -581,7 +501,7 @@ void fs_SandboxedFileSystem_TestClass::testOpenFileOutsideSandbox()
 			{
 			}
 
-			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::GenericFileObject& file)
+			void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, std::shared_ptr<tc::fs::IFileObject>& file)
 			{
 				tc::fs::Path mCurDir;
 				getWorkingDirectory(mCurDir);
@@ -598,16 +518,6 @@ void fs_SandboxedFileSystem_TestClass::testOpenFileOutsideSandbox()
 					throw tc::Exception("DummyFileSystem", "sandbox path was not as expected");
 				}
 			}
-
-			virtual tc::fs::IFileSystem* copyInstance() const
-			{
-				return new DummyFileSystem(*this);
-			}
-
-			virtual tc::fs::IFileSystem* moveInstance()
-			{
-				return new DummyFileSystem(std::move(*this));
-			}
 		};
 
 		DummyFileSystem fs;
@@ -622,11 +532,11 @@ void fs_SandboxedFileSystem_TestClass::testOpenFileOutsideSandbox()
 		// test accessing file outside of sandbox
 		try {
 			// get sandbox filesystem
-			tc::fs::SandboxedFileSystem sb_fs(fs, dummyfs_curdir + sandbox_relative_root);
+			tc::fs::SandboxedFileSystem sb_fs(std::make_shared<DummyFileSystem>(fs), dummyfs_curdir + sandbox_relative_root);
 			  
 			// try to open the file just outside the sandbox
 			sb_fs.setWorkingDirectory(tc::fs::Path("/"));
-			tc::fs::GenericFileObject inaccessible_file;
+			std::shared_ptr<tc::fs::IFileObject> inaccessible_file;
 			sb_fs.openFile(tc::fs::Path("../inaccessible_file0"), tc::fs::FILEACCESS_READ, inaccessible_file);
 
 			std::cout << "PASS" << std::endl;

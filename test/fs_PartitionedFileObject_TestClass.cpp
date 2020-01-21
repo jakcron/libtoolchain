@@ -26,16 +26,6 @@ void fs_PartitionedFileObject_TestClass::testSize()
 			DummyFile()
 			{
 			}
-
-			virtual tc::fs::IFileObject* copyInstance() const
-			{
-				return new DummyFile(*this);
-			}
-
-			virtual tc::fs::IFileObject* moveInstance()
-			{
-				return new DummyFile(*this);
-			}
 		};
 
 		try
@@ -44,7 +34,7 @@ void fs_PartitionedFileObject_TestClass::testSize()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox file
-			tc::fs::PartitionedFileObject sb_file(DummyFile(), sandbox_offset, sandbox_size);
+			tc::fs::PartitionedFileObject sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
 
 			if (sb_file.size() != sandbox_size)
 			{
@@ -85,16 +75,6 @@ void fs_PartitionedFileObject_TestClass::testSeekPos()
 					throw tc::Exception("Real file file offset was not as expected");
 				}
 			}
-
-			virtual tc::fs::IFileObject* copyInstance() const
-			{
-				return new DummyFile(*this);
-			}
-
-			virtual tc::fs::IFileObject* moveInstance()
-			{
-				return new DummyFile(*this);
-			}
 		};
 
 		try
@@ -105,7 +85,7 @@ void fs_PartitionedFileObject_TestClass::testSeekPos()
 			DummyFile file;
 
 			// get sandbox file
-			tc::fs::PartitionedFileObject sb_file(file, sandbox_offset, sandbox_size);
+			tc::fs::PartitionedFileObject sb_file(std::make_shared<DummyFile>(file), sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file.seek(offset_to_seek);
@@ -162,16 +142,6 @@ void fs_PartitionedFileObject_TestClass::testRead()
 					throw tc::Exception("'len' parameter was passed to base IFileObject object not as expected");
 				}
 			}
-
-			virtual tc::fs::IFileObject* copyInstance() const
-			{
-				return new DummyFile(*this);
-			}
-
-			virtual tc::fs::IFileObject* moveInstance()
-			{
-				return new DummyFile(*this);
-			}
 		};
 
 		try
@@ -180,7 +150,7 @@ void fs_PartitionedFileObject_TestClass::testRead()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox file
-			tc::fs::PartitionedFileObject sb_file(DummyFile(), sandbox_offset, sandbox_size);
+			tc::fs::PartitionedFileObject sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file.seek(offset_to_seek);
@@ -228,16 +198,6 @@ void fs_PartitionedFileObject_TestClass::testWrite()
 					throw tc::Exception("'len' parameter was passed to base IFileObject object not as expected");
 				}
 			}
-
-			virtual tc::fs::IFileObject* copyInstance() const
-			{
-				return new DummyFile(*this);
-			}
-
-			virtual tc::fs::IFileObject* moveInstance()
-			{
-				return new DummyFile(*this);
-			}
 		};
 
 		try
@@ -246,7 +206,7 @@ void fs_PartitionedFileObject_TestClass::testWrite()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox file
-			tc::fs::PartitionedFileObject sb_file(DummyFile(), sandbox_offset, sandbox_size);
+			tc::fs::PartitionedFileObject sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file.seek(offset_to_seek);

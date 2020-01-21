@@ -3,7 +3,6 @@
 #include <tc/fs/PathUtils.h>
 #include <tc/Exception.h>
 #include <tc/string.h>
-#include <tc/SharedPtr.h>
 
 #ifdef _WIN32
 #include <direct.h>
@@ -25,16 +24,6 @@ tc::fs::LocalFileSystem::LocalFileSystem() :
 	mState()
 {
 	openFs();
-}
-
-tc::fs::IFileSystem* tc::fs::LocalFileSystem::copyInstance() const
-{
-	return new LocalFileSystem();	
-}
-
-tc::fs::IFileSystem* tc::fs::LocalFileSystem::moveInstance()
-{
-	return new LocalFileSystem();                                                                                                                                                                                                                                                 
 }
 
 tc::ResourceState tc::fs::LocalFileSystem::getFsState()
@@ -101,7 +90,7 @@ void tc::fs::LocalFileSystem::removeFile(const tc::fs::Path& path)
 	// delete file
 	if (DeleteFileW((LPCWSTR)unicode_path.c_str()) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to delete file (" + std::to_string(GetLastError()) + ")");
+		throw tc::Exception(kClassName, "Failed to remove file (" + std::to_string(GetLastError()) + ")");
 	}	
 #else
 	// convert Path to unicode string
@@ -110,14 +99,14 @@ void tc::fs::LocalFileSystem::removeFile(const tc::fs::Path& path)
 
 	if (unlink(unicode_path.c_str()) == -1)
 	{
-		throw tc::Exception(kClassName, "Failed to delete file (" + std::string(strerror(errno)) + ")");
+		throw tc::Exception(kClassName, "Failed to remove file (" + std::string(strerror(errno)) + ")");
 	}	
 #endif
 }
 
-void tc::fs::LocalFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, tc::fs::GenericFileObject& file)
+void tc::fs::LocalFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, std::shared_ptr<tc::fs::IFileObject>& file)
 {
-	file = tc::fs::LocalFileObject(path, mode);
+	file = std::shared_ptr<tc::fs::LocalFileObject>(new tc::fs::LocalFileObject(path, mode));
 }
 
 void tc::fs::LocalFileSystem::createDirectory(const tc::fs::Path& path)
@@ -170,19 +159,19 @@ void tc::fs::LocalFileSystem::removeDirectory(const tc::fs::Path& path)
 void tc::fs::LocalFileSystem::getWorkingDirectory(tc::fs::Path& path)
 {
 #ifdef _WIN32
-	tc::SharedPtr<char16_t> raw_char16_path = new char16_t[MAX_PATH];
+	std::shared_ptr<char16_t> raw_char16_path(new char16_t[MAX_PATH]);
 
 	// get current directory
 	if (GetCurrentDirectoryW(MAX_PATH, (LPWSTR)(raw_char16_path.get())) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to get current directory (" + std::to_string(GetLastError()) + ")");
+		throw tc::Exception(kClassName, "Failed to get current working directory (" + std::to_string(GetLastError()) + ")");
 	}
 
 	path = Path(raw_char16_path.get());
 #else
 	setWorkingDirectory(Path("."));
 
-	tc::SharedPtr<char> raw_current_working_directory = new char[PATH_MAX];
+	std::shared_ptr<char> raw_current_working_directory(new char[PATH_MAX]);
 
 	if (getcwd(raw_current_working_directory.get(), PATH_MAX) == nullptr)
 	{
@@ -203,7 +192,7 @@ void tc::fs::LocalFileSystem::setWorkingDirectory(const tc::fs::Path& path)
 	// delete file
 	if (SetCurrentDirectoryW((LPCWSTR)unicode_path.c_str()) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to set current directory (" + std::to_string(GetLastError()) + ")");
+		throw tc::Exception(kClassName, "Failed to set current working directory (" + std::to_string(GetLastError()) + ")");
 	}
 #else
 	// convert Path to unicode string

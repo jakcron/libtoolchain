@@ -35,15 +35,6 @@ tc::fs::LocalFileObject::LocalFileObject(const tc::fs::Path& path, tc::fs::FileA
 	open(path, mode);
 }
 
-tc::fs::IFileObject* tc::fs::LocalFileObject::copyInstance() const
-{
-	return new LocalFileObject(*this);
-}
-tc::fs::IFileObject* tc::fs::LocalFileObject::moveInstance()
-{
-	return new LocalFileObject(std::move(*this));
-}
-
 tc::ResourceState tc::fs::LocalFileObject::state()
 {
 	return mState;
@@ -75,7 +66,7 @@ void tc::fs::LocalFileObject::open(const tc::fs::Path& path, tc::fs::FileAccessM
 	}
 
 	// store file handle
-	mFileHandle = new tc::fs::LocalFileObject::FileHandle(file_handle);
+	mFileHandle = std::shared_ptr<tc::fs::LocalFileObject::FileHandle>(new tc::fs::LocalFileObject::FileHandle(file_handle));
 	
 	// set state as initialised
 	mState.set(RESFLAG_READY);
@@ -94,7 +85,7 @@ void tc::fs::LocalFileObject::open(const tc::fs::Path& path, tc::fs::FileAccessM
 	}
 
 	// store file handle
-	mFileHandle = new tc::fs::LocalFileObject::FileHandle(file_handle);
+	mFileHandle = std::shared_ptr<tc::fs::LocalFileObject::FileHandle>(new tc::fs::LocalFileObject::FileHandle(file_handle));
 	
 	// set state as initialised
 	mState.set(RESFLAG_READY);
@@ -105,9 +96,9 @@ void tc::fs::LocalFileObject::close()
 {
 	if (mState.test(RESFLAG_READY))
 	{
-		mFileHandle.release();
+		mFileHandle.reset();
 	}
-	mState = 0;
+	mState.reset() = 0;
 }
 
 uint64_t tc::fs::LocalFileObject::size()
@@ -258,7 +249,7 @@ void tc::fs::LocalFileObject::write(const byte_t* data, size_t len)
 {
 	if (mState.test(RESFLAG_READY) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to read file (no file open)");
+		throw tc::Exception(kClassName, "Failed to write file (no file open)");
 	}
 
 #ifdef _WIN32
@@ -266,12 +257,12 @@ void tc::fs::LocalFileObject::write(const byte_t* data, size_t len)
 
 	if (WriteFile(mFileHandle->handle, data, (DWORD)len, &bytes_written, NULL) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to read file (" + std::to_string(GetLastError()) + ")");
+		throw tc::Exception(kClassName, "Failed to write file (" + std::to_string(GetLastError()) + ")");
 	}
 
 	if (bytes_written != len)
 	{
-		throw tc::Exception(kClassName, "Failed to read file (bytes written was not correct length)");
+		throw tc::Exception(kClassName, "Failed to write file (bytes written was not correct length)");
 	}
 #else
 	if (::write(mFileHandle->handle, data, len) == -1)

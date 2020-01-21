@@ -10,143 +10,172 @@ tc::fs::SandboxedFileSystem::SandboxedFileSystem() :
 {
 }
 
-tc::fs::SandboxedFileSystem::SandboxedFileSystem(const tc::fs::IFileSystem& fs, const tc::fs::Path& root_path) :
+tc::fs::SandboxedFileSystem::SandboxedFileSystem(const std::shared_ptr<tc::fs::IFileSystem>& fs, const tc::fs::Path& root_path) :
 	SandboxedFileSystem()
 {
 	initialiseFs(fs, root_path);
 }
 
-tc::fs::SandboxedFileSystem::SandboxedFileSystem(tc::fs::IFileSystem&& fs, const tc::fs::Path& root_path) :
+tc::fs::SandboxedFileSystem::SandboxedFileSystem(std::shared_ptr<tc::fs::IFileSystem>&& fs, const tc::fs::Path& root_path) :
 	SandboxedFileSystem()
 {
 	initialiseFs(std::move(fs), root_path);
 }
 
-tc::fs::IFileSystem* tc::fs::SandboxedFileSystem::copyInstance() const
-{
-	return new SandboxedFileSystem(*this);	
-}
-
-tc::fs::IFileSystem* tc::fs::SandboxedFileSystem::moveInstance()
-{
-	return new SandboxedFileSystem(std::move(*this));
-}
-
 tc::ResourceState tc::fs::SandboxedFileSystem::getFsState()
 {
-	return mFileSystem.getFsState();
+	return mFileSystem.get() ? mFileSystem->getFsState() : tc::ResourceState(RESFLAG_NOINIT);
 }
 
-void tc::fs::SandboxedFileSystem::initialiseFs(const tc::fs::IFileSystem& fs, const tc::fs::Path& root_path)
+void tc::fs::SandboxedFileSystem::initialiseFs(const std::shared_ptr<tc::fs::IFileSystem>& fs, const tc::fs::Path& root_path)
 {
 	closeFs();
 
 	mFileSystem = fs;
-	if (mFileSystem.getFsState().test(RESFLAG_READY))
+	
+	if (mFileSystem.get() != nullptr && mFileSystem->getFsState().test(RESFLAG_READY))
 	{
 		mRootPath = root_path; 
 		mWorkingDirectory = tc::fs::Path("/");
 
 		// get full path of root
-		mFileSystem.setWorkingDirectory(root_path);
-		mFileSystem.getWorkingDirectory(mRootPath);
+		mFileSystem->setWorkingDirectory(root_path);
+		mFileSystem->getWorkingDirectory(mRootPath);
 	}
 	else
 	{
-		mFileSystem.closeFs();
+		closeFs();
 	}
 }
 
-void tc::fs::SandboxedFileSystem::initialiseFs(tc::fs::IFileSystem&& fs, const tc::fs::Path& root_path)
+void tc::fs::SandboxedFileSystem::initialiseFs(std::shared_ptr<tc::fs::IFileSystem>&& fs, const tc::fs::Path& root_path)
 {
 	closeFs();
 
 	mFileSystem = std::move(fs);
-	if (mFileSystem.getFsState().test(RESFLAG_READY))
+
+	if (mFileSystem.get() != nullptr && mFileSystem->getFsState().test(RESFLAG_READY))
 	{
 		mRootPath = root_path; 
 		mWorkingDirectory = tc::fs::Path("/");
 
 		// get full path of root
-		mFileSystem.setWorkingDirectory(root_path);
-		mFileSystem.getWorkingDirectory(mRootPath);
+		mFileSystem->setWorkingDirectory(root_path);
+		mFileSystem->getWorkingDirectory(mRootPath);
 	}
 	else
 	{
-		mFileSystem.closeFs();
+		closeFs();
 	}
 }
 
 void tc::fs::SandboxedFileSystem::closeFs()
 {
-	mFileSystem.closeFs();
+	if (mFileSystem.get() != nullptr)
+		mFileSystem->closeFs();
+	
 	mRootPath.clear();
 	mWorkingDirectory.clear();
 }
 
 void tc::fs::SandboxedFileSystem::createFile(const tc::fs::Path& path)
 {
+	if (mFileSystem.get() == nullptr)
+	{
+		throw tc::Exception(kClassName, "Failed to create file (no base filesystem)");
+	}
+
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// delete file
-	mFileSystem.createFile(real_path);
+	mFileSystem->createFile(real_path);
 }
 
 void tc::fs::SandboxedFileSystem::removeFile(const tc::fs::Path& path)
 {
+	if (mFileSystem.get() == nullptr)
+	{
+		throw tc::Exception(kClassName, "Failed to remove file (no base filesystem)");
+	}
+
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// delete file
-	mFileSystem.removeFile(real_path);
+	mFileSystem->removeFile(real_path);
 }
 
-void tc::fs::SandboxedFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, tc::fs::GenericFileObject& file)
+void tc::fs::SandboxedFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, std::shared_ptr<tc::fs::IFileObject>& file)
 {
+	if (mFileSystem.get() == nullptr)
+	{
+		throw tc::Exception(kClassName, "Failed to open file (no base filesystem)");
+	}
+
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// open file
-	return mFileSystem.openFile(real_path, mode, file);
+	return mFileSystem->openFile(real_path, mode, file);
 }
 
 void tc::fs::SandboxedFileSystem::createDirectory(const tc::fs::Path& path)
 {
+	if (mFileSystem.get() == nullptr)
+	{
+		throw tc::Exception(kClassName, "Failed to create directory (no base filesystem)");
+	}
+
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// create directory
-	mFileSystem.createDirectory(real_path);
+	mFileSystem->createDirectory(real_path);
 }
 
 void tc::fs::SandboxedFileSystem::removeDirectory(const tc::fs::Path& path)
 {
+	if (mFileSystem.get() == nullptr)
+	{
+		throw tc::Exception(kClassName, "Failed to remove directory (no base filesystem)");
+	}
+
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// remove directory
-	mFileSystem.removeDirectory(real_path);
+	mFileSystem->removeDirectory(real_path);
 }
 
 void tc::fs::SandboxedFileSystem::getWorkingDirectory(tc::fs::Path& path)
 {
+	if (mFileSystem.get() == nullptr)
+	{
+		throw tc::Exception(kClassName, "Failed to get current working directory (no base filesystem)");
+	}
+
 	path = mWorkingDirectory;
 }
 
 void tc::fs::SandboxedFileSystem::setWorkingDirectory(const tc::fs::Path& path)
 {
+	if (mFileSystem.get() == nullptr)
+	{
+		throw tc::Exception(kClassName, "Failed to set current working directory (no base filesystem)");
+	}
+
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// set current directory
-	mFileSystem.setWorkingDirectory(real_path);
+	mFileSystem->setWorkingDirectory(real_path);
 
 	// save current directory
 	realPathToSandboxPath(real_path, mWorkingDirectory);
@@ -154,13 +183,18 @@ void tc::fs::SandboxedFileSystem::setWorkingDirectory(const tc::fs::Path& path)
 
 void tc::fs::SandboxedFileSystem::getDirectoryListing(const tc::fs::Path& path, sDirectoryListing& info)
 {
+	if (mFileSystem.get() == nullptr)
+	{
+		throw tc::Exception(kClassName, "Failed to get directory listing (no base filesystem)");
+	}
+
 	// convert sandbox path to real path
 	tc::fs::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// get real directory info
 	tc::fs::sDirectoryListing real_info;
-	mFileSystem.getDirectoryListing(real_path, real_info);
+	mFileSystem->getDirectoryListing(real_path, real_info);
 
 	// convert directory absolute path
 	tc::fs::Path sandbox_dir_path;

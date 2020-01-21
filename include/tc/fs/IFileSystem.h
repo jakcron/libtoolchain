@@ -8,8 +8,7 @@
 #pragma once
 #include <tc/types.h>
 #include <tc/ResourceState.h>
-#include <tc/fs/GenericFileObject.h>
-#include <tc/SharedPtr.h>
+#include <tc/fs/IFileObject.h>
 #include <tc/fs/Path.h>
 
 namespace tc { namespace fs {
@@ -69,20 +68,6 @@ public:
 	virtual ~IFileSystem() = default;
 
 		/**
-		 * @brief Create a new instance of this object as a copy
-		 * This is required by @ref tc::fs::GenericFileSystem
-		 * @return new instance of IFileSystem (dynamically allocated)
-		 */
-	virtual IFileSystem* copyInstance() const = 0;
-
-		/**
-		 * @brief Create a new instance of this object and move elements to the new instance
-		 * This is required by @ref tc::fs::GenericFileSystem
-		 * @return new instance of IFileSystem (dynamically allocated)
-		 */
-	virtual IFileSystem* moveInstance() = 0;
-
-		/**
 		 * @brief Get state of IFileSystem
 		 * @return ResourceState
 		 */
@@ -117,7 +102,7 @@ public:
 		 *	
 		 * @throws tc::Exception If the file cannot be opened (invalid path, or access rights)
 		 */
-	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::GenericFileObject& file) = 0;
+	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, std::shared_ptr<tc::fs::IFileObject>& file) = 0;
 	
 		/** 
 		 * @brief Create a new directory

@@ -1,7 +1,6 @@
 #include <tc/fs.h>
 #include <tc/Exception.h>
 #include <iostream>
-#include <tc/SharedPtr.h>
 
 #include "fs_LocalFileSystem_TestClass.h"
 
@@ -159,17 +158,17 @@ void fs_LocalFileSystem_TestClass::test_OpenFileCreate_NotExist()
 		tc::fs::LocalFileSystem fs;
 		try 
 		{
-			tc::fs::GenericFileObject file;
+			std::shared_ptr<tc::fs::IFileObject> file;
 			fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, file);
 
-			if (file.size() != 0)
+			if (file->size() != 0)
 			{
 				throw tc::Exception("file opened in create mode does not have a size of 0");
 			}
 
-			file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+			file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 			
-			if (file.size() != kRandomString.length())
+			if (file->size() != kRandomString.length())
 			{
 				throw tc::Exception("after writing data, file size is not correct");
 			}
@@ -199,17 +198,17 @@ void fs_LocalFileSystem_TestClass::test_OpenFileCreate_DoesExist()
 
 		try 
 		{
-			tc::fs::GenericFileObject file;
+			std::shared_ptr<tc::fs::IFileObject> file;
 			fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, file);
 
-			if (file.size() != 0)
+			if (file->size() != 0)
 			{
 				throw tc::Exception("file opened in create mode does not have a size of 0");
 			}
 
-			file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+			file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 			
-			if (file.size() != kRandomString.length())
+			if (file->size() != kRandomString.length())
 			{
 				throw tc::Exception("after writing data, file size is not correct");
 			}
@@ -235,24 +234,24 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_DoesExist()
 	try
 	{
 		tc::fs::LocalFileSystem fs;
-		tc::fs::GenericFileObject tmp_file;
+		std::shared_ptr<tc::fs::IFileObject> tmp_file;
 
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, tmp_file);
-		tmp_file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_file.close();
+		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		tmp_file->close();
 
 		try 
 		{
-			tc::fs::GenericFileObject file;
+			std::shared_ptr<tc::fs::IFileObject> file;
 			fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
 
-			if (file.size() != kRandomString.length())
+			if (file->size() != kRandomString.length())
 			{
 				throw tc::Exception("Unexpected file size");
 			}
 
-			tc::SharedPtr<byte_t> check = new byte_t[kRandomString.length()];
-			file.read(check.get(), kRandomString.length());
+			std::shared_ptr<byte_t> check(new byte_t[kRandomString.length()]);
+			file->read(check.get(), kRandomString.length());
 
 			if (memcmp(check.get(), kRandomString.c_str(), kRandomString.size()) != 0)
 			{
@@ -280,7 +279,7 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_NotExist()
 	try
 	{
 		tc::fs::LocalFileSystem fs;
-		tc::fs::GenericFileObject file;
+		std::shared_ptr<tc::fs::IFileObject> file;
 
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
 		
@@ -298,24 +297,24 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_UnicodePath()
 	try
 	{
 		tc::fs::LocalFileSystem fs;
-		tc::fs::GenericFileObject tmp_file;
+		std::shared_ptr<tc::fs::IFileObject> tmp_file;
 
 		fs.openFile(kUtf8TestPath, tc::fs::FILEACCESS_CREATE, tmp_file);
-		tmp_file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_file.close();
+		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		tmp_file->close();
 
 		try 
 		{
-			tc::fs::GenericFileObject file;
+			std::shared_ptr<tc::fs::IFileObject> file;
 			fs.openFile(kUtf8TestPath, tc::fs::FILEACCESS_READ, file);
 
-			if (file.size() != kRandomString.length())
+			if (file->size() != kRandomString.length())
 			{
 				throw tc::Exception("Unexpected file size");
 			}
 
-			tc::SharedPtr<byte_t> check = new byte_t[kRandomString.length()];
-			file.read(check.get(), kRandomString.length());
+			std::shared_ptr<byte_t> check(new byte_t[kRandomString.length()]);
+			file->read(check.get(), kRandomString.length());
 
 			if (memcmp(check.get(), kRandomString.c_str(), kRandomString.size()) != 0)
 			{
@@ -343,20 +342,20 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_TryWrite()
 	try
 	{
 		tc::fs::LocalFileSystem fs;
-		tc::fs::GenericFileObject tmp_file;
+		std::shared_ptr<tc::fs::IFileObject> tmp_file;
 
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, tmp_file);
-		tmp_file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_file.close();
+		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		tmp_file->close();
 
 		try 
 		{
-			tc::fs::GenericFileObject file;
+			std::shared_ptr<tc::fs::IFileObject> file;
 			fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
 
-			file.seek(file.size());
+			file->seek(file->size());
 		
-			file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+			file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 			
 			std::cout << "FAIL (Did not throw exception when write() was called)" << std::endl;
 		}
@@ -379,21 +378,21 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_TryReadBeyondEnd()
 	try
 	{
 		tc::fs::LocalFileSystem fs;
-		tc::fs::GenericFileObject tmp_file;
+		std::shared_ptr<tc::fs::IFileObject> tmp_file;
 
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, tmp_file);
-		tmp_file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_file.close();
+		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		tmp_file->close();
 
 		try 
 		{
-			tc::fs::GenericFileObject file;
+			std::shared_ptr<tc::fs::IFileObject> file;
 			fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
 
-			file.seek(file.size());
-			tc::SharedPtr<byte_t> check = new byte_t[kRandomString.length()];
+			file->seek(file->size());
+			std::shared_ptr<byte_t> check(new byte_t[kRandomString.length()]);
 
-			file.read(check.get(), kRandomString.length());
+			file->read(check.get(), kRandomString.length());
 		
 			std::cout << "FAIL (Did not throw exception when read() was called)" << std::endl;
 		}
@@ -416,31 +415,31 @@ void fs_LocalFileSystem_TestClass::test_OpenFileEdit_DoesExist()
 	try
 	{
 		tc::fs::LocalFileSystem fs;
-		tc::fs::GenericFileObject tmp_file;
+		std::shared_ptr<tc::fs::IFileObject> tmp_file;
 
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, tmp_file);
-		tmp_file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_file.close();
+		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		tmp_file->close();
 
 		try 
 		{
-			tc::fs::GenericFileObject file;
+			std::shared_ptr<tc::fs::IFileObject> file;
 			fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_EDIT, file);
 
-			if (file.size() != kRandomString.length())
+			if (file->size() != kRandomString.length())
 			{
 				throw tc::Exception("Unexpected file size");
 			}
 
-			file.seek(kRandomString.length());
-			file.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+			file->seek(kRandomString.length());
+			file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 
-			file.seek(7);
-			file.write((const byte_t*)kTestPhrase.c_str(), kTestPhrase.length());
+			file->seek(7);
+			file->write((const byte_t*)kTestPhrase.c_str(), kTestPhrase.length());
 
-			tc::SharedPtr<byte_t> check = new byte_t[kRandomString.length()*2];
-			file.seek(0);
-			file.read(check.get(), kRandomString.length()*2);
+			std::shared_ptr<byte_t> check(new byte_t[kRandomString.length()*2]);
+			file->seek(0);
+			file->read(check.get(), kRandomString.length()*2);
 
 			if (memcmp(check.get() + kRandomString.length(), kRandomString.c_str(), kRandomString.size()) != 0)
 			{
@@ -478,7 +477,7 @@ void fs_LocalFileSystem_TestClass::test_OpenFileEdit_NotExist()
 	try
 	{
 		tc::fs::LocalFileSystem fs;
-		tc::fs::GenericFileObject file;
+		std::shared_ptr<tc::fs::IFileObject> file;
 
 		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_EDIT, file);
 		

@@ -7,7 +7,6 @@
 	 */
 #pragma once
 #include <tc/types.h>
-#include <tc/SharedPtr.h>
 
 namespace tc {
 
@@ -68,7 +67,7 @@ public:
 		 */
 	void makeNull();
 private:
-	tc::SharedPtr<T> mValue;
+	std::shared_ptr<T> mValue;
 };
 
 template <class T>
@@ -95,9 +94,9 @@ template <class T>
 inline void Optional<T>::operator=(const T& value)
 {
 	// if mValue is null we need to allocate memory for it
-	if (mValue.isNull())
+	if (mValue.get() == nullptr)
 	{
-		mValue = new T;
+		mValue = std::shared_ptr<T>(new T);
 	}
 
 	// assign the value
@@ -128,13 +127,13 @@ inline T& Optional<T>::get() const
 template <class T>
 inline bool Optional<T>::isNull() const
 {
-	return mValue.isNull();
+	return mValue.get() == nullptr;
 }
 
 template <class T>
 inline void Optional<T>::makeNull()
 {
-	mValue.release();
+	mValue.reset();
 }
 
 } // namespace tc

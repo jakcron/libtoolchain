@@ -11,6 +11,5 @@
 	 */
 #include <tc/Exception.h>
 #include <tc/Optional.h>
-#include <tc/SharedPtr.h>
 #include <tc/string.h>
 #include <tc/fs.h>

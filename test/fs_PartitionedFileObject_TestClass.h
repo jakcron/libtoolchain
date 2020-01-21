@@ -2,7 +2,6 @@
 #include "ITestClass.h"
 
 #include <tc/fs.h>
-#include <tc/SharedPtr.h>
 
 class fs_PartitionedFileObject_TestClass : public ITestClass
 {
@@ -15,16 +14,6 @@ private:
 		DummyFileBase()
 		{
 			init();
-		}
-
-		virtual tc::fs::IFileObject* copyInstance() const
-		{
-			return new DummyFileBase(*this);
-		}
-
-		virtual tc::fs::IFileObject* moveInstance()
-		{
-			return new DummyFileBase(*this);
 		}
 
 		virtual tc::ResourceState state()

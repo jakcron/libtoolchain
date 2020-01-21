@@ -6,8 +6,7 @@
 	 * @date 2019/06/18
 	 */
 #pragma once
-#include <tc/fs/GenericFileSystem.h>
-#include <tc/SharedPtr.h>
+#include <tc/fs/IFileSystem.h>
 
 namespace tc { namespace fs {
 
@@ -29,17 +28,14 @@ public:
 		 * @param[in] fs IFileSystem object to be sandboxed
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	SandboxedFileSystem(const tc::fs::IFileSystem& fs, const tc::fs::Path& root_path);
+	SandboxedFileSystem(const std::shared_ptr<tc::fs::IFileSystem>& fs, const tc::fs::Path& root_path);
 
 		/** 
 		 * @brief Wrap (by move) constuctor
 		 * @param[in] fs IFileSystem object to be sandboxed
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	SandboxedFileSystem(tc::fs::IFileSystem&& fs, const tc::fs::Path& root_path);
-
-	virtual tc::fs::IFileSystem* copyInstance() const;
-	virtual tc::fs::IFileSystem* moveInstance();
+	SandboxedFileSystem(std::shared_ptr<tc::fs::IFileSystem>&& fs, const tc::fs::Path& root_path);
 
 	virtual tc::ResourceState getFsState();
 
@@ -48,19 +44,19 @@ public:
 		 * @param[in] fs IFileSystem object to be sandboxed
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	void initialiseFs(const tc::fs::IFileSystem& fs, const tc::fs::Path& root_path);
+	void initialiseFs(const std::shared_ptr<tc::fs::IFileSystem>& fs, const tc::fs::Path& root_path);
 
 		/** 
 		 * @brief Wrap (by move) initialiser
 		 * @param[in] fs IFileSystem object to be sandboxed
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	void initialiseFs(tc::fs::IFileSystem&& fs, const tc::fs::Path& root_path);
+	void initialiseFs(std::shared_ptr<tc::fs::IFileSystem>&& fs, const tc::fs::Path& root_path);
 
 	virtual void closeFs();
 	virtual void createFile(const tc::fs::Path& path);
 	virtual void removeFile(const tc::fs::Path& path);
-	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::GenericFileObject& file);
+	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, std::shared_ptr<tc::fs::IFileObject>& file);
 	virtual void createDirectory(const tc::fs::Path& path);
 	virtual void removeDirectory(const tc::fs::Path& path);
 	virtual void getWorkingDirectory(tc::fs::Path& path);
@@ -69,7 +65,7 @@ public:
 private:
 	static const std::string kClassName;
 	
-	tc::fs::GenericFileSystem mFileSystem;
+	std::shared_ptr<tc::fs::IFileSystem> mFileSystem;
 	tc::fs::Path mRootPath;
 	tc::fs::Path mWorkingDirectory;
 

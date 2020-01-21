@@ -36,8 +36,6 @@ public:
 		 */
 	LocalFileObject(const tc::fs::Path& path, tc::fs::FileAccessMode mode);
 
-	virtual tc::fs::IFileObject* copyInstance() const;
-	virtual tc::fs::IFileObject* moveInstance();
 	virtual tc::ResourceState state();
 
 		/** 
@@ -71,7 +69,7 @@ private:
 	tc::ResourceState mState;
 	
 	tc::fs::FileAccessMode mMode;
-	tc::SharedPtr<tc::fs::LocalFileObject::FileHandle> mFileHandle;
+	std::shared_ptr<tc::fs::LocalFileObject::FileHandle> mFileHandle;
 
 #ifdef _WIN32
 	DWORD getOpenModeFlag(tc::fs::FileAccessMode mode) const;

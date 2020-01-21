@@ -33,20 +33,6 @@ public:
 	virtual ~IFileObject() = default;
 
 		/**
-		 * @brief Create a new instance of this object as a copy. This allows this instance to be copied even when the type isn't known.
-		 * This is required by @ref tc::fs::GenericFileObject
-		 * @return new instance of IFileObject (dynamically allocated)
-		 */
-	virtual IFileObject* copyInstance() const = 0;
-
-		/**
-		 * @brief Create a new instance of this object and move elements to the new instance. This allows this instance to be moved even when the type isn't known.
-		 * This is required by @ref tc::fs::GenericFileObject
-		 * @return new instance of IFileObject (dynamically allocated)
-		 */
-	virtual IFileObject* moveInstance() = 0;
-
-		/**
 		 * @brief Get state of IFileObject
 		 * @return ResourceState
 		 */

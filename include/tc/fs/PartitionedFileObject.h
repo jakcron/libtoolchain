@@ -6,8 +6,7 @@
 	 * @date 2019/06/19
 	 */
 #pragma once
-#include <tc/fs/GenericFileObject.h>
-#include <tc/SharedPtr.h>
+#include <tc/fs/IFileObject.h>
 
 namespace tc { namespace fs {
 
@@ -31,7 +30,7 @@ public:
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	PartitionedFileObject(const tc::fs::IFileObject& file, uint64_t file_base_offset, uint64_t virtual_size);
+	PartitionedFileObject(const std::shared_ptr<tc::fs::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 		/** 
 		 * @brief Wrap (by move) constuctor
@@ -41,10 +40,7 @@ public:
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	PartitionedFileObject(tc::fs::IFileObject&& file, uint64_t file_base_offset, uint64_t virtual_size);
-
-	virtual tc::fs::IFileObject* copyInstance() const;
-	virtual tc::fs::IFileObject* moveInstance();
+	PartitionedFileObject(std::shared_ptr<tc::fs::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 	virtual tc::ResourceState state();
 
@@ -56,7 +52,7 @@ public:
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	void initialise(const tc::fs::IFileObject& file, uint64_t file_base_offset, uint64_t virtual_size);
+	void initialise(const std::shared_ptr<tc::fs::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 		/** 
 		 * @brief Wrap (by move) initialiser
@@ -66,7 +62,7 @@ public:
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	void initialise(tc::fs::IFileObject&& file, uint64_t file_base_offset, uint64_t virtual_size);
+	void initialise(std::shared_ptr<tc::fs::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 	virtual void close();
 	virtual uint64_t size();
@@ -78,7 +74,7 @@ public:
 private:
 	static const std::string kClassName;
 
-	tc::fs::GenericFileObject mFile;
+	std::shared_ptr<tc::fs::IFileObject> mFile;
 	uint64_t mFileBaseOffset;
 	uint64_t mVirtualSize;
 

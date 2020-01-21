@@ -2,7 +2,6 @@
 #include "ITestClass.h"
 
 #include <tc/fs.h>
-#include <tc/SharedPtr.h>
 
 class fs_SandboxedFileSystem_TestClass : public ITestClass
 {
@@ -17,16 +16,6 @@ private:
 			initFs();
 		}
 
-		virtual tc::fs::IFileSystem* copyInstance() const
-		{
-			return new DummyFileSystemBase(*this);
-		}
-
-		virtual tc::fs::IFileSystem* moveInstance()
-		{
-			return new DummyFileSystemBase(std::move(*this));
-		}
-
 		virtual tc::ResourceState getFsState()
 		{
 			return mState;
@@ -35,14 +24,14 @@ private:
 		void initFs()
 		{
 			closeFs();
-			mCurDir = new tc::fs::Path();
+			mCurDir = std::make_shared<tc::fs::Path>();
 			mState.set(tc::RESFLAG_READY);
 		}
 
 		virtual void closeFs()
 		{
-			mState = 0;
-			mCurDir.release();
+			mState.reset();
+			mCurDir.reset();
 		}
 
 		virtual void createFile(const tc::fs::Path& path)
@@ -55,7 +44,7 @@ private:
 			throw tc::Exception(kClassName, "removeFile() not implemented");
 		}
 
-		virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, tc::fs::GenericFileObject& file)
+		virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, std::shared_ptr<tc::fs::IFileObject>& file)
 		{
 			throw tc::Exception(kClassName, "openFile() not implemented");
 		}
@@ -87,7 +76,7 @@ private:
 	private:
 		static const std::string kClassName;
 		tc::ResourceState mState;
-		tc::SharedPtr<tc::fs::Path> mCurDir;
+		std::shared_ptr<tc::fs::Path> mCurDir;
 	};
 
 	void testSandboxRootPath();
