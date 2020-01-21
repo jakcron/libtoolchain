@@ -4,7 +4,7 @@
 #include "io_Path_TestClass.h"
 #include "io_LocalFileSystem_TestClass.h"
 #include "io_SubFileObject_TestClass.h"
-#include "io_SandboxedFileSystem_TestClass.h"
+#include "io_SubFileSystem_TestClass.h"
 
 void runTest(ITestClass* testClass)
 {
@@ -20,5 +20,5 @@ int main(int argc, char** argv)
 	runTest(new io_Path_TestClass());
 	runTest(new io_LocalFileSystem_TestClass());
 	runTest(new io_SubFileObject_TestClass());
-	runTest(new io_SandboxedFileSystem_TestClass());
+	runTest(new io_SubFileSystem_TestClass());
 }

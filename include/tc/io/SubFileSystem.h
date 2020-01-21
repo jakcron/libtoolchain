@@ -1,6 +1,6 @@
 	/**
-	 * @file SandboxedFileSystem.h
-	 * @brief Declaration of tc::io::SandboxedFileSystem
+	 * @file SubFileSystem.h
+	 * @brief Declaration of tc::io::SubFileSystem
 	 * @author Jack (jakcron)
 	 * @version 0.3
 	 * @date 2019/06/18
@@ -11,31 +11,31 @@
 namespace tc { namespace io {
 
 	/**
-	 * @class SandboxedFileSystem
-	 * @brief A wrapper around an existing IFileSystem object that exposes a subset of the wrapped IFileSystem directory tree.
+	 * @class SubFileSystem
+	 * @brief A wrapper around an existing IFileSystem object that exposes a subset of the base IFileSystem directory tree.
 	 */
-class SandboxedFileSystem : public IFileSystem
+class SubFileSystem : public IFileSystem
 {
 public:
 
 		/**
 		 * @brief Default constructor
 		 */
-	SandboxedFileSystem();
+	SubFileSystem();
 
 		/** 
 		 * @brief Wrap (by copy) constuctor
 		 * @param[in] fs IFileSystem object to be sandboxed
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	SandboxedFileSystem(const std::shared_ptr<tc::io::IFileSystem>& fs, const tc::io::Path& root_path);
+	SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>& fs, const tc::io::Path& root_path);
 
 		/** 
 		 * @brief Wrap (by move) constuctor
 		 * @param[in] fs IFileSystem object to be sandboxed
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	SandboxedFileSystem(std::shared_ptr<tc::io::IFileSystem>&& fs, const tc::io::Path& root_path);
+	SubFileSystem(std::shared_ptr<tc::io::IFileSystem>&& fs, const tc::io::Path& root_path);
 
 	virtual tc::ResourceState getFsState();
 

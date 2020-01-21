@@ -20,4 +20,4 @@
 #include <tc/io/LocalFileSystem.h>
 
 #include <tc/io/SubFileObject.h>
-#include <tc/io/SandboxedFileSystem.h>
+#include <tc/io/SubFileSystem.h>

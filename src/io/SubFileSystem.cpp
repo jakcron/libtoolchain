@@ -1,33 +1,33 @@
-#include <tc/io/SandboxedFileSystem.h>
+#include <tc/io/SubFileSystem.h>
 #include <tc/Exception.h>
 
-const std::string tc::io::SandboxedFileSystem::kClassName = "tc::io::SandboxedFileSystem";
+const std::string tc::io::SubFileSystem::kClassName = "tc::io::SubFileSystem";
 
-tc::io::SandboxedFileSystem::SandboxedFileSystem() :
+tc::io::SubFileSystem::SubFileSystem() :
 	mFileSystem(),
 	mRootPath(),
 	mWorkingDirectory()
 {
 }
 
-tc::io::SandboxedFileSystem::SandboxedFileSystem(const std::shared_ptr<tc::io::IFileSystem>& fs, const tc::io::Path& root_path) :
-	SandboxedFileSystem()
+tc::io::SubFileSystem::SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>& fs, const tc::io::Path& root_path) :
+	SubFileSystem()
 {
 	initialiseFs(fs, root_path);
 }
 
-tc::io::SandboxedFileSystem::SandboxedFileSystem(std::shared_ptr<tc::io::IFileSystem>&& fs, const tc::io::Path& root_path) :
-	SandboxedFileSystem()
+tc::io::SubFileSystem::SubFileSystem(std::shared_ptr<tc::io::IFileSystem>&& fs, const tc::io::Path& root_path) :
+	SubFileSystem()
 {
 	initialiseFs(std::move(fs), root_path);
 }
 
-tc::ResourceState tc::io::SandboxedFileSystem::getFsState()
+tc::ResourceState tc::io::SubFileSystem::getFsState()
 {
 	return mFileSystem.get() ? mFileSystem->getFsState() : tc::ResourceState(RESFLAG_NOINIT);
 }
 
-void tc::io::SandboxedFileSystem::initialiseFs(const std::shared_ptr<tc::io::IFileSystem>& fs, const tc::io::Path& root_path)
+void tc::io::SubFileSystem::initialiseFs(const std::shared_ptr<tc::io::IFileSystem>& fs, const tc::io::Path& root_path)
 {
 	closeFs();
 
@@ -48,7 +48,7 @@ void tc::io::SandboxedFileSystem::initialiseFs(const std::shared_ptr<tc::io::IFi
 	}
 }
 
-void tc::io::SandboxedFileSystem::initialiseFs(std::shared_ptr<tc::io::IFileSystem>&& fs, const tc::io::Path& root_path)
+void tc::io::SubFileSystem::initialiseFs(std::shared_ptr<tc::io::IFileSystem>&& fs, const tc::io::Path& root_path)
 {
 	closeFs();
 
@@ -69,7 +69,7 @@ void tc::io::SandboxedFileSystem::initialiseFs(std::shared_ptr<tc::io::IFileSyst
 	}
 }
 
-void tc::io::SandboxedFileSystem::closeFs()
+void tc::io::SubFileSystem::closeFs()
 {
 	if (mFileSystem.get() != nullptr)
 		mFileSystem->closeFs();
@@ -78,7 +78,7 @@ void tc::io::SandboxedFileSystem::closeFs()
 	mWorkingDirectory.clear();
 }
 
-void tc::io::SandboxedFileSystem::createFile(const tc::io::Path& path)
+void tc::io::SubFileSystem::createFile(const tc::io::Path& path)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -93,7 +93,7 @@ void tc::io::SandboxedFileSystem::createFile(const tc::io::Path& path)
 	mFileSystem->createFile(real_path);
 }
 
-void tc::io::SandboxedFileSystem::removeFile(const tc::io::Path& path)
+void tc::io::SubFileSystem::removeFile(const tc::io::Path& path)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -108,7 +108,7 @@ void tc::io::SandboxedFileSystem::removeFile(const tc::io::Path& path)
 	mFileSystem->removeFile(real_path);
 }
 
-void tc::io::SandboxedFileSystem::openFile(const tc::io::Path& path, FileAccessMode mode, std::shared_ptr<tc::io::IFileObject>& file)
+void tc::io::SubFileSystem::openFile(const tc::io::Path& path, FileAccessMode mode, std::shared_ptr<tc::io::IFileObject>& file)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -123,7 +123,7 @@ void tc::io::SandboxedFileSystem::openFile(const tc::io::Path& path, FileAccessM
 	return mFileSystem->openFile(real_path, mode, file);
 }
 
-void tc::io::SandboxedFileSystem::createDirectory(const tc::io::Path& path)
+void tc::io::SubFileSystem::createDirectory(const tc::io::Path& path)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -138,7 +138,7 @@ void tc::io::SandboxedFileSystem::createDirectory(const tc::io::Path& path)
 	mFileSystem->createDirectory(real_path);
 }
 
-void tc::io::SandboxedFileSystem::removeDirectory(const tc::io::Path& path)
+void tc::io::SubFileSystem::removeDirectory(const tc::io::Path& path)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -153,7 +153,7 @@ void tc::io::SandboxedFileSystem::removeDirectory(const tc::io::Path& path)
 	mFileSystem->removeDirectory(real_path);
 }
 
-void tc::io::SandboxedFileSystem::getWorkingDirectory(tc::io::Path& path)
+void tc::io::SubFileSystem::getWorkingDirectory(tc::io::Path& path)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -163,7 +163,7 @@ void tc::io::SandboxedFileSystem::getWorkingDirectory(tc::io::Path& path)
 	path = mWorkingDirectory;
 }
 
-void tc::io::SandboxedFileSystem::setWorkingDirectory(const tc::io::Path& path)
+void tc::io::SubFileSystem::setWorkingDirectory(const tc::io::Path& path)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -181,7 +181,7 @@ void tc::io::SandboxedFileSystem::setWorkingDirectory(const tc::io::Path& path)
 	realPathToSandboxPath(real_path, mWorkingDirectory);
 }
 
-void tc::io::SandboxedFileSystem::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
+void tc::io::SubFileSystem::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -207,7 +207,7 @@ void tc::io::SandboxedFileSystem::getDirectoryListing(const tc::io::Path& path, 
 	info = real_info;
 }
 
-void tc::io::SandboxedFileSystem::sandboxPathToRealPath(const tc::io::Path& sandbox_path, tc::io::Path& real_path)
+void tc::io::SubFileSystem::sandboxPathToRealPath(const tc::io::Path& sandbox_path, tc::io::Path& real_path)
 {
 	tc::io::Path sandbox_current_dir;
 	tc::io::Path sandbox_path_;
@@ -232,7 +232,7 @@ void tc::io::SandboxedFileSystem::sandboxPathToRealPath(const tc::io::Path& sand
 	real_path = mRootPath + safe_sandbox_path;
 }
 
-void tc::io::SandboxedFileSystem::realPathToSandboxPath(const tc::io::Path& real_path, tc::io::Path& sandbox_path)
+void tc::io::SubFileSystem::realPathToSandboxPath(const tc::io::Path& real_path, tc::io::Path& sandbox_path)
 {
 	// get iterator for real path
 	tc::io::Path::const_iterator real_path_itr = real_path.begin();
@@ -262,7 +262,7 @@ void tc::io::SandboxedFileSystem::realPathToSandboxPath(const tc::io::Path& real
 	}
 }
 
-void tc::io::SandboxedFileSystem::sanitiseInputPath(const tc::io::Path& unsafe_path, tc::io::Path& safe_path) const
+void tc::io::SubFileSystem::sanitiseInputPath(const tc::io::Path& unsafe_path, tc::io::Path& safe_path) const
 {
 	//for (size_t i = 0; i < unsafe_path.getPathElementList().size(); i++)
 	for (tc::io::Path::const_iterator itr = unsafe_path.begin(); itr != unsafe_path.end(); itr++)
