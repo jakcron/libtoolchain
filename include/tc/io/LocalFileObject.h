@@ -1,13 +1,13 @@
 	/**
 	 * @file LocalFileObject.h
-	 * @brief Declaration of tc::fs::LocalFileObject
+	 * @brief Declaration of tc::io::LocalFileObject
 	 * @author Jack (jakcron)
 	 * @version	0.3
 	 * @date 2019/06/18
 	 */
 #pragma once
-#include <tc/fs/IFileObject.h>
-#include <tc/fs/IFileSystem.h>
+#include <tc/io/IFileObject.h>
+#include <tc/io/IFileSystem.h>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -15,7 +15,7 @@
 #include <cstdio>
 #endif
 
-namespace tc { namespace fs {
+namespace tc { namespace io {
 
 	/**
 	 * @class LocalFileObject
@@ -34,7 +34,7 @@ public:
 		 * @param[in] path Path to file
 		 * @param[in] mode Access mode
 		 */
-	LocalFileObject(const tc::fs::Path& path, tc::fs::FileAccessMode mode);
+	LocalFileObject(const tc::io::Path& path, tc::io::FileAccessMode mode);
 
 	virtual tc::ResourceState state();
 
@@ -43,7 +43,7 @@ public:
 		 * @param[in] path Path to file
 		 * @param[in] mode Access mode
 		 */
-	void open(const tc::fs::Path& path, tc::fs::FileAccessMode mode);
+	void open(const tc::io::Path& path, tc::io::FileAccessMode mode);
 
 	virtual void close();
 	virtual uint64_t size();
@@ -68,16 +68,16 @@ private:
 
 	tc::ResourceState mState;
 	
-	tc::fs::FileAccessMode mMode;
-	std::shared_ptr<tc::fs::LocalFileObject::FileHandle> mFileHandle;
+	tc::io::FileAccessMode mMode;
+	std::shared_ptr<tc::io::LocalFileObject::FileHandle> mFileHandle;
 
 #ifdef _WIN32
-	DWORD getOpenModeFlag(tc::fs::FileAccessMode mode) const;
-	DWORD getShareModeFlag(tc::fs::FileAccessMode mode) const;
-	DWORD getCreationModeFlag(tc::fs::FileAccessMode mode) const;
+	DWORD getOpenModeFlag(tc::io::FileAccessMode mode) const;
+	DWORD getShareModeFlag(tc::io::FileAccessMode mode) const;
+	DWORD getCreationModeFlag(tc::io::FileAccessMode mode) const;
 #else
-	int getOpenModeFlag(tc::fs::FileAccessMode mode) const;
+	int getOpenModeFlag(tc::io::FileAccessMode mode) const;
 #endif
 };
 
-}} // namespace tc::fs
+}} // namespace tc::io

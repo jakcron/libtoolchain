@@ -2,13 +2,13 @@
 #include <iostream>
 #include <sstream>
 
-#include "fs_Path_TestClass.h"
+#include "io_Path_TestClass.h"
 
 //---------------------------------------------------------
 
-void fs_Path_TestClass::runAllTests(void)
+void io_Path_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::fs::Path] START" << std::endl;
+	std::cout << "[tc::io::Path] START" << std::endl;
 	test_Constructor_Default();
 	testPathComposition("test_PathComposition_EmptyPath", "", 0, UNIX_PATH);
 	testPathComposition("test_PathComposition_RootPath", "/", 1, UNIX_PATH);
@@ -26,17 +26,17 @@ void fs_Path_TestClass::runAllTests(void)
 	test_Scenario_AppendStressTest();
 	test_Operator_EqualityTest();
 	test_Operator_InequalityTest();
-	std::cout << "[tc::fs::Path] END" << std::endl;
+	std::cout << "[tc::io::Path] END" << std::endl;
 }
 
 //---------------------------------------------------------
 
-void fs_Path_TestClass::pathToUnixUtf8(const tc::fs::Path& path, std::string& out)
+void io_Path_TestClass::pathToUnixUtf8(const tc::io::Path& path, std::string& out)
 {
 	std::stringstream out_stream;
 
 	//for (size_t i = 0; i < path.size(); i++)
-	for (tc::fs::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
+	for (tc::io::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
 	{
 		//const std::string& element = path.getPathElementList()[i];
 		out_stream << *itr;
@@ -51,12 +51,12 @@ void fs_Path_TestClass::pathToUnixUtf8(const tc::fs::Path& path, std::string& ou
 	out = out_stream.str();
 }
 
-void fs_Path_TestClass::pathToWindowsUtf8(const tc::fs::Path& path, std::string& out)
+void io_Path_TestClass::pathToWindowsUtf8(const tc::io::Path& path, std::string& out)
 {
 	std::stringstream out_stream;
 
 	//for (size_t i = 0; i < path.size(); i++)
-	for (tc::fs::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
+	for (tc::io::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
 	{
 		//const std::string& element = path.getPathElementList()[i];
 		out_stream << *itr;
@@ -73,12 +73,12 @@ void fs_Path_TestClass::pathToWindowsUtf8(const tc::fs::Path& path, std::string&
 
 //---------------------------------------------------------
 
-void fs_Path_TestClass::testPathComposition(const std::string& test_name, const std::string& raw_path, const std::string& expected_path, size_t expected_element_count, PathType path_type)
+void io_Path_TestClass::testPathComposition(const std::string& test_name, const std::string& raw_path, const std::string& expected_path, size_t expected_element_count, PathType path_type)
 {
-	std::cout << "[tc::fs::Path] " << test_name << " : " << std::flush;
+	std::cout << "[tc::io::Path] " << test_name << " : " << std::flush;
 	try
 	{
-		tc::fs::Path path(raw_path);
+		tc::io::Path path(raw_path);
 		std::string utf8_path;
 
 		if (path.size() != expected_element_count)
@@ -104,19 +104,19 @@ void fs_Path_TestClass::testPathComposition(const std::string& test_name, const 
 	}
 }
 
-void fs_Path_TestClass::testPathComposition(const std::string& test_name, const std::string& raw_path, size_t expected_element_count, PathType path_type)
+void io_Path_TestClass::testPathComposition(const std::string& test_name, const std::string& raw_path, size_t expected_element_count, PathType path_type)
 {
 	testPathComposition(test_name, raw_path, raw_path, expected_element_count, path_type);
 }
 
 //---------------------------------------------------------
 
-void fs_Path_TestClass::test_Constructor_Default()
+void io_Path_TestClass::test_Constructor_Default()
 {
-	std::cout << "[tc::fs::Path] test_Constructor_Default : " << std::flush;
+	std::cout << "[tc::io::Path] test_Constructor_Default : " << std::flush;
 	try
 	{
-		tc::fs::Path path_empty;
+		tc::io::Path path_empty;
 		
 		if (path_empty.size() != 0)
 		{
@@ -136,12 +136,12 @@ void fs_Path_TestClass::test_Constructor_Default()
 	}
 }
 
-void fs_Path_TestClass::test_Method_pop_front()
+void io_Path_TestClass::test_Method_pop_front()
 {
-	std::cout << "[tc::fs::Path] test_Method_pop_front : " << std::flush;
+	std::cout << "[tc::io::Path] test_Method_pop_front : " << std::flush;
 	try
 	{
-		tc::fs::Path path("a/b/c/d/e/f/g/h/i/j");
+		tc::io::Path path("a/b/c/d/e/f/g/h/i/j");
 		std::list<std::string> expectedElements = {"a","b","c","d","e","f","g","h","i","j"};
 
 		for (size_t i = 0; i < 10; i++, path.pop_front(), expectedElements.pop_front())
@@ -164,12 +164,12 @@ void fs_Path_TestClass::test_Method_pop_front()
 	}
 }
 
-void fs_Path_TestClass::test_Method_pop_back()
+void io_Path_TestClass::test_Method_pop_back()
 {
-	std::cout << "[tc::fs::Path] test_Method_pop_back : " << std::flush;
+	std::cout << "[tc::io::Path] test_Method_pop_back : " << std::flush;
 	try
 	{
-		tc::fs::Path path("a/b/c/d/e/f/g/h/i/j");
+		tc::io::Path path("a/b/c/d/e/f/g/h/i/j");
 		std::list<std::string> expectedElements = {"a","b","c","d","e","f","g","h","i","j"};
 
 		for (size_t i = 0; i < 10; i++, path.pop_back(), expectedElements.pop_back())
@@ -192,12 +192,12 @@ void fs_Path_TestClass::test_Method_pop_back()
 	}
 }
 
-void fs_Path_TestClass::test_Method_push_front()
+void io_Path_TestClass::test_Method_push_front()
 {
-	std::cout << "[tc::fs::Path] test_Method_push_front : " << std::flush;
+	std::cout << "[tc::io::Path] test_Method_push_front : " << std::flush;
 	try
 	{
-		tc::fs::Path path("");
+		tc::io::Path path("");
 		std::list<std::string> expectedElements = {};
 
 		std::list<std::string> pushCue = {"a","b","c","d","e","f","g","h","i","j"};
@@ -224,12 +224,12 @@ void fs_Path_TestClass::test_Method_push_front()
 	}
 }
 
-void fs_Path_TestClass::test_Method_push_back()
+void io_Path_TestClass::test_Method_push_back()
 {
-	std::cout << "[tc::fs::Path] test_Method_push_back : " << std::flush;
+	std::cout << "[tc::io::Path] test_Method_push_back : " << std::flush;
 	try
 	{
-		tc::fs::Path path("");
+		tc::io::Path path("");
 		std::list<std::string> expectedElements = {};
 
 		std::list<std::string> pushCue = {"a","b","c","d","e","f","g","h","i","j"};
@@ -256,12 +256,12 @@ void fs_Path_TestClass::test_Method_push_back()
 	}
 }
 
-void fs_Path_TestClass::test_Method_clear()
+void io_Path_TestClass::test_Method_clear()
 {
-	std::cout << "[tc::fs::Path] test_Method_clear : " << std::flush;
+	std::cout << "[tc::io::Path] test_Method_clear : " << std::flush;
 	try
 	{
-		tc::fs::Path path("a/b/c/d/e/f/g/h/i/j");
+		tc::io::Path path("a/b/c/d/e/f/g/h/i/j");
 		
 		path.clear();
 
@@ -283,18 +283,18 @@ void fs_Path_TestClass::test_Method_clear()
 	}
 }
 
-void fs_Path_TestClass::test_Operator_Addition()
+void io_Path_TestClass::test_Operator_Addition()
 {
-	std::cout << "[tc::fs::Path] test_Operator_Addition : " << std::flush;
+	std::cout << "[tc::io::Path] test_Operator_Addition : " << std::flush;
 	try
 	{
 		const std::string raw_path_a = "foo/bar/";
 		const std::string raw_path_b = "file.txt";
 		const std::string raw_path_ab = raw_path_a + raw_path_b;
 
-		tc::fs::Path path_a(raw_path_a);
-		tc::fs::Path path_b(raw_path_b);
-		tc::fs::Path path_ab = path_a + path_b;
+		tc::io::Path path_a(raw_path_a);
+		tc::io::Path path_b(raw_path_b);
+		tc::io::Path path_ab = path_a + path_b;
 
 		std::string test_path;
 		pathToUnixUtf8(path_ab, test_path);
@@ -312,17 +312,17 @@ void fs_Path_TestClass::test_Operator_Addition()
 	}
 }
 
-void fs_Path_TestClass::test_Operator_Append()
+void io_Path_TestClass::test_Operator_Append()
 {
-	std::cout << "[tc::fs::Path] test_Operator_Append : " << std::flush;
+	std::cout << "[tc::io::Path] test_Operator_Append : " << std::flush;
 	try
 	{
 		const std::string raw_path_a = "foo/bar/";
 		const std::string raw_path_b = "file.txt";
 		const std::string raw_path_ab = raw_path_a + raw_path_b;
 
-		tc::fs::Path path_a(raw_path_a);
-		tc::fs::Path path_b(raw_path_b);
+		tc::io::Path path_a(raw_path_a);
+		tc::io::Path path_b(raw_path_b);
 		path_a += path_b;
 
 		std::string test_path;
@@ -341,9 +341,9 @@ void fs_Path_TestClass::test_Operator_Append()
 	}
 }
 
-void fs_Path_TestClass::test_Scenario_AppendStressTest()
+void io_Path_TestClass::test_Scenario_AppendStressTest()
 {
-	std::cout << "[tc::fs::Path] test_Scenario_AppendStressTest : " << std::flush;
+	std::cout << "[tc::io::Path] test_Scenario_AppendStressTest : " << std::flush;
 	try
 	{
 		const std::string raw_dir_path = "foo/bar/";
@@ -351,20 +351,20 @@ void fs_Path_TestClass::test_Scenario_AppendStressTest()
 		size_t append_itteration_count = 1000;
 		size_t expected_element_count = (append_itteration_count * 2) + 1;
 	
-		tc::fs::Path path;
-		tc::fs::Path path_dir(raw_dir_path);
+		tc::io::Path path;
+		tc::io::Path path_dir(raw_dir_path);
 
 		for (size_t i = 0; i < append_itteration_count; i++)
 			path += path_dir;
 
-		path += tc::fs::Path(raw_file_path);
+		path += tc::io::Path(raw_file_path);
 
 		if (path.size() != expected_element_count)
 		{
 			throw tc::Exception("unexpected number of path elements");
 		}
 
-		tc::fs::Path::const_iterator itr = path.end();
+		tc::io::Path::const_iterator itr = path.end();
 		if (*(--itr) != "file.txt")
 		{
 			throw tc::Exception("Unexpected value for tested path element");
@@ -388,15 +388,15 @@ void fs_Path_TestClass::test_Scenario_AppendStressTest()
 	}
 }
 
-void fs_Path_TestClass::test_Operator_EqualityTest()
+void io_Path_TestClass::test_Operator_EqualityTest()
 {
-	std::cout << "[tc::fs::Path] test_Operator_EqualityTest : " << std::flush;
+	std::cout << "[tc::io::Path] test_Operator_EqualityTest : " << std::flush;
 	try
 	{
 		std::string raw_path_0 = "a directory/a subdirectory";
 
-		tc::fs::Path path_a(raw_path_0);
-		tc::fs::Path path_b(raw_path_0);
+		tc::io::Path path_a(raw_path_0);
+		tc::io::Path path_b(raw_path_0);
 
 		if ((path_a == path_b) == false)
 			throw tc::Exception("operator==() did not return true for equal Path objects");
@@ -409,15 +409,15 @@ void fs_Path_TestClass::test_Operator_EqualityTest()
 	}
 }
 
-void fs_Path_TestClass::test_Operator_InequalityTest()
+void io_Path_TestClass::test_Operator_InequalityTest()
 {
-	std::cout << "[tc::fs::Path] test_Operator_InequalityTest : " << std::flush;
+	std::cout << "[tc::io::Path] test_Operator_InequalityTest : " << std::flush;
 	try
 	{
 		std::string raw_path_0 = "a directory/a subdirectory";
 		std::string raw_path_1 = "a different directory/a different subdirectory";
-		tc::fs::Path path_a(raw_path_0);
-		tc::fs::Path path_b(raw_path_1);
+		tc::io::Path path_a(raw_path_0);
+		tc::io::Path path_b(raw_path_1);
 
 		if ((path_a != path_b) == false)
 			throw tc::Exception("operator!=() did not return true for unequal Path objects");

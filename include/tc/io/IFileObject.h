@@ -1,6 +1,6 @@
 	/**
 	 * @file IFileObject.h
-	 * @brief Declaration of tc::fs::IFileObject
+	 * @brief Declaration of tc::io::IFileObject
 	 * @author Jack (jakcron)
 	 * @version	0.3
 	 * @date 2019/06/16
@@ -9,7 +9,7 @@
 #include <tc/types.h>
 #include <tc/ResourceState.h>
 
-namespace tc { namespace fs {
+namespace tc { namespace io {
 
 	/**
 	 * @class IFileObject

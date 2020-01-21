@@ -1,14 +1,14 @@
 	/**
 	 * @file PartitionedFileObject.h
-	 * @brief Declaration of tc::fs::PartitionedFileObject
+	 * @brief Declaration of tc::io::PartitionedFileObject
 	 * @author Jack (jakcron)
 	 * @version 0.3
 	 * @date 2019/06/19
 	 */
 #pragma once
-#include <tc/fs/IFileObject.h>
+#include <tc/io/IFileObject.h>
 
-namespace tc { namespace fs {
+namespace tc { namespace io {
 
 	/**
 	 * @class PartitionedFileObject
@@ -30,7 +30,7 @@ public:
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	PartitionedFileObject(const std::shared_ptr<tc::fs::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size);
+	PartitionedFileObject(const std::shared_ptr<tc::io::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 		/** 
 		 * @brief Wrap (by move) constuctor
@@ -40,7 +40,7 @@ public:
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	PartitionedFileObject(std::shared_ptr<tc::fs::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size);
+	PartitionedFileObject(std::shared_ptr<tc::io::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 	virtual tc::ResourceState state();
 
@@ -52,7 +52,7 @@ public:
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	void initialise(const std::shared_ptr<tc::fs::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size);
+	void initialise(const std::shared_ptr<tc::io::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 		/** 
 		 * @brief Wrap (by move) initialiser
@@ -62,7 +62,7 @@ public:
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	void initialise(std::shared_ptr<tc::fs::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size);
+	void initialise(std::shared_ptr<tc::io::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 	virtual void close();
 	virtual uint64_t size();
@@ -74,11 +74,11 @@ public:
 private:
 	static const std::string kClassName;
 
-	std::shared_ptr<tc::fs::IFileObject> mFile;
+	std::shared_ptr<tc::io::IFileObject> mFile;
 	uint64_t mFileBaseOffset;
 	uint64_t mVirtualSize;
 
 	uint64_t mVirtualOffset;
 };
 
-}} // namespace tc::fs
+}} // namespace tc::io

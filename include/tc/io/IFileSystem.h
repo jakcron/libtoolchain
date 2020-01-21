@@ -1,6 +1,6 @@
 	/**
 	 * @file IFileSystem.h
-	 * @brief Declaration of tc::fs::IFileSystem
+	 * @brief Declaration of tc::io::IFileSystem
 	 * @author Jack (jakcron)
 	 * @version 0.6
 	 * @date 2019/06/18
@@ -8,10 +8,10 @@
 #pragma once
 #include <tc/types.h>
 #include <tc/ResourceState.h>
-#include <tc/fs/IFileObject.h>
-#include <tc/fs/Path.h>
+#include <tc/io/IFileObject.h>
+#include <tc/io/Path.h>
 
-namespace tc { namespace fs {
+namespace tc { namespace io {
 
 	/** 
 	 * @enum FileAccessMode
@@ -36,7 +36,7 @@ enum FileAccessMode
 struct sDirectoryListing
 {
 		/// Absolute Path
-	tc::fs::Path abs_path;
+	tc::io::Path abs_path;
 		/// List of child directory names
 	std::vector<std::string> dir_list;
 		/// List of child file names
@@ -55,9 +55,9 @@ struct sDirectoryListing
 	 * - Directory management (create, remove)
 	 * - Directory listing
 	 * 
-	 * @note IFileSystem uses the tc::fs::Path class to represent a path, not as a literal string.
-	 * @note It is up to the implementation of IFileSystem to validate and process tc::fs::Path objects.
-	 * @note It is up to the implementation to enforce tc::fs::FileAccessMode.
+	 * @note IFileSystem uses the tc::io::Path class to represent a path, not as a literal string.
+	 * @note It is up to the implementation of IFileSystem to validate and process tc::io::Path objects.
+	 * @note It is up to the implementation to enforce tc::io::FileAccessMode.
 	 */
 class IFileSystem
 {
@@ -84,7 +84,7 @@ public:
 		 * 
 		 * @throws tc::Exception If the file cannot be created (invalid path, or access rights)
 		 */
-	virtual void createFile(const tc::fs::Path& path) = 0;
+	virtual void createFile(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Remove a file
@@ -92,7 +92,7 @@ public:
 		 * 
 		 * @throws tc::Exception If the file cannot be removed (invalid path, or access rights)
 		 */
-	virtual void removeFile(const tc::fs::Path& path) = 0;
+	virtual void removeFile(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Open a file
@@ -102,7 +102,7 @@ public:
 		 *	
 		 * @throws tc::Exception If the file cannot be opened (invalid path, or access rights)
 		 */
-	virtual void openFile(const tc::fs::Path& path, tc::fs::FileAccessMode mode, std::shared_ptr<tc::fs::IFileObject>& file) = 0;
+	virtual void openFile(const tc::io::Path& path, tc::io::FileAccessMode mode, std::shared_ptr<tc::io::IFileObject>& file) = 0;
 	
 		/** 
 		 * @brief Create a new directory
@@ -112,7 +112,7 @@ public:
 		 * 
 		 * @throws tc::Exception If the directory cannot be created (invalid path, or access rights)
 		 */
-	virtual void createDirectory(const tc::fs::Path& path) = 0;
+	virtual void createDirectory(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Remove a directory
@@ -120,19 +120,19 @@ public:
 		 * 
 		 * @throws tc::Exception If the directory cannot be removed (invalid path, or access rights)
 		 */
-	virtual void removeDirectory(const tc::fs::Path& path) = 0;
+	virtual void removeDirectory(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Get the full path of the working directory
 		 * @param[out] path Path object to populate
 		 */
-	virtual void getWorkingDirectory(tc::fs::Path& path) = 0;
+	virtual void getWorkingDirectory(tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Change the working directory
 		 * @param[in] path Path to directory
 		 */
-	virtual void setWorkingDirectory(const tc::fs::Path& path) = 0;
+	virtual void setWorkingDirectory(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Get directory listing a directory
@@ -141,7 +141,7 @@ public:
 		 * 
 		 * @throws tc::Exception If the directory cannot be accessed (invalid path, or access rights)
 		 */
-	virtual void getDirectoryListing(const tc::fs::Path& path, tc::fs::sDirectoryListing& info) = 0;
+	virtual void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info) = 0;
 };
 
-}} // namespace tc::fs
+}} // namespace tc::io

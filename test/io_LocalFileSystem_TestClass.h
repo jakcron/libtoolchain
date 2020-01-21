@@ -1,7 +1,7 @@
 #pragma once
 #include "ITestClass.h"
 
-class fs_LocalFileSystem_TestClass : public ITestClass
+class io_LocalFileSystem_TestClass : public ITestClass
 {
 public:
 	void runAllTests();

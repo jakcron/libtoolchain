@@ -1,12 +1,12 @@
-#include <tc/fs/PathUtils.h>
+#include <tc/io/PathUtils.h>
 #include <tc/string.h>
 
-void tc::fs::pathToWindowsUTF16(const tc::fs::Path& path, std::u16string& out)
+void tc::io::pathToWindowsUTF16(const tc::io::Path& path, std::u16string& out)
 {
 	std::u16string utf16_element;
 
 	out.clear();
-	for (tc::fs::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
+	for (tc::io::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
 	{
 		tc::string::transcodeUTF8ToUTF16(*itr, utf16_element);
 
@@ -18,10 +18,10 @@ void tc::fs::pathToWindowsUTF16(const tc::fs::Path& path, std::u16string& out)
 	}
 }
 
-void tc::fs::pathToUnixUTF8(const tc::fs::Path& path, std::string& out)
+void tc::io::pathToUnixUTF8(const tc::io::Path& path, std::string& out)
 {
 	out.clear();
-	for (tc::fs::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
+	for (tc::io::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
 	{
 		out += *itr;
 		if (itr != --path.end())

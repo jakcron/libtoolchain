@@ -1,9 +1,9 @@
 #pragma once
 #include "ITestClass.h"
-#include <tc/fs.h>
+#include <tc/io.h>
 #include <tc/string.h>
 
-class fs_Path_TestClass : public ITestClass
+class io_Path_TestClass : public ITestClass
 {
 public:
 	void runAllTests();
@@ -15,8 +15,8 @@ private:
 	};
 	
 	// helpers
-	void pathToUnixUtf8(const tc::fs::Path& path, std::string& out);
-	void pathToWindowsUtf8(const tc::fs::Path& path, std::string& out);
+	void pathToUnixUtf8(const tc::io::Path& path, std::string& out);
+	void pathToWindowsUtf8(const tc::io::Path& path, std::string& out);
 	
 	// generic tests
 	void testPathComposition(const std::string& test_name, const std::string& raw_path, const std::string& expected_path, size_t expected_element_count, PathType path_type);

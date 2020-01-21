@@ -1,14 +1,14 @@
 #pragma once
 #include "ITestClass.h"
 
-#include <tc/fs.h>
+#include <tc/io.h>
 
-class fs_PartitionedFileObject_TestClass : public ITestClass
+class io_PartitionedFileObject_TestClass : public ITestClass
 {
 public:
 	void runAllTests();
 private:
-	class DummyFileBase : public tc::fs::IFileObject
+	class DummyFileBase : public tc::io::IFileObject
 	{
 	public:
 		DummyFileBase()

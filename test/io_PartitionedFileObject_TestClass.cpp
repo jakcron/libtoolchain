@@ -1,23 +1,23 @@
 #include <tc/Exception.h>
 #include <iostream>
 
-#include "fs_PartitionedFileObject_TestClass.h"
+#include "io_PartitionedFileObject_TestClass.h"
 
-const std::string fs_PartitionedFileObject_TestClass::DummyFileBase::kClassName = "DummyFileBase";
+const std::string io_PartitionedFileObject_TestClass::DummyFileBase::kClassName = "DummyFileBase";
 
-void fs_PartitionedFileObject_TestClass::runAllTests(void)
+void io_PartitionedFileObject_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::fs::PartitionedFileObject] START" << std::endl;
+	std::cout << "[tc::io::PartitionedFileObject] START" << std::endl;
 	testSize();
 	testSeekPos();
 	testRead();
 	testWrite();
-	std::cout << "[tc::fs::PartitionedFileObject] END" << std::endl;
+	std::cout << "[tc::io::PartitionedFileObject] END" << std::endl;
 }
 
-void fs_PartitionedFileObject_TestClass::testSize()
+void io_PartitionedFileObject_TestClass::testSize()
 {
-	std::cout << "[tc::fs::PartitionedFileObject] testSize : " << std::flush;
+	std::cout << "[tc::io::PartitionedFileObject] testSize : " << std::flush;
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -34,7 +34,7 @@ void fs_PartitionedFileObject_TestClass::testSize()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox file
-			tc::fs::PartitionedFileObject sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
+			tc::io::PartitionedFileObject sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
 
 			if (sb_file.size() != sandbox_size)
 			{
@@ -55,9 +55,9 @@ void fs_PartitionedFileObject_TestClass::testSize()
 	}
 }
 
-void fs_PartitionedFileObject_TestClass::testSeekPos()
+void io_PartitionedFileObject_TestClass::testSeekPos()
 {
-	std::cout << "[tc::fs::PartitionedFileObject] testSeekPos : " << std::flush;
+	std::cout << "[tc::io::PartitionedFileObject] testSeekPos : " << std::flush;
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -85,7 +85,7 @@ void fs_PartitionedFileObject_TestClass::testSeekPos()
 			DummyFile file;
 
 			// get sandbox file
-			tc::fs::PartitionedFileObject sb_file(std::make_shared<DummyFile>(file), sandbox_offset, sandbox_size);
+			tc::io::PartitionedFileObject sb_file(std::make_shared<DummyFile>(file), sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file.seek(offset_to_seek);
@@ -117,9 +117,9 @@ void fs_PartitionedFileObject_TestClass::testSeekPos()
 	}
 }
 
-void fs_PartitionedFileObject_TestClass::testRead()
+void io_PartitionedFileObject_TestClass::testRead()
 {
-	std::cout << "[tc::fs::PartitionedFileObject] testRead : " << std::flush;
+	std::cout << "[tc::io::PartitionedFileObject] testRead : " << std::flush;
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -150,7 +150,7 @@ void fs_PartitionedFileObject_TestClass::testRead()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox file
-			tc::fs::PartitionedFileObject sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
+			tc::io::PartitionedFileObject sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file.seek(offset_to_seek);
@@ -173,9 +173,9 @@ void fs_PartitionedFileObject_TestClass::testRead()
 	}
 }
 
-void fs_PartitionedFileObject_TestClass::testWrite()
+void io_PartitionedFileObject_TestClass::testWrite()
 {
-	std::cout << "[tc::fs::PartitionedFileObject] testWrite : " << std::flush;
+	std::cout << "[tc::io::PartitionedFileObject] testWrite : " << std::flush;
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -206,7 +206,7 @@ void fs_PartitionedFileObject_TestClass::testWrite()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox file
-			tc::fs::PartitionedFileObject sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
+			tc::io::PartitionedFileObject sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file.seek(offset_to_seek);

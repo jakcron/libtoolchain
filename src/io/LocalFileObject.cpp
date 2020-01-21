@@ -1,6 +1,6 @@
-#include <tc/fs/LocalFileObject.h>
+#include <tc/io/LocalFileObject.h>
 #include <tc/Exception.h>
-#include <tc/fs/PathUtils.h>
+#include <tc/io/PathUtils.h>
 
 #ifdef _WIN32
 #include <direct.h>
@@ -12,9 +12,9 @@
 #include <unistd.h>   /* For open(), creat() */
 #endif
 
-const std::string tc::fs::LocalFileObject::kClassName = "tc::fs::LocalFileObject";
+const std::string tc::io::LocalFileObject::kClassName = "tc::io::LocalFileObject";
 
-tc::fs::LocalFileObject::FileHandle::~FileHandle()
+tc::io::LocalFileObject::FileHandle::~FileHandle()
 {
 #ifdef _WIN32
 	CloseHandle(handle);
@@ -23,24 +23,24 @@ tc::fs::LocalFileObject::FileHandle::~FileHandle()
 #endif
 }
 
-tc::fs::LocalFileObject::LocalFileObject() :
+tc::io::LocalFileObject::LocalFileObject() :
 	mState(0),
 	mMode(FILEACCESS_READ),
 	mFileHandle()
 {}
 
-tc::fs::LocalFileObject::LocalFileObject(const tc::fs::Path& path, tc::fs::FileAccessMode mode) :
+tc::io::LocalFileObject::LocalFileObject(const tc::io::Path& path, tc::io::FileAccessMode mode) :
 	LocalFileObject()
 {
 	open(path, mode);
 }
 
-tc::ResourceState tc::fs::LocalFileObject::state()
+tc::ResourceState tc::io::LocalFileObject::state()
 {
 	return mState;
 }
 
-void tc::fs::LocalFileObject::open(const tc::fs::Path& path, tc::fs::FileAccessMode mode)
+void tc::io::LocalFileObject::open(const tc::io::Path& path, tc::io::FileAccessMode mode)
 {
 	// close file before opening file
 	close();
@@ -66,7 +66,7 @@ void tc::fs::LocalFileObject::open(const tc::fs::Path& path, tc::fs::FileAccessM
 	}
 
 	// store file handle
-	mFileHandle = std::shared_ptr<tc::fs::LocalFileObject::FileHandle>(new tc::fs::LocalFileObject::FileHandle(file_handle));
+	mFileHandle = std::shared_ptr<tc::io::LocalFileObject::FileHandle>(new tc::io::LocalFileObject::FileHandle(file_handle));
 	
 	// set state as initialised
 	mState.set(RESFLAG_READY);
@@ -85,14 +85,14 @@ void tc::fs::LocalFileObject::open(const tc::fs::Path& path, tc::fs::FileAccessM
 	}
 
 	// store file handle
-	mFileHandle = std::shared_ptr<tc::fs::LocalFileObject::FileHandle>(new tc::fs::LocalFileObject::FileHandle(file_handle));
+	mFileHandle = std::shared_ptr<tc::io::LocalFileObject::FileHandle>(new tc::io::LocalFileObject::FileHandle(file_handle));
 	
 	// set state as initialised
 	mState.set(RESFLAG_READY);
 #endif
 }
 
-void tc::fs::LocalFileObject::close()
+void tc::io::LocalFileObject::close()
 {
 	if (mState.test(RESFLAG_READY))
 	{
@@ -101,7 +101,7 @@ void tc::fs::LocalFileObject::close()
 	mState.reset() = 0;
 }
 
-uint64_t tc::fs::LocalFileObject::size()
+uint64_t tc::io::LocalFileObject::size()
 {
 	if (mState.test(RESFLAG_READY) == false)
 	{
@@ -142,7 +142,7 @@ uint64_t tc::fs::LocalFileObject::size()
 	return fsize;
 }
 
-void tc::fs::LocalFileObject::seek(uint64_t offset)
+void tc::io::LocalFileObject::seek(uint64_t offset)
 {
 	if (mState.test(RESFLAG_READY) == false)
 	{
@@ -179,7 +179,7 @@ void tc::fs::LocalFileObject::seek(uint64_t offset)
 #endif
 }
 
-uint64_t tc::fs::LocalFileObject::pos()
+uint64_t tc::io::LocalFileObject::pos()
 {
 	if (mState.test(RESFLAG_READY) == false)
 	{
@@ -212,7 +212,7 @@ uint64_t tc::fs::LocalFileObject::pos()
 #endif
 }
 
-void tc::fs::LocalFileObject::read(byte_t* data, size_t len)
+void tc::io::LocalFileObject::read(byte_t* data, size_t len)
 {
 	if (mState.test(RESFLAG_READY) == false)
 	{
@@ -245,7 +245,7 @@ void tc::fs::LocalFileObject::read(byte_t* data, size_t len)
 #endif
 }
 
-void tc::fs::LocalFileObject::write(const byte_t* data, size_t len)
+void tc::io::LocalFileObject::write(const byte_t* data, size_t len)
 {
 	if (mState.test(RESFLAG_READY) == false)
 	{
@@ -273,7 +273,7 @@ void tc::fs::LocalFileObject::write(const byte_t* data, size_t len)
 }
 
 #ifdef _WIN32
-DWORD tc::fs::LocalFileObject::getOpenModeFlag(FileAccessMode mode) const
+DWORD tc::io::LocalFileObject::getOpenModeFlag(FileAccessMode mode) const
 {
 	DWORD flag = 0;
 	switch (mode)
@@ -292,7 +292,7 @@ DWORD tc::fs::LocalFileObject::getOpenModeFlag(FileAccessMode mode) const
 	}
 	return flag;
 }
-DWORD tc::fs::LocalFileObject::getShareModeFlag(FileAccessMode mode) const
+DWORD tc::io::LocalFileObject::getShareModeFlag(FileAccessMode mode) const
 {
 	DWORD flag = 0;
 	switch (mode)
@@ -311,7 +311,7 @@ DWORD tc::fs::LocalFileObject::getShareModeFlag(FileAccessMode mode) const
 	}
 	return flag;
 }
-DWORD tc::fs::LocalFileObject::getCreationModeFlag(FileAccessMode mode) const
+DWORD tc::io::LocalFileObject::getCreationModeFlag(FileAccessMode mode) const
 {
 	DWORD flag = 0;
 	switch (mode)
@@ -331,7 +331,7 @@ DWORD tc::fs::LocalFileObject::getCreationModeFlag(FileAccessMode mode) const
 	return flag;
 }
 #else
-int tc::fs::LocalFileObject::getOpenModeFlag(FileAccessMode mode) const
+int tc::io::LocalFileObject::getOpenModeFlag(FileAccessMode mode) const
 {
 	int flag = 0;
 	switch (mode)

@@ -1,8 +1,8 @@
-#include <tc/fs.h>
+#include <tc/io.h>
 #include <tc/Exception.h>
 #include <iostream>
 
-#include "fs_LocalFileSystem_TestClass.h"
+#include "io_LocalFileSystem_TestClass.h"
 
 static std::string kDirPath = "./testdir";
 static std::string kUtf8DirPath = "./ЀЁЂЃЄЅテスト/";
@@ -12,9 +12,9 @@ static std::string kNotExistFilePath = "ThisDoesNotExist.bin";
 static std::string kTestPhrase = "Hello world!\n";
 static std::string kRandomString = "uUkMx4MYhJdwUnr38Jk7nZvXQnW0IhGNQqjMRyKoRuxXwmxBS3p2Alzrv7BijPN2LDI1QGkEfQ3vrpoOGwKciwidTyuOPRRg9sj8QggPk7QSvJrrWKN3PfzN7JvEwax3vX3QaHIoX0afJtUiulzVf9SMlotimwrdOHbeAhLzQUSCAz6moIHhZd6DO0hFxjCxGpHUnDKE";
 
-void fs_LocalFileSystem_TestClass::runAllTests(void)
+void io_LocalFileSystem_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::fs::LocalFileSystem] START" << std::endl;
+	std::cout << "[tc::io::LocalFileSystem] START" << std::endl;
 	test_CreateFile_NotExist();
 	test_CreateFile_DoesExist();
 	test_CreateFile_UnicodePath();
@@ -46,15 +46,15 @@ void fs_LocalFileSystem_TestClass::runAllTests(void)
 	test_ChangeWorkingDirectory_DoesExist();
 	test_ChangeWorkingDirectory_NotExist();
 	test_ChangeWorkingDirectory_UnicodePath();
-	std::cout << "[tc::fs::LocalFileSystem] END" << std::endl;
+	std::cout << "[tc::io::LocalFileSystem] END" << std::endl;
 }
 
-void fs_LocalFileSystem_TestClass::test_CreateFile_NotExist()
+void io_LocalFileSystem_TestClass::test_CreateFile_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_CreateFile_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_CreateFile_NotExist : " << std::flush;
 	try 
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		fs.createFile(kAsciiFilePath);		
 
@@ -66,12 +66,12 @@ void fs_LocalFileSystem_TestClass::test_CreateFile_NotExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_CreateFile_DoesExist()
+void io_LocalFileSystem_TestClass::test_CreateFile_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_CreateFile_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_CreateFile_DoesExist : " << std::flush;
 	try 
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		fs.createFile(kAsciiFilePath);		
 
@@ -83,12 +83,12 @@ void fs_LocalFileSystem_TestClass::test_CreateFile_DoesExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_CreateFile_UnicodePath()
+void io_LocalFileSystem_TestClass::test_CreateFile_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_CreateFile_UnicodePath : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_CreateFile_UnicodePath : " << std::flush;
 	try 
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		fs.createFile(kUtf8TestPath);		
 
@@ -100,12 +100,12 @@ void fs_LocalFileSystem_TestClass::test_CreateFile_UnicodePath()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_RemoveFile_DoesExist()
+void io_LocalFileSystem_TestClass::test_RemoveFile_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveFile_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveFile_DoesExist : " << std::flush;
 	try 
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		fs.removeFile(kAsciiFilePath);		
 
@@ -117,12 +117,12 @@ void fs_LocalFileSystem_TestClass::test_RemoveFile_DoesExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_RemoveFile_NotExist()
+void io_LocalFileSystem_TestClass::test_RemoveFile_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveFile_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveFile_NotExist : " << std::flush;
 	try 
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		fs.removeFile(kNotExistFilePath);
 		std::cout << "FAIL (Did not throw exception when file was not present on FS)" << std::endl;
@@ -133,12 +133,12 @@ void fs_LocalFileSystem_TestClass::test_RemoveFile_NotExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_RemoveFile_UnicodePath()
+void io_LocalFileSystem_TestClass::test_RemoveFile_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveFile_UnicodePath : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveFile_UnicodePath : " << std::flush;
 	try 
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		fs.removeFile(kUtf8TestPath);		
 
@@ -150,16 +150,16 @@ void fs_LocalFileSystem_TestClass::test_RemoveFile_UnicodePath()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_OpenFileCreate_NotExist()
+void io_LocalFileSystem_TestClass::test_OpenFileCreate_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileCreate_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_OpenFileCreate_NotExist : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 		try 
 		{
-			std::shared_ptr<tc::fs::IFileObject> file;
-			fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, file);
+			std::shared_ptr<tc::io::IFileObject> file;
+			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, file);
 
 			if (file->size() != 0)
 			{
@@ -188,18 +188,18 @@ void fs_LocalFileSystem_TestClass::test_OpenFileCreate_NotExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_OpenFileCreate_DoesExist()
+void io_LocalFileSystem_TestClass::test_OpenFileCreate_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileCreate_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_OpenFileCreate_DoesExist : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 		fs.createFile(kAsciiFilePath);
 
 		try 
 		{
-			std::shared_ptr<tc::fs::IFileObject> file;
-			fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, file);
+			std::shared_ptr<tc::io::IFileObject> file;
+			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, file);
 
 			if (file->size() != 0)
 			{
@@ -228,22 +228,22 @@ void fs_LocalFileSystem_TestClass::test_OpenFileCreate_DoesExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_OpenFileRead_DoesExist()
+void io_LocalFileSystem_TestClass::test_OpenFileRead_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_OpenFileRead_DoesExist : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
-		std::shared_ptr<tc::fs::IFileObject> tmp_file;
+		tc::io::LocalFileSystem fs;
+		std::shared_ptr<tc::io::IFileObject> tmp_file;
 
-		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, tmp_file);
+		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, tmp_file);
 		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 		tmp_file->close();
 
 		try 
 		{
-			std::shared_ptr<tc::fs::IFileObject> file;
-			fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
+			std::shared_ptr<tc::io::IFileObject> file;
+			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_READ, file);
 
 			if (file->size() != kRandomString.length())
 			{
@@ -273,15 +273,15 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_DoesExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_OpenFileRead_NotExist()
+void io_LocalFileSystem_TestClass::test_OpenFileRead_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_OpenFileRead_NotExist : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
-		std::shared_ptr<tc::fs::IFileObject> file;
+		tc::io::LocalFileSystem fs;
+		std::shared_ptr<tc::io::IFileObject> file;
 
-		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
+		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_READ, file);
 		
 		std::cout << "FAIL (Did not throw exception where file did not exist)" << std::endl;
 	}
@@ -291,22 +291,22 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_NotExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_OpenFileRead_UnicodePath()
+void io_LocalFileSystem_TestClass::test_OpenFileRead_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_UnicodePath : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_OpenFileRead_UnicodePath : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
-		std::shared_ptr<tc::fs::IFileObject> tmp_file;
+		tc::io::LocalFileSystem fs;
+		std::shared_ptr<tc::io::IFileObject> tmp_file;
 
-		fs.openFile(kUtf8TestPath, tc::fs::FILEACCESS_CREATE, tmp_file);
+		fs.openFile(kUtf8TestPath, tc::io::FILEACCESS_CREATE, tmp_file);
 		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 		tmp_file->close();
 
 		try 
 		{
-			std::shared_ptr<tc::fs::IFileObject> file;
-			fs.openFile(kUtf8TestPath, tc::fs::FILEACCESS_READ, file);
+			std::shared_ptr<tc::io::IFileObject> file;
+			fs.openFile(kUtf8TestPath, tc::io::FILEACCESS_READ, file);
 
 			if (file->size() != kRandomString.length())
 			{
@@ -336,22 +336,22 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_UnicodePath()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_OpenFileRead_TryWrite()
+void io_LocalFileSystem_TestClass::test_OpenFileRead_TryWrite()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_TryWrite : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_OpenFileRead_TryWrite : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
-		std::shared_ptr<tc::fs::IFileObject> tmp_file;
+		tc::io::LocalFileSystem fs;
+		std::shared_ptr<tc::io::IFileObject> tmp_file;
 
-		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, tmp_file);
+		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, tmp_file);
 		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 		tmp_file->close();
 
 		try 
 		{
-			std::shared_ptr<tc::fs::IFileObject> file;
-			fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
+			std::shared_ptr<tc::io::IFileObject> file;
+			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_READ, file);
 
 			file->seek(file->size());
 		
@@ -372,22 +372,22 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_TryWrite()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_OpenFileRead_TryReadBeyondEnd()
+void io_LocalFileSystem_TestClass::test_OpenFileRead_TryReadBeyondEnd()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileRead_TryReadBeyondEnd : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_OpenFileRead_TryReadBeyondEnd : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
-		std::shared_ptr<tc::fs::IFileObject> tmp_file;
+		tc::io::LocalFileSystem fs;
+		std::shared_ptr<tc::io::IFileObject> tmp_file;
 
-		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, tmp_file);
+		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, tmp_file);
 		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 		tmp_file->close();
 
 		try 
 		{
-			std::shared_ptr<tc::fs::IFileObject> file;
-			fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_READ, file);
+			std::shared_ptr<tc::io::IFileObject> file;
+			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_READ, file);
 
 			file->seek(file->size());
 			std::shared_ptr<byte_t> check(new byte_t[kRandomString.length()]);
@@ -409,22 +409,22 @@ void fs_LocalFileSystem_TestClass::test_OpenFileRead_TryReadBeyondEnd()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_OpenFileEdit_DoesExist()
+void io_LocalFileSystem_TestClass::test_OpenFileEdit_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileEdit_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_OpenFileEdit_DoesExist : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
-		std::shared_ptr<tc::fs::IFileObject> tmp_file;
+		tc::io::LocalFileSystem fs;
+		std::shared_ptr<tc::io::IFileObject> tmp_file;
 
-		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_CREATE, tmp_file);
+		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, tmp_file);
 		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 		tmp_file->close();
 
 		try 
 		{
-			std::shared_ptr<tc::fs::IFileObject> file;
-			fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_EDIT, file);
+			std::shared_ptr<tc::io::IFileObject> file;
+			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_EDIT, file);
 
 			if (file->size() != kRandomString.length())
 			{
@@ -471,15 +471,15 @@ void fs_LocalFileSystem_TestClass::test_OpenFileEdit_DoesExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_OpenFileEdit_NotExist()
+void io_LocalFileSystem_TestClass::test_OpenFileEdit_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_OpenFileEdit_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_OpenFileEdit_NotExist : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
-		std::shared_ptr<tc::fs::IFileObject> file;
+		tc::io::LocalFileSystem fs;
+		std::shared_ptr<tc::io::IFileObject> file;
 
-		fs.openFile(kAsciiFilePath, tc::fs::FILEACCESS_EDIT, file);
+		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_EDIT, file);
 		
 		std::cout << "FAIL (Did not throw exception where file did not exist)" << std::endl;
 	}
@@ -489,12 +489,12 @@ void fs_LocalFileSystem_TestClass::test_OpenFileEdit_NotExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_CreateDirectory_NotExist()
+void io_LocalFileSystem_TestClass::test_CreateDirectory_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_CreateDirectory_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_CreateDirectory_NotExist : " << std::flush;
 	try 
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		fs.createDirectory(kDirPath);
 		std::cout << "PASS" << std::endl;
@@ -505,12 +505,12 @@ void fs_LocalFileSystem_TestClass::test_CreateDirectory_NotExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_CreateDirectory_DoesExist()
+void io_LocalFileSystem_TestClass::test_CreateDirectory_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_CreateDirectory_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_CreateDirectory_DoesExist : " << std::flush;
 	try 
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		fs.createDirectory(kDirPath);
 		std::cout << "PASS" << std::endl;
@@ -521,12 +521,12 @@ void fs_LocalFileSystem_TestClass::test_CreateDirectory_DoesExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_CreateDirectory_UnicodePath()
+void io_LocalFileSystem_TestClass::test_CreateDirectory_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_CreateDirectory_UnicodePath : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_CreateDirectory_UnicodePath : " << std::flush;
 	try 
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		fs.createDirectory(kUtf8DirPath);
 		std::cout << "PASS" << std::endl;
@@ -537,12 +537,12 @@ void fs_LocalFileSystem_TestClass::test_CreateDirectory_UnicodePath()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_RemoveDirectory_DoesExist()
+void io_LocalFileSystem_TestClass::test_RemoveDirectory_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveDirectory_DoesExist : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		fs.removeDirectory(kDirPath);
 		std::cout << "PASS" << std::endl;
@@ -553,12 +553,12 @@ void fs_LocalFileSystem_TestClass::test_RemoveDirectory_DoesExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_RemoveDirectory_NotExist()
+void io_LocalFileSystem_TestClass::test_RemoveDirectory_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveDirectory_NotExist : " << std::flush;
 	try 
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		fs.removeDirectory(kDirPath);
 		std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
@@ -569,12 +569,12 @@ void fs_LocalFileSystem_TestClass::test_RemoveDirectory_NotExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_RemoveDirectory_UnicodePath()
+void io_LocalFileSystem_TestClass::test_RemoveDirectory_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_UnicodePath : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveDirectory_UnicodePath : " << std::flush;
 	try 
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		fs.removeDirectory(kUtf8DirPath);
 		std::cout << "PASS" << std::endl;
@@ -585,15 +585,15 @@ void fs_LocalFileSystem_TestClass::test_RemoveDirectory_UnicodePath()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_RemoveDirectory_HasChildren()
+void io_LocalFileSystem_TestClass::test_RemoveDirectory_HasChildren()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_HasChildren : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveDirectory_HasChildren : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 	
-		tc::fs::Path dir_child_path = tc::fs::Path(kDirPath) + tc::fs::Path(kUtf8DirPath);
-		tc::fs::Path file_child_path = tc::fs::Path(kDirPath) + tc::fs::Path(kAsciiFilePath);
+		tc::io::Path dir_child_path = tc::io::Path(kDirPath) + tc::io::Path(kUtf8DirPath);
+		tc::io::Path file_child_path = tc::io::Path(kDirPath) + tc::io::Path(kAsciiFilePath);
 
 		try 
 		{
@@ -618,12 +618,12 @@ void fs_LocalFileSystem_TestClass::test_RemoveDirectory_HasChildren()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_RemoveDirectory_NotDirectoryActuallyFile()
+void io_LocalFileSystem_TestClass::test_RemoveDirectory_NotDirectoryActuallyFile()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_RemoveDirectory_NotDirectoryActuallyFile : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveDirectory_NotDirectoryActuallyFile : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 		try 
 		{
 			fs.createFile(kAsciiFilePath);
@@ -643,12 +643,12 @@ void fs_LocalFileSystem_TestClass::test_RemoveDirectory_NotDirectoryActuallyFile
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_DoesExist()
+void io_LocalFileSystem_TestClass::test_GetDirectoryListing_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_GetDirectoryListing_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_GetDirectoryListing_DoesExist : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		std::vector<std::string> file_list;
 		std::vector<std::string> dir_list;
@@ -667,17 +667,17 @@ void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_DoesExist()
 
 		for (size_t i = 0; i < file_list.size(); i++)
 		{
-			fs.createFile(tc::fs::Path(kDirPath) + tc::fs::Path(file_list[i]));
+			fs.createFile(tc::io::Path(kDirPath) + tc::io::Path(file_list[i]));
 		}
 
 		for (size_t i = 0; i < dir_list.size(); i++)
 		{
-			fs.createDirectory(tc::fs::Path(kDirPath) + tc::fs::Path(dir_list[i]));
+			fs.createDirectory(tc::io::Path(kDirPath) + tc::io::Path(dir_list[i]));
 		}
 
 		try
 		{
-			tc::fs::sDirectoryListing info;
+			tc::io::sDirectoryListing info;
 
 			fs.getDirectoryListing(kDirPath, info);
 			
@@ -701,15 +701,15 @@ void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_DoesExist()
 
 		for (size_t i = 0; i < file_list.size(); i++)
 		{
-			fs.removeFile(tc::fs::Path(kDirPath) + tc::fs::Path(file_list[i]));
+			fs.removeFile(tc::io::Path(kDirPath) + tc::io::Path(file_list[i]));
 		}
 
 		for (size_t i = 0; i < dir_list.size(); i++)
 		{
-			fs.removeDirectory(tc::fs::Path(kDirPath) + tc::fs::Path(dir_list[i]));
+			fs.removeDirectory(tc::io::Path(kDirPath) + tc::io::Path(dir_list[i]));
 		}
 
-		fs.removeDirectory(tc::fs::Path(kDirPath));
+		fs.removeDirectory(tc::io::Path(kDirPath));
 	}
 	catch (const std::exception& e)
 	{
@@ -717,14 +717,14 @@ void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_DoesExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_NotExist()
+void io_LocalFileSystem_TestClass::test_GetDirectoryListing_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_GetDirectoryListing_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_GetDirectoryListing_NotExist : " << std::flush;
 	try 
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
-		tc::fs::sDirectoryListing info;
+		tc::io::sDirectoryListing info;
 		fs.getDirectoryListing(kNotExistFilePath, info);
 		std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
 	}
@@ -734,12 +734,12 @@ void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_NotExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_UnicodePath()
+void io_LocalFileSystem_TestClass::test_GetDirectoryListing_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_GetDirectoryListing_UnicodePath : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_GetDirectoryListing_UnicodePath : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 
 		std::vector<std::string> file_list;
 		std::vector<std::string> dir_list;
@@ -758,17 +758,17 @@ void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_UnicodePath()
 
 		for (size_t i = 0; i < file_list.size(); i++)
 		{
-			fs.createFile(tc::fs::Path(kUtf8DirPath) + tc::fs::Path(file_list[i]));
+			fs.createFile(tc::io::Path(kUtf8DirPath) + tc::io::Path(file_list[i]));
 		}
 
 		for (size_t i = 0; i < dir_list.size(); i++)
 		{
-			fs.createDirectory(tc::fs::Path(kUtf8DirPath) + tc::fs::Path(dir_list[i]));
+			fs.createDirectory(tc::io::Path(kUtf8DirPath) + tc::io::Path(dir_list[i]));
 		}
 
 		try
 		{
-			tc::fs::sDirectoryListing info;
+			tc::io::sDirectoryListing info;
 
 			fs.getDirectoryListing(kUtf8DirPath, info);
 			
@@ -792,15 +792,15 @@ void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_UnicodePath()
 
 		for (size_t i = 0; i < file_list.size(); i++)
 		{
-			fs.removeFile(tc::fs::Path(kUtf8DirPath) + tc::fs::Path(file_list[i]));
+			fs.removeFile(tc::io::Path(kUtf8DirPath) + tc::io::Path(file_list[i]));
 		}
 
 		for (size_t i = 0; i < dir_list.size(); i++)
 		{
-			fs.removeDirectory(tc::fs::Path(kUtf8DirPath) + tc::fs::Path(dir_list[i]));
+			fs.removeDirectory(tc::io::Path(kUtf8DirPath) + tc::io::Path(dir_list[i]));
 		}
 
-		fs.removeDirectory(tc::fs::Path(kUtf8DirPath));
+		fs.removeDirectory(tc::io::Path(kUtf8DirPath));
 	}
 	catch (const std::exception& e)
 	{
@@ -808,14 +808,14 @@ void fs_LocalFileSystem_TestClass::test_GetDirectoryListing_UnicodePath()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_DoesExist()
+void io_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_DoesExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_ChangeWorkingDirectory_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_ChangeWorkingDirectory_DoesExist : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 		
-		tc::fs::Path old_dir;
+		tc::io::Path old_dir;
 		fs.getWorkingDirectory(old_dir);
 
 		try 
@@ -830,7 +830,7 @@ void fs_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_DoesExist()
 		}
 
 		fs.setWorkingDirectory(old_dir);
-		fs.removeDirectory(tc::fs::Path(kDirPath));
+		fs.removeDirectory(tc::io::Path(kDirPath));
 	}
 	catch (const std::exception& e)
 	{
@@ -838,12 +838,12 @@ void fs_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_DoesExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_NotExist()
+void io_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_NotExist()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_ChangeWorkingDirectory_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_ChangeWorkingDirectory_NotExist : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 		
 		fs.setWorkingDirectory(kNotExistFilePath);
 		std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
@@ -854,14 +854,14 @@ void fs_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_NotExist()
 	}
 }
 
-void fs_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_UnicodePath()
+void io_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_UnicodePath()
 {
-	std::cout << "[tc::fs::LocalFileSystem] test_ChangeWorkingDirectory_UnicodePath : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_ChangeWorkingDirectory_UnicodePath : " << std::flush;
 	try
 	{
-		tc::fs::LocalFileSystem fs;
+		tc::io::LocalFileSystem fs;
 		
-		tc::fs::Path old_dir;
+		tc::io::Path old_dir;
 		fs.getWorkingDirectory(old_dir);
 
 		try 

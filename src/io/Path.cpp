@@ -1,133 +1,133 @@
 #include <sstream>
-#include <tc/fs/Path.h>
+#include <tc/io/Path.h>
 #include <tc/string.h>
 #include <tc/Exception.h>
 
 #include <iostream>
 
 #ifdef _WIN32
-static const char kNativePathDelimiter = tc::fs::Path::kWindowsPathDelimiter; /**< Path delimiter for the native OS */
+static const char kNativePathDelimiter = tc::io::Path::kWindowsPathDelimiter; /**< Path delimiter for the native OS */
 #else
-static const char kNativePathDelimiter = tc::fs::Path::kUnixPathDelimiter; /**< Path delimiter for the native OS */
+static const char kNativePathDelimiter = tc::io::Path::kUnixPathDelimiter; /**< Path delimiter for the native OS */
 #endif
 
-const std::string tc::fs::Path::kClassName = "tc::fs::Path";
+const std::string tc::io::Path::kClassName = "tc::io::Path";
 
-tc::fs::Path::Path()
+tc::io::Path::Path()
 {}
 
-tc::fs::Path::Path(const std::string& path)
+tc::io::Path::Path(const std::string& path)
 {
 	initialisePath(path);
 }
 
-tc::fs::Path::Path(const std::u16string& path)
+tc::io::Path::Path(const std::u16string& path)
 {
 	std::string utf8_path;
 	string::transcodeUTF16ToUTF8(path, utf8_path);
 	initialisePath(utf8_path);
 }
 
-tc::fs::Path::Path(const std::u32string& path)
+tc::io::Path::Path(const std::u32string& path)
 {
 	std::string utf8_path;
 	string::transcodeUTF32ToUTF8(path, utf8_path);
 	initialisePath(utf8_path);
 }
 
-tc::fs::Path tc::fs::Path::operator+(const Path& other) const
+tc::io::Path tc::io::Path::operator+(const Path& other) const
 {
 	Path new_path = *this;
 	new_path.appendPath(other.mUnicodePath);
 	return new_path;
 }
 
-void tc::fs::Path::operator+=(const Path& other)
+void tc::io::Path::operator+=(const Path& other)
 {
 	appendPath(other.mUnicodePath);
 }
 
-bool tc::fs::Path::operator==(const Path& other) const
+bool tc::io::Path::operator==(const Path& other) const
 {
 	return mUnicodePath == other.mUnicodePath;
 }
 
-bool tc::fs::Path::operator!=(const Path& other) const
+bool tc::io::Path::operator!=(const Path& other) const
 {
 	return !(this->operator==(other));
 }
 
-tc::fs::Path::iterator tc::fs::Path::begin()
+tc::io::Path::iterator tc::io::Path::begin()
 {
 	return mUnicodePath.begin();
 }
 
-std::string& tc::fs::Path::front()
+std::string& tc::io::Path::front()
 {
 	return mUnicodePath.front();
 }
 
-const std::string& tc::fs::Path::front() const
+const std::string& tc::io::Path::front() const
 {
 	return mUnicodePath.front();
 }
 
-std::string& tc::fs::Path::back()
+std::string& tc::io::Path::back()
 {
 	return mUnicodePath.back();
 }
 
-const std::string& tc::fs::Path::back() const
+const std::string& tc::io::Path::back() const
 {
 	return mUnicodePath.back();
 }
 
-tc::fs::Path::const_iterator tc::fs::Path::begin() const
+tc::io::Path::const_iterator tc::io::Path::begin() const
 {
 	return mUnicodePath.begin();
 }
 
-tc::fs::Path::iterator tc::fs::Path::end()
+tc::io::Path::iterator tc::io::Path::end()
 {
 	return mUnicodePath.end();
 }
 
-tc::fs::Path::const_iterator tc::fs::Path::end() const
+tc::io::Path::const_iterator tc::io::Path::end() const
 {
 	return mUnicodePath.end();
 }
 
-void tc::fs::Path::pop_front()
+void tc::io::Path::pop_front()
 {
 	mUnicodePath.pop_front();
 }
 
-void tc::fs::Path::pop_back()
+void tc::io::Path::pop_back()
 {
 	mUnicodePath.pop_back();
 }
 
-void tc::fs::Path::push_front(const std::string& str)
+void tc::io::Path::push_front(const std::string& str)
 {
 	mUnicodePath.push_front(str);
 }
 
-void tc::fs::Path::push_back(const std::string& str)
+void tc::io::Path::push_back(const std::string& str)
 {
 	mUnicodePath.push_back(str);
 }
 
-void tc::fs::Path::clear()
+void tc::io::Path::clear()
 {
 	mUnicodePath.clear();
 }
 
-size_t tc::fs::Path::size() const
+size_t tc::io::Path::size() const
 {
 	return mUnicodePath.size();
 }
 
-void tc::fs::Path::initialisePath(const std::string& src)
+void tc::io::Path::initialisePath(const std::string& src)
 {
 	size_t windows_slash_count = 0;
 	size_t unix_slash_count = 0;
@@ -160,7 +160,7 @@ void tc::fs::Path::initialisePath(const std::string& src)
 	}
 }
 
-void tc::fs::Path::appendPath(const std::list<std::string>& other)
+void tc::io::Path::appendPath(const std::list<std::string>& other)
 {
 	for (std::list<std::string>::const_iterator itr = other.begin(); itr != other.end(); itr++)
 	{

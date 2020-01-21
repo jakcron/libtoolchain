@@ -1,9 +1,9 @@
-#include <tc/fs/PartitionedFileObject.h>
+#include <tc/io/PartitionedFileObject.h>
 #include <tc/Exception.h>
 
-const std::string tc::fs::PartitionedFileObject::kClassName = "tc::fs::PartitionedFileObject";
+const std::string tc::io::PartitionedFileObject::kClassName = "tc::io::PartitionedFileObject";
 
-tc::fs::PartitionedFileObject::PartitionedFileObject() :
+tc::io::PartitionedFileObject::PartitionedFileObject() :
 	mFile(),
 	mFileBaseOffset(0),
 	mVirtualSize(0),
@@ -11,24 +11,24 @@ tc::fs::PartitionedFileObject::PartitionedFileObject() :
 {}
 	
 
-tc::fs::PartitionedFileObject::PartitionedFileObject(const std::shared_ptr<tc::fs::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size) :
+tc::io::PartitionedFileObject::PartitionedFileObject(const std::shared_ptr<tc::io::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size) :
 	PartitionedFileObject()
 {
 	initialise(file, file_base_offset, virtual_size);
 }
 
-tc::fs::PartitionedFileObject::PartitionedFileObject(std::shared_ptr<tc::fs::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size) :
+tc::io::PartitionedFileObject::PartitionedFileObject(std::shared_ptr<tc::io::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size) :
 	PartitionedFileObject()
 {
 	initialise(std::move(file), file_base_offset, virtual_size);
 }
 
-tc::ResourceState tc::fs::PartitionedFileObject::state()
+tc::ResourceState tc::io::PartitionedFileObject::state()
 {
 	return mFile.get() ? mFile->state() : tc::ResourceState(RESFLAG_NOINIT);
 }
 
-void tc::fs::PartitionedFileObject::initialise(const std::shared_ptr<tc::fs::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size)
+void tc::io::PartitionedFileObject::initialise(const std::shared_ptr<tc::io::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size)
 {
 	close();
 
@@ -45,7 +45,7 @@ void tc::fs::PartitionedFileObject::initialise(const std::shared_ptr<tc::fs::IFi
 	}
 }
 
-void tc::fs::PartitionedFileObject::initialise(std::shared_ptr<tc::fs::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size)
+void tc::io::PartitionedFileObject::initialise(std::shared_ptr<tc::io::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size)
 {
 	close();
 
@@ -62,7 +62,7 @@ void tc::fs::PartitionedFileObject::initialise(std::shared_ptr<tc::fs::IFileObje
 	}
 }
 
-void tc::fs::PartitionedFileObject::close()
+void tc::io::PartitionedFileObject::close()
 {
 	if (mFile.get() != nullptr)
 		mFile->close();
@@ -72,7 +72,7 @@ void tc::fs::PartitionedFileObject::close()
 	mVirtualOffset = 0;
 }
 
-uint64_t tc::fs::PartitionedFileObject::size()
+uint64_t tc::io::PartitionedFileObject::size()
 {
 	if (mFile.get() == nullptr)
 	{
@@ -82,7 +82,7 @@ uint64_t tc::fs::PartitionedFileObject::size()
 	return mVirtualSize;
 }
 
-void tc::fs::PartitionedFileObject::seek(uint64_t offset)
+void tc::io::PartitionedFileObject::seek(uint64_t offset)
 {
 	if (mFile.get() == nullptr)
 	{
@@ -94,7 +94,7 @@ void tc::fs::PartitionedFileObject::seek(uint64_t offset)
 #undef _MIN
 }
 
-uint64_t tc::fs::PartitionedFileObject::pos()
+uint64_t tc::io::PartitionedFileObject::pos()
 {
 	if (mFile.get() == nullptr)
 	{
@@ -104,7 +104,7 @@ uint64_t tc::fs::PartitionedFileObject::pos()
 	return mVirtualOffset;
 }
 
-void tc::fs::PartitionedFileObject::read(byte_t* out, size_t len)
+void tc::io::PartitionedFileObject::read(byte_t* out, size_t len)
 {
 	if (mFile.get() == nullptr)
 	{
@@ -121,7 +121,7 @@ void tc::fs::PartitionedFileObject::read(byte_t* out, size_t len)
 	seek(mVirtualOffset + len);
 }
 
-void tc::fs::PartitionedFileObject::write(const byte_t* out, size_t len)
+void tc::io::PartitionedFileObject::write(const byte_t* out, size_t len)
 {
 	if (mFile.get() == nullptr)
 	{

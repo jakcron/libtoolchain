@@ -1,33 +1,33 @@
-#include <tc/fs/SandboxedFileSystem.h>
+#include <tc/io/SandboxedFileSystem.h>
 #include <tc/Exception.h>
 
-const std::string tc::fs::SandboxedFileSystem::kClassName = "tc::fs::SandboxedFileSystem";
+const std::string tc::io::SandboxedFileSystem::kClassName = "tc::io::SandboxedFileSystem";
 
-tc::fs::SandboxedFileSystem::SandboxedFileSystem() :
+tc::io::SandboxedFileSystem::SandboxedFileSystem() :
 	mFileSystem(),
 	mRootPath(),
 	mWorkingDirectory()
 {
 }
 
-tc::fs::SandboxedFileSystem::SandboxedFileSystem(const std::shared_ptr<tc::fs::IFileSystem>& fs, const tc::fs::Path& root_path) :
+tc::io::SandboxedFileSystem::SandboxedFileSystem(const std::shared_ptr<tc::io::IFileSystem>& fs, const tc::io::Path& root_path) :
 	SandboxedFileSystem()
 {
 	initialiseFs(fs, root_path);
 }
 
-tc::fs::SandboxedFileSystem::SandboxedFileSystem(std::shared_ptr<tc::fs::IFileSystem>&& fs, const tc::fs::Path& root_path) :
+tc::io::SandboxedFileSystem::SandboxedFileSystem(std::shared_ptr<tc::io::IFileSystem>&& fs, const tc::io::Path& root_path) :
 	SandboxedFileSystem()
 {
 	initialiseFs(std::move(fs), root_path);
 }
 
-tc::ResourceState tc::fs::SandboxedFileSystem::getFsState()
+tc::ResourceState tc::io::SandboxedFileSystem::getFsState()
 {
 	return mFileSystem.get() ? mFileSystem->getFsState() : tc::ResourceState(RESFLAG_NOINIT);
 }
 
-void tc::fs::SandboxedFileSystem::initialiseFs(const std::shared_ptr<tc::fs::IFileSystem>& fs, const tc::fs::Path& root_path)
+void tc::io::SandboxedFileSystem::initialiseFs(const std::shared_ptr<tc::io::IFileSystem>& fs, const tc::io::Path& root_path)
 {
 	closeFs();
 
@@ -36,7 +36,7 @@ void tc::fs::SandboxedFileSystem::initialiseFs(const std::shared_ptr<tc::fs::IFi
 	if (mFileSystem.get() != nullptr && mFileSystem->getFsState().test(RESFLAG_READY))
 	{
 		mRootPath = root_path; 
-		mWorkingDirectory = tc::fs::Path("/");
+		mWorkingDirectory = tc::io::Path("/");
 
 		// get full path of root
 		mFileSystem->setWorkingDirectory(root_path);
@@ -48,7 +48,7 @@ void tc::fs::SandboxedFileSystem::initialiseFs(const std::shared_ptr<tc::fs::IFi
 	}
 }
 
-void tc::fs::SandboxedFileSystem::initialiseFs(std::shared_ptr<tc::fs::IFileSystem>&& fs, const tc::fs::Path& root_path)
+void tc::io::SandboxedFileSystem::initialiseFs(std::shared_ptr<tc::io::IFileSystem>&& fs, const tc::io::Path& root_path)
 {
 	closeFs();
 
@@ -57,7 +57,7 @@ void tc::fs::SandboxedFileSystem::initialiseFs(std::shared_ptr<tc::fs::IFileSyst
 	if (mFileSystem.get() != nullptr && mFileSystem->getFsState().test(RESFLAG_READY))
 	{
 		mRootPath = root_path; 
-		mWorkingDirectory = tc::fs::Path("/");
+		mWorkingDirectory = tc::io::Path("/");
 
 		// get full path of root
 		mFileSystem->setWorkingDirectory(root_path);
@@ -69,7 +69,7 @@ void tc::fs::SandboxedFileSystem::initialiseFs(std::shared_ptr<tc::fs::IFileSyst
 	}
 }
 
-void tc::fs::SandboxedFileSystem::closeFs()
+void tc::io::SandboxedFileSystem::closeFs()
 {
 	if (mFileSystem.get() != nullptr)
 		mFileSystem->closeFs();
@@ -78,7 +78,7 @@ void tc::fs::SandboxedFileSystem::closeFs()
 	mWorkingDirectory.clear();
 }
 
-void tc::fs::SandboxedFileSystem::createFile(const tc::fs::Path& path)
+void tc::io::SandboxedFileSystem::createFile(const tc::io::Path& path)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -86,14 +86,14 @@ void tc::fs::SandboxedFileSystem::createFile(const tc::fs::Path& path)
 	}
 
 	// convert sandbox path to real path
-	tc::fs::Path real_path;
+	tc::io::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// delete file
 	mFileSystem->createFile(real_path);
 }
 
-void tc::fs::SandboxedFileSystem::removeFile(const tc::fs::Path& path)
+void tc::io::SandboxedFileSystem::removeFile(const tc::io::Path& path)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -101,14 +101,14 @@ void tc::fs::SandboxedFileSystem::removeFile(const tc::fs::Path& path)
 	}
 
 	// convert sandbox path to real path
-	tc::fs::Path real_path;
+	tc::io::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// delete file
 	mFileSystem->removeFile(real_path);
 }
 
-void tc::fs::SandboxedFileSystem::openFile(const tc::fs::Path& path, FileAccessMode mode, std::shared_ptr<tc::fs::IFileObject>& file)
+void tc::io::SandboxedFileSystem::openFile(const tc::io::Path& path, FileAccessMode mode, std::shared_ptr<tc::io::IFileObject>& file)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -116,14 +116,14 @@ void tc::fs::SandboxedFileSystem::openFile(const tc::fs::Path& path, FileAccessM
 	}
 
 	// convert sandbox path to real path
-	tc::fs::Path real_path;
+	tc::io::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// open file
 	return mFileSystem->openFile(real_path, mode, file);
 }
 
-void tc::fs::SandboxedFileSystem::createDirectory(const tc::fs::Path& path)
+void tc::io::SandboxedFileSystem::createDirectory(const tc::io::Path& path)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -131,14 +131,14 @@ void tc::fs::SandboxedFileSystem::createDirectory(const tc::fs::Path& path)
 	}
 
 	// convert sandbox path to real path
-	tc::fs::Path real_path;
+	tc::io::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// create directory
 	mFileSystem->createDirectory(real_path);
 }
 
-void tc::fs::SandboxedFileSystem::removeDirectory(const tc::fs::Path& path)
+void tc::io::SandboxedFileSystem::removeDirectory(const tc::io::Path& path)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -146,14 +146,14 @@ void tc::fs::SandboxedFileSystem::removeDirectory(const tc::fs::Path& path)
 	}
 
 	// convert sandbox path to real path
-	tc::fs::Path real_path;
+	tc::io::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// remove directory
 	mFileSystem->removeDirectory(real_path);
 }
 
-void tc::fs::SandboxedFileSystem::getWorkingDirectory(tc::fs::Path& path)
+void tc::io::SandboxedFileSystem::getWorkingDirectory(tc::io::Path& path)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -163,7 +163,7 @@ void tc::fs::SandboxedFileSystem::getWorkingDirectory(tc::fs::Path& path)
 	path = mWorkingDirectory;
 }
 
-void tc::fs::SandboxedFileSystem::setWorkingDirectory(const tc::fs::Path& path)
+void tc::io::SandboxedFileSystem::setWorkingDirectory(const tc::io::Path& path)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -171,7 +171,7 @@ void tc::fs::SandboxedFileSystem::setWorkingDirectory(const tc::fs::Path& path)
 	}
 
 	// convert sandbox path to real path
-	tc::fs::Path real_path;
+	tc::io::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// set current directory
@@ -181,7 +181,7 @@ void tc::fs::SandboxedFileSystem::setWorkingDirectory(const tc::fs::Path& path)
 	realPathToSandboxPath(real_path, mWorkingDirectory);
 }
 
-void tc::fs::SandboxedFileSystem::getDirectoryListing(const tc::fs::Path& path, sDirectoryListing& info)
+void tc::io::SandboxedFileSystem::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -189,15 +189,15 @@ void tc::fs::SandboxedFileSystem::getDirectoryListing(const tc::fs::Path& path, 
 	}
 
 	// convert sandbox path to real path
-	tc::fs::Path real_path;
+	tc::io::Path real_path;
 	sandboxPathToRealPath(path, real_path);
 
 	// get real directory info
-	tc::fs::sDirectoryListing real_info;
+	tc::io::sDirectoryListing real_info;
 	mFileSystem->getDirectoryListing(real_path, real_info);
 
 	// convert directory absolute path
-	tc::fs::Path sandbox_dir_path;
+	tc::io::Path sandbox_dir_path;
 	realPathToSandboxPath(real_info.abs_path, sandbox_dir_path);
 	
 	// update info with sandbox path
@@ -207,10 +207,10 @@ void tc::fs::SandboxedFileSystem::getDirectoryListing(const tc::fs::Path& path, 
 	info = real_info;
 }
 
-void tc::fs::SandboxedFileSystem::sandboxPathToRealPath(const tc::fs::Path& sandbox_path, tc::fs::Path& real_path)
+void tc::io::SandboxedFileSystem::sandboxPathToRealPath(const tc::io::Path& sandbox_path, tc::io::Path& real_path)
 {
-	tc::fs::Path sandbox_current_dir;
-	tc::fs::Path sandbox_path_;
+	tc::io::Path sandbox_current_dir;
+	tc::io::Path sandbox_path_;
 
 	// test if the sandbox path is an absolute path (begins with the root element)
 	if (sandbox_path.size() > 0 && *sandbox_path.begin() == "")
@@ -225,17 +225,17 @@ void tc::fs::SandboxedFileSystem::sandboxPathToRealPath(const tc::fs::Path& sand
 	}
 
 	// get santized path (removes elements that could be used to escape the sandbox)
-	tc::fs::Path safe_sandbox_path;
+	tc::io::Path safe_sandbox_path;
 	sanitiseInputPath(sandbox_current_dir + sandbox_path_, safe_sandbox_path);
 	
 	// the real path is the sandbox root path + sandbox path
 	real_path = mRootPath + safe_sandbox_path;
 }
 
-void tc::fs::SandboxedFileSystem::realPathToSandboxPath(const tc::fs::Path& real_path, tc::fs::Path& sandbox_path)
+void tc::io::SandboxedFileSystem::realPathToSandboxPath(const tc::io::Path& real_path, tc::io::Path& sandbox_path)
 {
 	// get iterator for real path
-	tc::fs::Path::const_iterator real_path_itr = real_path.begin();
+	tc::io::Path::const_iterator real_path_itr = real_path.begin();
 
 	// determine if the path is large enough to preclude the root path
 	if (real_path.size() < mRootPath.size())
@@ -244,7 +244,7 @@ void tc::fs::SandboxedFileSystem::realPathToSandboxPath(const tc::fs::Path& real
 	}
 
 	// confirm the real path includes the root path
-	for (tc::fs::Path::const_iterator root_path_itr = mRootPath.begin(); root_path_itr != mRootPath.end(); root_path_itr++, real_path_itr++)
+	for (tc::io::Path::const_iterator root_path_itr = mRootPath.begin(); root_path_itr != mRootPath.end(); root_path_itr++, real_path_itr++)
 	{
 		if (*real_path_itr != *root_path_itr)
 		{
@@ -262,10 +262,10 @@ void tc::fs::SandboxedFileSystem::realPathToSandboxPath(const tc::fs::Path& real
 	}
 }
 
-void tc::fs::SandboxedFileSystem::sanitiseInputPath(const tc::fs::Path& unsafe_path, tc::fs::Path& safe_path) const
+void tc::io::SandboxedFileSystem::sanitiseInputPath(const tc::io::Path& unsafe_path, tc::io::Path& safe_path) const
 {
 	//for (size_t i = 0; i < unsafe_path.getPathElementList().size(); i++)
-	for (tc::fs::Path::const_iterator itr = unsafe_path.begin(); itr != unsafe_path.end(); itr++)
+	for (tc::io::Path::const_iterator itr = unsafe_path.begin(); itr != unsafe_path.end(); itr++)
 	{
 		// root directory
 		if (*itr == "" && itr == unsafe_path.begin())

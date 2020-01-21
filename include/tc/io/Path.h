@@ -1,6 +1,6 @@
 /**
  * @file Path.h
- * @brief Declaration of tc::fs::Path
+ * @brief Declaration of tc::io::Path
  * @author Jack (jakcron)
  * @version 0.3
  * @date 2019/05/10
@@ -9,7 +9,7 @@
 #include <list>
 #include <tc/types.h>
 
-namespace tc { namespace fs {
+namespace tc { namespace io {
 
 	/**
 	 * @class Path
@@ -160,4 +160,4 @@ private:
 	void appendPath(const std::list<std::string>& other);
 };
 
-}} // namespace tc::fs
+}} // namespace tc::io
