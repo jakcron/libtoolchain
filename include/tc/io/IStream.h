@@ -2,27 +2,23 @@
 	 * @file IStream.h
 	 * @brief Declaration of tc::io::IStream
 	 * @author Jack (jakcron)
-	 * @version	0.3
-	 * @date 2019/06/16
+	 * @version	0.4
+	 * @date 2020/01/22
 	 */
 #pragma once
 #include <tc/types.h>
-#include <tc/ResourceStatus.h>
+#include <tc/io/SeekOrigin.h>
 
 namespace tc { namespace io {
 
 	/**
 	 * @class IStream
-	 * @brief An interface for implementing a basic File handler.
+	 * @brief An interface for implementing a basic data stream handler.
 	 *
-	 * Defines expcted functionality required to process/access a file.
+	 * Defines expcted functionality required to process/access a data stream.
 	 * 
-	 * The usage of size_t in read()/write() reflects the intention that size_t can represent 
-	 * sizes relevant to the run-time of a program. Whereas the usage of uint64_t in size()/seek()/pos() 
-	 * reflects the realty that files exist independent of the operating system which 
-	 * the programs run under. To that end it is important to accept this and preserve the 
-	 * true sizes of the files, while also working with-in the limitations of the operating system
-	 * by using size_t where memory is processed.
+	 * Usage of size_t with offsets and lengths reflect run-time memory allocation limits
+	 * Usage of int64_t with offsets and lengths reflect more closely the natural size limits of a stream
 	 */
 class IStream
 {
@@ -33,50 +29,113 @@ public:
 	virtual ~IStream() = default;
 
 		/**
-		 * @brief Get state of IStream
-		 * @return ResourceStatus
-		 */
-	virtual tc::ResourceStatus state() = 0;
+		 * @brief Indicates whether the current stream supports reading.
+		 **/ 
+	virtual bool canRead() const = 0;
 
 		/**
-		 * @brief Close the file
-		 */
-	virtual void close() = 0;
+		 * @brief Indicates whether the current stream supports writing.
+		 **/
+	virtual bool canWrite() const = 0;
 
 		/**
-		 * @brief Get size of the file
-		 * @return file size
-		 */
-	virtual uint64_t size() = 0;
+		 * @brief Indicates whether the current stream supports seeking.
+		 **/
+	virtual bool canSeek() const = 0;
+
+		/**
+		 * @brief Gets the length in bytes of the stream.
+		 **/
+	virtual int64_t length() = 0;
 
 		/** 
-		 * @brief Set the file position
-		 * @param[in] offset file position
-		 * @post If the offset is beyond the file size, the position will be at the end of file.
+		 * @brief Gets the position within the current stream.
 		 */
-	virtual void seek(uint64_t offset) = 0;
+	virtual int64_t position() = 0;
 
-		/** 
-		 * @brief Get the file position
-		 * @return file position
-		 */
-	virtual uint64_t pos() = 0;
-
-		/** 
-		 * @brief Read data from the file
-		 * @param[out] data Pointer to memory where data will be written to
-		 * @param[in] len Length of data to read
+		/**
+		 * @brief Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
 		 * 
-		 * @throws tc::Exception If read length exceeds file capacity
-		 */
-	virtual void read(byte_t* data, size_t len) = 0;
+		 * @param[out] buffer An array of bytes. When this method returns, the buffer contains the specified byte array with the values between offset and (offset + length - 1) replaced by the bytes read from the current source.
+		 * @param[in] offset The zero-based byte offset in buffer at which to begin storing the data read from the current stream.
+		 * @param[in] length The maximum number of bytes to be read from the current stream.
+		 * 
+		 * @return The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
+		 * 
+		 * @pre A stream must support reading for @ref read to work. 
+		 * @note Use @ref canRead to determine if this stream supports reading.
+		 * 
+		 * @throw tc::ArgumentException The sum of @p offset and @p length is greater than the buffer length.
+		 * @throw tc::ArgumentNullException @p buffer is @a nullptr.
+		 * @throw tc::ArgumentOutOfRangeException @p offset or @p length is negative.
+		 * @throw tc::io::IOException An I/O error occurred, such as the specified file cannot be found.
+		 * @throw tc::NotSupportedException The stream does not support reading.
+		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
+		 **/
+	virtual size_t read(byte_t* buffer, size_t offset, size_t length) = 0;
+	
+		/**
+		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
+		 * 
+		 * @param[in] buffer An array of bytes. This method copies count bytes from buffer to the current stream.
+		 * @param[in] offset The zero-based byte offset in buffer at which to begin copying bytes to the current stream.
+		 * @param[in] length The number of bytes to be written to the current stream.
+		 * 
+		 * @pre A stream must support writing for @ref write to work. 
+		 * @note Use @ref canWrite to determine if this stream supports writing.
+		 * 
+		 * @throw tc::ArgumentException The sum of @p offset and @p length is greater than the buffer length.
+		 * @throw tc::ArgumentNullException @p buffer is @a nullptr.
+		 * @throw tc::ArgumentOutOfRangeException @p offset or @p length is negative.
+		 * @throw tc::io::IOException An I/O error occurred, such as the specified file cannot be found.
+		 * @throw tc::NotSupportedException The stream does not support writing.
+		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
+		 **/
+	virtual void write(const byte_t* buffer, size_t offset, size_t length) = 0;
+	
+		/**
+		 * @brief Sets the position within the current stream.
+		 * 
+		 * @param[in] offset A byte offset relative to the origin parameter.
+		 * @param[in] origin A value of type @ref tc::io::SeekOrigin indicating the reference point used to obtain the new position.
+		 * 
+		 * @return The new position within the current stream.
+		 * 
+		 * @pre A stream must support seeking for @ref seek to work. 
+		 * @note Use @ref canSeek to determine if this stream supports seeking.
+		 * 
+		 * @throw tc::io::IOException An I/O error occurs.
+		 * @throw tc::NotSupportedException The stream does not support seeking, such as if the stream is constructed from a pipe or console output.
+		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
+		 **/
+	virtual int64_t seek(int64_t offset, SeekOrigin origin) = 0;
 
-		/** 
-		 * @brief Write data to the file
-		 * @param[in] data Pointer to memory where data will be sourced from
-		 * @param[in] len Length of data to write
-		 */
-	virtual void write(const byte_t* data, size_t len) = 0;
+		/**
+		 * @brief Sets the length of the current stream.
+		 * 
+		 * @param[in] length The desired length of the current stream in bytes.
+		 * 
+		 * @pre A stream must support both writing and seeking for @ref setLength to work. 
+		 * @note Use @ref canWrite to determine if this stream supports writing.
+		 * @note Use @ref canSeek to determine if this stream supports seeking.
+		 * 
+		 * @throw tc::io::IOException An I/O error occurs.
+		 * @throw tc::NotSupportedException The stream does not support both writing and seeking, such as if the stream is constructed from a pipe or console output.
+		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
+		 **/
+	virtual void setLength(int64_t length) = 0;
+	
+		/**
+		 * @brief Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
+		 * 
+		 * @throw tc::io::IOException An I/O error occurs.
+		 **/
+	virtual void flush() = 0;
+	
+		/**
+		 * @brief Releases all resources used by the Stream.
+		 **/
+	virtual void dispose() = 0;
 };
 
 }}
