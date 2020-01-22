@@ -1,6 +1,6 @@
 	/**
-	 * @file IFileObject.h
-	 * @brief Declaration of tc::io::IFileObject
+	 * @file IStream.h
+	 * @brief Declaration of tc::io::IStream
 	 * @author Jack (jakcron)
 	 * @version	0.3
 	 * @date 2019/06/16
@@ -12,7 +12,7 @@
 namespace tc { namespace io {
 
 	/**
-	 * @class IFileObject
+	 * @class IStream
 	 * @brief An interface for implementing a basic File handler.
 	 *
 	 * Defines expcted functionality required to process/access a file.
@@ -24,16 +24,16 @@ namespace tc { namespace io {
 	 * true sizes of the files, while also working with-in the limitations of the operating system
 	 * by using size_t where memory is processed.
 	 */
-class IFileObject
+class IStream
 {
 public:
 		/**
 		 * @brief Destructor
 		 */
-	virtual ~IFileObject() = default;
+	virtual ~IStream() = default;
 
 		/**
-		 * @brief Get state of IFileObject
+		 * @brief Get state of IStream
 		 * @return ResourceState
 		 */
 	virtual tc::ResourceState state() = 0;

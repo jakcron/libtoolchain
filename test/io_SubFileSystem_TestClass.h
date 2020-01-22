@@ -44,7 +44,7 @@ private:
 			throw tc::Exception(kClassName, "removeFile() not implemented");
 		}
 
-		virtual void openFile(const tc::io::Path& path, tc::io::FileAccessMode mode, std::shared_ptr<tc::io::IFileObject>& file)
+		virtual void openFile(const tc::io::Path& path, tc::io::FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file)
 		{
 			throw tc::Exception(kClassName, "openFile() not implemented");
 		}

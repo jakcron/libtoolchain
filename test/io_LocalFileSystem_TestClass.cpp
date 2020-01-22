@@ -158,7 +158,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileCreate_NotExist()
 		tc::io::LocalFileSystem fs;
 		try 
 		{
-			std::shared_ptr<tc::io::IFileObject> file;
+			std::shared_ptr<tc::io::IStream> file;
 			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, file);
 
 			if (file->size() != 0)
@@ -198,7 +198,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileCreate_DoesExist()
 
 		try 
 		{
-			std::shared_ptr<tc::io::IFileObject> file;
+			std::shared_ptr<tc::io::IStream> file;
 			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, file);
 
 			if (file->size() != 0)
@@ -234,7 +234,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileRead_DoesExist()
 	try
 	{
 		tc::io::LocalFileSystem fs;
-		std::shared_ptr<tc::io::IFileObject> tmp_file;
+		std::shared_ptr<tc::io::IStream> tmp_file;
 
 		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, tmp_file);
 		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
@@ -242,7 +242,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileRead_DoesExist()
 
 		try 
 		{
-			std::shared_ptr<tc::io::IFileObject> file;
+			std::shared_ptr<tc::io::IStream> file;
 			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_READ, file);
 
 			if (file->size() != kRandomString.length())
@@ -279,7 +279,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileRead_NotExist()
 	try
 	{
 		tc::io::LocalFileSystem fs;
-		std::shared_ptr<tc::io::IFileObject> file;
+		std::shared_ptr<tc::io::IStream> file;
 
 		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_READ, file);
 		
@@ -297,7 +297,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileRead_UnicodePath()
 	try
 	{
 		tc::io::LocalFileSystem fs;
-		std::shared_ptr<tc::io::IFileObject> tmp_file;
+		std::shared_ptr<tc::io::IStream> tmp_file;
 
 		fs.openFile(kUtf8TestPath, tc::io::FILEACCESS_CREATE, tmp_file);
 		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
@@ -305,7 +305,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileRead_UnicodePath()
 
 		try 
 		{
-			std::shared_ptr<tc::io::IFileObject> file;
+			std::shared_ptr<tc::io::IStream> file;
 			fs.openFile(kUtf8TestPath, tc::io::FILEACCESS_READ, file);
 
 			if (file->size() != kRandomString.length())
@@ -342,7 +342,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileRead_TryWrite()
 	try
 	{
 		tc::io::LocalFileSystem fs;
-		std::shared_ptr<tc::io::IFileObject> tmp_file;
+		std::shared_ptr<tc::io::IStream> tmp_file;
 
 		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, tmp_file);
 		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
@@ -350,7 +350,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileRead_TryWrite()
 
 		try 
 		{
-			std::shared_ptr<tc::io::IFileObject> file;
+			std::shared_ptr<tc::io::IStream> file;
 			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_READ, file);
 
 			file->seek(file->size());
@@ -378,7 +378,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileRead_TryReadBeyondEnd()
 	try
 	{
 		tc::io::LocalFileSystem fs;
-		std::shared_ptr<tc::io::IFileObject> tmp_file;
+		std::shared_ptr<tc::io::IStream> tmp_file;
 
 		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, tmp_file);
 		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
@@ -386,7 +386,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileRead_TryReadBeyondEnd()
 
 		try 
 		{
-			std::shared_ptr<tc::io::IFileObject> file;
+			std::shared_ptr<tc::io::IStream> file;
 			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_READ, file);
 
 			file->seek(file->size());
@@ -415,7 +415,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileEdit_DoesExist()
 	try
 	{
 		tc::io::LocalFileSystem fs;
-		std::shared_ptr<tc::io::IFileObject> tmp_file;
+		std::shared_ptr<tc::io::IStream> tmp_file;
 
 		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, tmp_file);
 		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
@@ -423,7 +423,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileEdit_DoesExist()
 
 		try 
 		{
-			std::shared_ptr<tc::io::IFileObject> file;
+			std::shared_ptr<tc::io::IStream> file;
 			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_EDIT, file);
 
 			if (file->size() != kRandomString.length())
@@ -477,7 +477,7 @@ void io_LocalFileSystem_TestClass::test_OpenFileEdit_NotExist()
 	try
 	{
 		tc::io::LocalFileSystem fs;
-		std::shared_ptr<tc::io::IFileObject> file;
+		std::shared_ptr<tc::io::IStream> file;
 
 		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_EDIT, file);
 		

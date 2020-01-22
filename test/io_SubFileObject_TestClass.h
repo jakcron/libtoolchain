@@ -8,7 +8,7 @@ class io_SubFileObject_TestClass : public ITestClass
 public:
 	void runAllTests();
 private:
-	class DummyFileBase : public tc::io::IFileObject
+	class DummyFileBase : public tc::io::IStream
 	{
 	public:
 		DummyFileBase()

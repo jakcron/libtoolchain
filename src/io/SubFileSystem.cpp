@@ -108,7 +108,7 @@ void tc::io::SubFileSystem::removeFile(const tc::io::Path& path)
 	mFileSystem->removeFile(real_path);
 }
 
-void tc::io::SubFileSystem::openFile(const tc::io::Path& path, FileAccessMode mode, std::shared_ptr<tc::io::IFileObject>& file)
+void tc::io::SubFileSystem::openFile(const tc::io::Path& path, FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file)
 {
 	if (mFileSystem.get() == nullptr)
 	{

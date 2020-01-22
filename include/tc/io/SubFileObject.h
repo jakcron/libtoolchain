@@ -6,15 +6,15 @@
 	 * @date 2019/06/19
 	 */
 #pragma once
-#include <tc/io/IFileObject.h>
+#include <tc/io/IStream.h>
 
 namespace tc { namespace io {
 
 	/**
 	 * @class SubFileObject
-	 * @brief A wrapper around an existing IFileObject object that exposes a subset of the base the IFileObject object.
+	 * @brief A wrapper around an existing IStream object that exposes a subset of the base the IStream object.
 	 */
-class SubFileObject : public IFileObject
+class SubFileObject : public IStream
 {
 public:
 		/**
@@ -24,45 +24,45 @@ public:
 
 		/** 
 		 * @brief Wrap (by copy) constuctor
-		 * @param[in] file IFileObject object to be partitioned
+		 * @param[in] file IStream object to be partitioned
 		 * @param[in] file_base_offset Offset in the base file that serves as offset 0 in the partition
 		 * @param[in] virtual_size Artificial size of the partition
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	SubFileObject(const std::shared_ptr<tc::io::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size);
+	SubFileObject(const std::shared_ptr<tc::io::IStream>& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 		/** 
 		 * @brief Wrap (by move) constuctor
-		 * @param[in] file IFileObject object to be partitioned
+		 * @param[in] file IStream object to be partitioned
 		 * @param[in] file_base_offset Offset in the base file that serves as offset 0 in the partition
 		 * @param[in] virtual_size Artificial size of the partition
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	SubFileObject(std::shared_ptr<tc::io::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size);
+	SubFileObject(std::shared_ptr<tc::io::IStream>&& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 	virtual tc::ResourceState state();
 
 		/** 
 		 * @brief Wrap (by copy) initialiser
-		 * @param[in] file IFileObject object to be partitioned
+		 * @param[in] file IStream object to be partitioned
 		 * @param[in] file_base_offset Offset in the base file that serves as offset 0 in the partition
 		 * @param[in] virtual_size Artificial size of the partition
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	void initialise(const std::shared_ptr<tc::io::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size);
+	void initialise(const std::shared_ptr<tc::io::IStream>& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 		/** 
 		 * @brief Wrap (by move) initialiser
-		 * @param[in] file IFileObject object to be partitioned
+		 * @param[in] file IStream object to be partitioned
 		 * @param[in] file_base_offset Offset in the base file that serves as offset 0 in the partition
 		 * @param[in] virtual_size Artificial size of the partition
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	void initialise(std::shared_ptr<tc::io::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size);
+	void initialise(std::shared_ptr<tc::io::IStream>&& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 	virtual void close();
 	virtual uint64_t size();
@@ -74,7 +74,7 @@ public:
 private:
 	static const std::string kClassName;
 
-	std::shared_ptr<tc::io::IFileObject> mFile;
+	std::shared_ptr<tc::io::IStream> mFile;
 	uint64_t mFileBaseOffset;
 	uint64_t mVirtualSize;
 

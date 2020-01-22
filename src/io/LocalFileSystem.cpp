@@ -104,7 +104,7 @@ void tc::io::LocalFileSystem::removeFile(const tc::io::Path& path)
 #endif
 }
 
-void tc::io::LocalFileSystem::openFile(const tc::io::Path& path, FileAccessMode mode, std::shared_ptr<tc::io::IFileObject>& file)
+void tc::io::LocalFileSystem::openFile(const tc::io::Path& path, FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file)
 {
 	file = std::shared_ptr<tc::io::LocalFileObject>(new tc::io::LocalFileObject(path, mode));
 }

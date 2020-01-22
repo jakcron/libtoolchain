@@ -134,12 +134,12 @@ void io_SubFileObject_TestClass::testRead()
 			{
 				if (data != (byte_t*)0xcafe)
 				{
-					throw tc::Exception("'data' pointer was passed to base IFileObject object not as expected");
+					throw tc::Exception("'data' pointer was passed to base IStream object not as expected");
 				}
 
 				if (len != 0xdeadbabe)
 				{
-					throw tc::Exception("'len' parameter was passed to base IFileObject object not as expected");
+					throw tc::Exception("'len' parameter was passed to base IStream object not as expected");
 				}
 			}
 		};
@@ -190,12 +190,12 @@ void io_SubFileObject_TestClass::testWrite()
 			{
 				if (data != (const byte_t*)0xcafe)
 				{
-					throw tc::Exception("'data' pointer was passed to base IFileObject object not as expected");
+					throw tc::Exception("'data' pointer was passed to base IStream object not as expected");
 				}
 
 				if (len != 0xdeadbabe)
 				{
-					throw tc::Exception("'len' parameter was passed to base IFileObject object not as expected");
+					throw tc::Exception("'len' parameter was passed to base IStream object not as expected");
 				}
 			}
 		};

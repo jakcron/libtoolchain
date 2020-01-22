@@ -135,7 +135,7 @@ void io_SubFileSystem_TestClass::testOpenFile()
 			{
 			}
 
-			void openFile(const tc::io::Path& path, tc::io::FileAccessMode mode, std::shared_ptr<tc::io::IFileObject>& file)
+			void openFile(const tc::io::Path& path, tc::io::FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file)
 			{
 				tc::io::Path cur_dir;
 				getWorkingDirectory(cur_dir);
@@ -163,7 +163,7 @@ void io_SubFileSystem_TestClass::testOpenFile()
 			tc::io::SubFileSystem sb_fs(std::make_shared<DummyFileSystem>(fs), dummyio_curdir + testdir_path);
 
 			// attempt to open file
-			std::shared_ptr<tc::io::IFileObject> file;
+			std::shared_ptr<tc::io::IStream> file;
 			sb_fs.openFile(tc::io::Path("/a_dir/testfile"), tc::io::FILEACCESS_READ, file);
 			
 			std::cout << "PASS" << std::endl;
@@ -501,7 +501,7 @@ void io_SubFileSystem_TestClass::testOpenFileOutsideSandbox()
 			{
 			}
 
-			void openFile(const tc::io::Path& path, tc::io::FileAccessMode mode, std::shared_ptr<tc::io::IFileObject>& file)
+			void openFile(const tc::io::Path& path, tc::io::FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file)
 			{
 				tc::io::Path mCurDir;
 				getWorkingDirectory(mCurDir);
@@ -536,7 +536,7 @@ void io_SubFileSystem_TestClass::testOpenFileOutsideSandbox()
 			  
 			// try to open the file just outside the sandbox
 			sb_fs.setWorkingDirectory(tc::io::Path("/"));
-			std::shared_ptr<tc::io::IFileObject> inaccessible_file;
+			std::shared_ptr<tc::io::IStream> inaccessible_file;
 			sb_fs.openFile(tc::io::Path("../inaccessible_file0"), tc::io::FILEACCESS_READ, inaccessible_file);
 
 			std::cout << "PASS" << std::endl;

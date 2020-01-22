@@ -6,7 +6,7 @@
 	 * @date 2019/06/18
 	 */
 #pragma once
-#include <tc/io/IFileObject.h>
+#include <tc/io/IStream.h>
 #include <tc/io/IStorage.h>
 
 #ifdef _WIN32
@@ -19,9 +19,9 @@ namespace tc { namespace io {
 
 	/**
 	 * @class LocalFileObject
-	 * @brief An implementation of IFileObject as a wrapper to local OS file access functions.
+	 * @brief An implementation of IStream as a wrapper to local OS file access functions.
 	 */
-class LocalFileObject : public IFileObject
+class LocalFileObject : public IStream
 {
 public:
 		/** 

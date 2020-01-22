@@ -8,7 +8,7 @@
 #pragma once
 #include <tc/types.h>
 #include <tc/ResourceState.h>
-#include <tc/io/IFileObject.h>
+#include <tc/io/IStream.h>
 #include <tc/io/Path.h>
 
 namespace tc { namespace io {
@@ -98,11 +98,11 @@ public:
 		 * @brief Open a file
 		 * @param[in] path Path to file
 		 * @param[in] mode Access mode
-		 * @param[out] file Pointer to IFileObject object to be instantiated
+		 * @param[out] file Pointer to IStream object to be instantiated
 		 *	
 		 * @throws tc::Exception If the file cannot be opened (invalid path, or access rights)
 		 */
-	virtual void openFile(const tc::io::Path& path, tc::io::FileAccessMode mode, std::shared_ptr<tc::io::IFileObject>& file) = 0;
+	virtual void openFile(const tc::io::Path& path, tc::io::FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file) = 0;
 	
 		/** 
 		 * @brief Create a new directory

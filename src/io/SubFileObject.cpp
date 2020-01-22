@@ -11,13 +11,13 @@ tc::io::SubFileObject::SubFileObject() :
 {}
 	
 
-tc::io::SubFileObject::SubFileObject(const std::shared_ptr<tc::io::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size) :
+tc::io::SubFileObject::SubFileObject(const std::shared_ptr<tc::io::IStream>& file, uint64_t file_base_offset, uint64_t virtual_size) :
 	SubFileObject()
 {
 	initialise(file, file_base_offset, virtual_size);
 }
 
-tc::io::SubFileObject::SubFileObject(std::shared_ptr<tc::io::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size) :
+tc::io::SubFileObject::SubFileObject(std::shared_ptr<tc::io::IStream>&& file, uint64_t file_base_offset, uint64_t virtual_size) :
 	SubFileObject()
 {
 	initialise(std::move(file), file_base_offset, virtual_size);
@@ -28,7 +28,7 @@ tc::ResourceState tc::io::SubFileObject::state()
 	return mFile.get() ? mFile->state() : tc::ResourceState(RESFLAG_NOINIT);
 }
 
-void tc::io::SubFileObject::initialise(const std::shared_ptr<tc::io::IFileObject>& file, uint64_t file_base_offset, uint64_t virtual_size)
+void tc::io::SubFileObject::initialise(const std::shared_ptr<tc::io::IStream>& file, uint64_t file_base_offset, uint64_t virtual_size)
 {
 	close();
 
@@ -45,7 +45,7 @@ void tc::io::SubFileObject::initialise(const std::shared_ptr<tc::io::IFileObject
 	}
 }
 
-void tc::io::SubFileObject::initialise(std::shared_ptr<tc::io::IFileObject>&& file, uint64_t file_base_offset, uint64_t virtual_size)
+void tc::io::SubFileObject::initialise(std::shared_ptr<tc::io::IStream>&& file, uint64_t file_base_offset, uint64_t virtual_size)
 {
 	close();
 

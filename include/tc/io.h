@@ -13,7 +13,7 @@
 #include <tc/io/Path.h>
 #include <tc/io/PathUtils.h>
 
-#include <tc/io/IFileObject.h>
+#include <tc/io/IStream.h>
 #include <tc/io/IStorage.h>
 
 #include <tc/io/LocalFileObject.h>
