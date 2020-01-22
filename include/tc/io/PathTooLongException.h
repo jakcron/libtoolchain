@@ -6,7 +6,7 @@
 	 * @date 2020/01/22
 	 */
 #pragma once
-#include <tc/Exception.h>
+#include <tc/io/IOException.h>
 
 namespace tc { namespace io {
 
