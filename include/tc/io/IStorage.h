@@ -10,20 +10,9 @@
 #include <tc/ResourceStatus.h>
 #include <tc/io/IStream.h>
 #include <tc/io/Path.h>
+#include <tc/io/FileAccessMode.h>
 
 namespace tc { namespace io {
-
-	/** 
-	 * @enum FileAccessMode
-	 * @brief This enum is used with openFile() to determine the access mode
-	 */
-enum FileAccessMode
-{
-	FILEACCESS_READ, /**< Access file with READ-ONLY permissions */
-	FILEACCESS_EDIT, /**< Access file with READ-WRITE permissions */
-	FILEACCESS_CREATE /**< Create a new file or overwrite an existing file (READ-WRITE permissions) */
-};
-
 
 	/**
 	 * @struct sDirectoryListing

@@ -7,7 +7,8 @@
 	 */
 #pragma once
 #include <tc/io/IStream.h>
-#include <tc/io/IStorage.h>
+#include <tc/io/Path.h>
+#include <tc/io/FileAccessMode.h>
 
 #ifdef _WIN32
 #include <Windows.h>
