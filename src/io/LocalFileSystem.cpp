@@ -1,5 +1,5 @@
 #include <tc/io/LocalFileSystem.h>
-#include <tc/io/LocalFileObject.h>
+#include <tc/io/FileStream.h>
 #include <tc/io/PathUtils.h>
 #include <tc/Exception.h>
 #include <tc/string.h>
@@ -106,7 +106,7 @@ void tc::io::LocalFileSystem::removeFile(const tc::io::Path& path)
 
 void tc::io::LocalFileSystem::openFile(const tc::io::Path& path, FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file)
 {
-	file = std::shared_ptr<tc::io::LocalFileObject>(new tc::io::LocalFileObject(path, mode));
+	file = std::shared_ptr<tc::io::FileStream>(new tc::io::FileStream(path, mode));
 }
 
 void tc::io::LocalFileSystem::createDirectory(const tc::io::Path& path)

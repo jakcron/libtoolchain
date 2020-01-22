@@ -1,6 +1,6 @@
 	/**
-	 * @file LocalFileObject.h
-	 * @brief Declaration of tc::io::LocalFileObject
+	 * @file FileStream.h
+	 * @brief Declaration of tc::io::FileStream
 	 * @author Jack (jakcron)
 	 * @version	0.3
 	 * @date 2019/06/18
@@ -18,23 +18,23 @@
 namespace tc { namespace io {
 
 	/**
-	 * @class LocalFileObject
+	 * @class FileStream
 	 * @brief An implementation of IStream as a wrapper to local OS file access functions.
 	 */
-class LocalFileObject : public IStream
+class FileStream : public IStream
 {
 public:
 		/** 
 		 * @brief Default constuctor
 		 */
-	LocalFileObject();
+	FileStream();
 
 		/** 
 		 * @brief Initialsing constuctor
 		 * @param[in] path Path to file
 		 * @param[in] mode Access mode
 		 */
-	LocalFileObject(const tc::io::Path& path, tc::io::FileAccessMode mode);
+	FileStream(const tc::io::Path& path, tc::io::FileAccessMode mode);
 
 	virtual tc::ResourceState state();
 
@@ -69,7 +69,7 @@ private:
 	tc::ResourceState mState;
 	
 	tc::io::FileAccessMode mMode;
-	std::shared_ptr<tc::io::LocalFileObject::FileHandle> mFileHandle;
+	std::shared_ptr<tc::io::FileStream::FileHandle> mFileHandle;
 
 #ifdef _WIN32
 	DWORD getOpenModeFlag(tc::io::FileAccessMode mode) const;

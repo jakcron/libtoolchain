@@ -1,4 +1,4 @@
-#include <tc/io/LocalFileObject.h>
+#include <tc/io/FileStream.h>
 #include <tc/Exception.h>
 #include <tc/io/PathUtils.h>
 
@@ -12,9 +12,9 @@
 #include <unistd.h>   /* For open(), creat() */
 #endif
 
-const std::string tc::io::LocalFileObject::kClassName = "tc::io::LocalFileObject";
+const std::string tc::io::FileStream::kClassName = "tc::io::FileStream";
 
-tc::io::LocalFileObject::FileHandle::~FileHandle()
+tc::io::FileStream::FileHandle::~FileHandle()
 {
 #ifdef _WIN32
 	CloseHandle(handle);
@@ -23,24 +23,24 @@ tc::io::LocalFileObject::FileHandle::~FileHandle()
 #endif
 }
 
-tc::io::LocalFileObject::LocalFileObject() :
+tc::io::FileStream::FileStream() :
 	mState(0),
 	mMode(FILEACCESS_READ),
 	mFileHandle()
 {}
 
-tc::io::LocalFileObject::LocalFileObject(const tc::io::Path& path, tc::io::FileAccessMode mode) :
-	LocalFileObject()
+tc::io::FileStream::FileStream(const tc::io::Path& path, tc::io::FileAccessMode mode) :
+	FileStream()
 {
 	open(path, mode);
 }
 
-tc::ResourceState tc::io::LocalFileObject::state()
+tc::ResourceState tc::io::FileStream::state()
 {
 	return mState;
 }
 
-void tc::io::LocalFileObject::open(const tc::io::Path& path, tc::io::FileAccessMode mode)
+void tc::io::FileStream::open(const tc::io::Path& path, tc::io::FileAccessMode mode)
 {
 	// close file before opening file
 	close();
@@ -66,7 +66,7 @@ void tc::io::LocalFileObject::open(const tc::io::Path& path, tc::io::FileAccessM
 	}
 
 	// store file handle
-	mFileHandle = std::shared_ptr<tc::io::LocalFileObject::FileHandle>(new tc::io::LocalFileObject::FileHandle(file_handle));
+	mFileHandle = std::shared_ptr<tc::io::FileStream::FileHandle>(new tc::io::FileStream::FileHandle(file_handle));
 	
 	// set state as initialised
 	mState.set(RESFLAG_READY);
@@ -85,14 +85,14 @@ void tc::io::LocalFileObject::open(const tc::io::Path& path, tc::io::FileAccessM
 	}
 
 	// store file handle
-	mFileHandle = std::shared_ptr<tc::io::LocalFileObject::FileHandle>(new tc::io::LocalFileObject::FileHandle(file_handle));
+	mFileHandle = std::shared_ptr<tc::io::FileStream::FileHandle>(new tc::io::FileStream::FileHandle(file_handle));
 	
 	// set state as initialised
 	mState.set(RESFLAG_READY);
 #endif
 }
 
-void tc::io::LocalFileObject::close()
+void tc::io::FileStream::close()
 {
 	if (mState.test(RESFLAG_READY))
 	{
@@ -101,7 +101,7 @@ void tc::io::LocalFileObject::close()
 	mState.reset() = 0;
 }
 
-uint64_t tc::io::LocalFileObject::size()
+uint64_t tc::io::FileStream::size()
 {
 	if (mState.test(RESFLAG_READY) == false)
 	{
@@ -142,7 +142,7 @@ uint64_t tc::io::LocalFileObject::size()
 	return fsize;
 }
 
-void tc::io::LocalFileObject::seek(uint64_t offset)
+void tc::io::FileStream::seek(uint64_t offset)
 {
 	if (mState.test(RESFLAG_READY) == false)
 	{
@@ -179,7 +179,7 @@ void tc::io::LocalFileObject::seek(uint64_t offset)
 #endif
 }
 
-uint64_t tc::io::LocalFileObject::pos()
+uint64_t tc::io::FileStream::pos()
 {
 	if (mState.test(RESFLAG_READY) == false)
 	{
@@ -212,7 +212,7 @@ uint64_t tc::io::LocalFileObject::pos()
 #endif
 }
 
-void tc::io::LocalFileObject::read(byte_t* data, size_t len)
+void tc::io::FileStream::read(byte_t* data, size_t len)
 {
 	if (mState.test(RESFLAG_READY) == false)
 	{
@@ -245,7 +245,7 @@ void tc::io::LocalFileObject::read(byte_t* data, size_t len)
 #endif
 }
 
-void tc::io::LocalFileObject::write(const byte_t* data, size_t len)
+void tc::io::FileStream::write(const byte_t* data, size_t len)
 {
 	if (mState.test(RESFLAG_READY) == false)
 	{
@@ -273,7 +273,7 @@ void tc::io::LocalFileObject::write(const byte_t* data, size_t len)
 }
 
 #ifdef _WIN32
-DWORD tc::io::LocalFileObject::getOpenModeFlag(FileAccessMode mode) const
+DWORD tc::io::FileStream::getOpenModeFlag(FileAccessMode mode) const
 {
 	DWORD flag = 0;
 	switch (mode)
@@ -292,7 +292,7 @@ DWORD tc::io::LocalFileObject::getOpenModeFlag(FileAccessMode mode) const
 	}
 	return flag;
 }
-DWORD tc::io::LocalFileObject::getShareModeFlag(FileAccessMode mode) const
+DWORD tc::io::FileStream::getShareModeFlag(FileAccessMode mode) const
 {
 	DWORD flag = 0;
 	switch (mode)
@@ -311,7 +311,7 @@ DWORD tc::io::LocalFileObject::getShareModeFlag(FileAccessMode mode) const
 	}
 	return flag;
 }
-DWORD tc::io::LocalFileObject::getCreationModeFlag(FileAccessMode mode) const
+DWORD tc::io::FileStream::getCreationModeFlag(FileAccessMode mode) const
 {
 	DWORD flag = 0;
 	switch (mode)
@@ -331,7 +331,7 @@ DWORD tc::io::LocalFileObject::getCreationModeFlag(FileAccessMode mode) const
 	return flag;
 }
 #else
-int tc::io::LocalFileObject::getOpenModeFlag(FileAccessMode mode) const
+int tc::io::FileStream::getOpenModeFlag(FileAccessMode mode) const
 {
 	int flag = 0;
 	switch (mode)
