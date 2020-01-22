@@ -4,7 +4,7 @@
 #include "io_Path_TestClass.h"
 #include "io_LocalStorage_TestClass.h"
 #include "io_SubStream_TestClass.h"
-#include "io_SubFileSystem_TestClass.h"
+#include "io_SubStorage_TestClass.h"
 
 void runTest(ITestClass* testClass)
 {
@@ -20,5 +20,5 @@ int main(int argc, char** argv)
 	runTest(new io_Path_TestClass());
 	runTest(new io_LocalStorage_TestClass());
 	runTest(new io_SubStream_TestClass());
-	runTest(new io_SubFileSystem_TestClass());
+	runTest(new io_SubStorage_TestClass());
 }

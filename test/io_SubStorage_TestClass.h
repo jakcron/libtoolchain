@@ -3,7 +3,7 @@
 
 #include <tc/io.h>
 
-class io_SubFileSystem_TestClass : public ITestClass
+class io_SubStorage_TestClass : public ITestClass
 {
 public:
 	void runAllTests();

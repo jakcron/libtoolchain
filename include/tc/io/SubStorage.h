@@ -1,6 +1,6 @@
 	/**
-	 * @file SubFileSystem.h
-	 * @brief Declaration of tc::io::SubFileSystem
+	 * @file SubStorage.h
+	 * @brief Declaration of tc::io::SubStorage
 	 * @author Jack (jakcron)
 	 * @version 0.3
 	 * @date 2019/06/18
@@ -11,31 +11,31 @@
 namespace tc { namespace io {
 
 	/**
-	 * @class SubFileSystem
+	 * @class SubStorage
 	 * @brief A wrapper around an existing IStorage object that exposes a subset of the base IStorage directory tree.
 	 */
-class SubFileSystem : public IStorage
+class SubStorage : public IStorage
 {
 public:
 
 		/**
 		 * @brief Default constructor
 		 */
-	SubFileSystem();
+	SubStorage();
 
 		/** 
 		 * @brief Wrap (by copy) constuctor
 		 * @param[in] fs IStorage object to be sandboxed
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	SubFileSystem(const std::shared_ptr<tc::io::IStorage>& fs, const tc::io::Path& root_path);
+	SubStorage(const std::shared_ptr<tc::io::IStorage>& fs, const tc::io::Path& root_path);
 
 		/** 
 		 * @brief Wrap (by move) constuctor
 		 * @param[in] fs IStorage object to be sandboxed
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	SubFileSystem(std::shared_ptr<tc::io::IStorage>&& fs, const tc::io::Path& root_path);
+	SubStorage(std::shared_ptr<tc::io::IStorage>&& fs, const tc::io::Path& root_path);
 
 	virtual tc::ResourceState getFsState();
 

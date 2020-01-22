@@ -20,4 +20,4 @@
 #include <tc/io/LocalStorage.h>
 
 #include <tc/io/SubStream.h>
-#include <tc/io/SubFileSystem.h>
+#include <tc/io/SubStorage.h>
