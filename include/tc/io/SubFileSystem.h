@@ -6,15 +6,15 @@
 	 * @date 2019/06/18
 	 */
 #pragma once
-#include <tc/io/IFileSystem.h>
+#include <tc/io/IStorage.h>
 
 namespace tc { namespace io {
 
 	/**
 	 * @class SubFileSystem
-	 * @brief A wrapper around an existing IFileSystem object that exposes a subset of the base IFileSystem directory tree.
+	 * @brief A wrapper around an existing IStorage object that exposes a subset of the base IStorage directory tree.
 	 */
-class SubFileSystem : public IFileSystem
+class SubFileSystem : public IStorage
 {
 public:
 
@@ -25,33 +25,33 @@ public:
 
 		/** 
 		 * @brief Wrap (by copy) constuctor
-		 * @param[in] fs IFileSystem object to be sandboxed
+		 * @param[in] fs IStorage object to be sandboxed
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>& fs, const tc::io::Path& root_path);
+	SubFileSystem(const std::shared_ptr<tc::io::IStorage>& fs, const tc::io::Path& root_path);
 
 		/** 
 		 * @brief Wrap (by move) constuctor
-		 * @param[in] fs IFileSystem object to be sandboxed
+		 * @param[in] fs IStorage object to be sandboxed
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	SubFileSystem(std::shared_ptr<tc::io::IFileSystem>&& fs, const tc::io::Path& root_path);
+	SubFileSystem(std::shared_ptr<tc::io::IStorage>&& fs, const tc::io::Path& root_path);
 
 	virtual tc::ResourceState getFsState();
 
 		/** 
 		 * @brief Wrap (by copy) initialiser
-		 * @param[in] fs IFileSystem object to be sandboxed
+		 * @param[in] fs IStorage object to be sandboxed
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	void initialiseFs(const std::shared_ptr<tc::io::IFileSystem>& fs, const tc::io::Path& root_path);
+	void initialiseFs(const std::shared_ptr<tc::io::IStorage>& fs, const tc::io::Path& root_path);
 
 		/** 
 		 * @brief Wrap (by move) initialiser
-		 * @param[in] fs IFileSystem object to be sandboxed
+		 * @param[in] fs IStorage object to be sandboxed
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	void initialiseFs(std::shared_ptr<tc::io::IFileSystem>&& fs, const tc::io::Path& root_path);
+	void initialiseFs(std::shared_ptr<tc::io::IStorage>&& fs, const tc::io::Path& root_path);
 
 	virtual void closeFs();
 	virtual void createFile(const tc::io::Path& path);
@@ -65,7 +65,7 @@ public:
 private:
 	static const std::string kClassName;
 	
-	std::shared_ptr<tc::io::IFileSystem> mFileSystem;
+	std::shared_ptr<tc::io::IStorage> mFileSystem;
 	tc::io::Path mRootPath;
 	tc::io::Path mWorkingDirectory;
 

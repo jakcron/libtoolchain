@@ -6,7 +6,7 @@
 	 * @date 2019/06/18
 	 */
 #pragma once
-#include <tc/io/IFileSystem.h>
+#include <tc/io/IStorage.h>
 
 #ifdef _WIN32
 	#include <windows.h>
@@ -16,9 +16,9 @@ namespace tc { namespace io {
 
 	/**
 	 * @class LocalFileSystem
-	 * @brief An IFileSystem wrapper around the existing OS FileSystem API.
+	 * @brief An IStorage wrapper around the existing OS FileSystem API.
 	 */
-class LocalFileSystem : public IFileSystem
+class LocalFileSystem : public IStorage
 {
 public:
 		/// Default Constructor

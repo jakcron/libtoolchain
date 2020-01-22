@@ -10,13 +10,13 @@ tc::io::SubFileSystem::SubFileSystem() :
 {
 }
 
-tc::io::SubFileSystem::SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>& fs, const tc::io::Path& root_path) :
+tc::io::SubFileSystem::SubFileSystem(const std::shared_ptr<tc::io::IStorage>& fs, const tc::io::Path& root_path) :
 	SubFileSystem()
 {
 	initialiseFs(fs, root_path);
 }
 
-tc::io::SubFileSystem::SubFileSystem(std::shared_ptr<tc::io::IFileSystem>&& fs, const tc::io::Path& root_path) :
+tc::io::SubFileSystem::SubFileSystem(std::shared_ptr<tc::io::IStorage>&& fs, const tc::io::Path& root_path) :
 	SubFileSystem()
 {
 	initialiseFs(std::move(fs), root_path);
@@ -27,7 +27,7 @@ tc::ResourceState tc::io::SubFileSystem::getFsState()
 	return mFileSystem.get() ? mFileSystem->getFsState() : tc::ResourceState(RESFLAG_NOINIT);
 }
 
-void tc::io::SubFileSystem::initialiseFs(const std::shared_ptr<tc::io::IFileSystem>& fs, const tc::io::Path& root_path)
+void tc::io::SubFileSystem::initialiseFs(const std::shared_ptr<tc::io::IStorage>& fs, const tc::io::Path& root_path)
 {
 	closeFs();
 
@@ -48,7 +48,7 @@ void tc::io::SubFileSystem::initialiseFs(const std::shared_ptr<tc::io::IFileSyst
 	}
 }
 
-void tc::io::SubFileSystem::initialiseFs(std::shared_ptr<tc::io::IFileSystem>&& fs, const tc::io::Path& root_path)
+void tc::io::SubFileSystem::initialiseFs(std::shared_ptr<tc::io::IStorage>&& fs, const tc::io::Path& root_path)
 {
 	closeFs();
 

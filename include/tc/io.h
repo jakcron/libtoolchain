@@ -14,7 +14,7 @@
 #include <tc/io/PathUtils.h>
 
 #include <tc/io/IFileObject.h>
-#include <tc/io/IFileSystem.h>
+#include <tc/io/IStorage.h>
 
 #include <tc/io/LocalFileObject.h>
 #include <tc/io/LocalFileSystem.h>

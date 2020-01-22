@@ -8,7 +8,7 @@ class io_SubFileSystem_TestClass : public ITestClass
 public:
 	void runAllTests();
 private:
-	class DummyFileSystemBase : public tc::io::IFileSystem
+	class DummyFileSystemBase : public tc::io::IStorage
 	{
 	public:
 		DummyFileSystemBase()

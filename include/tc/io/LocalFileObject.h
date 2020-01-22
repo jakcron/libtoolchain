@@ -7,7 +7,7 @@
 	 */
 #pragma once
 #include <tc/io/IFileObject.h>
-#include <tc/io/IFileSystem.h>
+#include <tc/io/IStorage.h>
 
 #ifdef _WIN32
 #include <Windows.h>
