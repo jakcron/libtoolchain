@@ -23,9 +23,9 @@ tc::io::SubStream::SubStream(std::shared_ptr<tc::io::IStream>&& file, uint64_t f
 	initialise(std::move(file), file_base_offset, virtual_size);
 }
 
-tc::ResourceState tc::io::SubStream::state()
+tc::ResourceStatus tc::io::SubStream::state()
 {
-	return mFile.get() ? mFile->state() : tc::ResourceState(RESFLAG_NOINIT);
+	return mFile.get() ? mFile->state() : tc::ResourceStatus(RESFLAG_NOINIT);
 }
 
 void tc::io::SubStream::initialise(const std::shared_ptr<tc::io::IStream>& file, uint64_t file_base_offset, uint64_t virtual_size)

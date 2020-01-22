@@ -22,9 +22,9 @@ tc::io::SubStorage::SubStorage(std::shared_ptr<tc::io::IStorage>&& fs, const tc:
 	initialiseFs(std::move(fs), root_path);
 }
 
-tc::ResourceState tc::io::SubStorage::getFsState()
+tc::ResourceStatus tc::io::SubStorage::getFsState()
 {
-	return mFileSystem.get() ? mFileSystem->getFsState() : tc::ResourceState(RESFLAG_NOINIT);
+	return mFileSystem.get() ? mFileSystem->getFsState() : tc::ResourceStatus(RESFLAG_NOINIT);
 }
 
 void tc::io::SubStorage::initialiseFs(const std::shared_ptr<tc::io::IStorage>& fs, const tc::io::Path& root_path)

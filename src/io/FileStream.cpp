@@ -35,7 +35,7 @@ tc::io::FileStream::FileStream(const tc::io::Path& path, tc::io::FileAccessMode 
 	open(path, mode);
 }
 
-tc::ResourceState tc::io::FileStream::state()
+tc::ResourceStatus tc::io::FileStream::state()
 {
 	return mState;
 }

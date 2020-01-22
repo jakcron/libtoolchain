@@ -36,7 +36,7 @@ public:
 		 */
 	FileStream(const tc::io::Path& path, tc::io::FileAccessMode mode);
 
-	virtual tc::ResourceState state();
+	virtual tc::ResourceStatus state();
 
 		/** 
 		 * @brief Open file
@@ -66,7 +66,7 @@ private:
 		~FileHandle();		
 	};
 
-	tc::ResourceState mState;
+	tc::ResourceStatus mState;
 	
 	tc::io::FileAccessMode mMode;
 	std::shared_ptr<tc::io::FileStream::FileHandle> mFileHandle;

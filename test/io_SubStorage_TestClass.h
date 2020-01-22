@@ -16,7 +16,7 @@ private:
 			initFs();
 		}
 
-		virtual tc::ResourceState getFsState()
+		virtual tc::ResourceStatus getFsState()
 		{
 			return mState;
 		}
@@ -75,7 +75,7 @@ private:
 		}
 	private:
 		static const std::string kClassName;
-		tc::ResourceState mState;
+		tc::ResourceStatus mState;
 		std::shared_ptr<tc::io::Path> mCurDir;
 	};
 

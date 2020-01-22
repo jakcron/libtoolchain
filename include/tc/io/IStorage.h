@@ -7,7 +7,7 @@
 	 */
 #pragma once
 #include <tc/types.h>
-#include <tc/ResourceState.h>
+#include <tc/ResourceStatus.h>
 #include <tc/io/IStream.h>
 #include <tc/io/Path.h>
 
@@ -69,9 +69,9 @@ public:
 
 		/**
 		 * @brief Get state of IStorage
-		 * @return ResourceState
+		 * @return ResourceStatus
 		 */
-	virtual tc::ResourceState getFsState() = 0;
+	virtual tc::ResourceStatus getFsState() = 0;
 
 		/**
 		 * @brief Close the filesystem

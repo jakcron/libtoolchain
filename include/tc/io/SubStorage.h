@@ -37,7 +37,7 @@ public:
 		 */
 	SubStorage(std::shared_ptr<tc::io::IStorage>&& fs, const tc::io::Path& root_path);
 
-	virtual tc::ResourceState getFsState();
+	virtual tc::ResourceStatus getFsState();
 
 		/** 
 		 * @brief Wrap (by copy) initialiser

@@ -7,7 +7,7 @@
 	 */
 #pragma once
 #include <tc/types.h>
-#include <tc/ResourceState.h>
+#include <tc/ResourceStatus.h>
 
 namespace tc { namespace io {
 
@@ -34,9 +34,9 @@ public:
 
 		/**
 		 * @brief Get state of IStream
-		 * @return ResourceState
+		 * @return ResourceStatus
 		 */
-	virtual tc::ResourceState state() = 0;
+	virtual tc::ResourceStatus state() = 0;
 
 		/**
 		 * @brief Close the file

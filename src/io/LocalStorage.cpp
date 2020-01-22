@@ -26,7 +26,7 @@ tc::io::LocalStorage::LocalStorage() :
 	openFs();
 }
 
-tc::ResourceState tc::io::LocalStorage::getFsState()
+tc::ResourceStatus tc::io::LocalStorage::getFsState()
 {
 	return mState;
 }

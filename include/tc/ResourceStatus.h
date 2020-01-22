@@ -1,6 +1,6 @@
 	/**
-	 * @file ResourceState.h
-	 * @brief Declaration of tc::ResourceState
+	 * @file ResourceStatus.h
+	 * @brief Declaration of tc::ResourceStatus
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2019/01/16
@@ -11,10 +11,10 @@
 namespace tc {
 
 	/**
-	 * @enum ResourceStateFlag
-	 * @brief Flags for ResourceState
+	 * @enum ResourceStatusFlag
+	 * @brief Flags for ResourceStatus
 	 */
-enum ResourceStateFlag
+enum ResourceStatusFlag
 {
 	RESFLAG_READY, /**< Resource is ready for use */
 	RESFLAG_ERROR, /**< Resource encountered an error */
@@ -22,8 +22,8 @@ enum ResourceStateFlag
 };
 
 	/**
-	 * @brief Bitset indicating resource state information (see @ref ResourceStateFlag)
+	 * @brief Bitset indicating resource state information (see @ref ResourceStatusFlag)
 	 */
-using ResourceState = std::bitset<32>; 
+using ResourceStatus = std::bitset<32>; 
 
 } // namespace tc

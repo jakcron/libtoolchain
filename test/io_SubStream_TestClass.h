@@ -16,7 +16,7 @@ private:
 			init();
 		}
 
-		virtual tc::ResourceState state()
+		virtual tc::ResourceStatus state()
 		{
 			return mState;
 		}
@@ -66,7 +66,7 @@ private:
 		}
 	private:
 		static const std::string kClassName;
-		tc::ResourceState mState;
+		tc::ResourceStatus mState;
 		uint64_t mOffset;
 		uint64_t mSize;
 	};

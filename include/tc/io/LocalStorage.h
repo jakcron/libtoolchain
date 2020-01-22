@@ -24,7 +24,7 @@ public:
 		/// Default Constructor
 	LocalStorage();
 
-	virtual tc::ResourceState getFsState();
+	virtual tc::ResourceStatus getFsState();
 
 		/// Open Local Filesystem
 	void openFs();
@@ -41,7 +41,7 @@ public:
 private:
 	static const std::string kClassName;
 
-	tc::ResourceState mState;
+	tc::ResourceStatus mState;
 };
 
 }} // namespace tc::io

@@ -42,7 +42,7 @@ public:
 		 */
 	SubStream(std::shared_ptr<tc::io::IStream>&& file, uint64_t file_base_offset, uint64_t virtual_size);
 
-	virtual tc::ResourceState state();
+	virtual tc::ResourceStatus state();
 
 		/** 
 		 * @brief Wrap (by copy) initialiser
