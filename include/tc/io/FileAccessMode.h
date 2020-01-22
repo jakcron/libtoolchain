@@ -8,6 +8,7 @@
 #pragma once
 
 namespace tc { namespace io {
+
 	/** 
 	 * @enum FileAccessMode
 	 * @brief This enum is used with openFile() to determine the access mode
