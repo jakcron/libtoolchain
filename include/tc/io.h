@@ -21,3 +21,9 @@
 
 #include <tc/io/SubStream.h>
 #include <tc/io/SubStorage.h>
+
+// Exceptions
+#include <tc/io/IOException.h>
+#include <tc/io/DirectoryNotFoundException.h>
+#include <tc/io/FileNotFoundException.h>
+#include <tc/io/PathTooLongException.h>
