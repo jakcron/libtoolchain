@@ -1,4 +1,4 @@
-#include <tc/io/LocalFileSystem.h>
+#include <tc/io/LocalStorage.h>
 #include <tc/io/FileStream.h>
 #include <tc/io/PathUtils.h>
 #include <tc/Exception.h>
@@ -18,30 +18,30 @@
 
 #include <iostream>
 
-const std::string tc::io::LocalFileSystem::kClassName = "tc::io::LocalFileSystem";
+const std::string tc::io::LocalStorage::kClassName = "tc::io::LocalStorage";
 
-tc::io::LocalFileSystem::LocalFileSystem() :
+tc::io::LocalStorage::LocalStorage() :
 	mState()
 {
 	openFs();
 }
 
-tc::ResourceState tc::io::LocalFileSystem::getFsState()
+tc::ResourceState tc::io::LocalStorage::getFsState()
 {
 	return mState;
 }
 
-void tc::io::LocalFileSystem::openFs()
+void tc::io::LocalStorage::openFs()
 {
 	mState = (1 << tc::RESFLAG_READY);
 }
 
-void tc::io::LocalFileSystem::closeFs()
+void tc::io::LocalStorage::closeFs()
 {
 	mState = 0;
 }
 
-void tc::io::LocalFileSystem::createFile(const tc::io::Path& path)
+void tc::io::LocalStorage::createFile(const tc::io::Path& path)
 {
 #ifdef _WIN32
 	// convert Path to unicode string
@@ -80,7 +80,7 @@ void tc::io::LocalFileSystem::createFile(const tc::io::Path& path)
 #endif
 }
 
-void tc::io::LocalFileSystem::removeFile(const tc::io::Path& path)
+void tc::io::LocalStorage::removeFile(const tc::io::Path& path)
 {
 #ifdef _WIN32
 	// convert Path to unicode string
@@ -104,12 +104,12 @@ void tc::io::LocalFileSystem::removeFile(const tc::io::Path& path)
 #endif
 }
 
-void tc::io::LocalFileSystem::openFile(const tc::io::Path& path, FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file)
+void tc::io::LocalStorage::openFile(const tc::io::Path& path, FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file)
 {
 	file = std::shared_ptr<tc::io::FileStream>(new tc::io::FileStream(path, mode));
 }
 
-void tc::io::LocalFileSystem::createDirectory(const tc::io::Path& path)
+void tc::io::LocalStorage::createDirectory(const tc::io::Path& path)
 {
 #ifdef _WIN32
 	// convert Path to unicode string
@@ -133,7 +133,7 @@ void tc::io::LocalFileSystem::createDirectory(const tc::io::Path& path)
 #endif
 }
 
-void tc::io::LocalFileSystem::removeDirectory(const tc::io::Path& path)
+void tc::io::LocalStorage::removeDirectory(const tc::io::Path& path)
 {
 #ifdef _WIN32
 	// convert Path to unicode string
@@ -156,7 +156,7 @@ void tc::io::LocalFileSystem::removeDirectory(const tc::io::Path& path)
 #endif
 }
 
-void tc::io::LocalFileSystem::getWorkingDirectory(tc::io::Path& path)
+void tc::io::LocalStorage::getWorkingDirectory(tc::io::Path& path)
 {
 #ifdef _WIN32
 	std::shared_ptr<char16_t> raw_char16_path(new char16_t[MAX_PATH]);
@@ -182,7 +182,7 @@ void tc::io::LocalFileSystem::getWorkingDirectory(tc::io::Path& path)
 #endif
 }
 
-void tc::io::LocalFileSystem::setWorkingDirectory(const tc::io::Path& path)
+void tc::io::LocalStorage::setWorkingDirectory(const tc::io::Path& path)
 {
 #ifdef _WIN32
 	// convert Path to unicode string
@@ -207,7 +207,7 @@ void tc::io::LocalFileSystem::setWorkingDirectory(const tc::io::Path& path)
 #endif
 }
 
-void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
+void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
 {
 	std::vector<std::string> child_dir_name_list;
 	std::vector<std::string> child_file_name_list;

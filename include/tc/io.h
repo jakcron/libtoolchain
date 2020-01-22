@@ -17,7 +17,7 @@
 #include <tc/io/IStorage.h>
 
 #include <tc/io/FileStream.h>
-#include <tc/io/LocalFileSystem.h>
+#include <tc/io/LocalStorage.h>
 
 #include <tc/io/SubFileObject.h>
 #include <tc/io/SubFileSystem.h>

@@ -1,6 +1,6 @@
 	/**
-	 * @file LocalFileSystem.h
-	 * @brief Declaration of tc::io::LocalFileSystem
+	 * @file LocalStorage.h
+	 * @brief Declaration of tc::io::LocalStorage
 	 * @author Jack (jakcron)
 	 * @version 0.5
 	 * @date 2019/06/18
@@ -15,14 +15,14 @@
 namespace tc { namespace io {
 
 	/**
-	 * @class LocalFileSystem
+	 * @class LocalStorage
 	 * @brief An IStorage wrapper around the existing OS FileSystem API.
 	 */
-class LocalFileSystem : public IStorage
+class LocalStorage : public IStorage
 {
 public:
 		/// Default Constructor
-	LocalFileSystem();
+	LocalStorage();
 
 	virtual tc::ResourceState getFsState();
 
