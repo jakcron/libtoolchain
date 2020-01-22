@@ -12,7 +12,7 @@ namespace tc { namespace io {
 
 	/**
 	 * @class IOException
-	 * @brief An extension of Exception indicating a generic IO exception has occurred
+	 * @brief The exception that is thrown when an I/O error occurs.
 	 */
 class IOException : public tc::Exception
 {
