@@ -1,6 +1,6 @@
 	/**
-	 * @file SubFileObject.h
-	 * @brief Declaration of tc::io::SubFileObject
+	 * @file SubStream.h
+	 * @brief Declaration of tc::io::SubStream
 	 * @author Jack (jakcron)
 	 * @version 0.3
 	 * @date 2019/06/19
@@ -11,16 +11,16 @@
 namespace tc { namespace io {
 
 	/**
-	 * @class SubFileObject
+	 * @class SubStream
 	 * @brief A wrapper around an existing IStream object that exposes a subset of the base the IStream object.
 	 */
-class SubFileObject : public IStream
+class SubStream : public IStream
 {
 public:
 		/**
 		 * @brief Default constructor
 		 */
-	SubFileObject();
+	SubStream();
 
 		/** 
 		 * @brief Wrap (by copy) constuctor
@@ -30,7 +30,7 @@ public:
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	SubFileObject(const std::shared_ptr<tc::io::IStream>& file, uint64_t file_base_offset, uint64_t virtual_size);
+	SubStream(const std::shared_ptr<tc::io::IStream>& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 		/** 
 		 * @brief Wrap (by move) constuctor
@@ -40,7 +40,7 @@ public:
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	SubFileObject(std::shared_ptr<tc::io::IStream>&& file, uint64_t file_base_offset, uint64_t virtual_size);
+	SubStream(std::shared_ptr<tc::io::IStream>&& file, uint64_t file_base_offset, uint64_t virtual_size);
 
 	virtual tc::ResourceState state();
 

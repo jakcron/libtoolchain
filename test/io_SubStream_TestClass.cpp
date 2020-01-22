@@ -1,23 +1,23 @@
 #include <tc/Exception.h>
 #include <iostream>
 
-#include "io_SubFileObject_TestClass.h"
+#include "io_SubStream_TestClass.h"
 
-const std::string io_SubFileObject_TestClass::DummyFileBase::kClassName = "DummyFileBase";
+const std::string io_SubStream_TestClass::DummyFileBase::kClassName = "DummyFileBase";
 
-void io_SubFileObject_TestClass::runAllTests(void)
+void io_SubStream_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::io::SubFileObject] START" << std::endl;
+	std::cout << "[tc::io::SubStream] START" << std::endl;
 	testSize();
 	testSeekPos();
 	testRead();
 	testWrite();
-	std::cout << "[tc::io::SubFileObject] END" << std::endl;
+	std::cout << "[tc::io::SubStream] END" << std::endl;
 }
 
-void io_SubFileObject_TestClass::testSize()
+void io_SubStream_TestClass::testSize()
 {
-	std::cout << "[tc::io::SubFileObject] testSize : " << std::flush;
+	std::cout << "[tc::io::SubStream] testSize : " << std::flush;
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -34,7 +34,7 @@ void io_SubFileObject_TestClass::testSize()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox file
-			tc::io::SubFileObject sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
+			tc::io::SubStream sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
 
 			if (sb_file.size() != sandbox_size)
 			{
@@ -55,9 +55,9 @@ void io_SubFileObject_TestClass::testSize()
 	}
 }
 
-void io_SubFileObject_TestClass::testSeekPos()
+void io_SubStream_TestClass::testSeekPos()
 {
-	std::cout << "[tc::io::SubFileObject] testSeekPos : " << std::flush;
+	std::cout << "[tc::io::SubStream] testSeekPos : " << std::flush;
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -85,7 +85,7 @@ void io_SubFileObject_TestClass::testSeekPos()
 			DummyFile file;
 
 			// get sandbox file
-			tc::io::SubFileObject sb_file(std::make_shared<DummyFile>(file), sandbox_offset, sandbox_size);
+			tc::io::SubStream sb_file(std::make_shared<DummyFile>(file), sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file.seek(offset_to_seek);
@@ -117,9 +117,9 @@ void io_SubFileObject_TestClass::testSeekPos()
 	}
 }
 
-void io_SubFileObject_TestClass::testRead()
+void io_SubStream_TestClass::testRead()
 {
-	std::cout << "[tc::io::SubFileObject] testRead : " << std::flush;
+	std::cout << "[tc::io::SubStream] testRead : " << std::flush;
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -150,7 +150,7 @@ void io_SubFileObject_TestClass::testRead()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox file
-			tc::io::SubFileObject sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
+			tc::io::SubStream sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file.seek(offset_to_seek);
@@ -173,9 +173,9 @@ void io_SubFileObject_TestClass::testRead()
 	}
 }
 
-void io_SubFileObject_TestClass::testWrite()
+void io_SubStream_TestClass::testWrite()
 {
-	std::cout << "[tc::io::SubFileObject] testWrite : " << std::flush;
+	std::cout << "[tc::io::SubStream] testWrite : " << std::flush;
 	try
 	{
 		class DummyFile : public DummyFileBase
@@ -206,7 +206,7 @@ void io_SubFileObject_TestClass::testWrite()
 			uint64_t sandbox_size = 0x1000;
 
 			// get sandbox file
-			tc::io::SubFileObject sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
+			tc::io::SubStream sb_file(std::shared_ptr<DummyFile>(new DummyFile()), sandbox_offset, sandbox_size);
 
 			uint64_t offset_to_seek = 0x337;
 			sb_file.seek(offset_to_seek);
