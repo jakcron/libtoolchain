@@ -56,7 +56,6 @@ public:
 		 */
 	void open(const tc::io::Path& path, FileMode mode, FileAccess access);
 
-
 	virtual bool canRead() const;
 	virtual bool canWrite() const;
 	virtual bool canSeek() const;
@@ -67,8 +66,8 @@ public:
 	virtual void write(const byte_t* buffer, size_t count);
 	virtual int64_t seek(int64_t offset, SeekOrigin origin);
 	virtual void setLength(int64_t length);
-	
 	virtual void flush();
+	
 	virtual void dispose();
 private:
 	static const std::string kClassName;
