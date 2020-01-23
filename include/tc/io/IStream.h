@@ -56,7 +56,7 @@ public:
 		/**
 		 * @brief Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
 		 * 
-		 * @param[out] buffer An array of bytes. When this method returns, the buffer contains the specified byte array with the values between offset and (offset + length - 1) replaced by the bytes read from the current source.
+		 * @param[out] buffer An array of bytes. When this method returns, the buffer contains the specified byte array with the values between 0 and (@p count - 1) replaced by the bytes read from the current source.
 		 * @param[in] count The maximum number of bytes to be read from the current stream.
 		 * 
 		 * @return The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
