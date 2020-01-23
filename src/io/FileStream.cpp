@@ -259,6 +259,12 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 		DWORD error = GetLastError();
 		switch (error)
 		{
+			case (ERROR_FILE_NOT_FOUND):
+				throw tc::io::FileNotFoundException(kClassName+"::open()", std::to_string(error));
+			case (ERROR_FILE_EXISTS):
+				throw tc::io::IOException(kClassName+"::open()", std::to_string(error));
+			case (ERROR_ACCESS_DENIED):
+				throw tc::UnauthorisedAccessException(kClassName+"::open()", std::to_string(error));
 			default:
 				throw tc::io::IOException(kClassName+"::open()", "Failed to open file stream (" + std::to_string(error) + ")");
 		}
@@ -279,10 +285,9 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 
 int64_t tc::io::FileStream::length_impl()
 {
-	int64_t length;
+	LARGE_INTEGER stream_length;
 
-	LARGE_INTEGER win_fsize;
-	if (GetFileSizeEx(mFileHandle->handle, &win_fsize) == false)
+	if (GetFileSizeEx(mFileHandle->handle, &stream_length) == false)
 	{
 		DWORD error = GetLastError();
 		switch (error)
@@ -291,10 +296,8 @@ int64_t tc::io::FileStream::length_impl()
 				throw tc::io::IOException(kClassName+"::length()", "Failed to get stream length (" + std::to_string(error) + ")");
 		}
 	}
-
-	length = win_fsize.QuadPart;
 	
-	return length;
+	return (int64_t) stream_length.QuadPart;
 }
 
 size_t tc::io::FileStream::read_impl(byte_t* buffer, size_t count)
