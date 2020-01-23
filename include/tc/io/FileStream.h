@@ -2,13 +2,14 @@
 	 * @file FileStream.h
 	 * @brief Declaration of tc::io::FileStream
 	 * @author Jack (jakcron)
-	 * @version	0.3
-	 * @date 2019/06/18
+	 * @version	0.4
+	 * @date 2020/01/23
 	 */
 #pragma once
 #include <tc/io/IStream.h>
 #include <tc/io/Path.h>
-#include <tc/io/FileAccessMode.h>
+#include <tc/io/FileMode.h>
+#include <tc/io/FileAccess.h>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -31,27 +32,44 @@ public:
 	FileStream();
 
 		/** 
-		 * @brief Initialsing constuctor
-		 * @param[in] path Path to file
-		 * @param[in] mode Access mode
+		 * @brief Initialsing constuctor. Calls @ref open
+		 * 
+		 * @see open for usage documentation
 		 */
-	FileStream(const tc::io::Path& path, tc::io::FileAccessMode mode);
-
-	virtual tc::ResourceStatus state();
+	FileStream(const tc::io::Path& path, FileMode mode, FileAccess access);
 
 		/** 
 		 * @brief Open file
-		 * @param[in] path Path to file
-		 * @param[in] mode Access mode
+		 * 
+		 * @param[in] path A relative or absolute path for the file that the current FileStream object will encapsulate.
+		 * @param[in] mode One of the enumeration values that determines how to open or create the file.
+		 * @param[in] access A bitwise combination of the enumeration values that determines how the file can be accessed by the FileStream object. This also determines the values returned by the @ref canRead and @ref canWrite methods of the FileStream object. @ref canSeek is true if path specifies a disk file.
+		 *
+		 * @throw tc::ArgumentException @p path contains invalid characters or is empty.
+		 * @throw tc::NotSupportedException @p path refers to an unsupported non-file device.
+		 * @throw tc::io::IOException An I/O error, such as specifying @a FileMode.CreateNew when the file specified by @p path already exists, occurred. Or the stream has been closed.
+		 * @throw tc::SecurityException The caller does not have the required permission.
+		 * @throw tc::io::DirectoryNotFoundException The specified path is invalid, such as being on an unmapped drive.
+		 * @throw tc::UnauthorizedAccessException The @p access requested is not permitted by the operating system for the specified @p path, such as when @p access is @a Write or @a ReadWrite and the file or directory is set for read-only access.
+		 * @throw tc::io::PathTooLongException The specified @p path, file name, or both exceed the system-defined maximum length.
+		 * @throw tc::ArgumentOutOfRangeException @p mode contains an invalid value.
 		 */
-	void open(const tc::io::Path& path, tc::io::FileAccessMode mode);
+	void open(const tc::io::Path& path, FileMode mode, FileAccess access);
 
-	virtual void close();
-	virtual uint64_t size();
-	virtual void seek(uint64_t offset);
-	virtual uint64_t pos();
-	virtual void read(byte_t* data, size_t len);
-	virtual void write(const byte_t* data, size_t len);
+
+	virtual bool canRead() const;
+	virtual bool canWrite() const;
+	virtual bool canSeek() const;
+	virtual int64_t length();
+	virtual int64_t position();
+
+	virtual size_t read(byte_t* buffer, size_t count);
+	virtual void write(const byte_t* buffer, size_t count);
+	virtual int64_t seek(int64_t offset, SeekOrigin origin);
+	virtual void setLength(int64_t length);
+	
+	virtual void flush();
+	virtual void dispose();
 private:
 	static const std::string kClassName;
 
@@ -67,17 +85,28 @@ private:
 		~FileHandle();		
 	};
 
-	tc::ResourceStatus mState;
-	
-	tc::io::FileAccessMode mMode;
+
+	bool mCanRead;
+	bool mCanWrite;
+	bool mCanSeek;
 	std::shared_ptr<tc::io::FileStream::FileHandle> mFileHandle;
 
 #ifdef _WIN32
-	DWORD getOpenModeFlag(tc::io::FileAccessMode mode) const;
-	DWORD getShareModeFlag(tc::io::FileAccessMode mode) const;
-	DWORD getCreationModeFlag(tc::io::FileAccessMode mode) const;
+	void open_impl(const tc::io::Path& path, FileMode mode, FileAccess access);
+	int64_t length_impl();
+	size_t read_impl(byte_t* buffer, size_t count);
+	void write_impl(const byte_t* buffer, size_t count);
+	int64_t seek_impl(int64_t offset, SeekOrigin origin);
+	void setLength_impl(int64_t length);
+	void flush_impl();
 #else
-	int getOpenModeFlag(tc::io::FileAccessMode mode) const;
+	void open_impl(const tc::io::Path& path, FileMode mode, FileAccess access);
+	int64_t length_impl();
+	size_t read_impl(byte_t* buffer, size_t count);
+	void write_impl(const byte_t* buffer, size_t count);
+	int64_t seek_impl(int64_t offset, SeekOrigin origin);
+	void setLength_impl(int64_t length);
+	void flush_impl();
 #endif
 };
 

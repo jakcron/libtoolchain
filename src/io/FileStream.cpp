@@ -1,6 +1,20 @@
 #include <tc/io/FileStream.h>
-#include <tc/Exception.h>
 #include <tc/io/PathUtils.h>
+
+// exceptions
+#include <tc/Exception.h>
+#include <tc/AccessViolationException.h>
+#include <tc/ArgumentOutOfRangeException.h>
+#include <tc/NotSupportedException.h>
+#include <tc/NotImplementedException.h>
+#include <tc/ObjectDisposedException.h>
+#include <tc/OverflowException.h>
+#include <tc/UnauthorisedAccessException.h>
+#include <tc/io/IOException.h>
+#include <tc/io/FileNotFoundException.h>
+#include <tc/io/PathTooLongException.h>
+
+
 
 #ifdef _WIN32
 #include <direct.h>
@@ -24,38 +38,223 @@ tc::io::FileStream::FileHandle::~FileHandle()
 }
 
 tc::io::FileStream::FileStream() :
-	mState(0),
-	mMode(FILEACCESS_READ),
+	mCanRead(false),
+	mCanWrite(false),
+	mCanSeek(false),
 	mFileHandle()
 {}
 
-tc::io::FileStream::FileStream(const tc::io::Path& path, tc::io::FileAccessMode mode) :
+tc::io::FileStream::FileStream(const tc::io::Path& path, FileMode mode, FileAccess access) :
 	FileStream()
 {
-	open(path, mode);
+	open(path, mode, access);
 }
 
-tc::ResourceStatus tc::io::FileStream::state()
+void tc::io::FileStream::open(const tc::io::Path& path, FileMode mode, FileAccess access)
 {
-	return mState;
+	// dispose stream before opening new stream
+	dispose();
+
+	open_impl(path, mode, access);
 }
 
-void tc::io::FileStream::open(const tc::io::Path& path, tc::io::FileAccessMode mode)
+bool tc::io::FileStream::canRead() const
 {
-	// close file before opening file
-	close();
+	return mCanRead;
+}
+
+bool tc::io::FileStream::canWrite() const
+{
+	return mCanWrite;
+}
+bool tc::io::FileStream::canSeek() const
+{
+	return mCanSeek;
+}
+
+int64_t tc::io::FileStream::length()
+{
+	if (mFileHandle.get() == nullptr)
+	{
+		throw tc::io::IOException(kClassName, "Failed to get file size (stream is closed)");
+	}
+
+	return length_impl();
+}
+
+int64_t tc::io::FileStream::position()
+{
+	if (mFileHandle.get() == nullptr)
+	{
+		throw tc::io::IOException(kClassName, "Failed to get file position (stream is closed)");
+	}
+
+	if (mCanSeek == false)
+	{
+		throw tc::NotSupportedException(kClassName, "position() is not supported for streams that do not support seeking");
+	}
+
+	return seek(0, SeekOrigin::Current);
+}
+
+size_t tc::io::FileStream::read(byte_t* buffer, size_t count)
+{
+	if (mFileHandle.get() == nullptr)
+	{
+		throw tc::io::IOException(kClassName, "Failed to read file (stream is closed)");
+	}
+
+	if (mCanRead == false)
+	{
+		throw tc::UnauthorisedAccessException(kClassName, "FileStream::read() called, however stream does not support reading");
+	}
+
+	return read_impl(buffer, count);
+}
+
+void tc::io::FileStream::write(const byte_t* buffer, size_t count)
+{
+	if (mFileHandle.get() == nullptr)
+	{
+		throw tc::io::IOException(kClassName, "Failed to write file (no file open)");
+	}
+
+	if (mCanWrite == false)
+	{
+		throw tc::NotSupportedException(kClassName, "FileStream::write() called, however stream does not support writing");
+	}
+
+	write_impl(buffer, count);
+}
+
+int64_t tc::io::FileStream::seek(int64_t offset, SeekOrigin origin)
+{
+	if (mFileHandle.get() == nullptr)
+	{
+		throw tc::io::IOException(kClassName, "Failed to set stream position (stream is closed)");
+	}
+
+	if (mCanSeek == false)
+	{
+		throw tc::NotSupportedException(kClassName, "FileStream::seek() called, however stream does not support seeking");
+	}
+
+	return seek_impl(offset, origin);
+}
+
+void tc::io::FileStream::setLength(int64_t length)
+{
+	if (mFileHandle.get() == nullptr)
+	{
+		throw tc::ObjectDisposedException(kClassName, "Failed to set stream length (stream is disposed)");
+	}
+
+	if (mCanWrite == false || mCanSeek == false)
+	{
+		throw tc::NotSupportedException(kClassName, "FileStream::setLength() called, however stream does not support both writing and seeking");
+	}
+
+	setLength_impl(length);
+}
+
+void tc::io::FileStream::flush()
+{
+	if (mFileHandle.get() == nullptr)
+	{
+		throw tc::io::IOException(kClassName, "Failed to flush stream (stream is closed)");
+	}
 
 #ifdef _WIN32
+	if (mCanWrite)
+		FlushFileBuffers(mFileHandle->handle);
+#else
+	// open/read/write are non-buffered
+#endif
+}
+
+void tc::io::FileStream::dispose()
+{
+	flush();
+	mFileHandle.reset();
+	mCanRead = false;
+	mCanWrite = false;
+	mCanSeek = false;
+}
+
+#ifdef _WIN32
+void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, FileAccess access)
+{
 	// convert Path to unicode string
 	std::u16string unicode_path;
 	pathToWindowsUTF16(path, unicode_path);
 
+	DWORD access_flag = 0;
+	DWORD share_mode_flag = 0;
+	DWORD creation_flag = 0;
+
+	// process mode
+	switch (mode) 
+	{
+		case (FileMode::CreateNew):
+			// create file if does not exist | return error if file does not exist
+			creation_flag = CREATE_NEW;
+			break;
+		case (FileMode::Create):
+			// create file if does not exist | truncate file if it exists
+			creation_flag = CREATE_ALWAYS;
+			break;
+		case (FileMode::Open):
+			// no flags
+			creation_flag = OPEN_EXISTING;
+			break;
+		case (FileMode::OpenOrCreate):
+			// create file if does not exist 
+			creation_flag = OPEN_ALWAYS;
+			break;
+		case (FileMode::Truncate):
+			// truncate file if file exists
+			creation_flag = TRUNCATE_EXISTING;
+			break;
+		case (FileMode::Append):
+			// open in append mode
+			creation_flag = OPEN_EXISTING;
+			break;
+		default:
+			throw tc::ArgumentOutOfRangeException(kClassName+"open()", "Illegal value for mode");
+	}
+
+	// process access
+	switch (access)
+	{
+		case (FileAccess::Read):
+			// read access
+			access_flag = GENERIC_READ;
+			// shared read lock
+			share_mode_flag = FILE_SHARE_READ;
+			break;
+		case (FileAccess::Write):
+			// write access
+			access_flag = GENERIC_WRITE;
+			// exclusive lock
+			share_mode_flag = 0;
+			break;
+		case (FileAccess::ReadWrite):
+			// read/write access
+			access_flag = GENERIC_READ | GENERIC_WRITE;
+			// exclusive lock
+			share_mode_flag = 0;
+			break;
+		default:
+			throw tc::ArgumentOutOfRangeException(kClassName+"open()", "Illegal value for access");
+	}
+
+
 	// open file
 	HANDLE file_handle = CreateFileW((LPCWSTR)unicode_path.c_str(),
-							  getOpenModeFlag(mode),
-							  getShareModeFlag(mode),
+							  access_flag,
+							  share_mode_flag,
 							  0,
-							  getCreationModeFlag(mode),
+							  creation_flag,
 							  FILE_ATTRIBUTE_NORMAL,
 							  NULL);
 		
@@ -68,286 +267,373 @@ void tc::io::FileStream::open(const tc::io::Path& path, tc::io::FileAccessMode m
 	// store file handle
 	mFileHandle = std::shared_ptr<tc::io::FileStream::FileHandle>(new tc::io::FileStream::FileHandle(file_handle));
 	
-	// set state as initialised
-	mState.set(RESFLAG_READY);
-#else
-	// convert Path to unicode string
-	std::string unicode_path;
-	pathToUnixUTF8(path, unicode_path);
+	// seek to end of file if in append mode
+	if (mMode == FileMode::Append)
+		seek(0, SeekOrigin::End);
 
-	// open file
-	int file_handle = ::open(unicode_path.c_str(), getOpenModeFlag(mode), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-
-	// check file handle
-	if (file_handle == -1)
-	{
-		throw tc::Exception(kClassName, "Failed to open file (" + std::string(strerror(errno)) + ")");
-	}
-
-	// store file handle
-	mFileHandle = std::shared_ptr<tc::io::FileStream::FileHandle>(new tc::io::FileStream::FileHandle(file_handle));
-	
-	// set state as initialised
-	mState.set(RESFLAG_READY);
-#endif
+	// set state flags
+	mCanRead = (access_flag & GENERIC_READ) ? true : false;
+	mCanWrite = (access_flag & GENERIC_WRITE) ? true : false;
+	mCanSeek = GetFileType(mFileHandle->handle) == FILE_TYPE_DISK ? true : false;
 }
 
-void tc::io::FileStream::close()
+int64_t tc::io::FileStream::length_impl()
 {
-	if (mState.test(RESFLAG_READY))
-	{
-		mFileHandle.reset();
-	}
-	mState.reset() = 0;
-}
+	int64_t length;
 
-uint64_t tc::io::FileStream::size()
-{
-	if (mState.test(RESFLAG_READY) == false)
-	{
-		throw tc::Exception(kClassName, "Failed to get file size (no file open)");
-	}
-
-	uint64_t fsize = 0;
-#ifdef _WIN32
 	LARGE_INTEGER win_fsize;
 	if (GetFileSizeEx(mFileHandle->handle, &win_fsize) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to get file size (" + std::to_string(GetLastError()) + ")");
+		throw tc::Exception(kClassName, "Failed to get stream length (" + std::to_string(GetLastError()) + ")");
 	}
 
-	fsize = win_fsize.QuadPart;
-
-#else
-	int64_t cur_pos = lseek(mFileHandle->handle, 0, SEEK_CUR);
-	if (cur_pos == -1)
-	{
-		throw tc::Exception(kClassName, "Failed to get file size (" + std::string(strerror(errno)) + ")");
-	}
-
-	int64_t end_pos = lseek(mFileHandle->handle, 0, SEEK_END);
-	if (end_pos == -1)
-	{
-		throw tc::Exception(kClassName, "Failed to get file size (" + std::string(strerror(errno)) + ")");
-	}
-	fsize = (uint64_t)end_pos;
-
-	int64_t ret = lseek(mFileHandle->handle, cur_pos, SEEK_SET);
-	if (ret == -1)
-	{
-		throw tc::Exception(kClassName, "Failed to get file size (" + std::string(strerror(errno)) + ")");
-	}
+	length = win_fsize.QuadPart;
 	
-#endif
-	return fsize;
+	return length;
 }
 
-void tc::io::FileStream::seek(uint64_t offset)
+size_t tc::io::FileStream::read_impl(byte_t* buffer, size_t count)
 {
-	if (mState.test(RESFLAG_READY) == false)
+	DWORD bytes_read;
+
+	if (ReadFile(mFileHandle->handle, buffer, (DWORD)count, &bytes_read, NULL) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to set file position (no file open)");
+		throw tc::Exception(kClassName, "Failed to read from stream (" + std::to_string(GetLastError()) + ")");
 	}
 
-	// limit seek to the file size
-	uint64_t fsize = size();
-	if (offset > fsize)
+	if (bytes_read != count)
 	{
-		offset = fsize;
+		throw tc::Exception(kClassName, "Failed to read from stream (bytes read was not correct length)");
 	}
-	
 
-#ifdef _WIN32
+	return bytes_read;
+}
+
+void tc::io::FileStream::write_impl(const byte_t* buffer, size_t count)
+{
+	DWORD bytes_written;
+
+	if (WriteFile(mFileHandle->handle, buffer, (DWORD)count, &bytes_written, NULL) == false)
+	{
+		throw tc::Exception(kClassName, "Failed to write to stream (" + std::to_string(GetLastError()) + ")");
+	}
+
+	if (bytes_written != count)
+	{
+		throw tc::Exception(kClassName, "Failed to write to stream (bytes written was not correct length)");
+	}
+}
+
+int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
+{
+	DWORD seek_flag = 0;
+	switch(origin)
+	{
+		case (SeekOrigin::Begin):
+			seek_flag = FILE_BEGIN;
+			break;
+		case (SeekOrigin::Current):
+			seek_flag = FILE_CURRENT;
+			break;
+		case (SeekOrigin::End):
+			seek_flag = FILE_END;
+			break;
+		default:
+			throw tc::ArgumentOutOfRangeException(kClassName+"::seek()", "Unknown SeekOrigin value");
+	}
+
 	LARGE_INTEGER win_pos, out;
 	win_pos.QuadPart = offset;
 	if (SetFilePointerEx(
 		mFileHandle->handle,
 		win_pos,
 		&out,
-		FILE_BEGIN
+		seek_flag
 	) == false || out.QuadPart != win_pos.QuadPart)
 	{
 		throw tc::Exception(kClassName, "Failed to set file position (" + std::to_string(GetLastError()) + ")");
 	}
-#else
-	int64_t fpos = lseek(mFileHandle->handle, offset, SEEK_SET);
-
-	if (fpos == -1)
-	{
-		throw tc::Exception(kClassName, "Failed to set file position (" + std::string(strerror(errno)) + ")");
-	}
-#endif
-}
-
-uint64_t tc::io::FileStream::pos()
-{
-	if (mState.test(RESFLAG_READY) == false)
-	{
-		throw tc::Exception(kClassName, "Failed to get file position (no file open)");
-	}
-
-#ifdef _WIN32
-	LARGE_INTEGER win_pos, out;
-	win_pos.QuadPart = 0;
-	if (SetFilePointerEx(
-		mFileHandle->handle,
-		win_pos,
-		&out,
-		FILE_CURRENT
-	) == false)
-	{
-		throw tc::Exception(kClassName, "Failed to get file position (" + std::to_string(GetLastError()) + ")");
-	}
 
 	return out.QuadPart;
-#else
-	int64_t fpos = lseek(mFileHandle->handle, 0, SEEK_CUR);
-
-	if (fpos == -1)
-	{
-		throw tc::Exception(kClassName, "Failed to get file position (" + std::string(strerror(errno)) + ")");
-	}
-
-	return fpos;
-#endif
 }
 
-void tc::io::FileStream::read(byte_t* data, size_t len)
+void tc::io::FileStream::setLength_impl(int64_t length)
 {
-	if (mState.test(RESFLAG_READY) == false)
-	{
-		throw tc::Exception(kClassName, "Failed to read file (no file open)");
-	}
+	throw tc::NotImplementedException(kClassName, "setLength() not implemented");
+}
 
-	// prevent excessive read()
-	if ((pos() + len) > size())
+void tc::io::FileStream::flush_impl()
+{
+	if (mCanWrite)
 	{
-		throw tc::Exception(kClassName, "Failed to read file (Illegal read length)");
+		// flush buffers only applies to written data
+		FlushFileBuffers(mFileHandle->handle);
 	}
-
-#ifdef _WIN32
-	DWORD bytes_read;
-
-	if (ReadFile(mFileHandle->handle, data, (DWORD)len, &bytes_read, NULL) == false)
-	{
-		throw tc::Exception(kClassName, "Failed to read file (" + std::to_string(GetLastError()) + ")");
-	}
-
-	if (bytes_read != len)
-	{
-		throw tc::Exception(kClassName, "Failed to read file (bytes read was not correct length)");
-	}
+}
 #else
-	if (::read(mFileHandle->handle, data, len) == -1)
+void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, FileAccess access)
+{
+	// convert Path to unicode string
+	std::string unicode_path;
+	pathToUnixUTF8(path, unicode_path);
+
+	// open file
+	int open_flag = 0;
+
+	// process mode
+	switch (mode) 
+	{
+		case (FileMode::CreateNew):
+			// create file if does not exist | return error if file does not exist
+			open_flag |= O_CREAT | O_EXCL;
+			break;
+		case (FileMode::Create):
+			// create file if does not exist | truncate file if it exists
+			open_flag |= O_CREAT | O_TRUNC;
+			break;
+		case (FileMode::Open):
+			// no flags
+			open_flag |= 0;
+			break;
+		case (FileMode::OpenOrCreate):
+			// create file if does not exist 
+			open_flag |= O_CREAT;
+			break;
+		case (FileMode::Truncate):
+			// truncate file if file exists
+			open_flag |= O_TRUNC;
+			break;
+		case (FileMode::Append):
+			// open in append mode
+			open_flag |= O_APPEND;
+			break;
+		default:
+			throw tc::ArgumentOutOfRangeException(kClassName+"open()", "Illegal value for mode");
+	}
+
+	// process access
+	switch (access)
+	{
+		case (FileAccess::Read):
+			// read access | shared lock
+			open_flag |= O_RDONLY | O_SHLOCK;
+			break;
+		case (FileAccess::Write):
+			// write access | exclusive lock
+			open_flag |= O_WRONLY | O_EXLOCK;
+			break;
+		case (FileAccess::ReadWrite):
+			// read/write access | exclusive lock
+			open_flag |= O_RDWR | O_EXLOCK;
+			break;
+		default:
+			throw tc::ArgumentOutOfRangeException(kClassName+"open()", "Illegal value for access");
+	}
+
+	// validate use of write dependent flags
+	if ((open_flag & (O_APPEND | O_TRUNC | O_CREAT)) && !(open_flag & O_WRONLY|O_RDWR)) {
+		throw tc::ArgumentException(kClassName+"open()", "Stream open mode requires write access, but write access was not allowed");
+	}
+
+	// open file handle with Read/Write for User, Read for Group, nothing for others
+	int file_handle	= ::open(unicode_path.c_str(), open_flag, S_IRUSR | S_IWUSR | S_IRGRP);
+
+	// handle error
+	if (file_handle == -1)
+	{
+		switch (errno) 
+		{
+			case (EACCES):
+			case (EROFS):
+				throw tc::UnauthorisedAccessException(kClassName+"::open()", std::string(strerror(errno)));
+			case (ENAMETOOLONG):
+				throw tc::io::PathTooLongException(kClassName+"open()", std::string(strerror(errno)));
+			case (ENOENT):
+				throw tc::io::FileNotFoundException(kClassName+"open()", std::string(strerror(errno)));
+			case (EEXIST):
+				throw tc::io::IOException(kClassName+"open()", std::string(strerror(errno)));
+			case (EINVAL):
+				throw tc::ArgumentOutOfRangeException(kClassName+"::open()", std::string(strerror(errno)));			
+			case (EFAULT):
+				throw tc::AccessViolationException(kClassName+"::open()", std::string(strerror(errno)));
+			case (EISDIR):
+				throw tc::io::FileNotFoundException(kClassName+"::open()", std::string(strerror(errno)));
+			case (EDQUOT):
+			case (EFBIG):
+			case (EINTR):
+			case (ELOOP):
+			case (EMFILE):
+			case (ENFILE):
+			case (ENOMEM):
+			case (ENOSPC):
+			case (ENXIO):
+			case (EOVERFLOW):
+			case (EPERM):
+			case (ETXTBSY):
+			case (EWOULDBLOCK):
+			default:
+				throw tc::io::IOException(kClassName+"::open()", "Failed to open file stream (" + std::string(strerror(errno)) + ")");
+		}
+	}
+
+	// store file handle
+	mFileHandle = std::shared_ptr<tc::io::FileStream::FileHandle>(new tc::io::FileStream::FileHandle(file_handle));
+
+	// get stat info on file
+	struct stat stat_buf;
+	if (fstat(mFileHandle->handle, &stat_buf) == -1)
+	{
+		throw tc::io::IOException(kClassName+"::open()", "Failed to check stream properties using fstat() (" + std::string(strerror(errno)) + ")");
+	}
+
+	// if this is a directory throw an exception
+	if (S_ISDIR(stat_buf.st_mode))
+	{
+		throw tc::io::IOException(kClassName+"::open()", "Path refers to a directory not a file");
+	}
+
+	// set state flags
+	mCanRead = (open_flag & O_RDONLY|O_RDWR) ? true : false;
+	mCanWrite = (open_flag & O_WRONLY|O_RDWR) ? true : false;
+	mCanSeek = S_ISREG(stat_buf.st_mode) ? true : false;
+}
+
+int64_t tc::io::FileStream::length_impl()
+{
+	int64_t length;
+
+	// use seek method (real disk files)
+	if (mCanSeek == true)
+	{
+		// save current position
+		int64_t cur_pos = seek(0, SeekOrigin::Current);
+
+		// seek to end of file
+		length = seek(0, SeekOrigin::End);
+
+		// restore current position
+		seek(cur_pos, SeekOrigin::Begin);
+	}
+	else
+	{
+		throw tc::NotSupportedException(kClassName, "length() cannot be used with device-files or pipes");
+	}
+	
+	return length;
+}
+
+size_t tc::io::FileStream::read_impl(byte_t* buffer, size_t count)
+{
+	int64_t read_len = ::read(mFileHandle->handle, buffer, count);
+
+	if (read_len == -1)
 	{
 		throw tc::Exception(kClassName, "Failed to read file (" + std::string(strerror(errno)) + ")");
 	}
+
+	// handle error
+	if (read_len == -1)
+	{
+		switch (errno) 
+		{	
+			case (EINVAL):
+				throw tc::ArgumentOutOfRangeException(kClassName+"::read()", std::string(strerror(errno)));			
+			case (EFAULT):
+				throw tc::AccessViolationException(kClassName+"::read()", std::string(strerror(errno)));
+			case (EISDIR):
+				throw tc::io::FileNotFoundException(kClassName+"::read()", std::string(strerror(errno)));
+			case (EBADF):
+			case (EAGAIN):
+			case (EINTR):
+			case (EIO):
+			default:
+				throw tc::io::IOException(kClassName+"::read()", "Failed to read from stream (" + std::string(strerror(errno)) + ")");
+		}
+	}
+
+	return read_len;
+}
+
+void tc::io::FileStream::write_impl(const byte_t* buffer, size_t count)
+{
+	int64_t write_len = ::write(mFileHandle->handle, buffer, count);
+
+	// handle error
+	if (write_len == -1)
+	{
+		switch (errno) 
+		{	
+			case (EINVAL):
+				throw tc::ArgumentOutOfRangeException(kClassName+"::write()", std::string(strerror(errno)));			
+			case (EFBIG):
+				throw tc::OverflowException(kClassName+"::write()", std::string(strerror(errno)));
+			case (EFAULT):
+				throw tc::AccessViolationException(kClassName+"::write()", std::string(strerror(errno)));
+			case (EAGAIN):
+			case (EDESTADDRREQ):
+			case (EDQUOT):
+			case (EINTR):
+			case (EIO):
+			case (ENOSPC):
+			case (EPERM):
+			case (EPIPE):
+			default:
+				throw tc::io::IOException(kClassName+"::write()", "Failed to write to stream (" + std::string(strerror(errno)) + ")");
+		}
+	}
+}
+
+int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
+{
+	int seek_flag = 0;
+	switch(origin)
+	{
+		case (SeekOrigin::Begin):
+			seek_flag = SEEK_SET;
+			break;
+		case (SeekOrigin::Current):
+			seek_flag = SEEK_CUR;
+			break;
+		case (SeekOrigin::End):
+			seek_flag = SEEK_END;
+			break;
+		default:
+			throw tc::ArgumentOutOfRangeException(kClassName+"::seek()", "Unknown SeekOrigin value");
+	}
+
+#ifdef _LARGEFILE64_SOURCE
+	int64_t fpos = lseek64(mFileHandle->handle, offset, seek_flag);
+#else 
+	int64_t fpos = lseek(mFileHandle->handle, offset, seek_flag);
 #endif
+
+	// handle error
+	if (fpos == -1)
+	{
+		switch (errno) 
+		{
+			case (EINVAL):
+				throw tc::ArgumentOutOfRangeException(kClassName+"::seek()",  std::string(strerror(errno)));			
+			case (EOVERFLOW):
+				throw tc::OverflowException(kClassName+"::seek()",  std::string(strerror(errno)));
+			case (EBADF):
+			case (ESPIPE):
+			case (ENXIO):
+			default:
+				throw tc::io::IOException(kClassName+"::seek()", "Failed to set stream position (" + std::string(strerror(errno)) + ")");
+		}
+	}
+
+	return fpos;
 }
 
-void tc::io::FileStream::write(const byte_t* data, size_t len)
+void tc::io::FileStream::setLength_impl(int64_t length)
 {
-	if (mState.test(RESFLAG_READY) == false)
-	{
-		throw tc::Exception(kClassName, "Failed to write file (no file open)");
-	}
-
-#ifdef _WIN32
-	DWORD bytes_written;
-
-	if (WriteFile(mFileHandle->handle, data, (DWORD)len, &bytes_written, NULL) == false)
-	{
-		throw tc::Exception(kClassName, "Failed to write file (" + std::to_string(GetLastError()) + ")");
-	}
-
-	if (bytes_written != len)
-	{
-		throw tc::Exception(kClassName, "Failed to write file (bytes written was not correct length)");
-	}
-#else
-	if (::write(mFileHandle->handle, data, len) == -1)
-	{
-		throw tc::Exception(kClassName, "Failed to write file (" + std::string(strerror(errno)) + ")");
-	}
-#endif
+	throw tc::NotImplementedException(kClassName, "setLength() not implemented");
 }
 
-#ifdef _WIN32
-DWORD tc::io::FileStream::getOpenModeFlag(FileAccessMode mode) const
+void tc::io::FileStream::flush_impl()
 {
-	DWORD flag = 0;
-	switch (mode)
-	{
-		case (FILEACCESS_READ):
-			flag = GENERIC_READ;
-			break;
-		case (FILEACCESS_EDIT):
-			flag = GENERIC_READ | GENERIC_WRITE;
-			break;
-		case (FILEACCESS_CREATE):
-			flag = GENERIC_WRITE;
-			break;
-		default:
-			throw tc::Exception(kClassName, "Unknown open mode");
-	}
-	return flag;
-}
-DWORD tc::io::FileStream::getShareModeFlag(FileAccessMode mode) const
-{
-	DWORD flag = 0;
-	switch (mode)
-	{
-		case (FILEACCESS_READ):
-			flag = FILE_SHARE_READ;
-			break;
-		case (FILEACCESS_EDIT):
-			flag = FILE_SHARE_READ;
-			break;
-		case (FILEACCESS_CREATE):
-			flag = 0;
-			break;
-		default:
-			throw tc::Exception(kClassName, "Unknown open mode");
-	}
-	return flag;
-}
-DWORD tc::io::FileStream::getCreationModeFlag(FileAccessMode mode) const
-{
-	DWORD flag = 0;
-	switch (mode)
-	{
-		case (FILEACCESS_READ):
-			flag = OPEN_EXISTING;
-			break;
-		case (FILEACCESS_EDIT):
-			flag = OPEN_EXISTING;
-			break;
-		case (FILEACCESS_CREATE):
-			flag = CREATE_ALWAYS;
-			break;
-		default:
-			throw tc::Exception(kClassName, "Unknown open mode");
-	}
-	return flag;
-}
-#else
-int tc::io::FileStream::getOpenModeFlag(FileAccessMode mode) const
-{
-	int flag = 0;
-	switch (mode)
-	{
-		case (FILEACCESS_READ):
-			flag = O_RDONLY;
-			break;
-		case (FILEACCESS_EDIT):
-			flag = O_RDWR;
-			break;
-		case (FILEACCESS_CREATE):
-			flag = O_CREAT | O_TRUNC | O_WRONLY;
-			break;
-		default:
-			throw tc::Exception(kClassName, "Unknown open mode");
-	}
-	return flag;
+	// open/read/write are non-buffered
 }
 #endif
