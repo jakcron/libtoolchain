@@ -32,14 +32,14 @@ public:
 	FileStream();
 
 		/** 
-		 * @brief Initialsing constuctor. Calls @ref open
+		 * @brief Initialsing constuctor.
 		 * 
-		 * @see open for usage documentation
+		 * @note Refer to @ref open for usage documentation
 		 */
 	FileStream(const tc::io::Path& path, FileMode mode, FileAccess access);
 
 		/** 
-		 * @brief Open file
+		 * @brief Open file stream
 		 * 
 		 * @param[in] path A relative or absolute path for the file that the current FileStream object will encapsulate.
 		 * @param[in] mode One of the enumeration values that determines how to open or create the file.
@@ -67,7 +67,7 @@ public:
 	virtual int64_t seek(int64_t offset, SeekOrigin origin);
 	virtual void setLength(int64_t length);
 	virtual void flush();
-	
+
 	virtual void dispose();
 private:
 	static const std::string kClassName;
