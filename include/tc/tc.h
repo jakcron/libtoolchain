@@ -19,6 +19,12 @@
 // exceptions
 #include <tc/Exception.h>
 #include <tc/ArgumentException.h>
+#include <tc/ArgumentNullException.h>
+#include <tc/ArgumentOutOfRangeException.h>
+#include <tc/ArithmeticException.h>
+#include <tc/InvalidOperationException.h>
 #include <tc/NotImplementedException.h>
 #include <tc/NotSupportedException.h>
+#include <tc/ObjectDisposedException.h>
+#include <tc/OverflowException.h>
 #include <tc/UnauthorisedAccessException.h>
