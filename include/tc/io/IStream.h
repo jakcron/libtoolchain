@@ -65,7 +65,6 @@ public:
 		 * @pre A stream must support reading for @ref read to work. 
 		 * @note Use @ref canRead to determine if this stream supports reading.
 		 * 
-		 * @throw tc::ArgumentException The sum of @p offset and @p count is greater than the buffer length.
 		 * @throw tc::ArgumentNullException @p buffer is @a nullptr.
 		 * @throw tc::ArgumentOutOfRangeException @p offset or @p count is negative.
 		 * @throw tc::io::IOException An I/O error occurred, such as the specified file cannot be found.
@@ -84,7 +83,6 @@ public:
 		 * @pre A stream must support writing for @ref write to work. 
 		 * @note Use @ref canWrite to determine if this stream supports writing.
 		 * 
-		 * @throw tc::ArgumentException The sum of @p offset and @p count is greater than the buffer length.
 		 * @throw tc::ArgumentNullException @p buffer is @a nullptr.
 		 * @throw tc::ArgumentOutOfRangeException @p offset or @p count is negative.
 		 * @throw tc::io::IOException An I/O error occurred, such as the specified file cannot be found.
