@@ -164,12 +164,7 @@ void tc::io::FileStream::flush()
 		throw tc::io::IOException(kClassName, "Failed to flush stream (stream is closed)");
 	}
 
-#ifdef _WIN32
-	if (mCanWrite)
-		FlushFileBuffers(mFileHandle->handle);
-#else
-	// open/read/write are non-buffered
-#endif
+	flush_impl();
 }
 
 void tc::io::FileStream::dispose()
@@ -261,7 +256,12 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	// check file handle
 	if (file_handle == INVALID_HANDLE_VALUE)
 	{
-		throw tc::Exception(kClassName, "Failed to open file (" + std::to_string(GetLastError()) + ")");
+		DWORD error = GetLastError();
+		switch (error)
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::open()", "Failed to open file stream (" + std::to_string(error) + ")");
+		}
 	}
 
 	// store file handle
@@ -284,7 +284,12 @@ int64_t tc::io::FileStream::length_impl()
 	LARGE_INTEGER win_fsize;
 	if (GetFileSizeEx(mFileHandle->handle, &win_fsize) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to get stream length (" + std::to_string(GetLastError()) + ")");
+		DWORD error = GetLastError();
+		switch (error)
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::length()", "Failed to get stream length (" + std::to_string(error) + ")");
+		}
 	}
 
 	length = win_fsize.QuadPart;
@@ -298,12 +303,17 @@ size_t tc::io::FileStream::read_impl(byte_t* buffer, size_t count)
 
 	if (ReadFile(mFileHandle->handle, buffer, (DWORD)count, &bytes_read, NULL) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to read from stream (" + std::to_string(GetLastError()) + ")");
+		DWORD error = GetLastError();
+		switch (error)
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::read()", "Failed to read from stream (" + std::to_string(error) + ")");
+		}
 	}
 
 	if (bytes_read != count)
 	{
-		throw tc::Exception(kClassName, "Failed to read from stream (bytes read was not correct length)");
+		throw tc::io::IOException(kClassName+"::read()", "Failed to read from stream (bytes read was not correct length)");
 	}
 
 	return bytes_read;
@@ -315,12 +325,17 @@ void tc::io::FileStream::write_impl(const byte_t* buffer, size_t count)
 
 	if (WriteFile(mFileHandle->handle, buffer, (DWORD)count, &bytes_written, NULL) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to write to stream (" + std::to_string(GetLastError()) + ")");
+		DWORD error = GetLastError();
+		switch (error)
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::write()", "Failed to write to stream (" + std::to_string(error) + ")");
+		}
 	}
 
 	if (bytes_written != count)
 	{
-		throw tc::Exception(kClassName, "Failed to write to stream (bytes written was not correct length)");
+		throw tc::io::IOException(kClassName+"::write()", "Failed to write to stream (bytes written was not correct length)");
 	}
 }
 
@@ -351,7 +366,12 @@ int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
 		seek_flag
 	) == false || out.QuadPart != win_pos.QuadPart)
 	{
-		throw tc::Exception(kClassName, "Failed to set file position (" + std::to_string(GetLastError()) + ")");
+		DWORD error = GetLastError();
+		switch (error)
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::seek()", "Failed to set stream position (" + std::to_string(error) + ")");
+		}
 	}
 
 	return out.QuadPart;
