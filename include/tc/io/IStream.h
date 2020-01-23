@@ -58,40 +58,40 @@ public:
 		 * 
 		 * @param[out] buffer An array of bytes. When this method returns, the buffer contains the specified byte array with the values between offset and (offset + length - 1) replaced by the bytes read from the current source.
 		 * @param[in] offset The zero-based byte offset in buffer at which to begin storing the data read from the current stream.
-		 * @param[in] length The maximum number of bytes to be read from the current stream.
+		 * @param[in] count The maximum number of bytes to be read from the current stream.
 		 * 
 		 * @return The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
 		 * 
 		 * @pre A stream must support reading for @ref read to work. 
 		 * @note Use @ref canRead to determine if this stream supports reading.
 		 * 
-		 * @throw tc::ArgumentException The sum of @p offset and @p length is greater than the buffer length.
+		 * @throw tc::ArgumentException The sum of @p offset and @p count is greater than the buffer length.
 		 * @throw tc::ArgumentNullException @p buffer is @a nullptr.
-		 * @throw tc::ArgumentOutOfRangeException @p offset or @p length is negative.
+		 * @throw tc::ArgumentOutOfRangeException @p offset or @p count is negative.
 		 * @throw tc::io::IOException An I/O error occurred, such as the specified file cannot be found.
 		 * @throw tc::NotSupportedException The stream does not support reading.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual size_t read(byte_t* buffer, size_t offset, size_t length) = 0;
+	virtual size_t read(byte_t* buffer, size_t offset, size_t count) = 0;
 	
 		/**
 		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
 		 * 
 		 * @param[in] buffer An array of bytes. This method copies count bytes from buffer to the current stream.
 		 * @param[in] offset The zero-based byte offset in buffer at which to begin copying bytes to the current stream.
-		 * @param[in] length The number of bytes to be written to the current stream.
+		 * @param[in] count The number of bytes to be written to the current stream.
 		 * 
 		 * @pre A stream must support writing for @ref write to work. 
 		 * @note Use @ref canWrite to determine if this stream supports writing.
 		 * 
-		 * @throw tc::ArgumentException The sum of @p offset and @p length is greater than the buffer length.
+		 * @throw tc::ArgumentException The sum of @p offset and @p count is greater than the buffer length.
 		 * @throw tc::ArgumentNullException @p buffer is @a nullptr.
-		 * @throw tc::ArgumentOutOfRangeException @p offset or @p length is negative.
+		 * @throw tc::ArgumentOutOfRangeException @p offset or @p count is negative.
 		 * @throw tc::io::IOException An I/O error occurred, such as the specified file cannot be found.
 		 * @throw tc::NotSupportedException The stream does not support writing.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual void write(const byte_t* buffer, size_t offset, size_t length) = 0;
+	virtual void write(const byte_t* buffer, size_t offset, size_t count) = 0;
 	
 		/**
 		 * @brief Sets the position within the current stream.
