@@ -4,6 +4,7 @@
 // exceptions
 #include <tc/Exception.h>
 #include <tc/AccessViolationException.h>
+#include <tc/ArgumentNullException.h
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/NotSupportedException.h>
 #include <tc/NotImplementedException.h>
@@ -76,7 +77,7 @@ int64_t tc::io::FileStream::length()
 {
 	if (mFileHandle.get() == nullptr)
 	{
-		throw tc::io::IOException(kClassName, "Failed to get file size (stream is closed)");
+		throw tc::ObjectDisposedException(kClassName+"::length()", "Failed to get stream length (stream is disposed)");
 	}
 
 	return length_impl();
@@ -86,12 +87,12 @@ int64_t tc::io::FileStream::position()
 {
 	if (mFileHandle.get() == nullptr)
 	{
-		throw tc::io::IOException(kClassName, "Failed to get file position (stream is closed)");
+		throw tc::ObjectDisposedException(kClassName+"::position()", "Failed to get file position (stream is disposed)");
 	}
 
 	if (mCanSeek == false)
 	{
-		throw tc::NotSupportedException(kClassName, "position() is not supported for streams that do not support seeking");
+		throw tc::NotSupportedException(kClassName+"::position()", "This method is not supported for streams that do not support seeking");
 	}
 
 	return seek(0, SeekOrigin::Current);
@@ -101,12 +102,22 @@ size_t tc::io::FileStream::read(byte_t* buffer, size_t count)
 {
 	if (mFileHandle.get() == nullptr)
 	{
-		throw tc::io::IOException(kClassName, "Failed to read file (stream is closed)");
+		throw tc::ObjectDisposedException(kClassName+"::read()", "Failed to read file (stream is disposed)");
 	}
 
 	if (mCanRead == false)
 	{
-		throw tc::UnauthorisedAccessException(kClassName, "FileStream::read() called, however stream does not support reading");
+		throw tc::UnauthorisedAccessException(kClassName+"::read()", "Stream does not support reading");
+	}
+
+	if (buffer == nullptr)
+	{
+		throw tc::ArgumentNullException(kClassName+"::read()", "buffer was null");
+	}
+
+	if (count < 0)
+	{
+		throw tc::ArgumentOutOfRangeException(kClassName+"::read()", "count was negative");
 	}
 
 	return read_impl(buffer, count);
@@ -116,12 +127,22 @@ void tc::io::FileStream::write(const byte_t* buffer, size_t count)
 {
 	if (mFileHandle.get() == nullptr)
 	{
-		throw tc::io::IOException(kClassName, "Failed to write file (no file open)");
+		throw tc::ObjectDisposedException(kClassName+"::write()", "Failed to write file (no file open)");
 	}
 
 	if (mCanWrite == false)
 	{
-		throw tc::NotSupportedException(kClassName, "FileStream::write() called, however stream does not support writing");
+		throw tc::NotSupportedException(kClassName+"::write()", "Stream does not support writing");
+	}
+
+	if (buffer == nullptr)
+	{
+		throw tc::ArgumentNullException(kClassName+"::write()", "buffer was null");
+	}
+
+	if (count < 0)
+	{
+		throw tc::ArgumentOutOfRangeException(kClassName+"::write()", "count was negative");
 	}
 
 	write_impl(buffer, count);
@@ -131,12 +152,12 @@ int64_t tc::io::FileStream::seek(int64_t offset, SeekOrigin origin)
 {
 	if (mFileHandle.get() == nullptr)
 	{
-		throw tc::io::IOException(kClassName, "Failed to set stream position (stream is closed)");
+		throw tc::ObjectDisposedException(kClassName+"::seek()", "Failed to set stream position (stream is disposed)");
 	}
 
 	if (mCanSeek == false)
 	{
-		throw tc::NotSupportedException(kClassName, "FileStream::seek() called, however stream does not support seeking");
+		throw tc::NotSupportedException(kClassName+"::seek()", "Stream does not support seeking");
 	}
 
 	return seek_impl(offset, origin);
@@ -146,12 +167,12 @@ void tc::io::FileStream::setLength(int64_t length)
 {
 	if (mFileHandle.get() == nullptr)
 	{
-		throw tc::ObjectDisposedException(kClassName, "Failed to set stream length (stream is disposed)");
+		throw tc::ObjectDisposedException(kClassName+"::setLength()", "Failed to set stream length (stream is disposed)");
 	}
 
 	if (mCanWrite == false || mCanSeek == false)
 	{
-		throw tc::NotSupportedException(kClassName, "FileStream::setLength() called, however stream does not support both writing and seeking");
+		throw tc::NotSupportedException(kClassName+"::setLength()", "Stream does not support both writing and seeking");
 	}
 
 	setLength_impl(length);
@@ -161,7 +182,7 @@ void tc::io::FileStream::flush()
 {
 	if (mFileHandle.get() == nullptr)
 	{
-		throw tc::io::IOException(kClassName, "Failed to flush stream (stream is closed)");
+		throw tc::ObjectDisposedException(kClassName+"::flush()", "Failed to flush stream (stream is disposed)");
 	}
 
 	flush_impl();
