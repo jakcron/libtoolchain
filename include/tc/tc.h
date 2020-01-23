@@ -18,6 +18,7 @@
 
 // exceptions
 #include <tc/Exception.h>
+#include <tc/AccessViolationException.h>
 #include <tc/ArgumentException.h>
 #include <tc/ArgumentNullException.h>
 #include <tc/ArgumentOutOfRangeException.h>
