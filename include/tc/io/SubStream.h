@@ -24,61 +24,61 @@ public:
 
 		/** 
 		 * @brief Wrap (by copy) constuctor
-		 * @param[in] file IStream object to be partitioned
-		 * @param[in] file_base_offset Offset in the base file that serves as offset 0 in the partition
-		 * @param[in] virtual_size Artificial size of the partition
 		 * 
-		 * @pre The carve out presented by the partititon should exist in the base file.
+		 * @note Refer to @ref initialise (by copy) for usage documentation
 		 */
-	SubStream(const std::shared_ptr<tc::io::IStream>& file, uint64_t file_base_offset, uint64_t virtual_size);
+	SubStream(const std::shared_ptr<tc::io::IStream>& stream, int64_t offset, int64_t length);
 
 		/** 
 		 * @brief Wrap (by move) constuctor
-		 * @param[in] file IStream object to be partitioned
-		 * @param[in] file_base_offset Offset in the base file that serves as offset 0 in the partition
-		 * @param[in] virtual_size Artificial size of the partition
 		 * 
-		 * @pre The carve out presented by the partititon should exist in the base file.
+		 * @note Refer to @ref initialise (by move) for usage documentation
 		 */
-	SubStream(std::shared_ptr<tc::io::IStream>&& file, uint64_t file_base_offset, uint64_t virtual_size);
-
-	virtual tc::ResourceStatus state();
+	SubStream(std::shared_ptr<tc::io::IStream>&& stream, int64_t offset, int64_t length);
 
 		/** 
 		 * @brief Wrap (by copy) initialiser
-		 * @param[in] file IStream object to be partitioned
-		 * @param[in] file_base_offset Offset in the base file that serves as offset 0 in the partition
-		 * @param[in] virtual_size Artificial size of the partition
+		 * @param[in] stream The base IStream object which this sub stream will derive from.
+		 * @param[in] offset The zero-based byte offset in stream at which to begin the sub stream.
+		 * @param[in] length Length of the sub stream.
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	void initialise(const std::shared_ptr<tc::io::IStream>& file, uint64_t file_base_offset, uint64_t virtual_size);
+	void initialise(const std::shared_ptr<tc::io::IStream>& stream, int64_t offset, int64_t length);
 
 		/** 
 		 * @brief Wrap (by move) initialiser
-		 * @param[in] file IStream object to be partitioned
-		 * @param[in] file_base_offset Offset in the base file that serves as offset 0 in the partition
-		 * @param[in] virtual_size Artificial size of the partition
+		 * @param[in] stream The base IStream object which this sub stream will derive from.
+		 * @param[in] offset The zero-based byte offset in stream at which to begin the sub stream.
+		 * @param[in] length Length of the sub stream.
 		 * 
 		 * @pre The carve out presented by the partititon should exist in the base file.
 		 */
-	void initialise(std::shared_ptr<tc::io::IStream>&& file, uint64_t file_base_offset, uint64_t virtual_size);
+	void initialise(std::shared_ptr<tc::io::IStream>&& stream, int64_t offset, int64_t length);
 
-	virtual void close();
-	virtual uint64_t size();
-	virtual void seek(uint64_t offset);
-	virtual uint64_t pos();
-	virtual void read(byte_t* data, size_t len);
-	virtual void write(const byte_t* data, size_t len);
+	virtual bool canRead() const;
+	virtual bool canWrite() const;
+	virtual bool canSeek() const;
+	virtual int64_t length();
+	virtual int64_t position();
 
+	virtual size_t read(byte_t* buffer, size_t count);
+	virtual void write(const byte_t* buffer, size_t count);
+	virtual int64_t seek(int64_t offset, SeekOrigin origin);
+	virtual void setLength(int64_t length);
+	virtual void flush();
+	
+	virtual void dispose();
 private:
 	static const std::string kClassName;
 
-	std::shared_ptr<tc::io::IStream> mFile;
-	uint64_t mFileBaseOffset;
-	uint64_t mVirtualSize;
+	std::shared_ptr<tc::io::IStream> mBaseStream;
+	int64_t mBaseStreamOffset;
 
-	uint64_t mVirtualOffset;
+	int64_t mSubStreamLength;
+	int64_t mSubStreamPosition;
+
+	void validateInitArgsAgainstBaseStream(int64_t offset, int64_t length);
 };
 
 }} // namespace tc::io
