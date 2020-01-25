@@ -475,7 +475,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	}
 
 	// validate use of write dependent flags
-	if ((open_flag & (O_APPEND | O_TRUNC | O_CREAT)) && !(open_flag & O_WRONLY|O_RDWR)) {
+	if ((open_flag & (O_APPEND | O_TRUNC | O_CREAT)) && !(open_flag & (O_WRONLY|O_RDWR))) {
 		throw tc::ArgumentException(kClassName+"open()", "Stream open mode requires write access, but write access was not allowed");
 	}
 
@@ -537,8 +537,8 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	}
 
 	// set state flags
-	mCanRead = (open_flag & O_RDONLY|O_RDWR) ? true : false;
-	mCanWrite = (open_flag & O_WRONLY|O_RDWR) ? true : false;
+	mCanRead = (open_flag & (O_RDONLY|O_RDWR)) ? true : false;
+	mCanWrite = (open_flag & (O_WRONLY|O_RDWR)) ? true : false;
 	mCanSeek = S_ISREG(stat_buf.st_mode) ? true : false;
 }
 
