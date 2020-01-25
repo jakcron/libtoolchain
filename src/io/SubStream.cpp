@@ -1,4 +1,5 @@
 #include <tc/io/SubStream.h>
+#include <algorithm>
 
 #include <tc/Exception.h>
 #include <tc/ArgumentNullException.h>
@@ -116,7 +117,7 @@ size_t tc::io::SubStream::read(byte_t* buffer, size_t count)
 	size_t read_len = mBaseStream->read(buffer, count);
 
 	// update sub stream position
-	seek(mSubStreamPosition + count, SeekOrigin::Begin);
+	seek(count, SeekOrigin::Current);
 
 	return read_len;
 }
@@ -141,7 +142,7 @@ void tc::io::SubStream::write(const byte_t* buffer, size_t count)
 	mBaseStream->write(buffer, count);
 
 	// update sub stream position
-	seek(mSubStreamPosition + count, SeekOrigin::Begin);
+	seek(count, SeekOrigin::Current);
 }
 
 int64_t tc::io::SubStream::seek(int64_t offset, SeekOrigin origin)
@@ -151,9 +152,27 @@ int64_t tc::io::SubStream::seek(int64_t offset, SeekOrigin origin)
 		throw tc::ObjectDisposedException(kClassName+"::seek()", "Failed to set stream position (stream is disposed)");
 	}
 
-#define _MIN(x,y) (x < y? x : y)
-	mSubStreamPosition = _MIN(offset, mSubStreamLength);
-#undef _MIN
+	switch (origin)
+	{
+		case (SeekOrigin::Begin):
+			mSubStreamPosition = std::min<int64_t>(offset, mSubStreamLength);
+			break;
+		case (SeekOrigin::Current):
+			mSubStreamPosition = std::min<int64_t>(offset+mSubStreamPosition, mSubStreamLength);
+			break;
+		case (SeekOrigin::End):
+			mSubStreamPosition = std::min<int64_t>(offset+mSubStreamLength, mSubStreamLength);
+			break;
+		default:
+			throw tc::ArgumentOutOfRangeException(kClassName+"seek()", "Undefined SeekOrigin value");
+	}
+
+	if (mSubStreamPosition < 0)
+	{
+		throw tc::InvalidOperationException(kClassName+"::seek()", "Negative seek result determined");
+	}
+
+	return mSubStreamPosition;
 }
 
 void tc::io::SubStream::setLength(int64_t length)
