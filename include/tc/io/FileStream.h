@@ -43,7 +43,7 @@ public:
 		 * 
 		 * @param[in] path A relative or absolute path for the file that the current FileStream object will encapsulate.
 		 * @param[in] mode One of the enumeration values that determines how to open or create the file.
-		 * @param[in] access A bitwise combination of the enumeration values that determines how the file can be accessed by the FileStream object. This also determines the values returned by the @ref canRead and @ref canWrite methods of the FileStream object. @ref canSeek is true if path specifies a disk file.
+		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the FileStream object. This also determines the values returned by the @ref canRead and @ref canWrite methods of the FileStream object. @ref canSeek is true if path specifies a disk file.
 		 *
 		 * @throw tc::ArgumentException @p path contains invalid characters or is empty.
 		 * @throw tc::NotSupportedException @p path refers to an unsupported non-file device.
