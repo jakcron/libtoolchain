@@ -4,7 +4,7 @@
 // exceptions
 #include <tc/Exception.h>
 #include <tc/AccessViolationException.h>
-#include <tc/ArgumentNullException.h
+#include <tc/ArgumentNullException.h>
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/NotSupportedException.h>
 #include <tc/NotImplementedException.h>
@@ -102,7 +102,7 @@ size_t tc::io::FileStream::read(byte_t* buffer, size_t count)
 {
 	if (mFileHandle.get() == nullptr)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::read()", "Failed to read file (stream is disposed)");
+		throw tc::ObjectDisposedException(kClassName+"::read()", "Failed to read from stream (stream is disposed)");
 	}
 
 	if (mCanRead == false)
@@ -127,7 +127,7 @@ void tc::io::FileStream::write(const byte_t* buffer, size_t count)
 {
 	if (mFileHandle.get() == nullptr)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::write()", "Failed to write file (no file open)");
+		throw tc::ObjectDisposedException(kClassName+"::write()", "Failed to write to stream (no file open)");
 	}
 
 	if (mCanWrite == false)
