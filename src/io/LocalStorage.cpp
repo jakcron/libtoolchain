@@ -43,41 +43,7 @@ void tc::io::LocalStorage::dispose()
 
 void tc::io::LocalStorage::createFile(const tc::io::Path& path)
 {
-#ifdef _WIN32
-	// convert Path to unicode string
-	std::u16string unicode_path;
-	pathToWindowsUTF16(path, unicode_path);
-
-	// open file
-	HANDLE file_handle = CreateFileW((LPCWSTR)unicode_path.c_str(),
-							  GENERIC_WRITE,
-							  0,
-							  0,
-							  CREATE_ALWAYS,
-							  FILE_ATTRIBUTE_NORMAL,
-							  NULL);
-		
-	// check file handle
-	if (file_handle == INVALID_HANDLE_VALUE)
-	{
-		throw tc::Exception(kClassName, "Failed to create file (" + std::to_string(GetLastError()) + ")");
-	}
-
-	CloseHandle(file_handle);
-#else
-	// convert Path to unicode string
-	std::string unicode_path;
-	pathToUnixUTF8(path, unicode_path);
-
-	int file_handle = open(unicode_path.c_str(), O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-
-	if (file_handle == -1)
-	{
-		throw tc::Exception(kClassName, "Failed to create file (" + std::string(strerror(errno)) + ")");
-	}
-
-	close(file_handle);
-#endif
+	tc::io::FileStream file(path, FileMode::Create, FileAccess::Write);
 }
 
 void tc::io::LocalStorage::removeFile(const tc::io::Path& path)
