@@ -240,12 +240,14 @@ void tc::io::SubStream::validateInitArgsAgainstBaseStream(int64_t offset, int64_
 	int64_t base_length = mBaseStream->length();
 
 	// validate arguments against stream length
-	if (base_length > length)
+	// substream length should not be greater than the base stream length
+	if (length > base_length)
 	{
-		throw tc::ArgumentOutOfRangeException(kClassName+"initialise()", "");
+		throw tc::ArgumentOutOfRangeException(kClassName+"initialise()", "SubStream length is greater than base stream length");
 	}
-	if ((base_length - length) < offset)
+	// Base length - length is the maximum possible offset for the substream
+	if (offset > (base_length - length))
 	{
-		throw tc::ArgumentOutOfRangeException(kClassName+"initialise()", "");
+		throw tc::ArgumentOutOfRangeException(kClassName+"initialise()", "SubStream offset is greater than the maximum possible offset given the base stream size and SubStream size");
 	}
 }
