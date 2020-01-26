@@ -89,11 +89,11 @@ public:
 		 * @param[in] path A relative or absolute path for the file that the current IStorage object will a IStream for.
 		 * @param[in] mode One of the enumeration values that determines how to open or create the file.
 		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the FileStream object. This also determines the values returned by the @ref canRead and @ref canWrite methods of the FileStream object. @ref canSeek is true if path specifies a disk file.
-		 * @param[out] file Pointer to IStream object to be instantiated
+		 * @param[out] stream Pointer to IStream object to be instantiated
 		 *	
 		 * @throws tc::Exception If the file cannot be opened (invalid path, or access rights)
 		 */
-	virtual void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& file) = 0;
+	virtual void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream) = 0;
 	
 		/** 
 		 * @brief Create a new directory
