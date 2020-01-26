@@ -36,8 +36,6 @@ void io_SubStream_TestClass::testSize()
 			// get substream file
 			tc::io::SubStream substream(std::shared_ptr<DummyStream>(new DummyStream()), substream_offset, substream_length);
 
-			std::cout << "Expected length: " << substream_length << ", got: " << substream.length() << std::endl;
-
 			if (substream.length() != substream_length)
 			{
 				throw tc::Exception("Unexpected substream length");
