@@ -2,6 +2,7 @@
 #include "ITestClass.h"
 
 #include <tc/io.h>
+#include <tc/NotImplementedException.h>
 
 class io_SubStorage_TestClass : public ITestClass
 {
@@ -36,27 +37,27 @@ private:
 
 		virtual void createFile(const tc::io::Path& path)
 		{
-			throw tc::Exception(kClassName, "createFile() not implemented");
+			throw tc::NotImplementedException(kClassName, "createFile() not implemented");
 		}
 
 		virtual void removeFile(const tc::io::Path& path)
 		{
-			throw tc::Exception(kClassName, "removeFile() not implemented");
+			throw tc::NotImplementedException(kClassName, "removeFile() not implemented");
 		}
 
-		virtual void openFile(const tc::io::Path& path, tc::io::FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file)
+		virtual void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream)
 		{
-			throw tc::Exception(kClassName, "openFile() not implemented");
+			throw tc::NotImplementedException(kClassName, "openFile() not implemented");
 		}
 
 		virtual void createDirectory(const tc::io::Path& path)
 		{
-			throw tc::Exception(kClassName, "createDirectory() not implemented");
+			throw tc::NotImplementedException(kClassName, "createDirectory() not implemented");
 		}
 
 		virtual void removeDirectory(const tc::io::Path& path)
 		{
-			throw tc::Exception(kClassName, "removeDirectory() not implemented");
+			throw tc::NotImplementedException(kClassName, "removeDirectory() not implemented");
 		}
 
 		virtual void getWorkingDirectory(tc::io::Path& path)

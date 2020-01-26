@@ -135,11 +135,11 @@ void io_SubStorage_TestClass::testOpenFile()
 			{
 			}
 
-			void openFile(const tc::io::Path& path, tc::io::FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file)
+			void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream)
 			{
 				tc::io::Path cur_dir;
 				getWorkingDirectory(cur_dir);
-				if (mode != tc::io::FILEACCESS_READ)
+				if (mode != tc::io::FileMode::Open || access != tc::io::FileAccess::Read)
 				{
 					throw tc::Exception("DummyFileSystem", "file had incorrect access permissions");
 				}
@@ -164,7 +164,7 @@ void io_SubStorage_TestClass::testOpenFile()
 
 			// attempt to open file
 			std::shared_ptr<tc::io::IStream> file;
-			sb_fs.openFile(tc::io::Path("/a_dir/testfile"), tc::io::FILEACCESS_READ, file);
+			sb_fs.openFile(tc::io::Path("/a_dir/testfile"), tc::io::FileMode::Open, tc::io::FileAccess::Read, file);
 			
 			std::cout << "PASS" << std::endl;
 		}
@@ -501,11 +501,11 @@ void io_SubStorage_TestClass::testOpenFileOutsideSandbox()
 			{
 			}
 
-			void openFile(const tc::io::Path& path, tc::io::FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file)
+			void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream)
 			{
 				tc::io::Path mCurDir;
 				getWorkingDirectory(mCurDir);
-				if (mode != tc::io::FILEACCESS_READ)
+				if (mode != tc::io::FileMode::Open || access != tc::io::FileAccess::Read)
 				{
 					throw tc::Exception("DummyFileSystem", "file had incorrect access mode");
 				}
@@ -537,7 +537,7 @@ void io_SubStorage_TestClass::testOpenFileOutsideSandbox()
 			// try to open the file just outside the sandbox
 			sb_fs.setWorkingDirectory(tc::io::Path("/"));
 			std::shared_ptr<tc::io::IStream> inaccessible_file;
-			sb_fs.openFile(tc::io::Path("../inaccessible_file0"), tc::io::FILEACCESS_READ, inaccessible_file);
+			sb_fs.openFile(tc::io::Path("../inaccessible_file0"), tc::io::FileMode::Open, tc::io::FileAccess::Read, inaccessible_file);
 
 			std::cout << "PASS" << std::endl;
 		}

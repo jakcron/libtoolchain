@@ -108,7 +108,7 @@ void tc::io::SubStorage::removeFile(const tc::io::Path& path)
 	mFileSystem->removeFile(real_path);
 }
 
-void tc::io::SubStorage::openFile(const tc::io::Path& path, FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file)
+void tc::io::SubStorage::openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream)
 {
 	if (mFileSystem.get() == nullptr)
 	{
@@ -120,7 +120,7 @@ void tc::io::SubStorage::openFile(const tc::io::Path& path, FileAccessMode mode,
 	sandboxPathToRealPath(path, real_path);
 
 	// open file
-	return mFileSystem->openFile(real_path, mode, file);
+	return mFileSystem->openFile(real_path, mode, access, stream);
 }
 
 void tc::io::SubStorage::createDirectory(const tc::io::Path& path)
