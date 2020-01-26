@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2019/01/15
-	 */
+	 **/
 #pragma once
 #include <exception>
 #include <string>
@@ -14,7 +14,7 @@ namespace tc {
 	/**
 	 * @class Exception
 	 * @brief An extension of std::exception that allows optionally specifying a module name
-	 */
+	 **/
 class Exception : public std::exception
 {
 public:
@@ -32,7 +32,7 @@ public:
 		 * - what() == what
 		 * - module() == ""
 		 * - error() == what
-		 */
+		 **/
 	Exception(const std::string& what) noexcept;
 
 		/**
@@ -45,7 +45,7 @@ public:
 		 * - what() == "[" + module + " ERROR] " + what
 		 * - module() == module
 		 * - error() == what
-		 */
+		 **/
 	Exception(const std::string& module, const std::string& what) noexcept;
 
 		/// Get explanation for exception (inherited from std::exception)
@@ -60,7 +60,7 @@ public:
 		 * Omits the module tag from the description
 		 * 
 		 * @returns exception description
-		 */
+		 **/
 	const char* error() const noexcept;
 private:
 	std::string what_;

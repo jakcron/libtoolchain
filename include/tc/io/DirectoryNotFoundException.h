@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/01/22
-	 */
+	 **/
 #pragma once
 #include <tc/io/IOException.h>
 
@@ -13,7 +13,7 @@ namespace tc { namespace io {
 	/**
 	 * @class DirectoryNotFoundException
 	 * @brief An extension of IOException indicating that a directory was not found
-	 */
+	 **/
 class DirectoryNotFoundException : public tc::io::IOException
 {
 public:
@@ -32,7 +32,7 @@ public:
 		 * - what() == what
 		 * - module() == ""
 		 * - error() == what
-		 */
+		 **/
 	DirectoryNotFoundException(const std::string& what) noexcept :
 		tc::io::IOException(what)
 	{}
@@ -47,7 +47,7 @@ public:
 		 * - what() == "[" + module + " ERROR] " + what
 		 * - module() == module
 		 * - error() == what
-		 */
+		 **/
 	DirectoryNotFoundException(const std::string& module, const std::string& what) noexcept :
 		tc::io::IOException(module, what)
 	{

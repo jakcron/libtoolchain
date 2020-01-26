@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version 0.3
 	 * @date 2019/06/19
-	 */
+	 **/
 #pragma once
 #include <tc/io/IStream.h>
 
@@ -19,13 +19,13 @@ namespace tc { namespace io {
 	/**
 	 * @class SubStream
 	 * @brief A wrapper around an existing IStream object that exposes a subset of the base the IStream object.
-	 */
+	 **/
 class SubStream : public IStream
 {
 public:
 		/**
 		 * @brief Default constructor
-		 */
+		 **/
 	SubStream();
 
 		/** 
@@ -41,7 +41,7 @@ public:
 		 * @throw tc::ArgumentNullException @p stream is a @p nullptr.
 		 * @throw tc::NotSupportedException The base stream does not support seeking.
 		 * @throw tc::ArgumentOutOfRangeException @p offset or @p length is negative or otherwise invalid given the length of the base stream.
-		 */
+		 **/
 	SubStream(const std::shared_ptr<tc::io::IStream>& stream, int64_t offset, int64_t length);
 
 		/** 
@@ -57,7 +57,7 @@ public:
 		 * @throw tc::ArgumentNullException @p stream is a @p nullptr.
 		 * @throw tc::NotSupportedException The base stream does not support seeking.
 		 * @throw tc::ArgumentOutOfRangeException @p offset or @p length is negative or otherwise invalid given the length of the base stream.
-		 */
+		 **/
 	SubStream(std::shared_ptr<tc::io::IStream>&& stream, int64_t offset, int64_t length);
 
 		/** 
@@ -73,7 +73,7 @@ public:
 		 * @throw tc::ArgumentNullException @p stream is a @p nullptr.
 		 * @throw tc::NotSupportedException The base stream does not support seeking.
 		 * @throw tc::ArgumentOutOfRangeException @p offset or @p length is negative or otherwise invalid given the length of the base stream.
-		 */
+		 **/
 	void initialise(const std::shared_ptr<tc::io::IStream>& stream, int64_t offset, int64_t length);
 
 		/** 
@@ -88,7 +88,7 @@ public:
 		 * @throw tc::ArgumentNullException @p stream is a @p nullptr.
 		 * @throw tc::NotSupportedException The base stream does not support seeking.
 		 * @throw tc::ArgumentOutOfRangeException @p offset or @p length is negative or otherwise invalid given the length of the base stream.
-		 */
+		 **/
 	void initialise(std::shared_ptr<tc::io::IStream>&& stream, int64_t offset, int64_t length);
 
 	virtual bool canRead() const;
@@ -108,7 +108,7 @@ public:
 		 * @return This is returns the result of seek(0, SeekOrigin::Current);
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
-		 */
+		 **/
 	virtual int64_t position();
 
 		/**

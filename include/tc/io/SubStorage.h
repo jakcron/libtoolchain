@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version 0.3
 	 * @date 2019/06/18
-	 */
+	 **/
 #pragma once
 #include <tc/io/IStorage.h>
 
@@ -18,28 +18,28 @@ namespace tc { namespace io {
 	/**
 	 * @class SubStorage
 	 * @brief A wrapper around an existing IStorage object that exposes a subset of the base IStorage directory tree.
-	 */
+	 **/
 class SubStorage : public IStorage
 {
 public:
 
 		/**
 		 * @brief Default constructor
-		 */
+		 **/
 	SubStorage();
 
 		/** 
 		 * @brief Wrap (by copy) constuctor
 		 * 
 		 * @note Refer to @ref initialise (by copy) for usage documentation
-		 */
+		 **/
 	SubStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& base_path);
 
 		/** 
 		 * @brief Wrap (by move) constuctor
 		 * 
 		 * @note Refer to @ref initialise (by move) for usage documentation
-		 */
+		 **/
 	SubStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& base_path);
 
 		/** 
@@ -50,7 +50,7 @@ public:
 		 * 
 		 * @throw tc::ArgumentNullException @p storage is @a nullptr.
 		 * @throw tc::InvalidOperationException @p storage was not in a ready state
-		 */
+		 **/
 	void initialise(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& base_path);
 
 		/** 
@@ -61,7 +61,7 @@ public:
 		 * 
 		 * @throw tc::ArgumentNullException @p storage is @a nullptr.
 		 * @throw tc::InvalidOperationException @p storage was not in a ready state
-		 */
+		 **/
 	void initialise(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& base_path);
 
 	virtual tc::ResourceStatus state();

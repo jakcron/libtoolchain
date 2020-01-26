@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/01/22
-	 */
+	 **/
 #pragma once
 #include <tc/ArgumentException.h>
 
@@ -13,7 +13,7 @@ namespace tc {
 	/**
 	 * @class ArgumentOutOfRangeException
 	 * @brief The exception that is thrown when the value of an argument is outside the allowable range of values as defined by the invoked method.
-	 */
+	 **/
 class ArgumentOutOfRangeException : public tc::ArgumentException
 {
 public:
@@ -32,7 +32,7 @@ public:
 		 * - what() == what
 		 * - module() == ""
 		 * - error() == what
-		 */
+		 **/
 	ArgumentOutOfRangeException(const std::string& what) noexcept :
 		tc::ArgumentException(what)
 	{}
@@ -47,7 +47,7 @@ public:
 		 * - what() == "[" + module + " ERROR] " + what
 		 * - module() == module
 		 * - error() == what
-		 */
+		 **/
 	ArgumentOutOfRangeException(const std::string& module, const std::string& what) noexcept :
 		tc::ArgumentException(module, what)
 	{

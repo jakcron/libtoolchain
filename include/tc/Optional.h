@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2019/01/06
-	 */
+	 **/
 #pragma once
 #include <tc/types.h>
 
@@ -13,7 +13,7 @@ namespace tc {
 	/**
 	 * @class Optional
 	 * @brief A wrapper class, where the existence of the wrapped value is optional.
-	 */
+	 **/
 template <class T>
 class Optional
 {
@@ -22,7 +22,7 @@ public:
 		 * @brief Default constructor
 		 *
 		 * This Optional shall be null initially.
-		 */
+		 **/
 	Optional();
 
 		/**
@@ -30,7 +30,7 @@ public:
 		 * @param value const T& Reference to value to wrap
 		 * 
 		 * This Optional shall be not null initially.
-		 */
+		 **/
 	Optional(const T& value);
 
 		/**
@@ -38,7 +38,7 @@ public:
 		 * @param other const Optional<T>& Reference to Optional object to copy
 		 * 
 		 * This Optional shall be not null initially.
-		 */
+		 **/
 	Optional(const Optional<T>& other);
 
 		/// Operator to wrap a value
@@ -50,13 +50,13 @@ public:
 		/**
 		 * @brief Access the wrapped value
 		 * @return T& reference to value
-		 */
+		 **/
 	T& get() const;
 
 		/**
 		 * @brief Determine if the Optional value exists
 		 * @return bool true if the value exists
-		 */
+		 **/
 	bool isNull() const;
 
 		/**
@@ -64,7 +64,7 @@ public:
 		 * 
 		 * This will destroy the wrapped value and make this Optional null.
 		 * If this Optional is already null, this does nothing.
-		 */
+		 **/
 	void makeNull();
 private:
 	std::shared_ptr<T> mValue;

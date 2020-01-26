@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version	0.4
 	 * @date 2020/01/22
-	 */
+	 **/
 #pragma once
 #include <tc/types.h>
 #include <tc/io/SeekOrigin.h>
@@ -19,13 +19,13 @@ namespace tc { namespace io {
 	 * 
 	 * Usage of size_t with offsets and lengths reflect run-time memory allocation limits
 	 * Usage of int64_t with offsets and lengths reflect more closely the natural size limits of a stream
-	 */
+	 **/
 class IStream
 {
 public:
 		/**
 		 * @brief Destructor
-		 */
+		 **/
 	virtual ~IStream() = default;
 
 		/**
@@ -50,7 +50,7 @@ public:
 
 		/** 
 		 * @brief Gets the position within the current stream.
-		 */
+		 **/
 	virtual int64_t position() = 0;
 
 		/**

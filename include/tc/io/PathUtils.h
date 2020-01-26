@@ -17,7 +17,7 @@ namespace tc { namespace io {
 	 * @param[in] path Source Path
 	 * @param[out] out Destination UTF-16 string
 	 * @note See @ref tc::io::Path
-	 */
+	 **/
 void pathToWindowsUTF16(const tc::io::Path& path, std::u16string& out);
 
 	/**
@@ -25,7 +25,7 @@ void pathToWindowsUTF16(const tc::io::Path& path, std::u16string& out);
 	 * @param[in] path Source Path
 	 * @param[out] out Destination UTF-8 string
 	 * @note See @ref tc::io::Path
-	 */
+	 **/
 void pathToUnixUTF8(const tc::io::Path& path, std::string& out);
 
 }} // namespace tc::io

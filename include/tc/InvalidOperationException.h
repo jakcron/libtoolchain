@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/01/22
-	 */
+	 **/
 #pragma once
 #include <tc/Exception.h>
 
@@ -13,7 +13,7 @@ namespace tc {
 	/**
 	 * @class InvalidOperationException
 	 * @brief The exception that is thrown when a method call is invalid for the object's current state.
-	 */
+	 **/
 class InvalidOperationException : public tc::Exception
 {
 public:
@@ -32,7 +32,7 @@ public:
 		 * - what() == what
 		 * - module() == ""
 		 * - error() == what
-		 */
+		 **/
 	InvalidOperationException(const std::string& what) noexcept :
 		tc::Exception(what)
 	{}
@@ -47,7 +47,7 @@ public:
 		 * - what() == "[" + module + " ERROR] " + what
 		 * - module() == module
 		 * - error() == what
-		 */
+		 **/
 	InvalidOperationException(const std::string& module, const std::string& what) noexcept :
 		tc::Exception(module, what)
 	{

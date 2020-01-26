@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version	0.4
 	 * @date 2020/01/23
-	 */
+	 **/
 #pragma once
 #include <tc/io/IStream.h>
 #include <tc/io/Path.h>
@@ -35,13 +35,13 @@ namespace tc { namespace io {
 	/**
 	 * @class FileStream
 	 * @brief An implementation of IStream as a wrapper to local OS file access functions.
-	 */
+	 **/
 class FileStream : public IStream
 {
 public:
 		/** 
 		 * @brief Default constuctor
-		 */
+		 **/
 	FileStream();
 
 		/** 
@@ -59,7 +59,7 @@ public:
 		 * @throw tc::UnauthorisedAccessException The @p access requested is not permitted by the operating system for the specified @p path, such as when @p access is @a Write or @a ReadWrite and the file or directory is set for read-only access.
 		 * @throw tc::io::PathTooLongException The specified @p path, file name, or both exceed the system-defined maximum length.
 		 * @throw tc::ArgumentOutOfRangeException @p mode contains an invalid value.
-		 */
+		 **/
 	FileStream(const tc::io::Path& path, FileMode mode, FileAccess access);
 
 		/** 
@@ -77,7 +77,7 @@ public:
 		 * @throw tc::UnauthorisedAccessException The @p access requested is not permitted by the operating system for the specified @p path, such as when @p access is @a Write or @a ReadWrite and the file or directory is set for read-only access.
 		 * @throw tc::io::PathTooLongException The specified @p path, file name, or both exceed the system-defined maximum length.
 		 * @throw tc::ArgumentOutOfRangeException @p mode contains an invalid value.
-		 */
+		 **/
 	void open(const tc::io::Path& path, FileMode mode, FileAccess access);
 
 	virtual bool canRead() const;
@@ -98,7 +98,7 @@ public:
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 * @throw tc::NotSupportedException The stream does not support seeking.
-		 */
+		 **/
 	virtual int64_t position();
 
 		/**

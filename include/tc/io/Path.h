@@ -16,7 +16,7 @@ namespace tc { namespace io {
 	 * @brief Represents a unicode path for a filesystem
 	 *
 	 * This stores a path as a list of path elements.
-	 */
+	 **/
 class Path
 {
 public:
@@ -41,7 +41,7 @@ public:
 		 * - path can have either forward or backward slash path delimiters ('/' or '\') but not both
 		 * 
 		 * @note No filtering or processing of special characters is done (e.g. '.', '~')
-		 */
+		 **/
 	Path(const std::string& path);
 
 		/**
@@ -54,7 +54,7 @@ public:
 		 * 
 		 * @note 
 		 * No filtering or processing of special characters is done (e.g. '.', '~')
-		 */
+		 **/
 	Path(const std::u16string& path);
 
 		/**
@@ -67,7 +67,7 @@ public:
 		 * 
 		 * @note 
 		 * No filtering or processing of special characters is done (e.g. '.', '~')
-		 */
+		 **/
 	Path(const std::u32string& path);
 
 		/// Addition operator
@@ -89,7 +89,7 @@ public:
 		 * 
 		 * @note Calling front on an empty container is undefined.
 		 * @note For a Path p, the expression p.front() is equivalent to *p.begin(). 
-		 */
+		 **/
 	std::string& front();
 
 		/**
@@ -99,7 +99,7 @@ public:
 		 * 
 		 * @note Calling front on an empty container is undefined.
 		 * @note For a Path p, the expression p.front() is equivalent to *p.begin(). 
-		 */
+		 **/
 	const std::string& front() const;
 
 		/**
@@ -109,7 +109,7 @@ public:
 		 * 
 		 * @note Calling back on an empty container is undefined.
 		 * @note For a Path p, the expression p.back() is equivalent to *(--p.end()). 
-		 */
+		 **/
 	std::string& back();
 
 		/**
@@ -119,7 +119,7 @@ public:
 		 * 
 		 * @note Calling back on an empty container is undefined.
 		 * @note For a Path p, the expression p.back() is equivalent to *(--p.end()). 
-		 */
+		 **/
 	const std::string& back() const;
 
 		/// Begin Iterator, points to front element

@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/01/22
-	 */
+	 **/
 #pragma once
 #include <tc/ArgumentException.h>
 
@@ -13,7 +13,7 @@ namespace tc {
 	/**
 	 * @class ArgumentNullException
 	 * @brief The exception that is thrown when a null reference is passed to a method that does not accept it as a valid argument.
-	 */
+	 **/
 class ArgumentNullException : public tc::ArgumentException
 {
 public:
@@ -32,7 +32,7 @@ public:
 		 * - what() == what
 		 * - module() == ""
 		 * - error() == what
-		 */
+		 **/
 	ArgumentNullException(const std::string& what) noexcept :
 		tc::ArgumentException(what)
 	{}
@@ -47,7 +47,7 @@ public:
 		 * - what() == "[" + module + " ERROR] " + what
 		 * - module() == module
 		 * - error() == what
-		 */
+		 **/
 	ArgumentNullException(const std::string& module, const std::string& what) noexcept :
 		tc::ArgumentException(module, what)
 	{

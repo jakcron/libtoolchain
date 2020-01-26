@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2019/01/16
-	 */
+	 **/
 #pragma once
 #include <bitset>
 
@@ -13,7 +13,7 @@ namespace tc {
 	/**
 	 * @enum ResourceStatusFlag
 	 * @brief Flags for ResourceStatus
-	 */
+	 **/
 enum ResourceStatusFlag
 {
 	RESFLAG_READY, /**< Resource is ready for use */
@@ -23,7 +23,7 @@ enum ResourceStatusFlag
 
 	/**
 	 * @brief Bitset indicating resource state information (see @ref ResourceStatusFlag)
-	 */
+	 **/
 using ResourceStatus = std::bitset<32>; 
 
 } // namespace tc

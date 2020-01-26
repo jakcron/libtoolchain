@@ -1,14 +1,14 @@
 	/**
 	 * @file		tc.h
 	 * @brief       Declaration of the libtoolchain namespace
-	 */
+	 **/
 #pragma once
 #include <tc/types.h>
 
 	/**
 	 * @namespace   tc
 	 * @brief       Root namespace for libtoolchain
-	 */
+	 **/
 // classes
 #include <tc/Optional.h>
 

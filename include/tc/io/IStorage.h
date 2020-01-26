@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version 0.6
 	 * @date 2019/06/18
-	 */
+	 **/
 #pragma once
 #include <tc/types.h>
 #include <tc/ResourceStatus.h>
@@ -22,7 +22,7 @@ namespace tc { namespace io {
 	 * The includes the absolute path of the directory, and lists of child directory and file names.
 	 * 
 	 * @note All strings are UTF-8
-	 */
+	 **/
 struct sDirectoryListing
 {
 		/// Absolute Path
@@ -48,36 +48,36 @@ struct sDirectoryListing
 	 * @note IStorage uses the tc::io::Path class to represent a path, not as a literal string.
 	 * @note It is up to the implementation of IStorage to validate and process tc::io::Path objects.
 	 * @note It is up to the implementation to enforce tc::io::FileMode & tc::io::FileAccess.
-	 */
+	 **/
 class IStorage
 {
 public:
 		/**
 		 * @brief Destructor
-		 */
+		 **/
 	virtual ~IStorage() = default;
 
 		/**
 		 * @brief Get state of IStorage
 		 * @return ResourceStatus
-		 */
+		 **/
 	virtual tc::ResourceStatus state() = 0;
 
 		/**
 		 * @brief Close the filesystem
-		 */
+		 **/
 	virtual void dispose() = 0;
 
 		/** 
 		 * @brief Create a new file
 		 * @param[in] path A relative or absolute path for the file that the current @ref IStorage object will create.
-		 */
+		 **/
 	virtual void createFile(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Remove a file
 		 * @param[in] path Path to file
-		 */
+		 **/
 	virtual void removeFile(const tc::io::Path& path) = 0;
 
 		/** 
@@ -86,7 +86,7 @@ public:
 		 * @param[in] mode One of the enumeration values that determines how to open or create the file.
 		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the @ref IStream object. This also determines the values returned by the @ref IStream::canRead and @ref IStream::canWrite methods of the IStream object. @ref IStream::canSeek is true if path specifies a disk file.
 		 * @param[out] stream Pointer to IStream object to be instantiated
-		 */
+		 **/
 	virtual void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream) = 0;
 	
 		/** 
@@ -94,32 +94,32 @@ public:
 		 * @param[in] path Path to directory
 		 * 
 		 * @post If the directory already exists, this does nothing if the directory cannot be created (invalid path, or access rights)
-		 */
+		 **/
 	virtual void createDirectory(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Remove a directory
 		 * @param[in] path Path to directory
-		 */
+		 **/
 	virtual void removeDirectory(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Get the full path of the working directory
 		 * @param[out] path Path object to populate
-		 */
+		 **/
 	virtual void getWorkingDirectory(tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Change the working directory
 		 * @param[in] path Path to directory
-		 */
+		 **/
 	virtual void setWorkingDirectory(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Get directory listing a directory
 		 * @param[in] path Path to directory
 		 * @param[out] info sDirectoryListing object to populate
-		 */
+		 **/
 	virtual void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info) = 0;
 };
 

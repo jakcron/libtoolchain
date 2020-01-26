@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/01/22
-	 */
+	 **/
 #pragma once
 #include <tc/ArithmeticException.h>
 
@@ -13,7 +13,7 @@ namespace tc {
 	/**
 	 * @class OverflowException
 	 * @brief The exception that is thrown when an arithmetic, casting, or conversion operation in a checked context results in an overflow.
-	 */
+	 **/
 class OverflowException : public tc::ArithmeticException
 {
 public:
@@ -32,7 +32,7 @@ public:
 		 * - what() == what
 		 * - module() == ""
 		 * - error() == what
-		 */
+		 **/
 	OverflowException(const std::string& what) noexcept :
 		tc::ArithmeticException(what)
 	{}
@@ -47,7 +47,7 @@ public:
 		 * - what() == "[" + module + " ERROR] " + what
 		 * - module() == module
 		 * - error() == what
-		 */
+		 **/
 	OverflowException(const std::string& module, const std::string& what) noexcept :
 		tc::ArithmeticException(module, what)
 	{
