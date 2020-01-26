@@ -56,7 +56,12 @@ void tc::io::LocalStorage::removeFile(const tc::io::Path& path)
 	// delete file
 	if (DeleteFileW((LPCWSTR)unicode_path.c_str()) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to remove file (" + std::to_string(GetLastError()) + ")");
+		DWORD error = GetLastError();
+		switch (error)
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::removeFile()", "Failed to remove file (" + std::to_string(error) + ")");
+		}
 	}	
 #else
 	// convert Path to unicode string
@@ -65,7 +70,11 @@ void tc::io::LocalStorage::removeFile(const tc::io::Path& path)
 
 	if (unlink(unicode_path.c_str()) == -1)
 	{
-		throw tc::Exception(kClassName, "Failed to remove file (" + std::string(strerror(errno)) + ")");
+		switch (errno) 
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::removeFile()", "Failed to remove file (" + std::string(strerror(errno)) + ")");
+		}
 	}	
 #endif
 }
@@ -85,7 +94,12 @@ void tc::io::LocalStorage::createDirectory(const tc::io::Path& path)
 	// create directory
 	if (CreateDirectoryW((LPCWSTR)unicode_path.c_str(), nullptr) == false && GetLastError() != ERROR_ALREADY_EXISTS)
 	{
-		throw tc::Exception(kClassName, "Failed to create directory (" + std::to_string(GetLastError()) + ")");
+		DWORD error = GetLastError();
+		switch (error)
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::createDirectory()", "Failed to create directory (" + std::to_string(error) + ")");
+		}
 	}
 #else
 	// convert Path to unicode string
@@ -94,7 +108,11 @@ void tc::io::LocalStorage::createDirectory(const tc::io::Path& path)
 
 	if (mkdir(unicode_path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1 && errno != EEXIST)
 	{
-		throw tc::Exception(kClassName, "Failed to create directory (" + std::string(strerror(errno)) + ")");
+		switch (errno) 
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::createDirectory()", "Failed to create directory (" + std::string(strerror(errno)) + ")");
+		}
 	}
 #endif
 }
@@ -108,7 +126,12 @@ void tc::io::LocalStorage::removeDirectory(const tc::io::Path& path)
 
 	if (RemoveDirectoryW((wchar_t*)unicode_path.c_str()) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to remove directory (" + std::to_string(GetLastError()) + ")");
+		DWORD error = GetLastError();
+		switch (error)
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::removeDirectory()", "Failed to remove directory (" + std::to_string(error) + ")");
+		}
 	}
 #else
 	// convert Path to unicode string
@@ -117,7 +140,11 @@ void tc::io::LocalStorage::removeDirectory(const tc::io::Path& path)
 
 	if (rmdir(unicode_path.c_str()) == -1)
 	{
-		throw tc::Exception(kClassName, "Failed to remove directory (" + std::string(strerror(errno)) + ")");
+		switch (errno) 
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::createDirectory()", "Failed to remove directory (" + std::string(strerror(errno)) + ")");
+		}
 	}	
 #endif
 }
@@ -130,7 +157,12 @@ void tc::io::LocalStorage::getWorkingDirectory(tc::io::Path& path)
 	// get current directory
 	if (GetCurrentDirectoryW(MAX_PATH, (LPWSTR)(raw_char16_path.get())) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to get current working directory (" + std::to_string(GetLastError()) + ")");
+		DWORD error = GetLastError();
+		switch (error)
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (" + std::to_string(error) + ")");
+		}
 	}
 
 	path = Path(raw_char16_path.get());
@@ -141,7 +173,11 @@ void tc::io::LocalStorage::getWorkingDirectory(tc::io::Path& path)
 
 	if (getcwd(raw_current_working_directory.get(), PATH_MAX) == nullptr)
 	{
-		throw tc::Exception(kClassName, "Failed to get current working directory (getcwd)" + std::string(strerror(errno)) + ")");
+		switch (errno) 
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (getcwd) (" + std::string(strerror(errno)) + ")");
+		}
 	}
 
 	path = Path(raw_current_working_directory.get());
@@ -158,7 +194,12 @@ void tc::io::LocalStorage::setWorkingDirectory(const tc::io::Path& path)
 	// delete file
 	if (SetCurrentDirectoryW((LPCWSTR)unicode_path.c_str()) == false)
 	{
-		throw tc::Exception(kClassName, "Failed to set current working directory (" + std::to_string(GetLastError()) + ")");
+		DWORD error = GetLastError();
+		switch (error)
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::setWorkingDirectory()", "Failed to set current working directory (" + std::to_string(error) + ")");
+		}
 	}
 #else
 	// convert Path to unicode string
@@ -168,7 +209,11 @@ void tc::io::LocalStorage::setWorkingDirectory(const tc::io::Path& path)
 	// get full path to directory
 	if (chdir(unicode_path.c_str()) != 0)
 	{
-		throw tc::Exception(kClassName, "Failed to get directory info (chdir)(" + std::string(strerror(errno)) + ")");
+		switch (errno) 
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::setWorkingDirectory()", "Failed to get directory info (chdir)(" + std::string(strerror(errno)) + ")");
+		}
 	}
 #endif
 }
@@ -191,7 +236,12 @@ void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirect
 	dir_handle = FindFirstFileW((LPCWSTR)unicode_path.c_str(), &dir_entry);
 	if (dir_handle == INVALID_HANDLE_VALUE) 
 	{
-		throw tc::Exception(kClassName, "Failed to open directory (" + std::to_string(GetLastError()) + ")");
+		DWORD error = GetLastError();
+		switch (error)
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to open directory (" + std::to_string(error) + ")");
+		}
 	}
 
 	do {
@@ -208,10 +258,17 @@ void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirect
 		}
 	} while (FindNextFileW(dir_handle, &dir_entry) != 0);
 
+	// throw error where GetLastError() isn't just that there were no more files
 	if (GetLastError() != ERROR_NO_MORE_FILES) 
 	{
 		FindClose(dir_handle);
-		throw tc::Exception(kClassName, "Failed to open directory (" + std::to_string(GetLastError()) + ")");
+
+		DWORD error = GetLastError();
+		switch (error)
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to open directory (" + std::to_string(error) + ")");
+		}
 	}
 
 	FindClose(dir_handle);
@@ -240,7 +297,11 @@ void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirect
 	dp = opendir(unicode_path.c_str());
 	if (dp == nullptr)
 	{
-		throw tc::Exception(kClassName, "Failed to get directory info (opendir)(" + std::string(strerror(errno)) + ")");
+		switch (errno) 
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to get directory info (opendir)(" + std::string(strerror(errno)) + ")");
+		}
 	}
 
 	// get file and directory names
@@ -264,7 +325,11 @@ void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirect
 	// throw an error if necessary 
 	if (errno != 0)
 	{
-		throw tc::Exception(kClassName, "Failed to get directory info (readdir)(" + std::string(strerror(errno)) + ")");
+		switch (errno) 
+		{
+			default:
+				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to get directory info (readdir)(" + std::string(strerror(errno)) + ")");
+		}
 	}
 	
 
