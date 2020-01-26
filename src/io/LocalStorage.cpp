@@ -104,9 +104,9 @@ void tc::io::LocalStorage::removeFile(const tc::io::Path& path)
 #endif
 }
 
-void tc::io::LocalStorage::openFile(const tc::io::Path& path, FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file)
+void tc::io::LocalStorage::openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream)
 {
-	file = std::shared_ptr<tc::io::FileStream>(new tc::io::FileStream(path, mode));
+	stream = std::shared_ptr<tc::io::FileStream>(new tc::io::FileStream(path, mode, access));
 }
 
 void tc::io::LocalStorage::createDirectory(const tc::io::Path& path)

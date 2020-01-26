@@ -32,7 +32,7 @@ public:
 	virtual void closeFs();
 	virtual void createFile(const tc::io::Path& path);
 	virtual void removeFile(const tc::io::Path& path);
-	virtual void openFile(const tc::io::Path& path, tc::io::FileAccessMode mode, std::shared_ptr<tc::io::IStream>& file);
+	virtual void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream);
 	virtual void createDirectory(const tc::io::Path& path);
 	virtual void removeDirectory(const tc::io::Path& path);
 	virtual void getWorkingDirectory(tc::io::Path& path);

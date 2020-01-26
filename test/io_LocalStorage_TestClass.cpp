@@ -54,9 +54,9 @@ void io_LocalStorage_TestClass::test_CreateFile_NotExist()
 	std::cout << "[tc::io::LocalStorage] test_CreateFile_NotExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
-		fs.createFile(kAsciiFilePath);		
+		local_storage.createFile(kAsciiFilePath);		
 
 		std::cout << "PASS" << std::endl;
 	}
@@ -71,9 +71,9 @@ void io_LocalStorage_TestClass::test_CreateFile_DoesExist()
 	std::cout << "[tc::io::LocalStorage] test_CreateFile_DoesExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
-		fs.createFile(kAsciiFilePath);		
+		local_storage.createFile(kAsciiFilePath);		
 
 		std::cout << "PASS" << std::endl;
 	}
@@ -88,9 +88,9 @@ void io_LocalStorage_TestClass::test_CreateFile_UnicodePath()
 	std::cout << "[tc::io::LocalStorage] test_CreateFile_UnicodePath : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
-		fs.createFile(kUtf8TestPath);		
+		local_storage.createFile(kUtf8TestPath);		
 
 		std::cout << "PASS" << std::endl;
 	}
@@ -105,9 +105,9 @@ void io_LocalStorage_TestClass::test_RemoveFile_DoesExist()
 	std::cout << "[tc::io::LocalStorage] test_RemoveFile_DoesExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
-		fs.removeFile(kAsciiFilePath);		
+		local_storage.removeFile(kAsciiFilePath);		
 
 		std::cout << "PASS" << std::endl;
 	}
@@ -122,10 +122,10 @@ void io_LocalStorage_TestClass::test_RemoveFile_NotExist()
 	std::cout << "[tc::io::LocalStorage] test_RemoveFile_NotExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
-		fs.removeFile(kNotExistFilePath);
-		std::cout << "FAIL (Did not throw exception when file was not present on FS)" << std::endl;
+		local_storage.removeFile(kNotExistFilePath);
+		std::cout << "FAIL (Did not throw exception when stream was not present on FS)" << std::endl;
 	}
 	catch (const tc::Exception& e) 
 	{
@@ -138,9 +138,9 @@ void io_LocalStorage_TestClass::test_RemoveFile_UnicodePath()
 	std::cout << "[tc::io::LocalStorage] test_RemoveFile_UnicodePath : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
-		fs.removeFile(kUtf8TestPath);		
+		local_storage.removeFile(kUtf8TestPath);		
 
 		std::cout << "PASS" << std::endl;
 	}
@@ -155,22 +155,22 @@ void io_LocalStorage_TestClass::test_OpenFileCreate_NotExist()
 	std::cout << "[tc::io::LocalStorage] test_OpenFileCreate_NotExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 		try 
 		{
-			std::shared_ptr<tc::io::IStream> file;
-			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, file);
+			std::shared_ptr<tc::io::IStream> stream;
+			local_storage.openFile(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write, stream);
 
-			if (file->size() != 0)
+			if (stream->length() != 0)
 			{
-				throw tc::Exception("file opened in create mode does not have a size of 0");
+				throw tc::Exception("stream opened in create mode does not have a size of 0");
 			}
 
-			file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+			stream->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 			
-			if (file->size() != kRandomString.length())
+			if (stream->length() != kRandomString.length())
 			{
-				throw tc::Exception("after writing data, file size is not correct");
+				throw tc::Exception("after writing data, stream length is not correct");
 			}
 
 			std::cout << "PASS" << std::endl;
@@ -180,7 +180,7 @@ void io_LocalStorage_TestClass::test_OpenFileCreate_NotExist()
 			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 
-		fs.removeFile(kAsciiFilePath);
+		local_storage.removeFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -193,24 +193,24 @@ void io_LocalStorage_TestClass::test_OpenFileCreate_DoesExist()
 	std::cout << "[tc::io::LocalStorage] test_OpenFileCreate_DoesExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
-		fs.createFile(kAsciiFilePath);
+		tc::io::LocalStorage local_storage;
+		local_storage.createFile(kAsciiFilePath);
 
 		try 
 		{
-			std::shared_ptr<tc::io::IStream> file;
-			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, file);
+			std::shared_ptr<tc::io::IStream> stream;
+			local_storage.openFile(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write, stream);
 
-			if (file->size() != 0)
+			if (stream->length() != 0)
 			{
-				throw tc::Exception("file opened in create mode does not have a size of 0");
+				throw tc::Exception("stream opened in create mode does not have a size of 0");
 			}
 
-			file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+			stream->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 			
-			if (file->size() != kRandomString.length())
+			if (stream->length() != kRandomString.length())
 			{
-				throw tc::Exception("after writing data, file size is not correct");
+				throw tc::Exception("after writing data, stream size is not correct");
 			}
 
 			std::cout << "PASS" << std::endl;
@@ -220,7 +220,7 @@ void io_LocalStorage_TestClass::test_OpenFileCreate_DoesExist()
 			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 
-		fs.removeFile(kAsciiFilePath);
+		local_storage.removeFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -233,39 +233,39 @@ void io_LocalStorage_TestClass::test_OpenFileRead_DoesExist()
 	std::cout << "[tc::io::LocalStorage] test_OpenFileRead_DoesExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
-		std::shared_ptr<tc::io::IStream> tmp_file;
+		tc::io::LocalStorage local_storage;
+		std::shared_ptr<tc::io::IStream> tmp_stream;
 
-		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, tmp_file);
-		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_file->close();
+		local_storage.openFile(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write, tmp_stream);
+		tmp_stream->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		tmp_stream->dispose();
 
 		try 
 		{
-			std::shared_ptr<tc::io::IStream> file;
-			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_READ, file);
+			std::shared_ptr<tc::io::IStream> stream;
+			local_storage.openFile(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read, stream);
 
-			if (file->size() != kRandomString.length())
+			if (stream->length() != kRandomString.length())
 			{
-				throw tc::Exception("Unexpected file size");
+				throw tc::Exception("Unexpected stream size");
 			}
 
 			std::shared_ptr<byte_t> check(new byte_t[kRandomString.length()]);
-			file->read(check.get(), kRandomString.length());
+			stream->read(check.get(), kRandomString.length());
 
 			if (memcmp(check.get(), kRandomString.c_str(), kRandomString.size()) != 0)
 			{
-				throw tc::Exception("Data in file was not correct");
+				throw tc::Exception("Data in stream was not correct");
 			}
 
 			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "FAIL (Test opening file in read mode and confirming the data is correct (" << e.what() << "))" << std::endl;
+			std::cout << "FAIL (Test opening stream in read mode and confirming the data is correct (" << e.what() << "))" << std::endl;
 		}
 
-		fs.removeFile(kAsciiFilePath);
+		local_storage.removeFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -278,12 +278,12 @@ void io_LocalStorage_TestClass::test_OpenFileRead_NotExist()
 	std::cout << "[tc::io::LocalStorage] test_OpenFileRead_NotExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
-		std::shared_ptr<tc::io::IStream> file;
+		tc::io::LocalStorage local_storage;
+		std::shared_ptr<tc::io::IStream> stream;
 
-		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_READ, file);
+		local_storage.openFile(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read, stream);
 		
-		std::cout << "FAIL (Did not throw exception where file did not exist)" << std::endl;
+		std::cout << "FAIL (Did not throw exception where stream did not exist)" << std::endl;
 	}
 	catch (const tc::Exception& e)
 	{
@@ -296,39 +296,39 @@ void io_LocalStorage_TestClass::test_OpenFileRead_UnicodePath()
 	std::cout << "[tc::io::LocalStorage] test_OpenFileRead_UnicodePath : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
-		std::shared_ptr<tc::io::IStream> tmp_file;
+		tc::io::LocalStorage local_storage;
+		std::shared_ptr<tc::io::IStream> tmp_stream;
 
-		fs.openFile(kUtf8TestPath, tc::io::FILEACCESS_CREATE, tmp_file);
-		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_file->close();
+		local_storage.openFile(kUtf8TestPath, tc::io::FileMode::Create, tc::io::FileAccess::Write, tmp_stream);
+		tmp_stream->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		tmp_stream->dispose();
 
 		try 
 		{
-			std::shared_ptr<tc::io::IStream> file;
-			fs.openFile(kUtf8TestPath, tc::io::FILEACCESS_READ, file);
+			std::shared_ptr<tc::io::IStream> stream;
+			local_storage.openFile(kUtf8TestPath, tc::io::FileMode::Open, tc::io::FileAccess::Read, stream);
 
-			if (file->size() != kRandomString.length())
+			if (stream->length() != kRandomString.length())
 			{
-				throw tc::Exception("Unexpected file size");
+				throw tc::Exception("Unexpected stream size");
 			}
 
 			std::shared_ptr<byte_t> check(new byte_t[kRandomString.length()]);
-			file->read(check.get(), kRandomString.length());
+			stream->read(check.get(), kRandomString.length());
 
 			if (memcmp(check.get(), kRandomString.c_str(), kRandomString.size()) != 0)
 			{
-				throw tc::Exception("Data in file was not correct");
+				throw tc::Exception("Data in stream was not correct");
 			}
 
 			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "FAIL (Test opening file in read mode and confirming the data is correct (" << e.what() << "))" << std::endl;
+			std::cout << "FAIL (Test opening stream in read mode and confirming the data is correct (" << e.what() << "))" << std::endl;
 		}
 
-		fs.removeFile(kUtf8TestPath);
+		local_storage.removeFile(kUtf8TestPath);
 	}
 	catch (const std::exception& e)
 	{
@@ -341,21 +341,21 @@ void io_LocalStorage_TestClass::test_OpenFileRead_TryWrite()
 	std::cout << "[tc::io::LocalStorage] test_OpenFileRead_TryWrite : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
-		std::shared_ptr<tc::io::IStream> tmp_file;
+		tc::io::LocalStorage local_storage;
+		std::shared_ptr<tc::io::IStream> tmp_stream;
 
-		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, tmp_file);
-		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_file->close();
+		local_storage.openFile(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write, tmp_stream);
+		tmp_stream->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		tmp_stream->dispose();
 
 		try 
 		{
-			std::shared_ptr<tc::io::IStream> file;
-			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_READ, file);
+			std::shared_ptr<tc::io::IStream> stream;
+			local_storage.openFile(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read, stream);
 
-			file->seek(file->size());
+			stream->seek(stream->length(), tc::io::SeekOrigin::Begin);
 		
-			file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+			stream->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 			
 			std::cout << "FAIL (Did not throw exception when write() was called)" << std::endl;
 		}
@@ -364,7 +364,7 @@ void io_LocalStorage_TestClass::test_OpenFileRead_TryWrite()
 			std::cout << "PASS (" << e.error() << ")" << std::endl;
 		}
 
-		fs.removeFile(kAsciiFilePath);
+		local_storage.removeFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -377,31 +377,36 @@ void io_LocalStorage_TestClass::test_OpenFileRead_TryReadBeyondEnd()
 	std::cout << "[tc::io::LocalStorage] test_OpenFileRead_TryReadBeyondEnd : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
-		std::shared_ptr<tc::io::IStream> tmp_file;
+		tc::io::LocalStorage local_storage;
+		std::shared_ptr<tc::io::IStream> tmp_stream;
 
-		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, tmp_file);
-		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_file->close();
+		local_storage.openFile(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write, tmp_stream);
+		tmp_stream->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		tmp_stream->dispose();
 
 		try 
 		{
-			std::shared_ptr<tc::io::IStream> file;
-			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_READ, file);
+			std::shared_ptr<tc::io::IStream> stream;
+			local_storage.openFile(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read, stream);
 
-			file->seek(file->size());
+			stream->seek(0, tc::io::SeekOrigin::End);
 			std::shared_ptr<byte_t> check(new byte_t[kRandomString.length()]);
 
-			file->read(check.get(), kRandomString.length());
+			size_t read_len = stream->read(check.get(), kRandomString.length());
+
+			if (read_len != 0)
+			{
+				throw tc::Exception("read() returned a non-zero response when reading past end of file");
+			}
 		
-			std::cout << "FAIL (Did not throw exception when read() was called)" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 
-		fs.removeFile(kAsciiFilePath);
+		local_storage.removeFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -414,56 +419,56 @@ void io_LocalStorage_TestClass::test_OpenFileEdit_DoesExist()
 	std::cout << "[tc::io::LocalStorage] test_OpenFileEdit_DoesExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
-		std::shared_ptr<tc::io::IStream> tmp_file;
+		tc::io::LocalStorage local_storage;
+		std::shared_ptr<tc::io::IStream> tmp_stream;
 
-		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_CREATE, tmp_file);
-		tmp_file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_file->close();
+		local_storage.openFile(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write, tmp_stream);
+		tmp_stream->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+		tmp_stream->dispose();
 
 		try 
 		{
-			std::shared_ptr<tc::io::IStream> file;
-			fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_EDIT, file);
+			std::shared_ptr<tc::io::IStream> stream;
+			local_storage.openFile(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::ReadWrite, stream);
 
-			if (file->size() != kRandomString.length())
+			if (stream->length() != kRandomString.length())
 			{
-				throw tc::Exception("Unexpected file size");
+				throw tc::Exception("Unexpected stream size");
 			}
 
-			file->seek(kRandomString.length());
-			file->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
+			stream->seek(kRandomString.length(), tc::io::SeekOrigin::Begin);
+			stream->write((const byte_t*)kRandomString.c_str(), kRandomString.length());
 
-			file->seek(7);
-			file->write((const byte_t*)kTestPhrase.c_str(), kTestPhrase.length());
+			stream->seek(7, tc::io::SeekOrigin::Begin);
+			stream->write((const byte_t*)kTestPhrase.c_str(), kTestPhrase.length());
 
 			std::shared_ptr<byte_t> check(new byte_t[kRandomString.length()*2]);
-			file->seek(0);
-			file->read(check.get(), kRandomString.length()*2);
+			stream->seek(0, tc::io::SeekOrigin::Begin);
+			stream->read(check.get(), kRandomString.length()*2);
 
 			if (memcmp(check.get() + kRandomString.length(), kRandomString.c_str(), kRandomString.size()) != 0)
 			{
-				throw tc::Exception("Data(kRandomStr[1][:]) in file was not correct");
+				throw tc::Exception("Data(kRandomStr[1][:]) in stream was not correct");
 			}
 
 			if (memcmp(check.get() + 7, kTestPhrase.c_str(), kTestPhrase.size()) != 0)
 			{
-				throw tc::Exception("Data(kTestPhrase[:]) in file was not correct");
+				throw tc::Exception("Data(kTestPhrase[:]) in stream was not correct");
 			}
 
 			if (memcmp(check.get(), kRandomString.c_str(), 7) != 0)
 			{
-				throw tc::Exception("Data(kRandomStr[0][0:7]) in file was not correct");
+				throw tc::Exception("Data(kRandomStr[0][0:7]) in stream was not correct");
 			}
 
 			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "FAIL (Test opening file in edit mode and confirming the data is correct (" << e.what() << "))" << std::endl;
+			std::cout << "FAIL (Test opening stream in edit mode and confirming the data is correct (" << e.what() << "))" << std::endl;
 		}
 
-		fs.removeFile(kAsciiFilePath);
+		local_storage.removeFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -476,12 +481,12 @@ void io_LocalStorage_TestClass::test_OpenFileEdit_NotExist()
 	std::cout << "[tc::io::LocalStorage] test_OpenFileEdit_NotExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
-		std::shared_ptr<tc::io::IStream> file;
+		tc::io::LocalStorage local_storage;
+		std::shared_ptr<tc::io::IStream> stream;
 
-		fs.openFile(kAsciiFilePath, tc::io::FILEACCESS_EDIT, file);
+		local_storage.openFile(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::ReadWrite, stream);
 		
-		std::cout << "FAIL (Did not throw exception where file did not exist)" << std::endl;
+		std::cout << "FAIL (Did not throw exception where stream did not exist)" << std::endl;
 	}
 	catch (const tc::Exception& e)
 	{
@@ -494,9 +499,9 @@ void io_LocalStorage_TestClass::test_CreateDirectory_NotExist()
 	std::cout << "[tc::io::LocalStorage] test_CreateDirectory_NotExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
-		fs.createDirectory(kDirPath);
+		local_storage.createDirectory(kDirPath);
 		std::cout << "PASS" << std::endl;
 	}
 	catch (const tc::Exception& e) 
@@ -510,9 +515,9 @@ void io_LocalStorage_TestClass::test_CreateDirectory_DoesExist()
 	std::cout << "[tc::io::LocalStorage] test_CreateDirectory_DoesExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
-		fs.createDirectory(kDirPath);
+		local_storage.createDirectory(kDirPath);
 		std::cout << "PASS" << std::endl;
 	}
 	catch (const tc::Exception& e) 
@@ -526,9 +531,9 @@ void io_LocalStorage_TestClass::test_CreateDirectory_UnicodePath()
 	std::cout << "[tc::io::LocalStorage] test_CreateDirectory_UnicodePath : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
-		fs.createDirectory(kUtf8DirPath);
+		local_storage.createDirectory(kUtf8DirPath);
 		std::cout << "PASS" << std::endl;
 	}
 	catch (const tc::Exception& e) 
@@ -542,9 +547,9 @@ void io_LocalStorage_TestClass::test_RemoveDirectory_DoesExist()
 	std::cout << "[tc::io::LocalStorage] test_RemoveDirectory_DoesExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
-		fs.removeDirectory(kDirPath);
+		local_storage.removeDirectory(kDirPath);
 		std::cout << "PASS" << std::endl;
 	}
 	catch (const tc::Exception& e)
@@ -558,9 +563,9 @@ void io_LocalStorage_TestClass::test_RemoveDirectory_NotExist()
 	std::cout << "[tc::io::LocalStorage] test_RemoveDirectory_NotExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
-		fs.removeDirectory(kDirPath);
+		local_storage.removeDirectory(kDirPath);
 		std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
 	}
 	catch (const tc::Exception& e) 
@@ -574,9 +579,9 @@ void io_LocalStorage_TestClass::test_RemoveDirectory_UnicodePath()
 	std::cout << "[tc::io::LocalStorage] test_RemoveDirectory_UnicodePath : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
-		fs.removeDirectory(kUtf8DirPath);
+		local_storage.removeDirectory(kUtf8DirPath);
 		std::cout << "PASS" << std::endl;
 	}
 	catch (const tc::Exception& e) 
@@ -590,17 +595,17 @@ void io_LocalStorage_TestClass::test_RemoveDirectory_HasChildren()
 	std::cout << "[tc::io::LocalStorage] test_RemoveDirectory_HasChildren : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 	
 		tc::io::Path dir_child_path = tc::io::Path(kDirPath) + tc::io::Path(kUtf8DirPath);
-		tc::io::Path file_child_path = tc::io::Path(kDirPath) + tc::io::Path(kAsciiFilePath);
+		tc::io::Path stream_child_path = tc::io::Path(kDirPath) + tc::io::Path(kAsciiFilePath);
 
 		try 
 		{
-			fs.createDirectory(kDirPath);
-			fs.createDirectory(dir_child_path);
-			fs.createFile(file_child_path);
-			fs.removeDirectory(kDirPath);
+			local_storage.createDirectory(kDirPath);
+			local_storage.createDirectory(dir_child_path);
+			local_storage.createFile(stream_child_path);
+			local_storage.removeDirectory(kDirPath);
 			std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
 		}
 		catch (const tc::Exception& e) 
@@ -608,9 +613,9 @@ void io_LocalStorage_TestClass::test_RemoveDirectory_HasChildren()
 			std::cout << "PASS (" << e.error() << ")" << std::endl;
 		}
 
-		fs.removeDirectory(dir_child_path);
-		fs.removeFile(file_child_path);
-		fs.removeDirectory(kDirPath);
+		local_storage.removeDirectory(dir_child_path);
+		local_storage.removeFile(stream_child_path);
+		local_storage.removeDirectory(kDirPath);
 	}
 	catch (const std::exception& e)
 	{
@@ -623,11 +628,11 @@ void io_LocalStorage_TestClass::test_RemoveDirectory_NotDirectoryActuallyFile()
 	std::cout << "[tc::io::LocalStorage] test_RemoveDirectory_NotDirectoryActuallyFile : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 		try 
 		{
-			fs.createFile(kAsciiFilePath);
-			fs.removeDirectory(kAsciiFilePath);
+			local_storage.createFile(kAsciiFilePath);
+			local_storage.removeDirectory(kAsciiFilePath);
 			std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
 		}
 		catch (const tc::Exception& e) 
@@ -635,7 +640,7 @@ void io_LocalStorage_TestClass::test_RemoveDirectory_NotDirectoryActuallyFile()
 			std::cout << "PASS (" << e.error() << ")" << std::endl;
 		}
 
-		fs.removeFile(kAsciiFilePath);
+		local_storage.removeFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -648,38 +653,38 @@ void io_LocalStorage_TestClass::test_GetDirectoryListing_DoesExist()
 	std::cout << "[tc::io::LocalStorage] test_GetDirectoryListing_DoesExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
 		std::vector<std::string> file_list;
 		std::vector<std::string> dir_list;
 		
-		file_list.push_back("fileA.bin");
-		file_list.push_back("fileB.bin");
-		file_list.push_back("fileC.bin");
-		file_list.push_back("fileD.bin");
+		file_list.push_back("streamA.bin");
+		file_list.push_back("streamB.bin");
+		file_list.push_back("streamC.bin");
+		file_list.push_back("streamD.bin");
 
 		dir_list.push_back("dir000");
 		dir_list.push_back("dir001");
 		dir_list.push_back("dir002");
 		dir_list.push_back("dir003");
 
-		fs.createDirectory(kDirPath);
+		local_storage.createDirectory(kDirPath);
 
 		for (size_t i = 0; i < file_list.size(); i++)
 		{
-			fs.createFile(tc::io::Path(kDirPath) + tc::io::Path(file_list[i]));
+			local_storage.createFile(tc::io::Path(kDirPath) + tc::io::Path(file_list[i]));
 		}
 
 		for (size_t i = 0; i < dir_list.size(); i++)
 		{
-			fs.createDirectory(tc::io::Path(kDirPath) + tc::io::Path(dir_list[i]));
+			local_storage.createDirectory(tc::io::Path(kDirPath) + tc::io::Path(dir_list[i]));
 		}
 
 		try
 		{
 			tc::io::sDirectoryListing info;
 
-			fs.getDirectoryListing(kDirPath, info);
+			local_storage.getDirectoryListing(kDirPath, info);
 			
 			// + 2 for "." & ".."
 			if (info.dir_list.size() != (dir_list.size() + 2))
@@ -689,7 +694,7 @@ void io_LocalStorage_TestClass::test_GetDirectoryListing_DoesExist()
 
 			if (info.file_list.size() != file_list.size())
 			{
-				throw tc::Exception("Unexpected file count");
+				throw tc::Exception("Unexpected stream count");
 			}
 
 			std::cout << "PASS" << std::endl;
@@ -701,15 +706,15 @@ void io_LocalStorage_TestClass::test_GetDirectoryListing_DoesExist()
 
 		for (size_t i = 0; i < file_list.size(); i++)
 		{
-			fs.removeFile(tc::io::Path(kDirPath) + tc::io::Path(file_list[i]));
+			local_storage.removeFile(tc::io::Path(kDirPath) + tc::io::Path(file_list[i]));
 		}
 
 		for (size_t i = 0; i < dir_list.size(); i++)
 		{
-			fs.removeDirectory(tc::io::Path(kDirPath) + tc::io::Path(dir_list[i]));
+			local_storage.removeDirectory(tc::io::Path(kDirPath) + tc::io::Path(dir_list[i]));
 		}
 
-		fs.removeDirectory(tc::io::Path(kDirPath));
+		local_storage.removeDirectory(tc::io::Path(kDirPath));
 	}
 	catch (const std::exception& e)
 	{
@@ -722,10 +727,10 @@ void io_LocalStorage_TestClass::test_GetDirectoryListing_NotExist()
 	std::cout << "[tc::io::LocalStorage] test_GetDirectoryListing_NotExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
 		tc::io::sDirectoryListing info;
-		fs.getDirectoryListing(kNotExistFilePath, info);
+		local_storage.getDirectoryListing(kNotExistFilePath, info);
 		std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
 	}
 	catch (const tc::Exception& e) 
@@ -739,38 +744,38 @@ void io_LocalStorage_TestClass::test_GetDirectoryListing_UnicodePath()
 	std::cout << "[tc::io::LocalStorage] test_GetDirectoryListing_UnicodePath : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 
 		std::vector<std::string> file_list;
 		std::vector<std::string> dir_list;
 		
-		file_list.push_back("fileA.bin");
-		file_list.push_back("fileB.bin");
-		file_list.push_back("fileC.bin");
-		file_list.push_back("fileD.bin");
+		file_list.push_back("streamA.bin");
+		file_list.push_back("streamB.bin");
+		file_list.push_back("streamC.bin");
+		file_list.push_back("streamD.bin");
 
 		dir_list.push_back("dir000");
 		dir_list.push_back("dir001");
 		dir_list.push_back("dir002");
 		dir_list.push_back("dir003");
 
-		fs.createDirectory(kUtf8DirPath);
+		local_storage.createDirectory(kUtf8DirPath);
 
 		for (size_t i = 0; i < file_list.size(); i++)
 		{
-			fs.createFile(tc::io::Path(kUtf8DirPath) + tc::io::Path(file_list[i]));
+			local_storage.createFile(tc::io::Path(kUtf8DirPath) + tc::io::Path(file_list[i]));
 		}
 
 		for (size_t i = 0; i < dir_list.size(); i++)
 		{
-			fs.createDirectory(tc::io::Path(kUtf8DirPath) + tc::io::Path(dir_list[i]));
+			local_storage.createDirectory(tc::io::Path(kUtf8DirPath) + tc::io::Path(dir_list[i]));
 		}
 
 		try
 		{
 			tc::io::sDirectoryListing info;
 
-			fs.getDirectoryListing(kUtf8DirPath, info);
+			local_storage.getDirectoryListing(kUtf8DirPath, info);
 			
 			// + 2 for "." & ".."
 			if (info.dir_list.size() != (dir_list.size() + 2))
@@ -780,7 +785,7 @@ void io_LocalStorage_TestClass::test_GetDirectoryListing_UnicodePath()
 
 			if (info.file_list.size() != file_list.size())
 			{
-				throw tc::Exception("Unexpected file count");
+				throw tc::Exception("Unexpected stream count");
 			}
 
 			std::cout << "PASS" << std::endl;
@@ -792,15 +797,15 @@ void io_LocalStorage_TestClass::test_GetDirectoryListing_UnicodePath()
 
 		for (size_t i = 0; i < file_list.size(); i++)
 		{
-			fs.removeFile(tc::io::Path(kUtf8DirPath) + tc::io::Path(file_list[i]));
+			local_storage.removeFile(tc::io::Path(kUtf8DirPath) + tc::io::Path(file_list[i]));
 		}
 
 		for (size_t i = 0; i < dir_list.size(); i++)
 		{
-			fs.removeDirectory(tc::io::Path(kUtf8DirPath) + tc::io::Path(dir_list[i]));
+			local_storage.removeDirectory(tc::io::Path(kUtf8DirPath) + tc::io::Path(dir_list[i]));
 		}
 
-		fs.removeDirectory(tc::io::Path(kUtf8DirPath));
+		local_storage.removeDirectory(tc::io::Path(kUtf8DirPath));
 	}
 	catch (const std::exception& e)
 	{
@@ -813,15 +818,15 @@ void io_LocalStorage_TestClass::test_ChangeWorkingDirectory_DoesExist()
 	std::cout << "[tc::io::LocalStorage] test_ChangeWorkingDirectory_DoesExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 		
 		tc::io::Path old_dir;
-		fs.getWorkingDirectory(old_dir);
+		local_storage.getWorkingDirectory(old_dir);
 
 		try 
 		{
-			fs.createDirectory(kDirPath);
-			fs.setWorkingDirectory(kDirPath);
+			local_storage.createDirectory(kDirPath);
+			local_storage.setWorkingDirectory(kDirPath);
 			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e) 
@@ -829,8 +834,8 @@ void io_LocalStorage_TestClass::test_ChangeWorkingDirectory_DoesExist()
 			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 
-		fs.setWorkingDirectory(old_dir);
-		fs.removeDirectory(tc::io::Path(kDirPath));
+		local_storage.setWorkingDirectory(old_dir);
+		local_storage.removeDirectory(tc::io::Path(kDirPath));
 	}
 	catch (const std::exception& e)
 	{
@@ -843,9 +848,9 @@ void io_LocalStorage_TestClass::test_ChangeWorkingDirectory_NotExist()
 	std::cout << "[tc::io::LocalStorage] test_ChangeWorkingDirectory_NotExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 		
-		fs.setWorkingDirectory(kNotExistFilePath);
+		local_storage.setWorkingDirectory(kNotExistFilePath);
 		std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
 	}
 	catch (const tc::Exception& e)
@@ -859,15 +864,15 @@ void io_LocalStorage_TestClass::test_ChangeWorkingDirectory_UnicodePath()
 	std::cout << "[tc::io::LocalStorage] test_ChangeWorkingDirectory_UnicodePath : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage fs;
+		tc::io::LocalStorage local_storage;
 		
 		tc::io::Path old_dir;
-		fs.getWorkingDirectory(old_dir);
+		local_storage.getWorkingDirectory(old_dir);
 
 		try 
 		{
-			fs.createDirectory(kUtf8DirPath);
-			fs.setWorkingDirectory(kUtf8DirPath);
+			local_storage.createDirectory(kUtf8DirPath);
+			local_storage.setWorkingDirectory(kUtf8DirPath);
 			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e) 
@@ -875,8 +880,8 @@ void io_LocalStorage_TestClass::test_ChangeWorkingDirectory_UnicodePath()
 			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 
-		fs.setWorkingDirectory(old_dir);
-		fs.removeDirectory(kUtf8DirPath);
+		local_storage.setWorkingDirectory(old_dir);
+		local_storage.removeDirectory(kUtf8DirPath);
 	}
 	catch (const std::exception& e)
 	{
