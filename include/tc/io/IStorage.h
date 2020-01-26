@@ -70,17 +70,13 @@ public:
 
 		/** 
 		 * @brief Create a new file
-		 * @param[in] path Path to file
-		 * 
-		 * @throws tc::Exception If the file cannot be created (invalid path, or access rights)
+		 * @param[in] path A relative or absolute path for the file that the current @ref IStorage object will create.
 		 */
 	virtual void createFile(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Remove a file
 		 * @param[in] path Path to file
-		 * 
-		 * @throws tc::Exception If the file cannot be removed (invalid path, or access rights)
 		 */
 	virtual void removeFile(const tc::io::Path& path) = 0;
 
@@ -90,8 +86,6 @@ public:
 		 * @param[in] mode One of the enumeration values that determines how to open or create the file.
 		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the @ref IStream object. This also determines the values returned by the @ref IStream::canRead and @ref IStream::canWrite methods of the IStream object. @ref IStream::canSeek is true if path specifies a disk file.
 		 * @param[out] stream Pointer to IStream object to be instantiated
-		 *	
-		 * @throws tc::Exception If the file cannot be opened (invalid path, or access rights)
 		 */
 	virtual void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream) = 0;
 	
@@ -100,16 +94,12 @@ public:
 		 * @param[in] path Path to directory
 		 * 
 		 * @post If the directory already exists, this does nothing if the directory cannot be created (invalid path, or access rights)
-		 * 
-		 * @throws tc::Exception If the directory cannot be created (invalid path, or access rights)
 		 */
 	virtual void createDirectory(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Remove a directory
 		 * @param[in] path Path to directory
-		 * 
-		 * @throws tc::Exception If the directory cannot be removed (invalid path, or access rights)
 		 */
 	virtual void removeDirectory(const tc::io::Path& path) = 0;
 
@@ -129,8 +119,6 @@ public:
 		 * @brief Get directory listing a directory
 		 * @param[in] path Path to directory
 		 * @param[out] info sDirectoryListing object to populate
-		 * 
-		 * @throws tc::Exception If the directory cannot be accessed (invalid path, or access rights)
 		 */
 	virtual void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info) = 0;
 };
