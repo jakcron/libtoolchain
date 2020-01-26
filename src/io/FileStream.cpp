@@ -190,8 +190,11 @@ void tc::io::FileStream::flush()
 
 void tc::io::FileStream::dispose()
 {
-	flush();
-	mFileHandle.reset();
+	if (mFileHandle.get() != nullptr)
+	{
+		flush();
+		mFileHandle.reset();
+	}
 	mCanRead = false;
 	mCanWrite = false;
 	mCanSeek = false;
@@ -537,7 +540,8 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	}
 
 	// set state flags
-	mCanRead = (open_flag & (O_RDONLY|O_RDWR)) ? true : false;
+	// would check O_RDONLY but that resolves to 0 so it can't be bitmask checked
+	mCanRead = (open_flag & O_RDWR) || !(open_flag & O_WRONLY) ? true : false;
 	mCanWrite = (open_flag & (O_WRONLY|O_RDWR)) ? true : false;
 	mCanSeek = S_ISREG(stat_buf.st_mode) ? true : false;
 }
@@ -546,21 +550,20 @@ int64_t tc::io::FileStream::length_impl()
 {
 	int64_t length;
 
-	// use seek method (real disk files)
-	if (mCanSeek == true)
+	// get stat info on file
+	struct stat stat_buf;
+	if (fstat(mFileHandle->handle, &stat_buf) == -1)
 	{
-		// save current position
-		int64_t cur_pos = seek(0, SeekOrigin::Current);
+		throw tc::io::IOException(kClassName+"::length()", "Failed to check stream properties using fstat() (" + std::string(strerror(errno)) + ")");
+	}
 
-		// seek to end of file
-		length = seek(0, SeekOrigin::End);
-
-		// restore current position
-		seek(cur_pos, SeekOrigin::Begin);
+	if (S_ISREG(stat_buf.st_mode))
+	{
+		length = stat_buf.st_size;
 	}
 	else
 	{
-		throw tc::NotSupportedException(kClassName, "length() cannot be used with device-files or pipes");
+		throw tc::NotSupportedException(kClassName+"::length()", "length() cannot be used with device-files or pipes");
 	}
 	
 	return length;
