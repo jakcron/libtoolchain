@@ -86,9 +86,9 @@ public:
 
 		/** 
 		 * @brief Open a file
-		 * @param[in] path A relative or absolute path for the file that the current IStorage object will a IStream for.
+		 * @param[in] path A relative or absolute path for the file that the current @ref IStorage object will open an @ref IStream for.
 		 * @param[in] mode One of the enumeration values that determines how to open or create the file.
-		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the FileStream object. This also determines the values returned by the @ref canRead and @ref canWrite methods of the FileStream object. @ref canSeek is true if path specifies a disk file.
+		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the @ref IStream object. This also determines the values returned by the @ref IStream::canRead and @ref IStream::canWrite methods of the IStream object. @ref IStream::canSeek is true if path specifies a disk file.
 		 * @param[out] stream Pointer to IStream object to be instantiated
 		 *	
 		 * @throws tc::Exception If the file cannot be opened (invalid path, or access rights)
