@@ -1,22 +1,6 @@
 #include <tc/io/FileStream.h>
 #include <tc/io/PathUtils.h>
 
-// exceptions
-#include <tc/Exception.h>
-#include <tc/AccessViolationException.h>
-#include <tc/ArgumentNullException.h>
-#include <tc/ArgumentOutOfRangeException.h>
-#include <tc/NotSupportedException.h>
-#include <tc/NotImplementedException.h>
-#include <tc/ObjectDisposedException.h>
-#include <tc/OverflowException.h>
-#include <tc/UnauthorisedAccessException.h>
-#include <tc/io/IOException.h>
-#include <tc/io/FileNotFoundException.h>
-#include <tc/io/PathTooLongException.h>
-
-
-
 #ifdef _WIN32
 #include <direct.h>
 #include <cstdlib>
@@ -107,7 +91,7 @@ size_t tc::io::FileStream::read(byte_t* buffer, size_t count)
 
 	if (mCanRead == false)
 	{
-		throw tc::UnauthorisedAccessException(kClassName+"::read()", "Stream does not support reading");
+		throw tc::NotSupportedException(kClassName+"::read()", "Stream does not support reading");
 	}
 
 	if (buffer == nullptr)
@@ -286,7 +270,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 			case (ERROR_FILE_NOT_FOUND):
 				throw tc::io::FileNotFoundException(kClassName+"::open()", std::to_string(error));
 			case (ERROR_FILE_EXISTS):
-				throw tc::io::IOException(kClassName+"::open()", std::to_string(error));
+				throw tc::io::FileExistsException(kClassName+"::open()", std::to_string(error));
 			case (ERROR_ACCESS_DENIED):
 				throw tc::UnauthorisedAccessException(kClassName+"::open()", std::to_string(error));
 			default:
@@ -498,7 +482,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 			case (ENOENT):
 				throw tc::io::FileNotFoundException(kClassName+"open()", std::string(strerror(errno)));
 			case (EEXIST):
-				throw tc::io::IOException(kClassName+"open()", std::string(strerror(errno)));
+				throw tc::io::FileExistsException(kClassName+"open()", std::string(strerror(errno)));
 			case (EINVAL):
 				throw tc::ArgumentOutOfRangeException(kClassName+"::open()", std::string(strerror(errno)));			
 			case (EFAULT):
@@ -573,11 +557,6 @@ size_t tc::io::FileStream::read_impl(byte_t* buffer, size_t count)
 {
 	int64_t read_len = ::read(mFileHandle->handle, buffer, count);
 
-	if (read_len == -1)
-	{
-		throw tc::Exception(kClassName, "Failed to read file (" + std::string(strerror(errno)) + ")");
-	}
-
 	// handle error
 	if (read_len == -1)
 	{
@@ -588,7 +567,6 @@ size_t tc::io::FileStream::read_impl(byte_t* buffer, size_t count)
 			case (EFAULT):
 				throw tc::AccessViolationException(kClassName+"::read()", std::string(strerror(errno)));
 			case (EISDIR):
-				throw tc::io::FileNotFoundException(kClassName+"::read()", std::string(strerror(errno)));
 			case (EBADF):
 			case (EAGAIN):
 			case (EINTR):
@@ -611,11 +589,10 @@ void tc::io::FileStream::write_impl(const byte_t* buffer, size_t count)
 		switch (errno) 
 		{	
 			case (EINVAL):
-				throw tc::ArgumentOutOfRangeException(kClassName+"::write()", std::string(strerror(errno)));			
-			case (EFBIG):
-				throw tc::OverflowException(kClassName+"::write()", std::string(strerror(errno)));
+				throw tc::ArgumentOutOfRangeException(kClassName+"::write()", std::string(strerror(errno)));
 			case (EFAULT):
 				throw tc::AccessViolationException(kClassName+"::write()", std::string(strerror(errno)));
+			case (EFBIG):
 			case (EAGAIN):
 			case (EDESTADDRREQ):
 			case (EDQUOT):

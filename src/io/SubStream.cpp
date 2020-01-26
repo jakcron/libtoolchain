@@ -1,12 +1,6 @@
 #include <tc/io/SubStream.h>
 #include <algorithm>
 
-#include <tc/Exception.h>
-#include <tc/ArgumentNullException.h>
-#include <tc/ArgumentOutOfRangeException.h>
-#include <tc/NotSupportedException.h>
-#include <tc/ObjectDisposedException.h>
-
 const std::string tc::io::SubStream::kClassName = "tc::io::SubStream";
 
 tc::io::SubStream::SubStream() :

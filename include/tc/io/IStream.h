@@ -63,12 +63,6 @@ public:
 		 * 
 		 * @pre A stream must support reading for @ref read to work. 
 		 * @note Use @ref canRead to determine if this stream supports reading.
-		 * 
-		 * @throw tc::ArgumentNullException @p buffer is @a nullptr.
-		 * @throw tc::ArgumentOutOfRangeException @p count is negative.
-		 * @throw tc::io::IOException An I/O error occurred, such as the specified file cannot be found.
-		 * @throw tc::NotSupportedException The stream does not support reading.
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	virtual size_t read(byte_t* buffer, size_t count) = 0;
 	
@@ -80,12 +74,6 @@ public:
 		 * 
 		 * @pre A stream must support writing for @ref write to work. 
 		 * @note Use @ref canWrite to determine if this stream supports writing.
-		 * 
-		 * @throw tc::ArgumentNullException @p buffer is @a nullptr.
-		 * @throw tc::ArgumentOutOfRangeException @p count is negative.
-		 * @throw tc::io::IOException An I/O error occurred, such as the specified file cannot be found.
-		 * @throw tc::NotSupportedException The stream does not support writing.
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	virtual void write(const byte_t* buffer, size_t count) = 0;
 	
@@ -99,10 +87,6 @@ public:
 		 * 
 		 * @pre A stream must support seeking for @ref seek to work. 
 		 * @note Use @ref canSeek to determine if this stream supports seeking.
-		 * 
-		 * @throw tc::io::IOException An I/O error occurs.
-		 * @throw tc::NotSupportedException The stream does not support seeking, such as if the stream is constructed from a pipe or console output.
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	virtual int64_t seek(int64_t offset, SeekOrigin origin) = 0;
 
@@ -114,17 +98,11 @@ public:
 		 * @pre A stream must support both writing and seeking for @ref setLength to work. 
 		 * @note Use @ref canWrite to determine if this stream supports writing.
 		 * @note Use @ref canSeek to determine if this stream supports seeking.
-		 * 
-		 * @throw tc::io::IOException An I/O error occurs.
-		 * @throw tc::NotSupportedException The stream does not support both writing and seeking, such as if the stream is constructed from a pipe or console output.
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	virtual void setLength(int64_t length) = 0;
 	
 		/**
 		 * @brief Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
-		 * 
-		 * @throw tc::io::IOException An I/O error occurs.
 		 **/
 	virtual void flush() = 0;
 	
