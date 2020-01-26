@@ -8,6 +8,11 @@
 #pragma once
 #include <tc/io/IStorage.h>
 
+#include <tc/ArgumentNullException.h>
+#include <tc/InvalidOperationException.h>
+#include <tc/ObjectDisposedException.h>
+#include <tc/UnauthorisedAccessException.h>
+
 namespace tc { namespace io {
 
 	/**
@@ -28,30 +33,36 @@ public:
 		 * 
 		 * @note Refer to @ref initialise (by copy) for usage documentation
 		 */
-	SubStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& root_path);
+	SubStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& base_path);
 
 		/** 
 		 * @brief Wrap (by move) constuctor
 		 * 
 		 * @note Refer to @ref initialise (by move) for usage documentation
 		 */
-	SubStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& root_path);
-
-	
+	SubStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& base_path);
 
 		/** 
 		 * @brief Wrap (by copy) initialiser
+		 * 
 		 * @param[in] storage The base IStorage object which this sub storage will derive from.
-		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
+		 * @param[in] base_path The path to the subdirectory used as the substream root directory.
+		 * 
+		 * @throw tc::ArgumentNullException @p storage is @a nullptr.
+		 * @throw tc::InvalidOperationException @p storage was not in a ready state
 		 */
-	void initialiseStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& root_path);
+	void initialise(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& base_path);
 
 		/** 
 		 * @brief Wrap (by move) initialiser
+		 * 
 		 * @param[in] storage The base IStorage object which this sub storage will derive from.
-		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
+		 * @param[in] base_path The path to the subdirectory used as the substream root directory.
+		 * 
+		 * @throw tc::ArgumentNullException @p storage is @a nullptr.
+		 * @throw tc::InvalidOperationException @p storage was not in a ready state
 		 */
-	void initialiseStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& root_path);
+	void initialise(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& base_path);
 
 	virtual tc::ResourceStatus state();
 	virtual void dispose();
@@ -66,12 +77,12 @@ public:
 private:
 	static const std::string kClassName;
 	
-	std::shared_ptr<tc::io::IStorage> mFileSystem;
-	tc::io::Path mRootPath;
-	tc::io::Path mWorkingDirectory;
+	std::shared_ptr<tc::io::IStorage> mBaseStorage;
+	tc::io::Path mBaseStoragePath;
+	tc::io::Path mSubStoragePath;
 
-	void sandboxPathToRealPath(const tc::io::Path& sandbox_path, tc::io::Path& real_path);
-	void realPathToSandboxPath(const tc::io::Path& real_path, tc::io::Path& sandbox_path);
+	void subPathToRealPath(const tc::io::Path& substorage_path, tc::io::Path& real_path);
+	void realPathToSubPath(const tc::io::Path& real_path, tc::io::Path& substorage_path);
 	void sanitiseInputPath(const tc::io::Path& unsafe_path, tc::io::Path& safe_path) const;
 };
 

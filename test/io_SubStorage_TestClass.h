@@ -9,27 +9,27 @@ class io_SubStorage_TestClass : public ITestClass
 public:
 	void runAllTests();
 private:
-	class DummyFileSystemBase : public tc::io::IStorage
+	class DummyStorageBase : public tc::io::IStorage
 	{
 	public:
-		DummyFileSystemBase()
+		DummyStorageBase()
 		{
-			initFs();
+			init();
 		}
 
-		virtual tc::ResourceStatus getFsState()
+		void init()
 		{
-			return mState;
-		}
-
-		void initFs()
-		{
-			closeFs();
+			dispose();
 			mCurDir = std::make_shared<tc::io::Path>();
 			mState.set(tc::RESFLAG_READY);
 		}
 
-		virtual void closeFs()
+		virtual tc::ResourceStatus state()
+		{
+			return mState;
+		}
+
+		virtual void dispose()
 		{
 			mState.reset();
 			mCurDir.reset();
@@ -72,7 +72,7 @@ private:
 
 		virtual void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info)
 		{
-			throw tc::Exception(kClassName, "getDirectoryListing() not implemented");
+			throw tc::NotImplementedException(kClassName, "getDirectoryListing() not implemented");
 		}
 	private:
 		static const std::string kClassName;
@@ -80,13 +80,13 @@ private:
 		std::shared_ptr<tc::io::Path> mCurDir;
 	};
 
-	void testSandboxRootPath();
+	void testSubStorageRootPath();
 	void testCreateFile();
 	void testOpenFile();
 	void testRemoveFile();
 	void testCreateDirectory();
 	void testRemoveDirectory();
 	void testGetDirectoryListing();
-	void testNavigateUpSandboxEscape();
-	void testOpenFileOutsideSandbox();
+	void testNavigateUpSubStorageEscape();
+	void testOpenFileOutsideSubStorage();
 };

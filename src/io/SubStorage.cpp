@@ -1,264 +1,270 @@
 #include <tc/io/SubStorage.h>
-#include <tc/Exception.h>
 
 const std::string tc::io::SubStorage::kClassName = "tc::io::SubStorage";
 
 tc::io::SubStorage::SubStorage() :
-	mFileSystem(),
-	mRootPath(),
-	mWorkingDirectory()
+	mBaseStorage(),
+	mBaseStoragePath(),
+	mSubStoragePath()
 {
 }
 
-tc::io::SubStorage::SubStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& root_path) :
+tc::io::SubStorage::SubStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& base_path) :
 	SubStorage()
 {
-	initialiseStorage(storage, root_path);
+	initialise(storage, base_path);
 }
 
-tc::io::SubStorage::SubStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& root_path) :
+tc::io::SubStorage::SubStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& base_path) :
 	SubStorage()
 {
-	initialiseStorage(std::move(storage), root_path);
+	initialise(std::move(storage), base_path);
 }
 
-void tc::io::SubStorage::initialiseStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& root_path)
+void tc::io::SubStorage::initialise(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& base_path)
 {
+	// dispose object before re-initialising
 	dispose();
 
-	mFileSystem = storage;
+	// copy IStorage ptr
+	mBaseStorage = storage;
 	
-	if (mFileSystem.get() != nullptr && mFileSystem->state().test(RESFLAG_READY))
+	if (mBaseStorage.get() == nullptr)
 	{
-		mRootPath = root_path; 
-		mWorkingDirectory = tc::io::Path("/");
+		throw tc::ArgumentNullException(kClassName+"::initialise()", "storage is null");
+	}
+	else if (mBaseStorage->state().test(RESFLAG_READY) == false)
+	{
+		throw tc::InvalidOperationException(kClassName+"::initialise()", "storage is not ready");
+	}
 
-		// get full path of root
-		mFileSystem->setWorkingDirectory(root_path);
-		mFileSystem->getWorkingDirectory(mRootPath);
-	}
-	else
-	{
-		dispose();
-	}
+	// set class state
+	mSubStoragePath = tc::io::Path("/");
+
+	// get full path of root
+	mBaseStorage->setWorkingDirectory(base_path);
+	mBaseStorage->getWorkingDirectory(mBaseStoragePath);
 }
 
-void tc::io::SubStorage::initialiseStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& root_path)
+void tc::io::SubStorage::initialise(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& base_path)
 {
+	// dispose object before re-initialising
 	dispose();
 
-	mFileSystem = std::move(storage);
+	// move IStorage ptr
+	mBaseStorage = std::move(storage);
 
-	if (mFileSystem.get() != nullptr && mFileSystem->state().test(RESFLAG_READY))
+	if (mBaseStorage.get() == nullptr)
 	{
-		mRootPath = root_path; 
-		mWorkingDirectory = tc::io::Path("/");
+		throw tc::ArgumentNullException(kClassName+"::initialise()", "storage is null");
+	}
+	else if (mBaseStorage->state().test(RESFLAG_READY) == false)
+	{
+		throw tc::ArgumentNullException(kClassName+"::initialise()", "storage is not ready");
+	}
 
-		// get full path of root
-		mFileSystem->setWorkingDirectory(root_path);
-		mFileSystem->getWorkingDirectory(mRootPath);
-	}
-	else
-	{
-		dispose();
-	}
+	mSubStoragePath = tc::io::Path("/");
+
+	// get full path of root
+	mBaseStorage->setWorkingDirectory(base_path);
+	mBaseStorage->getWorkingDirectory(mBaseStoragePath);
 }
 
 tc::ResourceStatus tc::io::SubStorage::state()
 {
-	return mFileSystem.get() ? mFileSystem->state() : tc::ResourceStatus(RESFLAG_NOINIT);
+	return mBaseStorage.get() ? mBaseStorage->state() : tc::ResourceStatus(RESFLAG_NOINIT);
 }
 
 void tc::io::SubStorage::dispose()
 {
-	if (mFileSystem.get() != nullptr)
-		mFileSystem->dispose();
+	if (mBaseStorage.get() != nullptr)
+		mBaseStorage->dispose();
 	
-	mRootPath.clear();
-	mWorkingDirectory.clear();
+	mBaseStoragePath.clear();
+	mSubStoragePath.clear();
 }
 
 void tc::io::SubStorage::createFile(const tc::io::Path& path)
 {
-	if (mFileSystem.get() == nullptr)
+	if (mBaseStorage.get() == nullptr)
 	{
-		throw tc::Exception(kClassName, "Failed to create file (no base filesystem)");
+		throw tc::ObjectDisposedException(kClassName+"::createFile()", "Failed to create file (no base storage)");
 	}
 
-	// convert sandbox path to real path
+	// convert substorage path to real path
 	tc::io::Path real_path;
-	sandboxPathToRealPath(path, real_path);
+	subPathToRealPath(path, real_path);
 
 	// delete file
-	mFileSystem->createFile(real_path);
+	mBaseStorage->createFile(real_path);
 }
 
 void tc::io::SubStorage::removeFile(const tc::io::Path& path)
 {
-	if (mFileSystem.get() == nullptr)
+	if (mBaseStorage.get() == nullptr)
 	{
-		throw tc::Exception(kClassName, "Failed to remove file (no base filesystem)");
+		throw tc::ObjectDisposedException(kClassName+"::removeFile()", "Failed to remove file (no base storage)");
 	}
 
-	// convert sandbox path to real path
+	// convert substorage path to real path
 	tc::io::Path real_path;
-	sandboxPathToRealPath(path, real_path);
+	subPathToRealPath(path, real_path);
 
 	// delete file
-	mFileSystem->removeFile(real_path);
+	mBaseStorage->removeFile(real_path);
 }
 
 void tc::io::SubStorage::openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream)
 {
-	if (mFileSystem.get() == nullptr)
+	if (mBaseStorage.get() == nullptr)
 	{
-		throw tc::Exception(kClassName, "Failed to open file (no base filesystem)");
+		throw tc::ObjectDisposedException(kClassName+"::openFile()", "Failed to open file (no base storage)");
 	}
 
-	// convert sandbox path to real path
+	// convert substorage path to real path
 	tc::io::Path real_path;
-	sandboxPathToRealPath(path, real_path);
+	subPathToRealPath(path, real_path);
 
 	// open file
-	return mFileSystem->openFile(real_path, mode, access, stream);
+	return mBaseStorage->openFile(real_path, mode, access, stream);
 }
 
 void tc::io::SubStorage::createDirectory(const tc::io::Path& path)
 {
-	if (mFileSystem.get() == nullptr)
+	if (mBaseStorage.get() == nullptr)
 	{
-		throw tc::Exception(kClassName, "Failed to create directory (no base filesystem)");
+		throw tc::ObjectDisposedException(kClassName+"::createDirectory()", "Failed to create directory (no base storage)");
 	}
 
-	// convert sandbox path to real path
+	// convert substorage path to real path
 	tc::io::Path real_path;
-	sandboxPathToRealPath(path, real_path);
+	subPathToRealPath(path, real_path);
 
 	// create directory
-	mFileSystem->createDirectory(real_path);
+	mBaseStorage->createDirectory(real_path);
 }
 
 void tc::io::SubStorage::removeDirectory(const tc::io::Path& path)
 {
-	if (mFileSystem.get() == nullptr)
+	if (mBaseStorage.get() == nullptr)
 	{
-		throw tc::Exception(kClassName, "Failed to remove directory (no base filesystem)");
+		throw tc::ObjectDisposedException(kClassName+"::removeDirectory()", "Failed to remove directory (no base storage)");
 	}
 
-	// convert sandbox path to real path
+	// convert substorage path to real path
 	tc::io::Path real_path;
-	sandboxPathToRealPath(path, real_path);
+	subPathToRealPath(path, real_path);
 
 	// remove directory
-	mFileSystem->removeDirectory(real_path);
+	mBaseStorage->removeDirectory(real_path);
 }
 
 void tc::io::SubStorage::getWorkingDirectory(tc::io::Path& path)
 {
-	if (mFileSystem.get() == nullptr)
+	if (mBaseStorage.get() == nullptr)
 	{
-		throw tc::Exception(kClassName, "Failed to get current working directory (no base filesystem)");
+		throw tc::ObjectDisposedException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (no base storage)");
 	}
 
-	path = mWorkingDirectory;
+	path = mSubStoragePath;
 }
 
 void tc::io::SubStorage::setWorkingDirectory(const tc::io::Path& path)
 {
-	if (mFileSystem.get() == nullptr)
+	if (mBaseStorage.get() == nullptr)
 	{
-		throw tc::Exception(kClassName, "Failed to set current working directory (no base filesystem)");
+		throw tc::ObjectDisposedException(kClassName+"::setWorkingDirectory()", "Failed to set current working directory (no base storage)");
 	}
 
-	// convert sandbox path to real path
+	// convert substorage path to real path
 	tc::io::Path real_path;
-	sandboxPathToRealPath(path, real_path);
+	subPathToRealPath(path, real_path);
 
 	// set current directory
-	mFileSystem->setWorkingDirectory(real_path);
+	mBaseStorage->setWorkingDirectory(real_path);
 
 	// save current directory
-	realPathToSandboxPath(real_path, mWorkingDirectory);
+	realPathToSubPath(real_path, mSubStoragePath);
 }
 
 void tc::io::SubStorage::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
 {
-	if (mFileSystem.get() == nullptr)
+	if (mBaseStorage.get() == nullptr)
 	{
-		throw tc::Exception(kClassName, "Failed to get directory listing (no base filesystem)");
+		throw tc::ObjectDisposedException(kClassName+"::setWorkingDirectory()", "Failed to get directory listing (no base storage)");
 	}
 
-	// convert sandbox path to real path
+	// convert substorage path to real path
 	tc::io::Path real_path;
-	sandboxPathToRealPath(path, real_path);
+	subPathToRealPath(path, real_path);
 
 	// get real directory info
 	tc::io::sDirectoryListing real_info;
-	mFileSystem->getDirectoryListing(real_path, real_info);
+	mBaseStorage->getDirectoryListing(real_path, real_info);
 
 	// convert directory absolute path
-	tc::io::Path sandbox_dir_path;
-	realPathToSandboxPath(real_info.abs_path, sandbox_dir_path);
+	tc::io::Path substorage_dir_path;
+	realPathToSubPath(real_info.abs_path, substorage_dir_path);
 	
-	// update info with sandbox path
-	real_info.abs_path = sandbox_dir_path;
+	// update info with substorage path
+	real_info.abs_path = substorage_dir_path;
 
 	// write object to output
 	info = real_info;
 }
 
-void tc::io::SubStorage::sandboxPathToRealPath(const tc::io::Path& sandbox_path, tc::io::Path& real_path)
+void tc::io::SubStorage::subPathToRealPath(const tc::io::Path& substorage_path, tc::io::Path& real_path)
 {
-	tc::io::Path sandbox_current_dir;
-	tc::io::Path sandbox_path_;
+	tc::io::Path substorage_current_dir;
+	tc::io::Path substorage_path_;
 
-	// test if the sandbox path is an absolute path (begins with the root element)
-	if (sandbox_path.size() > 0 && *sandbox_path.begin() == "")
+	// test if the substorage path is an absolute path (begins with the root element)
+	if (substorage_path.size() > 0 && *substorage_path.begin() == "")
 	{
-		sandbox_current_dir = sandbox_path;
+		substorage_current_dir = substorage_path;
 	}
 	// otherwise this is a relative directory and the working directory (which includes the root element) must be obtained
 	else
 	{
-		sandbox_path_ = sandbox_path;
-		getWorkingDirectory(sandbox_current_dir);
+		substorage_path_ = substorage_path;
+		getWorkingDirectory(substorage_current_dir);
 	}
 
-	// get santized path (removes elements that could be used to escape the sandbox)
-	tc::io::Path safe_sandbox_path;
-	sanitiseInputPath(sandbox_current_dir + sandbox_path_, safe_sandbox_path);
+	// get santized path (removes elements that could be used to escape the substorage)
+	tc::io::Path safe_substorage_path;
+	sanitiseInputPath(substorage_current_dir + substorage_path_, safe_substorage_path);
 	
-	// the real path is the sandbox root path + sandbox path
-	real_path = mRootPath + safe_sandbox_path;
+	// the real path is the substorage root path + substorage path
+	real_path = mBaseStoragePath + safe_substorage_path;
 }
 
-void tc::io::SubStorage::realPathToSandboxPath(const tc::io::Path& real_path, tc::io::Path& sandbox_path)
+void tc::io::SubStorage::realPathToSubPath(const tc::io::Path& real_path, tc::io::Path& substorage_path)
 {
 	// get iterator for real path
 	tc::io::Path::const_iterator real_path_itr = real_path.begin();
 
 	// determine if the path is large enough to preclude the root path
-	if (real_path.size() < mRootPath.size())
+	if (real_path.size() < mBaseStoragePath.size())
 	{
-		throw tc::Exception(kClassName, "Sandbox security exception (sandbox escape detected)");
+		throw tc::UnauthorisedAccessException(kClassName, "Substorage escape detected");
 	}
 
 	// confirm the real path includes the root path
-	for (tc::io::Path::const_iterator root_path_itr = mRootPath.begin(); root_path_itr != mRootPath.end(); root_path_itr++, real_path_itr++)
+	for (tc::io::Path::const_iterator root_path_itr = mBaseStoragePath.begin(); root_path_itr != mBaseStoragePath.end(); root_path_itr++, real_path_itr++)
 	{
 		if (*real_path_itr != *root_path_itr)
 		{
-			throw tc::Exception(kClassName, "Sandbox security exception (sandbox escape detected)");
+			throw tc::UnauthorisedAccessException(kClassName, "Substorage escape detected");
 		}
 	}
 
 	// Put root char
-	sandbox_path.push_back("");
+	substorage_path.push_back("");
 
-	// save all path elements after the root sandbox path
+	// save all path elements after the root substorage path
 	for (; real_path_itr != real_path.end(); real_path_itr++)
 	{
-		sandbox_path.push_back(*real_path_itr);
+		substorage_path.push_back(*real_path_itr);
 	}
 }
 

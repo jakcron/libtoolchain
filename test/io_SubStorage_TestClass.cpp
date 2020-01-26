@@ -3,58 +3,58 @@
 
 #include "io_SubStorage_TestClass.h"
 
-const std::string io_SubStorage_TestClass::DummyFileSystemBase::kClassName = "DummyFileSystemBase";
+const std::string io_SubStorage_TestClass::DummyStorageBase::kClassName = "DummyStorageBase";
 
 void io_SubStorage_TestClass::runAllTests(void)
 {
 	std::cout << "[tc::io::SubStorage] START" << std::endl;
-	testSandboxRootPath();
+	testSubStorageRootPath();
 	testCreateFile();
 	testOpenFile();
 	testRemoveFile();
 	testCreateDirectory();
 	testRemoveDirectory();
 	testGetDirectoryListing();
-	testNavigateUpSandboxEscape();
-	testOpenFileOutsideSandbox();
+	testNavigateUpSubStorageEscape();
+	testOpenFileOutsideSubStorage();
 	std::cout << "[tc::io::SubStorage] END" << std::endl;
 }
 
-void io_SubStorage_TestClass::testSandboxRootPath()
+void io_SubStorage_TestClass::testSubStorageRootPath()
 {
-	std::cout << "[tc::io::SubStorage] testSandboxRootPath : " << std::flush;
+	std::cout << "[tc::io::SubStorage] testSubStorageRootPath : " << std::flush;
 	try
 	{
-		class DummyFileSystem : public DummyFileSystemBase
+		class DummyStorage : public DummyStorageBase
 		{
 		public:
-			DummyFileSystem()
+			DummyStorage()
 			{
 			}
 		};
 
-		DummyFileSystem fs;
+		DummyStorage storage;
 
 		// define directory names
 		tc::io::Path dummyio_curdir = tc::io::Path("/home/jakcron/source/LibToolChain");
 		tc::io::Path testdir_path = tc::io::Path("testdir");
-		tc::io::Path sandbox_relative_root = testdir_path + tc::io::Path("sandbox");
+		tc::io::Path sub_storage_relative_root = testdir_path + tc::io::Path("substorage");
 
-		// test sandbox creation & test real sandbox root path
+		// test substorage creation & test real substorage root path
 		try
 		{
-			// get sandbox filesystem
-			tc::io::SubStorage sb_fs(std::make_shared<DummyFileSystem>(fs), dummyio_curdir + sandbox_relative_root);
+			// get substorage filesystem
+			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + sub_storage_relative_root);
 
-			// save sandbox real path
-			tc::io::Path sandbox_real_root;
-			sb_fs.setWorkingDirectory(tc::io::Path("/"));
-			fs.getWorkingDirectory(sandbox_real_root);
+			// save substorage real path
+			tc::io::Path sub_storage_real_root;
+			sub_storage.setWorkingDirectory(tc::io::Path("/"));
+			storage.getWorkingDirectory(sub_storage_real_root);
 
-			// check the sandbox is generating the correct path
-			if (sandbox_real_root != dummyio_curdir + sandbox_relative_root)
+			// check the substorage is generating the correct path
+			if (sub_storage_real_root != dummyio_curdir + sub_storage_relative_root)
 			{
-				throw tc::Exception("Sandbox root directory did not have expected absolute real path");
+				throw tc::Exception("SubStorage root directory did not have expected absolute real path");
 			}
 
 			std::cout << "PASS" << std::endl;
@@ -77,10 +77,10 @@ void io_SubStorage_TestClass::testCreateFile()
 	std::cout << "[tc::io::SubStorage] testCreateFile : " << std::flush;
 	try
 	{
-		class DummyFileSystem : public DummyFileSystemBase
+		class DummyStorage : public DummyStorageBase
 		{
 		public:
-			DummyFileSystem()
+			DummyStorage()
 			{
 			}
 
@@ -90,25 +90,25 @@ void io_SubStorage_TestClass::testCreateFile()
 				getWorkingDirectory(cur_dir);
 				if (path != cur_dir + tc::io::Path("a_dir/testfile"))
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect path");
+					throw tc::Exception("DummyStorage", "file had incorrect path");
 				}
 			}
 		};
 
-		DummyFileSystem fs;
+		DummyStorage storage;
 
 		// define directory names
 		tc::io::Path dummyio_curdir = tc::io::Path("/home/jakcron/source/LibToolChain");
 		tc::io::Path testdir_path = tc::io::Path("testdir");
 
-		// test sandbox creation & test real sandbox root path
+		// test substorage creation & test real substorage root path
 		try
 		{
-			// get sandbox filesystem
-			tc::io::SubStorage sb_fs(std::make_shared<DummyFileSystem>(fs), dummyio_curdir + testdir_path);
+			// get substorage filesystem
+			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
 
 			// attempt to create file
-			sb_fs.createFile(tc::io::Path("/a_dir/testfile"));
+			sub_storage.createFile(tc::io::Path("/a_dir/testfile"));
 			
 			std::cout << "PASS" << std::endl;
 		}
@@ -128,10 +128,10 @@ void io_SubStorage_TestClass::testOpenFile()
 	std::cout << "[tc::io::SubStorage] testOpenFile : " << std::flush;
 	try
 	{
-		class DummyFileSystem : public DummyFileSystemBase
+		class DummyStorage : public DummyStorageBase
 		{
 		public:
-			DummyFileSystem()
+			DummyStorage()
 			{
 			}
 
@@ -141,30 +141,30 @@ void io_SubStorage_TestClass::testOpenFile()
 				getWorkingDirectory(cur_dir);
 				if (mode != tc::io::FileMode::Open || access != tc::io::FileAccess::Read)
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect access permissions");
+					throw tc::Exception("DummyStorage", "file had incorrect access permissions");
 				}
 				if (path != cur_dir + tc::io::Path("a_dir/testfile"))
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect path");
+					throw tc::Exception("DummyStorage", "file had incorrect path");
 				}
 			}
 		};
 
-		DummyFileSystem fs;
+		DummyStorage storage;
 
 		// define directory names
 		tc::io::Path dummyio_curdir = tc::io::Path("/home/jakcron/source/LibToolChain");
 		tc::io::Path testdir_path = tc::io::Path("testdir");
 
-		// test sandbox creation & test real sandbox root path
+		// test substorage creation & test real substorage root path
 		try
 		{
-			// get sandbox filesystem
-			tc::io::SubStorage sb_fs(std::make_shared<DummyFileSystem>(fs), dummyio_curdir + testdir_path);
+			// get substorage filesystem
+			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
 
 			// attempt to open file
 			std::shared_ptr<tc::io::IStream> file;
-			sb_fs.openFile(tc::io::Path("/a_dir/testfile"), tc::io::FileMode::Open, tc::io::FileAccess::Read, file);
+			sub_storage.openFile(tc::io::Path("/a_dir/testfile"), tc::io::FileMode::Open, tc::io::FileAccess::Read, file);
 			
 			std::cout << "PASS" << std::endl;
 		}
@@ -184,10 +184,10 @@ void io_SubStorage_TestClass::testRemoveFile()
 	std::cout << "[tc::io::SubStorage] testRemoveFile : " << std::flush;
 	try
 	{
-		class DummyFileSystem : public DummyFileSystemBase
+		class DummyStorage : public DummyStorageBase
 		{
 		public:
-			DummyFileSystem()
+			DummyStorage()
 			{
 			}
 
@@ -197,25 +197,25 @@ void io_SubStorage_TestClass::testRemoveFile()
 				getWorkingDirectory(cur_dir);
 				if (path != cur_dir + tc::io::Path("a_dir/testfile"))
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect path");
+					throw tc::Exception("DummyStorage", "file had incorrect path");
 				}
 			}
 		};
 	
-		DummyFileSystem fs;
+		DummyStorage storage;
 
 		// define directory names
 		tc::io::Path dummyio_curdir = tc::io::Path("/home/jakcron/source/LibToolChain");
 		tc::io::Path testdir_path = tc::io::Path("testdir");
 
-		// test sandbox creation & test real sandbox root path
+		// test substorage creation & test real substorage root path
 		try
 		{
-			// get sandbox filesystem
-			tc::io::SubStorage sb_fs(std::make_shared<DummyFileSystem>(fs), dummyio_curdir + testdir_path);
+			// get substorage filesystem
+			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
 
 			// attempt to delete file
-			sb_fs.removeFile(tc::io::Path("/a_dir/testfile"));
+			sub_storage.removeFile(tc::io::Path("/a_dir/testfile"));
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -236,10 +236,10 @@ void io_SubStorage_TestClass::testCreateDirectory()
 	std::cout << "[tc::io::SubStorage] testCreateDirectory : " << std::flush;
 	try
 	{
-		class DummyFileSystem : public DummyFileSystemBase
+		class DummyStorage : public DummyStorageBase
 		{
 		public:
-			DummyFileSystem()
+			DummyStorage()
 			{
 			}
 
@@ -249,25 +249,25 @@ void io_SubStorage_TestClass::testCreateDirectory()
 				getWorkingDirectory(cur_dir);
 				if (path != cur_dir + tc::io::Path("a_dir/testdir/hey"))
 				{
-					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
+					throw tc::Exception("DummyStorage", "dir had incorrect path");
 				}
 			}
 		};
 
-		DummyFileSystem fs;
+		DummyStorage storage;
 
 		// define directory names
 		tc::io::Path dummyio_curdir = tc::io::Path("/home/jakcron/source/LibToolChain");
 		tc::io::Path testdir_path = tc::io::Path("testdir");
 
-		// test sandbox creation & test real sandbox root path
+		// test substorage creation & test real substorage root path
 		try
 		{
-			// get sandbox filesystem
-			tc::io::SubStorage sb_fs(std::make_shared<DummyFileSystem>(fs), dummyio_curdir + testdir_path);
+			// get substorage filesystem
+			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
 
 			// attempt to create directory
-			sb_fs.createDirectory(tc::io::Path("/a_dir/testdir/hey"));
+			sub_storage.createDirectory(tc::io::Path("/a_dir/testdir/hey"));
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -287,10 +287,10 @@ void io_SubStorage_TestClass::testRemoveDirectory()
 	std::cout << "[tc::io::SubStorage] testRemoveDirectory : " << std::flush;
 	try
 	{
-		class DummyFileSystem : public DummyFileSystemBase
+		class DummyStorage : public DummyStorageBase
 		{
 		public:
-			DummyFileSystem()
+			DummyStorage()
 			{
 			}
 
@@ -300,25 +300,25 @@ void io_SubStorage_TestClass::testRemoveDirectory()
 				getWorkingDirectory(cur_dir);
 				if (path != cur_dir + tc::io::Path("a_dir/testdir/hey"))
 				{
-					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
+					throw tc::Exception("DummyStorage", "dir had incorrect path");
 				}
 			}
 		};
 
-		DummyFileSystem fs;
+		DummyStorage storage;
 
 		// define directory names
 		tc::io::Path dummyio_curdir = tc::io::Path("/home/jakcron/source/LibToolChain");
 		tc::io::Path testdir_path = tc::io::Path("testdir");
 
-		// test sandbox creation & test real sandbox root path
+		// test substorage creation & test real substorage root path
 		try
 		{
-			// get sandbox filesystem
-			tc::io::SubStorage sb_fs(std::make_shared<DummyFileSystem>(fs), dummyio_curdir + testdir_path);
+			// get substorage filesystem
+			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
 
 			// attempt to remove directory
-			sb_fs.removeDirectory(tc::io::Path("/a_dir/testdir/hey"));
+			sub_storage.removeDirectory(tc::io::Path("/a_dir/testdir/hey"));
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -338,10 +338,10 @@ void io_SubStorage_TestClass::testGetDirectoryListing()
 	std::cout << "[tc::io::SubStorage] testGetDirectoryListing : " << std::flush;
 	try
 	{
-		class DummyFileSystem : public DummyFileSystemBase
+		class DummyStorage : public DummyStorageBase
 		{
 		public:
-			DummyFileSystem()
+			DummyStorage()
 			{
 			}
 
@@ -351,7 +351,7 @@ void io_SubStorage_TestClass::testGetDirectoryListing()
 				getWorkingDirectory(cur_dir);
 				if (path != cur_dir + tc::io::Path("a_dir/testdir/hey"))
 				{
-					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
+					throw tc::Exception("DummyStorage", "dir had incorrect path");
 				}
 
 				dir_info.abs_path = path;
@@ -360,37 +360,37 @@ void io_SubStorage_TestClass::testGetDirectoryListing()
 			}
 		};
 
-		DummyFileSystem fs;
+		DummyStorage storage;
 
 		// define directory names
 		tc::io::Path dummyio_curdir = tc::io::Path("/home/jakcron/source/LibToolChain");
 		tc::io::Path testdir_path = tc::io::Path("testdir");
 
-		// test sandbox creation & test real sandbox root path
+		// test substorage creation & test real substorage root path
 		try
 		{
-			// get sandbox filesystem
-			tc::io::SubStorage sb_fs(std::make_shared<DummyFileSystem>(fs), dummyio_curdir + testdir_path);
+			// get substorage filesystem
+			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
 
-			// save sandbox dir info
+			// save substorage dir info
 			tc::io::sDirectoryListing sb_dir_info;
-			sb_fs.getDirectoryListing(tc::io::Path("/a_dir/testdir/hey"), sb_dir_info);
+			sub_storage.getDirectoryListing(tc::io::Path("/a_dir/testdir/hey"), sb_dir_info);
 
 			// save real dir info
 			tc::io::sDirectoryListing real_dir_info;
-			fs.getDirectoryListing(dummyio_curdir + tc::io::Path("testdir/a_dir/testdir/hey"), real_dir_info);
+			storage.getDirectoryListing(dummyio_curdir + tc::io::Path("testdir/a_dir/testdir/hey"), real_dir_info);
 
 			if (sb_dir_info.file_list != real_dir_info.file_list)
 			{
-				throw tc::Exception("DummyFileSystem", "File list was not as expected");
+				throw tc::Exception("DummyStorage", "File list was not as expected");
 			}
 
 			if (sb_dir_info.dir_list != real_dir_info.dir_list)
 			{
-				throw tc::Exception("DummyFileSystem", "Directory list was not as expected");
+				throw tc::Exception("DummyStorage", "Directory list was not as expected");
 			}
 
-			tc::io::Path fixed_sandbox_path;
+			tc::io::Path fixed_sub_storage_path;
 			for (tc::io::Path::const_iterator itr = sb_dir_info.abs_path.begin(); itr != sb_dir_info.abs_path.end(); itr++)
 			{
 				if (*itr == "" && itr == sb_dir_info.abs_path.begin())
@@ -398,12 +398,12 @@ void io_SubStorage_TestClass::testGetDirectoryListing()
 					continue;
 				}
 
-				fixed_sandbox_path.push_back(*itr);
+				fixed_sub_storage_path.push_back(*itr);
 			}
 
-			if ((dummyio_curdir + testdir_path + fixed_sandbox_path) != real_dir_info.abs_path)
+			if ((dummyio_curdir + testdir_path + fixed_sub_storage_path) != real_dir_info.abs_path)
 			{
-				throw tc::Exception("DummyFileSystem", "Directory path was not as expected");
+				throw tc::Exception("DummyStorage", "Directory path was not as expected");
 			}
 
 			std::cout << "PASS" << std::endl;
@@ -420,15 +420,15 @@ void io_SubStorage_TestClass::testGetDirectoryListing()
 }
 
 
-void io_SubStorage_TestClass::testNavigateUpSandboxEscape()
+void io_SubStorage_TestClass::testNavigateUpSubStorageEscape()
 {
-	std::cout << "[tc::io::SubStorage] testNavigateUpSandboxEscape : " << std::flush;
+	std::cout << "[tc::io::SubStorage] testNavigateUpSubStorageEscape : " << std::flush;
 	try
 	{
-		class DummyFileSystem : public DummyFileSystemBase
+		class DummyStorage : public DummyStorageBase
 		{
 		public:
-			DummyFileSystem() :
+			DummyStorage() :
 				mLastUsedPath(new tc::io::Path())
 			{
 			}
@@ -447,31 +447,31 @@ void io_SubStorage_TestClass::testNavigateUpSandboxEscape()
 			std::shared_ptr<tc::io::Path> mLastUsedPath;
 		};
 
-		DummyFileSystem fs;
+		DummyStorage storage;
 
 		// save the current directory
 		tc::io::Path dummyio_curdir = tc::io::Path("/home/jakcron/source/LibToolChain");
 
 		// define directory names
 		tc::io::Path testdir_path = tc::io::Path("testdir");
-		tc::io::Path sandbox_relative_root = testdir_path + tc::io::Path("sandbox");
+		tc::io::Path sub_storage_relative_root = testdir_path + tc::io::Path("substorage");
 
-		// test navigating outside of sandbox with ".." navigation
+		// test navigating outside of substorage with ".." navigation
 		try
 		{
-			// get sandbox filesystem
-			tc::io::SubStorage sb_fs(std::make_shared<DummyFileSystem>(fs), dummyio_curdir + sandbox_relative_root);
+			// get substorage filesystem
+			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + sub_storage_relative_root);
 
 			// get info about current directory
 			tc::io::sDirectoryListing dir_info;
-			sb_fs.getDirectoryListing(tc::io::Path("./../../../../../../../../../../../../../..///./././"), dir_info);
+			sub_storage.getDirectoryListing(tc::io::Path("./../../../../../../../../../../../../../..///./././"), dir_info);
 			
 			if (dir_info.abs_path != tc::io::Path("/"))
 			{
-				throw tc::Exception("Sandbox directory path not as expected");
+				throw tc::Exception("SubStorage directory path not as expected");
 			}
 
-			if (fs.getLastUsedPath() != dummyio_curdir + sandbox_relative_root)
+			if (storage.getLastUsedPath() != dummyio_curdir + sub_storage_relative_root)
 			{
 				throw tc::Exception("Real directory path not as expected");
 			}
@@ -489,15 +489,15 @@ void io_SubStorage_TestClass::testNavigateUpSandboxEscape()
 	}
 }
 
-void io_SubStorage_TestClass::testOpenFileOutsideSandbox()
+void io_SubStorage_TestClass::testOpenFileOutsideSubStorage()
 {
-	std::cout << "[tc::io::SubStorage] testOpenFileOutsideSandbox : " << std::flush;
+	std::cout << "[tc::io::SubStorage] testOpenFileOutsideSubStorage : " << std::flush;
 	try
 	{
-		class DummyFileSystem : public DummyFileSystemBase
+		class DummyStorage : public DummyStorageBase
 		{
 		public:
-			DummyFileSystem()
+			DummyStorage()
 			{
 			}
 
@@ -507,37 +507,37 @@ void io_SubStorage_TestClass::testOpenFileOutsideSandbox()
 				getWorkingDirectory(mCurDir);
 				if (mode != tc::io::FileMode::Open || access != tc::io::FileAccess::Read)
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect access mode");
+					throw tc::Exception("DummyStorage", "file had incorrect access mode");
 				}
 				if (path == tc::io::Path("/home/jakcron/source/LibToolChain/testdir/inaccessible_file0"))
 				{
-					throw tc::Exception("DummyFileSystem", "escaped sandbox");
+					throw tc::Exception("DummyStorage", "escaped substorage");
 				}
-				if (path != tc::io::Path("/home/jakcron/source/LibToolChain/testdir/sandbox/inaccessible_file0"))
+				if (path != tc::io::Path("/home/jakcron/source/LibToolChain/testdir/substorage/inaccessible_file0"))
 				{
-					throw tc::Exception("DummyFileSystem", "sandbox path was not as expected");
+					throw tc::Exception("DummyStorage", "substorage path was not as expected");
 				}
 			}
 		};
 
-		DummyFileSystem fs;
+		DummyStorage storage;
 
 		// save the current directory
 		tc::io::Path dummyio_curdir = tc::io::Path("/home/jakcron/source/LibToolChain");
 
 		// define directory names
 		tc::io::Path testdir_path = tc::io::Path("testdir");
-		tc::io::Path sandbox_relative_root = testdir_path + tc::io::Path("sandbox");
+		tc::io::Path sub_storage_relative_root = testdir_path + tc::io::Path("substorage");
 
-		// test accessing file outside of sandbox
+		// test accessing file outside of substorage
 		try {
-			// get sandbox filesystem
-			tc::io::SubStorage sb_fs(std::make_shared<DummyFileSystem>(fs), dummyio_curdir + sandbox_relative_root);
+			// get substorage filesystem
+			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + sub_storage_relative_root);
 			  
-			// try to open the file just outside the sandbox
-			sb_fs.setWorkingDirectory(tc::io::Path("/"));
+			// try to open the file just outside the substorage
+			sub_storage.setWorkingDirectory(tc::io::Path("/"));
 			std::shared_ptr<tc::io::IStream> inaccessible_file;
-			sb_fs.openFile(tc::io::Path("../inaccessible_file0"), tc::io::FileMode::Open, tc::io::FileAccess::Read, inaccessible_file);
+			sub_storage.openFile(tc::io::Path("../inaccessible_file0"), tc::io::FileMode::Open, tc::io::FileAccess::Read, inaccessible_file);
 
 			std::cout << "PASS" << std::endl;
 		}
