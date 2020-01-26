@@ -25,35 +25,36 @@ public:
 
 		/** 
 		 * @brief Wrap (by copy) constuctor
-		 * @param[in] fs IStorage object to be sandboxed
-		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
+		 * 
+		 * @note Refer to @ref initialise (by copy) for usage documentation
 		 */
-	SubStorage(const std::shared_ptr<tc::io::IStorage>& fs, const tc::io::Path& root_path);
+	SubStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& root_path);
 
 		/** 
 		 * @brief Wrap (by move) constuctor
-		 * @param[in] fs IStorage object to be sandboxed
-		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
+		 * 
+		 * @note Refer to @ref initialise (by move) for usage documentation
 		 */
-	SubStorage(std::shared_ptr<tc::io::IStorage>&& fs, const tc::io::Path& root_path);
+	SubStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& root_path);
 
-	virtual tc::ResourceStatus getFsState();
+	
 
 		/** 
 		 * @brief Wrap (by copy) initialiser
-		 * @param[in] fs IStorage object to be sandboxed
+		 * @param[in] storage The base IStorage object which this sub storage will derive from.
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	void initialiseFs(const std::shared_ptr<tc::io::IStorage>& fs, const tc::io::Path& root_path);
+	void initialiseStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& root_path);
 
 		/** 
 		 * @brief Wrap (by move) initialiser
-		 * @param[in] fs IStorage object to be sandboxed
+		 * @param[in] storage The base IStorage object which this sub storage will derive from.
 		 * @param[in] root_path The path to the subdirectory used as the sandboxed root directory.
 		 */
-	void initialiseFs(std::shared_ptr<tc::io::IStorage>&& fs, const tc::io::Path& root_path);
+	void initialiseStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& root_path);
 
-	virtual void closeFs();
+	virtual tc::ResourceStatus state();
+	virtual void dispose();
 	virtual void createFile(const tc::io::Path& path);
 	virtual void removeFile(const tc::io::Path& path);
 	virtual void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream);

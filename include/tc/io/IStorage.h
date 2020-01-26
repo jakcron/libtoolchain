@@ -61,12 +61,12 @@ public:
 		 * @brief Get state of IStorage
 		 * @return ResourceStatus
 		 */
-	virtual tc::ResourceStatus getFsState() = 0;
+	virtual tc::ResourceStatus state() = 0;
 
 		/**
 		 * @brief Close the filesystem
 		 */
-	virtual void closeFs() = 0;
+	virtual void dispose() = 0;
 
 		/** 
 		 * @brief Create a new file

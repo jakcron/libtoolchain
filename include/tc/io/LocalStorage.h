@@ -24,12 +24,11 @@ public:
 		/// Default Constructor
 	LocalStorage();
 
-	virtual tc::ResourceStatus getFsState();
+		/// Open Local Storage
+	void openStorage();
 
-		/// Open Local Filesystem
-	void openFs();
-
-	virtual void closeFs();
+	virtual tc::ResourceStatus state();
+	virtual void dispose();
 	virtual void createFile(const tc::io::Path& path);
 	virtual void removeFile(const tc::io::Path& path);
 	virtual void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream);

@@ -10,30 +10,25 @@ tc::io::SubStorage::SubStorage() :
 {
 }
 
-tc::io::SubStorage::SubStorage(const std::shared_ptr<tc::io::IStorage>& fs, const tc::io::Path& root_path) :
+tc::io::SubStorage::SubStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& root_path) :
 	SubStorage()
 {
-	initialiseFs(fs, root_path);
+	initialiseStorage(storage, root_path);
 }
 
-tc::io::SubStorage::SubStorage(std::shared_ptr<tc::io::IStorage>&& fs, const tc::io::Path& root_path) :
+tc::io::SubStorage::SubStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& root_path) :
 	SubStorage()
 {
-	initialiseFs(std::move(fs), root_path);
+	initialiseStorage(std::move(storage), root_path);
 }
 
-tc::ResourceStatus tc::io::SubStorage::getFsState()
+void tc::io::SubStorage::initialiseStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& root_path)
 {
-	return mFileSystem.get() ? mFileSystem->getFsState() : tc::ResourceStatus(RESFLAG_NOINIT);
-}
+	dispose();
 
-void tc::io::SubStorage::initialiseFs(const std::shared_ptr<tc::io::IStorage>& fs, const tc::io::Path& root_path)
-{
-	closeFs();
-
-	mFileSystem = fs;
+	mFileSystem = storage;
 	
-	if (mFileSystem.get() != nullptr && mFileSystem->getFsState().test(RESFLAG_READY))
+	if (mFileSystem.get() != nullptr && mFileSystem->state().test(RESFLAG_READY))
 	{
 		mRootPath = root_path; 
 		mWorkingDirectory = tc::io::Path("/");
@@ -44,17 +39,17 @@ void tc::io::SubStorage::initialiseFs(const std::shared_ptr<tc::io::IStorage>& f
 	}
 	else
 	{
-		closeFs();
+		dispose();
 	}
 }
 
-void tc::io::SubStorage::initialiseFs(std::shared_ptr<tc::io::IStorage>&& fs, const tc::io::Path& root_path)
+void tc::io::SubStorage::initialiseStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& root_path)
 {
-	closeFs();
+	dispose();
 
-	mFileSystem = std::move(fs);
+	mFileSystem = std::move(storage);
 
-	if (mFileSystem.get() != nullptr && mFileSystem->getFsState().test(RESFLAG_READY))
+	if (mFileSystem.get() != nullptr && mFileSystem->state().test(RESFLAG_READY))
 	{
 		mRootPath = root_path; 
 		mWorkingDirectory = tc::io::Path("/");
@@ -65,14 +60,19 @@ void tc::io::SubStorage::initialiseFs(std::shared_ptr<tc::io::IStorage>&& fs, co
 	}
 	else
 	{
-		closeFs();
+		dispose();
 	}
 }
 
-void tc::io::SubStorage::closeFs()
+tc::ResourceStatus tc::io::SubStorage::state()
+{
+	return mFileSystem.get() ? mFileSystem->state() : tc::ResourceStatus(RESFLAG_NOINIT);
+}
+
+void tc::io::SubStorage::dispose()
 {
 	if (mFileSystem.get() != nullptr)
-		mFileSystem->closeFs();
+		mFileSystem->dispose();
 	
 	mRootPath.clear();
 	mWorkingDirectory.clear();

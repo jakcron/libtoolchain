@@ -23,20 +23,20 @@ const std::string tc::io::LocalStorage::kClassName = "tc::io::LocalStorage";
 tc::io::LocalStorage::LocalStorage() :
 	mState()
 {
-	openFs();
+	openStorage();
 }
 
-tc::ResourceStatus tc::io::LocalStorage::getFsState()
-{
-	return mState;
-}
-
-void tc::io::LocalStorage::openFs()
+void tc::io::LocalStorage::openStorage()
 {
 	mState = (1 << tc::RESFLAG_READY);
 }
 
-void tc::io::LocalStorage::closeFs()
+tc::ResourceStatus tc::io::LocalStorage::state()
+{
+	return mState;
+}
+
+void tc::io::LocalStorage::dispose()
 {
 	mState = 0;
 }
