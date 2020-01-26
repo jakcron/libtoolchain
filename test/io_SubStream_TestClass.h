@@ -2,73 +2,106 @@
 #include "ITestClass.h"
 
 #include <tc/io.h>
+#include <tc/ArgumentOutOfRangeException.h>
+#include <tc/NotImplementedException.h>
 
 class io_SubStream_TestClass : public ITestClass
 {
 public:
 	void runAllTests();
 private:
-	class DummyFileBase : public tc::io::IStream
+	class DummyStreamBase : public tc::io::IStream
 	{
 	public:
-		DummyFileBase()
+		DummyStreamBase() :
+			DummyStreamBase(0x10000000)
 		{
-			init();
 		}
 
-		virtual tc::ResourceStatus state()
+		DummyStreamBase(int64_t length)
 		{
-			return mState;
+			init(length);
 		}
 
-		void init()
+		void init(int64_t length)
 		{
-			mState.set(tc::RESFLAG_READY);
-			mOffset = 0;
-			mSize = 0;
+			mCanRead = true;
+			mCanWrite = true;
+			mCanSeek = true;
+			mPosition = 0;
+			mLength = length;
 		}
 
-		virtual void close()
+		virtual bool canRead() const
 		{
-			mState = 0;
-			mOffset = 0;
-			mSize = 0;
+			return mCanRead;
 		}
 
-		virtual void setSize(uint64_t size)
+		virtual bool canWrite() const
 		{
-			mSize = size;
+			return mCanWrite;
 		}
 
-		virtual uint64_t size()
+		virtual bool canSeek() const
 		{
-			return mSize;
-		}
-		
-		virtual void seek(uint64_t offset)
-		{
-			mOffset = offset;
+			return mCanSeek;
 		}
 
-		virtual uint64_t pos()
+		virtual int64_t length()
 		{
-			return mOffset;
+			return mLength;
 		}
 
-		virtual void read(byte_t* data, size_t len)
+		virtual int64_t position()
 		{
-			throw tc::Exception(kClassName, "read() not implemented");
+			return mPosition;
 		}
 
-		virtual void write(const byte_t* data, size_t len)
+		virtual size_t read(byte_t* buffer, size_t count)
 		{
-			throw tc::Exception(kClassName, "write() not implemented");
+			throw tc::NotImplementedException(kClassName, "read() not implemented");
+		}
+
+		virtual void write(const byte_t* buffer, size_t count)
+		{
+			throw tc::NotImplementedException(kClassName, "write() not implemented");
+		}
+
+		virtual int64_t seek(int64_t offset, tc::io::SeekOrigin origin)
+		{
+			if (origin != tc::io::SeekOrigin::Begin)
+				throw tc::ArgumentOutOfRangeException(kClassName, "SubStream should not be passing seek origin values that are not SeekOrigin::Begin to the base stream");
+			mPosition = offset;
+
+			return mPosition;
+		}
+
+		virtual void setLength(int64_t length)
+		{
+			mLength = length;
+		}
+
+		virtual void flush()
+		{
+			// nothing
+		}
+
+		virtual void dispose()
+		{
+			flush();
+			mCanRead = false;
+			mCanWrite = false;
+			mCanSeek = false;
+			mPosition = 0;
+			mLength = 0;
 		}
 	private:
 		static const std::string kClassName;
-		tc::ResourceStatus mState;
-		uint64_t mOffset;
-		uint64_t mSize;
+		bool mCanRead;
+		bool mCanWrite;
+		bool mCanSeek;
+		int64_t mPosition;
+		int64_t mLength;
 	};
 
 	void testSize();
