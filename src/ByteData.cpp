@@ -9,4 +9,5 @@ tc::ByteData::ByteData(size_t size)
 	{
 		throw tc::OutOfMemoryException(kClassName);
 	}
+	mSize = size;
 }

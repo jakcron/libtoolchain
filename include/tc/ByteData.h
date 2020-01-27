@@ -31,7 +31,7 @@ public:
 		/**
 		 * @brief Get buffer pointer
 		 **/
-	const byte_t* buffer() const { return mPtr.get(); }
+	byte_t* buffer() const { return mPtr.get(); }
 
 		/**
 		 * @brief Get buffer size
