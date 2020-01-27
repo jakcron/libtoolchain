@@ -12,7 +12,7 @@ namespace tc { namespace io {
 
 	/**
 	 * @class PathTooLongException
-	 * @brief An extension of IOException indicating that a path was too long
+	 * @brief The exception that is thrown when a path or fully qualified file name is longer than the system-defined maximum length.
 	 **/
 class PathTooLongException : public tc::io::IOException
 {
