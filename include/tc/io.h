@@ -14,13 +14,15 @@
 #include <tc/io/PathUtils.h>
 
 #include <tc/io/IStream.h>
-#include <tc/io/IStorage.h>
-
 #include <tc/io/FileStream.h>
-#include <tc/io/LocalStorage.h>
-
 #include <tc/io/SubStream.h>
+
+#include <tc/io/IStorage.h>
+#include <tc/io/LocalStorage.h>
 #include <tc/io/SubStorage.h>
+
+#include <tc/io/ISink.h>
+#include <tc/io/ISource.h>
 
 // Exceptions
 #include <tc/io/IOException.h>
