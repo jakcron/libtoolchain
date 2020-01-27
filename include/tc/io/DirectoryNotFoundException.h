@@ -12,7 +12,7 @@ namespace tc { namespace io {
 
 	/**
 	 * @class DirectoryNotFoundException
-	 * @brief An extension of IOException indicating that a directory was not found
+	 * @brief The exception that is thrown when part of a file or directory cannot be found.
 	 **/
 class DirectoryNotFoundException : public tc::io::IOException
 {
