@@ -9,6 +9,7 @@
 #include <tc/io/IStorage.h>
 
 #include <tc/io/IOException.h>
+#include <tc/io/DirectoryNotEmptyException.h>
 #include <tc/io/DirectoryNotFoundException.h>
 #include <tc/io/FileNotFoundException.h>
 #include <tc/io/PathTooLongException.h>
@@ -41,8 +42,11 @@ public:
 		 * @brief Remove a file
 		 * @param[in] path A relative or absolute path for the file that the current @ref IStorage object will remove.
 		 * 
-		 * @throw tc::UnauthorisedAccessException @p path specified a read-only file. -or- @p path is a directory. -or- The caller does not have the required permission.
-		 * @throw tc::io::IOException File is in use The specified file is in use. -or- An I/O error has occured.
+		 * @throw tc::UnauthorisedAccessException @p path specified a read-only file.
+		 * @throw tc::UnauthorisedAccessException @p path is a directory.
+		 * @throw tc::UnauthorisedAccessException The caller does not have the required permission.
+		 * @throw tc::UnauthorisedAccessException The file is currently in use.
+		 * @throw tc::io::IOException File An I/O error has occured.
 		 * @throw tc::io::PathTooLongException The specified path, file name, or both exceed the system-defined maximum length.
 		 * @throw tc::io::DirectoryNotFoundException A component of the path prefix is not a directory.
 		 * @throw tc::io::FileNotFoundException The specifed file does not exist.
@@ -64,7 +68,10 @@ public:
 		 * 
 		 * @post If the directory already exists, this does nothing if the directory cannot be created (invalid path, or access rights)
 		 * 
-		 * @throw tc::UnauthorisedAccessException Write permission is denied for a parent direcory. -or- Parent directory resides in a read-only file system. -or- The caller does not have the required permission.
+		 * @throw tc::UnauthorisedAccessException Write permission is denied for a parent direcory.
+		 * @throw tc::UnauthorisedAccessException Parent directory resides in a read-only file system.
+		 * @throw tc::UnauthorisedAccessException The caller does not have the required permission.
+
 		 * @throw tc::io::IOException An I/O error has occured.
 		 * @throw tc::io::PathTooLongException The specified path, directory name, or both exceed the system-defined maximum length.
 		 * @throw tc::io::DirectoryNotFoundException A component of the path prefix is not a directory or does not exist.
@@ -74,18 +81,36 @@ public:
 		/** 
 		 * @brief Remove a directory
 		 * @param[in] path Path to directory
+		 * 
+		 * @throw tc::UnauthorisedAccessException Directory resides in a read-only file system.
+		 * @throw tc::UnauthorisedAccessException The caller does not have the required permission.
+		 * @throw tc::UnauthorisedAccessException The directory is a mount point.
+		 * @throw tc::io::IOException An I/O error has occured.
+		 * @throw tc::io::PathTooLongException The specified path, directory name, or both exceed the system-defined maximum length.
+		 * @throw tc::io::DirectoryNotEmptyException The named directory is not empty.
+		 * @throw tc::io::DirectoryNotFoundException A component of the path prefix is not a directory.
+		 * @throw tc::io::DirectoryNotFoundException The named directory does not exist.
 		 **/
 	virtual void removeDirectory(const tc::io::Path& path);
 
 		/** 
 		 * @brief Get the full path of the working directory
 		 * @param[out] path Path object to populate
+		 * 
+		 * @throw tc::UnauthorisedAccessException Read or search permission was denied for a component of the pathname.
+		 * @throw tc::io::IOException An I/O error has occured.
 		 **/
 	virtual void getWorkingDirectory(tc::io::Path& path);
 
 		/** 
 		 * @brief Change the working directory
 		 * @param[in] path Path to directory
+		 * 
+		 * @throw tc::UnauthorisedAccessException Search permission was denied for a component of the pathname.
+		 * @throw tc::io::IOException An I/O error has occured.
+		 * @throw tc::io::PathTooLongException The specified path, directory name, or both exceed the system-defined maximum length.
+		 * @throw tc::io::DirectoryNotFoundException A component of the path prefix is not a directory.
+		 * @throw tc::io::DirectoryNotFoundException The named directory does not exist.
 		 **/
 	virtual void setWorkingDirectory(const tc::io::Path& path);
 
@@ -93,6 +118,11 @@ public:
 		 * @brief Get directory listing a directory
 		 * @param[in] path Path to directory
 		 * @param[out] info sDirectoryListing object to populate
+		 * 
+		 * @throw tc::UnauthorisedAccessException Permission denied.
+		 * @throw tc::io::IOException An I/O error has occured.
+		 * @throw tc::io::DirectoryNotFoundException A component of the path prefix is not a directory.
+		 * @throw tc::io::DirectoryNotFoundException The named directory does not exist.
 		 **/
 	virtual void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info);
 private:

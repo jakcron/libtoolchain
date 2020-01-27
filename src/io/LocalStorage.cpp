@@ -72,22 +72,20 @@ void tc::io::LocalStorage::removeFile(const tc::io::Path& path)
 	{
 		switch (errno) 
 		{
-			case (EACCES):
-			case (EROFS):
-			case (EISDIR):
-			case (EPERM):
+			case (EACCES): // Search permission is denied for a component of the path prefix. -OR- Write permission is denied on the directory containing the link to be removed.
+			case (EROFS): // The named file resides on a read-only file system.
+			case (EPERM): // The named file is a directory and the effective user ID of the process is not the super-user. -OR- The directory containing the file is marked sticky, and neither the containing directory nor the file to be removed are owned by the effective user ID.
+			case (EBUSY): // The entry to be unlinked is the mount point for a mounted file system. -OR- The file named by the path argument cannot be unlinked because it is being used by the system or by another process.
 				throw tc::UnauthorisedAccessException(kClassName+"::removeFile()", std::string(strerror(errno)));
-			case (ENAMETOOLONG):
+			case (ENAMETOOLONG): // A component of a pathname exceeds {NAME_MAX} characters, or an entire path name exceeds {PATH_MAX} characters (possibly as a result of expanding a symlink).
 				throw tc::io::PathTooLongException(kClassName+"::removeFile()", std::string(strerror(errno)));
-			case (ENOENT):
+			case (ENOENT): // The named file does not exist.
 				throw tc::io::FileNotFoundException(kClassName+"::removeFile()", std::string(strerror(errno)));
-			case (ENOTDIR):
+			case (ENOTDIR): // A component of the path prefix is not a directory.
 				throw tc::io::DirectoryNotFoundException(kClassName+"::removeFile()", std::string(strerror(errno)));
-			case (EFAULT):
-			case (EIO):
-			case (ELOOP):
-			case (ENOMEM):
-			case (EBUSY):
+			case (EFAULT): // Path points outside the process's allocated address space.
+			case (EIO): // An I/O error occurs while deleting the directory entry or deallocating the inode.
+			case (ELOOP): // Too many symbolic links are encountered in translating the pathname.  This is taken to be indicative of a looping symbolic link.
 			default:
 				throw tc::io::IOException(kClassName+"::removeFile()", "Failed to remove file (" + std::string(strerror(errno)) + ")");
 		}
@@ -126,22 +124,22 @@ void tc::io::LocalStorage::createDirectory(const tc::io::Path& path)
 	{
 		switch (errno) 
 		{
-			case (EACCES):
-			case (EROFS):
+			case (EACCES): // Search permission is denied for a component of the path prefix. -OR- Write permission is denied for the parent directory.
+			case (EROFS): // The parent directory resides on a read-only file system.
 				throw tc::UnauthorisedAccessException(kClassName+"::createDirectory()", std::string(strerror(errno)));
-			case (ENOTDIR):
-			case (ENOENT):
+			case (ENOTDIR): // A component of the path prefix is not a directory.
+			case (ENOENT): // A component of the path prefix does not exist or path is an empty string.
 				throw tc::io::DirectoryNotFoundException(kClassName+"::removeFile()", std::string(strerror(errno)));
-			case (ENAMETOOLONG):
+			case (ENAMETOOLONG): // A component of a pathname exceeded {NAME_MAX} characters, or an entire path name exceeded {PATH_MAX} characters.
 				throw tc::io::PathTooLongException(kClassName+"::removeFile()", std::string(strerror(errno)));
-			case (EISDIR):
-			case (EDQUOT):
-			//case (EEXIST):
-			case (EFAULT):
-			case (EIO):
-			case (ELOOP):
-			case (EMLINK):
-			case (ENOSPC):
+			case (EISDIR): // The named file is the root directory.
+			case (EDQUOT): // The new directory cannot be created because the user's quota of disk blocks on the file system that will contain the directory has been exhausted. -OR- The user's quota of inodes on the file system on which the directory is being created has been exhausted.
+			//case (EEXIST): // The named file exists
+			case (EFAULT): // Path points outside the process's allocated address space.
+			case (EIO): // An I/O error occurred while reading from or writing to the file system. -OR- An I/O error occurred while making the directory entry or allocating the inode.
+			case (ELOOP): // Too many symbolic links were encountered in translating the pathname.  This is taken to be indicative of a looping symbolic link.
+			case (EMLINK): // The parent directory already has {LINK_MAX} links.
+			case (ENOSPC): // The new directory cannot be created because there is no space left on the file system that would contain it. -OR- There are no free inodes on the file system on which the directory is being created.
 			default:
 				throw tc::io::IOException(kClassName+"::createDirectory()", "Failed to create directory (" + std::string(strerror(errno)) + ")");
 		}
@@ -172,46 +170,25 @@ void tc::io::LocalStorage::removeDirectory(const tc::io::Path& path)
 
 	if (rmdir(unicode_path.c_str()) == -1)
 	{
-		/*
-	 [EACCES]           Search permission is denied for a component of the path prefix.
-
-     [EACCES]           Write permission is denied on the directory containing the link to be removed.
-
-	 [EBUSY]            The directory to be removed is the mount point for a mounted file system.
-
-     [EFAULT]           Path points outside the process's allocated address space.
-
-     [EIO]              An I/O error occurs while deleting the directory entry or deallocating the inode.
-
-     [ELOOP]            Too many symbolic links are encountered in translating the pathname.  This is taken to be indicative of a looping symbolic link.
-
-     [ENAMETOOLONG]     A component of a pathname (possibly expanded by a symbolic link) exceeds {NAME_MAX} characters, or an entire path name exceeded {PATH_MAX} characters.
-
-     [ENOENT]           The named directory does not exist.
-
-     [ENOTDIR]          A component of the path is not a directory.
-
-     [ENOTEMPTY]        The named directory contains files other than `.' and `..' in it.
-
-     [EPERM]            The directory containing the directory to be removed is marked sticky, and neither the containing directory nor the directory to be removed are owned by the effective user ID.
-
-     [EROFS]            The directory entry to be removed resides on a read-only file system.
-		*/
 		switch (errno) 
 		{
-			case (EACCES):
-			case (EBUSY):
-			case (EFAULT):
-			case (EIO):
-			case (ELOOP):
+			case (EACCES): // Search permission is denied for a component of the path prefix. -OR- Write permission is denied on the directory containing the link to be removed.
+			case (EROFS): // The directory entry to be removed resides on a read-only file system.
+			case (EPERM): // The directory containing the directory to be removed is marked sticky, and neither the containing directory nor the directory to be removed are owned by the effective user ID.
+			case (EBUSY): // The directory to be removed is the mount point for a mounted file system.
+				throw tc::UnauthorisedAccessException(kClassName+"::removeDirectory()", std::string(strerror(errno)));
 			case (ENAMETOOLONG):
-			case (ENOENT):
-			case (ENOTDIR):
-			case (ENOTEMPTY):
-			case (EPERM):
-			case (EROFS):
+				throw tc::io::PathTooLongException(kClassName+"::removeDirectory()", std::string(strerror(errno)));
+			case (ENOENT): // The named directory does not exist.
+			case (ENOTDIR): // A component of the path prefix is not a directory.
+				throw tc::io::DirectoryNotFoundException(kClassName+"::removeDirectory()", std::string(strerror(errno)));
+			case (ENOTEMPTY): // The named directory contains files other than `.' and `..' in it.
+				throw tc::io::DirectoryNotEmptyException(kClassName+"::removeDirectory()", std::string(strerror(errno)));
+			case (EFAULT): // Path points outside the process's allocated address space.
+			case (EIO): // An I/O error occurred while reading from or writing to the file system.
+			case (ELOOP): // Too many symbolic links are encountered in translating the pathname.  This is taken to be indicative of a looping symbolic link.
 			default:
-				throw tc::io::IOException(kClassName+"::createDirectory()", "Failed to remove directory (" + std::string(strerror(errno)) + ")");
+				throw tc::io::IOException(kClassName+"::removeDirectory()", "Failed to remove directory (" + std::string(strerror(errno)) + ")");
 		}
 	}	
 #endif
@@ -241,28 +218,14 @@ void tc::io::LocalStorage::getWorkingDirectory(tc::io::Path& path)
 
 	if (getcwd(raw_current_working_directory.get(), PATH_MAX) == nullptr)
 	{
-		/*
-		The getcwd() function will fail if:
-
-     [EINVAL]           The size argument is zero.
-
-     [ENOENT]           A component of the pathname no longer exists.
-
-     [ENOMEM]           Insufficient memory is available.
-
-     [ERANGE]           The size argument is greater than zero but smaller than the length of the pathname plus 1.
-
-     The getcwd() function may fail if:
-
-     [EACCES]           Read or search permission was denied for a component of the pathname.  This is only checked in limited cases, depending on implementation details.
-		*/
 		switch (errno) 
 		{
-			case (EINVAL):
-			case (ENOENT):
-			case (ENOMEM):
-			case (ERANGE):
-			case (EACCES):
+			case (EACCES): // Read or search permission was denied for a component of the pathname.  This is only checked in limited cases, depending on implementation details.
+				throw tc::UnauthorisedAccessException(kClassName+"::getWorkingDirectory()", std::string(strerror(errno)));
+			case (EINVAL): // The size argument is zero.
+			case (ENOENT): // A component of the pathname no longer exists.
+			case (ENOMEM): // Insufficient memory is available.
+			case (ERANGE): // The size argument is greater than zero but smaller than the length of the pathname plus 1.
 			default:
 				throw tc::io::IOException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (getcwd) (" + std::string(strerror(errno)) + ")");
 		}
@@ -297,32 +260,18 @@ void tc::io::LocalStorage::setWorkingDirectory(const tc::io::Path& path)
 	// get full path to directory
 	if (chdir(unicode_path.c_str()) != 0)
 	{
-		/*
-	 The chdir() system call will fail and the current working directory will be unchanged if one or more of the following are true:
-
-     [EACCES]           Search permission is denied for any component of the path name.
-
-     [EFAULT]           Path points outside the process's allocated address space.
-
-     [EIO]              An I/O error occurred while reading from or writing to the file system.
-
-     [ELOOP]            Too many symbolic links were encountered in translating the pathname.  This is taken to be indicative of a looping symbolic link.
-
-     [ENAMETOOLONG]     A component of a pathname exceeded {NAME_MAX} characters, or an entire path name exceeded {PATH_MAX} characters.
-
-     [ENOENT]           The named directory does not exist.
-
-     [ENOTDIR]          A component of the path prefix is not a directory.
-		*/
 		switch (errno) 
 		{
-			case (EACCES):
-			case (EFAULT):
-			case (EIO):
-			case (ELOOP):
-			case (ENAMETOOLONG):
-			case (ENOENT):
-			case (ENOTDIR):
+			case (EACCES): // Search permission is denied for any component of the path name.
+				throw tc::UnauthorisedAccessException(kClassName+"::setWorkingDirectory()", std::string(strerror(errno)));
+			case (ENAMETOOLONG): // A component of a pathname exceeded {NAME_MAX} characters, or an entire path name exceeded {PATH_MAX} characters.
+				throw tc::io::PathTooLongException(kClassName+"::setWorkingDirectory()", std::string(strerror(errno)));
+			case (ENOENT): // The named directory does not exist.
+			case (ENOTDIR): // A component of the path prefix is not a directory.
+				throw tc::io::DirectoryNotFoundException(kClassName+"::setWorkingDirectory()", std::string(strerror(errno)));
+			case (EFAULT): // Path points outside the process's allocated address space.
+			case (EIO): // An I/O error occurred while reading from or writing to the file system.
+			case (ELOOP): //  Too many symbolic links were encountered in translating the pathname.  This is taken to be indicative of a looping symbolic link.
 			default:
 				throw tc::io::IOException(kClassName+"::setWorkingDirectory()", "Failed to get directory info (chdir)(" + std::string(strerror(errno)) + ")");
 		}
@@ -409,42 +358,17 @@ void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirect
 	dp = opendir(unicode_path.c_str());
 	if (dp == nullptr)
 	{
-		/*
-		EACCES
-Permission denied.
-
-EBADF
-
-fd is not a valid file descriptor opened for reading.
-
-EMFILE
-
-Too many file descriptors in use by process.
-
-ENFILE
-
-Too many files are currently open in the system.
-
-ENOENT
-
-Directory does not exist, or name is an empty string.
-
-ENOMEM
-
-Insufficient memory to complete the operation.
-
-ENOTDIR
-name is not a directory.
-		*/
 		switch (errno) 
 		{
-			case (EACCES):
-			case (EBADF):
+			case (EACCES): // Permission denied.
+				throw tc::UnauthorisedAccessException(kClassName+"::getDirectoryListing()", std::string(strerror(errno)));
+			case (ENOTDIR): // A component of the path prefix is not a directory. // name is not a directory.
+			case (ENOENT): // Directory does not exist, or name is an empty string.
+				throw tc::io::DirectoryNotFoundException(kClassName+"::getDirectoryListing()", std::string(strerror(errno)));
+			case (EBADF): // fd is not a valid file descriptor open for reading.
 			case (EMFILE):
 			case (ENFILE):
-			case (ENOENT):
 			case (ENOMEM):
-			case (ENOTDIR):
 			default:
 				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to get directory info (opendir)(" + std::string(strerror(errno)) + ")");
 		}
@@ -471,15 +395,10 @@ name is not a directory.
 	// throw an error if necessary 
 	if (errno != 0)
 	{
-		/*
-	 [EBADF]            fd is not a valid file descriptor open for reading.
-
-     [EIO]              An I/O error occurred while reading from or writing to the file system.
-	 */
 		switch (errno) 
 		{
-			case (EBADF):
-			case (EIO):
+			case (EBADF): // fd is not a valid file descriptor open for reading.
+			case (EIO): // An I/O error occurred while reading from or writing to the file system.
 			default:
 				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to get directory info (readdir)(" + std::string(strerror(errno)) + ")");
 		}
