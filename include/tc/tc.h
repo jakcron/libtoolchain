@@ -10,6 +10,7 @@
 	 * @brief       Root namespace for libtoolchain
 	 **/
 // classes
+#include <tc/ByteData.h>
 #include <tc/Optional.h>
 
 // sub namespaces
