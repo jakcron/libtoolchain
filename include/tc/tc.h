@@ -27,5 +27,6 @@
 #include <tc/NotImplementedException.h>
 #include <tc/NotSupportedException.h>
 #include <tc/ObjectDisposedException.h>
+#include <tc/OutOfMemoryException.h>
 #include <tc/OverflowException.h>
 #include <tc/UnauthorisedAccessException.h>
