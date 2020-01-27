@@ -91,9 +91,7 @@ public:
 	
 		/** 
 		 * @brief Create a new directory
-		 * @param[in] path Path to directory
-		 * 
-		 * @post If the directory already exists, this does nothing if the directory cannot be created (invalid path, or access rights)
+		 * @param[in] path Path to directory 
 		 **/
 	virtual void createDirectory(const tc::io::Path& path) = 0;
 

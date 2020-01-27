@@ -66,8 +66,6 @@ public:
 		 * @brief Create a new directory
 		 * @param[in] path Path to directory
 		 * 
-		 * @post If the directory already exists, this does nothing if the directory cannot be created (invalid path, or access rights)
-		 * 
 		 * @throw tc::UnauthorisedAccessException Write permission is denied for a parent direcory.
 		 * @throw tc::UnauthorisedAccessException Parent directory resides in a read-only file system.
 		 * @throw tc::UnauthorisedAccessException The caller does not have the required permission.
