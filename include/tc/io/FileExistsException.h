@@ -12,7 +12,7 @@ namespace tc { namespace io {
 
 	/**
 	 * @class FileExistsException
-	 * @brief An extension of IOException indicating that a file was not found
+	 * @brief The exception that is thrown when an attempt to overwrite/remove a file that exists on disk fails.
 	 **/
 class FileExistsException : public tc::io::IOException
 {
