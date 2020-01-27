@@ -24,6 +24,7 @@
 
 // Exceptions
 #include <tc/io/IOException.h>
+#include <tc/io/DirectoryNotEmptyException.h>
 #include <tc/io/DirectoryNotFoundException.h>
 #include <tc/io/FileExistsException.h>
 #include <tc/io/FileNotFoundException.h>
