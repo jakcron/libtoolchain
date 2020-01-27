@@ -12,7 +12,7 @@ namespace tc { namespace io {
 
 	/**
 	 * @class FileNotFoundException
-	 * @brief An extension of IOException indicating that a file was not found
+	 * @brief The exception that is thrown when an attempt to access a file that does not exist on disk fails.
 	 **/
 class FileNotFoundException : public tc::io::IOException
 {
