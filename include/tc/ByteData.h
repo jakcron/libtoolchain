@@ -19,6 +19,9 @@ namespace tc {
 class ByteData
 {
 public:
+		/// Create empty ByteData
+	ByteData();
+
 		/**
 		 * @brief Create linear memory block
 		 * 
@@ -31,17 +34,14 @@ public:
 		/**
 		 * @brief Get buffer pointer
 		 **/
-	byte_t* buffer() const { return mPtr.get(); }
+	byte_t* buffer() const;
 
 		/**
 		 * @brief Get buffer size
 		 **/
-	size_t size() const { return mSize; }
+	size_t size() const;
 private:
 	static const std::string kClassName;
-
-	// deleted default constructor
-	ByteData();
 
 	size_t mSize;
 	std::shared_ptr<byte_t> mPtr;
