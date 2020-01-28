@@ -31,9 +31,10 @@ public:
 		/**
 		 * @brief Push data to sink
 		 * 
+		 * @param[in] data Data to be pushed to the sink.
 		 * @param[in] offset Zero-based offset in sink to push data.
 		 **/
-	virtual void pushData(const tc::ByteData& x, size_t offset) = 0;
+	virtual void pushData(const tc::ByteData& data, size_t offset) = 0;
 };
 
 
