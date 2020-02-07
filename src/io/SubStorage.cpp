@@ -12,17 +12,6 @@ tc::io::SubStorage::SubStorage() :
 tc::io::SubStorage::SubStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& base_path) :
 	SubStorage()
 {
-	initialise(storage, base_path);
-}
-
-tc::io::SubStorage::SubStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& base_path) :
-	SubStorage()
-{
-	initialise(std::move(storage), base_path);
-}
-
-void tc::io::SubStorage::initialise(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& base_path)
-{
 	// dispose object before re-initialising
 	dispose();
 
@@ -46,7 +35,8 @@ void tc::io::SubStorage::initialise(const std::shared_ptr<tc::io::IStorage>& sto
 	mBaseStorage->getWorkingDirectory(mBaseStoragePath);
 }
 
-void tc::io::SubStorage::initialise(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& base_path)
+tc::io::SubStorage::SubStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& base_path) :
+	SubStorage()
 {
 	// dispose object before re-initialising
 	dispose();

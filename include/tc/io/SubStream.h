@@ -60,37 +60,6 @@ public:
 		 **/
 	SubStream(std::shared_ptr<tc::io::IStream>&& stream, int64_t offset, int64_t length);
 
-		/** 
-		 * @brief Wrap (by copy) initialiser
-		 * 
-		 * @param[in] stream The base IStream object which this sub stream will derive from.
-		 * @param[in] offset The zero-based byte offset in stream at which to begin the sub stream.
-		 * @param[in] length Length of the sub stream.
-		 * 
-		 * @pre The sub stream must be a subset of the base stream.
-		 * @pre A stream must support seeking for @ref seek to work. 
-		 * 
-		 * @throw tc::ArgumentNullException @p stream is a @p nullptr.
-		 * @throw tc::NotSupportedException The base stream does not support seeking.
-		 * @throw tc::ArgumentOutOfRangeException @p offset or @p length is negative or otherwise invalid given the length of the base stream.
-		 **/
-	void initialise(const std::shared_ptr<tc::io::IStream>& stream, int64_t offset, int64_t length);
-
-		/** 
-		 * @brief Wrap (by move) initialiser
-		 * @param[in] stream The base IStream object which this sub stream will derive from.
-		 * @param[in] offset The zero-based byte offset in stream at which to begin the sub stream.
-		 * @param[in] length Length of the sub stream.
-		 * 
-		 * @pre The sub stream must be a subset of the base stream.
-		 * @pre A stream must support seeking for @ref seek to work. 
-		 * 
-		 * @throw tc::ArgumentNullException @p stream is a @p nullptr.
-		 * @throw tc::NotSupportedException The base stream does not support seeking.
-		 * @throw tc::ArgumentOutOfRangeException @p offset or @p length is negative or otherwise invalid given the length of the base stream.
-		 **/
-	void initialise(std::shared_ptr<tc::io::IStream>&& stream, int64_t offset, int64_t length);
-
 	virtual bool canRead() const;
 	virtual bool canWrite() const;
 	virtual bool canSeek() const;

@@ -45,24 +45,6 @@ public:
 	FileStream();
 
 		/** 
-		 * @brief Initialsing constuctor.
-		 * 
-		 * @param[in] path A relative or absolute path for the file that the current FileStream object will encapsulate.
-		 * @param[in] mode One of the enumeration values that determines how to open or create the file.
-		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the FileStream object. This also determines the values returned by the @ref canRead and @ref canWrite methods of the FileStream object. @ref canSeek is true if path specifies a disk file.
-		 *
-		 * @throw tc::ArgumentException @p path contains invalid characters or is empty.
-		 * @throw tc::NotSupportedException @p path refers to an unsupported non-file device.
-		 * @throw tc::io::IOException An I/O error, such as specifying @a FileMode.CreateNew when the file specified by @p path already exists, occurred. Or the stream has been closed.
-		 * @throw tc::SecurityException The caller does not have the required permission.
-		 * @throw tc::io::DirectoryNotFoundException The specified path is invalid, such as being on an unmapped drive.
-		 * @throw tc::UnauthorisedAccessException The @p access requested is not permitted by the operating system for the specified @p path, such as when @p access is @a Write or @a ReadWrite and the file or directory is set for read-only access.
-		 * @throw tc::io::PathTooLongException The specified @p path, file name, or both exceed the system-defined maximum length.
-		 * @throw tc::ArgumentOutOfRangeException @p mode contains an invalid value.
-		 **/
-	FileStream(const tc::io::Path& path, FileMode mode, FileAccess access);
-
-		/** 
 		 * @brief Open file stream
 		 * 
 		 * @param[in] path A relative or absolute path for the file that the current FileStream object will encapsulate.
@@ -78,7 +60,7 @@ public:
 		 * @throw tc::io::PathTooLongException The specified @p path, file name, or both exceed the system-defined maximum length.
 		 * @throw tc::ArgumentOutOfRangeException @p mode contains an invalid value.
 		 **/
-	void open(const tc::io::Path& path, FileMode mode, FileAccess access);
+	FileStream(const tc::io::Path& path, FileMode mode, FileAccess access);
 
 	virtual bool canRead() const;
 	virtual bool canWrite() const;

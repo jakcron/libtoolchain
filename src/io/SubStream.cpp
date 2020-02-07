@@ -14,17 +14,6 @@ tc::io::SubStream::SubStream() :
 tc::io::SubStream::SubStream(const std::shared_ptr<tc::io::IStream>& stream, int64_t offset, int64_t length) :
 	SubStream()
 {
-	initialise(stream, offset, length);
-}
-
-tc::io::SubStream::SubStream(std::shared_ptr<tc::io::IStream>&& stream, int64_t offset, int64_t length) :
-	SubStream()
-{
-	initialise(std::move(stream), offset, length);
-}
-
-void tc::io::SubStream::initialise(const std::shared_ptr<tc::io::IStream>& stream, int64_t offset, int64_t length)
-{
 	// dispose object before re-initialising
 	dispose();
 
@@ -40,7 +29,8 @@ void tc::io::SubStream::initialise(const std::shared_ptr<tc::io::IStream>& strea
 	mSubStreamPosition = 0;
 }
 
-void tc::io::SubStream::initialise(std::shared_ptr<tc::io::IStream>&& stream, int64_t offset, int64_t length)
+tc::io::SubStream::SubStream(std::shared_ptr<tc::io::IStream>&& stream, int64_t offset, int64_t length) :
+	SubStream()
 {
 	// dispose object before re-initialising
 	dispose();

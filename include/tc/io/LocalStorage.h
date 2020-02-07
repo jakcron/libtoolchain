@@ -31,9 +31,6 @@ public:
 		/// Default Constructor
 	LocalStorage();
 
-		/// Open Local Storage
-	void openStorage();
-
 	virtual tc::ResourceStatus state();
 	virtual void dispose();
 	virtual void createFile(const tc::io::Path& path);

@@ -23,11 +23,6 @@ const std::string tc::io::LocalStorage::kClassName = "tc::io::LocalStorage";
 tc::io::LocalStorage::LocalStorage() :
 	mState()
 {
-	openStorage();
-}
-
-void tc::io::LocalStorage::openStorage()
-{
 	mState = (1 << tc::RESFLAG_READY);
 }
 

@@ -32,11 +32,6 @@ tc::io::FileStream::FileStream() :
 tc::io::FileStream::FileStream(const tc::io::Path& path, FileMode mode, FileAccess access) :
 	FileStream()
 {
-	open(path, mode, access);
-}
-
-void tc::io::FileStream::open(const tc::io::Path& path, FileMode mode, FileAccess access)
-{
 	// dispose stream before opening new stream
 	dispose();
 
