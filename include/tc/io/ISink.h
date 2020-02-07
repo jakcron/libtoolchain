@@ -22,10 +22,10 @@ public:
 		/// Destructor
 	virtual ~ISink() = default;
 
-		/// Get size of source
-	virtual size_t size() = 0;
+		/// Get size of sink
+	virtual int64_t size() = 0;
 
-		/// Get status of source
+		/// Get status of sink
 	virtual tc::ResourceStatus status() = 0;
 
 		/**
@@ -34,8 +34,7 @@ public:
 		 * @param[in] data Data to be pushed to the sink.
 		 * @param[in] offset Zero-based offset in sink to push data.
 		 **/
-	virtual void pushData(const tc::ByteData& data, size_t offset) = 0;
+	virtual void pushData(const tc::ByteData& data, int64_t offset) = 0;
 };
-
 
 }} // namespace tc::io

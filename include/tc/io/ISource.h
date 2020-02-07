@@ -23,7 +23,7 @@ public:
 	virtual ~ISource() = default;
 
 		/// Get size of source
-	virtual size_t size() = 0;
+	virtual int64_t size() = 0;
 
 		/// Get status of source
 	virtual tc::ResourceStatus status() = 0;
@@ -36,7 +36,7 @@ public:
 		 *
 		 * @return ByteData containing data pulled from source
 		 **/
-	virtual tc::ByteData& pullData(size_t offset, size_t size) = 0;
+	virtual tc::ByteData& pullData(int64_t offset, size_t size) = 0;
 };
 
 
