@@ -39,5 +39,4 @@ public:
 	virtual tc::ByteData& pullData(int64_t offset, size_t size) = 0;
 };
 
-
 }} // namespace tc::io
