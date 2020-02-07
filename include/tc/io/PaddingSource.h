@@ -16,13 +16,11 @@ namespace tc { namespace io {
 	 * @class PaddingSource
 	 * @brief A source that provides dummy/filler data.
 	 **/
-class PaddingSource
+class PaddingSource : tc::io::ISource
 {
 public:
 		/**
-		 * @brief Create empty PaddingSource
-		 * 
-		 * @post @ref length() == 0
+		 * @brief Default constructor
 		 **/ 
 	PaddingSource();
 
