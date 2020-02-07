@@ -22,11 +22,11 @@ public:
 		/// Destructor
 	virtual ~ISink() = default;
 
-		/// Get size of sink
-	virtual int64_t size() = 0;
+		/// Get length of sink
+	virtual int64_t length() = 0;
 
-		/// Get status of sink
-	virtual tc::ResourceStatus status() = 0;
+		/// Set length of sink
+	virtual void setLength(int64_t length) = 0;
 
 		/**
 		 * @brief Push data to sink
