@@ -22,9 +22,11 @@
 #include <tc/io/SubStorage.h>
 
 #include <tc/io/ISink.h>
+#include <tc/io/SubSink.h>
 
 #include <tc/io/ISource.h>
 #include <tc/io/PaddingSource.h>
+#include <tc/io/SubSource.h>
 
 // Exceptions
 #include <tc/io/IOException.h>
