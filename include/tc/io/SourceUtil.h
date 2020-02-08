@@ -17,7 +17,7 @@ namespace tc { namespace io {
 class SourceUtil
 {
 public:
-	static size_t getPullableCount(int64_t source_length, int64_t source_offset, size_t data_to_pull);
+	static size_t getReadableSize(int64_t source_length, int64_t source_offset, size_t read_size);
 };
 
 }} // namespace tc::io

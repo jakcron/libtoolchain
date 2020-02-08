@@ -20,7 +20,7 @@ int64_t tc::io::PaddingSource::length()
 
 tc::ByteData tc::io::PaddingSource::pullData(int64_t offset, size_t count)
 {
-	tc::ByteData data(SourceUtil::getPullableCount(mSourceLength, offset, count));
+	tc::ByteData data(SourceUtil::getReadableSize(mSourceLength, offset, count));
 
 	memset(data.buffer(), mPaddingByte, data.size());
 	
