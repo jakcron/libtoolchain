@@ -22,16 +22,16 @@ public:
 		/// Destructor
 	virtual ~ISource() = default;
 
-		/// Get length of source
+		/// Gets the length of the source.
 	virtual int64_t length() = 0;
 
 		/**
-		 * @brief Pull data from source
+		 * @brief Pull data from the source.
 		 * 
 		 * @param[in] offset Zero-based offset in source to pull data.
 		 * @param[in] count The maximum number of bytes to be pull from the source.
 		 *
-		 * @return ByteData containing data pulled from source
+		 * @return ByteData containing data pulled from source.
 		 **/
 	virtual tc::ByteData pullData(int64_t offset, size_t count) = 0;
 };

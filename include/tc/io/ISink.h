@@ -22,14 +22,18 @@ public:
 		/// Destructor
 	virtual ~ISink() = default;
 
-		/// Get length of sink
+		/// Gets the length of the sink.
 	virtual int64_t length() = 0;
 
-		/// Set length of sink
+		/**
+		 * @brief Sets the length of the sink.
+		 * 
+		 * @param[in] length The desired length of the sink in bytes.
+		 **/
 	virtual void setLength(int64_t length) = 0;
 
 		/**
-		 * @brief Push data to sink
+		 * @brief Push data to the sink.
 		 * 
 		 * @param[in] data Data to be pushed to the sink.
 		 * @param[in] offset Zero-based offset in sink to push data.
