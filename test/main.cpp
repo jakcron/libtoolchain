@@ -6,6 +6,9 @@
 #include "io_LocalStorage_TestClass.h"
 #include "io_SubStream_TestClass.h"
 #include "io_SubStorage_TestClass.h"
+#include "io_PaddingSource_TestClass.h"
+#include "io_SubSource_TestClass.h"
+#include "io_SubSink_TestClass.h"
 
 void runTest(ITestClass* testClass)
 {
@@ -23,4 +26,7 @@ int main(int argc, char** argv)
 	runTest(new io_LocalStorage_TestClass());
 	runTest(new io_SubStream_TestClass());
 	runTest(new io_SubStorage_TestClass());
+	runTest(new io_PaddingSource_TestClass());
+	runTest(new io_SubSource_TestClass());
+	runTest(new io_SubSink_TestClass());
 }
