@@ -1,4 +1,4 @@
-#include <tc/tc.h>
+#include <tc.h>
 #include <iostream>
 
 #include "endian_TestClass.h"
