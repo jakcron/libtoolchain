@@ -14,32 +14,45 @@ tc::io::SubStream::SubStream() :
 tc::io::SubStream::SubStream(const std::shared_ptr<tc::io::IStream>& stream, int64_t offset, int64_t length) :
 	SubStream()
 {
-	// dispose object before re-initialising
-	dispose();
-
 	// copy stream
 	mBaseStream = stream;
 
-	// validate arguments
-	validateInitArgsAgainstBaseStream(offset, length);
-	
-	// set class state
-	mBaseStreamOffset = offset;
-	mSubStreamLength = length;
-	mSubStreamPosition = 0;
-}
+	// validate the stream exists
+	if (mBaseStream.get() == nullptr)
+	{
+		throw tc::ArgumentNullException(kClassName, "stream is null");
+	}
 
-tc::io::SubStream::SubStream(std::shared_ptr<tc::io::IStream>&& stream, int64_t offset, int64_t length) :
-	SubStream()
-{
-	// dispose object before re-initialising
-	dispose();
+	// check if the stream supports seeking
+	if (mBaseStream->canSeek() == false)
+	{
+		tc::NotSupportedException(kClassName, "Streams that do not support seeking are not supported");
+	}
 
-	// move stream
-	mBaseStream = std::move(stream);
 	
 	// validate arguments
-	validateInitArgsAgainstBaseStream(offset, length);
+	if (offset < 0)
+	{
+		throw tc::ArgumentOutOfRangeException(kClassName, "offset is negative");
+	}
+	if (length < 0)
+	{
+		throw tc::ArgumentOutOfRangeException(kClassName, "length is negative");
+	}
+
+	int64_t base_length = mBaseStream->length();
+
+	// validate arguments against stream length
+	// substream length should not be greater than the base stream length
+	if (length > base_length)
+	{
+		throw tc::ArgumentOutOfRangeException(kClassName, "SubStream length is greater than base stream length");
+	}
+	// Base length - length is the maximum possible offset for the substream
+	if (offset > (base_length - length))
+	{
+		throw tc::ArgumentOutOfRangeException(kClassName, "SubStream offset is greater than the maximum possible offset given the base stream size and SubStream size");
+	}
 	
 	// set class state
 	mBaseStreamOffset = offset;
@@ -194,44 +207,4 @@ void tc::io::SubStream::dispose()
 	mBaseStreamOffset = 0;
 	mSubStreamLength = 0;
 	mSubStreamPosition = 0;
-}
-
-void tc::io::SubStream::validateInitArgsAgainstBaseStream(int64_t offset, int64_t length)
-{
-	// validate the stream exists
-	if (mBaseStream.get() == nullptr)
-	{
-		throw tc::ArgumentNullException(kClassName+"initialise()", "stream is null");
-	}
-
-	// check if the stream supports seeking
-	if (mBaseStream->canSeek() == false)
-	{
-		tc::NotSupportedException(kClassName+"initialise()", "Streams that do not support seeking are not supported");
-	}
-
-	
-	// validate arguments
-	if (offset < 0)
-	{
-		throw tc::ArgumentOutOfRangeException(kClassName+"initialise()", "offset is negative");
-	}
-	if (length < 0)
-	{
-		throw tc::ArgumentOutOfRangeException(kClassName+"initialise()", "length is negative");
-	}
-
-	int64_t base_length = mBaseStream->length();
-
-	// validate arguments against stream length
-	// substream length should not be greater than the base stream length
-	if (length > base_length)
-	{
-		throw tc::ArgumentOutOfRangeException(kClassName+"initialise()", "SubStream length is greater than base stream length");
-	}
-	// Base length - length is the maximum possible offset for the substream
-	if (offset > (base_length - length))
-	{
-		throw tc::ArgumentOutOfRangeException(kClassName+"initialise()", "SubStream offset is greater than the maximum possible offset given the base stream size and SubStream size");
-	}
 }

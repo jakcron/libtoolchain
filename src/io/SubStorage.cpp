@@ -12,47 +12,19 @@ tc::io::SubStorage::SubStorage() :
 tc::io::SubStorage::SubStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& base_path) :
 	SubStorage()
 {
-	// dispose object before re-initialising
-	dispose();
-
 	// copy IStorage ptr
 	mBaseStorage = storage;
 	
 	if (mBaseStorage.get() == nullptr)
 	{
-		throw tc::ArgumentNullException(kClassName+"::initialise()", "storage is null");
+		throw tc::ArgumentNullException(kClassName, "storage is null");
 	}
 	else if (mBaseStorage->state().test(RESFLAG_READY) == false)
 	{
-		throw tc::InvalidOperationException(kClassName+"::initialise()", "storage is not ready");
+		throw tc::InvalidOperationException(kClassName, "storage is not ready");
 	}
 
 	// set class state
-	mSubStoragePath = tc::io::Path("/");
-
-	// get full path of root
-	mBaseStorage->setWorkingDirectory(base_path);
-	mBaseStorage->getWorkingDirectory(mBaseStoragePath);
-}
-
-tc::io::SubStorage::SubStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& base_path) :
-	SubStorage()
-{
-	// dispose object before re-initialising
-	dispose();
-
-	// move IStorage ptr
-	mBaseStorage = std::move(storage);
-
-	if (mBaseStorage.get() == nullptr)
-	{
-		throw tc::ArgumentNullException(kClassName+"::initialise()", "storage is null");
-	}
-	else if (mBaseStorage->state().test(RESFLAG_READY) == false)
-	{
-		throw tc::ArgumentNullException(kClassName+"::initialise()", "storage is not ready");
-	}
-
 	mSubStoragePath = tc::io::Path("/");
 
 	// get full path of root

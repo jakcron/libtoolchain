@@ -29,7 +29,7 @@ public:
 	SubStorage();
 
 		/** 
-		 * @brief Wrap (by copy) constructor
+		 * @brief Create SubStorage
 		 * 
 		 * @param[in] storage The base IStorage object which this sub storage will derive from.
 		 * @param[in] base_path The path to the subdirectory used as the substream root directory.
@@ -38,17 +38,6 @@ public:
 		 * @throw tc::InvalidOperationException @p storage was not in a ready state
 		 **/
 	SubStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& base_path);
-
-		/** 
-		 * @brief Wrap (by move) constructor
-		 * 
-		 * @param[in] storage The base IStorage object which this sub storage will derive from.
-		 * @param[in] base_path The path to the subdirectory used as the substream root directory.
-		 * 
-		 * @throw tc::ArgumentNullException @p storage is @a nullptr.
-		 * @throw tc::InvalidOperationException @p storage was not in a ready state
-		 **/
-	SubStorage(std::shared_ptr<tc::io::IStorage>&& storage, const tc::io::Path& base_path);
 
 	virtual tc::ResourceStatus state();
 	virtual void dispose();
