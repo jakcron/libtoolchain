@@ -8,7 +8,7 @@
 #pragma once
 #include <tc/io/ISource.h>
 
-#include <tc/OutOfMemoryException.h>
+#include <tc/ArgumentOutOfRangeException.h>
 
 namespace tc { namespace io {
 
@@ -29,6 +29,8 @@ public:
 		 * 
 		 * @param[in] padding_byte Byte to fill data pulled using @ref pullData.
 		 * @param[in] length Length of source.
+		 * 
+		 * @throw tc::ArgumentOutOfRangeException @p length is negative.
 		 **/ 
 	PaddingSource(byte_t padding_byte, int64_t length);
 
@@ -47,6 +49,8 @@ public:
 		 **/
 	virtual tc::ByteData pullData(int64_t offset, size_t count);
 private:
+	static const std::string kClassName;
+
 	int64_t mSourceLength;
 	byte_t mPaddingByte;
 };

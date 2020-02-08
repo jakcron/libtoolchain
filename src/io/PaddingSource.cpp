@@ -1,6 +1,8 @@
 #include <tc/io/PaddingSource.h>
 #include <tc/io/SourceUtil.h>
 
+const std::string tc::io::PaddingSource::kClassName = "tc::io::PaddingSource";
+
 tc::io::PaddingSource::PaddingSource() :
 	mSourceLength(0),
 	mPaddingByte(0)
@@ -11,6 +13,10 @@ tc::io::PaddingSource::PaddingSource(byte_t padding_byte, int64_t size) :
 	mSourceLength(size),
 	mPaddingByte(padding_byte)
 {
+	if (size < 0)
+	{
+		throw tc::ArgumentOutOfRangeException(kClassName, "length is negative");
+	}
 }
 
 int64_t tc::io::PaddingSource::length()
