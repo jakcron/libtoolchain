@@ -10,7 +10,6 @@
 
 #include <tc/ArgumentNullException.h>
 #include <tc/ArgumentOutOfRangeException.h>
-#include <tc/OutOfMemoryException.h>
 
 namespace tc { namespace io {
 
@@ -50,8 +49,6 @@ public:
 		 * @param[in] count The maximum number of bytes to be pull from the source.
 		 *
 		 * @return ByteData containing data pulled from source
-		 * 
-		 * @throw tc::OutOfMemoryException The @ref tc::ByteData object could not be created due to insuffient memory.
 		 **/
 	virtual tc::ByteData pullData(int64_t offset, size_t count);
 private:
