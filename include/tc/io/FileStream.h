@@ -36,7 +36,7 @@ namespace tc { namespace io {
 	 * @class FileStream
 	 * @brief An implementation of IStream as a wrapper to local OS file access functions.
 	 **/
-class FileStream : public IStream
+class FileStream : public tc::io::IStream
 {
 public:
 		/** 

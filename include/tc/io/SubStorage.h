@@ -19,7 +19,7 @@ namespace tc { namespace io {
 	 * @class SubStorage
 	 * @brief A wrapper around an existing IStorage object that exposes a subset of the base IStorage directory tree.
 	 **/
-class SubStorage : public IStorage
+class SubStorage : public tc::io::IStorage
 {
 public:
 

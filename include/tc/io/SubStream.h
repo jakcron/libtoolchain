@@ -20,7 +20,7 @@ namespace tc { namespace io {
 	 * @class SubStream
 	 * @brief A wrapper around an existing IStream object that exposes a subset of the base the IStream object.
 	 **/
-class SubStream : public IStream
+class SubStream : public tc::io::IStream
 {
 public:
 		/**

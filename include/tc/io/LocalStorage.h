@@ -25,7 +25,7 @@ namespace tc { namespace io {
 	 * @class LocalStorage
 	 * @brief An IStorage wrapper around the existing OS FileSystem API.
 	 **/
-class LocalStorage : public IStorage
+class LocalStorage : public tc::io::IStorage
 {
 public:
 		/// Default Constructor
