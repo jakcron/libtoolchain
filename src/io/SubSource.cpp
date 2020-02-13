@@ -17,7 +17,7 @@ tc::io::SubSource::SubSource(const std::shared_ptr<tc::io::ISource>& source, int
 	mBaseSource = source;
 
 	// validate arguments
-	if (mBaseSource.get() == nullptr)
+	if (mBaseSource == nullptr)
 	{
 		throw tc::ArgumentNullException(kClassName, "source is null");
 	}
@@ -59,7 +59,7 @@ tc::ByteData tc::io::SubSource::pullData(int64_t offset, size_t count)
 {
 	size_t pull_count = SourceUtil::getReadableSize(mSubSourceLength, offset, count);
 
-	if (mBaseSource.get() == nullptr)
+	if (mBaseSource == nullptr)
 		return tc::ByteData();
 
 	return mBaseSource->pullData(mBaseSourceOffset + offset, pull_count);

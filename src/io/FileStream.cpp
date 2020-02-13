@@ -54,7 +54,7 @@ bool tc::io::FileStream::canSeek() const
 
 int64_t tc::io::FileStream::length()
 {
-	if (mFileHandle.get() == nullptr)
+	if (mFileHandle == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::length()", "Failed to get stream length (stream is disposed)");
 	}
@@ -64,7 +64,7 @@ int64_t tc::io::FileStream::length()
 
 int64_t tc::io::FileStream::position()
 {
-	if (mFileHandle.get() == nullptr)
+	if (mFileHandle == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::position()", "Failed to get file position (stream is disposed)");
 	}
@@ -79,7 +79,7 @@ int64_t tc::io::FileStream::position()
 
 size_t tc::io::FileStream::read(byte_t* buffer, size_t count)
 {
-	if (mFileHandle.get() == nullptr)
+	if (mFileHandle == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::read()", "Failed to read from stream (stream is disposed)");
 	}
@@ -104,7 +104,7 @@ size_t tc::io::FileStream::read(byte_t* buffer, size_t count)
 
 void tc::io::FileStream::write(const byte_t* buffer, size_t count)
 {
-	if (mFileHandle.get() == nullptr)
+	if (mFileHandle == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::write()", "Failed to write to stream (no file open)");
 	}
@@ -129,7 +129,7 @@ void tc::io::FileStream::write(const byte_t* buffer, size_t count)
 
 int64_t tc::io::FileStream::seek(int64_t offset, SeekOrigin origin)
 {
-	if (mFileHandle.get() == nullptr)
+	if (mFileHandle == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::seek()", "Failed to set stream position (stream is disposed)");
 	}
@@ -144,7 +144,7 @@ int64_t tc::io::FileStream::seek(int64_t offset, SeekOrigin origin)
 
 void tc::io::FileStream::setLength(int64_t length)
 {
-	if (mFileHandle.get() == nullptr)
+	if (mFileHandle == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::setLength()", "Failed to set stream length (stream is disposed)");
 	}
@@ -159,7 +159,7 @@ void tc::io::FileStream::setLength(int64_t length)
 
 void tc::io::FileStream::flush()
 {
-	if (mFileHandle.get() == nullptr)
+	if (mFileHandle == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::flush()", "Failed to flush stream (stream is disposed)");
 	}

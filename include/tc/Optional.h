@@ -94,7 +94,7 @@ template <class T>
 inline void Optional<T>::operator=(const T& value)
 {
 	// if mValue is null we need to allocate memory for it
-	if (mValue.get() == nullptr)
+	if (mValue == nullptr)
 	{
 		mValue = std::shared_ptr<T>(new T);
 	}
@@ -127,7 +127,7 @@ inline T& Optional<T>::get() const
 template <class T>
 inline bool Optional<T>::isNull() const
 {
-	return mValue.get() == nullptr;
+	return mValue == nullptr;
 }
 
 template <class T>

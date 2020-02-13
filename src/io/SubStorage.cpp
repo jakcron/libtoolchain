@@ -15,7 +15,7 @@ tc::io::SubStorage::SubStorage(const std::shared_ptr<tc::io::IStorage>& storage,
 	// copy IStorage ptr
 	mBaseStorage = storage;
 	
-	if (mBaseStorage.get() == nullptr)
+	if (mBaseStorage == nullptr)
 	{
 		throw tc::ArgumentNullException(kClassName, "storage is null");
 	}
@@ -48,7 +48,7 @@ void tc::io::SubStorage::dispose()
 
 void tc::io::SubStorage::createFile(const tc::io::Path& path)
 {
-	if (mBaseStorage.get() == nullptr)
+	if (mBaseStorage == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::createFile()", "Failed to create file (no base storage)");
 	}
@@ -63,7 +63,7 @@ void tc::io::SubStorage::createFile(const tc::io::Path& path)
 
 void tc::io::SubStorage::removeFile(const tc::io::Path& path)
 {
-	if (mBaseStorage.get() == nullptr)
+	if (mBaseStorage == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::removeFile()", "Failed to remove file (no base storage)");
 	}
@@ -78,7 +78,7 @@ void tc::io::SubStorage::removeFile(const tc::io::Path& path)
 
 void tc::io::SubStorage::openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream)
 {
-	if (mBaseStorage.get() == nullptr)
+	if (mBaseStorage == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::openFile()", "Failed to open file (no base storage)");
 	}
@@ -93,7 +93,7 @@ void tc::io::SubStorage::openFile(const tc::io::Path& path, tc::io::FileMode mod
 
 void tc::io::SubStorage::createDirectory(const tc::io::Path& path)
 {
-	if (mBaseStorage.get() == nullptr)
+	if (mBaseStorage == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::createDirectory()", "Failed to create directory (no base storage)");
 	}
@@ -108,7 +108,7 @@ void tc::io::SubStorage::createDirectory(const tc::io::Path& path)
 
 void tc::io::SubStorage::removeDirectory(const tc::io::Path& path)
 {
-	if (mBaseStorage.get() == nullptr)
+	if (mBaseStorage == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::removeDirectory()", "Failed to remove directory (no base storage)");
 	}
@@ -123,7 +123,7 @@ void tc::io::SubStorage::removeDirectory(const tc::io::Path& path)
 
 void tc::io::SubStorage::getWorkingDirectory(tc::io::Path& path)
 {
-	if (mBaseStorage.get() == nullptr)
+	if (mBaseStorage == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (no base storage)");
 	}
@@ -133,7 +133,7 @@ void tc::io::SubStorage::getWorkingDirectory(tc::io::Path& path)
 
 void tc::io::SubStorage::setWorkingDirectory(const tc::io::Path& path)
 {
-	if (mBaseStorage.get() == nullptr)
+	if (mBaseStorage == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::setWorkingDirectory()", "Failed to set current working directory (no base storage)");
 	}
@@ -151,7 +151,7 @@ void tc::io::SubStorage::setWorkingDirectory(const tc::io::Path& path)
 
 void tc::io::SubStorage::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
 {
-	if (mBaseStorage.get() == nullptr)
+	if (mBaseStorage == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::setWorkingDirectory()", "Failed to get directory listing (no base storage)");
 	}

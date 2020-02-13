@@ -17,7 +17,7 @@ tc::io::SubSink::SubSink(const std::shared_ptr<tc::io::ISink>& sink, int64_t off
 	mBaseSink = sink;
 
 	// validate arguments
-	if (mBaseSink.get() == nullptr)
+	if (mBaseSink == nullptr)
 	{
 		throw tc::ArgumentNullException(kClassName, "sink is null");
 	}
@@ -57,7 +57,7 @@ int64_t tc::io::SubSink::length()
 
 void tc::io::SubSink::setLength(int64_t length)
 {
-	if (mBaseSink.get() == nullptr)
+	if (mBaseSink == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::setLength()", "Failed to set sink length (no base sink)");
 	}
@@ -67,7 +67,7 @@ void tc::io::SubSink::setLength(int64_t length)
 
 void tc::io::SubSink::pushData(const tc::ByteData& data, int64_t offset)
 {
-	if (mBaseSink.get() == nullptr)
+	if (mBaseSink == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::pushData()", "Failed to push data (no base sink)");
 	}

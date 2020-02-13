@@ -23,7 +23,7 @@ tc::ByteData::ByteData(size_t size)
 			throw tc::OutOfMemoryException(kClassName, "std::bad_alloc thrown");
 		}
 		
-		if (mPtr.get() == nullptr)
+		if (mPtr == nullptr)
 		{
 			throw tc::OutOfMemoryException(kClassName, "Failed to allocate memory");
 		}
@@ -39,5 +39,5 @@ byte_t* tc::ByteData::buffer() const
 
 size_t tc::ByteData::size() const
 {
-	return mPtr.get() == nullptr ? 0 : mSize;
+	return mPtr == nullptr ? 0 : mSize;
 }

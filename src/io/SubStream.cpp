@@ -18,7 +18,7 @@ tc::io::SubStream::SubStream(const std::shared_ptr<tc::io::IStream>& stream, int
 	mBaseStream = stream;
 
 	// validate the stream exists
-	if (mBaseStream.get() == nullptr)
+	if (mBaseStream == nullptr)
 	{
 		throw tc::ArgumentNullException(kClassName, "stream is null");
 	}
@@ -76,7 +76,7 @@ bool tc::io::SubStream::canSeek() const
 
 int64_t tc::io::SubStream::length()
 {
-	if (mBaseStream.get() == nullptr)
+	if (mBaseStream == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::length()", "Failed to get stream length (stream is disposed)");
 	}
@@ -86,7 +86,7 @@ int64_t tc::io::SubStream::length()
 
 int64_t tc::io::SubStream::position()
 {
-	if (mBaseStream.get() == nullptr)
+	if (mBaseStream == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::position()", "Failed to get file position (stream is disposed)");
 	}
@@ -96,7 +96,7 @@ int64_t tc::io::SubStream::position()
 
 size_t tc::io::SubStream::read(byte_t* buffer, size_t count)
 {
-	if (mBaseStream.get() == nullptr)
+	if (mBaseStream == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::read()", "Failed to read from stream (stream is disposed)");
 	}
@@ -121,7 +121,7 @@ size_t tc::io::SubStream::read(byte_t* buffer, size_t count)
 
 void tc::io::SubStream::write(const byte_t* buffer, size_t count)
 {
-	if (mBaseStream.get() == nullptr)
+	if (mBaseStream == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::write()", "Failed to write to stream (stream is disposed)");
 	}
@@ -144,7 +144,7 @@ void tc::io::SubStream::write(const byte_t* buffer, size_t count)
 
 int64_t tc::io::SubStream::seek(int64_t offset, SeekOrigin origin)
 {
-	if (mBaseStream.get() == nullptr)
+	if (mBaseStream == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::seek()", "Failed to set stream position (stream is disposed)");
 	}
@@ -174,7 +174,7 @@ int64_t tc::io::SubStream::seek(int64_t offset, SeekOrigin origin)
 
 void tc::io::SubStream::setLength(int64_t length)
 {
-	if (mBaseStream.get() == nullptr)
+	if (mBaseStream == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::setLength()", "Failed to set stream length (stream is disposed)");
 	}
@@ -184,7 +184,7 @@ void tc::io::SubStream::setLength(int64_t length)
 
 void tc::io::SubStream::flush()
 {
-	if (mBaseStream.get() == nullptr)
+	if (mBaseStream == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::seek()", "Failed to flush stream (stream is disposed)");
 	}
