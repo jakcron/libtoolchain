@@ -23,10 +23,12 @@
 
 #include <tc/io/ISink.h>
 #include <tc/io/SubSink.h>
+#include <tc/io/StreamSink.h>
 
 #include <tc/io/ISource.h>
 #include <tc/io/PaddingSource.h>
 #include <tc/io/SubSource.h>
+#include <tc/io/StreamSource.h>
 
 // Exceptions
 #include <tc/io/IOException.h>

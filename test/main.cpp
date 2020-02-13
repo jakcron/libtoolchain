@@ -9,6 +9,8 @@
 #include "io_PaddingSource_TestClass.h"
 #include "io_SubSource_TestClass.h"
 #include "io_SubSink_TestClass.h"
+#include "io_StreamSource_TestClass.h"
+#include "io_StreamSink_TestClass.h"
 
 void runTest(ITestClass* testClass)
 {
@@ -29,4 +31,6 @@ int main(int argc, char** argv)
 	runTest(new io_PaddingSource_TestClass());
 	runTest(new io_SubSource_TestClass());
 	runTest(new io_SubSink_TestClass());
+	runTest(new io_StreamSource_TestClass());
+	runTest(new io_StreamSink_TestClass());
 }
