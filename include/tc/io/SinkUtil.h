@@ -6,13 +6,13 @@
 	 * @date 2020/02/08
 	 **/
 #pragma once
-#include <tc/io/ISource.h>
+#include <tc/io/ISink.h>
 
 namespace tc { namespace io {
 
 	/**
 	 * @class SinkUtil
-	 * @brief Utility class for ISource objects.
+	 * @brief Utility class for ISink objects.
 	 **/
 class SinkUtil
 {
