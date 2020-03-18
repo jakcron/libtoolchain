@@ -441,16 +441,28 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	switch (access)
 	{
 		case (FileAccess::Read):
-			// read access | shared lock
-			open_flag |= O_RDONLY | O_SHLOCK;
+			// read access
+			open_flag |= O_RDONLY;
+#ifdef O_SHLOCK
+			// shared lock
+			open_flag |= O_SHLOCK;
+#endif
 			break;
 		case (FileAccess::Write):
-			// write access | exclusive lock
-			open_flag |= O_WRONLY | O_EXLOCK;
+			// write access
+			open_flag |= O_WRONLY;
+#ifdef O_EXLOCK
+			// exclusive lock
+			open_flag |= O_EXLOCK;
+#endif
 			break;
 		case (FileAccess::ReadWrite):
-			// read/write access | exclusive lock
-			open_flag |= O_RDWR | O_EXLOCK;
+			// read/write access
+			open_flag |= O_RDWR;
+#ifdef O_EXLOCK
+			// exclusive lock
+			open_flag |= O_EXLOCK;
+#endif
 			break;
 		default:
 			throw tc::ArgumentOutOfRangeException(kClassName+"open()", "Illegal value for access");
