@@ -799,7 +799,6 @@ void io_MemoryStream_TestClass::testResizeStreamLarger()
 				throw tc::Exception("After resizing data was not correct");
 			}
 
-
 			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
@@ -820,6 +819,47 @@ void io_MemoryStream_TestClass::testResizeStreamSmaller()
 	{
 		try
 		{
+			int64_t initial_len = 0xdead;
+			int64_t new_len = 0xcafe;
+
+			tc::io::MemoryStream stream(initial_len);
+			
+			// write data to stream
+			tc::ByteData initial_data = tc::ByteData(size_t(initial_len));
+			memset(initial_data.buffer(), 0xdf, initial_data.size());
+			stream.write(initial_data.buffer(), initial_data.size());
+
+			// resize stream larger
+			stream.setLength(new_len);
+
+			// check stream length
+			int64_t len_res = stream.length();
+
+			if (len_res != new_len)
+			{
+				throw tc::Exception("Stream length was not correct after resizing stream");
+			}
+
+			// check stream position
+			int64_t pos_res = stream.position();
+
+			if (pos_res != new_len)
+			{
+				throw tc::Exception("Stream position was not correct after resizing stream");
+			}
+
+			// read data from stream
+			tc::ByteData new_data = tc::ByteData(size_t(stream.length()));
+			stream.seek(0, tc::io::SeekOrigin::Begin);
+			stream.read(new_data.buffer(), new_data.size());
+
+			// check data was correct
+			size_t cmp_size = std::min<size_t>(initial_data.size(), new_data.size());
+			if (memcmp(initial_data.buffer(), new_data.buffer(), cmp_size) != 0)
+			{
+				throw tc::Exception("After resizing data was not correct");
+			}
+
 			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
