@@ -2,8 +2,8 @@
 	 * @file ByteData.h
 	 * @brief Declaration of tc::ByteData
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2020/01/27
+	 * @version 0.2
+	 * @date 2020/03/20
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -30,6 +30,16 @@ public:
 		 * @throw tc::OutOfMemoryException Insuffient memory available.
 		 **/
 	ByteData(size_t size);
+
+		/**
+		 * @brief Create ByteData from existing memory.
+		 * 
+		 * @param[in] data Pointer to memory to copy.
+		 * @param[in] size Size of memory to copy.
+		 * 
+		 * @throw tc::OutOfMemoryException Insuffient memory available.
+		 **/
+	ByteData(const byte_t* data, size_t size);
 		
 		/**
 		 * @brief Get buffer pointer

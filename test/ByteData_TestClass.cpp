@@ -14,6 +14,7 @@ void ByteData_TestClass::runAllTests(void)
 	test_Constructor_CreateSmallSized();
 	test_Constructor_CreateLargeSized();
 	test_Constructor_ThrowExceptForBadAlloc();
+	test_Constructor_CreateFromPtr();
 	test_ImplicitCopy_CopyInSameScope();
 	test_ImplicitCopy_CopyOntoInitiallisedByteData();
 	test_ImplicitMove_CopyInSameScope();
@@ -175,6 +176,52 @@ void ByteData_TestClass::test_Constructor_ThrowExceptForBadAlloc()
 		catch (const tc::Exception& e)
 		{
 			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void ByteData_TestClass::test_Constructor_CreateFromPtr()
+{
+	std::cout << "[tc::ByteData] test_Constructor_CreateFromPtr : " << std::flush;
+	try
+	{
+		try 
+		{
+			std::stringstream error_ss;
+			const size_t src_data_size = 0x1000;
+			tc::ByteData src_data(src_data_size);
+			memset(src_data.buffer(), 0xe0, src_data.size());
+
+			tc::ByteData data(src_data.buffer(), src_data.size());
+
+
+			if (data.buffer() == nullptr)
+			{
+				error_ss << ".buffer() returned nullptr when ByteData was constructed with size " << src_data_size;
+				throw tc::Exception(error_ss.str());
+			}
+
+			if (data.size() != src_data_size)
+			{
+				error_ss << ".size() did not return " << src_data_size << " when ByteData was constructed with size " << src_data_size;
+				throw tc::Exception(error_ss.str());
+			}
+
+			if (memcmp(data.buffer(), src_data.buffer(), src_data_size) != 0)
+			{
+				error_ss << ".buffer() did not have expected contents, when compared to source data";
+				throw tc::Exception(error_ss.str());
+			}
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
 	catch (const std::exception& e)

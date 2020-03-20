@@ -12,6 +12,7 @@ private:
 	void test_Constructor_CreateSmallSized();
 	void test_Constructor_CreateLargeSized();
 	void test_Constructor_ThrowExceptForBadAlloc();
+	void test_Constructor_CreateFromPtr();
 	void test_ImplicitCopy_CopyInSameScope();
 	void test_ImplicitCopy_CopyOntoInitiallisedByteData();
 	void test_ImplicitMove_CopyInSameScope();

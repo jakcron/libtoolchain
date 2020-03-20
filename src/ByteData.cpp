@@ -32,6 +32,12 @@ tc::ByteData::ByteData(size_t size)
 	mSize = size;
 }
 
+tc::ByteData::ByteData(const byte_t* data, size_t size) :
+	ByteData(size)
+{
+	memcpy(mPtr.get(), data, mSize);
+}
+
 byte_t* tc::ByteData::buffer() const
 {
 	return mPtr.get();
