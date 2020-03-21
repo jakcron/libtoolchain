@@ -39,6 +39,21 @@ public:
 		 **/
 	MemoryStream(size_t length);
 
+		/** 
+		 * @brief Create MemoryStream from a tc::ByteData object.
+		 * 
+		 * @param[in] byte_data The base data to create the MemoryStream from.
+		 **/
+	MemoryStream(const tc::ByteData& byte_data);
+
+		/** 
+		 * @brief Create MemoryStream from a memory pointer.
+		 * 
+		 * @param[in] data Pointer to memory which will populate this MemoryStream.
+		 * @param[in] len Length of data to copy int this MemoryStream.
+		 **/
+	MemoryStream(const byte_t* data, size_t len);
+
 	virtual bool canRead() const;
 	virtual bool canWrite() const;
 	virtual bool canSeek() const;

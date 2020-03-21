@@ -16,6 +16,19 @@ tc::io::MemoryStream::MemoryStream(size_t length) :
 	setLength(length);
 }
 
+tc::io::MemoryStream::MemoryStream(const tc::ByteData& byte_data) :
+	mData(byte_data),
+	mPosition(0)
+{
+
+}
+
+tc::io::MemoryStream::MemoryStream(const byte_t* data, size_t len) :
+	mData(data, len),
+	mPosition(0)
+{
+}
+
 bool tc::io::MemoryStream::canRead() const 
 {
 	return true;

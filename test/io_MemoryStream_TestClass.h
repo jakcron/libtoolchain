@@ -11,6 +11,8 @@ private:
 	void testCreateEmptyStream_DefaultConstructor();
 	void testCreateEmptyStream_SizedConstructor();
 	void testCreatePopulatedStream();
+	void testCreateFromByteData();
+	void testCreateFromMemoryPointer();
 	void testSeekBeginToZero();
 	void testSeekBeginToMiddle();
 	void testSeekBeginToEnd();

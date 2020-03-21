@@ -11,6 +11,8 @@ void io_MemoryStream_TestClass::runAllTests(void)
 	testCreateEmptyStream_DefaultConstructor();
 	testCreateEmptyStream_SizedConstructor();
 	testCreatePopulatedStream();
+	testCreateFromByteData();
+	testCreateFromMemoryPointer();
 	testSeekBeginToZero();
 	testSeekBeginToMiddle();
 	testSeekBeginToEnd();
@@ -98,6 +100,57 @@ void io_MemoryStream_TestClass::testCreatePopulatedStream()
 		{
 			int64_t length = 0xcafe;
 			tc::io::MemoryStream stream(length);
+
+			constructor_TestHelper(stream, 0xcafe, 0, true, true, true);
+
+			std::cout << "PASS" << std::endl;	
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_MemoryStream_TestClass::testCreateFromByteData()
+{
+	std::cout << "[tc::io::MemoryStream] testCreateFromByteData : " << std::flush;
+	try
+	{
+		try
+		{
+			int64_t length = 0xcafe;
+			tc::io::MemoryStream stream = tc::io::MemoryStream(tc::ByteData(length));
+
+			constructor_TestHelper(stream, 0xcafe, 0, true, true, true);
+
+			std::cout << "PASS" << std::endl;	
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_MemoryStream_TestClass::testCreateFromMemoryPointer()
+{
+	std::cout << "[tc::io::MemoryStream] testCreateFromMemoryPointer : " << std::flush;
+	try
+	{
+		try
+		{
+			int64_t length = 0xcafe;
+			tc::ByteData data(length);
+			tc::io::MemoryStream stream(data.buffer(), data.size());
 
 			constructor_TestHelper(stream, 0xcafe, 0, true, true, true);
 
