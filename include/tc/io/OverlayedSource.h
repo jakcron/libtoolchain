@@ -41,6 +41,10 @@ public:
 		 * @param[in] overlay_source Sources to overlay onto the base source.
 		 * @param[in] offset Offset in base source to overlay
 		 * @param[in] length Length in base source to overlay
+		 * 
+		 * @throw tc::ArgumentNullException @p base_source or @p overlay_source was null.
+		 * @throw tc::ArgumentOutOfRangeException @p length was greater than the length of @p overlay_source .
+		 * @throw tc::ArgumentOutOfRangeException The overlay region offset is negative or the total size exceeded the length of @p base_source .
 		 **/
 	OverlayedSource(const std::shared_ptr<tc::io::ISource>& base_source, const std::shared_ptr<tc::io::ISource>& overlay_source, int64_t offset, int64_t length);
 
