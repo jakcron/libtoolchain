@@ -39,8 +39,6 @@ public:
 
 		/**
 		 * @brief Gets the length of the source.
-		 * 
-		 * @throw tc::ObjectDisposedException The base stream was not initialised.
 		 **/
 	virtual int64_t length();
 
@@ -51,8 +49,6 @@ public:
 		 * @param[in] count The maximum number of bytes to be pull from the source.
 		 *
 		 * @return ByteData containing data pulled from source
-		 * 
-		 * @throw tc::ObjectDisposedException The base stream was not initialised.
 		 **/
 	virtual tc::ByteData pullData(int64_t offset, size_t count);
 private:
