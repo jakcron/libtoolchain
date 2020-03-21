@@ -30,6 +30,8 @@
 #include <tc/io/PaddingSource.h>
 #include <tc/io/SubSource.h>
 #include <tc/io/StreamSource.h>
+#include <tc/io/MemorySource.h>
+#include <tc/io/OverlayedSource.h>
 
 // Exceptions
 #include <tc/io/IOException.h>

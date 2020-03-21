@@ -9,6 +9,7 @@
 #include "io_SubStorage_TestClass.h"
 #include "io_PaddingSource_TestClass.h"
 #include "io_MemorySource_TestClass.h"
+#include "io_OverlayedSource_TestClass.h"
 #include "io_SubSource_TestClass.h"
 #include "io_SubSink_TestClass.h"
 #include "io_StreamSource_TestClass.h"
@@ -33,6 +34,7 @@ int main(int argc, char** argv)
 	runTest(new io_SubStorage_TestClass());
 	runTest(new io_PaddingSource_TestClass());
 	runTest(new io_MemorySource_TestClass());
+	runTest(new io_OverlayedSource_TestClass());
 	runTest(new io_SubSource_TestClass());
 	runTest(new io_SubSink_TestClass());
 	runTest(new io_StreamSource_TestClass());
