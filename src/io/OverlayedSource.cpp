@@ -37,25 +37,25 @@ tc::io::OverlayedSource::OverlayedSource(const std::shared_ptr<tc::io::ISource>&
 		}
 
 		// throw exception if overly region offset is negative
-		if (itr->base_offset < 0)
+		if (itr->offset < 0)
 		{
 			throw tc::ArgumentOutOfRangeException(kClassName+"::OverlayedSource()", "Invalid overlay region. Overlay offset is negative.");
 		}
 
 		// throw exception if the overlay region offset is beyond the length of the base source
-		if (itr->base_offset > mBaseSource->length())
+		if (itr->offset > mBaseSource->length())
 		{
 			throw tc::ArgumentOutOfRangeException(kClassName+"::OverlayedSource()", "Invalid overlay region. Overlay offset beyond length of base_source.");
 		}
 
 		// throw exception if the overlay region exceeds the length of the base source
-		if ((itr->base_offset + itr->base_length) > mBaseSource->length())
+		if ((itr->offset + itr->length) > mBaseSource->length())
 		{
 			throw tc::ArgumentOutOfRangeException(kClassName+"::OverlayedSource()", "Invalid overlay region. Overlay region exceeds the length of base_source.");
 		}
 
 		// throw exception if the overlay region exceeds the length of the overlay source
-		if (itr->base_length > itr->overlay_source->length())
+		if (itr->length > itr->overlay_source->length())
 		{
 			throw tc::ArgumentOutOfRangeException(kClassName+"::OverlayedSource()", "Invalid overlay region. Overlay region exceeds the length of overlay_source.");
 		}
@@ -106,7 +106,7 @@ tc::ByteData tc::io::OverlayedSource::pullData(int64_t offset, size_t count)
 		overlay_pull_count = std::min<size_t>(overlay_pull.size(), overlay_pull_count);
 		
 		// copy into out buffer
-		int64_t overlay_offset_in_out = (overlay_pull_offset + itr->base_offset) - offset;
+		int64_t overlay_offset_in_out = (overlay_pull_offset + itr->offset) - offset;
 		memcpy(out.buffer() + overlay_offset_in_out, overlay_pull.buffer(), overlay_pull_count);
 	}
 
@@ -115,13 +115,12 @@ tc::ByteData tc::io::OverlayedSource::pullData(int64_t offset, size_t count)
 
 void tc::io::OverlayedSource::getOverlaySourcePullableRegion(int64_t base_pull_offset, size_t base_pull_count, const OverlaySourceInfo& overlay_info, int64_t& overlay_pull_offset, size_t& overlay_pull_count)
 {
-	// if the overlay offset is >= the base pull offset
-	int64_t overlay_relative_start_offset = base_pull_offset - overlay_info.base_offset;
+	int64_t overlay_relative_start_offset = base_pull_offset - overlay_info.offset;
 	int64_t overlay_relative_end_offset = overlay_relative_start_offset + int64_t(base_pull_count);
 
 	// if the start offset > overlay length: then the data starts after the overlay ends
 	// if the end offset < 0: then the data ends before the overlay begins
-	if (overlay_relative_start_offset > overlay_info.base_length || overlay_relative_end_offset < 0)
+	if (overlay_relative_start_offset > overlay_info.length || overlay_relative_end_offset < 0)
 	{
 		overlay_pull_offset = 0;
 		overlay_pull_count = 0;
@@ -133,6 +132,6 @@ void tc::io::OverlayedSource::getOverlaySourcePullableRegion(int64_t base_pull_o
 		overlay_pull_offset = overlay_relative_start_offset > 0 ? overlay_relative_start_offset : 0;
 
 		// getReadableSize will cap the amount read if it exceeds the base_length
-		overlay_pull_count = SourceUtil::getReadableSize(overlay_info.base_length, overlay_pull_offset, size_t(overlay_relative_end_offset - overlay_pull_offset));
+		overlay_pull_count = SourceUtil::getReadableSize(overlay_info.length, overlay_pull_offset, size_t(overlay_relative_end_offset - overlay_pull_offset));
 	}
 }
