@@ -36,6 +36,12 @@ tc::io::OverlayedSource::OverlayedSource(const std::shared_ptr<tc::io::ISource>&
 			throw tc::ArgumentNullException(kClassName+"::OverlayedSource()", "overlay_source was null.");
 		}
 
+		// throw exception if overly region offset is negative
+		if (itr->base_offset < 0)
+		{
+			throw tc::ArgumentOutOfRangeException(kClassName+"::OverlayedSource()", "Invalid overlay region. Overlay offset is negative.");
+		}
+
 		// throw exception if the overlay region offset is beyond the length of the base source
 		if (itr->base_offset > mBaseSource->length())
 		{
