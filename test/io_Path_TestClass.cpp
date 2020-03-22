@@ -1,4 +1,5 @@
 #include <tc/Exception.h>
+#include <tc/io/PathUtil.h>
 #include <iostream>
 #include <sstream>
 
@@ -31,48 +32,6 @@ void io_Path_TestClass::runAllTests(void)
 
 //---------------------------------------------------------
 
-void io_Path_TestClass::pathToUnixUtf8(const tc::io::Path& path, std::string& out)
-{
-	std::stringstream out_stream;
-
-	//for (size_t i = 0; i < path.size(); i++)
-	for (tc::io::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
-	{
-		//const std::string& element = path.getPathElementList()[i];
-		out_stream << *itr;
-		//if (i+1 < path.size())
-		if (itr != --path.end())
-			out_stream << "/";
-		//else if (element == "" && i == 0)
-		else if (*itr == "" && itr == path.begin())
-			out_stream << "/";
-	}
-
-	out = out_stream.str();
-}
-
-void io_Path_TestClass::pathToWindowsUtf8(const tc::io::Path& path, std::string& out)
-{
-	std::stringstream out_stream;
-
-	//for (size_t i = 0; i < path.size(); i++)
-	for (tc::io::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
-	{
-		//const std::string& element = path.getPathElementList()[i];
-		out_stream << *itr;
-		//if (i+1 < path.size())
-		if (itr != --path.end())
-			out_stream << "\\";
-		//else if (element == "" && i == 0)
-		else if (*itr == "" && itr == path.begin())
-			out_stream << "\\";
-	}
-
-	out = out_stream.str();
-}
-
-//---------------------------------------------------------
-
 void io_Path_TestClass::testPathComposition(const std::string& test_name, const std::string& raw_path, const std::string& expected_path, size_t expected_element_count, PathType path_type)
 {
 	std::cout << "[tc::io::Path] " << test_name << " : " << std::flush;
@@ -87,9 +46,14 @@ void io_Path_TestClass::testPathComposition(const std::string& test_name, const 
 		}
 
 		if (path_type == UNIX_PATH)
-			pathToUnixUtf8(path, utf8_path);
-		else 
-			pathToWindowsUtf8(path, utf8_path);
+			tc::io::PathUtil::pathToUnixUTF8(path, utf8_path);
+		else
+		{
+			std::u16string utf16_path;
+			tc::io::PathUtil::pathToWindowsUTF16(path, utf16_path);
+			tc::string::transcodeUTF16ToUTF8(utf16_path, utf8_path);
+		}
+			
 
 		if (utf8_path != expected_path)
 		{
@@ -297,7 +261,7 @@ void io_Path_TestClass::test_Operator_Addition()
 		tc::io::Path path_ab = path_a + path_b;
 
 		std::string test_path;
-		pathToUnixUtf8(path_ab, test_path);
+		tc::io::PathUtil::pathToUnixUTF8(path_ab, test_path);
 
 		if (test_path != raw_path_ab)
 		{
@@ -326,7 +290,7 @@ void io_Path_TestClass::test_Operator_Append()
 		path_a += path_b;
 
 		std::string test_path;
-		pathToUnixUtf8(path_a, test_path);
+		tc::io::PathUtil::pathToUnixUTF8(path_a, test_path);
 
 		if (test_path != raw_path_ab)
 		{

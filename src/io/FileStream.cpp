@@ -1,5 +1,5 @@
 #include <tc/io/FileStream.h>
-#include <tc/io/PathUtils.h>
+#include <tc/io/PathUtil.h>
 
 #ifdef _WIN32
 #include <direct.h>
@@ -184,7 +184,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 {
 	// convert Path to unicode string
 	std::u16string unicode_path;
-	pathToWindowsUTF16(path, unicode_path);
+	PathUtil::pathToWindowsUTF16(path, unicode_path);
 
 	DWORD access_flag = 0;
 	DWORD share_mode_flag = 0;
@@ -401,7 +401,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 {
 	// convert Path to unicode string
 	std::string unicode_path;
-	pathToUnixUTF8(path, unicode_path);
+	PathUtil::pathToUnixUTF8(path, unicode_path);
 
 	// open file
 	int open_flag = 0;

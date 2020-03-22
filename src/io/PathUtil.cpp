@@ -1,7 +1,7 @@
-#include <tc/io/PathUtils.h>
+#include <tc/io/PathUtil.h>
 #include <tc/string.h>
 
-void tc::io::pathToWindowsUTF16(const tc::io::Path& path, std::u16string& out)
+void tc::io::PathUtil::pathToWindowsUTF16(const tc::io::Path& path, std::u16string& out)
 {
 	std::u16string utf16_element;
 
@@ -18,7 +18,7 @@ void tc::io::pathToWindowsUTF16(const tc::io::Path& path, std::u16string& out)
 	}
 }
 
-void tc::io::pathToUnixUTF8(const tc::io::Path& path, std::string& out)
+void tc::io::PathUtil::pathToUnixUTF8(const tc::io::Path& path, std::string& out)
 {
 	out.clear();
 	for (tc::io::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)

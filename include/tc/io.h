@@ -11,7 +11,7 @@
 	 * @brief       Namespace of the input/output library
 	 **/
 #include <tc/io/Path.h>
-#include <tc/io/PathUtils.h>
+#include <tc/io/PathUtil.h>
 
 #include <tc/io/IStream.h>
 #include <tc/io/FileStream.h>

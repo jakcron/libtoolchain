@@ -1,6 +1,6 @@
 #include <tc/io/LocalStorage.h>
 #include <tc/io/FileStream.h>
-#include <tc/io/PathUtils.h>
+#include <tc/io/PathUtil.h>
 #include <tc/Exception.h>
 #include <tc/string.h>
 
@@ -46,7 +46,7 @@ void tc::io::LocalStorage::removeFile(const tc::io::Path& path)
 #ifdef _WIN32
 	// convert Path to unicode string
 	std::u16string unicode_path;
-	pathToWindowsUTF16(path, unicode_path);
+	PathUtil::pathToWindowsUTF16(path, unicode_path);
 
 	// delete file
 	if (DeleteFileW((LPCWSTR)unicode_path.c_str()) == false)
@@ -61,7 +61,7 @@ void tc::io::LocalStorage::removeFile(const tc::io::Path& path)
 #else
 	// convert Path to unicode string
 	std::string unicode_path;
-	pathToUnixUTF8(path, unicode_path);
+	PathUtil::pathToUnixUTF8(path, unicode_path);
 
 	if (unlink(unicode_path.c_str()) == -1)
 	{
@@ -98,7 +98,7 @@ void tc::io::LocalStorage::createDirectory(const tc::io::Path& path)
 #ifdef _WIN32
 	// convert Path to unicode string
 	std::u16string unicode_path;
-	pathToWindowsUTF16(path, unicode_path);
+	PathUtil::pathToWindowsUTF16(path, unicode_path);
 
 	// create directory
 	if (CreateDirectoryW((LPCWSTR)unicode_path.c_str(), nullptr) == false && GetLastError() != ERROR_ALREADY_EXISTS)
@@ -113,7 +113,7 @@ void tc::io::LocalStorage::createDirectory(const tc::io::Path& path)
 #else
 	// convert Path to unicode string
 	std::string unicode_path;
-	pathToUnixUTF8(path, unicode_path);
+	PathUtil::pathToUnixUTF8(path, unicode_path);
 
 	if (mkdir(unicode_path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1 && errno != EEXIST)
 	{
@@ -147,7 +147,7 @@ void tc::io::LocalStorage::removeDirectory(const tc::io::Path& path)
 #ifdef _WIN32
 	// convert Path to unicode string
 	std::u16string unicode_path;
-	pathToWindowsUTF16(path, unicode_path);
+	PathUtil::pathToWindowsUTF16(path, unicode_path);
 
 	if (RemoveDirectoryW((wchar_t*)unicode_path.c_str()) == false)
 	{
@@ -161,7 +161,7 @@ void tc::io::LocalStorage::removeDirectory(const tc::io::Path& path)
 #else
 	// convert Path to unicode string
 	std::string unicode_path;
-	pathToUnixUTF8(path, unicode_path);
+	PathUtil::pathToUnixUTF8(path, unicode_path);
 
 	if (rmdir(unicode_path.c_str()) == -1)
 	{
@@ -235,7 +235,7 @@ void tc::io::LocalStorage::setWorkingDirectory(const tc::io::Path& path)
 #ifdef _WIN32
 	// convert Path to unicode string
 	std::u16string unicode_path;
-	pathToWindowsUTF16(path, unicode_path);
+	PathUtil::pathToWindowsUTF16(path, unicode_path);
 
 	// delete file
 	if (SetCurrentDirectoryW((LPCWSTR)unicode_path.c_str()) == false)
@@ -250,7 +250,7 @@ void tc::io::LocalStorage::setWorkingDirectory(const tc::io::Path& path)
 #else
 	// convert Path to unicode string
 	std::string unicode_path;
-	pathToUnixUTF8(path, unicode_path);
+	PathUtil::pathToUnixUTF8(path, unicode_path);
 
 	// get full path to directory
 	if (chdir(unicode_path.c_str()) != 0)
@@ -284,7 +284,7 @@ void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirect
 
 	// convert Path to unicode string
 	std::u16string unicode_path;
-	pathToWindowsUTF16(wildcard_path, unicode_path);
+	PathUtil::pathToWindowsUTF16(wildcard_path, unicode_path);
 
 	HANDLE dir_handle = INVALID_HANDLE_VALUE;
 	WIN32_FIND_DATAW dir_entry;
@@ -347,7 +347,7 @@ void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirect
 	DIR *dp;
 
 	// convert Path to unicode string
-	pathToUnixUTF8(path, unicode_path);
+	PathUtil::pathToUnixUTF8(path, unicode_path);
 	
 	// open directory
 	dp = opendir(unicode_path.c_str());
