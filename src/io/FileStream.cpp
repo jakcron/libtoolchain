@@ -295,6 +295,7 @@ int64_t tc::io::FileStream::length_impl()
 		DWORD error = GetLastError();
 		switch (error)
 		{
+			// TODO: Directly handle usual errors for custom exceptions
 			default:
 				throw tc::io::IOException(kClassName+"::length()", "Failed to get stream length (" + std::to_string(error) + ")");
 		}
@@ -312,6 +313,7 @@ size_t tc::io::FileStream::read_impl(byte_t* buffer, size_t count)
 		DWORD error = GetLastError();
 		switch (error)
 		{
+			// TODO: Directly handle usual errors for custom exceptions
 			default:
 				throw tc::io::IOException(kClassName+"::read()", "Failed to read from stream (" + std::to_string(error) + ")");
 		}
@@ -334,6 +336,7 @@ void tc::io::FileStream::write_impl(const byte_t* buffer, size_t count)
 		DWORD error = GetLastError();
 		switch (error)
 		{
+			// TODO: Directly handle usual errors for custom exceptions
 			default:
 				throw tc::io::IOException(kClassName+"::write()", "Failed to write to stream (" + std::to_string(error) + ")");
 		}
@@ -375,6 +378,7 @@ int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
 		DWORD error = GetLastError();
 		switch (error)
 		{
+			// TODO: Directly handle usual errors for custom exceptions
 			default:
 				throw tc::io::IOException(kClassName+"::seek()", "Failed to set stream position (" + std::to_string(error) + ")");
 		}
