@@ -44,7 +44,7 @@ public:
 		 * 
 		 * @throw tc::ObjectDisposedException The base stream was not initialised.
 		 **/
-	virtual int64_t length();
+	int64_t length();
 
 		/**
 		 * @brief Pull data from source
@@ -56,7 +56,7 @@ public:
 		 * 
 		 * @throw tc::ObjectDisposedException The base stream was not initialised.
 		 **/
-	virtual tc::ByteData pullData(int64_t offset, size_t count);
+	tc::ByteData pullData(int64_t offset, size_t count);
 private:
 	static const std::string kClassName;
 

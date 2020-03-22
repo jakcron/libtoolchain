@@ -39,8 +39,8 @@ public:
 		 **/
 	SubStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& base_path);
 
-	virtual tc::ResourceStatus state();
-	virtual void dispose();
+	tc::ResourceStatus state();
+	void dispose();
 
 		/** 
 		 * @brief Create a new file
@@ -49,7 +49,7 @@ public:
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual void createFile(const tc::io::Path& path);
+	void createFile(const tc::io::Path& path);
 
 		/** 
 		 * @brief Remove a file
@@ -58,7 +58,7 @@ public:
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual void removeFile(const tc::io::Path& path);
+	void removeFile(const tc::io::Path& path);
 
 		/** 
 		 * @brief Open a file
@@ -70,7 +70,7 @@ public:
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream);
+	void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream);
 	
 		/** 
 		 * @brief Create a new directory
@@ -79,7 +79,7 @@ public:
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual void createDirectory(const tc::io::Path& path);
+	void createDirectory(const tc::io::Path& path);
 
 		/** 
 		 * @brief Remove a directory
@@ -87,7 +87,7 @@ public:
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual void removeDirectory(const tc::io::Path& path);
+	void removeDirectory(const tc::io::Path& path);
 
 		/** 
 		 * @brief Get the full path of the working directory
@@ -95,7 +95,7 @@ public:
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual void getWorkingDirectory(tc::io::Path& path);
+	void getWorkingDirectory(tc::io::Path& path);
 
 		/** 
 		 * @brief Change the working directory
@@ -104,7 +104,7 @@ public:
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 * @throw tc::UnauthorisedAccessException Substorage escape detected.
 		 **/
-	virtual void setWorkingDirectory(const tc::io::Path& path);
+	void setWorkingDirectory(const tc::io::Path& path);
 
 		/** 
 		 * @brief Get directory listing a directory
@@ -114,7 +114,7 @@ public:
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 * @throw tc::UnauthorisedAccessException Substorage escape detected.
 		 **/
-	virtual void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info);
+	void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info);
 private:
 	static const std::string kClassName;
 	

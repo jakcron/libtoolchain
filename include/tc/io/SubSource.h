@@ -40,7 +40,7 @@ public:
 	SubSource(const std::shared_ptr<tc::io::ISource>& source, int64_t offset, int64_t length);
 
 		/// Get length of source
-	virtual int64_t length();
+	int64_t length();
 
 		/**
 		 * @brief Pull data from source
@@ -50,7 +50,7 @@ public:
 		 *
 		 * @return ByteData containing data pulled from source
 		 **/
-	virtual tc::ByteData pullData(int64_t offset, size_t count);
+	tc::ByteData pullData(int64_t offset, size_t count);
 private:
 	static const std::string kClassName;
 

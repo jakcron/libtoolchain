@@ -31,9 +31,9 @@ public:
 		/// Default Constructor
 	LocalStorage();
 
-	virtual tc::ResourceStatus state();
-	virtual void dispose();
-	virtual void createFile(const tc::io::Path& path);
+	tc::ResourceStatus state();
+	void dispose();
+	void createFile(const tc::io::Path& path);
 
 		/** 
 		 * @brief Remove a file
@@ -48,7 +48,7 @@ public:
 		 * @throw tc::io::DirectoryNotFoundException A component of the path prefix is not a directory.
 		 * @throw tc::io::FileNotFoundException The specifed file does not exist.
 		 **/
-	virtual void removeFile(const tc::io::Path& path);
+	void removeFile(const tc::io::Path& path);
 
 		/** 
 		 * @brief Open a file
@@ -57,7 +57,7 @@ public:
 		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the @ref IStream object. This also determines the values returned by the @ref IStream::canRead and @ref IStream::canWrite methods of the IStream object. @ref IStream::canSeek is true if path specifies a disk file.
 		 * @param[out] stream Pointer to IStream object to be instantiated
 		 **/
-	virtual void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream);
+	void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream);
 	
 		/** 
 		 * @brief Create a new directory
@@ -71,7 +71,7 @@ public:
 		 * @throw tc::io::PathTooLongException The specified path, directory name, or both exceed the system-defined maximum length.
 		 * @throw tc::io::DirectoryNotFoundException A component of the path prefix is not a directory or does not exist.
 		 **/
-	virtual void createDirectory(const tc::io::Path& path);
+	void createDirectory(const tc::io::Path& path);
 
 		/** 
 		 * @brief Remove a directory
@@ -86,7 +86,7 @@ public:
 		 * @throw tc::io::DirectoryNotFoundException A component of the path prefix is not a directory.
 		 * @throw tc::io::DirectoryNotFoundException The named directory does not exist.
 		 **/
-	virtual void removeDirectory(const tc::io::Path& path);
+	void removeDirectory(const tc::io::Path& path);
 
 		/** 
 		 * @brief Get the full path of the working directory
@@ -95,7 +95,7 @@ public:
 		 * @throw tc::UnauthorisedAccessException Read or search permission was denied for a component of the pathname.
 		 * @throw tc::io::IOException An I/O error has occured.
 		 **/
-	virtual void getWorkingDirectory(tc::io::Path& path);
+	void getWorkingDirectory(tc::io::Path& path);
 
 		/** 
 		 * @brief Change the working directory
@@ -107,7 +107,7 @@ public:
 		 * @throw tc::io::DirectoryNotFoundException A component of the path prefix is not a directory.
 		 * @throw tc::io::DirectoryNotFoundException The named directory does not exist.
 		 **/
-	virtual void setWorkingDirectory(const tc::io::Path& path);
+	void setWorkingDirectory(const tc::io::Path& path);
 
 		/** 
 		 * @brief Get directory listing a directory
@@ -119,7 +119,7 @@ public:
 		 * @throw tc::io::DirectoryNotFoundException A component of the path prefix is not a directory.
 		 * @throw tc::io::DirectoryNotFoundException The named directory does not exist.
 		 **/
-	virtual void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info);
+	void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info);
 private:
 	static const std::string kClassName;
 

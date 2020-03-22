@@ -44,16 +44,16 @@ public:
 		 **/
 	SubStream(const std::shared_ptr<tc::io::IStream>& stream, int64_t offset, int64_t length);
 
-	virtual bool canRead() const;
-	virtual bool canWrite() const;
-	virtual bool canSeek() const;
+	bool canRead() const;
+	bool canWrite() const;
+	bool canSeek() const;
 
 		/**
 		 * @brief Gets the length in bytes of the stream.
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual int64_t length();
+	int64_t length();
 
 		/** 
 		 * @brief Gets the position within the current stream. 
@@ -62,7 +62,7 @@ public:
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual int64_t position();
+	int64_t position();
 
 		/**
 		 * @brief Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
@@ -79,7 +79,7 @@ public:
 		 * @throw tc::ArgumentOutOfRangeException @p count exceeds the length of readable data in the sub stream.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual size_t read(byte_t* buffer, size_t count);
+	size_t read(byte_t* buffer, size_t count);
 
 		/**
 		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
@@ -94,7 +94,7 @@ public:
 		 * @throw tc::ArgumentOutOfRangeException @p count exceeds the length of writeable data in the sub stream.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual void write(const byte_t* buffer, size_t count);
+	void write(const byte_t* buffer, size_t count);
 
 		/**
 		 * @brief Sets the position within the current stream.
@@ -111,7 +111,7 @@ public:
 		 * @throw tc::ArgumentOutOfRangeException @p origin contains an invalid value.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual int64_t seek(int64_t offset, SeekOrigin origin);
+	int64_t seek(int64_t offset, SeekOrigin origin);
 
 		/**
 		 * @brief Sets the length of the current stream. THIS IS NOT IMPLEMENTED FOR @ref SubStream.
@@ -125,7 +125,7 @@ public:
 		 * @throw tc::NotImplementedException @ref setLength is not implemented for @ref SubStream
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual void setLength(int64_t length);
+	void setLength(int64_t length);
 
 		/**
 		 * @brief Clears all buffers for this and the base steram and causes any buffered data to be written to the underlying device.
@@ -133,9 +133,9 @@ public:
 		 * @throw tc::io::IOException An I/O error occurs.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	virtual void flush();
+	void flush();
 	
-	virtual void dispose();
+	void dispose();
 private:
 	static const std::string kClassName;
 

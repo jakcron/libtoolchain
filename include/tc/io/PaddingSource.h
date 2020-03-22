@@ -35,7 +35,7 @@ public:
 	PaddingSource(byte_t padding_byte, int64_t length);
 
 		/// Get length of source
-	virtual int64_t length();
+	int64_t length();
 
 		/**
 		 * @brief Pull data from source
@@ -47,7 +47,7 @@ public:
 		 * 
 		 * @throw tc::OutOfMemoryException The @ref tc::ByteData object could not be created due to insuffient memory.
 		 **/
-	virtual tc::ByteData pullData(int64_t offset, size_t count);
+	tc::ByteData pullData(int64_t offset, size_t count);
 private:
 	static const std::string kClassName;
 

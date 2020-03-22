@@ -44,7 +44,7 @@ public:
 		 * 
 		 * @throw tc::ObjectDisposedException The base stream was not initialised.
 		 **/
-	virtual int64_t length();
+	int64_t length();
 
 		/**
 		 * @brief Sets the length of the sink.
@@ -53,7 +53,7 @@ public:
 		 * 
 		 * @throw tc::ObjectDisposedException The base stream was not initialised.
 		 **/
-	virtual void setLength(int64_t length);
+	void setLength(int64_t length);
 
 		/**
 		 * @brief Push data to the sink.
@@ -63,7 +63,7 @@ public:
 		 * 
 		 * @throw tc::ObjectDisposedException The base stream was not initialised.
 		 **/
-	virtual void pushData(const tc::ByteData& data, int64_t offset);
+	void pushData(const tc::ByteData& data, int64_t offset);
 private:
 	static const std::string kClassName;
 

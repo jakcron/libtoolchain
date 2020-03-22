@@ -32,27 +32,27 @@ private:
 			mLength = length;
 		}
 
-		virtual bool canRead() const
+		bool canRead() const
 		{
 			return mCanRead;
 		}
 
-		virtual bool canWrite() const
+		bool canWrite() const
 		{
 			return mCanWrite;
 		}
 
-		virtual bool canSeek() const
+		bool canSeek() const
 		{
 			return mCanSeek;
 		}
 
-		virtual int64_t length()
+		int64_t length()
 		{
 			return mLength;
 		}
 
-		virtual int64_t position()
+		int64_t position()
 		{
 			return mPosition;
 		}
@@ -67,7 +67,7 @@ private:
 			throw tc::NotImplementedException(kClassName, "write() not implemented");
 		}
 
-		virtual int64_t seek(int64_t offset, tc::io::SeekOrigin origin)
+		int64_t seek(int64_t offset, tc::io::SeekOrigin origin)
 		{
 			if (origin != tc::io::SeekOrigin::Begin)
 				throw tc::ArgumentOutOfRangeException(kClassName, "SubStream should not be passing seek origin values that are not SeekOrigin::Begin to the base stream");
@@ -76,17 +76,17 @@ private:
 			return mPosition;
 		}
 
-		virtual void setLength(int64_t length)
+		void setLength(int64_t length)
 		{
 			mLength = length;
 		}
 
-		virtual void flush()
+		void flush()
 		{
 			// nothing
 		}
 
-		virtual void dispose()
+		void dispose()
 		{
 			flush();
 			mCanRead = false;

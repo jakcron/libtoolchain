@@ -54,19 +54,19 @@ public:
 		 **/
 	MemoryStream(const byte_t* data, size_t len);
 
-	virtual bool canRead() const;
-	virtual bool canWrite() const;
-	virtual bool canSeek() const;
+	bool canRead() const;
+	bool canWrite() const;
+	bool canSeek() const;
 
 		/**
 		 * @brief Gets the length in bytes of the stream.
 		 **/
-	virtual int64_t length();
+	int64_t length();
 
 		/** 
 		 * @brief Gets the position within the current stream.
 		 **/
-	virtual int64_t position();
+	int64_t position();
 
 		/**
 		 * @brief Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
@@ -78,7 +78,7 @@ public:
 		 * 
 		 * @throw tc::ArgumentNullException @p buffer is @a nullptr.
 		 **/
-	virtual size_t read(byte_t* buffer, size_t count);
+	size_t read(byte_t* buffer, size_t count);
 
 		/**
 		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
@@ -89,7 +89,7 @@ public:
 		 * @throw tc::ArgumentNullException @p buffer is @a nullptr.
 		 * @throw tc::ArgumentOutOfRangeException @p count is too large.
 		 **/
-	virtual void write(const byte_t* buffer, size_t count);
+	void write(const byte_t* buffer, size_t count);
 
 		/**
 		 * @brief Sets the position within the current stream.
@@ -102,7 +102,7 @@ public:
 		 * @throw tc::ArgumentOutOfRangeException @p offset and @p origin indicate an invalid stream position.
 		 * @throw tc::ArgumentOutOfRangeException @p origin contains an invalid value.
 		 **/
-	virtual int64_t seek(int64_t offset, SeekOrigin origin);
+	int64_t seek(int64_t offset, SeekOrigin origin);
 
 
 		/**
@@ -115,17 +115,17 @@ public:
 		 * @throw tc::ArgumentOutOfRangeException @p length exceeds the maximum possible value for a MemoryStream.
 		 * @throw tc::ArgumentOutOfRangeException @p length is negative.
 		 **/
-	virtual void setLength(int64_t length);
+	void setLength(int64_t length);
 
 		/**
 		 * @brief This does nothing for tc::io::MemoryStream
 		 **/
-	virtual void flush();
+	void flush();
 
 		/**
 		 * @brief Release internal memory. This will make this stream length 0.
 		 **/
-	virtual void dispose();
+	void dispose();
 private:
 	static const std::string kClassName;
 
