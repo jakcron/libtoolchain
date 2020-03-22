@@ -3,7 +3,7 @@
 
 #include <tc/string.h>
 
-class string_transcode_TestClass : public ITestClass
+class string_TranscodeUtil_TestClass : public ITestClass
 {
 public:
 	void runAllTests();

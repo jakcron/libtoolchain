@@ -302,7 +302,7 @@ void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirect
 
 	do {
 		std::string utf8_name;
-		tc::string::transcodeUTF16ToUTF8((char16_t*)dir_entry.cFileName, utf8_name);
+		tc::string::TranscodeUtil::UTF16ToUTF8((char16_t*)dir_entry.cFileName, utf8_name);
 
 		if (dir_entry.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
 		{

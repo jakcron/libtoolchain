@@ -45,7 +45,7 @@
     <ClCompile Include="..\..\..\test\SharedPtr_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\string_transcode_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\string_TranscodeUtil_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,7 +80,7 @@
     <ClInclude Include="..\..\..\test\SharedPtr_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\string_transcode_TestClass.h">
+    <ClInclude Include="..\..\..\test\string_TranscodeUtil_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

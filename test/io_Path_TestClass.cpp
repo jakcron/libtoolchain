@@ -51,7 +51,7 @@ void io_Path_TestClass::testPathComposition(const std::string& test_name, const 
 		{
 			std::u16string utf16_path;
 			tc::io::PathUtil::pathToWindowsUTF16(path, utf16_path);
-			tc::string::transcodeUTF16ToUTF8(utf16_path, utf8_path);
+			tc::string::TranscodeUtil::UTF16ToUTF8(utf16_path, utf8_path);
 		}
 			
 

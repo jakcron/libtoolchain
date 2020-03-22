@@ -24,14 +24,14 @@ tc::io::Path::Path(const std::string& path)
 tc::io::Path::Path(const std::u16string& path)
 {
 	std::string utf8_path;
-	string::transcodeUTF16ToUTF8(path, utf8_path);
+	string::TranscodeUtil::UTF16ToUTF8(path, utf8_path);
 	initialisePath(utf8_path);
 }
 
 tc::io::Path::Path(const std::u32string& path)
 {
 	std::string utf8_path;
-	string::transcodeUTF32ToUTF8(path, utf8_path);
+	string::TranscodeUtil::UTF32ToUTF8(path, utf8_path);
 	initialisePath(utf8_path);
 }
 

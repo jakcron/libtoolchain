@@ -134,7 +134,7 @@
     <ClCompile Include="..\..\..\test\main.cpp" />
     <ClCompile Include="..\..\..\test\Optional_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\SharedPtr_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\string_transcode_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\string_TranscodeUtil_TestClass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\test\endian_TestClass.h" />
@@ -147,7 +147,7 @@
     <ClInclude Include="..\..\..\test\ITestClass.h" />
     <ClInclude Include="..\..\..\test\Optional_TestClass.h" />
     <ClInclude Include="..\..\..\test\SharedPtr_TestClass.h" />
-    <ClInclude Include="..\..\..\test\string_transcode_TestClass.h" />
+    <ClInclude Include="..\..\..\test\string_TranscodeUtil_TestClass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

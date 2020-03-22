@@ -8,7 +8,7 @@ void tc::io::PathUtil::pathToWindowsUTF16(const tc::io::Path& path, std::u16stri
 	out.clear();
 	for (tc::io::Path::const_iterator itr = path.begin(); itr != path.end(); itr++)
 	{
-		tc::string::transcodeUTF8ToUTF16(*itr, utf16_element);
+		tc::string::TranscodeUtil::UTF8ToUTF16(*itr, utf16_element);
 
 		out += utf16_element;
 		if (itr != --path.end())
