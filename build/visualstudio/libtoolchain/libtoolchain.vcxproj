@@ -130,7 +130,7 @@
     <ClInclude Include="..\..\..\include\tc\fs\LocalFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\fs\PartitionedFileObject.h" />
     <ClInclude Include="..\..\..\include\tc\fs\Path.h" />
-    <ClInclude Include="..\..\..\include\tc\fs\PathUtils.h" />
+    <ClInclude Include="..\..\..\include\tc\fs\PathUtil.h" />
     <ClInclude Include="..\..\..\include\tc\fs\SandboxedFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\Optional.h" />
     <ClInclude Include="..\..\..\include\tc\ResourceState.h" />
@@ -150,7 +150,7 @@
     <ClCompile Include="..\..\..\src\fs\LocalFileSystem.cpp" />
     <ClCompile Include="..\..\..\src\fs\PartitionedFileObject.cpp" />
     <ClCompile Include="..\..\..\src\fs\Path.cpp" />
-    <ClCompile Include="..\..\..\src\fs\PathUtils.cpp" />
+    <ClCompile Include="..\..\..\src\fs\PathUtil.cpp" />
     <ClCompile Include="..\..\..\src\fs\SandboxedFileSystem.cpp" />
     <ClCompile Include="..\..\..\src\string\transcode.cpp" />
   </ItemGroup>
