@@ -27,7 +27,7 @@ public:
 
 		/**
 		 * @brief Initialising constructor with value to wrap
-		 * @param value const T& Reference to value to wrap
+		 * @param[in] value const T& Reference to value to wrap
 		 * 
 		 * This Optional shall be not null initially.
 		 **/
@@ -35,7 +35,7 @@ public:
 
 		/**
 		 * @brief Copy constructor
-		 * @param other const Optional<T>& Reference to Optional object to copy
+		 * @param[in] other const Optional<T>& Reference to Optional object to copy
 		 * 
 		 * This Optional shall be not null initially.
 		 **/
