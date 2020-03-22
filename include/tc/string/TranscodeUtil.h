@@ -2,8 +2,8 @@
 	 * @file TranscodeUtil.h
 	 * @brief Declaration of tc::string::TranscodeUtil
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2018/12/23
+	 * @version 0.2
+	 * @date 2020/03/22
 	 **/
 #pragma once
 #include <string>
@@ -18,6 +18,7 @@ namespace tc { namespace string {
 	 **/
 class TranscodeUtil
 {
+public:
 		/**
 		 * @brief Transcode a UTF-8 string to UTF-32.
 		 * @param[in] src Source UTF-8 string.
