@@ -13,8 +13,5 @@
 #include <memory>
 #include <tc/endian.h>
 
-	/**
-	 * @typedef byte_t
-	 * @brief Typedef uint8_t to byte_t to more explicity indicate its role in memory related contexts
-	 **/
-typedef uint8_t byte_t;
+	/// Alias uint8_t to byte_t to more explicity indicate its role in memory related contexts
+using byte_t = uint8_t;
