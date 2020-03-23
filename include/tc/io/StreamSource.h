@@ -24,6 +24,7 @@ class StreamSource : tc::io::ISource
 public:
 		/**
 		 * @brief Default constructor
+		 * @post This will create an unusable StreamSource, it will have to be assigned from a valid StreamSource object to be usable.
 		 **/ 
 	StreamSource();
 

@@ -2,8 +2,8 @@
 	 * @file SubStream.h
 	 * @brief Declaration of tc::io::SubStream
 	 * @author Jack (jakcron)
-	 * @version 0.3
-	 * @date 2019/06/19
+	 * @version 0.4
+	 * @date 2020/01/26
 	 **/
 #pragma once
 #include <tc/io/IStream.h>
@@ -24,7 +24,8 @@ class SubStream : public tc::io::IStream
 {
 public:
 		/**
-		 * @brief Default constructor
+		 * @brief Default Constructor
+		 * @post This will create an unusable SubStream, it will have to be assigned from a valid SubStream object to be usable.
 		 **/
 	SubStream();
 
@@ -58,7 +59,7 @@ public:
 		/** 
 		 * @brief Gets the position within the current stream. 
 		 * 
-		 * @return This is returns the result of seek(0, SeekOrigin::Current);
+		 * @return This is returns the current position within the stream.
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
@@ -128,13 +129,16 @@ public:
 	void setLength(int64_t length);
 
 		/**
-		 * @brief Clears all buffers for this and the base steram and causes any buffered data to be written to the underlying device.
+		 * @brief Clears all buffers for this and the base stream and causes any buffered data to be written to the underlying device.
 		 * 
 		 * @throw tc::io::IOException An I/O error occurs.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	void flush();
 	
+		/**
+		 * @brief Releases internal resources including base stream and clears internal state.
+		 **/
 	void dispose();
 private:
 	static const std::string kClassName;

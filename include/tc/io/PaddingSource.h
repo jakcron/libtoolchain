@@ -21,6 +21,7 @@ class PaddingSource : tc::io::ISource
 public:
 		/**
 		 * @brief Default constructor
+		 * @post This will create a PaddingSource with length() == 0.
 		 **/ 
 	PaddingSource();
 

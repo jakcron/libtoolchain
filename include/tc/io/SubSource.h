@@ -22,6 +22,7 @@ class SubSource : tc::io::ISource
 public:
 		/**
 		 * @brief Default constructor
+		 * @post This will create an unusable SubSource, it will have to be assigned from a valid SubSource object to be usable.
 		 **/ 
 	SubSource();
 

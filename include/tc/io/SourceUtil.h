@@ -17,7 +17,16 @@ namespace tc { namespace io {
 class SourceUtil
 {
 public:
-	static size_t getReadableSize(int64_t source_length, int64_t source_offset, size_t read_size);
+		/**
+		 * @brief Get size of readable data for an ISource given the source size, desired read offset and length
+		 * 
+		 * @param[in] source_length Total length of source.
+		 * @param[in] read_offset Byte offset in source to begin reading from.
+		 * @param[in] read_length of data to read from source.
+		 * 
+		 * @return Largest possible readable length.
+		 **/
+	static size_t getReadableSize(int64_t length, int64_t offset, size_t read_len);
 };
 
 }} // namespace tc::io

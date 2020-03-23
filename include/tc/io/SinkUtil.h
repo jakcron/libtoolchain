@@ -17,6 +17,14 @@ namespace tc { namespace io {
 class SinkUtil
 {
 public:
+		/**
+		 * @brief Get size of writeable data for an ISink given the sink size and deisred write offset
+		 * 
+		 * @param[in] sink_length Total length of sink.
+		 * @param[in] write_offset Byte offset in sink to begin writing from.
+		 * 
+		 * @return Largest possible writeable length.
+		 **/
 	static int64_t getWritableSize(int64_t sink_length, int64_t sink_offset);
 };
 

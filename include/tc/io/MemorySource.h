@@ -19,6 +19,7 @@ class MemorySource : tc::io::ISource
 public:
 		/**
 		 * @brief Default constructor
+		 * @post This will create a MemorySource with length() == 0.
 		 **/ 
 	MemorySource();
 

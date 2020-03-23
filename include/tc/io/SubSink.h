@@ -24,6 +24,7 @@ class SubSink : tc::io::ISink
 public:
 		/**
 		 * @brief Default constructor
+		 * @post This will create an unusable SubSink, it will have to be assigned from a valid SubSink object to be usable.
 		 **/ 
 	SubSink();
 

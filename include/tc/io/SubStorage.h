@@ -2,8 +2,8 @@
 	 * @file SubStorage.h
 	 * @brief Declaration of tc::io::SubStorage
 	 * @author Jack (jakcron)
-	 * @version 0.3
-	 * @date 2019/06/18
+	 * @version 0.4
+	 * @date 2020/01/26
 	 **/
 #pragma once
 #include <tc/io/IStorage.h>
@@ -25,6 +25,7 @@ public:
 
 		/**
 		 * @brief Default constructor
+		 * @post This will create an unusable SubStorage, it will have to be assigned from a valid SubStorage object to be usable.
 		 **/
 	SubStorage();
 
@@ -45,7 +46,7 @@ public:
 		/** 
 		 * @brief Create a new file
 		 * 
-		 * @param[in] path A relative or absolute path for the file that the current @ref IStorage object will create.
+		 * @param[in] path A relative or absolute path to file.
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
@@ -54,7 +55,7 @@ public:
 		/** 
 		 * @brief Remove a file
 		 * 
-		 * @param[in] path Path to file
+		 * @param[in] path A relative or absolute path to file.
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
@@ -63,7 +64,7 @@ public:
 		/** 
 		 * @brief Open a file
 		 * 
-		 * @param[in] path A relative or absolute path for the file that the current @ref IStorage object will open an @ref IStream for.
+		 * @param[in] path A relative or absolute path to file.
 		 * @param[in] mode One of the enumeration values that determines how to open or create the file.
 		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the @ref IStream object. This also determines the values returned by the @ref IStream::canRead and @ref IStream::canWrite methods of the IStream object. @ref IStream::canSeek is true if path specifies a disk file.
 		 * @param[out] stream Pointer to IStream object to be instantiated
@@ -75,7 +76,7 @@ public:
 		/** 
 		 * @brief Create a new directory
 		 * 
-		 * @param[in] path Path to directory
+		 * @param[in] path A relative or absolute path to directory.
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
@@ -83,7 +84,7 @@ public:
 
 		/** 
 		 * @brief Remove a directory
-		 * @param[in] path Path to directory
+		 * @param[in] path A relative or absolute path to directory.
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
@@ -99,7 +100,7 @@ public:
 
 		/** 
 		 * @brief Change the working directory
-		 * @param[in] path Path to directory
+		 * @param[in] path A relative or absolute path to directory.
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 * @throw tc::UnauthorisedAccessException Substorage escape detected.
@@ -108,8 +109,8 @@ public:
 
 		/** 
 		 * @brief Get directory listing a directory
-		 * @param[in] path Path to directory
-		 * @param[out] info sDirectoryListing object to populate
+		 * @param[in] path A relative or absolute path to directory.
+		 * @param[out] info The sDirectoryListing object to populate
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 * @throw tc::UnauthorisedAccessException Substorage escape detected.

@@ -1,22 +1,29 @@
 #include <tc/io/StreamUtil.h>
 
-size_t tc::io::StreamUtil::getReadableSize(int64_t length, int64_t offset, size_t read_size)
+size_t tc::io::StreamUtil::getReadableSize(int64_t stream_length, int64_t read_offset, size_t read_length)
 {
-	if (length < 0 || offset < 0)
+	if (stream_length < 0 || read_offset < 0)
 		return 0;
 
-	int64_t available_data = (offset < length) ? (length - offset) : 0;
+	int64_t readable_length = (read_offset < stream_length) ? (stream_length - read_offset) : 0;
 
-	return size_t(std::min<int64_t>(available_data, int64_t(read_size)));
+	// if size_t has less digits than int64_t we must limit readable_length to the maximum value for a size_t
+	if (std::numeric_limits<size_t>::digits < std::numeric_limits<int64_t>::digits)
+		readable_length = int64_t(std::min<int64_t>(readable_length, int64_t(std::numeric_limits<size_t>::max())));
+
+	return std::min<size_t>(size_t(readable_length), read_length);
 }
 
-size_t tc::io::StreamUtil::getWritableSize(int64_t length, int64_t offset)
+size_t tc::io::StreamUtil::getWritableSize(int64_t stream_length, int64_t write_offset)
 {
-	if (length < 0 || offset < 0)
+	if (stream_length < 0 || write_offset < 0)
 		return 0;
 
-	if (offset > length)
-		return 0;
+	int64_t writable_length = stream_length > write_offset ? stream_length - write_offset : 0;
 
-	return length - offset;
+	// if size_t has less digits than int64_t we must limit writable_length to the maximum value for a size_t
+	if (std::numeric_limits<size_t>::digits < std::numeric_limits<int64_t>::digits)
+		writable_length = int64_t(std::min<int64_t>(writable_length, int64_t(std::numeric_limits<size_t>::max())));
+
+	return size_t(writable_length);
 }

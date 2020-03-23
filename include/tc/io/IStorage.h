@@ -70,19 +70,19 @@ public:
 
 		/** 
 		 * @brief Create a new file
-		 * @param[in] path A relative or absolute path for the file that the current @ref IStorage object will create.
+		 * @param[in] path A relative or absolute path to file.
 		 **/
 	virtual void createFile(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Remove a file
-		 * @param[in] path Path to file
+		 * @param[in] path A relative or absolute path to file.
 		 **/
 	virtual void removeFile(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Open a file
-		 * @param[in] path A relative or absolute path for the file that the current @ref IStorage object will open an @ref IStream for.
+		 * @param[in] path A relative or absolute path to file.
 		 * @param[in] mode One of the enumeration values that determines how to open or create the file.
 		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the @ref IStream object. This also determines the values returned by the @ref IStream::canRead and @ref IStream::canWrite methods of the IStream object. @ref IStream::canSeek is true if path specifies a disk file.
 		 * @param[out] stream Pointer to IStream object to be instantiated
@@ -91,13 +91,13 @@ public:
 	
 		/** 
 		 * @brief Create a new directory
-		 * @param[in] path Path to directory 
+		 * @param[in] path A relative or absolute path to directory.
 		 **/
 	virtual void createDirectory(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Remove a directory
-		 * @param[in] path Path to directory
+		 * @param[in] path A relative or absolute path to directory.
 		 **/
 	virtual void removeDirectory(const tc::io::Path& path) = 0;
 
@@ -109,13 +109,13 @@ public:
 
 		/** 
 		 * @brief Change the working directory
-		 * @param[in] path Path to directory
+		 * @param[in] path A relative or absolute path to directory.
 		 **/
 	virtual void setWorkingDirectory(const tc::io::Path& path) = 0;
 
 		/** 
 		 * @brief Get directory listing a directory
-		 * @param[in] path Path to directory
+		 * @param[in] path A relative or absolute path to directory.
 		 * @param[out] info sDirectoryListing object to populate
 		 **/
 	virtual void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info) = 0;

@@ -24,6 +24,7 @@ class StreamSink : tc::io::ISink
 public:
 		/**
 		 * @brief Default constructor
+		 * @post This will create an unusable StreamSink, it will have to be assigned from a valid StreamSink object to be usable.
 		 **/ 
 	StreamSink();
 

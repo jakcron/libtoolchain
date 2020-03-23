@@ -38,6 +38,7 @@ public:
 
 		/**
 		 * @brief Default constructor
+		 * @post This will create a OverlayedSource with length() == 0.
 		 **/ 
 	OverlayedSource();
 
