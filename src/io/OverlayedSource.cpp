@@ -30,6 +30,12 @@ tc::io::OverlayedSource::OverlayedSource(const std::shared_ptr<tc::io::ISource>&
 	// check/import overlay sources
 	for (auto itr = overlay_source_infos.begin(); itr != overlay_source_infos.end(); itr++)
 	{
+		// skip regions with no length
+		if (itr->length == 0)
+		{
+			continue;
+		}
+
 		// throw exception if a overlay source is null
 		if (itr->overlay_source == nullptr)
 		{
