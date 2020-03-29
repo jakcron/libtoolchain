@@ -124,9 +124,21 @@ void io_MemoryStream_TestClass::testCreateFromByteData()
 		try
 		{
 			int64_t length = 0xcafe;
-			tc::io::MemoryStream stream = tc::io::MemoryStream(tc::ByteData(length));
+
+			tc::ByteData data(length);
+			memset(data.buffer(), 0xff, data.size());
+
+			tc::io::MemoryStream stream = tc::io::MemoryStream(data);
 
 			constructor_TestHelper(stream, 0xcafe, 0, true, true, true);
+
+			tc::ByteData output_data(stream.length());
+			stream.read(output_data.buffer(), output_data.size());
+
+			if (memcmp(output_data.buffer(), data.buffer(), length) != 0)
+			{
+				throw tc::Exception("Data in memory stream was not correct after being constructed from a ByteData object");
+			}
 
 			std::cout << "PASS" << std::endl;	
 		}
