@@ -57,6 +57,7 @@ void io_MemorySource_TestClass::testCreateFromByteData()
 
 			test::SourceUtil::testSourceLength(source, length);
 			test::SourceUtil::pullTestHelper(source, 0, data.size(), data.size(), data.buffer());
+			test::SourceUtil::pullTestHelper(source, 0, data.size()*2, data.size(), data.buffer());
 
 			std::cout << "PASS" << std::endl;	
 		}
@@ -73,7 +74,7 @@ void io_MemorySource_TestClass::testCreateFromByteData()
 
 void io_MemorySource_TestClass::testCreateFromMemoryPointer()
 {
-	std::cout << "[tc::io::MemorySource] testCreateFromByteData : " << std::flush;
+	std::cout << "[tc::io::MemorySource] testCreateFromMemoryPointer : " << std::flush;
 	try
 	{
 		try
@@ -86,6 +87,7 @@ void io_MemorySource_TestClass::testCreateFromMemoryPointer()
 
 			test::SourceUtil::testSourceLength(source, length);
 			test::SourceUtil::pullTestHelper(source, 0, data.size(), data.size(), data.buffer());
+			test::SourceUtil::pullTestHelper(source, 0, data.size()*2, data.size(), data.buffer());
 
 			std::cout << "PASS" << std::endl;	
 		}

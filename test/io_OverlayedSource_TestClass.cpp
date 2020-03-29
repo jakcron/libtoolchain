@@ -79,6 +79,11 @@ void io_OverlayedSource_TestClass::testSingleOverlayConstructor()
 			pull_size = base_source.length();
 			pull_offset = 0;
 			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+
+			// try to pull double the length of source
+			pull_size = base_source.length() * 2;
+			pull_offset = 0;
+			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size/2, expected_data.buffer() + pull_offset);
 			
 			// pull source up to overlay source
 			pull_size = overlay_offset;
