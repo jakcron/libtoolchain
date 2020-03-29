@@ -8,4 +8,9 @@ class io_MemorySource_TestClass : public ITestClass
 public:
 	void runAllTests();
 private:
+	void testDefaultConstructor();
+	void testCreateFromByteData();
+	void testCreateFromMemoryPointer();
+	void testNegativeOffset();
+	void testTooLargeOffset();
 };
