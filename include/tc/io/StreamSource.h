@@ -2,8 +2,8 @@
 	 * @file StreamSource.h
 	 * @brief Declaration of tc::io::StreamSource
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2020/02/13
+	 * @version 0.2
+	 * @date 2020/03/29
 	 **/
 #pragma once
 #include <tc/io/ISource.h>
