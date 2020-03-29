@@ -2,8 +2,7 @@
 #include <iostream>
 
 #include "io_SubStream_TestClass.h"
-
-const std::string io_SubStream_TestClass::DummyStreamBase::kClassName = "DummyStreamBase";
+#include "StreamTestUtil.h"
 
 void io_SubStream_TestClass::runAllTests(void)
 {
@@ -20,7 +19,7 @@ void io_SubStream_TestClass::testSize()
 	std::cout << "[tc::io::SubStream] testSize : " << std::flush;
 	try
 	{
-		class DummyStream : public DummyStreamBase
+		class DummyStream : public StreamTestUtil::DummyStreamBase
 		{
 		public:
 			DummyStream()
@@ -59,7 +58,7 @@ void io_SubStream_TestClass::testSeekPos()
 	std::cout << "[tc::io::SubStream] testSeekPos : " << std::flush;
 	try
 	{
-		class DummyStream : public DummyStreamBase
+		class DummyStream : public StreamTestUtil::DummyStreamBase
 		{
 		public:
 			DummyStream()
@@ -123,7 +122,7 @@ void io_SubStream_TestClass::testRead()
 	std::cout << "[tc::io::SubStream] testRead : " << std::flush;
 	try
 	{
-		class DummyStream : public DummyStreamBase
+		class DummyStream : public StreamTestUtil::DummyStreamBase
 		{
 		public:
 			DummyStream()
@@ -181,7 +180,7 @@ void io_SubStream_TestClass::testWrite()
 	std::cout << "[tc::io::SubStream] testWrite : " << std::flush;
 	try
 	{
-		class DummyStream : public DummyStreamBase
+		class DummyStream : public StreamTestUtil::DummyStreamBase
 		{
 		public:
 			DummyStream()
