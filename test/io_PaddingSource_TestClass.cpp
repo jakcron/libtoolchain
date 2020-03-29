@@ -1,5 +1,4 @@
 #include <iostream>
-#include <sstream>
 
 #include "io_PaddingSource_TestClass.h"
 #include "SourceUtil.h"
@@ -23,8 +22,6 @@ void io_PaddingSource_TestClass::testDefaultConstructor()
 	{
 		try
 		{
-			std::stringstream error_ss;
-
 			tc::io::PaddingSource source;
 
 			test::SourceUtil::testSourceLength(source, 0);
