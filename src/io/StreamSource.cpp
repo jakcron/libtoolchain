@@ -20,39 +20,34 @@ tc::io::StreamSource::StreamSource(const std::shared_ptr<tc::io::IStream>& strea
 	{
 		throw tc::NotSupportedException(kClassName, "base stream does not support reading.");
 	}
+
+	if (mBaseStream->canSeek() == false)
+	{
+		throw tc::NotSupportedException(kClassName, "base stream does not support seeking.");
+	}
 }
 
 int64_t tc::io::StreamSource::length()
 {
-	if (mBaseStream == nullptr)
-	{
-		throw tc::ObjectDisposedException(kClassName+"::length()", "The base stream was not initialised.");
-	}
-
-	return mBaseStream->length();
+	return mBaseStream == nullptr ? 0 : mBaseStream->length();
 }
 
 tc::ByteData tc::io::StreamSource::pullData(int64_t offset, size_t count)
 {
-	if (mBaseStream == nullptr)
-	{
-		throw tc::ObjectDisposedException(kClassName+"::pullData()", "The base stream was not initialised.");
-	}
-
-	// no canSeek is checked here, it can be thrown by the base stream
-	// but also only seek if necessary
-	if (offset != 0 || (mBaseStream->canSeek() && mBaseStream->position() != 0))
-	{
-		mBaseStream->seek(offset, tc::io::SeekOrigin::Begin);
-	}
-
 	// get readable count
-	size_t read_count = SourceUtil::getReadableSize(mBaseStream->length(), offset, count);
+	size_t read_count = SourceUtil::getReadableSize(this->length(), offset, count);
+
+	// return if nothing is to be read
+	if (read_count == 0)
+	{
+		return tc::ByteData();
+	}
 	
 	// allocate ByteData
 	ByteData data(read_count);
 
-	// read from stream
+	// read from stream (note this will not be called if mBaseStream is null, as in that case read_count == 0, and this code won't be reached)
+	mBaseStream->seek(offset, tc::io::SeekOrigin::Begin);
 	mBaseStream->read(data.buffer(), data.size());
 
 	// return populated ByteData

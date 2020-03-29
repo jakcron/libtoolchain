@@ -11,7 +11,6 @@
 
 #include <tc/ArgumentNullException.h>
 #include <tc/NotSupportedException.h>
-#include <tc/ObjectDisposedException.h>
 
 namespace tc { namespace io {
 
@@ -37,13 +36,12 @@ public:
 		 * 
 		 * @throw tc::ArgumentNullException @p stream is a @p nullptr.
 		 * @throw tc::NotSupportedException @p stream does not support reading.
+		 * @throw tc::NotSupportedException @p stream does not support seeking.
 		 **/
 	StreamSource(const std::shared_ptr<tc::io::IStream>& stream);
 
 		/**
 		 * @brief Gets the length of the source.
-		 * 
-		 * @throw tc::ObjectDisposedException The base stream was not initialised.
 		 **/
 	int64_t length();
 
@@ -54,8 +52,6 @@ public:
 		 * @param[in] count The maximum number of bytes to be pull from the source.
 		 *
 		 * @return ByteData containing data pulled from source
-		 * 
-		 * @throw tc::ObjectDisposedException The base stream was not initialised.
 		 **/
 	tc::ByteData pullData(int64_t offset, size_t count);
 private:
