@@ -2,7 +2,7 @@
 #include <sstream>
 
 #include "io_OverlayedSource_TestClass.h"
-#include "SourceUtil.h"
+#include "SourceTestUtil.h"
 
 #include <tc.h>
 
@@ -31,8 +31,8 @@ void io_OverlayedSource_TestClass::testDefaultConstructor()
 		{
 			tc::io::OverlayedSource source;
 
-			test::SourceUtil::testSourceLength(source, 0);
-			test::SourceUtil::pullTestHelper(source, 0, 0xdead, 0, nullptr);
+			SourceTestUtil::testSourceLength(source, 0);
+			SourceTestUtil::pullTestHelper(source, 0, 0xdead, 0, nullptr);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -69,7 +69,7 @@ void io_OverlayedSource_TestClass::testSingleOverlayConstructor()
 
 			// ## validate overlay source
 			// source length
-			test::SourceUtil::testSourceLength(source, base_source.length());
+			SourceTestUtil::testSourceLength(source, base_source.length());
 
 			// pullData tests
 			size_t pull_size;
@@ -78,37 +78,37 @@ void io_OverlayedSource_TestClass::testSingleOverlayConstructor()
 			// pull full contents of source
 			pull_size = base_source.length();
 			pull_offset = 0;
-			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 
 			// try to pull double the length of source
 			pull_size = base_source.length() * 2;
 			pull_offset = 0;
-			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size/2, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size/2, expected_data.buffer() + pull_offset);
 			
 			// pull source up to overlay source
 			pull_size = overlay_offset;
 			pull_offset = 0;
-			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 
 			// pull just overlay source
 			pull_size = overlay_source.length();
 			pull_offset = overlay_offset;
-			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 
 			// pull part of overlay
 			pull_size = 0x20;
 			pull_offset = overlay_offset - 0x30;
-			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 
 			// pull part of base and part of overlay
 			pull_size = 0x20;
 			pull_offset = overlay_offset - 0x10;
-			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 
 			// pull part of overlay and part of base
 			pull_size = 0x20;
 			pull_offset = overlay_offset + overlay_source.length() - 0x10;
-			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -154,7 +154,7 @@ void io_OverlayedSource_TestClass::testMultiOverlayConstructor()
 					
 			// ## validate overlay source
 			// source length
-			test::SourceUtil::testSourceLength(source, base_source.length());
+			SourceTestUtil::testSourceLength(source, base_source.length());
 
 			// pullData tests
 			size_t pull_size;
@@ -163,7 +163,7 @@ void io_OverlayedSource_TestClass::testMultiOverlayConstructor()
 			// pull full contents of source
 			pull_size = base_source.length();
 			pull_offset = 0;
-			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 
 			std::cout << "PASS" << std::endl;
 		}

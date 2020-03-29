@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "io_PaddingSource_TestClass.h"
-#include "SourceUtil.h"
+#include "SourceTestUtil.h"
 
 #include <tc.h>
 
@@ -24,8 +24,8 @@ void io_PaddingSource_TestClass::testDefaultConstructor()
 		{
 			tc::io::PaddingSource source;
 
-			test::SourceUtil::testSourceLength(source, 0);
-			test::SourceUtil::pullTestHelper(source, 0, 0xdead, 0, nullptr);
+			SourceTestUtil::testSourceLength(source, 0);
+			SourceTestUtil::pullTestHelper(source, 0, 0xdead, 0, nullptr);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -57,10 +57,10 @@ void io_PaddingSource_TestClass::testCreateConstructor()
 			memset(expected_data.buffer(), padding_byte, expected_data.size());
 
 			// test source
-			test::SourceUtil::testSourceLength(source, source_len);
-			test::SourceUtil::pullTestHelper(source, 0, source_len, source_len, expected_data.buffer());
-			test::SourceUtil::pullTestHelper(source, 0, source_len/2, source_len/2, expected_data.buffer());
-			test::SourceUtil::pullTestHelper(source, 0, source_len*2, source_len, expected_data.buffer());
+			SourceTestUtil::testSourceLength(source, source_len);
+			SourceTestUtil::pullTestHelper(source, 0, source_len, source_len, expected_data.buffer());
+			SourceTestUtil::pullTestHelper(source, 0, source_len/2, source_len/2, expected_data.buffer());
+			SourceTestUtil::pullTestHelper(source, 0, source_len*2, source_len, expected_data.buffer());
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -88,8 +88,8 @@ void io_PaddingSource_TestClass::testNegativeOffset()
 			tc::io::PaddingSource source(padding_byte, source_len);
 
 			// test
-			test::SourceUtil::testSourceLength(source, source_len);
-			test::SourceUtil::pullTestHelper(source, -10, 20, 0, nullptr);
+			SourceTestUtil::testSourceLength(source, source_len);
+			SourceTestUtil::pullTestHelper(source, -10, 20, 0, nullptr);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -117,8 +117,8 @@ void io_PaddingSource_TestClass::testTooLargeOffset()
 			tc::io::PaddingSource source(padding_byte, source_len);
 
 			// test
-			test::SourceUtil::testSourceLength(source, source_len);
-			test::SourceUtil::pullTestHelper(source, source_len * 2, 20, 0, nullptr);
+			SourceTestUtil::testSourceLength(source, source_len);
+			SourceTestUtil::pullTestHelper(source, source_len * 2, 20, 0, nullptr);
 			
 			std::cout << "PASS" << std::endl;
 		}

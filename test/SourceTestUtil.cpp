@@ -1,7 +1,7 @@
-#include "SourceUtil.h"
+#include "SourceTestUtil.h"
 #include <sstream>
 
-void test::SourceUtil::testSourceLength(tc::io::ISource& source, int64_t expected_len)
+void SourceTestUtil::testSourceLength(tc::io::ISource& source, int64_t expected_len)
 {
 	std::stringstream error_ss;
 	int64_t actual_len = source.length();
@@ -12,7 +12,7 @@ void test::SourceUtil::testSourceLength(tc::io::ISource& source, int64_t expecte
 	}
 }
 
-void test::SourceUtil::pullTestHelper(tc::io::ISource& source, int64_t offset, size_t len, size_t expected_len, const byte_t* expected_data)
+void SourceTestUtil::pullTestHelper(tc::io::ISource& source, int64_t offset, size_t len, size_t expected_len, const byte_t* expected_data)
 {
 	std::stringstream error_ss;
 
