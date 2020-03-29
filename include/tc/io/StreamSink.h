@@ -19,7 +19,7 @@ namespace tc { namespace io {
 	 * @class StreamSink
 	 * @brief An IStream wrapped in an ISink.
 	 **/
-class StreamSink : tc::io::ISink
+class StreamSink : public tc::io::ISink
 {
 public:
 		/**

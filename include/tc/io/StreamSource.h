@@ -19,7 +19,7 @@ namespace tc { namespace io {
 	 * @class StreamSource
 	 * @brief An IStream wrapped in an ISource.
 	 **/
-class StreamSource : tc::io::ISource
+class StreamSource : public tc::io::ISource
 {
 public:
 		/**

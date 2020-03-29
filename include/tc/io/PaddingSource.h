@@ -16,7 +16,7 @@ namespace tc { namespace io {
 	 * @class PaddingSource
 	 * @brief A source that provides dummy/filler data.
 	 **/
-class PaddingSource : tc::io::ISource
+class PaddingSource : public tc::io::ISource
 {
 public:
 		/**

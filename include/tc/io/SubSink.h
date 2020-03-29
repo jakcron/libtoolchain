@@ -19,7 +19,7 @@ namespace tc { namespace io {
 	 * @class SubSink
 	 * @brief A ISink that exposes a subset of a base ISink.
 	 **/
-class SubSink : tc::io::ISink
+class SubSink : public tc::io::ISink
 {
 public:
 		/**

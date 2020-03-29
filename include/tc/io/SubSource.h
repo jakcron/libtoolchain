@@ -17,7 +17,7 @@ namespace tc { namespace io {
 	 * @class SubSource
 	 * @brief A ISource that exposes a subset of a base ISource.
 	 **/
-class SubSource : tc::io::ISource
+class SubSource : public tc::io::ISource
 {
 public:
 		/**

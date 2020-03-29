@@ -18,7 +18,7 @@ namespace tc { namespace io {
 	 * @class OverlayedSource
 	 * @brief This will replaces regions within a base source with one or more other sources, so as to override those regions in the base source when pullData() is called. 
 	 **/
-class OverlayedSource : tc::io::ISource
+class OverlayedSource : public tc::io::ISource
 {
 public:
 
