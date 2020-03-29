@@ -2,6 +2,7 @@
 #include <sstream>
 
 #include "io_OverlayedSource_TestClass.h"
+#include "SourceUtil.h"
 
 #include <tc.h>
 
@@ -28,25 +29,10 @@ void io_OverlayedSource_TestClass::testDefaultConstructor()
 	{
 		try
 		{
-			std::stringstream error_ss;
-
 			tc::io::OverlayedSource source;
 
-			if (source.length() != 0)
-			{
-				error_ss << "Source did not have length: " << 0;
-				throw tc::Exception(error_ss.str());
-			}
-
-			size_t pull_len = 0xdead;
-			size_t expected_pull_len = 0x0;
-			tc::ByteData data = source.pullData(0, pull_len);
-
-			if (data.size() != expected_pull_len)
-			{
-				error_ss << "pullData() returned ByteData with size(): " << data.size() << ", when it should have been " << expected_pull_len;
-				throw tc::Exception(error_ss.str());
-			}
+			test::SourceUtil::testSourceLength(source, 0);
+			test::SourceUtil::pullTestHelper(source, 0, 0xdead, 0, nullptr);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -68,8 +54,6 @@ void io_OverlayedSource_TestClass::testSingleOverlayConstructor()
 	{
 		try
 		{
-			std::stringstream error_ss;
-
 			// ## create overlay source
 			size_t overlay_offset = 0x80;
 			tc::io::PaddingSource base_source = tc::io::PaddingSource(0xff, 0x1000);
@@ -85,11 +69,7 @@ void io_OverlayedSource_TestClass::testSingleOverlayConstructor()
 
 			// ## validate overlay source
 			// source length
-			if (source.length() != base_source.length())
-			{
-				error_ss << "Source did not have length: " << base_source.length();
-				throw tc::Exception(error_ss.str());
-			}
+			test::SourceUtil::testSourceLength(source, base_source.length());
 
 			// pullData tests
 			size_t pull_size;
@@ -98,32 +78,32 @@ void io_OverlayedSource_TestClass::testSingleOverlayConstructor()
 			// pull full contents of source
 			pull_size = base_source.length();
 			pull_offset = 0;
-			pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 			
 			// pull source up to overlay source
 			pull_size = overlay_offset;
 			pull_offset = 0;
-			pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 
 			// pull just overlay source
 			pull_size = overlay_source.length();
 			pull_offset = overlay_offset;
-			pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 
 			// pull part of overlay
 			pull_size = 0x20;
 			pull_offset = overlay_offset - 0x30;
-			pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 
 			// pull part of base and part of overlay
 			pull_size = 0x20;
 			pull_offset = overlay_offset - 0x10;
-			pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 
 			// pull part of overlay and part of base
 			pull_size = 0x20;
 			pull_offset = overlay_offset + overlay_source.length() - 0x10;
-			pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -145,8 +125,8 @@ void io_OverlayedSource_TestClass::testMultiOverlayConstructor()
 	{
 		try
 		{
-			std::stringstream error_ss;
-
+			
+			// ## create overlay source
 			tc::io::PaddingSource base_source = tc::io::PaddingSource(0xff, 0x1000);
 
 			std::vector<tc::io::OverlayedSource::OverlaySourceInfo> overlay_info = {
@@ -159,34 +139,26 @@ void io_OverlayedSource_TestClass::testMultiOverlayConstructor()
 
 			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), overlay_info);
 
-			if (source.length() != base_source.length())
-			{
-				error_ss << "Source did not have length: " << base_source.length();
-				throw tc::Exception(error_ss.str());
-			}
-
-			size_t pull_len = base_source.length();
-			size_t expected_pull_len = base_source.length();
-			tc::ByteData data = source.pullData(0, pull_len);
-
-			if (data.size() != expected_pull_len)
-			{
-				error_ss << "pullData() returned ByteData with size(): " << data.size() << ", when it should have been " << expected_pull_len;
-				throw tc::Exception(error_ss.str());
-			}
-
+			// ## create ByteData with expected data to test against
 			tc::ByteData expected_data = base_source.pullData(0, base_source.length());
 			for (auto itr = overlay_info.begin(); itr != overlay_info.end(); itr++)
 			{
 				tc::ByteData tmp = itr->overlay_source->pullData(0, itr->length);
 				memcpy(expected_data.buffer() + itr->offset, tmp.buffer(), tmp.size());
 			}
-		
-			if (memcmp(expected_data.buffer(), data.buffer(), expected_data.size()) != 0)
-			{
-				error_ss << "pullData() returned ByteData with incorrect layout";
-				throw tc::Exception(error_ss.str());
-			}
+					
+			// ## validate overlay source
+			// source length
+			test::SourceUtil::testSourceLength(source, base_source.length());
+
+			// pullData tests
+			size_t pull_size;
+			int64_t pull_offset;
+
+			// pull full contents of source
+			pull_size = base_source.length();
+			pull_offset = 0;
+			test::SourceUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -208,8 +180,6 @@ void io_OverlayedSource_TestClass::testNullBaseStream()
 	{
 		try
 		{
-			std::stringstream error_ss;
-
 			tc::io::PaddingSource base_source = tc::io::PaddingSource(0xff, 0x1000);
 
 			std::vector<tc::io::OverlayedSource::OverlaySourceInfo> overlay_info = {
@@ -243,8 +213,6 @@ void io_OverlayedSource_TestClass::testNullOverlayStream()
 	{
 		try
 		{
-			std::stringstream error_ss;
-
 			tc::io::PaddingSource base_source = tc::io::PaddingSource(0xff, 0x1000);
 
 			std::vector<tc::io::OverlayedSource::OverlaySourceInfo> overlay_info = {
@@ -278,8 +246,6 @@ void io_OverlayedSource_TestClass::testOverlayStreamTooSmallForOverlayRegion()
 	{
 		try
 		{
-			std::stringstream error_ss;
-
 			tc::io::PaddingSource base_source = tc::io::PaddingSource(0xff, 0x1000);
 
 			std::vector<tc::io::OverlayedSource::OverlaySourceInfo> overlay_info = {
@@ -291,7 +257,6 @@ void io_OverlayedSource_TestClass::testOverlayStreamTooSmallForOverlayRegion()
 			};
 
 			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), overlay_info);
-
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -313,13 +278,10 @@ void io_OverlayedSource_TestClass::testOverlayRegionBeforeBaseStream()
 	{
 		try
 		{
-			std::stringstream error_ss;
-
 			tc::io::PaddingSource base_source = tc::io::PaddingSource(0xff, 0x1000);
 			tc::io::PaddingSource padding_source = tc::io::PaddingSource(0xee, 0x1000);
 
 			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), std::make_shared<tc::io::PaddingSource>(padding_source), -1, 1);
-
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -341,13 +303,10 @@ void io_OverlayedSource_TestClass::testOverlayRegionPartlyBeforeBaseStream()
 	{
 		try
 		{
-			std::stringstream error_ss;
-
 			tc::io::PaddingSource base_source = tc::io::PaddingSource(0xff, 0x1000);
 			tc::io::PaddingSource padding_source = tc::io::PaddingSource(0xee, 0x1000);
 
 			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), std::make_shared<tc::io::PaddingSource>(padding_source), -1, 20);
-
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -369,13 +328,10 @@ void io_OverlayedSource_TestClass::testOverlayRegionAfterBaseStream()
 	{
 		try
 		{
-			std::stringstream error_ss;
-
 			tc::io::PaddingSource base_source = tc::io::PaddingSource(0xff, 0x1000);
 			tc::io::PaddingSource padding_source = tc::io::PaddingSource(0xee, 0x1000);
 
 			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), std::make_shared<tc::io::PaddingSource>(padding_source), 0x1000, 0x100);
-
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -397,13 +353,10 @@ void io_OverlayedSource_TestClass::testOverlayRegionPartlyAfterBaseStream()
 	{
 		try
 		{
-			std::stringstream error_ss;
-
 			tc::io::PaddingSource base_source = tc::io::PaddingSource(0xff, 0x1000);
 			tc::io::PaddingSource padding_source = tc::io::PaddingSource(0xee, 0x1000);
 
 			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), std::make_shared<tc::io::PaddingSource>(padding_source), 0xfff, 0x100);
-
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -415,24 +368,5 @@ void io_OverlayedSource_TestClass::testOverlayRegionPartlyAfterBaseStream()
 	catch (const std::exception& e)
 	{
 		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
-	}
-}
-
-void io_OverlayedSource_TestClass::pullTestHelper(tc::io::ISource& source, int64_t offset, size_t len, size_t expected_len, const byte_t* expected_data)
-{
-	std::stringstream error_ss;
-
-	tc::ByteData data = source.pullData(offset, len);
-
-	if (data.size() != expected_len)
-	{
-		error_ss << "pullData(offset: " << offset << ", len:" << len << ") returned ByteData with size(): " << data.size() << ", when it should have been " << expected_len;
-		throw tc::Exception(error_ss.str());
-	}
-
-	if (memcmp(data.buffer(), expected_data, expected_len) != 0)
-	{
-		error_ss << "pullData(offset: " << offset << ", len:" << len << ") returned ByteData with incorrect layout";
-		throw tc::Exception(error_ss.str());
 	}
 }
