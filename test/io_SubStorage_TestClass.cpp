@@ -2,8 +2,7 @@
 #include <iostream>
 
 #include "io_SubStorage_TestClass.h"
-
-const std::string io_SubStorage_TestClass::DummyStorageBase::kClassName = "DummyStorageBase";
+#include "StorageTestUtil.h"
 
 void io_SubStorage_TestClass::runAllTests(void)
 {
@@ -25,7 +24,7 @@ void io_SubStorage_TestClass::testSubStorageRootPath()
 	std::cout << "[tc::io::SubStorage] testSubStorageRootPath : " << std::flush;
 	try
 	{
-		class DummyStorage : public DummyStorageBase
+		class DummyStorage : public StorageTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -77,7 +76,7 @@ void io_SubStorage_TestClass::testCreateFile()
 	std::cout << "[tc::io::SubStorage] testCreateFile : " << std::flush;
 	try
 	{
-		class DummyStorage : public DummyStorageBase
+		class DummyStorage : public StorageTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -128,7 +127,7 @@ void io_SubStorage_TestClass::testOpenFile()
 	std::cout << "[tc::io::SubStorage] testOpenFile : " << std::flush;
 	try
 	{
-		class DummyStorage : public DummyStorageBase
+		class DummyStorage : public StorageTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -184,7 +183,7 @@ void io_SubStorage_TestClass::testRemoveFile()
 	std::cout << "[tc::io::SubStorage] testRemoveFile : " << std::flush;
 	try
 	{
-		class DummyStorage : public DummyStorageBase
+		class DummyStorage : public StorageTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -236,7 +235,7 @@ void io_SubStorage_TestClass::testCreateDirectory()
 	std::cout << "[tc::io::SubStorage] testCreateDirectory : " << std::flush;
 	try
 	{
-		class DummyStorage : public DummyStorageBase
+		class DummyStorage : public StorageTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -287,7 +286,7 @@ void io_SubStorage_TestClass::testRemoveDirectory()
 	std::cout << "[tc::io::SubStorage] testRemoveDirectory : " << std::flush;
 	try
 	{
-		class DummyStorage : public DummyStorageBase
+		class DummyStorage : public StorageTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -338,7 +337,7 @@ void io_SubStorage_TestClass::testGetDirectoryListing()
 	std::cout << "[tc::io::SubStorage] testGetDirectoryListing : " << std::flush;
 	try
 	{
-		class DummyStorage : public DummyStorageBase
+		class DummyStorage : public StorageTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -425,7 +424,7 @@ void io_SubStorage_TestClass::testNavigateUpSubStorageEscape()
 	std::cout << "[tc::io::SubStorage] testNavigateUpSubStorageEscape : " << std::flush;
 	try
 	{
-		class DummyStorage : public DummyStorageBase
+		class DummyStorage : public StorageTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage() :
@@ -494,7 +493,7 @@ void io_SubStorage_TestClass::testOpenFileOutsideSubStorage()
 	std::cout << "[tc::io::SubStorage] testOpenFileOutsideSubStorage : " << std::flush;
 	try
 	{
-		class DummyStorage : public DummyStorageBase
+		class DummyStorage : public StorageTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
