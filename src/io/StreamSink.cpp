@@ -19,16 +19,16 @@ tc::io::StreamSink::StreamSink(const std::shared_ptr<tc::io::IStream>& stream) :
 	{
 		throw tc::NotSupportedException(kClassName, "base stream does not support writing");
 	}
+
+	if (mBaseStream->canSeek() == false)
+	{
+		throw tc::NotSupportedException(kClassName, "base stream does not support seeking");
+	}
 }
 
 int64_t tc::io::StreamSink::length()
 {
-	if (mBaseStream == nullptr)
-	{
-		throw tc::ObjectDisposedException(kClassName+"::length()", "The base stream was not initialised.");
-	}
-
-	return mBaseStream->length();
+	return mBaseStream == nullptr ? 0 :mBaseStream->length();
 }
 
 void tc::io::StreamSink::setLength(int64_t length)
@@ -48,13 +48,7 @@ void tc::io::StreamSink::pushData(const tc::ByteData& data, int64_t offset)
 		throw tc::ObjectDisposedException(kClassName+"::pushData()", "The base stream was not initialised.");
 	}
 
-	// no canSeek is checked here, it can be thrown by the base stream
-	// but also only seek if necessary
-	if (offset != 0 || (mBaseStream->canSeek() && mBaseStream->position() != 0))
-	{
-		mBaseStream->seek(offset, tc::io::SeekOrigin::Begin);
-	}
-
 	// canWrite is validated at class creation	
+	mBaseStream->seek(offset, tc::io::SeekOrigin::Begin);
 	mBaseStream->write(data.buffer(), data.size());
 }

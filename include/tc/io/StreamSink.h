@@ -42,8 +42,6 @@ public:
 
 		/**
 		 * @brief Gets the length of the sink.
-		 * 
-		 * @throw tc::ObjectDisposedException The base stream was not initialised.
 		 **/
 	int64_t length();
 
