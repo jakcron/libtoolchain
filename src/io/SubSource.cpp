@@ -52,14 +52,14 @@ tc::io::SubSource::SubSource(const std::shared_ptr<tc::io::ISource>& source, int
 
 int64_t tc::io::SubSource::length()
 {
-	return mSubSourceLength;
+	return mBaseSource == nullptr ? 0 : mSubSourceLength;
 }
 
 tc::ByteData tc::io::SubSource::pullData(int64_t offset, size_t count)
 {
-	size_t pull_count = SourceUtil::getReadableSize(mSubSourceLength, offset, count);
+	size_t pull_count = SourceUtil::getReadableSize(length(), offset, count);
 
-	if (mBaseSource == nullptr)
+	if (pull_count == 0)
 		return tc::ByteData();
 
 	return mBaseSource->pullData(mBaseSourceOffset + offset, pull_count);
