@@ -52,7 +52,7 @@ tc::io::SubSink::SubSink(const std::shared_ptr<tc::io::ISink>& sink, int64_t off
 
 int64_t tc::io::SubSink::length()
 {
-	return mSubSinkLength;
+	return mBaseSink == nullptr ? 0 : mSubSinkLength;
 }
 
 void tc::io::SubSink::setLength(int64_t length)
