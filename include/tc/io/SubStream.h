@@ -51,8 +51,6 @@ public:
 
 		/**
 		 * @brief Gets the length in bytes of the stream.
-		 * 
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	int64_t length();
 
@@ -60,8 +58,6 @@ public:
 		 * @brief Gets the position within the current stream. 
 		 * 
 		 * @return This is returns the current position within the stream.
-		 * 
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	int64_t position();
 

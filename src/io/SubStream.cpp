@@ -62,36 +62,26 @@ tc::io::SubStream::SubStream(const std::shared_ptr<tc::io::IStream>& stream, int
 
 bool tc::io::SubStream::canRead() const
 {
-	return mBaseStream.get()? mBaseStream->canRead() : false;
+	return mBaseStream == nullptr ? mBaseStream->canRead() : false;
 }
 
 bool tc::io::SubStream::canWrite() const
 {
-	return mBaseStream.get()? mBaseStream->canWrite() : false;
+	return mBaseStream == nullptr ? mBaseStream->canWrite() : false;
 }
 bool tc::io::SubStream::canSeek() const
 {
-	return mBaseStream.get()? mBaseStream->canSeek() : false;
+	return mBaseStream == nullptr ? mBaseStream->canSeek() : false;
 }
 
 int64_t tc::io::SubStream::length()
 {
-	if (mBaseStream == nullptr)
-	{
-		throw tc::ObjectDisposedException(kClassName+"::length()", "Failed to get stream length (stream is disposed)");
-	}
-
-	return mSubStreamLength;
+	return mBaseStream == nullptr ? 0 : mSubStreamLength;
 }
 
 int64_t tc::io::SubStream::position()
 {
-	if (mBaseStream == nullptr)
-	{
-		throw tc::ObjectDisposedException(kClassName+"::position()", "Failed to get file position (stream is disposed)");
-	}
-
-	return mSubStreamPosition;
+	return mBaseStream == nullptr ? 0 : mSubStreamPosition;
 }
 
 size_t tc::io::SubStream::read(byte_t* buffer, size_t count)
