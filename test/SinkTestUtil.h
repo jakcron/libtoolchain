@@ -46,7 +46,7 @@ public:
 			mLength = length;
 		}
 
-		void pushData(const tc::ByteData& data, int64_t offset)
+		virtual void pushData(const tc::ByteData& data, int64_t offset)
 		{
 			throw tc::NotImplementedException(kClassName, "pushData not implemented");
 		}
