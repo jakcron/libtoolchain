@@ -7,7 +7,7 @@ tc::io::SubStream::SubStream() :
 	mBaseStream(),
 	mBaseStreamOffset(0),
 	mSubStreamLength(0),
-	mSubStreamPosition(0)
+	mSubStreamPosition(std::make_shared<int64_t>(0))
 {}
 	
 
@@ -57,7 +57,7 @@ tc::io::SubStream::SubStream(const std::shared_ptr<tc::io::IStream>& stream, int
 	// set class state
 	mBaseStreamOffset = offset;
 	mSubStreamLength = length;
-	mSubStreamPosition = 0;
+	*mSubStreamPosition = 0;
 }
 
 bool tc::io::SubStream::canRead() const
@@ -81,7 +81,7 @@ int64_t tc::io::SubStream::length()
 
 int64_t tc::io::SubStream::position()
 {
-	return mBaseStream == nullptr ? 0 : mSubStreamPosition;
+	return mBaseStream == nullptr ? 0 : *mSubStreamPosition;
 }
 
 size_t tc::io::SubStream::read(byte_t* buffer, size_t count)
@@ -92,13 +92,13 @@ size_t tc::io::SubStream::read(byte_t* buffer, size_t count)
 	}
 
 	// ensure data read won't exceed the boundary of the sub-stream
-	if ((mSubStreamLength - mSubStreamPosition) < count)
+	if ((mSubStreamLength - *mSubStreamPosition) < count)
 	{
 		throw tc::ArgumentOutOfRangeException(kClassName+"read()", "count too large, exceeded limit of sub stream");
 	}
 
 	// assert proper position in file
-	mBaseStream->seek(mBaseStreamOffset + mSubStreamPosition, SeekOrigin::Begin);
+	mBaseStream->seek(mBaseStreamOffset + *mSubStreamPosition, SeekOrigin::Begin);
 
 	// read data
 	size_t read_len = mBaseStream->read(buffer, count);
@@ -117,13 +117,13 @@ void tc::io::SubStream::write(const byte_t* buffer, size_t count)
 	}
 
 	// ensure data read won't exceed the boundary of the sub-stream
-	if ((mSubStreamLength - mSubStreamPosition) < count)
+	if ((mSubStreamLength - *mSubStreamPosition) < count)
 	{
 		throw tc::ArgumentOutOfRangeException(kClassName+"write()", "count too large, exceeded limit of sub stream");
 	}
 
 	// assert proper position in file
-	mBaseStream->seek(mBaseStreamOffset + mSubStreamPosition, SeekOrigin::Begin);
+	mBaseStream->seek(mBaseStreamOffset + *mSubStreamPosition, SeekOrigin::Begin);
 
 	// write data
 	mBaseStream->write(buffer, count);
@@ -142,24 +142,24 @@ int64_t tc::io::SubStream::seek(int64_t offset, SeekOrigin origin)
 	switch (origin)
 	{
 		case (SeekOrigin::Begin):
-			mSubStreamPosition = std::min<int64_t>(offset, mSubStreamLength);
+			*mSubStreamPosition = std::min<int64_t>(offset, mSubStreamLength);
 			break;
 		case (SeekOrigin::Current):
-			mSubStreamPosition = std::min<int64_t>(offset+mSubStreamPosition, mSubStreamLength);
+			*mSubStreamPosition = std::min<int64_t>(offset + *mSubStreamPosition, mSubStreamLength);
 			break;
 		case (SeekOrigin::End):
-			mSubStreamPosition = std::min<int64_t>(offset+mSubStreamLength, mSubStreamLength);
+			*mSubStreamPosition = std::min<int64_t>(offset + mSubStreamLength, mSubStreamLength);
 			break;
 		default:
 			throw tc::ArgumentOutOfRangeException(kClassName+"seek()", "Undefined SeekOrigin value");
 	}
 
-	if (mSubStreamPosition < 0)
+	if (*mSubStreamPosition < 0)
 	{
 		throw tc::InvalidOperationException(kClassName+"::seek()", "Negative seek result determined");
 	}
 
-	return mSubStreamPosition;
+	return *mSubStreamPosition;
 }
 
 void tc::io::SubStream::setLength(int64_t length)
