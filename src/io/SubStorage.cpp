@@ -5,7 +5,7 @@ const std::string tc::io::SubStorage::kClassName = "tc::io::SubStorage";
 tc::io::SubStorage::SubStorage() :
 	mBaseStorage(),
 	mBaseStoragePath(),
-	mSubStoragePath()
+	mSubStoragePath(std::make_shared<tc::io::Path>())
 {
 }
 
@@ -25,7 +25,7 @@ tc::io::SubStorage::SubStorage(const std::shared_ptr<tc::io::IStorage>& storage,
 	}
 
 	// set class state
-	mSubStoragePath = tc::io::Path("/");
+	*mSubStoragePath = tc::io::Path("/");
 
 	// get full path of root
 	mBaseStorage->setWorkingDirectory(base_path);
@@ -43,7 +43,7 @@ void tc::io::SubStorage::dispose()
 		mBaseStorage->dispose();
 	
 	mBaseStoragePath.clear();
-	mSubStoragePath.clear();
+	(*mSubStoragePath).clear();
 }
 
 void tc::io::SubStorage::createFile(const tc::io::Path& path)
@@ -128,7 +128,7 @@ void tc::io::SubStorage::getWorkingDirectory(tc::io::Path& path)
 		throw tc::ObjectDisposedException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (no base storage)");
 	}
 
-	path = mSubStoragePath;
+	path = *mSubStoragePath;
 }
 
 void tc::io::SubStorage::setWorkingDirectory(const tc::io::Path& path)
@@ -146,7 +146,7 @@ void tc::io::SubStorage::setWorkingDirectory(const tc::io::Path& path)
 	mBaseStorage->setWorkingDirectory(real_path);
 
 	// save current directory
-	realPathToSubPath(real_path, mSubStoragePath);
+	realPathToSubPath(real_path, *mSubStoragePath);
 }
 
 void tc::io::SubStorage::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
