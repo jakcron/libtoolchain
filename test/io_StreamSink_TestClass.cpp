@@ -12,6 +12,7 @@ void io_StreamSink_TestClass::runAllTests(void)
 	std::cout << "[tc::io::StreamSink] START" << std::endl;
 	testDefaultConstructor();
 	testCreateConstructor();
+	testCreateFromNullStream();
 	testCreateFromStreamWithoutSeek();
 	testCreateFromStreamWithoutRead();
 	testCreateFromStreamWithoutWrite();
@@ -73,6 +74,29 @@ void io_StreamSink_TestClass::testCreateConstructor()
 		catch (const tc::Exception& e)
 		{
 			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_StreamSink_TestClass::testCreateFromNullStream()
+{
+	std::cout << "[tc::io::StreamSink] testCreateFromNullStream : " << std::flush;
+	try
+	{
+		try
+		{
+			// create sink
+			tc::io::StreamSink sink = tc::io::StreamSink(nullptr);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
 		}
 	}
 	catch (const std::exception& e)

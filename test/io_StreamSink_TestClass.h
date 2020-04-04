@@ -11,6 +11,7 @@ public:
 private:
 	void testDefaultConstructor();
 	void testCreateConstructor();
+	void testCreateFromNullStream();
 	void testCreateFromStreamWithoutSeek();
 	void testCreateFromStreamWithoutRead();
 	void testCreateFromStreamWithoutWrite();
