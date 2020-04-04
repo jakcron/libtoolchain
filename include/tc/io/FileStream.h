@@ -68,8 +68,6 @@ public:
 
 		/**
 		 * @brief Gets the length in bytes of the stream.
-		 * 
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	int64_t length();
 
@@ -78,7 +76,6 @@ public:
 		 * 
 		 * @return This is returns the result of seek(0, SeekOrigin::Current);
 		 * 
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 * @throw tc::NotSupportedException The stream does not support seeking.
 		 **/
 	int64_t position();

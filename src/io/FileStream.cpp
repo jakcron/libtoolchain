@@ -40,33 +40,28 @@ tc::io::FileStream::FileStream(const tc::io::Path& path, FileMode mode, FileAcce
 
 bool tc::io::FileStream::canRead() const
 {
-	return mCanRead;
+	return mFileHandle == nullptr ? false : mCanRead;
 }
 
 bool tc::io::FileStream::canWrite() const
 {
-	return mCanWrite;
+	return mFileHandle == nullptr ? false : mCanWrite;
 }
 bool tc::io::FileStream::canSeek() const
 {
-	return mCanSeek;
+	return mFileHandle == nullptr ? false : mCanSeek;
 }
 
 int64_t tc::io::FileStream::length()
 {
-	if (mFileHandle == nullptr)
-	{
-		throw tc::ObjectDisposedException(kClassName+"::length()", "Failed to get stream length (stream is disposed)");
-	}
-
-	return length_impl();
+	return mFileHandle == nullptr ? 0 : length_impl();
 }
 
 int64_t tc::io::FileStream::position()
 {
 	if (mFileHandle == nullptr)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::position()", "Failed to get file position (stream is disposed)");
+		return 0;
 	}
 
 	if (mCanSeek == false)
@@ -159,12 +154,10 @@ void tc::io::FileStream::setLength(int64_t length)
 
 void tc::io::FileStream::flush()
 {
-	if (mFileHandle == nullptr)
+	if (mFileHandle != nullptr)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::flush()", "Failed to flush stream (stream is disposed)");
+		flush_impl();
 	}
-
-	flush_impl();
 }
 
 void tc::io::FileStream::dispose()
