@@ -11,21 +11,21 @@ tc::io::MemoryStream::MemoryStream() :
 
 tc::io::MemoryStream::MemoryStream(size_t length) :
 	mData(),
-	mPosition(0)
+	mPosition(std::make_shared<int64_t>(0))
 {
 	setLength(length);
 }
 
 tc::io::MemoryStream::MemoryStream(const tc::ByteData& byte_data) :
 	mData(byte_data),
-	mPosition(0)
+	mPosition(std::make_shared<int64_t>(0))
 {
 
 }
 
 tc::io::MemoryStream::MemoryStream(const byte_t* data, size_t len) :
 	mData(data, len),
-	mPosition(0)
+	mPosition(std::make_shared<int64_t>(0))
 {
 }
 
@@ -51,7 +51,7 @@ int64_t tc::io::MemoryStream::length()
 
 int64_t tc::io::MemoryStream::position() 
 {
-	return mPosition;
+	return *mPosition;
 }
 
 size_t tc::io::MemoryStream::read(byte_t* buffer, size_t count) 
@@ -61,11 +61,11 @@ size_t tc::io::MemoryStream::read(byte_t* buffer, size_t count)
 		throw tc::ArgumentNullException(kClassName+"::read()", "buffer is null.");
 	}
 
-	size_t read_length = StreamUtil::getReadableSize(mData.size(), mPosition, count);
+	size_t read_length = StreamUtil::getReadableSize(mData.size(), *mPosition, count);
 
-	memcpy(buffer, mData.buffer() + mPosition, read_length);
+	memcpy(buffer, mData.buffer() + *mPosition, read_length);
 
-	mPosition += int64_t(read_length);
+	*mPosition += int64_t(read_length);
 
 	return read_length;
 }
@@ -77,14 +77,14 @@ void tc::io::MemoryStream::write(const byte_t* buffer, size_t count)
 		throw tc::ArgumentNullException(kClassName+"::write()", "buffer is null.");
 	}
 
-	if (count > StreamUtil::getWritableSize(mData.size(), mPosition))
+	if (count > StreamUtil::getWritableSize(mData.size(), *mPosition))
 	{
 		throw tc::ArgumentOutOfRangeException(kClassName+"::write()", "count is too large.");
 	}
 
-	memcpy(mData.buffer() + mPosition, buffer, count);
+	memcpy(mData.buffer() + *mPosition, buffer, count);
 
-	mPosition += int64_t(count);
+	*mPosition += int64_t(count);
 }
 
 int64_t tc::io::MemoryStream::seek(int64_t offset, SeekOrigin origin) 
@@ -96,7 +96,7 @@ int64_t tc::io::MemoryStream::seek(int64_t offset, SeekOrigin origin)
 			new_pos = offset;
 			break;
 		case (SeekOrigin::Current):
-			new_pos = mPosition + offset;
+			new_pos = *mPosition + offset;
 			break;
 		case (SeekOrigin::End):
 			new_pos = (int64_t)mData.size() + offset;
@@ -116,9 +116,9 @@ int64_t tc::io::MemoryStream::seek(int64_t offset, SeekOrigin origin)
 		throw tc::ArgumentOutOfRangeException(kClassName+"::seek()", "New position is negative.");
 	}
 
-	mPosition = new_pos;
+	*mPosition = new_pos;
 
-	return mPosition;
+	return *mPosition;
 }
 
 void tc::io::MemoryStream::setLength(int64_t length) 
@@ -148,7 +148,7 @@ void tc::io::MemoryStream::setLength(int64_t length)
 	mData = data;
 
 	// reduce position if shrunk
-	mPosition = std::min<int64_t>(mPosition, int64_t(mData.size()));
+	*mPosition = std::min<int64_t>(*mPosition, int64_t(mData.size()));
 }
 
 void tc::io::MemoryStream::flush() 
