@@ -17,6 +17,7 @@ void io_StreamSink_TestClass::runAllTests(void)
 	testCreateFromStreamWithoutWrite();
 	testSetLengthOnDisposedBase();
 	testPushDataOnDisposedBase();
+	testPushDataOutsideOfBaseRange();
 	std::cout << "[tc::io::StreamSink] END" << std::endl;
 }
 
@@ -188,6 +189,39 @@ void io_StreamSink_TestClass::testPushDataOnDisposedBase()
 			tc::io::StreamSink sink;
 
 			sink.pushData(tc::ByteData(0xff), 0);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_StreamSink_TestClass::testPushDataOutsideOfBaseRange()
+{
+	std::cout << "[tc::io::StreamSink] testPushDataOutsideOfBaseRange : " << std::flush;
+	try
+	{
+		try
+		{
+			// create sink
+			size_t data_len = 0x1000;
+			tc::ByteData data(data_len);
+			int64_t base_stream_len = 0x100000;
+			tc::io::MemoryStream base_stream = tc::io::MemoryStream(base_stream_len);	
+			tc::io::StreamSink sink = tc::io::StreamSink(std::make_shared<tc::io::MemoryStream>(base_stream));
+
+			// test
+			SinkTestUtil::testSinkLength(sink, base_stream.length());
+
+			memset(data.buffer(), 0x08, data.size());
+			pushTestHelper(sink, base_stream, data, base_stream_len);
 
 			std::cout << "FAIL" << std::endl;
 		}

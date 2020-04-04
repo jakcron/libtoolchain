@@ -16,6 +16,7 @@ private:
 	void testCreateFromStreamWithoutWrite();
 	void testSetLengthOnDisposedBase();
 	void testPushDataOnDisposedBase();
+	void testPushDataOutsideOfBaseRange();
 
 	void pushTestHelper(tc::io::ISink& sink, tc::io::IStream& base_stream, tc::ByteData& expected_data, int64_t push_offset);
 };
