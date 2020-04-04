@@ -36,7 +36,7 @@ public:
 
 		void pushData(const tc::ByteData& data, int64_t offset);
 	private:
-		tc::ByteData expected_data;
+		std::shared_ptr<tc::ByteData> expected_data;
 		std::shared_ptr<int64_t> expected_offset;
 	};
 };

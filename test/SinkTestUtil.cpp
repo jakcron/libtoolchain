@@ -55,13 +55,13 @@ void SinkTestUtil::DummySinkBase::pushData(const tc::ByteData& data, int64_t off
 
 SinkTestUtil::DummySinkTestablePushData::DummySinkTestablePushData() :
 	DummySinkBase(),
-	expected_data(),
+	expected_data(std::make_shared<tc::ByteData>(0)),
 	expected_offset(std::make_shared<int64_t>(0))
 {}
 
 void SinkTestUtil::DummySinkTestablePushData::setExpectedPushDataCfg(const tc::ByteData& data, int64_t offset)
 {
-	expected_data = data;
+	*expected_data = data;
 	*expected_offset = offset;
 }
 
@@ -75,13 +75,13 @@ void SinkTestUtil::DummySinkTestablePushData::pushData(const tc::ByteData& data,
 		throw tc::Exception(error_ss.str());
 	}
 
-	if (data.size() != expected_data.size())
+	if (data.size() != expected_data->size())
 	{
-		error_ss << "pushData() passed a ByteData to base_sink with size " << data.size() << ", when it should have been " << expected_data.size() << ".";
+		error_ss << "pushData() passed a ByteData to base_sink with size " << data.size() << ", when it should have been " << expected_data->size() << ".";
 		throw tc::Exception(error_ss.str());
 	}
 
-	if (memcmp(data.buffer(), expected_data.buffer(), data.size()) != 0)
+	if (memcmp(data.buffer(), expected_data->buffer(), data.size()) != 0)
 	{
 		throw tc::Exception("ByteData pushed to base sink did not have expected data.");
 	}
