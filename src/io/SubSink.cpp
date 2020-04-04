@@ -42,7 +42,7 @@ tc::io::SubSink::SubSink(const std::shared_ptr<tc::io::ISink>& sink, int64_t off
 	// Base length - length is the maximum possible offset for the sub sink
 	if (offset > (base_length - length))
 	{
-		throw tc::ArgumentOutOfRangeException(kClassName, "sub sink offset is greater than the maximum possible offset given the base stream size and SubStream size");
+		throw tc::ArgumentOutOfRangeException(kClassName, "sub sink offset is greater than the maximum possible offset given the base sink size and sub sink size");
 	}
 	
 	// set class state
