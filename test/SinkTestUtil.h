@@ -12,47 +12,31 @@ public:
 	class DummySinkBase : public tc::io::ISink
 	{
 	public:
-		DummySinkBase() :
-			DummySinkBase(0x10000000)
-		{
-		}
+		DummySinkBase();
+		DummySinkBase(int64_t length);
+		DummySinkBase(int64_t length, bool canSetLength);
 
-		DummySinkBase(int64_t length) :
-			DummySinkBase(length, true)
-		{
-		}
+		void init(int64_t length, bool canSetLength);
 
-		DummySinkBase(int64_t length, bool canSetLength)
-		{
-			init(length, canSetLength);
-		}
-
-		void init(int64_t length, bool canSetLength)
-		{
-			mCanSetLength = canSetLength;
-			mLength = length;
-		}
-
-		int64_t length()
-		{
-			return mLength;
-		}
-
-		void setLength(int64_t length)
-		{
-			if (mCanSetLength == false)
-				throw tc::NotImplementedException(kClassName, "setLength() is not implemented");
-				
-			mLength = length;
-		}
-
-		virtual void pushData(const tc::ByteData& data, int64_t offset)
-		{
-			throw tc::NotImplementedException(kClassName, "pushData not implemented");
-		}
+		int64_t length();
+		void setLength(int64_t length);
+		virtual void pushData(const tc::ByteData& data, int64_t offset);
 	private:
 		static const std::string kClassName;
 		bool mCanSetLength;
 		int64_t mLength;
+	};
+
+	class DummySinkTestablePushData : public DummySinkBase
+	{
+	public:
+		DummySinkTestablePushData();
+
+		void setExpectedPushDataCfg(const tc::ByteData& data, int64_t offset);
+
+		void pushData(const tc::ByteData& data, int64_t offset);
+	private:
+		tc::ByteData expected_data;
+		std::shared_ptr<int64_t> expected_offset;
 	};
 };
