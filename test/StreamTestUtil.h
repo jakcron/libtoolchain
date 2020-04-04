@@ -16,16 +16,16 @@ public:
 		}
 
 		DummyStreamBase(int64_t length) :
-			DummyStreamBase(length, true, true, true, true)
+			DummyStreamBase(length, true, true, true, true, true)
 		{
 		}
 
-		DummyStreamBase(int64_t length, bool canRead, bool canWrite, bool canSeek, bool canSeekOnlyFromBegin)
+		DummyStreamBase(int64_t length, bool canRead, bool canWrite, bool canSeek, bool canSeekOnlyFromBegin, bool canSetLength)
 		{
-			init(length, canRead, canWrite, canSeek, canSeekOnlyFromBegin);
+			init(length, canRead, canWrite, canSeek, canSeekOnlyFromBegin, canSetLength);
 		}
 
-		void init(int64_t length, bool canRead, bool canWrite, bool canSeek, bool canSeekOnlyFromBegin)
+		void init(int64_t length, bool canRead, bool canWrite, bool canSeek, bool canSeekOnlyFromBegin, bool canSetLength)
 		{
 			mCanRead = canRead;
 			mCanWrite = canWrite;
@@ -100,6 +100,9 @@ public:
 
 		void setLength(int64_t length)
 		{
+			if (mCanSetLength == false)
+				throw tc::NotImplementedException(kClassName, "setLength() is not implemented");
+
 			mLength = length;
 		}
 
@@ -114,6 +117,7 @@ public:
 			mCanRead = false;
 			mCanWrite = false;
 			mCanSeek = false;
+			mCanSetLength = false;
 			mPosition = 0;
 			mLength = 0;
 		}
@@ -123,6 +127,7 @@ public:
 		bool mCanWrite;
 		bool mCanSeek;
 		bool mCanSeekOnlyFromBegin;
+		bool mCanSetLength;
 		int64_t mPosition;
 		int64_t mLength;
 	};

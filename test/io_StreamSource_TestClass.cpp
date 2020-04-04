@@ -84,7 +84,7 @@ void io_StreamSource_TestClass::testCreateFromStreamWithoutSeek()
 		try
 		{
 			// create source
-			tc::io::StreamSource source = tc::io::StreamSource(std::shared_ptr<StreamTestUtil::DummyStreamBase>(new StreamTestUtil::DummyStreamBase(0x1000, true, true, false, true)));
+			tc::io::StreamSource source = tc::io::StreamSource(std::shared_ptr<StreamTestUtil::DummyStreamBase>(new StreamTestUtil::DummyStreamBase(0x1000, true, true, false, true, true)));
 
 			std::cout << "FAIL" << std::endl;	
 		}
@@ -107,7 +107,7 @@ void io_StreamSource_TestClass::testCreateFromStreamWithoutRead()
 		try
 		{
 			// create source
-			tc::io::StreamSource source = tc::io::StreamSource(std::shared_ptr<StreamTestUtil::DummyStreamBase>(new StreamTestUtil::DummyStreamBase(0x1000, false, true, true, false)));
+			tc::io::StreamSource source = tc::io::StreamSource(std::shared_ptr<StreamTestUtil::DummyStreamBase>(new StreamTestUtil::DummyStreamBase(0x1000, false, true, true, false, true)));
 
 			std::cout << "FAIL" << std::endl;	
 		}
@@ -130,7 +130,7 @@ void io_StreamSource_TestClass::testCreateFromStreamWithoutWrite()
 		try
 		{
 			// create source
-			tc::io::StreamSource source = tc::io::StreamSource(std::shared_ptr<StreamTestUtil::DummyStreamBase>(new StreamTestUtil::DummyStreamBase(0x1000, true, false, true, false)));
+			tc::io::StreamSource source = tc::io::StreamSource(std::shared_ptr<StreamTestUtil::DummyStreamBase>(new StreamTestUtil::DummyStreamBase(0x1000, true, false, true, false, true)));
 
 			std::cout << "PASS" << std::endl;	
 		}
