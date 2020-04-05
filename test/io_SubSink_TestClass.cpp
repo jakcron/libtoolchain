@@ -191,20 +191,11 @@ void io_SubSink_TestClass::testCreateWithExcessiveSubSink()
 			int64_t sub_sink_size = 2;
 			auto sub_sink = tc::io::SubSink(std::make_shared<SinkTestUtil::DummySinkTestablePushData>(base_sink), sub_sink_offset, sub_sink_size);
 
-			// test
-			SinkTestUtil::testSinkLength(sub_sink, sub_sink_size);
-
-			memset(data.buffer(), 0x33, data.size());
-			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0, data);
-			
-			memset(data.buffer(), 0xea, data.size());
-			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0x200, data);
-
-			std::cout << "PASS" << std::endl;
+			std::cout << "FAIL" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
 		}
 	}
 	catch (const std::exception& e)
