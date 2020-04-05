@@ -270,7 +270,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	mFileHandle = std::shared_ptr<tc::io::FileStream::FileHandle>(new tc::io::FileStream::FileHandle(file_handle));
 	
 	// seek to end of file if in append mode
-	if (mMode == FileMode::Append)
+	if (mode == FileMode::Append)
 		seek(0, SeekOrigin::End);
 
 	// set state flags
@@ -366,7 +366,7 @@ int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
 		win_pos,
 		&out,
 		seek_flag
-	) == false || out.QuadPart != win_pos.QuadPart)
+	) == false)
 	{
 		DWORD error = GetLastError();
 		switch (error)
