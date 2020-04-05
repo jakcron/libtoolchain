@@ -2,6 +2,7 @@
 #include <sstream>
 
 #include "io_MemoryStream_TestClass.h"
+#include "StreamTestUtil.h"
 
 #include <tc.h>
 
@@ -51,7 +52,7 @@ void io_MemoryStream_TestClass::testCreateEmptyStream_DefaultConstructor()
 		{
 			tc::io::MemoryStream stream;
 
-			constructor_TestHelper(stream, 0, 0, true, true, true);
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, true, true);
 
 			std::cout << "PASS" << std::endl;	
 		}
@@ -76,7 +77,7 @@ void io_MemoryStream_TestClass::testCreateEmptyStream_SizedConstructor()
 			int64_t length = 0;
 			tc::io::MemoryStream stream(length);
 
-			constructor_TestHelper(stream, 0, 0, true, true, true);
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, true, true);
 
 			std::cout << "PASS" << std::endl;	
 		}
@@ -101,7 +102,7 @@ void io_MemoryStream_TestClass::testCreatePopulatedStream()
 			int64_t length = 0xcafe;
 			tc::io::MemoryStream stream(length);
 
-			constructor_TestHelper(stream, 0xcafe, 0, true, true, true);
+			StreamTestUtil::constructor_TestHelper(stream, 0xcafe, 0, true, true, true);
 
 			std::cout << "PASS" << std::endl;	
 		}
@@ -130,7 +131,7 @@ void io_MemoryStream_TestClass::testCreateFromByteData()
 
 			tc::io::MemoryStream stream = tc::io::MemoryStream(data);
 
-			constructor_TestHelper(stream, 0xcafe, 0, true, true, true);
+			StreamTestUtil::constructor_TestHelper(stream, 0xcafe, 0, true, true, true);
 
 			tc::ByteData output_data(stream.length());
 			stream.read(output_data.buffer(), output_data.size());
@@ -164,7 +165,7 @@ void io_MemoryStream_TestClass::testCreateFromMemoryPointer()
 			tc::ByteData data(length);
 			tc::io::MemoryStream stream(data.buffer(), data.size());
 
-			constructor_TestHelper(stream, 0xcafe, 0, true, true, true);
+			StreamTestUtil::constructor_TestHelper(stream, 0xcafe, 0, true, true, true);
 
 			std::cout << "PASS" << std::endl;	
 		}
@@ -189,7 +190,7 @@ void io_MemoryStream_TestClass::testSeekBeginToZero()
 			int64_t length = 0xcafe;
 			tc::io::MemoryStream stream(length);
 
-			seek_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, 0, 0);
+			StreamTestUtil::seek_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, 0, 0);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -214,7 +215,7 @@ void io_MemoryStream_TestClass::testSeekBeginToMiddle()
 			int64_t length = 0xcafe;
 			tc::io::MemoryStream stream(length);
 
-			seek_TestHelper(stream, 0xbabe, tc::io::SeekOrigin::Begin, 0xbabe, 0xbabe);
+			StreamTestUtil::seek_TestHelper(stream, 0xbabe, tc::io::SeekOrigin::Begin, 0xbabe, 0xbabe);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -239,7 +240,7 @@ void io_MemoryStream_TestClass::testSeekBeginToEnd()
 			int64_t length = 0xcafe;
 			tc::io::MemoryStream stream(length);
 
-			seek_TestHelper(stream, length, tc::io::SeekOrigin::Begin, length, length);
+			StreamTestUtil::seek_TestHelper(stream, length, tc::io::SeekOrigin::Begin, length, length);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -264,7 +265,7 @@ void io_MemoryStream_TestClass::testSeekBeginPastEnd()
 			int64_t length = 0xcafe;
 			tc::io::MemoryStream stream(length);
 
-			seek_TestHelper(stream, length+0x10, tc::io::SeekOrigin::Begin, length+0x10, length+0x10);
+			StreamTestUtil::seek_TestHelper(stream, length+0x10, tc::io::SeekOrigin::Begin, length+0x10, length+0x10);
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -289,7 +290,7 @@ void io_MemoryStream_TestClass::testSeekBeginNegative()
 			int64_t length = 0xcafe;
 			tc::io::MemoryStream stream(length);
 
-			seek_TestHelper(stream, -23, tc::io::SeekOrigin::Begin, 0, 0);
+			StreamTestUtil::seek_TestHelper(stream, -23, tc::io::SeekOrigin::Begin, 0, 0);
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -317,7 +318,7 @@ void io_MemoryStream_TestClass::testSeekCurrentByZero()
 
 			stream.seek(seek_pos, tc::io::SeekOrigin::Begin);
 
-			seek_TestHelper(stream, 0, tc::io::SeekOrigin::Current, seek_pos, seek_pos);
+			StreamTestUtil::seek_TestHelper(stream, 0, tc::io::SeekOrigin::Current, seek_pos, seek_pos);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -345,7 +346,7 @@ void io_MemoryStream_TestClass::testSeekCurrentToMiddle()
 
 			stream.seek(seek_pos, tc::io::SeekOrigin::Begin);
 
-			seek_TestHelper(stream, 0x20, tc::io::SeekOrigin::Current, seek_pos+0x20, seek_pos+0x20);
+			StreamTestUtil::seek_TestHelper(stream, 0x20, tc::io::SeekOrigin::Current, seek_pos+0x20, seek_pos+0x20);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -373,7 +374,7 @@ void io_MemoryStream_TestClass::testSeekCurrentToEnd()
 
 			stream.seek(seek_pos, tc::io::SeekOrigin::Begin);
 
-			seek_TestHelper(stream, length - seek_pos, tc::io::SeekOrigin::Current, length, length);
+			StreamTestUtil::seek_TestHelper(stream, length - seek_pos, tc::io::SeekOrigin::Current, length, length);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -401,7 +402,7 @@ void io_MemoryStream_TestClass::testSeekCurrentPastEnd()
 
 			stream.seek(seek_pos, tc::io::SeekOrigin::Begin);
 
-			seek_TestHelper(stream, length, tc::io::SeekOrigin::Current, length, length);
+			StreamTestUtil::seek_TestHelper(stream, length, tc::io::SeekOrigin::Current, length, length);
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -429,7 +430,7 @@ void io_MemoryStream_TestClass::testSeekCurrentNegative()
 
 			stream.seek(seek_pos, tc::io::SeekOrigin::Begin);
 
-			seek_TestHelper(stream, 0 - seek_pos + 1, tc::io::SeekOrigin::Current, 1, 1);
+			StreamTestUtil::seek_TestHelper(stream, 0 - seek_pos + 1, tc::io::SeekOrigin::Current, 1, 1);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -455,7 +456,7 @@ void io_MemoryStream_TestClass::testSeekEndByZero()
 			int64_t seek_pos = 0;
 			tc::io::MemoryStream stream(length);
 
-			seek_TestHelper(stream, seek_pos, tc::io::SeekOrigin::End, length, length);
+			StreamTestUtil::seek_TestHelper(stream, seek_pos, tc::io::SeekOrigin::End, length, length);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -481,7 +482,7 @@ void io_MemoryStream_TestClass::testSeekEndPastEnd()
 			int64_t seek_pos = 1;
 			tc::io::MemoryStream stream(length);
 
-			seek_TestHelper(stream, seek_pos, tc::io::SeekOrigin::End, length+1, length+1);
+			StreamTestUtil::seek_TestHelper(stream, seek_pos, tc::io::SeekOrigin::End, length+1, length+1);
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -506,7 +507,7 @@ void io_MemoryStream_TestClass::testSeekEndNegative()
 			int64_t length = 0xcafe;
 			tc::io::MemoryStream stream(length);
 
-			seek_TestHelper(stream, 0 - length, tc::io::SeekOrigin::End, 0, 0);
+			StreamTestUtil::seek_TestHelper(stream, 0 - length, tc::io::SeekOrigin::End, 0, 0);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -531,7 +532,7 @@ void io_MemoryStream_TestClass::testSeekEndTooNegative()
 			int64_t length = 0xcafe;
 			tc::io::MemoryStream stream(length);
 
-			seek_TestHelper(stream, 0 - length - length, tc::io::SeekOrigin::End, 0, 0);
+			StreamTestUtil::seek_TestHelper(stream, 0 - length - length, tc::io::SeekOrigin::End, 0, 0);
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -559,7 +560,7 @@ void io_MemoryStream_TestClass::testReadAllDataAvailable()
 
 			tc::io::MemoryStream stream(stream_length);
 
-			read_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, read_len, read_len, read_len, stream_length);
+			StreamTestUtil::read_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, read_len, read_len, read_len, stream_length);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -587,7 +588,7 @@ void io_MemoryStream_TestClass::testReadRequestsSubsetOfAvailableData()
 
 			tc::io::MemoryStream stream(stream_length);
 
-			read_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, read_len, read_len, read_len, int64_t(read_len));
+			StreamTestUtil::read_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, read_len, read_len, read_len, int64_t(read_len));
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -615,7 +616,7 @@ void io_MemoryStream_TestClass::testReadSomeDataAvailable()
 
 			tc::io::MemoryStream stream(stream_length);
 
-			read_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, read_len, read_len, read_len - size_t(stream_offset), stream_length);
+			StreamTestUtil::read_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, read_len, read_len, read_len - size_t(stream_offset), stream_length);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -641,7 +642,7 @@ void io_MemoryStream_TestClass::testReadNoDataAvailable()
 			size_t read_len = size_t(stream_length);
 			tc::io::MemoryStream stream(stream_length);
 
-			read_TestHelper(stream, 0, tc::io::SeekOrigin::End, read_len, read_len, 0, stream_length);
+			StreamTestUtil::read_TestHelper(stream, 0, tc::io::SeekOrigin::End, read_len, read_len, 0, stream_length);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -672,7 +673,7 @@ void io_MemoryStream_TestClass::testWriteAllDataWritable()
 
 			int64_t stream_expected_position = int64_t(data_len) + stream_offset;
 
-			write_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, data, stream_expected_position);
+			StreamTestUtil::write_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, data, stream_expected_position);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -703,7 +704,7 @@ void io_MemoryStream_TestClass::testWriteToSomeOfDataAvailable()
 
 			int64_t stream_expected_position = int64_t(data_len) + stream_offset;
 
-			write_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, data, stream_expected_position);
+			StreamTestUtil::write_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, data, stream_expected_position);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -734,7 +735,7 @@ void io_MemoryStream_TestClass::testWriteSomeDataWritable()
 
 			int64_t stream_expected_position = int64_t(data_len) + stream_offset;
 
-			write_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, data, stream_expected_position);
+			StreamTestUtil::write_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, data, stream_expected_position);
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -765,7 +766,7 @@ void io_MemoryStream_TestClass::testWriteNoDataWritable()
 
 			int64_t stream_expected_position = int64_t(data_len) + stream_offset;
 
-			write_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, data, stream_expected_position);
+			StreamTestUtil::write_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, data, stream_expected_position);
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -973,115 +974,5 @@ void io_MemoryStream_TestClass::testDispose()
 	catch (const std::exception& e)
 	{
 		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
-	}
-}
-
-void io_MemoryStream_TestClass::constructor_TestHelper(tc::io::IStream& stream, int64_t stream_length, int64_t exp_pos_res, bool exp_canread_res, bool exp_canwrite_res, bool exp_canseek_res)
-{
-	std::stringstream error_ss;
-
-	int64_t length_res = stream.length();
-	int64_t pos_res = stream.position();
-	bool can_read = stream.canRead();
-	bool can_write = stream.canWrite();
-	bool can_seek = stream.canSeek();
-
-	if (length_res != stream_length)
-	{
-		error_ss << "Stream did not have length " << stream_length << " (actual " << length_res << ")";
-		throw tc::Exception(error_ss.str());
-	}
-
-	if (pos_res != exp_pos_res)
-	{
-		error_ss << "Stream did not have position " << exp_pos_res << " (actual " << pos_res << ")";
-		throw tc::Exception(error_ss.str());
-	}
-
-	if (can_read != exp_canread_res)
-	{
-		error_ss << "Stream property canRead() was not " << std::boolalpha << exp_canread_res << " (actual " << std::boolalpha << can_read << ")";
-		throw tc::Exception(error_ss.str());
-	}
-
-	if (can_write != exp_canwrite_res)
-	{
-		error_ss << "Stream property canWrite() was not " << std::boolalpha << exp_canwrite_res << " (actual " << std::boolalpha << can_write << ")";
-		throw tc::Exception(error_ss.str());
-	}
-
-	if (can_seek != exp_canseek_res)
-	{
-		error_ss << "Stream property canSeek() was not " << std::boolalpha << exp_canseek_res << " (actual " << std::boolalpha << can_seek << ")";
-		throw tc::Exception(error_ss.str());
-	}
-}
-
-void io_MemoryStream_TestClass::seek_TestHelper(tc::io::IStream& stream, int64_t seek_offset, tc::io::SeekOrigin seek_origin, int64_t exp_seek_res, int64_t exp_pos_res)
-{
-	std::stringstream error_ss;
-
-	int64_t seek_res = stream.seek(seek_offset, seek_origin);
-	int64_t pos_res = stream.position();
-
-	if (seek_res != exp_seek_res)
-	{
-		error_ss << "Stream did not return position from seek " << exp_seek_res << " (actual " << seek_res << ")";
-		throw tc::Exception(error_ss.str());
-	}
-
-	if (pos_res != exp_pos_res)
-	{
-		error_ss << "Stream did not have position " << exp_pos_res << " (actual " << pos_res << ")";
-		throw tc::Exception(error_ss.str());
-	}
-}
-
-void io_MemoryStream_TestClass::read_TestHelper(tc::io::IStream& stream, int64_t seek_offset, tc::io::SeekOrigin seek_origin, size_t dst_size, size_t read_count, size_t exp_read_res, int64_t exp_pos_res)
-{
-	std::stringstream error_ss;
-
-	tc::ByteData data(dst_size);
-
-	// offset the position
-	stream.seek(seek_offset, seek_origin);
-
-	// read data
-	size_t read_res = stream.read(data.buffer(), data.size());
-
-	// check position
-	int64_t pos_res = stream.position();
-
-	// validate read result
-	if (read_res != exp_read_res)
-	{
-		error_ss << "Stream did not read expected number of bytes " << exp_read_res << " (actual " << read_res << ")";
-		throw tc::Exception(error_ss.str());
-	}
-
-	// validate pos result
-	if (pos_res != exp_pos_res)
-	{
-		error_ss << "Stream did not have position " << exp_pos_res << " (actual " << pos_res << ")";
-		throw tc::Exception(error_ss.str());
-	}
-}
-
-void io_MemoryStream_TestClass::write_TestHelper(tc::io::IStream& stream, int64_t seek_offset, tc::io::SeekOrigin seek_origin, tc::ByteData& data, int64_t exp_pos_res)
-{
-	std::stringstream error_ss;
-
-	// offset the position
-	stream.seek(seek_offset, seek_origin);
-
-	stream.write(data.buffer(), data.size());
-
-	int64_t pos_res = stream.position();
-
-	// validate pos result
-	if (pos_res != exp_pos_res)
-	{
-		error_ss << "Stream did not have position " << exp_pos_res << " (actual " << pos_res << ")";
-		throw tc::Exception(error_ss.str());
 	}
 }
