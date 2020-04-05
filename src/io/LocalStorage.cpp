@@ -154,8 +154,10 @@ void tc::io::LocalStorage::removeDirectory(const tc::io::Path& path)
 		DWORD error = GetLastError();
 		switch (error)
 		{
-			default:
-				throw tc::io::IOException(kClassName+"::removeDirectory()", "Failed to remove directory (" + std::to_string(error) + ")");
+		case (ERROR_DIR_NOT_EMPTY):
+		case (ERROR_DIRECTORY):
+		default:
+			throw tc::io::IOException(kClassName+"::removeDirectory()", "Failed to remove directory (" + std::to_string(error) + ")");
 		}
 	}
 #else
