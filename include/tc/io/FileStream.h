@@ -53,12 +53,13 @@ public:
 		 *
 		 * @throw tc::ArgumentException @p path contains invalid characters or is empty.
 		 * @throw tc::NotSupportedException @p path refers to an unsupported non-file device.
-		 * @throw tc::io::IOException An I/O error, such as specifying @a FileMode.CreateNew when the file specified by @p path already exists, occurred. Or the stream has been closed.
+		 * @throw tc::io::IOException An I/O error, such as specifying @p mode @a CreateNew when the file specified by @p path already exists, occurred. Or the stream has been closed.
 		 * @throw tc::SecurityException The caller does not have the required permission.
 		 * @throw tc::io::DirectoryNotFoundException The specified path is invalid, such as being on an unmapped drive.
 		 * @throw tc::UnauthorisedAccessException The @p access requested is not permitted by the operating system for the specified @p path, such as when @p access is @a Write or @a ReadWrite and the file or directory is set for read-only access.
 		 * @throw tc::io::PathTooLongException The specified @p path, file name, or both exceed the system-defined maximum length.
 		 * @throw tc::ArgumentOutOfRangeException @p mode contains an invalid value.
+		 * @throw tc::ArgumentOutOfRangeException @p access contains an invalid value.
 		 **/
 	FileStream(const tc::io::Path& path, FileMode mode, FileAccess access);
 
