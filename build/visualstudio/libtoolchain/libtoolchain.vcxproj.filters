@@ -13,22 +13,16 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\private">
-      <UniqueIdentifier>{946439fe-8be3-4727-a06b-ba156a3923a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\public">
-      <UniqueIdentifier>{6da5d070-2e06-4ac4-a8d6-b63a48173e14}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\public\fs">
+    <Filter Include="Header Files\tc">
       <UniqueIdentifier>{9824df4a-c13c-4643-b49b-497b47572477}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\public\string">
+    <Filter Include="Header Files\tc\io">
       <UniqueIdentifier>{d4011998-c73d-4ec4-a10d-4ef12f84577c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\private\string">
+    <Filter Include="Header Files\tc\string">
       <UniqueIdentifier>{a0b38501-540c-4267-97c0-8909d09d30fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\fs">
+    <Filter Include="Source Files\io">
       <UniqueIdentifier>{8ecef8dd-2a48-45cd-940d-7ce8fbdabfd6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\string">
@@ -36,102 +30,231 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\tc\endian.h">
-      <Filter>Header Files\public</Filter>
+    <ClInclude Include="..\..\..\include\tc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\AccessViolationException.h">
+      <Filter>Header Files\tc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\ArgumentException.h">
+      <Filter>Header Files\tc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\ArgumentNullException.h">
+      <Filter>Header Files\tc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\ArgumentOutOfRangeException.h">
+      <Filter>Header Files\tc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\ArithmeticException.h">
+      <Filter>Header Files\tc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\ByteData.h">
+      <Filter>Header Files\tc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\Exception.h">
-      <Filter>Header Files\public</Filter>
+      <Filter>Header Files\tc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs.h">
-      <Filter>Header Files\public</Filter>
+    <ClInclude Include="..\..\..\include\tc\InvalidOperationException.h">
+      <Filter>Header Files\tc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\NotImplementedException.h">
+      <Filter>Header Files\tc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\NotSupportedException.h">
+      <Filter>Header Files\tc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\ObjectDisposedException.h">
+      <Filter>Header Files\tc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\Optional.h">
-      <Filter>Header Files\public</Filter>
+      <Filter>Header Files\tc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\ResourceState.h">
-      <Filter>Header Files\public</Filter>
+    <ClInclude Include="..\..\..\include\tc\OutOfMemoryException.h">
+      <Filter>Header Files\tc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\SharedPtr.h">
-      <Filter>Header Files\public</Filter>
+    <ClInclude Include="..\..\..\include\tc\OverflowException.h">
+      <Filter>Header Files\tc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\ResourceStatus.h">
+      <Filter>Header Files\tc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\UnauthorisedAccessException.h">
+      <Filter>Header Files\tc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\endian.h">
+      <Filter>Header Files\tc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io.h">
+      <Filter>Header Files\tc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\string.h">
-      <Filter>Header Files\public</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\tc.h">
-      <Filter>Header Files\public</Filter>
+      <Filter>Header Files\tc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\types.h">
-      <Filter>Header Files\public</Filter>
+      <Filter>Header Files\tc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\GenericFileObject.h">
-      <Filter>Header Files\public\fs</Filter>
+    <ClInclude Include="..\..\..\include\tc\io\DirectoryNotEmptyException.h" />
+      <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\GenericFileSystem.h">
-      <Filter>Header Files\public\fs</Filter>
+    <ClInclude Include="..\..\..\include\tc\io\DirectoryNotFoundException.h" />
+      <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\IFileObject.h">
-      <Filter>Header Files\public\fs</Filter>
+    <ClInclude Include="..\..\..\include\tc\io\FileAccess.h" />
+      <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\IFileSystem.h">
-      <Filter>Header Files\public\fs</Filter>
+    <ClInclude Include="..\..\..\include\tc\io\FileExistsException.h" />
+      <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\LocalFileObject.h">
-      <Filter>Header Files\public\fs</Filter>
+    <ClInclude Include="..\..\..\include\tc\io\FileMode.h" />
+      <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\LocalFileSystem.h">
-      <Filter>Header Files\public\fs</Filter>
+    <ClInclude Include="..\..\..\include\tc\io\FileNotFoundException.h" />
+      <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\PartitionedFileObject.h">
-      <Filter>Header Files\public\fs</Filter>
+    <ClInclude Include="..\..\..\include\tc\io\FileStream.h" />
+      <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\Path.h">
-      <Filter>Header Files\public\fs</Filter>
+    <ClInclude Include="..\..\..\include\tc\io\IOException.h" />
+      <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\PathUtil.h">
-      <Filter>Header Files\public\fs</Filter>
+    <ClInclude Include="..\..\..\include\tc\io\IReadableSink.h" />
+      <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\fs\SandboxedFileSystem.h">
-      <Filter>Header Files\public\fs</Filter>
+    <ClInclude Include="..\..\..\include\tc\io\ISink.h" />
+      <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\string\transcode.h">
-      <Filter>Header Files\public\string</Filter>
+    <ClInclude Include="..\..\..\include\tc\io\ISource.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\IStorage.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\IStream.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\LocalStorage.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\MemorySource.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\MemoryStream.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\OverlayedSource.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\PaddingSource.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\Path.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\PathTooLongException.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\PathUtil.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\SeekOrigin.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\SinkUtil.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\SourceUtil.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\StreamSink.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\StreamSource.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\StreamUtil.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\SubSink.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\SubSource.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\SubStorage.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\SubStream.h" />
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\string\TranscodeUtil.h">
+      <Filter>Header Files\tc\string</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\string\utf8.h">
-      <Filter>Header Files\private\string</Filter>
+      <Filter>Source Files\string</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\string\utf16.h">
-      <Filter>Header Files\private\string</Filter>
+      <Filter>Source Files\string</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\ByteData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\Exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\GenericFileObject.cpp">
-      <Filter>Source Files\fs</Filter>
+    <ClCompile Include="..\..\..\src\io\FileStream.cpp">
+      <Filter>Source Files\io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\GenericFileSystem.cpp">
-      <Filter>Source Files\fs</Filter>
+    <ClCompile Include="..\..\..\src\io\LocalStorage.cpp">
+      <Filter>Source Files\io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\LocalFileObject.cpp">
-      <Filter>Source Files\fs</Filter>
+    <ClCompile Include="..\..\..\src\io\MemorySource.cpp">
+      <Filter>Source Files\io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\LocalFileSystem.cpp">
-      <Filter>Source Files\fs</Filter>
+    <ClCompile Include="..\..\..\src\io\MemoryStream.cpp">
+      <Filter>Source Files\io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\PartitionedFileObject.cpp">
-      <Filter>Source Files\fs</Filter>
+    <ClCompile Include="..\..\..\src\io\OverlayedSource.cpp">
+      <Filter>Source Files\io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\Path.cpp">
-      <Filter>Source Files\fs</Filter>
+    <ClCompile Include="..\..\..\src\io\PaddingSource.cpp">
+      <Filter>Source Files\io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\PathUtil.cpp">
-      <Filter>Source Files\fs</Filter>
+    <ClCompile Include="..\..\..\src\io\Path.cpp">
+      <Filter>Source Files\io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\fs\SandboxedFileSystem.cpp">
-      <Filter>Source Files\fs</Filter>
+    <ClCompile Include="..\..\..\src\io\PathUtil.cpp">
+      <Filter>Source Files\io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\string\transcode.cpp">
+    <ClCompile Include="..\..\..\src\io\SinkUtil.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\io\SourceUtil.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\io\StreamSink.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\io\StreamSource.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\io\StreamUtil.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\io\SubSink.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\io\SubSource.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\io\SubStorage.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\io\SubStream.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\string\TranscodeUtil.cpp">
       <Filter>Source Files\string</Filter>
     </ClCompile>
   </ItemGroup>
