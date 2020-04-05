@@ -12,17 +12,6 @@ private:
 	void test_RemoveFile_DoesExist();
 	void test_RemoveFile_NotExist();
 	void test_RemoveFile_UnicodePath();
-
-	void test_OpenFileCreate_NotExist();
-	void test_OpenFileCreate_DoesExist();
-	void test_OpenFileRead_DoesExist();
-	void test_OpenFileRead_NotExist();
-	void test_OpenFileRead_UnicodePath();
-	void test_OpenFileRead_TryWrite();
-	void test_OpenFileRead_TryReadBeyondEnd();
-	void test_OpenFileEdit_DoesExist();
-	void test_OpenFileEdit_NotExist();	
-	
 	void test_CreateDirectory_NotExist();
 	void test_CreateDirectory_DoesExist();
 	void test_CreateDirectory_UnicodePath();
@@ -37,4 +26,10 @@ private:
 	void test_ChangeWorkingDirectory_DoesExist();
 	void test_ChangeWorkingDirectory_NotExist();
 	void test_ChangeWorkingDirectory_UnicodePath();
+
+	static std::string kDirPath;
+	static std::string kUtf8DirPath;
+	static std::string kAsciiFilePath;
+	static std::string kUtf8TestPath;
+	static std::string kNotExistFilePath;
 };
