@@ -89,21 +89,7 @@ void tc::io::MemoryStream::write(const byte_t* buffer, size_t count)
 
 int64_t tc::io::MemoryStream::seek(int64_t offset, SeekOrigin origin) 
 {
-	int64_t new_pos = 0;
-	switch (origin)
-	{
-		case (SeekOrigin::Begin):
-			new_pos = offset;
-			break;
-		case (SeekOrigin::Current):
-			new_pos = *mPosition + offset;
-			break;
-		case (SeekOrigin::End):
-			new_pos = (int64_t)mData.size() + offset;
-			break;
-		default:
-			throw tc::ArgumentOutOfRangeException(kClassName, "Illegal value for origin.");
-	}
+	int64_t new_pos = StreamUtil::getSeekResult(offset, origin, *mPosition, (int64_t)mData.size());
 
 	// check length isn't too large (int64_t could be larger than size_t)
 	if (new_pos > (int64_t)mData.size())
