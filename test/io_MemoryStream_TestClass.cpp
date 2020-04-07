@@ -643,6 +643,7 @@ void io_MemoryStream_TestClass::testReadNoDataAvailable()
 			tc::io::MemoryStream stream(stream_length);
 
 			StreamTestUtil::read_TestHelper(stream, 0, tc::io::SeekOrigin::End, read_len, read_len, 0, stream_length);
+			StreamTestUtil::read_TestHelper(stream, 20, tc::io::SeekOrigin::End, read_len, read_len, 0, stream_length + 20);
 
 			std::cout << "PASS" << std::endl;
 		}
