@@ -1,7 +1,9 @@
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 #include "io_FileStream_TestClass.h"
+#include "StreamTestUtil.h"
 
 #include <tc.h>
 
@@ -14,39 +16,93 @@ std::string io_FileStream_TestClass::kRandomString = "uUkMx4MYhJdwUnr38Jk7nZvXQn
 void io_FileStream_TestClass::runAllTests(void)
 {
 	std::cout << "[tc::io::FileStream] START" << std::endl;
-	test_OpenFileCreate_NotExist();
-	test_OpenFileCreate_DoesExist();
-	test_OpenFileRead_DoesExist();
-	test_OpenFileRead_NotExist();
-	test_OpenFileRead_UnicodePath();
-	test_OpenFileRead_TryWrite();
-	test_OpenFileRead_TryReadBeyondEnd();
-	test_OpenFileEdit_DoesExist();
-	test_OpenFileEdit_NotExist();
+	
+	test_DefaultConstructor();
+
+	test_Constructor_CreateNew_Read_FileExists();
+	test_Constructor_CreateNew_Read_FileNotExist();
+	test_Constructor_CreateNew_Write_FileExists();
+	test_Constructor_CreateNew_Write_FileNotExist();
+	test_Constructor_CreateNew_ReadWrite_FileExists();
+	test_Constructor_CreateNew_ReadWrite_FileNotExist();
+
+	test_Constructor_Create_Read_FileExists();
+	test_Constructor_Create_Read_FileNotExist();
+	test_Constructor_Create_Write_FileExists();
+	test_Constructor_Create_Write_FileNotExist();
+	test_Constructor_Create_ReadWrite_FileExists();
+	test_Constructor_Create_ReadWrite_FileNotExist();
+
+	test_Constructor_Open_Read_FileExists();
+	test_Constructor_Open_Read_FileNotExist();
+	test_Constructor_Open_Write_FileExists();
+	test_Constructor_Open_Write_FileNotExist();
+	test_Constructor_Open_ReadWrite_FileExists();
+	test_Constructor_Open_ReadWrite_FileNotExist();
+
+	test_Constructor_OpenOrCreate_Read_FileExists();
+	test_Constructor_OpenOrCreate_Read_FileNotExist();
+	test_Constructor_OpenOrCreate_Write_FileExists();
+	test_Constructor_OpenOrCreate_Write_FileNotExist();
+	test_Constructor_OpenOrCreate_ReadWrite_FileExists();
+	test_Constructor_OpenOrCreate_ReadWrite_FileNotExist();
+
+	test_Constructor_Truncate_Read_FileExists();
+	test_Constructor_Truncate_Read_FileNotExist();
+	test_Constructor_Truncate_Write_FileExists();
+	test_Constructor_Truncate_Write_FileNotExist();
+	test_Constructor_Truncate_ReadWrite_FileExists();
+	test_Constructor_Truncate_ReadWrite_FileNotExist();
+
+	test_Constructor_Append_Read_FileExists();
+	test_Constructor_Append_Read_FileNotExist();
+	test_Constructor_Append_Write_FileExists();
+	test_Constructor_Append_Write_FileNotExist();
+	test_Constructor_Append_ReadWrite_FileExists();
+	test_Constructor_Append_ReadWrite_FileNotExist();
+
+	test_Constructor_IllegalMode();
+	test_Constructor_IllegalAccess();
+
+	test_Constructor_DirectoryPath();
+	test_Constructor_CreateThenReopenFileWithUnicodePath();
+
+	test_Seek_EmptyFile();
+	test_Seek_CreatedFile();
+	test_Seek_AppendMode();
+	test_Seek_PositionBeforeFileBegin();
+	test_Seek_PositionAfterFileEnd();
+
+	test_Read_NoData();
+	test_Read_SomeDataFromZero();
+	test_Read_SomeDataFromMiddle();
+	test_Read_AllData();
+	test_Read_TooMuchData();
+	test_Read_BeyondEnd();
+	test_Read_CanReadFalse();
+	test_Read_NullDstPointer();
+
+	test_Write_NoData();
+	test_Write_OverwriteSomeDataFromZero();
+	test_Write_OverwriteSomeDataFromMiddle();
+	test_Write_ExtendStreamSizeThruWritingDataFromZero();
+	test_Write_ExtendStreamSizeThruWritingDataFromMiddle();
+	test_Write_CanWriteFalse();
+	test_Write_NullSrcPointer();
+
 	std::cout << "[tc::io::FileStream] END" << std::endl;
 }
 
-void io_FileStream_TestClass::test_OpenFileCreate_NotExist()
+void io_FileStream_TestClass::test_DefaultConstructor()
 {
-	std::cout << "[tc::io::FileStream] test_OpenFileCreate_NotExist : " << std::flush;
+	std::cout << "[tc::io::FileStream] test_DefaultConstructor : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage local_storage;
 		try 
 		{
-			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write);
+			auto stream = tc::io::FileStream();
 
-			if (stream.length() != 0)
-			{
-				throw tc::Exception("stream opened in create mode does not have a size of 0");
-			}
-
-			stream.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-			
-			if (stream.length() != kRandomString.length())
-			{
-				throw tc::Exception("after writing data, stream length is not correct");
-			}
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, false, false, false);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -54,8 +110,6 @@ void io_FileStream_TestClass::test_OpenFileCreate_NotExist()
 		{
 			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
-
-		local_storage.removeFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -63,175 +117,33 @@ void io_FileStream_TestClass::test_OpenFileCreate_NotExist()
 	}
 }
 
-void io_FileStream_TestClass::test_OpenFileCreate_DoesExist()
+// Constructor_CreateNew
+
+void io_FileStream_TestClass::test_Constructor_CreateNew_Read_FileExists()
 {
-	std::cout << "[tc::io::FileStream] test_OpenFileCreate_DoesExist : " << std::flush;
+	std::cout << "[tc::io::FileStream] test_Constructor_CreateNew_Read_FileExists : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage local_storage;
-
-		auto tmp_stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write);
-		tmp_stream.dispose();
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
 
 		try 
 		{
-			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write);
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::CreateNew, tc::io::FileAccess::Read);
 
-			if (stream.length() != 0)
-			{
-				throw tc::Exception("stream opened in create mode does not have a size of 0");
-			}
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, false, true);
 
-			stream.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-			
-			if (stream.length() != kRandomString.length())
-			{
-				throw tc::Exception("after writing data, stream size is not correct");
-			}
-
-			std::cout << "PASS" << std::endl;
+			std::cout << "FAIL" << std::endl;
 		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
-
-		local_storage.removeFile(kAsciiFilePath);
-	}
-	catch (const std::exception& e)
-	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
-	}
-}
-
-void io_FileStream_TestClass::test_OpenFileRead_DoesExist()
-{
-	std::cout << "[tc::io::FileStream] test_OpenFileRead_DoesExist : " << std::flush;
-	try
-	{
-		tc::io::LocalStorage local_storage;
-
-		auto tmp_stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write);
-		tmp_stream.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_stream.dispose();
-
-		try 
-		{
-			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
-
-			if (stream.length() != kRandomString.length())
-			{
-				throw tc::Exception("Unexpected stream size");
-			}
-
-			std::shared_ptr<byte_t> check(new byte_t[kRandomString.length()]);
-			stream.read(check.get(), kRandomString.length());
-
-			if (memcmp(check.get(), kRandomString.c_str(), kRandomString.size()) != 0)
-			{
-				throw tc::Exception("Data in stream was not correct");
-			}
-
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (Test opening stream in read mode and confirming the data is correct (" << e.what() << "))" << std::endl;
-		}
-
-		local_storage.removeFile(kAsciiFilePath);
-	}
-	catch (const std::exception& e)
-	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
-	}
-}
-
-void io_FileStream_TestClass::test_OpenFileRead_NotExist()
-{
-	std::cout << "[tc::io::FileStream] test_OpenFileRead_NotExist : " << std::flush;
-	try
-	{
-		auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
-		
-		std::cout << "FAIL (Did not throw exception where stream did not exist)" << std::endl;
-	}
-	catch (const tc::Exception& e)
-	{
-		std::cout << "PASS (" << e.error() << ")" << std::endl;
-	}
-}
-
-void io_FileStream_TestClass::test_OpenFileRead_UnicodePath()
-{
-	std::cout << "[tc::io::FileStream] test_OpenFileRead_UnicodePath : " << std::flush;
-	try
-	{
-		tc::io::LocalStorage local_storage;
-
-		auto tmp_stream = tc::io::FileStream(kUtf8TestPath, tc::io::FileMode::Create, tc::io::FileAccess::Write);
-		tmp_stream.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_stream.dispose();
-
-		try 
-		{
-			auto stream = tc::io::FileStream(kUtf8TestPath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
-
-			if (stream.length() != kRandomString.length())
-			{
-				throw tc::Exception("Unexpected stream size");
-			}
-
-			std::shared_ptr<byte_t> check(new byte_t[kRandomString.length()]);
-			stream.read(check.get(), kRandomString.length());
-
-			if (memcmp(check.get(), kRandomString.c_str(), kRandomString.size()) != 0)
-			{
-				throw tc::Exception("Data in stream was not correct");
-			}
-
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (Test opening stream in read mode and confirming the data is correct (" << e.what() << "))" << std::endl;
-		}
-
-		local_storage.removeFile(kUtf8TestPath);
-	}
-	catch (const std::exception& e)
-	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
-	}
-}
-
-void io_FileStream_TestClass::test_OpenFileRead_TryWrite()
-{
-	std::cout << "[tc::io::FileStream] test_OpenFileRead_TryWrite : " << std::flush;
-	try
-	{
-		tc::io::LocalStorage local_storage;
-		
-		auto tmp_stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write);
-		tmp_stream.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_stream.dispose();
-
-		try 
-		{
-			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
-
-			stream.seek(stream.length(), tc::io::SeekOrigin::Begin);
-		
-			stream.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-			
-			std::cout << "FAIL (Did not throw exception when write() was called)" << std::endl;
-		}
-		catch (const tc::Exception& e)
+		catch (const tc::ArgumentException& e)
 		{
 			std::cout << "PASS (" << e.error() << ")" << std::endl;
 		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
 
-		local_storage.removeFile(kAsciiFilePath);
+		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -239,31 +151,80 @@ void io_FileStream_TestClass::test_OpenFileRead_TryWrite()
 	}
 }
 
-void io_FileStream_TestClass::test_OpenFileRead_TryReadBeyondEnd()
+void io_FileStream_TestClass::test_Constructor_CreateNew_Read_FileNotExist()
 {
-	std::cout << "[tc::io::FileStream] test_OpenFileRead_TryReadBeyondEnd : " << std::flush;
+	std::cout << "[tc::io::FileStream] test_Constructor_CreateNew_Read_FileNotExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage local_storage;
-		
-		auto tmp_stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write);
-		tmp_stream.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_stream.dispose();
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::CreateNew, tc::io::FileAccess::Read);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, false, true);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_CreateNew_Write_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_CreateNew_Write_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
 
 		try 
 		{
-			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::CreateNew, tc::io::FileAccess::Write);
 
-			stream.seek(0, tc::io::SeekOrigin::End);
-			std::shared_ptr<byte_t> check(new byte_t[kRandomString.length()]);
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, false, true, true);
 
-			size_t read_len = stream.read(check.get(), kRandomString.length());
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::io::FileExistsException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
 
-			if (read_len != 0)
-			{
-				throw tc::Exception("read() returned a non-zero response when reading past end of file");
-			}
-		
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_CreateNew_Write_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_CreateNew_Write_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::CreateNew, tc::io::FileAccess::Write);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, false, true, true);
+
 			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
@@ -271,7 +232,7 @@ void io_FileStream_TestClass::test_OpenFileRead_TryReadBeyondEnd()
 			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 
-		local_storage.removeFile(kAsciiFilePath);
+		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -279,59 +240,382 @@ void io_FileStream_TestClass::test_OpenFileRead_TryReadBeyondEnd()
 	}
 }
 
-void io_FileStream_TestClass::test_OpenFileEdit_DoesExist()
+void io_FileStream_TestClass::test_Constructor_CreateNew_ReadWrite_FileExists()
 {
-	std::cout << "[tc::io::FileStream] test_OpenFileEdit_DoesExist : " << std::flush;
+	std::cout << "[tc::io::FileStream] test_Constructor_CreateNew_ReadWrite_FileExists : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage local_storage;
-		
-		auto tmp_stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write);
-		tmp_stream.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-		tmp_stream.dispose();
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::CreateNew, tc::io::FileAccess::ReadWrite);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, true, true);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::io::FileExistsException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_CreateNew_ReadWrite_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_CreateNew_ReadWrite_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::CreateNew, tc::io::FileAccess::ReadWrite);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, true, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+// Constructor_Create
+
+void io_FileStream_TestClass::test_Constructor_Create_Read_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Create_Read_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Read);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, false, true);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Create_Read_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Create_Read_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Read);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, false, true);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Create_Write_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Create_Write_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, false, true, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Create_Write_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Create_Write_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::Write);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, false, true, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Create_ReadWrite_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Create_ReadWrite_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::ReadWrite);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, true, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Create_ReadWrite_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Create_ReadWrite_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Create, tc::io::FileAccess::ReadWrite);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, true, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+// Constructor_Open
+
+void io_FileStream_TestClass::test_Constructor_Open_Read_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Open_Read_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			StreamTestUtil::constructor_TestHelper(stream, kRandomString.size(), 0, true, false, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Open_Read_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Open_Read_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, false, true);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::io::FileNotFoundException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Open_Write_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Open_Write_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
+
+			StreamTestUtil::constructor_TestHelper(stream, kRandomString.size(), 0, false, true, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Open_Write_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Open_Write_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, false, true, true);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::io::FileNotFoundException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Open_ReadWrite_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Open_ReadWrite_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
 
 		try 
 		{
 			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::ReadWrite);
 
-			if (stream.length() != kRandomString.length())
-			{
-				throw tc::Exception("Unexpected stream size");
-			}
-
-			stream.seek(kRandomString.length(), tc::io::SeekOrigin::Begin);
-			stream.write((const byte_t*)kRandomString.c_str(), kRandomString.length());
-
-			stream.seek(7, tc::io::SeekOrigin::Begin);
-			stream.write((const byte_t*)kTestPhrase.c_str(), kTestPhrase.length());
-
-			std::shared_ptr<byte_t> check(new byte_t[kRandomString.length()*2]);
-			stream.seek(0, tc::io::SeekOrigin::Begin);
-			stream.read(check.get(), kRandomString.length()*2);
-
-			if (memcmp(check.get() + kRandomString.length(), kRandomString.c_str(), kRandomString.size()) != 0)
-			{
-				throw tc::Exception("Data(kRandomStr[1][:]) in stream was not correct");
-			}
-
-			if (memcmp(check.get() + 7, kTestPhrase.c_str(), kTestPhrase.size()) != 0)
-			{
-				throw tc::Exception("Data(kTestPhrase[:]) in stream was not correct");
-			}
-
-			if (memcmp(check.get(), kRandomString.c_str(), 7) != 0)
-			{
-				throw tc::Exception("Data(kRandomStr[0][0:7]) in stream was not correct");
-			}
+			StreamTestUtil::constructor_TestHelper(stream, kRandomString.size(), 0, true, true, true);
 
 			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "FAIL (Test opening stream in edit mode and confirming the data is correct (" << e.what() << "))" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 
-		local_storage.removeFile(kAsciiFilePath);
+		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -339,19 +623,1427 @@ void io_FileStream_TestClass::test_OpenFileEdit_DoesExist()
 	}
 }
 
-void io_FileStream_TestClass::test_OpenFileEdit_NotExist()
+void io_FileStream_TestClass::test_Constructor_Open_ReadWrite_FileNotExist()
 {
-	std::cout << "[tc::io::FileStream] test_OpenFileEdit_NotExist : " << std::flush;
+	std::cout << "[tc::io::FileStream] test_Constructor_Open_ReadWrite_FileNotExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage local_storage;
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::ReadWrite);
 
-		auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::ReadWrite);
-		
-		std::cout << "FAIL (Did not throw exception where stream did not exist)" << std::endl;
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, true, true);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::io::FileNotFoundException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
 	}
-	catch (const tc::Exception& e)
+	catch (const std::exception& e)
 	{
-		std::cout << "PASS (" << e.error() << ")" << std::endl;
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
 	}
+}
+
+// Constructor_OpenOrCreate
+
+void io_FileStream_TestClass::test_Constructor_OpenOrCreate_Read_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_OpenOrCreate_Read_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::OpenOrCreate, tc::io::FileAccess::Read);
+
+			StreamTestUtil::constructor_TestHelper(stream, kRandomString.size(), 0, true, false, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_OpenOrCreate_Read_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_OpenOrCreate_Read_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::OpenOrCreate, tc::io::FileAccess::Read);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, false, true);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::io::FileNotFoundException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_OpenOrCreate_Write_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_OpenOrCreate_Write_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::OpenOrCreate, tc::io::FileAccess::Write);
+
+			StreamTestUtil::constructor_TestHelper(stream, kRandomString.size(), 0, false, true, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_OpenOrCreate_Write_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_OpenOrCreate_Write_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::OpenOrCreate, tc::io::FileAccess::Write);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, false, true, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_OpenOrCreate_ReadWrite_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_OpenOrCreate_ReadWrite_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::OpenOrCreate, tc::io::FileAccess::ReadWrite);
+
+			StreamTestUtil::constructor_TestHelper(stream, kRandomString.size(), 0, true, true, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_OpenOrCreate_ReadWrite_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_OpenOrCreate_ReadWrite_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::OpenOrCreate, tc::io::FileAccess::ReadWrite);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, true, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+// Constructor_Truncate
+
+void io_FileStream_TestClass::test_Constructor_Truncate_Read_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Truncate_Read_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Truncate, tc::io::FileAccess::Read);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, false, true);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Truncate_Read_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Truncate_Read_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Truncate, tc::io::FileAccess::Read);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, false, true);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Truncate_Write_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Truncate_Write_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Truncate, tc::io::FileAccess::Write);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, false, true, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Truncate_Write_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Truncate_Write_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Truncate, tc::io::FileAccess::Write);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, false, true, true);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::io::FileNotFoundException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Truncate_ReadWrite_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Truncate_ReadWrite_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Truncate, tc::io::FileAccess::ReadWrite);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, true, true);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Truncate_ReadWrite_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Truncate_ReadWrite_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Truncate, tc::io::FileAccess::ReadWrite);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, true, true, true);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::io::FileNotFoundException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+// Constructor_Append
+
+void io_FileStream_TestClass::test_Constructor_Append_Read_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Append_Read_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Append, tc::io::FileAccess::Read);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Append_Read_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Append_Read_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Append, tc::io::FileAccess::Read);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Append_Write_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Append_Write_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Append, tc::io::FileAccess::Write);
+
+			StreamTestUtil::constructor_TestHelper(stream, kRandomString.size(), kRandomString.size(), false, true, false);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Append_Write_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Append_Write_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Append, tc::io::FileAccess::Write);
+
+			StreamTestUtil::constructor_TestHelper(stream, 0, 0, false, true, false);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Append_ReadWrite_FileExists()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Append_ReadWrite_FileExists : " << std::flush;
+	try
+	{
+	
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.length());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Append, tc::io::FileAccess::ReadWrite);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_Append_ReadWrite_FileNotExist()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_Append_ReadWrite_FileNotExist : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Append, tc::io::FileAccess::ReadWrite);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+// illegal constructor args
+
+void io_FileStream_TestClass::test_Constructor_IllegalMode()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_IllegalMode : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode(55), tc::io::FileAccess::ReadWrite);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentOutOfRangeException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_IllegalAccess()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_IllegalAccess : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::CreateNew, tc::io::FileAccess(55));
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentOutOfRangeException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_DirectoryPath()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_DirectoryPath : " << std::flush;
+	try
+	{
+		helper_CreateDirectory(kAsciiFilePath);
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::io::IOException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteDirectory(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Constructor_CreateThenReopenFileWithUnicodePath()
+{
+	std::cout << "[tc::io::FileStream] test_Constructor_CreateThenReopenFileWithUnicodePath : " << std::flush;
+	try
+	{
+		try 
+		{
+			auto stream = tc::io::FileStream(kUtf8TestPath, tc::io::FileMode::Create, tc::io::FileAccess::ReadWrite);
+
+			stream.dispose();
+
+			stream = tc::io::FileStream(kUtf8TestPath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kUtf8TestPath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+// seek() tests
+void io_FileStream_TestClass::test_Seek_EmptyFile()
+{
+	std::cout << "[tc::io::FileStream] test_Seek_EmptyFile : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, nullptr, 0);
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			StreamTestUtil::seek_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, 0, 0);
+			StreamTestUtil::seek_TestHelper(stream, 0, tc::io::SeekOrigin::Current, 0, 0);
+			StreamTestUtil::seek_TestHelper(stream, 0, tc::io::SeekOrigin::End, 0, 0);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteDirectory(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Seek_CreatedFile()
+{
+	std::cout << "[tc::io::FileStream] test_Seek_CreatedFile : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			StreamTestUtil::seek_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, 0, 0);
+			StreamTestUtil::seek_TestHelper(stream, 0, tc::io::SeekOrigin::Current, 0, 0);
+			StreamTestUtil::seek_TestHelper(stream, 100, tc::io::SeekOrigin::Current, 100, 100);
+			StreamTestUtil::seek_TestHelper(stream, 50, tc::io::SeekOrigin::Current, 150, 150);
+			StreamTestUtil::seek_TestHelper(stream, 0, tc::io::SeekOrigin::End, 200, 200);
+			StreamTestUtil::seek_TestHelper(stream, 0, tc::io::SeekOrigin::Current, 200, 200);
+			StreamTestUtil::seek_TestHelper(stream, 1, tc::io::SeekOrigin::Begin, 1, 1);
+			StreamTestUtil::seek_TestHelper(stream, 0, tc::io::SeekOrigin::Current, 1, 1);
+			StreamTestUtil::seek_TestHelper(stream, -1, tc::io::SeekOrigin::End, 199, 199);
+			StreamTestUtil::seek_TestHelper(stream, -198, tc::io::SeekOrigin::Current, 1, 1);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Seek_AppendMode()
+{
+	std::cout << "[tc::io::FileStream] test_Seek_AppendMode : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Append, tc::io::FileAccess::Write);
+
+			StreamTestUtil::seek_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, 0, 0);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::io::IOException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Seek_PositionBeforeFileBegin()
+{
+	std::cout << "[tc::io::FileStream] test_Seek_PositionBeforeFileBegin : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			StreamTestUtil::seek_TestHelper(stream, -1, tc::io::SeekOrigin::Begin, -1, -1);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentOutOfRangeException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Seek_PositionAfterFileEnd()
+{
+	std::cout << "[tc::io::FileStream] test_Seek_PositionAfterFileEnd : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			StreamTestUtil::seek_TestHelper(stream, stream.length(), tc::io::SeekOrigin::Begin, stream.length(), stream.length());
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentOutOfRangeException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+// read tests
+
+void io_FileStream_TestClass::test_Read_NoData()
+{
+	std::cout << "[tc::io::FileStream] test_Read_NoData : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			StreamTestUtil::read_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, kRandomString.size(), 0, 0, 0);
+			StreamTestUtil::read_TestHelper(stream, stream.length()/2, tc::io::SeekOrigin::Begin, kRandomString.size(), 0, 0, stream.length()/2);
+			StreamTestUtil::read_TestHelper(stream, 0, tc::io::SeekOrigin::End, kRandomString.size(), 0, 0, stream.length());
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Read_SomeDataFromZero()
+{
+	std::cout << "[tc::io::FileStream] test_Read_SomeDataFromZero : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			StreamTestUtil::read_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, kRandomString.size(), 0x01, 0x01, 0x01, (const byte_t*)kRandomString.c_str());
+			StreamTestUtil::read_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, kRandomString.size(), 0x20, 0x20, 0x20, (const byte_t*)kRandomString.c_str());
+			StreamTestUtil::read_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, kRandomString.size(), kRandomString.size()/2, kRandomString.size()/2, kRandomString.size()/2, (const byte_t*)kRandomString.c_str());
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Read_SomeDataFromMiddle()
+{
+	std::cout << "[tc::io::FileStream] test_Read_SomeDataFromMiddle : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			size_t offset;
+			size_t size;
+
+			offset = 01;
+			size = 20;
+			StreamTestUtil::read_TestHelper(stream, offset, tc::io::SeekOrigin::Begin, kRandomString.size(), size, size, offset + size, (const byte_t*)kRandomString.c_str() + offset);
+
+			offset = 67;
+			size = 100;
+			StreamTestUtil::read_TestHelper(stream, offset, tc::io::SeekOrigin::Begin, kRandomString.size(), size, size, offset + size, (const byte_t*)kRandomString.c_str() + offset);
+
+			offset = stream.length() / 2;
+			size = 80;
+			StreamTestUtil::read_TestHelper(stream, offset, tc::io::SeekOrigin::Begin, kRandomString.size(), size, size, offset + size, (const byte_t*)kRandomString.c_str() + offset);
+			
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Read_AllData()
+{
+	std::cout << "[tc::io::FileStream] test_Read_AllData : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			StreamTestUtil::read_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, kRandomString.size(), kRandomString.size(), kRandomString.size(), kRandomString.size(), (const byte_t*)kRandomString.c_str());
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Read_TooMuchData()
+{
+	std::cout << "[tc::io::FileStream] test_Read_TooMuchData : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			StreamTestUtil::read_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, kRandomString.size()*2, kRandomString.size()*2, kRandomString.size(), kRandomString.size(), (const byte_t*)kRandomString.c_str());
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Read_BeyondEnd()
+{
+	std::cout << "[tc::io::FileStream] test_Read_BeyondEnd : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			StreamTestUtil::read_TestHelper(stream, 1, tc::io::SeekOrigin::End, kRandomString.size(), kRandomString.size(), 0, kRandomString.size() + 1, (const byte_t*)kRandomString.c_str());
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Read_CanReadFalse()
+{
+	std::cout << "[tc::io::FileStream] test_Read_CanReadFalse : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
+
+			StreamTestUtil::read_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, kRandomString.size(), kRandomString.size(), 0, kRandomString.size(), (const byte_t*)kRandomString.c_str());
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::NotSupportedException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Read_NullDstPointer()
+{
+	std::cout << "[tc::io::FileStream] test_Read_NullDstPointer : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), kRandomString.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			StreamTestUtil::read_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, 0, kRandomString.size(), 0, kRandomString.size(), (const byte_t*)kRandomString.c_str());
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentNullException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+// write() test
+
+void io_FileStream_TestClass::test_Write_NoData()
+{
+	std::cout << "[tc::io::FileStream] test_Write_NoData : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, nullptr, 0);
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
+
+			StreamTestUtil::write_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, (const byte_t*)kRandomString.c_str(), 0, 0);
+
+			stream.dispose();
+
+			helper_ValidateFileContents(kAsciiFilePath, (const byte_t*)kRandomString.c_str(), 0);
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Write_OverwriteSomeDataFromZero()
+{
+	std::cout << "[tc::io::FileStream] test_Write_OverwriteSomeDataFromZero : " << std::flush;
+	try
+	{
+		auto padding = tc::io::PaddingSource(0xff, kRandomString.size());
+		auto padding_data = padding.pullData(0, padding.length());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.buffer(), padding_data.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
+
+			const byte_t* original_ptr = padding_data.buffer();
+			size_t original_size = padding_data.size();
+
+			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
+			size_t written_data_size = 30;
+			size_t written_data_offset = 0;
+
+			StreamTestUtil::write_TestHelper(stream, written_data_offset, tc::io::SeekOrigin::Begin, written_data_ptr, written_data_size, written_data_offset + written_data_size);
+			stream.dispose();
+
+			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
+
+			memcpy(expected_file_layout.buffer(), original_ptr, original_size);
+			memcpy(expected_file_layout.buffer() + written_data_offset, written_data_ptr, written_data_size);
+
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.buffer(), expected_file_layout.size());
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Write_OverwriteSomeDataFromMiddle()
+{
+	std::cout << "[tc::io::FileStream] test_Write_OverwriteSomeDataFromMiddle : " << std::flush;
+	try
+	{
+		auto padding = tc::io::PaddingSource(0xee, kRandomString.size());
+		auto padding_data = padding.pullData(0, padding.length());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.buffer(), padding_data.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
+
+			const byte_t* original_ptr = padding_data.buffer();
+			size_t original_size = padding_data.size();
+
+			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
+			size_t written_data_size = 90;
+			size_t written_data_offset = 50;
+
+			StreamTestUtil::write_TestHelper(stream, written_data_offset, tc::io::SeekOrigin::Begin, written_data_ptr, written_data_size, written_data_offset + written_data_size);
+			stream.dispose();
+
+			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
+
+			memcpy(expected_file_layout.buffer(), original_ptr, original_size);
+			memcpy(expected_file_layout.buffer() + written_data_offset, written_data_ptr, written_data_size);
+
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.buffer(), expected_file_layout.size());
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Write_ExtendStreamSizeThruWritingDataFromZero()
+{
+	std::cout << "[tc::io::FileStream] test_Write_ExtendStreamSizeThruWritingDataFromZero : " << std::flush;
+	try
+	{
+		auto padding = tc::io::PaddingSource(0xee, 0x20);
+		auto padding_data = padding.pullData(0, padding.length());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.buffer(), padding_data.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
+
+			const byte_t* original_ptr = padding_data.buffer();
+			size_t original_size = padding_data.size();
+
+			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
+			size_t written_data_size = 90;
+			size_t written_data_offset = 0;
+
+			StreamTestUtil::write_TestHelper(stream, written_data_offset, tc::io::SeekOrigin::Begin, written_data_ptr, written_data_size, written_data_offset + written_data_size, written_data_offset + written_data_size);
+			stream.dispose();
+
+			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
+
+			memcpy(expected_file_layout.buffer(), original_ptr, original_size);
+			memcpy(expected_file_layout.buffer() + written_data_offset, written_data_ptr, written_data_size);
+
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.buffer(), expected_file_layout.size());
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Write_ExtendStreamSizeThruWritingDataFromMiddle()
+{
+	std::cout << "[tc::io::FileStream] test_Write_ExtendStreamSizeThruWritingDataFromMiddle : " << std::flush;
+	try
+	{
+		auto padding = tc::io::PaddingSource(0xee, 0x20);
+		auto padding_data = padding.pullData(0, padding.length());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.buffer(), padding_data.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
+
+			const byte_t* original_ptr = padding_data.buffer();
+			size_t original_size = padding_data.size();
+
+			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
+			size_t written_data_size = 90;
+			size_t written_data_offset = 0x10;
+
+			StreamTestUtil::write_TestHelper(stream, written_data_offset, tc::io::SeekOrigin::Begin, written_data_ptr, written_data_size, written_data_offset + written_data_size, written_data_offset + written_data_size);
+			stream.dispose();
+
+			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
+
+			memcpy(expected_file_layout.buffer(), original_ptr, original_size);
+			memcpy(expected_file_layout.buffer() + written_data_offset, written_data_ptr, written_data_size);
+
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.buffer(), expected_file_layout.size());
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Write_CanWriteFalse()
+{
+	std::cout << "[tc::io::FileStream] test_Write_CanWriteFalse : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, nullptr, 0);
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
+
+			StreamTestUtil::write_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, (const byte_t*)kRandomString.c_str(), kRandomString.size(), kRandomString.size());
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::NotSupportedException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Write_NullSrcPointer()
+{
+	std::cout << "[tc::io::FileStream] test_Write_NullSrcPointer : " << std::flush;
+	try
+	{
+		helper_CreateFileForReading(kAsciiFilePath, nullptr, 0);
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
+
+			StreamTestUtil::write_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, nullptr, kRandomString.size(), kRandomString.size());
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::ArgumentNullException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+// helper code
+
+void io_FileStream_TestClass::helper_CreateFileForReading(const std::string& path, const uint8_t* data, size_t data_len)
+{
+	auto test_file = std::ofstream(path, std::ios::binary);
+	if (data != nullptr && data_len != 0)
+	{
+		test_file.write((char*)data, data_len);
+	}
+	test_file.close();
+}
+
+void io_FileStream_TestClass::helper_ValidateFileContents(const std::string& path, const uint8_t* data, size_t data_len)
+{
+	auto test_file = std::ifstream(path, std::ios::binary);
+
+	if (test_file.fail())
+	{
+		throw tc::Exception("helper_ValidateFileContents : Failed to open file");
+	}
+
+	if (data == nullptr || data_len == 0)
+	{
+		return;
+	}
+
+	auto datablob = tc::ByteData(data_len);
+	test_file.read((char*)datablob.buffer(), data_len);
+
+	if (test_file.fail())
+	{
+		throw tc::Exception("helper_ValidateFileContents : Failed to read file");
+	}
+
+	test_file.close();
+
+	if (memcmp(datablob.buffer(), data, data_len) != 0)
+	{
+		throw tc::Exception("helper_ValidateFileContents : Invalid file contents");
+	}
+} 
+
+void io_FileStream_TestClass::helper_DeleteFile(const std::string& path)
+{
+	tc::io::LocalStorage s;
+	s.removeFile(path);
+}
+
+void io_FileStream_TestClass::helper_CreateDirectory(const std::string& path)
+{
+	tc::io::LocalStorage s;
+	s.createDirectory(path);
+}
+
+void io_FileStream_TestClass::helper_DeleteDirectory(const std::string& path)
+{
+	tc::io::LocalStorage s;
+	s.removeDirectory(path);
 }
