@@ -182,6 +182,7 @@ private:
 	bool mCanRead;
 	bool mCanWrite;
 	bool mCanSeek;
+	bool mIsAppendRestrictSeekCall;
 	std::shared_ptr<tc::io::FileStream::FileHandle> mFileHandle;
 
 #ifdef _WIN32

@@ -26,6 +26,7 @@ tc::io::FileStream::FileStream() :
 	mCanRead(false),
 	mCanWrite(false),
 	mCanSeek(false),
+	mIsAppendRestrictSeekCall(false),
 	mFileHandle()
 {}
 
@@ -49,7 +50,7 @@ bool tc::io::FileStream::canWrite() const
 }
 bool tc::io::FileStream::canSeek() const
 {
-	return mFileHandle == nullptr ? false : mCanSeek;
+	return mFileHandle == nullptr || mIsAppendRestrictSeekCall == true ? false : mCanSeek;
 }
 
 int64_t tc::io::FileStream::length()
@@ -69,7 +70,7 @@ int64_t tc::io::FileStream::position()
 		throw tc::NotSupportedException(kClassName+"::position()", "This method is not supported for streams that do not support seeking");
 	}
 
-	return seek(0, SeekOrigin::Current);
+	return seek_impl(0, SeekOrigin::Current);
 }
 
 size_t tc::io::FileStream::read(byte_t* buffer, size_t count)
@@ -132,6 +133,11 @@ int64_t tc::io::FileStream::seek(int64_t offset, SeekOrigin origin)
 	if (mCanSeek == false)
 	{
 		throw tc::NotSupportedException(kClassName+"::seek()", "Stream does not support seeking");
+	}
+
+	if (mIsAppendRestrictSeekCall == true)
+	{
+		throw tc::io::IOException(kClassName+"::seek()", "Streams opened in Append mode are not allowed to change file position.");
 	}
 
 	return seek_impl(offset, origin);
@@ -271,7 +277,11 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	
 	// seek to end of file if in append mode
 	if (mode == FileMode::Append)
-		seek(0, SeekOrigin::End);
+	{
+		seek_impl(0, SeekOrigin::End);
+		mIsAppendRestrictSeekToEndOnly = true;
+	}
+		
 
 	// set state flags
 	mCanRead = (access_flag & GENERIC_READ) ? true : false;
@@ -419,16 +429,16 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 			open_flag |= 0;
 			break;
 		case (FileMode::OpenOrCreate):
-			// create file if does not exist 
-			open_flag |= O_CREAT;
+			// create file if does not exist (however only enable create flag if write access is enabled)
+			open_flag |= (access == FileAccess::ReadWrite || access == FileAccess::Write) ? O_CREAT : 0;
 			break;
 		case (FileMode::Truncate):
 			// truncate file if file exists
 			open_flag |= O_TRUNC;
 			break;
 		case (FileMode::Append):
-			// open in append mode
-			open_flag |= O_APPEND;
+			// open in append mode (create file if doesn't exist)
+			open_flag |= O_APPEND | O_CREAT;
 			break;
 		default:
 			throw tc::ArgumentOutOfRangeException(kClassName+"open()", "Illegal value for mode");
@@ -468,6 +478,10 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	// validate use of write dependent flags
 	if ((open_flag & (O_APPEND | O_TRUNC | O_CREAT)) && !(open_flag & (O_WRONLY|O_RDWR))) {
 		throw tc::ArgumentException(kClassName+"open()", "Stream open mode requires write access, but write access was not allowed");
+	}
+	// explicitly check APPEND as being write only
+	if ((open_flag & (O_APPEND)) && (open_flag & (O_RDWR))) {
+		throw tc::ArgumentException(kClassName+"open()", "Stream opened in Append mode can only work with Write access. ReadWrite is not permitted");
 	}
 
 	// open file handle with Read/Write for User, Read for Group, nothing for others
@@ -532,6 +546,13 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	mCanRead = (open_flag & O_RDWR) || !(open_flag & O_WRONLY) ? true : false;
 	mCanWrite = (open_flag & (O_WRONLY|O_RDWR)) ? true : false;
 	mCanSeek = S_ISREG(stat_buf.st_mode) ? true : false;
+
+	// seek to end of file if in append mode
+	if (mode == FileMode::Append)
+	{
+		seek_impl(0, SeekOrigin::End);
+		mIsAppendRestrictSeekCall = true;
+	}
 }
 
 int64_t tc::io::FileStream::length_impl()
