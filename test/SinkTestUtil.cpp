@@ -81,7 +81,7 @@ void SinkTestUtil::DummySinkTestablePushData::pushData(const tc::ByteData& data,
 		throw tc::Exception(error_ss.str());
 	}
 
-	if (memcmp(data.buffer(), expected_data->buffer(), data.size()) != 0)
+	if (memcmp(data.get(), expected_data->get(), data.size()) != 0)
 	{
 		throw tc::Exception("ByteData pushed to base sink did not have expected data.");
 	}

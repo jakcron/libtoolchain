@@ -76,6 +76,7 @@ private:
 	void test_Write_OverwriteSomeDataFromMiddle();
 	void test_Write_ExtendStreamSizeThruWritingDataFromZero();
 	void test_Write_ExtendStreamSizeThruWritingDataFromMiddle();
+	void test_Write_BeyondEnd();
 	void test_Write_CanWriteFalse();
 	void test_Write_NullSrcPointer();
 

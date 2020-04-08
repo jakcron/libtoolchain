@@ -63,10 +63,10 @@ void io_StreamSink_TestClass::testCreateConstructor()
 			// test
 			SinkTestUtil::testSinkLength(sink, base_stream.length());
 
-			memset(expected_data.buffer(), 0x5A, expected_data.size());
+			memset(expected_data.get(), 0x5A, expected_data.size());
 			pushTestHelper(sink, base_stream, expected_data, 0);
 
-			memset(expected_data.buffer(), 0x08, expected_data.size());
+			memset(expected_data.get(), 0x08, expected_data.size());
 			pushTestHelper(sink, base_stream, expected_data, 0xcafe);
 
 			std::cout << "PASS" << std::endl;
@@ -244,7 +244,7 @@ void io_StreamSink_TestClass::testPushDataOutsideOfBaseRange()
 			// test
 			SinkTestUtil::testSinkLength(sink, base_stream.length());
 
-			memset(data.buffer(), 0x08, data.size());
+			memset(data.get(), 0x08, data.size());
 			pushTestHelper(sink, base_stream, data, base_stream_len);
 
 			std::cout << "FAIL" << std::endl;
@@ -285,14 +285,14 @@ void io_StreamSink_TestClass::pushTestHelper(tc::io::ISink& sink, tc::io::IStrea
 		throw tc::Exception(error_ss.str());
 	}
 	
-	size_t read_ret = base_stream.read(output_data.buffer(), output_data.size());
+	size_t read_ret = base_stream.read(output_data.get(), output_data.size());
 	if (read_ret != expected_data.size())
 	{
 		error_ss << "internal test method to read from base_stream failed. read(size: " << expected_data.size() << "): " << read_ret << ", when it should have been " << expected_data.size();
 		throw tc::Exception(error_ss.str());
 	}
 
-	if (memcmp(expected_data.buffer(), output_data.buffer(), expected_data.size()) != 0)
+	if (memcmp(expected_data.get(), output_data.get(), expected_data.size()) != 0)
 	{
 		error_ss << "pushData(offset: " << push_offset << ") did not write data to base_stream as expected";
 		throw tc::Exception(error_ss.str());

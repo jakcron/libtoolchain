@@ -87,6 +87,7 @@ void io_FileStream_TestClass::runAllTests(void)
 	test_Write_OverwriteSomeDataFromMiddle();
 	test_Write_ExtendStreamSizeThruWritingDataFromZero();
 	test_Write_ExtendStreamSizeThruWritingDataFromMiddle();
+	test_Write_BeyondEnd();
 	test_Write_CanWriteFalse();
 	test_Write_NullSrcPointer();
 
@@ -1439,15 +1440,11 @@ void io_FileStream_TestClass::test_Seek_PositionAfterFileEnd()
 
 			StreamTestUtil::seek_TestHelper(stream, stream.length(), tc::io::SeekOrigin::Begin, stream.length(), stream.length());
 
-			std::cout << "FAIL" << std::endl;
-		}
-		catch (const tc::ArgumentOutOfRangeException& e)
-		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 
 		helper_DeleteFile(kAsciiFilePath);
@@ -1751,13 +1748,13 @@ void io_FileStream_TestClass::test_Write_OverwriteSomeDataFromZero()
 	{
 		auto padding = tc::io::PaddingSource(0xff, kRandomString.size());
 		auto padding_data = padding.pullData(0, padding.length());
-		helper_CreateFileForReading(kAsciiFilePath, padding_data.buffer(), padding_data.size());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.get(), padding_data.size());
 
 		try 
 		{
 			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
 
-			const byte_t* original_ptr = padding_data.buffer();
+			const byte_t* original_ptr = padding_data.get();
 			size_t original_size = padding_data.size();
 
 			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
@@ -1769,10 +1766,10 @@ void io_FileStream_TestClass::test_Write_OverwriteSomeDataFromZero()
 
 			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
 
-			memcpy(expected_file_layout.buffer(), original_ptr, original_size);
-			memcpy(expected_file_layout.buffer() + written_data_offset, written_data_ptr, written_data_size);
+			memcpy(expected_file_layout.get(), original_ptr, original_size);
+			memcpy(expected_file_layout.get() + written_data_offset, written_data_ptr, written_data_size);
 
-			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.buffer(), expected_file_layout.size());
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.get(), expected_file_layout.size());
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -1796,13 +1793,13 @@ void io_FileStream_TestClass::test_Write_OverwriteSomeDataFromMiddle()
 	{
 		auto padding = tc::io::PaddingSource(0xee, kRandomString.size());
 		auto padding_data = padding.pullData(0, padding.length());
-		helper_CreateFileForReading(kAsciiFilePath, padding_data.buffer(), padding_data.size());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.get(), padding_data.size());
 
 		try 
 		{
 			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
 
-			const byte_t* original_ptr = padding_data.buffer();
+			const byte_t* original_ptr = padding_data.get();
 			size_t original_size = padding_data.size();
 
 			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
@@ -1814,10 +1811,10 @@ void io_FileStream_TestClass::test_Write_OverwriteSomeDataFromMiddle()
 
 			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
 
-			memcpy(expected_file_layout.buffer(), original_ptr, original_size);
-			memcpy(expected_file_layout.buffer() + written_data_offset, written_data_ptr, written_data_size);
+			memcpy(expected_file_layout.get(), original_ptr, original_size);
+			memcpy(expected_file_layout.get() + written_data_offset, written_data_ptr, written_data_size);
 
-			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.buffer(), expected_file_layout.size());
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.get(), expected_file_layout.size());
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -1841,13 +1838,13 @@ void io_FileStream_TestClass::test_Write_ExtendStreamSizeThruWritingDataFromZero
 	{
 		auto padding = tc::io::PaddingSource(0xee, 0x20);
 		auto padding_data = padding.pullData(0, padding.length());
-		helper_CreateFileForReading(kAsciiFilePath, padding_data.buffer(), padding_data.size());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.get(), padding_data.size());
 
 		try 
 		{
 			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
 
-			const byte_t* original_ptr = padding_data.buffer();
+			const byte_t* original_ptr = padding_data.get();
 			size_t original_size = padding_data.size();
 
 			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
@@ -1859,10 +1856,10 @@ void io_FileStream_TestClass::test_Write_ExtendStreamSizeThruWritingDataFromZero
 
 			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
 
-			memcpy(expected_file_layout.buffer(), original_ptr, original_size);
-			memcpy(expected_file_layout.buffer() + written_data_offset, written_data_ptr, written_data_size);
+			memcpy(expected_file_layout.get(), original_ptr, original_size);
+			memcpy(expected_file_layout.get() + written_data_offset, written_data_ptr, written_data_size);
 
-			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.buffer(), expected_file_layout.size());
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.get(), expected_file_layout.size());
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -1886,13 +1883,13 @@ void io_FileStream_TestClass::test_Write_ExtendStreamSizeThruWritingDataFromMidd
 	{
 		auto padding = tc::io::PaddingSource(0xee, 0x20);
 		auto padding_data = padding.pullData(0, padding.length());
-		helper_CreateFileForReading(kAsciiFilePath, padding_data.buffer(), padding_data.size());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.get(), padding_data.size());
 
 		try 
 		{
 			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
 
-			const byte_t* original_ptr = padding_data.buffer();
+			const byte_t* original_ptr = padding_data.get();
 			size_t original_size = padding_data.size();
 
 			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
@@ -1904,10 +1901,54 @@ void io_FileStream_TestClass::test_Write_ExtendStreamSizeThruWritingDataFromMidd
 
 			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
 
-			memcpy(expected_file_layout.buffer(), original_ptr, original_size);
-			memcpy(expected_file_layout.buffer() + written_data_offset, written_data_ptr, written_data_size);
+			memcpy(expected_file_layout.get(), original_ptr, original_size);
+			memcpy(expected_file_layout.get() + written_data_offset, written_data_ptr, written_data_size);
 
-			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.buffer(), expected_file_layout.size());
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.get(), expected_file_layout.size());
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+
+		helper_DeleteFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_FileStream_TestClass::test_Write_BeyondEnd()
+{
+	std::cout << "[tc::io::FileStream] test_Write_BeyondEnd : " << std::flush;
+	try
+	{
+		auto padding = tc::io::PaddingSource(0xee, 0x20);
+		auto padding_data = padding.pullData(0, padding.length());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.get(), padding_data.size());
+
+		try 
+		{
+			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::OpenOrCreate, tc::io::FileAccess::Write);
+
+			const byte_t* original_ptr = padding_data.get();
+			size_t original_size = padding_data.size();
+
+			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
+			size_t written_data_size = 90;
+			size_t written_data_offset = original_size + 4;
+
+			StreamTestUtil::write_TestHelper(stream, written_data_offset, tc::io::SeekOrigin::Begin, written_data_ptr, written_data_size, written_data_offset + written_data_size, written_data_offset + written_data_size);
+			stream.dispose();
+
+			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
+			memcpy(expected_file_layout.get(), original_ptr, original_size);
+			memcpy(expected_file_layout.get() + written_data_offset, written_data_ptr, written_data_size);
+
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.get(), expected_file_layout.size());
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -2015,7 +2056,7 @@ void io_FileStream_TestClass::helper_ValidateFileContents(const std::string& pat
 	}
 
 	auto datablob = tc::ByteData(data_len);
-	test_file.read((char*)datablob.buffer(), data_len);
+	test_file.read((char*)datablob.get(), data_len);
 
 	if (test_file.fail())
 	{
@@ -2024,7 +2065,7 @@ void io_FileStream_TestClass::helper_ValidateFileContents(const std::string& pat
 
 	test_file.close();
 
-	if (memcmp(datablob.buffer(), data, data_len) != 0)
+	if (memcmp(datablob.get(), data, data_len) != 0)
 	{
 		throw tc::Exception("helper_ValidateFileContents : Invalid file contents");
 	}

@@ -33,9 +33,9 @@ void ByteData_TestClass::test_Constructor_DefaultConstructor()
 		{
 			tc::ByteData data;
 
-			if (data.buffer() != nullptr)
+			if (data.get() != nullptr)
 			{
-				throw tc::Exception(".buffer() did not return nullptr when ByteData was constructed with default constructor");
+				throw tc::Exception(".get() did not return nullptr when ByteData was constructed with default constructor");
 			}
 
 			if (data.size() != 0)
@@ -65,9 +65,9 @@ void ByteData_TestClass::test_Constructor_CreateZeroSized()
 		{
 			tc::ByteData data(0);
 
-			if (data.buffer() != nullptr)
+			if (data.get() != nullptr)
 			{
-				throw tc::Exception(".buffer() did not return nullptr when ByteData was constructed with size 0");
+				throw tc::Exception(".get() did not return nullptr when ByteData was constructed with size 0");
 			}
 
 			if (data.size() != 0)
@@ -99,9 +99,9 @@ void ByteData_TestClass::test_Constructor_CreateSmallSized()
 			const size_t data_size = 1271;
 			tc::ByteData data(data_size);
 
-			if (data.buffer() == nullptr)
+			if (data.get() == nullptr)
 			{
-				error_ss << ".buffer() returned nullptr when ByteData was constructed with size " << data_size;
+				error_ss << ".get() returned nullptr when ByteData was constructed with size " << data_size;
 				throw tc::Exception(error_ss.str());
 			}
 
@@ -135,9 +135,9 @@ void ByteData_TestClass::test_Constructor_CreateLargeSized()
 			const size_t data_size = 0x1000000;
 			tc::ByteData data(data_size);
 
-			if (data.buffer() == nullptr)
+			if (data.get() == nullptr)
 			{
-				error_ss << ".buffer() returned nullptr when ByteData was constructed with size " << data_size;
+				error_ss << ".get() returned nullptr when ByteData was constructed with size " << data_size;
 				throw tc::Exception(error_ss.str());
 			}
 
@@ -194,14 +194,14 @@ void ByteData_TestClass::test_Constructor_CreateFromPtr()
 			std::stringstream error_ss;
 			const size_t src_data_size = 0x1000;
 			tc::ByteData src_data(src_data_size);
-			memset(src_data.buffer(), 0xe0, src_data.size());
+			memset(src_data.get(), 0xe0, src_data.size());
 
-			tc::ByteData data(src_data.buffer(), src_data.size());
+			tc::ByteData data(src_data.get(), src_data.size());
 
 
-			if (data.buffer() == nullptr)
+			if (data.get() == nullptr)
 			{
-				error_ss << ".buffer() returned nullptr when ByteData was constructed with size " << src_data_size;
+				error_ss << ".get() returned nullptr when ByteData was constructed with size " << src_data_size;
 				throw tc::Exception(error_ss.str());
 			}
 
@@ -211,9 +211,9 @@ void ByteData_TestClass::test_Constructor_CreateFromPtr()
 				throw tc::Exception(error_ss.str());
 			}
 
-			if (memcmp(data.buffer(), src_data.buffer(), src_data_size) != 0)
+			if (memcmp(data.get(), src_data.get(), src_data_size) != 0)
 			{
-				error_ss << ".buffer() did not have expected contents, when compared to source data";
+				error_ss << ".get() did not have expected contents, when compared to source data";
 				throw tc::Exception(error_ss.str());
 			}
 
@@ -251,7 +251,7 @@ void ByteData_TestClass::test_ImplicitCopy_CopyInSameScope()
 				throw tc::Exception("data2 after being constructed by copy, did not have the same size");
 			}
 
-			if (data.buffer() != data2.buffer())
+			if (data.get() != data2.get())
 			{
 				throw tc::Exception("data2 after being constructed by copy, did not have the same pointer");
 			}
@@ -263,7 +263,7 @@ void ByteData_TestClass::test_ImplicitCopy_CopyInSameScope()
 				throw tc::Exception("data3 after being constructed by copy assignment, did not have the same size");
 			}
 
-			if (data.buffer() != data3.buffer())
+			if (data.get() != data3.get())
 			{
 				throw tc::Exception("data3 after being constructed by copy assignment, did not have the same pointer");
 			}
@@ -305,7 +305,7 @@ void ByteData_TestClass::test_ImplicitCopy_CopyOntoInitiallisedByteData()
 				throw tc::Exception("data2 after being assigned by copy, did not have the same size");
 			}
 
-			if (data.buffer() != data2.buffer())
+			if (data.get() != data2.get())
 			{
 				throw tc::Exception("data2 after being assigned by copy, did not have the same pointer");
 			}
@@ -336,17 +336,17 @@ void ByteData_TestClass::test_ImplicitMove_CopyInSameScope()
 			// create data with allocating constructor
 			tc::ByteData data(data_size);
 			// mark buffer[0] so we can see if buffer ptr is being moved properly
-			data.buffer()[0] = 0xff;
+			data.get()[0] = 0xff;
 
 			// create data2 as a copy of data using implicit move constructor
 			tc::ByteData data2(std::move(data));
 
-			if (data2.buffer()[0] != 0xff)
+			if (data2.get()[0] != 0xff)
 			{
 				throw tc::Exception("data2 did not have expected byte at buffer()[0]");
 			}
 
-			if (data.buffer() != nullptr)
+			if (data.get() != nullptr)
 			{
 				throw tc::Exception("data after being moved to data2 retained it's old pointer");
 			}
@@ -358,12 +358,12 @@ void ByteData_TestClass::test_ImplicitMove_CopyInSameScope()
 
 			tc::ByteData data3 = std::move(data2);
 
-			if (data3.buffer()[0] != 0xff)
+			if (data3.get()[0] != 0xff)
 			{
 				throw tc::Exception("data3 did not have expected byte at buffer()[0]");
 			}
 
-			if (data2.buffer() != nullptr)
+			if (data2.get() != nullptr)
 			{
 				throw tc::Exception("data2 after being moved to data3 retained it's old pointer");
 			}
@@ -400,7 +400,7 @@ void ByteData_TestClass::test_ImplicitMove_MoveOntoInitiallisedByteData()
 			// create data with allocating constructor
 			tc::ByteData data(data_size);
 			// mark buffer[0] so we can see if buffer ptr is being copied properly
-			data.buffer()[0] = 0xff;
+			data.get()[0] = 0xff;
 
 			// create data2 with allocating constructor
 			tc::ByteData data2(data2_size);
@@ -408,7 +408,7 @@ void ByteData_TestClass::test_ImplicitMove_MoveOntoInitiallisedByteData()
 			// move data to data2 by assignment
 			data2 = std::move(data);
 
-			if (data.buffer() != nullptr)
+			if (data.get() != nullptr)
 			{
 				throw tc::Exception("data after being moved to data2 retained it's old pointer");
 			}

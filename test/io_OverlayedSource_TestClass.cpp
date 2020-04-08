@@ -65,7 +65,7 @@ void io_OverlayedSource_TestClass::testSingleOverlayConstructor()
 			tc::ByteData expected_data = base_source.pullData(0, base_source.length());
 			tc::ByteData overlay_data = overlay_source.pullData(0, overlay_source.length());
 			
-			memcpy(expected_data.buffer() + overlay_offset, overlay_data.buffer(), overlay_data.size());
+			memcpy(expected_data.get() + overlay_offset, overlay_data.get(), overlay_data.size());
 
 			// ## validate overlay source
 			// source length
@@ -78,37 +78,37 @@ void io_OverlayedSource_TestClass::testSingleOverlayConstructor()
 			// pull full contents of source
 			pull_size = base_source.length();
 			pull_offset = 0;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.get() + pull_offset);
 
 			// try to pull double the length of source
 			pull_size = base_source.length() * 2;
 			pull_offset = 0;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size/2, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size/2, expected_data.get() + pull_offset);
 			
 			// pull source up to overlay source
 			pull_size = overlay_offset;
 			pull_offset = 0;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.get() + pull_offset);
 
 			// pull just overlay source
 			pull_size = overlay_source.length();
 			pull_offset = overlay_offset;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.get() + pull_offset);
 
 			// pull part of overlay
 			pull_size = 0x20;
 			pull_offset = overlay_offset - 0x30;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.get() + pull_offset);
 
 			// pull part of base and part of overlay
 			pull_size = 0x20;
 			pull_offset = overlay_offset - 0x10;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.get() + pull_offset);
 
 			// pull part of overlay and part of base
 			pull_size = 0x20;
 			pull_offset = overlay_offset + overlay_source.length() - 0x10;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.get() + pull_offset);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -149,7 +149,7 @@ void io_OverlayedSource_TestClass::testMultiOverlayConstructor()
 			for (auto itr = overlay_info.begin(); itr != overlay_info.end(); itr++)
 			{
 				tc::ByteData tmp = itr->overlay_source->pullData(0, itr->length);
-				memcpy(expected_data.buffer() + itr->offset, tmp.buffer(), tmp.size());
+				memcpy(expected_data.get() + itr->offset, tmp.get(), tmp.size());
 			}
 					
 			// ## validate overlay source
@@ -163,7 +163,7 @@ void io_OverlayedSource_TestClass::testMultiOverlayConstructor()
 			// pull full contents of source
 			pull_size = base_source.length();
 			pull_offset = 0;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.buffer() + pull_offset);
+			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.get() + pull_offset);
 
 			std::cout << "PASS" << std::endl;
 		}

@@ -679,6 +679,7 @@ int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
 void tc::io::FileStream::setLength_impl(int64_t length)
 {
 	throw tc::NotImplementedException(kClassName, "setLength() not implemented");
+	
 }
 
 void tc::io::FileStream::flush_impl()

@@ -66,10 +66,10 @@ void io_SubSink_TestClass::testCreateConstructor()
 			// test
 			SinkTestUtil::testSinkLength(sub_sink, sub_sink_size);
 
-			memset(data.buffer(), 0x33, data.size());
+			memset(data.get(), 0x33, data.size());
 			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0, data);
 			
-			memset(data.buffer(), 0xea, data.size());
+			memset(data.get(), 0xea, data.size());
 			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0x200, data);
 
 			std::cout << "PASS" << std::endl;
@@ -276,7 +276,7 @@ void io_SubSink_TestClass::testPushDataOutsideOfBaseRange()
 			// test
 			SinkTestUtil::testSinkLength(sub_sink, sub_sink_size);
 
-			memset(data.buffer(), 0x08, data.size());
+			memset(data.get(), 0x08, data.size());
 			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, sub_sink_size, data);
 
 			std::cout << "FAIL" << std::endl;

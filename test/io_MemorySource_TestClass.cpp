@@ -51,13 +51,13 @@ void io_MemorySource_TestClass::testCreateFromByteData()
 		{
 			int64_t length = 0xcafe;
 			tc::ByteData data(length);
-			memset(data.buffer(), 0xff, data.size());
+			memset(data.get(), 0xff, data.size());
 
 			tc::io::MemorySource source = tc::io::MemorySource(data);
 
 			SourceTestUtil::testSourceLength(source, length);
-			SourceTestUtil::pullTestHelper(source, 0, data.size(), data.size(), data.buffer());
-			SourceTestUtil::pullTestHelper(source, 0, data.size()*2, data.size(), data.buffer());
+			SourceTestUtil::pullTestHelper(source, 0, data.size(), data.size(), data.get());
+			SourceTestUtil::pullTestHelper(source, 0, data.size()*2, data.size(), data.get());
 
 			std::cout << "PASS" << std::endl;	
 		}
@@ -81,13 +81,13 @@ void io_MemorySource_TestClass::testCreateFromMemoryPointer()
 		{
 			int64_t length = 0xcafe;
 			tc::ByteData data(length);
-			memset(data.buffer(), 0xff, data.size());
+			memset(data.get(), 0xff, data.size());
 
-			tc::io::MemorySource source = tc::io::MemorySource(data.buffer(), data.size());
+			tc::io::MemorySource source = tc::io::MemorySource(data.get(), data.size());
 
 			SourceTestUtil::testSourceLength(source, length);
-			SourceTestUtil::pullTestHelper(source, 0, data.size(), data.size(), data.buffer());
-			SourceTestUtil::pullTestHelper(source, 0, data.size()*2, data.size(), data.buffer());
+			SourceTestUtil::pullTestHelper(source, 0, data.size(), data.size(), data.get());
+			SourceTestUtil::pullTestHelper(source, 0, data.size()*2, data.size(), data.get());
 
 			std::cout << "PASS" << std::endl;	
 		}

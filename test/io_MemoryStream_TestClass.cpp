@@ -127,16 +127,16 @@ void io_MemoryStream_TestClass::testCreateFromByteData()
 			int64_t length = 0xcafe;
 
 			tc::ByteData data(length);
-			memset(data.buffer(), 0xff, data.size());
+			memset(data.get(), 0xff, data.size());
 
 			tc::io::MemoryStream stream = tc::io::MemoryStream(data);
 
 			StreamTestUtil::constructor_TestHelper(stream, 0xcafe, 0, true, true, true);
 
 			tc::ByteData output_data(stream.length());
-			stream.read(output_data.buffer(), output_data.size());
+			stream.read(output_data.get(), output_data.size());
 
-			if (memcmp(output_data.buffer(), data.buffer(), length) != 0)
+			if (memcmp(output_data.get(), data.get(), length) != 0)
 			{
 				throw tc::Exception("Data in memory stream was not correct after being constructed from a ByteData object");
 			}
@@ -163,7 +163,7 @@ void io_MemoryStream_TestClass::testCreateFromMemoryPointer()
 		{
 			int64_t length = 0xcafe;
 			tc::ByteData data(length);
-			tc::io::MemoryStream stream(data.buffer(), data.size());
+			tc::io::MemoryStream stream(data.get(), data.size());
 
 			StreamTestUtil::constructor_TestHelper(stream, 0xcafe, 0, true, true, true);
 
@@ -792,15 +792,15 @@ void io_MemoryStream_TestClass::testWriteReadDataPersistence()
 			size_t data_size = 0x100;
 			tc::ByteData source(data_size), dst(data_size);
 
-			memset(source.buffer(), 0xab, source.size());
+			memset(source.get(), 0xab, source.size());
 
 			tc::io::MemoryStream stream(data_size);
 
-			stream.write(source.buffer(), source.size());
+			stream.write(source.get(), source.size());
 			stream.seek(0, tc::io::SeekOrigin::Begin);
-			stream.read(dst.buffer(), dst.size());
+			stream.read(dst.get(), dst.size());
 
-			if (memcmp(source.buffer(), dst.buffer(), data_size) != 0)
+			if (memcmp(source.get(), dst.get(), data_size) != 0)
 			{
 				throw tc::Exception("Stream did not read back data written to it");
 			}
@@ -832,8 +832,8 @@ void io_MemoryStream_TestClass::testResizeStreamLarger()
 			
 			// write data to stream
 			tc::ByteData initial_data = tc::ByteData(size_t(initial_len));
-			memset(initial_data.buffer(), 0xdf, initial_data.size());
-			stream.write(initial_data.buffer(), initial_data.size());
+			memset(initial_data.get(), 0xdf, initial_data.size());
+			stream.write(initial_data.get(), initial_data.size());
 
 			// resize stream larger
 			stream.setLength(new_len);
@@ -857,11 +857,11 @@ void io_MemoryStream_TestClass::testResizeStreamLarger()
 			// read data from stream
 			tc::ByteData new_data = tc::ByteData(size_t(stream.length()));
 			stream.seek(0, tc::io::SeekOrigin::Begin);
-			stream.read(new_data.buffer(), new_data.size());
+			stream.read(new_data.get(), new_data.size());
 
 			// check data was correct
 			size_t cmp_size = std::min<size_t>(initial_data.size(), new_data.size());
-			if (memcmp(initial_data.buffer(), new_data.buffer(), cmp_size) != 0)
+			if (memcmp(initial_data.get(), new_data.get(), cmp_size) != 0)
 			{
 				throw tc::Exception("After resizing data was not correct");
 			}
@@ -893,8 +893,8 @@ void io_MemoryStream_TestClass::testResizeStreamSmaller()
 			
 			// write data to stream
 			tc::ByteData initial_data = tc::ByteData(size_t(initial_len));
-			memset(initial_data.buffer(), 0xdf, initial_data.size());
-			stream.write(initial_data.buffer(), initial_data.size());
+			memset(initial_data.get(), 0xdf, initial_data.size());
+			stream.write(initial_data.get(), initial_data.size());
 
 			// resize stream larger
 			stream.setLength(new_len);
@@ -918,11 +918,11 @@ void io_MemoryStream_TestClass::testResizeStreamSmaller()
 			// read data from stream
 			tc::ByteData new_data = tc::ByteData(size_t(stream.length()));
 			stream.seek(0, tc::io::SeekOrigin::Begin);
-			stream.read(new_data.buffer(), new_data.size());
+			stream.read(new_data.get(), new_data.size());
 
 			// check data was correct
 			size_t cmp_size = std::min<size_t>(initial_data.size(), new_data.size());
-			if (memcmp(initial_data.buffer(), new_data.buffer(), cmp_size) != 0)
+			if (memcmp(initial_data.get(), new_data.get(), cmp_size) != 0)
 			{
 				throw tc::Exception("After resizing data was not correct");
 			}

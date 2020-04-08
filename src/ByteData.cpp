@@ -6,7 +6,7 @@ tc::ByteData::ByteData() :
 	ByteData(0)
 {}
 
-tc::ByteData::ByteData(size_t size)
+tc::ByteData::ByteData(size_t size, bool clear_memory)
 {
 	if (size == 0)
 	{
@@ -30,15 +30,20 @@ tc::ByteData::ByteData(size_t size)
 	}
 	
 	mSize = size;
+
+	if (clear_memory == true)
+	{
+		memset(mPtr.get(), 0, mSize);
+	}
 }
 
 tc::ByteData::ByteData(const byte_t* data, size_t size) :
-	ByteData(size)
+	ByteData(size, false)
 {
 	memcpy(mPtr.get(), data, mSize);
 }
 
-byte_t* tc::ByteData::buffer() const
+byte_t* tc::ByteData::get() const
 {
 	return mPtr.get();
 }

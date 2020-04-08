@@ -54,13 +54,13 @@ void io_PaddingSource_TestClass::testCreateConstructor()
 
 			// create expected data
 			tc::ByteData expected_data(source_len);
-			memset(expected_data.buffer(), padding_byte, expected_data.size());
+			memset(expected_data.get(), padding_byte, expected_data.size());
 
 			// test source
 			SourceTestUtil::testSourceLength(source, source_len);
-			SourceTestUtil::pullTestHelper(source, 0, source_len, source_len, expected_data.buffer());
-			SourceTestUtil::pullTestHelper(source, 0, source_len/2, source_len/2, expected_data.buffer());
-			SourceTestUtil::pullTestHelper(source, 0, source_len*2, source_len, expected_data.buffer());
+			SourceTestUtil::pullTestHelper(source, 0, source_len, source_len, expected_data.get());
+			SourceTestUtil::pullTestHelper(source, 0, source_len/2, source_len/2, expected_data.get());
+			SourceTestUtil::pullTestHelper(source, 0, source_len*2, source_len, expected_data.get());
 
 			std::cout << "PASS" << std::endl;
 		}

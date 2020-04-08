@@ -24,7 +24,7 @@ void SourceTestUtil::pullTestHelper(tc::io::ISource& source, int64_t offset, siz
 		throw tc::Exception(error_ss.str());
 	}
 
-	if (expected_data != nullptr && memcmp(data.buffer(), expected_data, expected_len) != 0)
+	if (expected_data != nullptr && memcmp(data.get(), expected_data, expected_len) != 0)
 	{
 		error_ss << "pullData(offset: " << offset << ", len:" << len << ") returned ByteData with incorrect layout";
 		throw tc::Exception(error_ss.str());

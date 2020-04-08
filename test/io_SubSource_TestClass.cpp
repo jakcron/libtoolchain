@@ -60,8 +60,8 @@ void io_SubSource_TestClass::testCreateConstructor()
 
 			// test source
 			SourceTestUtil::testSourceLength(source, sub_length);
-			SourceTestUtil::pullTestHelper(source, 0, sub_length, sub_length, expected_data.buffer());
-			SourceTestUtil::pullTestHelper(source, 0, sub_length*2, sub_length, expected_data.buffer());
+			SourceTestUtil::pullTestHelper(source, 0, sub_length, sub_length, expected_data.get());
+			SourceTestUtil::pullTestHelper(source, 0, sub_length*2, sub_length, expected_data.get());
 
 			std::cout << "PASS" << std::endl;
 		}

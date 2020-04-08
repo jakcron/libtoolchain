@@ -63,7 +63,7 @@ size_t tc::io::MemoryStream::read(byte_t* buffer, size_t count)
 
 	size_t read_length = StreamUtil::getReadableSize(mData.size(), *mPosition, count);
 
-	memcpy(buffer, mData.buffer() + *mPosition, read_length);
+	memcpy(buffer, mData.get() + *mPosition, read_length);
 
 	*mPosition += int64_t(read_length);
 
@@ -82,7 +82,7 @@ void tc::io::MemoryStream::write(const byte_t* buffer, size_t count)
 		throw tc::ArgumentOutOfRangeException(kClassName+"::write()", "count is too large.");
 	}
 
-	memcpy(mData.buffer() + *mPosition, buffer, count);
+	memcpy(mData.get() + *mPosition, buffer, count);
 
 	*mPosition += int64_t(count);
 }
@@ -128,7 +128,7 @@ void tc::io::MemoryStream::setLength(int64_t length)
 	size_t copy_len = std::min<size_t>(data.size(), mData.size());
 
 	// copy from old to new ByteData
-	memcpy(data.buffer(), mData.buffer(), copy_len);
+	memcpy(data.get(), mData.get(), copy_len);
 
 	// re-assign mData (this frees the old mData)
 	mData = data;

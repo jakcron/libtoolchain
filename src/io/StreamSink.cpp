@@ -50,5 +50,5 @@ void tc::io::StreamSink::pushData(const tc::ByteData& data, int64_t offset)
 
 	// canWrite is validated at class creation	
 	mBaseStream->seek(offset, tc::io::SeekOrigin::Begin);
-	mBaseStream->write(data.buffer(), data.size());
+	mBaseStream->write(data.get(), data.size());
 }

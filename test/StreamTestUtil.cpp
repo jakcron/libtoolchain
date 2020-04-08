@@ -74,7 +74,7 @@ void StreamTestUtil::read_TestHelper(tc::io::IStream& stream, int64_t seek_offse
 	stream.seek(seek_offset, seek_origin);
 
 	// read data
-	size_t read_res = stream.read(data.buffer(), read_count);
+	size_t read_res = stream.read(data.get(), read_count);
 
 	// check position
 	int64_t pos_res = stream.position();
@@ -87,7 +87,7 @@ void StreamTestUtil::read_TestHelper(tc::io::IStream& stream, int64_t seek_offse
 	}
 	
 	// validate read data
-	if (expected_data != nullptr && memcmp(data.buffer(), expected_data, exp_read_res) != 0)
+	if (expected_data != nullptr && memcmp(data.get(), expected_data, exp_read_res) != 0)
 	{
 		error_ss << "Stream did not read expected bytes";
 		throw tc::Exception(error_ss.str());
@@ -103,12 +103,12 @@ void StreamTestUtil::read_TestHelper(tc::io::IStream& stream, int64_t seek_offse
 
 void StreamTestUtil::write_TestHelper(tc::io::IStream& stream, int64_t seek_offset, tc::io::SeekOrigin seek_origin, tc::ByteData& data, int64_t exp_pos_res)
 {
-	write_TestHelper(stream, seek_offset, seek_origin, data.buffer(), data.size(), exp_pos_res);
+	write_TestHelper(stream, seek_offset, seek_origin, data.get(), data.size(), exp_pos_res);
 }
 
 void StreamTestUtil::write_TestHelper(tc::io::IStream& stream, int64_t seek_offset, tc::io::SeekOrigin seek_origin, tc::ByteData& data, int64_t exp_pos_res, int64_t exp_length_res)
 {
-	write_TestHelper(stream, seek_offset, seek_origin, data.buffer(), data.size(), exp_pos_res, exp_length_res);
+	write_TestHelper(stream, seek_offset, seek_origin, data.get(), data.size(), exp_pos_res, exp_length_res);
 }
 
 void StreamTestUtil::write_TestHelper(tc::io::IStream& stream, int64_t seek_offset, tc::io::SeekOrigin seek_origin, const byte_t* data, size_t data_size, int64_t exp_pos_res)

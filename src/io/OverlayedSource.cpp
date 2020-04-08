@@ -113,7 +113,7 @@ tc::ByteData tc::io::OverlayedSource::pullData(int64_t offset, size_t count)
 		
 		// copy into out buffer
 		int64_t overlay_offset_in_out = (overlay_pull_offset + itr->offset) - offset;
-		memcpy(out.buffer() + overlay_offset_in_out, overlay_pull.buffer(), overlay_pull_count);
+		memcpy(out.get() + overlay_offset_in_out, overlay_pull.get(), overlay_pull_count);
 	}
 
 	return out;

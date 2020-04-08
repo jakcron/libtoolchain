@@ -2,8 +2,8 @@
 	 * @file ByteData.h
 	 * @brief Declaration of tc::ByteData
 	 * @author Jack (jakcron)
-	 * @version 0.2
-	 * @date 2020/03/20
+	 * @version 0.3
+	 * @date 2020/04/08
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -25,11 +25,12 @@ public:
 		/**
 		 * @brief Create linear memory block
 		 * 
-		 * @param[in] size Size in bytes of the memory block
+		 * @param[in] size Size in bytes of the memory block.
+		 * @param[in] clear_memory Clear memory after allocation. Default is true.
 		 * 
 		 * @throw tc::OutOfMemoryException Insuffient memory available.
 		 **/
-	ByteData(size_t size);
+	ByteData(size_t size, bool clear_memory = true);
 
 		/**
 		 * @brief Create ByteData from existing memory.
@@ -42,12 +43,12 @@ public:
 	ByteData(const byte_t* data, size_t size);
 		
 		/**
-		 * @brief Get buffer pointer
+		 * @brief Get data pointer
 		 **/
-	byte_t* buffer() const;
+	byte_t* get() const;
 
 		/**
-		 * @brief Get buffer size
+		 * @brief Get data size
 		 **/
 	size_t size() const;
 private:

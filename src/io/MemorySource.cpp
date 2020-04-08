@@ -36,7 +36,7 @@ tc::ByteData tc::io::MemorySource::pullData(int64_t offset, size_t count)
 
 	tc::ByteData out(read_len);
 
-	memcpy(out.buffer(), mData.buffer() + offset, read_len);
+	memcpy(out.get(), mData.get() + offset, read_len);
 
 	return out;
 }

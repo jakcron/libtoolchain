@@ -48,7 +48,7 @@ tc::ByteData tc::io::StreamSource::pullData(int64_t offset, size_t count)
 
 	// read from stream (note this will not be called if mBaseStream is null, as in that case read_count == 0, and this code won't be reached)
 	mBaseStream->seek(offset, tc::io::SeekOrigin::Begin);
-	mBaseStream->read(data.buffer(), data.size());
+	mBaseStream->read(data.get(), data.size());
 
 	// return populated ByteData
 	return data;

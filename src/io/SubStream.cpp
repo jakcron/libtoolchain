@@ -1,5 +1,7 @@
 #include <tc/io/SubStream.h>
+#include <tc/io/StreamUtil.h>
 #include <algorithm>
+
 
 const std::string tc::io::SubStream::kClassName = "tc::io::SubStream";
 
@@ -91,10 +93,12 @@ size_t tc::io::SubStream::read(byte_t* buffer, size_t count)
 		throw tc::ObjectDisposedException(kClassName+"::read()", "Failed to read from stream (stream is disposed)");
 	}
 
+	size_t readable_size = StreamUtil::getReadableSize(mSubStreamLength, *mSubStreamPosition, count);
+
 	// ensure data read won't exceed the boundary of the sub-stream
-	if ((mSubStreamLength - *mSubStreamPosition) < count)
+	if (readable_size < count)
 	{
-		throw tc::ArgumentOutOfRangeException(kClassName+"read()", "count too large, exceeded limit of sub stream");
+		count = readable_size;
 	}
 
 	// assert proper position in file
@@ -116,8 +120,10 @@ void tc::io::SubStream::write(const byte_t* buffer, size_t count)
 		throw tc::ObjectDisposedException(kClassName+"::write()", "Failed to write to stream (stream is disposed)");
 	}
 
+	size_t writable_size = StreamUtil::getWritableSize(mSubStreamLength, *mSubStreamPosition);
+
 	// ensure data read won't exceed the boundary of the sub-stream
-	if ((mSubStreamLength - *mSubStreamPosition) < count)
+	if (writable_size < count)
 	{
 		throw tc::ArgumentOutOfRangeException(kClassName+"write()", "count too large, exceeded limit of sub stream");
 	}
@@ -139,20 +145,7 @@ int64_t tc::io::SubStream::seek(int64_t offset, SeekOrigin origin)
 		throw tc::ObjectDisposedException(kClassName+"::seek()", "Failed to set stream position (stream is disposed)");
 	}
 
-	switch (origin)
-	{
-		case (SeekOrigin::Begin):
-			*mSubStreamPosition = std::min<int64_t>(offset, mSubStreamLength);
-			break;
-		case (SeekOrigin::Current):
-			*mSubStreamPosition = std::min<int64_t>(offset + *mSubStreamPosition, mSubStreamLength);
-			break;
-		case (SeekOrigin::End):
-			*mSubStreamPosition = std::min<int64_t>(offset + mSubStreamLength, mSubStreamLength);
-			break;
-		default:
-			throw tc::ArgumentOutOfRangeException(kClassName+"seek()", "Undefined SeekOrigin value");
-	}
+	*mSubStreamPosition = StreamUtil::getSeekResult(offset, origin, *mSubStreamPosition, mSubStreamLength);
 
 	if (*mSubStreamPosition < 0)
 	{

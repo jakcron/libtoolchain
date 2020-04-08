@@ -54,14 +54,14 @@ void io_StreamSource_TestClass::testCreateConstructor()
 			// create source
 			size_t expected_len = 0x1000;
 			tc::ByteData expected_data(expected_len);
-			memset(expected_data.buffer(), 0x5A, expected_data.size());
+			memset(expected_data.get(), 0x5A, expected_data.size());
 			tc::io::MemoryStream base_stream = tc::io::MemoryStream(expected_data);	
 			tc::io::StreamSource source = tc::io::StreamSource(std::make_shared<tc::io::MemoryStream>(base_stream));
 
 			// test
 			SourceTestUtil::testSourceLength(source, expected_len);
-			SourceTestUtil::pullTestHelper(source, 0, expected_data.size(), expected_data.size(), expected_data.buffer());
-			SourceTestUtil::pullTestHelper(source, 0, expected_data.size()*2, expected_data.size(), expected_data.buffer());
+			SourceTestUtil::pullTestHelper(source, 0, expected_data.size(), expected_data.size(), expected_data.get());
+			SourceTestUtil::pullTestHelper(source, 0, expected_data.size()*2, expected_data.size(), expected_data.get());
 
 			std::cout << "PASS" << std::endl;	
 		}
@@ -154,7 +154,7 @@ void io_StreamSource_TestClass::testNegativeOffset()
 		{
 			size_t expected_len = 0x1000;
 			tc::ByteData expected_data(expected_len);
-			memset(expected_data.buffer(), 0x5A, expected_data.size());
+			memset(expected_data.get(), 0x5A, expected_data.size());
 			tc::io::MemoryStream base_stream = tc::io::MemoryStream(expected_data);	
 			tc::io::StreamSource source = tc::io::StreamSource(std::make_shared<tc::io::MemoryStream>(base_stream));
 
@@ -184,7 +184,7 @@ void io_StreamSource_TestClass::testTooLargeOffset()
 		{
 			size_t expected_len = 0x1000;
 			tc::ByteData expected_data(expected_len);
-			memset(expected_data.buffer(), 0x5A, expected_data.size());
+			memset(expected_data.get(), 0x5A, expected_data.size());
 			tc::io::MemoryStream base_stream = tc::io::MemoryStream(expected_data);	
 			tc::io::StreamSource source = tc::io::StreamSource(std::make_shared<tc::io::MemoryStream>(base_stream));
 
