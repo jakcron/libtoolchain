@@ -54,8 +54,19 @@ public:
 		 **/
 	MemoryStream(const byte_t* data, size_t len);
 
+		/**
+		 * @brief Indicates whether the current stream supports reading.
+		 **/ 
 	bool canRead() const;
+
+		/**
+		 * @brief Indicates whether the current stream supports writing.
+		 **/
 	bool canWrite() const;
+
+		/**
+		 * @brief Indicates whether the current stream supports seeking.
+		 **/
 	bool canSeek() const;
 
 		/**
@@ -71,25 +82,25 @@ public:
 		/**
 		 * @brief Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
 		 * 
-		 * @param[out] buffer An array of bytes. When this method returns, the buffer contains the specified byte array with the values between 0 and (@p count - 1) replaced by the bytes read from the current source.
+		 * @param[out] ptr Pointer to an array of bytes. When this method returns, @p ptr contains the specified byte array with the values between 0 and (@p count - 1) replaced by the bytes read from the current source.
 		 * @param[in] count The maximum number of bytes to be read from the current stream.
 		 * 
-		 * @return The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
+		 * @return The total number of bytes read into @p ptr. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
 		 * 
-		 * @throw tc::ArgumentNullException @p buffer is @a nullptr.
+		 * @throw tc::ArgumentNullException @p ptr is @a nullptr.
 		 **/
-	size_t read(byte_t* buffer, size_t count);
+	size_t read(byte_t* ptr, size_t count);
 
 		/**
 		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
 		 * 
-		 * @param[in] buffer An array of bytes. This method copies count bytes from buffer to the current stream.
+		 * @param[in] ptr Pointer to an array of bytes. This method copies @p count bytes from @p ptr to the current stream.
 		 * @param[in] count The number of bytes to be written to the current stream.
 		 * 
-		 * @throw tc::ArgumentNullException @p buffer is @a nullptr.
+		 * @throw tc::ArgumentNullException @p ptr is @a nullptr.
 		 * @throw tc::ArgumentOutOfRangeException @p count is too large.
 		 **/
-	void write(const byte_t* buffer, size_t count);
+	void write(const byte_t* ptr, size_t count);
 
 		/**
 		 * @brief Sets the position within the current stream.

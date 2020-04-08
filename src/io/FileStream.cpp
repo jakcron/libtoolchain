@@ -73,7 +73,7 @@ int64_t tc::io::FileStream::position()
 	return seek_impl(0, SeekOrigin::Current);
 }
 
-size_t tc::io::FileStream::read(byte_t* buffer, size_t count)
+size_t tc::io::FileStream::read(byte_t* ptr, size_t count)
 {
 	if (mFileHandle == nullptr)
 	{
@@ -85,9 +85,9 @@ size_t tc::io::FileStream::read(byte_t* buffer, size_t count)
 		throw tc::NotSupportedException(kClassName+"::read()", "Stream does not support reading");
 	}
 
-	if (buffer == nullptr)
+	if (ptr == nullptr)
 	{
-		throw tc::ArgumentNullException(kClassName+"::read()", "buffer was null");
+		throw tc::ArgumentNullException(kClassName+"::read()", "ptr was null");
 	}
 
 	if (count < 0)
@@ -95,10 +95,10 @@ size_t tc::io::FileStream::read(byte_t* buffer, size_t count)
 		throw tc::ArgumentOutOfRangeException(kClassName+"::read()", "count was negative");
 	}
 
-	return read_impl(buffer, count);
+	return read_impl(ptr, count);
 }
 
-void tc::io::FileStream::write(const byte_t* buffer, size_t count)
+void tc::io::FileStream::write(const byte_t* ptr, size_t count)
 {
 	if (mFileHandle == nullptr)
 	{
@@ -110,9 +110,9 @@ void tc::io::FileStream::write(const byte_t* buffer, size_t count)
 		throw tc::NotSupportedException(kClassName+"::write()", "Stream does not support writing");
 	}
 
-	if (buffer == nullptr)
+	if (ptr == nullptr)
 	{
-		throw tc::ArgumentNullException(kClassName+"::write()", "buffer was null");
+		throw tc::ArgumentNullException(kClassName+"::write()", "ptr was null");
 	}
 
 	if (count < 0)
@@ -120,7 +120,7 @@ void tc::io::FileStream::write(const byte_t* buffer, size_t count)
 		throw tc::ArgumentOutOfRangeException(kClassName+"::write()", "count was negative");
 	}
 
-	write_impl(buffer, count);
+	write_impl(ptr, count);
 }
 
 int64_t tc::io::FileStream::seek(int64_t offset, SeekOrigin origin)
@@ -307,11 +307,11 @@ int64_t tc::io::FileStream::length_impl()
 	return (int64_t) stream_length.QuadPart;
 }
 
-size_t tc::io::FileStream::read_impl(byte_t* buffer, size_t count)
+size_t tc::io::FileStream::read_impl(byte_t* ptr, size_t count)
 {
 	DWORD bytes_read;
 
-	if (ReadFile(mFileHandle->handle, buffer, (DWORD)count, &bytes_read, NULL) == false)
+	if (ReadFile(mFileHandle->handle, ptr, (DWORD)count, &bytes_read, NULL) == false)
 	{
 		DWORD error = GetLastError();
 		switch (error)
@@ -330,11 +330,11 @@ size_t tc::io::FileStream::read_impl(byte_t* buffer, size_t count)
 	return bytes_read;
 }
 
-void tc::io::FileStream::write_impl(const byte_t* buffer, size_t count)
+void tc::io::FileStream::write_impl(const byte_t* ptr, size_t count)
 {
 	DWORD bytes_written;
 
-	if (WriteFile(mFileHandle->handle, buffer, (DWORD)count, &bytes_written, NULL) == false)
+	if (WriteFile(mFileHandle->handle, ptr, (DWORD)count, &bytes_written, NULL) == false)
 	{
 		DWORD error = GetLastError();
 		switch (error)
@@ -578,9 +578,9 @@ int64_t tc::io::FileStream::length_impl()
 	return length;
 }
 
-size_t tc::io::FileStream::read_impl(byte_t* buffer, size_t count)
+size_t tc::io::FileStream::read_impl(byte_t* ptr, size_t count)
 {
-	int64_t read_len = ::read(mFileHandle->handle, buffer, count);
+	int64_t read_len = ::read(mFileHandle->handle, ptr, count);
 
 	// handle error
 	if (read_len == -1)
@@ -604,9 +604,9 @@ size_t tc::io::FileStream::read_impl(byte_t* buffer, size_t count)
 	return read_len;
 }
 
-void tc::io::FileStream::write_impl(const byte_t* buffer, size_t count)
+void tc::io::FileStream::write_impl(const byte_t* ptr, size_t count)
 {
-	int64_t write_len = ::write(mFileHandle->handle, buffer, count);
+	int64_t write_len = ::write(mFileHandle->handle, ptr, count);
 
 	// handle error
 	if (write_len == -1)

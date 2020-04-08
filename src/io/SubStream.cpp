@@ -86,7 +86,7 @@ int64_t tc::io::SubStream::position()
 	return mBaseStream == nullptr ? 0 : *mSubStreamPosition;
 }
 
-size_t tc::io::SubStream::read(byte_t* buffer, size_t count)
+size_t tc::io::SubStream::read(byte_t* ptr, size_t count)
 {
 	if (mBaseStream == nullptr)
 	{
@@ -105,7 +105,7 @@ size_t tc::io::SubStream::read(byte_t* buffer, size_t count)
 	mBaseStream->seek(mBaseStreamOffset + *mSubStreamPosition, SeekOrigin::Begin);
 
 	// read data
-	size_t read_len = mBaseStream->read(buffer, count);
+	size_t read_len = mBaseStream->read(ptr, count);
 
 	// update sub stream position
 	seek(count, SeekOrigin::Current);
@@ -113,7 +113,7 @@ size_t tc::io::SubStream::read(byte_t* buffer, size_t count)
 	return read_len;
 }
 
-void tc::io::SubStream::write(const byte_t* buffer, size_t count)
+void tc::io::SubStream::write(const byte_t* ptr, size_t count)
 {
 	if (mBaseStream == nullptr)
 	{
@@ -132,7 +132,7 @@ void tc::io::SubStream::write(const byte_t* buffer, size_t count)
 	mBaseStream->seek(mBaseStreamOffset + *mSubStreamPosition, SeekOrigin::Begin);
 
 	// write data
-	mBaseStream->write(buffer, count);
+	mBaseStream->write(ptr, count);
 
 	// update sub stream position
 	seek(count, SeekOrigin::Current);
