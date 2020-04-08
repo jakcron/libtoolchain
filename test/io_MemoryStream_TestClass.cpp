@@ -267,11 +267,11 @@ void io_MemoryStream_TestClass::testSeekBeginPastEnd()
 
 			StreamTestUtil::seek_TestHelper(stream, length+0x10, tc::io::SeekOrigin::Begin, length+0x10, length+0x10);
 
-			std::cout << "FAIL" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
 	catch (const std::exception& e)
@@ -482,13 +482,13 @@ void io_MemoryStream_TestClass::testSeekEndPastEnd()
 			int64_t seek_pos = 1;
 			tc::io::MemoryStream stream(length);
 
-			StreamTestUtil::seek_TestHelper(stream, seek_pos, tc::io::SeekOrigin::End, length+1, length+1);
+			StreamTestUtil::seek_TestHelper(stream, seek_pos, tc::io::SeekOrigin::End, length + seek_pos, length + seek_pos);
 
-			std::cout << "FAIL" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
 	catch (const std::exception& e)
