@@ -1254,6 +1254,10 @@ void io_FileStream_TestClass::test_Constructor_DirectoryPath()
 		{
 			std::cout << "PASS (" << e.error() << ")" << std::endl;
 		}
+		catch (const tc::UnauthorisedAccessException& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
 		catch (const tc::Exception& e)
 		{
 			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;

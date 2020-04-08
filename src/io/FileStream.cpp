@@ -206,7 +206,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 			break;
 		case (FileMode::OpenOrCreate):
 			// create file if does not exist 
-			creation_flag = OPEN_ALWAYS;
+			creation_flag = access == FileAccess::Read ? OPEN_EXISTING : OPEN_ALWAYS;
 			break;
 		case (FileMode::Truncate):
 			// truncate file if file exists
@@ -214,7 +214,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 			break;
 		case (FileMode::Append):
 			// open in append mode
-			creation_flag = OPEN_EXISTING;
+			creation_flag = OPEN_ALWAYS;
 			break;
 		default:
 			throw tc::ArgumentOutOfRangeException(kClassName+"open()", "Illegal value for mode");
@@ -244,7 +244,18 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 		default:
 			throw tc::ArgumentOutOfRangeException(kClassName+"open()", "Illegal value for access");
 	}
+	
+	// validate use of write dependent flags (open existing is the only one that supports no write flag)
+	if (creation_flag != OPEN_EXISTING && !(access_flag & GENERIC_WRITE))
+	{
+		throw tc::ArgumentException(kClassName, "Stream open mode requires write access, but write access was not allowed");
+	}
 
+	// append can only open in write only mode
+	if (mode == tc::io::FileMode::Append && (access_flag & GENERIC_READ | GENERIC_WRITE) != GENERIC_WRITE)
+	{
+		throw tc::ArgumentException(kClassName + "open()", "Stream opened in Append mode can only work with Write access. ReadWrite is not permitted");
+	}
 
 	// open file
 	HANDLE file_handle = CreateFileW((LPCWSTR)unicode_path.c_str(),
@@ -265,6 +276,8 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 				throw tc::io::FileNotFoundException(kClassName+"::open()", std::to_string(error));
 			case (ERROR_FILE_EXISTS):
 				throw tc::io::FileExistsException(kClassName+"::open()", std::to_string(error));
+			case (ERROR_INVALID_PARAMETER):
+				throw tc::ArgumentException(kClassName + "::open()", std::to_string(error));
 			case (ERROR_ACCESS_DENIED):
 				throw tc::UnauthorisedAccessException(kClassName+"::open()", std::to_string(error));
 			default:
@@ -279,7 +292,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	if (mode == FileMode::Append)
 	{
 		seek_impl(0, SeekOrigin::End);
-		mIsAppendRestrictSeekToEndOnly = true;
+		mIsAppendRestrictSeekCall = true;
 	}
 		
 
@@ -320,11 +333,6 @@ size_t tc::io::FileStream::read_impl(byte_t* ptr, size_t count)
 			default:
 				throw tc::io::IOException(kClassName+"::read()", "Failed to read from stream (" + std::to_string(error) + ")");
 		}
-	}
-
-	if (bytes_read != count)
-	{
-		throw tc::io::IOException(kClassName+"::read()", "Failed to read from stream (bytes read was not correct length)");
 	}
 
 	return bytes_read;
@@ -381,9 +389,10 @@ int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
 		DWORD error = GetLastError();
 		switch (error)
 		{
-			// TODO: Directly handle usual errors for custom exceptions
-			default:
-				throw tc::io::IOException(kClassName+"::seek()", "Failed to set stream position (" + std::to_string(error) + ")");
+		case (ERROR_NEGATIVE_SEEK):
+			throw tc::ArgumentOutOfRangeException(kClassName, std::to_string(error));
+		default:
+			throw tc::io::IOException(kClassName+"::seek()", "Failed to set stream position (" + std::to_string(error) + ")");
 		}
 	}
 
@@ -476,11 +485,13 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	}
 
 	// validate use of write dependent flags
-	if ((open_flag & (O_APPEND | O_TRUNC | O_CREAT)) && !(open_flag & (O_WRONLY|O_RDWR))) {
+	if ((open_flag & (O_APPEND | O_TRUNC | O_CREAT)) && !(open_flag & (O_WRONLY|O_RDWR))) 
+	{
 		throw tc::ArgumentException(kClassName+"open()", "Stream open mode requires write access, but write access was not allowed");
 	}
 	// explicitly check APPEND as being write only
-	if ((open_flag & (O_APPEND)) && (open_flag & (O_RDWR))) {
+	if ((open_flag & (O_APPEND)) && (open_flag & (O_RDWR))) 
+	{
 		throw tc::ArgumentException(kClassName+"open()", "Stream opened in Append mode can only work with Write access. ReadWrite is not permitted");
 	}
 
