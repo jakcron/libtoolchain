@@ -66,7 +66,7 @@ void io_SubStream_TestClass::testSeekPos()
 
 			}
 
-			virtual size_t read(byte_t* buffer, size_t count)
+			virtual size_t read(byte_t* ptr, size_t count)
 			{
 				if (this->position() != (0x56 + 0x337))
 				{
@@ -130,11 +130,11 @@ void io_SubStream_TestClass::testRead()
 
 			}
 
-			virtual size_t read(byte_t* buffer, size_t count)
+			virtual size_t read(byte_t* ptr, size_t count)
 			{
-				if (buffer != (byte_t*)0xcafe)
+				if (ptr != (byte_t*)0xcafe)
 				{
-					throw tc::Exception("'buffer' pointer was passed to base IStream object not as expected");
+					throw tc::Exception("'ptr' pointer was passed to base IStream object not as expected");
 				}
 
 				if (count != 0xbabe)
