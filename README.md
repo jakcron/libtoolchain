@@ -10,7 +10,7 @@ Library to ease the development of toolchain applications.
 This library aims to help with the busy work that is common to many toolchain development projects including:
 * Cross platform FileSystem IO with large file support for both 32bit & 64bit targets and unicode path support
 * String transcoding (UTF-8/UTF-16/UTF-32)
-* Usable abstractions/interfaces for generating and processing files and binary data.
+* Extensible abstractions for generating and processing binary data.
 
 Planned features:
 * CLI argv processing
