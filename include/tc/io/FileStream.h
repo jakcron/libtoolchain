@@ -118,6 +118,8 @@ public:
 		 * @param[in] ptr Pointer to an array of bytes. This method copies @p count bytes from @p ptr to the current stream.
 		 * @param[in] count The number of bytes to be written to the current stream.
 		 * 
+		 * @return The total number of bytes written to the stream. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
+		 * 
 		 * @pre A stream must support writing for @ref write to work. 
 		 * @note Use @ref canWrite to determine if this stream supports writing.
 		 * 
@@ -128,7 +130,7 @@ public:
 		 * @throw tc::NotSupportedException The stream does not support writing.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
-	void write(const byte_t* ptr, size_t count);
+	size_t write(const byte_t* ptr, size_t count);
 
 		/**
 		 * @brief Sets the position within the current stream.
@@ -200,7 +202,7 @@ private:
 	void open_impl(const tc::io::Path& path, FileMode mode, FileAccess access);
 	int64_t length_impl();
 	size_t read_impl(byte_t* ptr, size_t count);
-	void write_impl(const byte_t* ptr, size_t count);
+	size_t write_impl(const byte_t* ptr, size_t count);
 	int64_t seek_impl(int64_t offset, SeekOrigin origin);
 	void setLength_impl(int64_t length);
 	void flush_impl();
@@ -208,7 +210,7 @@ private:
 	void open_impl(const tc::io::Path& path, FileMode mode, FileAccess access);
 	int64_t length_impl();
 	size_t read_impl(byte_t* ptr, size_t count);
-	void write_impl(const byte_t* ptr, size_t count);
+	size_t write_impl(const byte_t* ptr, size_t count);
 	int64_t seek_impl(int64_t offset, SeekOrigin origin);
 	void setLength_impl(int64_t length);
 	void flush_impl();

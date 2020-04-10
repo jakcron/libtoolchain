@@ -72,10 +72,12 @@ public:
 		 * @param[in] ptr Pointer to an array of bytes. This method copies @p count bytes from @p ptr to the current stream.
 		 * @param[in] count The number of bytes to be written to the current stream.
 		 * 
+		 * @return The total number of bytes written to the stream. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
+		 * 
 		 * @pre A stream must support writing for @ref write to work. 
 		 * @note Use @ref canWrite to determine if this stream supports writing.
 		 **/
-	virtual void write(const byte_t* ptr, size_t count) = 0;
+	virtual size_t write(const byte_t* ptr, size_t count) = 0;
 	
 		/**
 		 * @brief Sets the position within the current stream.

@@ -97,10 +97,11 @@ public:
 		 * @param[in] ptr Pointer to an array of bytes. This method copies @p count bytes from @p ptr to the current stream.
 		 * @param[in] count The number of bytes to be written to the current stream.
 		 * 
+		 * @return The total number of bytes written to the stream. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
+		 * 
 		 * @throw tc::ArgumentNullException @p ptr is @a nullptr.
-		 * @throw tc::ArgumentOutOfRangeException @p count is too large.
 		 **/
-	void write(const byte_t* ptr, size_t count);
+	size_t write(const byte_t* ptr, size_t count);
 
 		/**
 		 * @brief Sets the position within the current stream.

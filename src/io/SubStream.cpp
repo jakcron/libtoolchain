@@ -1,4 +1,5 @@
 #include <tc/io/SubStream.h>
+#include <tc/io/IOUtil.h>
 #include <tc/io/StreamUtil.h>
 #include <algorithm>
 
@@ -93,49 +94,39 @@ size_t tc::io::SubStream::read(byte_t* ptr, size_t count)
 		throw tc::ObjectDisposedException(kClassName+"::read()", "Failed to read from stream (stream is disposed)");
 	}
 
-	size_t readable_size = StreamUtil::getReadableSize(mSubStreamLength, *mSubStreamPosition, count);
-
-	// ensure data read won't exceed the boundary of the sub-stream
-	if (readable_size < count)
-	{
-		count = readable_size;
-	}
+	count = IOUtil::getReadableCount(mSubStreamLength, *mSubStreamPosition, count);
 
 	// assert proper position in file
 	mBaseStream->seek(mBaseStreamOffset + *mSubStreamPosition, SeekOrigin::Begin);
 
 	// read data
-	size_t read_len = mBaseStream->read(ptr, count);
+	size_t data_read_size = mBaseStream->read(ptr, count);
 
 	// update sub stream position
-	seek(count, SeekOrigin::Current);
+	seek(data_read_size, SeekOrigin::Current);
 
-	return read_len;
+	return data_read_size;
 }
 
-void tc::io::SubStream::write(const byte_t* ptr, size_t count)
+size_t tc::io::SubStream::write(const byte_t* ptr, size_t count)
 {
 	if (mBaseStream == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::write()", "Failed to write to stream (stream is disposed)");
 	}
 
-	size_t writable_size = StreamUtil::getWritableSize(mSubStreamLength, *mSubStreamPosition);
-
-	// ensure data read won't exceed the boundary of the sub-stream
-	if (writable_size < count)
-	{
-		throw tc::ArgumentOutOfRangeException(kClassName+"write()", "count too large, exceeded limit of sub stream");
-	}
+	count = IOUtil::getWritableCount(mSubStreamLength, *mSubStreamPosition, count);
 
 	// assert proper position in file
 	mBaseStream->seek(mBaseStreamOffset + *mSubStreamPosition, SeekOrigin::Begin);
 
 	// write data
-	mBaseStream->write(ptr, count);
+	size_t data_written_size = mBaseStream->write(ptr, count);
 
 	// update sub stream position
-	seek(count, SeekOrigin::Current);
+	seek(data_written_size, SeekOrigin::Current);
+
+	return data_written_size;
 }
 
 int64_t tc::io::SubStream::seek(int64_t offset, SeekOrigin origin)

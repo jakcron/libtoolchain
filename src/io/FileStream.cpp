@@ -98,7 +98,7 @@ size_t tc::io::FileStream::read(byte_t* ptr, size_t count)
 	return read_impl(ptr, count);
 }
 
-void tc::io::FileStream::write(const byte_t* ptr, size_t count)
+size_t tc::io::FileStream::write(const byte_t* ptr, size_t count)
 {
 	if (mFileHandle == nullptr)
 	{
@@ -120,7 +120,7 @@ void tc::io::FileStream::write(const byte_t* ptr, size_t count)
 		throw tc::ArgumentOutOfRangeException(kClassName+"::write()", "count was negative");
 	}
 
-	write_impl(ptr, count);
+	return write_impl(ptr, count);
 }
 
 int64_t tc::io::FileStream::seek(int64_t offset, SeekOrigin origin)
@@ -338,7 +338,7 @@ size_t tc::io::FileStream::read_impl(byte_t* ptr, size_t count)
 	return bytes_read;
 }
 
-void tc::io::FileStream::write_impl(const byte_t* ptr, size_t count)
+size_t tc::io::FileStream::write_impl(const byte_t* ptr, size_t count)
 {
 	DWORD bytes_written;
 
@@ -353,10 +353,7 @@ void tc::io::FileStream::write_impl(const byte_t* ptr, size_t count)
 		}
 	}
 
-	if (bytes_written != count)
-	{
-		throw tc::io::IOException(kClassName+"::write()", "Failed to write to stream (bytes written was not correct length)");
-	}
+	return bytes_written;
 }
 
 int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
@@ -401,7 +398,19 @@ int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
 
 void tc::io::FileStream::setLength_impl(int64_t length)
 {
-	throw tc::NotImplementedException(kClassName, "setLength() not implemented");
+	seek(length, tc::io::SeekOrigin::Begin);
+
+	if (SetEndOfFile(
+		mFileHandle->handle
+	) == false)
+	{
+		DWORD error = GetLastError();
+		switch (error)
+		{
+		default:
+			throw tc::io::IOException(kClassName+"::setLength()", "Failed to set end of file (" + std::to_string(error) + ")");
+		}
+	}
 }
 
 void tc::io::FileStream::flush_impl()
@@ -612,10 +621,10 @@ size_t tc::io::FileStream::read_impl(byte_t* ptr, size_t count)
 		}
 	}
 
-	return read_len;
+	return size_t(read_len);
 }
 
-void tc::io::FileStream::write_impl(const byte_t* ptr, size_t count)
+size_t tc::io::FileStream::write_impl(const byte_t* ptr, size_t count)
 {
 	int64_t write_len = ::write(mFileHandle->handle, ptr, count);
 
@@ -641,6 +650,8 @@ void tc::io::FileStream::write_impl(const byte_t* ptr, size_t count)
 				throw tc::io::IOException(kClassName+"::write()", "Failed to write to stream (" + std::string(strerror(errno)) + ")");
 		}
 	}
+
+	return size_t(write_len);
 }
 
 int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
@@ -689,7 +700,25 @@ int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
 
 void tc::io::FileStream::setLength_impl(int64_t length)
 {
-	throw tc::NotImplementedException(kClassName, "setLength() not implemented");
+#ifdef _LARGEFILE64_SOURCE
+	int trun_res = ftruncate64(mFileHandle->handle, length);
+#else 
+	int trun_res = ftruncate(mFileHandle->handle, length);
+#endif
+
+	if (trun_res == -1)
+	{
+		switch (errno)
+		{
+			case (EINTR):
+			case (EINVAL):
+			case (EFBIG):
+			case (EIO):
+			case (EBADF):
+			default:
+				throw tc::io::IOException(kClassName+"::seek()", "Failed to set stream position (" + std::string(strerror(errno)) + ")");
+		}
+	}
 	
 }
 

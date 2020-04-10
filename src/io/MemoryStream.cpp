@@ -2,6 +2,7 @@
 
 #include <limits>
 #include <tc/io/StreamUtil.h>
+#include <tc/io/IOUtil.h>
 
 const std::string tc::io::MemoryStream::kClassName = "tc::io::MemoryStream";
 
@@ -61,34 +62,35 @@ size_t tc::io::MemoryStream::read(byte_t* ptr, size_t count)
 		throw tc::ArgumentNullException(kClassName+"::read()", "ptr is null.");
 	}
 
-	size_t readable_size = StreamUtil::getReadableSize(mData.size(), *mPosition, count);
-	if (readable_size < count)
-	{
-		count = readable_size;
-	}
+	count = IOUtil::getReadableCount(IOUtil::castSizeToInt64(mData.size()), *mPosition, count);
 
 	memcpy(ptr, mData.get() + *mPosition, count);
 
-	*mPosition += int64_t(count);
+	*mPosition += IOUtil::castSizeToInt64(count);
 
 	return count;
 }
 
-void tc::io::MemoryStream::write(const byte_t* ptr, size_t count) 
+size_t tc::io::MemoryStream::write(const byte_t* ptr, size_t count) 
 {
 	if (ptr == nullptr)
 	{
 		throw tc::ArgumentNullException(kClassName+"::write()", "ptr is null.");
 	}
 
-	if (count > StreamUtil::getWritableSize(mData.size(), *mPosition))
+	// check if the position is past the end of stream, enlarge stream in this case
+	if ((IOUtil::castInt64ToSize(*mPosition) + count) > mData.size())
 	{
-		throw tc::ArgumentOutOfRangeException(kClassName+"::write()", "count is too large.");
+		setLength(*mPosition + IOUtil::castSizeToInt64(count));
 	}
+
+	count = IOUtil::getWritableCount(IOUtil::castSizeToInt64(mData.size()), *mPosition, count);
 
 	memcpy(mData.get() + *mPosition, ptr, count);
 
-	*mPosition += int64_t(count);
+	*mPosition += IOUtil::castSizeToInt64(count);
+
+	return count;
 }
 
 int64_t tc::io::MemoryStream::seek(int64_t offset, SeekOrigin origin) 
@@ -108,7 +110,7 @@ int64_t tc::io::MemoryStream::seek(int64_t offset, SeekOrigin origin)
 void tc::io::MemoryStream::setLength(int64_t length) 
 {
 	// check length isn't too large (int64_t could be larger than size_t)
-	if (length > std::numeric_limits<size_t>::max())
+	if (IOUtil::castInt64ToSize(length) > std::numeric_limits<size_t>::max())
 	{
 		throw tc::ArgumentOutOfRangeException(kClassName+"::setLength()", "Length greater than maxium possible length for MemoryStream");
 	}
@@ -120,7 +122,7 @@ void tc::io::MemoryStream::setLength(int64_t length)
 	}
 
 	// create new ByteData
-	ByteData data(length);
+	ByteData data(IOUtil::castInt64ToSize(length));
 
 	// determine copy length (between old and new ByteData)
 	size_t copy_len = std::min<size_t>(data.size(), mData.size());

@@ -12,6 +12,7 @@
 #include <tc/ArgumentNullException.h>
 #include <tc/ObjectDisposedException.h>
 #include <tc/NotSupportedException.h>
+#include <tc/io/IOException.h>
 
 namespace tc { namespace io {
 
@@ -61,6 +62,7 @@ public:
 		 * @param[in] offset Zero-based offset in sink to push data.
 		 * 
 		 * @throw tc::ObjectDisposedException The base stream was not initialised.
+		 * @throw tc::io::IOException Data was not written to base stream successfully.
 		 **/
 	void pushData(const tc::ByteData& data, int64_t offset);
 private:

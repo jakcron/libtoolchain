@@ -1,5 +1,5 @@
 #include <tc/io/MemorySource.h>
-#include <tc/io/SourceUtil.h>
+#include <tc/io/IOUtil.h>
 
 const std::string tc::io::MemorySource::kClassName = "tc::io::MemorySource";
 
@@ -27,7 +27,7 @@ int64_t tc::io::MemorySource::length()
 
 tc::ByteData tc::io::MemorySource::pullData(int64_t offset, size_t count)
 {
-	size_t read_len = SourceUtil::getReadableSize(this->length(), offset, count);
+	size_t read_len = IOUtil::getReadableCount(this->length(), offset, count);
 
 	// if the read length is zero then return now.
 	if (read_len == 0)

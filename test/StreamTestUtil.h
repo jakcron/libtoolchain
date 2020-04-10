@@ -74,7 +74,7 @@ public:
 			throw tc::NotImplementedException(kClassName, "read() not implemented");
 		}
 
-		virtual void write(const byte_t* ptr, size_t count)
+		virtual size_t write(const byte_t* ptr, size_t count)
 		{
 			throw tc::NotImplementedException(kClassName, "write() not implemented");
 		}

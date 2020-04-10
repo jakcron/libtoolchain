@@ -736,13 +736,13 @@ void io_MemoryStream_TestClass::testWriteSomeDataWritable()
 
 			int64_t stream_expected_position = int64_t(data_len) + stream_offset;
 
-			StreamTestUtil::write_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, data, stream_expected_position);
+			StreamTestUtil::write_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, data, stream_expected_position, stream_expected_position);
 
-			std::cout << "FAIL" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
 	catch (const std::exception& e)
@@ -767,13 +767,13 @@ void io_MemoryStream_TestClass::testWriteNoDataWritable()
 
 			int64_t stream_expected_position = int64_t(data_len) + stream_offset;
 
-			StreamTestUtil::write_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, data, stream_expected_position);
+			StreamTestUtil::write_TestHelper(stream, stream_offset, tc::io::SeekOrigin::Begin, data, stream_expected_position, stream_expected_position);
 
-			std::cout << "FAIL" << std::endl;
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
 	catch (const std::exception& e)

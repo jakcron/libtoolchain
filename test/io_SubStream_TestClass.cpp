@@ -188,17 +188,19 @@ void io_SubStream_TestClass::testWrite()
 
 			}
 
-			virtual void write(const byte_t* data, size_t len)
+			virtual size_t write(const byte_t* data, size_t count)
 			{
 				if (data != (const byte_t*)0xcafe)
 				{
 					throw tc::Exception("'data' pointer was passed to base IStream object not as expected");
 				}
 
-				if (len != 0xbabe)
+				if (count != 0xbabe)
 				{
-					throw tc::Exception("'len' parameter was passed to base IStream object not as expected");
+					throw tc::Exception("'count' parameter was passed to base IStream object not as expected");
 				}
+
+				return count;
 			}
 		};
 

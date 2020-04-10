@@ -48,7 +48,11 @@ void tc::io::StreamSink::pushData(const tc::ByteData& data, int64_t offset)
 		throw tc::ObjectDisposedException(kClassName+"::pushData()", "The base stream was not initialised.");
 	}
 
-	// canWrite is validated at class creation	
 	mBaseStream->seek(offset, tc::io::SeekOrigin::Begin);
-	mBaseStream->write(data.get(), data.size());
+	size_t data_writen_size = mBaseStream->write(data.get(), data.size());
+
+	if (data_writen_size != data.size())
+	{
+		throw tc::io::IOException(kClassName+"::pushData()", "Not all data was written to base stream.");
+	}
 }
