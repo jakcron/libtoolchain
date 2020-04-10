@@ -13,17 +13,17 @@ tc::io::StreamSource::StreamSource(const std::shared_ptr<tc::io::IStream>& strea
 {
 	if (mBaseStream == nullptr)
 	{
-		throw tc::ArgumentNullException(kClassName, "base stream is null");
+		throw tc::ArgumentNullException(kClassName, "The base stream is null.");
 	}
 
 	if (mBaseStream->canRead() == false)
 	{
-		throw tc::NotSupportedException(kClassName, "base stream does not support reading.");
+		throw tc::NotSupportedException(kClassName, "The base stream does not support reading.");
 	}
 
 	if (mBaseStream->canSeek() == false)
 	{
-		throw tc::NotSupportedException(kClassName, "base stream does not support seeking.");
+		throw tc::NotSupportedException(kClassName, "The base stream does not support seeking.");
 	}
 }
 
