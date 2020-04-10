@@ -1,5 +1,5 @@
 #include <tc/io/StreamSource.h>
-#include <tc/io/SourceUtil.h>
+#include <tc/io/IOUtil.h>
 
 const std::string tc::io::StreamSource::kClassName = "tc::io::StreamSource";
 
@@ -35,7 +35,7 @@ int64_t tc::io::StreamSource::length()
 tc::ByteData tc::io::StreamSource::pullData(int64_t offset, size_t count)
 {
 	// get readable count
-	size_t read_count = SourceUtil::getReadableSize(this->length(), offset, count);
+	size_t read_count = IOUtil::getReadableCount(this->length(), offset, count);
 
 	// return if nothing is to be read
 	if (read_count == 0)

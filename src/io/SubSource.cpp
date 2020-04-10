@@ -1,5 +1,5 @@
 #include <tc/io/SubSource.h>
-#include <tc/io/SourceUtil.h>
+#include <tc/io/IOUtil.h>
 
 const std::string tc::io::SubSource::kClassName = "tc::io::SubSource";
 
@@ -57,7 +57,7 @@ int64_t tc::io::SubSource::length()
 
 tc::ByteData tc::io::SubSource::pullData(int64_t offset, size_t count)
 {
-	size_t pull_count = SourceUtil::getReadableSize(length(), offset, count);
+	size_t pull_count = IOUtil::getReadableCount(length(), offset, count);
 
 	if (pull_count == 0)
 		return tc::ByteData();

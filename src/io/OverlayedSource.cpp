@@ -1,5 +1,5 @@
 #include <tc/io/OverlayedSource.h>
-#include <tc/io/SourceUtil.h>
+#include <tc/io/IOUtil.h>
 
 const std::string tc::io::OverlayedSource::kClassName = "tc::io::OverlayedSource";
 
@@ -83,7 +83,7 @@ tc::ByteData tc::io::OverlayedSource::pullData(int64_t offset, size_t count)
 	if (mBaseSource == nullptr)
 		return tc::ByteData();
 
-	size_t read_len = SourceUtil::getReadableSize(this->length(), offset, count);
+	size_t read_len = IOUtil::getReadableCount(this->length(), offset, count);
 
 	// if the read length is zero then return now.
 	if (read_len == 0)
@@ -138,6 +138,6 @@ void tc::io::OverlayedSource::getOverlaySourcePullableRegion(int64_t base_pull_o
 		overlay_pull_offset = overlay_relative_start_offset > 0 ? overlay_relative_start_offset : 0;
 
 		// getReadableSize will cap the amount read if it exceeds the base_length
-		overlay_pull_count = SourceUtil::getReadableSize(overlay_info.length, overlay_pull_offset, size_t(overlay_relative_end_offset - overlay_pull_offset));
+		overlay_pull_count = IOUtil::getReadableCount(overlay_info.length, overlay_pull_offset, size_t(overlay_relative_end_offset - overlay_pull_offset));
 	}
 }

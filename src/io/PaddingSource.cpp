@@ -1,5 +1,5 @@
 #include <tc/io/PaddingSource.h>
-#include <tc/io/SourceUtil.h>
+#include <tc/io/IOUtil.h>
 
 const std::string tc::io::PaddingSource::kClassName = "tc::io::PaddingSource";
 
@@ -26,7 +26,7 @@ int64_t tc::io::PaddingSource::length()
 
 tc::ByteData tc::io::PaddingSource::pullData(int64_t offset, size_t count)
 {
-	tc::ByteData data(SourceUtil::getReadableSize(mSourceLength, offset, count));
+	tc::ByteData data(IOUtil::getReadableCount(mSourceLength, offset, count));
 
 	memset(data.get(), mPaddingByte, data.size());
 	
