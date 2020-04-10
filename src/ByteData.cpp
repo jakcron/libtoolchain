@@ -6,6 +6,17 @@ tc::ByteData::ByteData() :
 	ByteData(0)
 {}
 
+tc::ByteData::ByteData(const tc::ByteData& other) :
+	ByteData(other.mPtr.get(), other.mSize)
+{}
+
+tc::ByteData::ByteData(tc::ByteData&& other) :
+	mSize(other.mSize),
+	mPtr(std::move(other.mPtr))
+{
+	other.mSize = 0;
+}
+
 tc::ByteData::ByteData(size_t size, bool clear_memory)
 {
 	if (size == 0)
@@ -16,7 +27,7 @@ tc::ByteData::ByteData(size_t size, bool clear_memory)
 	{
 		try
 		{
-			mPtr = std::shared_ptr<byte_t>(new byte_t[size]);
+			mPtr = std::unique_ptr<byte_t>(new byte_t[size]);
 		} 
 		catch (std::bad_alloc) 
 		{
@@ -41,6 +52,21 @@ tc::ByteData::ByteData(const byte_t* data, size_t size) :
 	ByteData(size, false)
 {
 	memcpy(mPtr.get(), data, mSize);
+}
+
+tc::ByteData& tc::ByteData::operator=(const ByteData& other)
+{
+	*this = tc::ByteData(other);
+	return *this;
+}
+
+tc::ByteData& tc::ByteData::operator=(ByteData&& other)
+{
+	this->mPtr = std::move(other.mPtr);
+	this->mSize = other.mSize;
+	other.mSize = 0;
+	
+	return *this;
 }
 
 byte_t* tc::ByteData::get() const

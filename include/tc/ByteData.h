@@ -22,6 +22,12 @@ public:
 		/// Create empty ByteData
 	ByteData();
 
+		/// Copy constructor
+	ByteData(const ByteData& other);
+
+		/// Move constructor
+	ByteData(ByteData&& other);
+
 		/**
 		 * @brief Create linear memory block
 		 * 
@@ -43,6 +49,16 @@ public:
 	ByteData(const byte_t* data, size_t size);
 		
 		/**
+		 * @brief Copy assignment operator (deep copy)
+		 **/
+	ByteData& operator=(const ByteData& other);
+
+		/**
+		 * @brief Move assignment
+		 **/
+	ByteData& operator=(ByteData&& other);
+
+		/**
 		 * @brief Get data pointer
 		 **/
 	byte_t* get() const;
@@ -55,7 +71,7 @@ private:
 	static const std::string kClassName;
 
 	size_t mSize;
-	std::shared_ptr<byte_t> mPtr;
+	std::unique_ptr<byte_t> mPtr;
 }; 
 
 } // namespace tc

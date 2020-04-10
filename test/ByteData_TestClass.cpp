@@ -251,9 +251,9 @@ void ByteData_TestClass::test_ImplicitCopy_CopyInSameScope()
 				throw tc::Exception("data2 after being constructed by copy, did not have the same size");
 			}
 
-			if (data.get() != data2.get())
+			if (data.get() == data2.get())
 			{
-				throw tc::Exception("data2 after being constructed by copy, did not have the same pointer");
+				throw tc::Exception("data2 after being constructed by copy, had the same pointer");
 			}
 
 			tc::ByteData data3 = data;
@@ -263,9 +263,9 @@ void ByteData_TestClass::test_ImplicitCopy_CopyInSameScope()
 				throw tc::Exception("data3 after being constructed by copy assignment, did not have the same size");
 			}
 
-			if (data.get() != data3.get())
+			if (data.get() == data3.get())
 			{
-				throw tc::Exception("data3 after being constructed by copy assignment, did not have the same pointer");
+				throw tc::Exception("data3 after being constructed by copy assignment, had the same pointer");
 			}
 
 			std::cout << "PASS" << std::endl;
@@ -305,9 +305,9 @@ void ByteData_TestClass::test_ImplicitCopy_CopyOntoInitiallisedByteData()
 				throw tc::Exception("data2 after being assigned by copy, did not have the same size");
 			}
 
-			if (data.get() != data2.get())
+			if (data.get() == data2.get())
 			{
-				throw tc::Exception("data2 after being assigned by copy, did not have the same pointer");
+				throw tc::Exception("data2 after being assigned by copy, had the same pointer");
 			}
 
 			std::cout << "PASS" << std::endl;
