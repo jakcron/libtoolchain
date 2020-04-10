@@ -12,7 +12,7 @@ namespace tc { namespace io {
 
 	/**
 	 * @class MemorySource
-	 * @brief A block of run-time memory wrapped as an ISource object. 
+	 * @brief A block of run-time memory wrapped as an ISource object.
 	 **/
 class MemorySource : public tc::io::ISource
 {
