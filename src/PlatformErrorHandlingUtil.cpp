@@ -1,4 +1,5 @@
 #include <tc/PlatformErrorHandlingUtil.h>
+#include <algorithm>
 
 #ifdef _WIN32
 std::string tc::PlatformErrorHandlingUtil::GetLastErrorString(DWORD error)
@@ -22,6 +23,10 @@ std::string tc::PlatformErrorHandlingUtil::GetLastErrorString(DWORD error)
 			std::string result(lpMsgStr, lpMsgStr+bufLen);
 			
 			LocalFree(lpMsgBuf);
+
+			// remove CR+LF from string
+			result.erase(std::remove(result.begin(), result.end(), '\n'), result.end());
+			result.erase(std::remove(result.begin(), result.end(), '\r'), result.end());
 
 			return result;
 		}
