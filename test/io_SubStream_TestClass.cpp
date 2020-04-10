@@ -70,7 +70,7 @@ void io_SubStream_TestClass::testSeekPos()
 			{
 				if (this->position() != (0x56 + 0x337))
 				{
-					throw tc::Exception("base stream position was not as expected");
+					throw tc::Exception("The base stream position was not as expected.");
 				}
 
 				return count;
