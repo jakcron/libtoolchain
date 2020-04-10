@@ -142,7 +142,7 @@ private:
 	static const std::string kClassName;
 
 	tc::ByteData mData;
-	std::shared_ptr<int64_t> mPosition;
+	int64_t mPosition;
 };
 
 }} // namespace tc::io

@@ -12,21 +12,21 @@ tc::io::MemoryStream::MemoryStream() :
 
 tc::io::MemoryStream::MemoryStream(size_t length) :
 	mData(),
-	mPosition(std::make_shared<int64_t>(0))
+	mPosition(0)
 {
 	setLength(length);
 }
 
 tc::io::MemoryStream::MemoryStream(const tc::ByteData& byte_data) :
 	mData(byte_data),
-	mPosition(std::make_shared<int64_t>(0))
+	mPosition(0)
 {
 
 }
 
 tc::io::MemoryStream::MemoryStream(const byte_t* data, size_t len) :
 	mData(data, len),
-	mPosition(std::make_shared<int64_t>(0))
+	mPosition(0)
 {
 }
 
@@ -52,7 +52,7 @@ int64_t tc::io::MemoryStream::length()
 
 int64_t tc::io::MemoryStream::position() 
 {
-	return *mPosition;
+	return mPosition;
 }
 
 size_t tc::io::MemoryStream::read(byte_t* ptr, size_t count) 
@@ -62,11 +62,11 @@ size_t tc::io::MemoryStream::read(byte_t* ptr, size_t count)
 		throw tc::ArgumentNullException(kClassName+"::read()", "ptr is null.");
 	}
 
-	count = IOUtil::getReadableCount(IOUtil::castSizeToInt64(mData.size()), *mPosition, count);
+	count = IOUtil::getReadableCount(IOUtil::castSizeToInt64(mData.size()), mPosition, count);
 
-	memcpy(ptr, mData.get() + *mPosition, count);
+	memcpy(ptr, mData.get() + mPosition, count);
 
-	*mPosition += IOUtil::castSizeToInt64(count);
+	mPosition += IOUtil::castSizeToInt64(count);
 
 	return count;
 }
@@ -79,32 +79,32 @@ size_t tc::io::MemoryStream::write(const byte_t* ptr, size_t count)
 	}
 
 	// check if the position is past the end of stream, enlarge stream in this case
-	if ((IOUtil::castInt64ToSize(*mPosition) + count) > mData.size())
+	if ((IOUtil::castInt64ToSize(mPosition) + count) > mData.size())
 	{
-		setLength(*mPosition + IOUtil::castSizeToInt64(count));
+		setLength(mPosition + IOUtil::castSizeToInt64(count));
 	}
 
-	count = IOUtil::getWritableCount(IOUtil::castSizeToInt64(mData.size()), *mPosition, count);
+	count = IOUtil::getWritableCount(IOUtil::castSizeToInt64(mData.size()), mPosition, count);
 
-	memcpy(mData.get() + *mPosition, ptr, count);
+	memcpy(mData.get() + mPosition, ptr, count);
 
-	*mPosition += IOUtil::castSizeToInt64(count);
+	mPosition += IOUtil::castSizeToInt64(count);
 
 	return count;
 }
 
 int64_t tc::io::MemoryStream::seek(int64_t offset, SeekOrigin origin) 
 {
-	int64_t new_pos = StreamUtil::getSeekResult(offset, origin, *mPosition, (int64_t)mData.size());
+	int64_t new_pos = StreamUtil::getSeekResult(offset, origin, mPosition, (int64_t)mData.size());
 
 	if (new_pos < 0)
 	{
 		throw tc::ArgumentOutOfRangeException(kClassName+"::seek()", "New position is negative.");
 	}
 
-	*mPosition = new_pos;
+	mPosition = new_pos;
 
-	return *mPosition;
+	return mPosition;
 }
 
 void tc::io::MemoryStream::setLength(int64_t length) 
@@ -134,7 +134,7 @@ void tc::io::MemoryStream::setLength(int64_t length)
 	mData = data;
 
 	// reduce position if shrunk
-	*mPosition = std::min<int64_t>(*mPosition, int64_t(mData.size()));
+	mPosition = std::min<int64_t>(mPosition, int64_t(mData.size()));
 }
 
 void tc::io::MemoryStream::flush() 
