@@ -38,7 +38,7 @@ public:
 	static size_t getAvailableSize(int64_t data_length, int64_t data_offset);
 
 		/**
-		 * @brief Get size of writeable data for an IO class, given the data length, desired write offset and count.
+		 * @brief Get size of writeable data for an IO class, given the data length, desired read offset and count.
 		 * 
 		 * @param[in] data_length Total length of data.
 		 * @param[in] data_offset Byte offset in data to begin reading from.
