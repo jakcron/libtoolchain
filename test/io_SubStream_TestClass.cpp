@@ -79,15 +79,15 @@ void io_SubStream_TestClass::testSeekPos()
 
 		try
 		{
-			uint64_t substream_offset = 0x56;
-			uint64_t substream_size = 0x1000;
+			int64_t substream_offset = 0x56;
+			int64_t substream_size = 0x1000;
 
 			DummyStream stream;
 
 			// get sandbox file
 			tc::io::SubStream substream(std::make_shared<DummyStream>(stream), substream_offset, substream_size);
 
-			uint64_t offset_to_seek = 0x337;
+			int64_t offset_to_seek = 0x337;
 			substream.seek(offset_to_seek, tc::io::SeekOrigin::Begin);
 
 			if (substream.position() != offset_to_seek)
