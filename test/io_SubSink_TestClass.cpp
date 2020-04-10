@@ -56,13 +56,13 @@ void io_SubSink_TestClass::testCreateConstructor()
 			auto data = tc::ByteData(0x100);
 
 			// create base sink
-			auto base_sink = SinkTestUtil::DummySinkTestablePushData();
-			base_sink.setLength(0x10000);
+			auto base_sink = std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>(new SinkTestUtil::DummySinkTestablePushData());
+			base_sink->setLength(0x10000);
 
 			// create sub sink
 			int64_t sub_sink_offset = 0xcafe;
 			int64_t sub_sink_size = 0x1000;
-			auto sub_sink = tc::io::SubSink(std::make_shared<SinkTestUtil::DummySinkTestablePushData>(base_sink), sub_sink_offset, sub_sink_size);
+			auto sub_sink = tc::io::SubSink(base_sink, sub_sink_offset, sub_sink_size);
 
 			// test
 			SinkTestUtil::testSinkLength(sub_sink, sub_sink_size);
@@ -120,13 +120,13 @@ void io_SubSink_TestClass::testCreateWithNegativeSubSinkOffset()
 			auto data = tc::ByteData(0x100);
 
 			// create base sink
-			auto base_sink = SinkTestUtil::DummySinkTestablePushData();
-			base_sink.setLength(0x10000);
+			auto base_sink = std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>(new SinkTestUtil::DummySinkTestablePushData());
+			base_sink->setLength(0x10000);
 
 			// create sub sink
 			int64_t sub_sink_offset = -1;
 			int64_t sub_sink_size = 0x1000;
-			auto sub_sink = tc::io::SubSink(std::make_shared<SinkTestUtil::DummySinkTestablePushData>(base_sink), sub_sink_offset, sub_sink_size);
+			auto sub_sink = tc::io::SubSink(base_sink, sub_sink_offset, sub_sink_size);
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -152,13 +152,13 @@ void io_SubSink_TestClass::testCreateWithNegativeSubSinkLength()
 			auto data = tc::ByteData(0x100);
 
 			// create base sink
-			auto base_sink = SinkTestUtil::DummySinkTestablePushData();
-			base_sink.setLength(0x10000);
+			auto base_sink = std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>(new SinkTestUtil::DummySinkTestablePushData());
+			base_sink->setLength(0x10000);
 
 			// create sub sink
 			int64_t sub_sink_offset = 0x200;
 			int64_t sub_sink_size = -1;
-			auto sub_sink = tc::io::SubSink(std::make_shared<SinkTestUtil::DummySinkTestablePushData>(base_sink), sub_sink_offset, sub_sink_size);
+			auto sub_sink = tc::io::SubSink(base_sink, sub_sink_offset, sub_sink_size);
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -184,13 +184,13 @@ void io_SubSink_TestClass::testCreateWithExcessiveSubSink()
 			auto data = tc::ByteData(0x100);
 
 			// create base sink
-			auto base_sink = SinkTestUtil::DummySinkTestablePushData();
-			base_sink.setLength(0x10000);
+			auto base_sink = std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>(new SinkTestUtil::DummySinkTestablePushData());
+			base_sink->setLength(0x10000);
 
 			// create sub sink
-			int64_t sub_sink_offset = base_sink.length() - 1;
+			int64_t sub_sink_offset = base_sink->length() - 1;
 			int64_t sub_sink_size = 2;
-			auto sub_sink = tc::io::SubSink(std::make_shared<SinkTestUtil::DummySinkTestablePushData>(base_sink), sub_sink_offset, sub_sink_size);
+			auto sub_sink = tc::io::SubSink(base_sink, sub_sink_offset, sub_sink_size);
 
 			std::cout << "FAIL" << std::endl;
 		}
@@ -216,13 +216,13 @@ void io_SubSink_TestClass::testCreateThenSetLength()
 			auto data = tc::ByteData(0x100);
 
 			// create base sink
-			auto base_sink = SinkTestUtil::DummySinkTestablePushData();
-			base_sink.setLength(0x10000);
+			auto base_sink = std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>(new SinkTestUtil::DummySinkTestablePushData());
+			base_sink->setLength(0x10000);
 
 			// create sub sink
 			int64_t sub_sink_offset = 0xcafe;
 			int64_t sub_sink_size = 0x1000;
-			auto sub_sink = tc::io::SubSink(std::make_shared<SinkTestUtil::DummySinkTestablePushData>(base_sink), sub_sink_offset, sub_sink_size);
+			auto sub_sink = tc::io::SubSink(base_sink, sub_sink_offset, sub_sink_size);
 
 			// test
 			int64_t new_length = 0xdeadcafe;
@@ -305,13 +305,13 @@ void io_SubSink_TestClass::testPushDataOutsideOfBaseRange()
 			auto data = tc::ByteData(0x100);
 
 			// create base sink
-			auto base_sink = SinkTestUtil::DummySinkTestablePushData();
-			base_sink.setLength(0x10000);
+			auto base_sink = std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>(new SinkTestUtil::DummySinkTestablePushData());
+			base_sink->setLength(0x10000);
 
 			// create sub sink
 			int64_t sub_sink_offset = 0xcafe;
 			int64_t sub_sink_size = 0x1000;
-			auto sub_sink = tc::io::SubSink(std::make_shared<SinkTestUtil::DummySinkTestablePushData>(base_sink), sub_sink_offset, sub_sink_size);
+			auto sub_sink = tc::io::SubSink(base_sink, sub_sink_offset, sub_sink_size);
 
 			// test
 			SinkTestUtil::testSinkLength(sub_sink, sub_sink_size);
@@ -332,8 +332,8 @@ void io_SubSink_TestClass::testPushDataOutsideOfBaseRange()
 	}
 }
 
-void io_SubSink_TestClass::pushDataTestHelper(tc::io::ISink& sub_sink, SinkTestUtil::DummySinkTestablePushData& base_sink, int64_t sub_base_offset, int64_t sub_push_offset, tc::ByteData& expected_data)
+void io_SubSink_TestClass::pushDataTestHelper(tc::io::ISink& sub_sink, const std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>& base_sink, int64_t sub_base_offset, int64_t sub_push_offset, tc::ByteData& expected_data)
 {
-	base_sink.setExpectedPushDataCfg(expected_data, sub_base_offset + sub_push_offset);
+	base_sink->setExpectedPushDataCfg(expected_data, sub_base_offset + sub_push_offset);
 	sub_sink.pushData(expected_data, sub_push_offset);
 }

@@ -20,5 +20,5 @@ private:
 	void testPushDataOnDisposedBase();
 	void testPushDataOutsideOfBaseRange();
 
-	void pushDataTestHelper(tc::io::ISink& sub_sink, SinkTestUtil::DummySinkTestablePushData& base_sink, int64_t sub_base_offset, int64_t sub_push_offset, tc::ByteData& expected_data);
+	void pushDataTestHelper(tc::io::ISink& sub_sink, const std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>& base_sink, int64_t sub_base_offset, int64_t sub_push_offset, tc::ByteData& expected_data);
 };
