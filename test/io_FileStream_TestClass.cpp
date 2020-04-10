@@ -173,8 +173,6 @@ void io_FileStream_TestClass::test_Constructor_CreateNew_Read_FileNotExist()
 		{
 			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
 		}
-
-		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -356,8 +354,6 @@ void io_FileStream_TestClass::test_Constructor_Create_Read_FileNotExist()
 		{
 			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
 		}
-
-		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -527,8 +523,6 @@ void io_FileStream_TestClass::test_Constructor_Open_Read_FileNotExist()
 		{
 			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
 		}
-
-		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -586,8 +580,6 @@ void io_FileStream_TestClass::test_Constructor_Open_Write_FileNotExist()
 		{
 			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
 		}
-
-		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -645,8 +637,6 @@ void io_FileStream_TestClass::test_Constructor_Open_ReadWrite_FileNotExist()
 		{
 			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
 		}
-
-		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -706,8 +696,6 @@ void io_FileStream_TestClass::test_Constructor_OpenOrCreate_Read_FileNotExist()
 		{
 			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
 		}
-
-		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -881,8 +869,6 @@ void io_FileStream_TestClass::test_Constructor_Truncate_Read_FileNotExist()
 		{
 			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
 		}
-
-		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -940,8 +926,6 @@ void io_FileStream_TestClass::test_Constructor_Truncate_Write_FileNotExist()
 		{
 			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
 		}
-
-		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -999,8 +983,6 @@ void io_FileStream_TestClass::test_Constructor_Truncate_ReadWrite_FileNotExist()
 		{
 			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
 		}
-
-		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -1060,8 +1042,6 @@ void io_FileStream_TestClass::test_Constructor_Append_Read_FileNotExist()
 		{
 			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
 		}
-
-		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -1174,8 +1154,6 @@ void io_FileStream_TestClass::test_Constructor_Append_ReadWrite_FileNotExist()
 		{
 			std::cout << "FAIL (Wrong Exception)(" << e.error() << ")" << std::endl;
 		}
-
-		helper_DeleteFile(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
@@ -1321,8 +1299,6 @@ void io_FileStream_TestClass::test_Seek_EmptyFile()
 		{
 			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
-
-		helper_DeleteDirectory(kAsciiFilePath);
 	}
 	catch (const std::exception& e)
 	{
