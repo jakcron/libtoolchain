@@ -12,17 +12,17 @@ tc::io::StreamSink::StreamSink(const std::shared_ptr<tc::io::IStream>& stream) :
 {
 	if (mBaseStream == nullptr)
 	{
-		throw tc::ArgumentNullException(kClassName, "base stream is null");
+		throw tc::ArgumentNullException(kClassName, "The base stream is null.");
 	}
 
 	if (mBaseStream->canWrite() == false)
 	{
-		throw tc::NotSupportedException(kClassName, "base stream does not support writing");
+		throw tc::NotSupportedException(kClassName, "The base stream does not support writing.");
 	}
 
 	if (mBaseStream->canSeek() == false)
 	{
-		throw tc::NotSupportedException(kClassName, "base stream does not support seeking");
+		throw tc::NotSupportedException(kClassName, "The base stream does not support seeking.");
 	}
 }
 
