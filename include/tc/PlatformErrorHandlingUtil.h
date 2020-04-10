@@ -29,7 +29,7 @@ public:
 		 * 
 		 * @return Error as a localised string.
 		 **/
-	static std::string GetLastErrorString(DWORD error)
+	static std::string GetLastErrorString(DWORD error);
 #else
 		/**
 		 * @brief Create a string from GNU error number.
