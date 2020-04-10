@@ -121,7 +121,7 @@ private:
 	
 	std::shared_ptr<tc::io::IStorage> mBaseStorage;
 	tc::io::Path mBaseStoragePath;
-	std::shared_ptr<tc::io::Path> mSubStoragePath;
+	tc::io::Path mSubStoragePath;
 
 	void subPathToRealPath(const tc::io::Path& substorage_path, tc::io::Path& real_path);
 	void realPathToSubPath(const tc::io::Path& real_path, tc::io::Path& substorage_path);
