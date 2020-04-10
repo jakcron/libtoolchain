@@ -17,7 +17,7 @@
 
 ## Native Win32 - Visual Studio
 ### Requirements
-* [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/) 2015 or 2017
+* [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/) 2015 or 2017 or 2019
 * [Doxygen](http://www.doxygen.nl/download.html#srcbin)
 * [Graphvis](https://graphviz.gitlab.io/_pages/Download/Download_windows.html) (make sure to download the GUI)
 	* Add the location of the Graphvis `bin` directory to `$(PATH)` or create a separate enviroment variable `$(DOT_PATH)` for it.

@@ -4,7 +4,7 @@
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2019/01/15
-	 */
+	 **/
 #pragma once
 #include <cinttypes>
 
@@ -45,7 +45,7 @@ static inline uint16_t __le_uint16(uint16_t a) { return __local_bswap16(a); }
 	/**
 	 * @struct le_uint16_t
 	 * @brief Wrapper that allows accessing a little-endian uint16_t regardless of processor endianness 
-	 */
+	 **/
 struct le_uint16_t {
 public:
 		/// Unwrap value
@@ -59,7 +59,7 @@ private:
 	/**
 	 * @struct be_uint16_t
 	 * @brief Wrapper that allows accessing a big-endian uint16_t regardless of processor endianness 
-	 */
+	 **/
 struct be_uint16_t {
 public:
 		/// Unwrap value
@@ -73,7 +73,7 @@ private:
 	/**
 	 * @struct le_uint32_t
 	 * @brief Wrapper that allows accessing a little-endian uint32_t regardless of processor endianness 
-	 */
+	 **/
 struct le_uint32_t {
 public:
 		/// Unwrap value
@@ -87,7 +87,7 @@ private:
 	/**
 	 * @struct be_uint32_t
 	 * @brief Wrapper that allows accessing a big-endian uint32_t regardless of processor endianness 
-	 */
+	 **/
 struct be_uint32_t {
 public:
 		/// Unwrap value
@@ -101,7 +101,7 @@ private:
 	/**
 	 * @struct le_uint64_t
 	 * @brief Wrapper that allows accessing a little-endian uint64_t regardless of processor endianness 
-	 */
+	 **/
 struct le_uint64_t {
 public:
 		/// Unwrap value
@@ -115,7 +115,7 @@ private:
 	/**
 	 * @struct be_uint64_t
 	 * @brief Wrapper that allows accessing a big-endian uint64_t regardless of processor endianness 
-	 */
+	 **/
 struct be_uint64_t {
 public:
 		/// Unwrap value

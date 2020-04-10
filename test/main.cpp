@@ -1,13 +1,20 @@
-#include "string_transcode_TestClass.h"
+#include "string_TranscodeUtil_TestClass.h"
+#include "ByteData_TestClass.h"
 #include "endian_TestClass.h"
-#include "SharedPtr_TestClass.h"
 #include "Optional_TestClass.h"
-#include "fs_Path_TestClass.h"
-#include "fs_GenericFileObject_TestClass.h"
-#include "fs_GenericFileSystem_TestClass.h"
-#include "fs_LocalFileSystem_TestClass.h"
-#include "fs_PartitionedFileObject_TestClass.h"
-#include "fs_SandboxedFileSystem_TestClass.h"
+#include "io_Path_TestClass.h"
+#include "io_LocalStorage_TestClass.h"
+#include "io_FileStream_TestClass.h"
+#include "io_MemoryStream_TestClass.h"
+#include "io_SubStream_TestClass.h"
+#include "io_SubStorage_TestClass.h"
+#include "io_PaddingSource_TestClass.h"
+#include "io_MemorySource_TestClass.h"
+#include "io_OverlayedSource_TestClass.h"
+#include "io_SubSource_TestClass.h"
+#include "io_SubSink_TestClass.h"
+#include "io_StreamSource_TestClass.h"
+#include "io_StreamSink_TestClass.h"
 
 void runTest(ITestClass* testClass)
 {
@@ -17,14 +24,21 @@ void runTest(ITestClass* testClass)
 
 int main(int argc, char** argv)
 {
-	runTest(new string_transcode_TestClass());
+	runTest(new string_TranscodeUtil_TestClass());
+	runTest(new ByteData_TestClass());
 	runTest(new endian_TestClass());
-	runTest(new SharedPtr_TestClass());
 	runTest(new Optional_TestClass());
-	runTest(new fs_Path_TestClass());
-	runTest(new fs_GenericFileObject_TestClass());
-	runTest(new fs_GenericFileSystem_TestClass());
-	runTest(new fs_LocalFileSystem_TestClass());
-	runTest(new fs_PartitionedFileObject_TestClass());
-	runTest(new fs_SandboxedFileSystem_TestClass());
+	runTest(new io_Path_TestClass());
+	runTest(new io_LocalStorage_TestClass());
+	runTest(new io_FileStream_TestClass());
+	runTest(new io_MemoryStream_TestClass());
+	runTest(new io_SubStream_TestClass());
+	runTest(new io_SubStorage_TestClass());
+	runTest(new io_PaddingSource_TestClass());
+	runTest(new io_MemorySource_TestClass());
+	runTest(new io_OverlayedSource_TestClass());
+	runTest(new io_SubSource_TestClass());
+	runTest(new io_SubSink_TestClass());
+	runTest(new io_StreamSource_TestClass());
+	runTest(new io_StreamSink_TestClass());
 }

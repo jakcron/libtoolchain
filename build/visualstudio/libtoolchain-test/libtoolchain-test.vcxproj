@@ -124,30 +124,52 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\test\endian_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\fs_GenericFileObject_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\fs_GenericFileSystem_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\fs_LocalFileSystem_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\fs_PartitionedFileObject_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\fs_Path_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\fs_SandboxedFileSystem_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\main.cpp" />
+    <ClCompile Include="..\..\..\test\ByteData_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\Optional_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\SharedPtr_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\string_transcode_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\SinkTestUtil.cpp" />
+    <ClCompile Include="..\..\..\test\SourceTestUtil.cpp" />
+    <ClCompile Include="..\..\..\test\StorageTestUtil.cpp" />
+    <ClCompile Include="..\..\..\test\StreamTestUtil.cpp" />
+    <ClCompile Include="..\..\..\test\endian_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_FileStream_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_LocalStorage_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_MemorySource_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_MemoryStream_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_OverlayedSource_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_PaddingSource_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_Path_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_StreamSink_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_StreamSource_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_SubSink_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_SubSource_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_SubStorage_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_SubStream_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\main.cpp" />
+    <ClCompile Include="..\..\..\test\string_TranscodeUtil_TestClass.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\test\endian_TestClass.h" />
-    <ClInclude Include="..\..\..\test\fs_GenericFileObject_TestClass.h" />
-    <ClInclude Include="..\..\..\test\fs_GenericFileSystem_TestClass.h" />
-    <ClInclude Include="..\..\..\test\fs_LocalFileSystem_TestClass.h" />
-    <ClInclude Include="..\..\..\test\fs_PartitionedFileObject_TestClass.h" />
-    <ClInclude Include="..\..\..\test\fs_Path_TestClass.h" />
-    <ClInclude Include="..\..\..\test\fs_SandboxedFileSystem_TestClass.h" />
+    <ClInclude Include="..\..\..\test\ByteData_TestClass.h" />
     <ClInclude Include="..\..\..\test\ITestClass.h" />
     <ClInclude Include="..\..\..\test\Optional_TestClass.h" />
-    <ClInclude Include="..\..\..\test\SharedPtr_TestClass.h" />
-    <ClInclude Include="..\..\..\test\string_transcode_TestClass.h" />
+    <ClInclude Include="..\..\..\test\SinkTestUtil.h" />
+    <ClInclude Include="..\..\..\test\SourceTestUtil.h" />
+    <ClInclude Include="..\..\..\test\StorageTestUtil.h" />
+    <ClInclude Include="..\..\..\test\StreamTestUtil.h" />
+    <ClInclude Include="..\..\..\test\endian_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_FileStream_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_LocalStorage_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_MemorySource_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_MemoryStream_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_OverlayedSource_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_PaddingSource_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_Path_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_StreamSink_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_StreamSource_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_SubSink_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_SubSource_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_SubStorage_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_SubStream_TestClass.h" />
+    <ClInclude Include="..\..\..\test\string_TranscodeUtil_TestClass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
