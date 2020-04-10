@@ -1,6 +1,7 @@
 #include <tc/io/LocalStorage.h>
 #include <tc/io/FileStream.h>
 #include <tc/io/PathUtil.h>
+#include <tc/PlatformErrorHandlingUtil.h>
 #include <tc/Exception.h>
 #include <tc/string.h>
 
@@ -55,7 +56,7 @@ void tc::io::LocalStorage::removeFile(const tc::io::Path& path)
 		switch (error)
 		{
 			default:
-				throw tc::io::IOException(kClassName+"::removeFile()", "Failed to remove file (" + std::to_string(error) + ")");
+				throw tc::io::IOException(kClassName+"::removeFile()", "Failed to remove file (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}	
 #else
@@ -71,18 +72,18 @@ void tc::io::LocalStorage::removeFile(const tc::io::Path& path)
 			case (EROFS): // The named file resides on a read-only file system.
 			case (EPERM): // The named file is a directory and the effective user ID of the process is not the super-user. -OR- The directory containing the file is marked sticky, and neither the containing directory nor the file to be removed are owned by the effective user ID.
 			case (EBUSY): // The entry to be unlinked is the mount point for a mounted file system. -OR- The file named by the path argument cannot be unlinked because it is being used by the system or by another process.
-				throw tc::UnauthorisedAccessException(kClassName+"::removeFile()", std::string(strerror(errno)));
+				throw tc::UnauthorisedAccessException(kClassName+"::removeFile()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENAMETOOLONG): // A component of a pathname exceeds {NAME_MAX} characters, or an entire path name exceeds {PATH_MAX} characters (possibly as a result of expanding a symlink).
-				throw tc::io::PathTooLongException(kClassName+"::removeFile()", std::string(strerror(errno)));
+				throw tc::io::PathTooLongException(kClassName+"::removeFile()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENOENT): // The named file does not exist.
-				throw tc::io::FileNotFoundException(kClassName+"::removeFile()", std::string(strerror(errno)));
+				throw tc::io::FileNotFoundException(kClassName+"::removeFile()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENOTDIR): // A component of the path prefix is not a directory.
-				throw tc::io::DirectoryNotFoundException(kClassName+"::removeFile()", std::string(strerror(errno)));
+				throw tc::io::DirectoryNotFoundException(kClassName+"::removeFile()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EFAULT): // Path points outside the process's allocated address space.
 			case (EIO): // An I/O error occurs while deleting the directory entry or deallocating the inode.
 			case (ELOOP): // Too many symbolic links are encountered in translating the pathname.  This is taken to be indicative of a looping symbolic link.
 			default:
-				throw tc::io::IOException(kClassName+"::removeFile()", "Failed to remove file (" + std::string(strerror(errno)) + ")");
+				throw tc::io::IOException(kClassName+"::removeFile()", "Failed to remove file (" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}	
 #endif
@@ -107,7 +108,7 @@ void tc::io::LocalStorage::createDirectory(const tc::io::Path& path)
 		switch (error)
 		{
 			default:
-				throw tc::io::IOException(kClassName+"::createDirectory()", "Failed to create directory (" + std::to_string(error) + ")");
+				throw tc::io::IOException(kClassName+"::createDirectory()", "Failed to create directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 #else
@@ -121,12 +122,12 @@ void tc::io::LocalStorage::createDirectory(const tc::io::Path& path)
 		{
 			case (EACCES): // Search permission is denied for a component of the path prefix. -OR- Write permission is denied for the parent directory.
 			case (EROFS): // The parent directory resides on a read-only file system.
-				throw tc::UnauthorisedAccessException(kClassName+"::createDirectory()", std::string(strerror(errno)));
+				throw tc::UnauthorisedAccessException(kClassName+"::createDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENOTDIR): // A component of the path prefix is not a directory.
 			case (ENOENT): // A component of the path prefix does not exist or path is an empty string.
-				throw tc::io::DirectoryNotFoundException(kClassName+"::removeFile()", std::string(strerror(errno)));
+				throw tc::io::DirectoryNotFoundException(kClassName+"::removeFile()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENAMETOOLONG): // A component of a pathname exceeded {NAME_MAX} characters, or an entire path name exceeded {PATH_MAX} characters.
-				throw tc::io::PathTooLongException(kClassName+"::removeFile()", std::string(strerror(errno)));
+				throw tc::io::PathTooLongException(kClassName+"::removeFile()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EISDIR): // The named file is the root directory.
 			case (EDQUOT): // The new directory cannot be created because the user's quota of disk blocks on the file system that will contain the directory has been exhausted. -OR- The user's quota of inodes on the file system on which the directory is being created has been exhausted.
 			//case (EEXIST): // The named file exists
@@ -136,7 +137,7 @@ void tc::io::LocalStorage::createDirectory(const tc::io::Path& path)
 			case (EMLINK): // The parent directory already has {LINK_MAX} links.
 			case (ENOSPC): // The new directory cannot be created because there is no space left on the file system that would contain it. -OR- There are no free inodes on the file system on which the directory is being created.
 			default:
-				throw tc::io::IOException(kClassName+"::createDirectory()", "Failed to create directory (" + std::string(strerror(errno)) + ")");
+				throw tc::io::IOException(kClassName+"::createDirectory()", "Failed to create directory (" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 #endif
@@ -157,7 +158,7 @@ void tc::io::LocalStorage::removeDirectory(const tc::io::Path& path)
 		case (ERROR_DIR_NOT_EMPTY):
 		case (ERROR_DIRECTORY):
 		default:
-			throw tc::io::IOException(kClassName+"::removeDirectory()", "Failed to remove directory (" + std::to_string(error) + ")");
+			throw tc::io::IOException(kClassName+"::removeDirectory()", "Failed to remove directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 #else
@@ -173,19 +174,19 @@ void tc::io::LocalStorage::removeDirectory(const tc::io::Path& path)
 			case (EROFS): // The directory entry to be removed resides on a read-only file system.
 			case (EPERM): // The directory containing the directory to be removed is marked sticky, and neither the containing directory nor the directory to be removed are owned by the effective user ID.
 			case (EBUSY): // The directory to be removed is the mount point for a mounted file system.
-				throw tc::UnauthorisedAccessException(kClassName+"::removeDirectory()", std::string(strerror(errno)));
+				throw tc::UnauthorisedAccessException(kClassName+"::removeDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENAMETOOLONG):
-				throw tc::io::PathTooLongException(kClassName+"::removeDirectory()", std::string(strerror(errno)));
+				throw tc::io::PathTooLongException(kClassName+"::removeDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENOENT): // The named directory does not exist.
 			case (ENOTDIR): // A component of the path prefix is not a directory.
-				throw tc::io::DirectoryNotFoundException(kClassName+"::removeDirectory()", std::string(strerror(errno)));
+				throw tc::io::DirectoryNotFoundException(kClassName+"::removeDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENOTEMPTY): // The named directory contains files other than `.' and `..' in it.
-				throw tc::io::DirectoryNotEmptyException(kClassName+"::removeDirectory()", std::string(strerror(errno)));
+				throw tc::io::DirectoryNotEmptyException(kClassName+"::removeDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EFAULT): // Path points outside the process's allocated address space.
 			case (EIO): // An I/O error occurred while reading from or writing to the file system.
 			case (ELOOP): // Too many symbolic links are encountered in translating the pathname.  This is taken to be indicative of a looping symbolic link.
 			default:
-				throw tc::io::IOException(kClassName+"::removeDirectory()", "Failed to remove directory (" + std::string(strerror(errno)) + ")");
+				throw tc::io::IOException(kClassName+"::removeDirectory()", "Failed to remove directory (" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}	
 #endif
@@ -203,7 +204,7 @@ void tc::io::LocalStorage::getWorkingDirectory(tc::io::Path& path)
 		switch (error)
 		{
 			default:
-				throw tc::io::IOException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (" + std::to_string(error) + ")");
+				throw tc::io::IOException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 
@@ -218,13 +219,13 @@ void tc::io::LocalStorage::getWorkingDirectory(tc::io::Path& path)
 		switch (errno) 
 		{
 			case (EACCES): // Read or search permission was denied for a component of the pathname.  This is only checked in limited cases, depending on implementation details.
-				throw tc::UnauthorisedAccessException(kClassName+"::getWorkingDirectory()", std::string(strerror(errno)));
+				throw tc::UnauthorisedAccessException(kClassName+"::getWorkingDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EINVAL): // The size argument is zero.
 			case (ENOENT): // A component of the pathname no longer exists.
 			case (ENOMEM): // Insufficient memory is available.
 			case (ERANGE): // The size argument is greater than zero but smaller than the length of the pathname plus 1.
 			default:
-				throw tc::io::IOException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (getcwd) (" + std::string(strerror(errno)) + ")");
+				throw tc::io::IOException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (getcwd) (" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 
@@ -246,7 +247,7 @@ void tc::io::LocalStorage::setWorkingDirectory(const tc::io::Path& path)
 		switch (error)
 		{
 			default:
-				throw tc::io::IOException(kClassName+"::setWorkingDirectory()", "Failed to set current working directory (" + std::to_string(error) + ")");
+				throw tc::io::IOException(kClassName+"::setWorkingDirectory()", "Failed to set current working directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 #else
@@ -260,17 +261,17 @@ void tc::io::LocalStorage::setWorkingDirectory(const tc::io::Path& path)
 		switch (errno) 
 		{
 			case (EACCES): // Search permission is denied for any component of the path name.
-				throw tc::UnauthorisedAccessException(kClassName+"::setWorkingDirectory()", std::string(strerror(errno)));
+				throw tc::UnauthorisedAccessException(kClassName+"::setWorkingDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENAMETOOLONG): // A component of a pathname exceeded {NAME_MAX} characters, or an entire path name exceeded {PATH_MAX} characters.
-				throw tc::io::PathTooLongException(kClassName+"::setWorkingDirectory()", std::string(strerror(errno)));
+				throw tc::io::PathTooLongException(kClassName+"::setWorkingDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENOENT): // The named directory does not exist.
 			case (ENOTDIR): // A component of the path prefix is not a directory.
-				throw tc::io::DirectoryNotFoundException(kClassName+"::setWorkingDirectory()", std::string(strerror(errno)));
+				throw tc::io::DirectoryNotFoundException(kClassName+"::setWorkingDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EFAULT): // Path points outside the process's allocated address space.
 			case (EIO): // An I/O error occurred while reading from or writing to the file system.
 			case (ELOOP): //  Too many symbolic links were encountered in translating the pathname.  This is taken to be indicative of a looping symbolic link.
 			default:
-				throw tc::io::IOException(kClassName+"::setWorkingDirectory()", "Failed to get directory info (chdir)(" + std::string(strerror(errno)) + ")");
+				throw tc::io::IOException(kClassName+"::setWorkingDirectory()", "Failed to get directory info (chdir)(" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 #endif
@@ -298,7 +299,7 @@ void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirect
 		switch (error)
 		{
 			default:
-				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to open directory (" + std::to_string(error) + ")");
+				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to open directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 
@@ -325,7 +326,7 @@ void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirect
 		switch (error)
 		{
 			default:
-				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to open directory (" + std::to_string(error) + ")");
+				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to open directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 
@@ -358,16 +359,16 @@ void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirect
 		switch (errno) 
 		{
 			case (EACCES): // Permission denied.
-				throw tc::UnauthorisedAccessException(kClassName+"::getDirectoryListing()", std::string(strerror(errno)));
+				throw tc::UnauthorisedAccessException(kClassName+"::getDirectoryListing()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENOTDIR): // A component of the path prefix is not a directory. // name is not a directory.
 			case (ENOENT): // Directory does not exist, or name is an empty string.
-				throw tc::io::DirectoryNotFoundException(kClassName+"::getDirectoryListing()", std::string(strerror(errno)));
+				throw tc::io::DirectoryNotFoundException(kClassName+"::getDirectoryListing()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EBADF): // fd is not a valid file descriptor open for reading.
 			case (EMFILE):
 			case (ENFILE):
 			case (ENOMEM):
 			default:
-				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to get directory info (opendir)(" + std::string(strerror(errno)) + ")");
+				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to get directory info (opendir)(" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 
@@ -397,7 +398,7 @@ void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirect
 			case (EBADF): // fd is not a valid file descriptor open for reading.
 			case (EIO): // An I/O error occurred while reading from or writing to the file system.
 			default:
-				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to get directory info (readdir)(" + std::string(strerror(errno)) + ")");
+				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to get directory info (readdir)(" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 	
