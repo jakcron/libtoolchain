@@ -1,5 +1,6 @@
 #include <tc/io/FileStream.h>
 #include <tc/io/PathUtil.h>
+#include <tc/PlatformErrorHandlingUtil.h>
 
 #ifdef _WIN32
 #include <direct.h>
@@ -248,13 +249,13 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	// validate use of write dependent flags (open existing is the only one that supports no write flag)
 	if (creation_flag != OPEN_EXISTING && !(access_flag & GENERIC_WRITE))
 	{
-		throw tc::ArgumentException(kClassName, "Stream open mode requires write access, but write access was not allowed");
+		throw tc::ArgumentException(kClassName + "::open()", "Stream open mode requires write access, but write access was not allowed");
 	}
 
 	// append can only open in write only mode
 	if (mode == tc::io::FileMode::Append && (access_flag & GENERIC_READ | GENERIC_WRITE) != GENERIC_WRITE)
 	{
-		throw tc::ArgumentException(kClassName + "open()", "Stream opened in Append mode can only work with Write access. ReadWrite is not permitted");
+		throw tc::ArgumentException(kClassName + "::open()", "Stream opened in Append mode can only work with Write access. ReadWrite is not permitted");
 	}
 
 	// open file
@@ -273,15 +274,15 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 		switch (error)
 		{
 			case (ERROR_FILE_NOT_FOUND):
-				throw tc::io::FileNotFoundException(kClassName+"::open()", std::to_string(error));
+				throw tc::io::FileNotFoundException(kClassName+"::open()", PlatformErrorHandlingUtil::GetLastErrorString(error));
 			case (ERROR_FILE_EXISTS):
-				throw tc::io::FileExistsException(kClassName+"::open()", std::to_string(error));
+				throw tc::io::FileExistsException(kClassName+"::open()", PlatformErrorHandlingUtil::GetLastErrorString(error));
 			case (ERROR_INVALID_PARAMETER):
-				throw tc::ArgumentException(kClassName + "::open()", std::to_string(error));
+				throw tc::ArgumentException(kClassName + "::open()", PlatformErrorHandlingUtil::GetLastErrorString(error));
 			case (ERROR_ACCESS_DENIED):
-				throw tc::UnauthorisedAccessException(kClassName+"::open()", std::to_string(error));
+				throw tc::UnauthorisedAccessException(kClassName+"::open()", PlatformErrorHandlingUtil::GetLastErrorString(error));
 			default:
-				throw tc::io::IOException(kClassName+"::open()", "Failed to open file stream (" + std::to_string(error) + ")");
+				throw tc::io::IOException(kClassName+"::open()", "Failed to open file stream (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 
@@ -313,7 +314,7 @@ int64_t tc::io::FileStream::length_impl()
 		{
 			// TODO: Directly handle usual errors for custom exceptions
 			default:
-				throw tc::io::IOException(kClassName+"::length()", "Failed to get stream length (" + std::to_string(error) + ")");
+				throw tc::io::IOException(kClassName+"::length()", "Failed to get stream length (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 	
@@ -331,7 +332,7 @@ size_t tc::io::FileStream::read_impl(byte_t* ptr, size_t count)
 		{
 			// TODO: Directly handle usual errors for custom exceptions
 			default:
-				throw tc::io::IOException(kClassName+"::read()", "Failed to read from stream (" + std::to_string(error) + ")");
+				throw tc::io::IOException(kClassName+"::read()", "Failed to read from stream (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 
@@ -349,7 +350,7 @@ size_t tc::io::FileStream::write_impl(const byte_t* ptr, size_t count)
 		{
 			// TODO: Directly handle usual errors for custom exceptions
 			default:
-				throw tc::io::IOException(kClassName+"::write()", "Failed to write to stream (" + std::to_string(error) + ")");
+				throw tc::io::IOException(kClassName+"::write()", "Failed to write to stream (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 
@@ -387,9 +388,9 @@ int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
 		switch (error)
 		{
 		case (ERROR_NEGATIVE_SEEK):
-			throw tc::ArgumentOutOfRangeException(kClassName, std::to_string(error));
+			throw tc::ArgumentOutOfRangeException(kClassName+"::seek()", PlatformErrorHandlingUtil::GetLastErrorString(error));
 		default:
-			throw tc::io::IOException(kClassName+"::seek()", "Failed to set stream position (" + std::to_string(error) + ")");
+			throw tc::io::IOException(kClassName+"::seek()", "Failed to set stream position (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 
@@ -408,7 +409,7 @@ void tc::io::FileStream::setLength_impl(int64_t length)
 		switch (error)
 		{
 		default:
-			throw tc::io::IOException(kClassName+"::setLength()", "Failed to set end of file (" + std::to_string(error) + ")");
+			throw tc::io::IOException(kClassName+"::setLength()", "Failed to set end of file (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 }
@@ -514,19 +515,19 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 		{
 			case (EACCES):
 			case (EROFS):
-				throw tc::UnauthorisedAccessException(kClassName+"::open()", std::string(strerror(errno)));
+				throw tc::UnauthorisedAccessException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENAMETOOLONG):
-				throw tc::io::PathTooLongException(kClassName+"open()", std::string(strerror(errno)));
+				throw tc::io::PathTooLongException(kClassName+"open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENOENT):
-				throw tc::io::FileNotFoundException(kClassName+"open()", std::string(strerror(errno)));
+				throw tc::io::FileNotFoundException(kClassName+"open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EEXIST):
-				throw tc::io::FileExistsException(kClassName+"open()", std::string(strerror(errno)));
+				throw tc::io::FileExistsException(kClassName+"open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EINVAL):
-				throw tc::ArgumentOutOfRangeException(kClassName+"::open()", std::string(strerror(errno)));			
+				throw tc::ArgumentOutOfRangeException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));			
 			case (EFAULT):
-				throw tc::AccessViolationException(kClassName+"::open()", std::string(strerror(errno)));
+				throw tc::AccessViolationException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EISDIR):
-				throw tc::io::FileNotFoundException(kClassName+"::open()", std::string(strerror(errno)));
+				throw tc::io::FileNotFoundException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EDQUOT):
 			case (EFBIG):
 			case (EINTR):
@@ -541,7 +542,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 			case (ETXTBSY):
 			case (EWOULDBLOCK):
 			default:
-				throw tc::io::IOException(kClassName+"::open()", "Failed to open file stream (" + std::string(strerror(errno)) + ")");
+				throw tc::io::IOException(kClassName+"::open()", "Failed to open file stream (" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 
@@ -552,7 +553,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	struct stat stat_buf;
 	if (fstat(mFileHandle->handle, &stat_buf) == -1)
 	{
-		throw tc::io::IOException(kClassName+"::open()", "Failed to check stream properties using fstat() (" + std::string(strerror(errno)) + ")");
+		throw tc::io::IOException(kClassName+"::open()", "Failed to check stream properties using fstat() (" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 	}
 
 	// if this is a directory throw an exception
@@ -583,7 +584,7 @@ int64_t tc::io::FileStream::length_impl()
 	struct stat stat_buf;
 	if (fstat(mFileHandle->handle, &stat_buf) == -1)
 	{
-		throw tc::io::IOException(kClassName+"::length()", "Failed to check stream properties using fstat() (" + std::string(strerror(errno)) + ")");
+		throw tc::io::IOException(kClassName+"::length()", "Failed to check stream properties using fstat() (" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 	}
 
 	if (S_ISREG(stat_buf.st_mode))
@@ -608,16 +609,16 @@ size_t tc::io::FileStream::read_impl(byte_t* ptr, size_t count)
 		switch (errno) 
 		{	
 			case (EINVAL):
-				throw tc::ArgumentOutOfRangeException(kClassName+"::read()", std::string(strerror(errno)));			
+				throw tc::ArgumentOutOfRangeException(kClassName+"::read()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));			
 			case (EFAULT):
-				throw tc::AccessViolationException(kClassName+"::read()", std::string(strerror(errno)));
+				throw tc::AccessViolationException(kClassName+"::read()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EISDIR):
 			case (EBADF):
 			case (EAGAIN):
 			case (EINTR):
 			case (EIO):
 			default:
-				throw tc::io::IOException(kClassName+"::read()", "Failed to read from stream (" + std::string(strerror(errno)) + ")");
+				throw tc::io::IOException(kClassName+"::read()", "Failed to read from stream (" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 
@@ -634,9 +635,9 @@ size_t tc::io::FileStream::write_impl(const byte_t* ptr, size_t count)
 		switch (errno) 
 		{	
 			case (EINVAL):
-				throw tc::ArgumentOutOfRangeException(kClassName+"::write()", std::string(strerror(errno)));
+				throw tc::ArgumentOutOfRangeException(kClassName+"::write()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EFAULT):
-				throw tc::AccessViolationException(kClassName+"::write()", std::string(strerror(errno)));
+				throw tc::AccessViolationException(kClassName+"::write()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EFBIG):
 			case (EAGAIN):
 			case (EDESTADDRREQ):
@@ -647,7 +648,7 @@ size_t tc::io::FileStream::write_impl(const byte_t* ptr, size_t count)
 			case (EPERM):
 			case (EPIPE):
 			default:
-				throw tc::io::IOException(kClassName+"::write()", "Failed to write to stream (" + std::string(strerror(errno)) + ")");
+				throw tc::io::IOException(kClassName+"::write()", "Failed to write to stream (" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 
@@ -684,14 +685,14 @@ int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
 		switch (errno) 
 		{
 			case (EINVAL):
-				throw tc::ArgumentOutOfRangeException(kClassName+"::seek()",  std::string(strerror(errno)));			
+				throw tc::ArgumentOutOfRangeException(kClassName+"::seek()",  PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));			
 			case (EOVERFLOW):
-				throw tc::OverflowException(kClassName+"::seek()",  std::string(strerror(errno)));
+				throw tc::OverflowException(kClassName+"::seek()",  PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EBADF):
 			case (ESPIPE):
 			case (ENXIO):
 			default:
-				throw tc::io::IOException(kClassName+"::seek()", "Failed to set stream position (" + std::string(strerror(errno)) + ")");
+				throw tc::io::IOException(kClassName+"::seek()", "Failed to set stream position (" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 
@@ -716,7 +717,7 @@ void tc::io::FileStream::setLength_impl(int64_t length)
 			case (EIO):
 			case (EBADF):
 			default:
-				throw tc::io::IOException(kClassName+"::seek()", "Failed to set stream position (" + std::string(strerror(errno)) + ")");
+				throw tc::io::IOException(kClassName+"::seek()", "Failed to set stream position (" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 	
