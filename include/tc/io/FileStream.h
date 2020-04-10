@@ -44,6 +44,11 @@ public:
 		 **/
 	FileStream();
 
+		/**
+		 * @brief Move constructor
+		 **/
+	FileStream(FileStream&& other);
+
 		/** 
 		 * @brief Open file stream
 		 * 
@@ -62,6 +67,11 @@ public:
 		 * @throw tc::ArgumentOutOfRangeException @p access contains an invalid value.
 		 **/
 	FileStream(const tc::io::Path& path, FileMode mode, FileAccess access);
+
+		/**
+		 * @brief Move assignment
+		 **/
+	FileStream& operator=(FileStream&& other);
 
 		/**
 		 * @brief Indicates whether the current stream supports reading.
@@ -179,16 +189,26 @@ public:
 private:
 	static const std::string kClassName;
 
+	// delete copy constructor
+	FileStream(const FileStream&);
+
+	// delete copy assignment
+	FileStream& operator=(const FileStream&);
+
 	struct FileHandle
 	{
 #ifdef _WIN32
 		HANDLE handle;
-		FileHandle(HANDLE h) :  handle(h) {}
+		FileHandle(HANDLE h) : handle(h) {}
 #else
 		int handle;
-		FileHandle(int h) :  handle(h) {}
+		FileHandle(int h) : handle(h) {}
 #endif
-		~FileHandle();		
+		FileHandle() : handle(0) {}
+		FileHandle(FileHandle&& other) {handle = other.handle; other.handle = 0;}
+		~FileHandle();
+	private:
+		FileHandle(const FileHandle& other);
 	};
 
 
@@ -196,7 +216,7 @@ private:
 	bool mCanWrite;
 	bool mCanSeek;
 	bool mIsAppendRestrictSeekCall;
-	std::shared_ptr<tc::io::FileStream::FileHandle> mFileHandle;
+	std::unique_ptr<tc::io::FileStream::FileHandle> mFileHandle;
 
 #ifdef _WIN32
 	void open_impl(const tc::io::Path& path, FileMode mode, FileAccess access);

@@ -31,6 +31,12 @@ tc::io::FileStream::FileStream() :
 	mFileHandle()
 {}
 
+tc::io::FileStream::FileStream(FileStream&& other) :
+	FileStream()
+{
+	*this = std::move(other);
+}
+
 tc::io::FileStream::FileStream(const tc::io::Path& path, FileMode mode, FileAccess access) :
 	FileStream()
 {
@@ -38,6 +44,18 @@ tc::io::FileStream::FileStream(const tc::io::Path& path, FileMode mode, FileAcce
 	dispose();
 
 	open_impl(path, mode, access);
+}
+
+tc::io::FileStream& tc::io::FileStream::operator=(tc::io::FileStream&& other)
+{
+	mCanRead = other.mCanRead;
+	mCanWrite = other.mCanWrite;
+	mCanSeek = other.mCanSeek;
+	mIsAppendRestrictSeekCall = other.mIsAppendRestrictSeekCall;
+	mFileHandle = std::move(other.mFileHandle);
+	other.dispose();
+
+	return *this;
 }
 
 bool tc::io::FileStream::canRead() const
@@ -287,7 +305,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	}
 
 	// store file handle
-	mFileHandle = std::shared_ptr<tc::io::FileStream::FileHandle>(new tc::io::FileStream::FileHandle(file_handle));
+	mFileHandle = std::unique_ptr<tc::io::FileStream::FileHandle>(new tc::io::FileStream::FileHandle(file_handle));
 	
 	// seek to end of file if in append mode
 	if (mode == FileMode::Append)
@@ -547,7 +565,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	}
 
 	// store file handle
-	mFileHandle = std::shared_ptr<tc::io::FileStream::FileHandle>(new tc::io::FileStream::FileHandle(file_handle));
+	mFileHandle = std::unique_ptr<tc::io::FileStream::FileHandle>(new tc::io::FileStream::FileHandle(file_handle));
 
 	// get stat info on file
 	struct stat stat_buf;
