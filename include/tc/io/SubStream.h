@@ -149,7 +149,7 @@ private:
 	int64_t mBaseStreamOffset;
 
 	int64_t mSubStreamLength;
-	std::shared_ptr<int64_t> mSubStreamPosition;
+	int64_t mSubStreamPosition;
 };
 
 }} // namespace tc::io
