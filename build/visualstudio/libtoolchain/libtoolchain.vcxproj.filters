@@ -7,7 +7,13 @@
     <ClCompile Include="..\..\..\src\Exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\PlatformErrorHandlingUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\io\FileStream.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\io\IOUtil.cpp">
       <Filter>Source Files\io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\io\LocalStorage.cpp">
@@ -29,12 +35,6 @@
       <Filter>Source Files\io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\io\PathUtil.cpp">
-      <Filter>Source Files\io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\io\SinkUtil.cpp">
-      <Filter>Source Files\io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\io\SourceUtil.cpp">
       <Filter>Source Files\io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\io\StreamSink.cpp">
@@ -99,6 +99,9 @@
     <ClInclude Include="..\..\..\include\tc\io\IOException.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\IOUtil.h">
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\io\IReadableSink.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
@@ -138,12 +141,6 @@
     <ClInclude Include="..\..\..\include\tc\io\PathUtil.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\io\SinkUtil.h">
-      <Filter>Header Files\tc\io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\io\SourceUtil.h">
-      <Filter>Header Files\tc\io</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\io\StreamSink.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
@@ -166,6 +163,9 @@
       <Filter>Header Files\tc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\Optional.h">
+      <Filter>Header Files\tc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\PlatformErrorHandlingUtil.h">
       <Filter>Header Files\tc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\string\TranscodeUtil.h">
