@@ -1,8 +1,7 @@
 #include <tc/PlatformErrorHandlingUtil.h>
 
 #ifdef _WIN32
-
-std::string PlatformErrorHandlingUtil::GetLastErrorString(DWORD error)
+std::string tc::PlatformErrorHandlingUtil::GetLastErrorString(DWORD error)
 {
 	if (error)
 	{
@@ -29,5 +28,9 @@ std::string PlatformErrorHandlingUtil::GetLastErrorString(DWORD error)
 	}
 	return std::string();
 }
-
+#else
+std::string tc::PlatformErrorHandlingUtil::GetGnuErrorNumString(int errnum)
+{
+	return std::string(strerror(errnum));
+}
 #endif

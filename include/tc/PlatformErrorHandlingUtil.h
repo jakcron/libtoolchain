@@ -6,6 +6,7 @@
 	 * @date 2020/04/09
 	 **/
 #pragma once
+#include <tc/types.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -22,14 +23,24 @@ class PlatformErrorHandlingUtil
 public:
 #ifdef _WIN32
 		/**
-		 * @brief Create a string with last error message
+		 * @brief Create a string with last error message.
 		 * 
 		 * @param[in] error Error code, returned from GetLastError().
 		 * 
-		 * @return Error string localised.
+		 * @return Error as a localised string.
 		 **/
 	static std::string GetLastErrorString(DWORD error)
+#else
+		/**
+		 * @brief Create a string from GNU error number.
+		 * 
+		 * @param[in] errnum Error code, returned from @a errno macro.
+		 * 
+		 * @return Error as a localised string.
+		 **/
+	static std::string GetGnuErrorNumString(int errnum);
 #endif
+
 };
 
 } // namespace tc
