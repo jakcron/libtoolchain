@@ -1,0 +1,4 @@
+<map id="tc::io::OverlayedSource" name="tc::io::OverlayedSource">
+<area shape="rect" id="node1" title="This will replaces regions within a base source with one or more other sources, so as to override tho..." alt="" coords="5,160,163,296"/>
+<area shape="rect" id="node2" href="$classtc_1_1io_1_1_i_source.html" title="An interface defining a byte data source." alt="" coords="33,5,135,112"/>
+</map>

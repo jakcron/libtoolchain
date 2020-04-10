@@ -1,0 +1,18 @@
+<map id="tc/ResourceStatus.h" name="tc/ResourceStatus.h">
+<area shape="rect" id="node1" title="Declaration of tc::ResourceStatus." alt="" coords="752,5,893,32"/>
+<area shape="rect" id="node2" href="$_i_sink_8h.html" title="Declaration of tc::io::ISink." alt="" coords="221,80,312,107"/>
+<area shape="rect" id="node8" href="$_i_source_8h.html" title="Declaration of tc::io::ISource." alt="" coords="769,80,876,107"/>
+<area shape="rect" id="node14" href="$_i_storage_8h.html" title="Declaration of tc::io::IStorage." alt="" coords="1434,80,1545,107"/>
+<area shape="rect" id="node3" href="$_i_readable_sink_8h.html" title="Declaration of tc::io::IReadableSink." alt="" coords="346,155,491,181"/>
+<area shape="rect" id="node4" href="$_stream_sink_8h.html" title="Declaration of tc::io::StreamSink." alt="" coords="5,155,136,181"/>
+<area shape="rect" id="node5" href="$io_8h.html" title="Declaration of the input/output library." alt="" coords="883,229,941,256"/>
+<area shape="rect" id="node7" href="$_sub_sink_8h.html" title="Declaration of tc::io::SubSink." alt="" coords="211,155,322,181"/>
+<area shape="rect" id="node6" href="$tc_8h.html" title="Declaration of the libtoolchain namespace." alt="" coords="890,304,934,331"/>
+<area shape="rect" id="node9" href="$_memory_source_8h.html" title="Declaration of tc::io::MemorySource." alt="" coords="567,155,718,181"/>
+<area shape="rect" id="node10" href="$_overlayed_source_8h.html" title="Declaration of tc::io::OverlayedSource." alt="" coords="743,155,903,181"/>
+<area shape="rect" id="node11" href="$_padding_source_8h.html" title="Declaration of tc::io::PaddingSource." alt="" coords="927,155,1078,181"/>
+<area shape="rect" id="node12" href="$_stream_source_8h.html" title="Declaration of tc::io::StreamSource." alt="" coords="1102,155,1247,181"/>
+<area shape="rect" id="node13" href="$_sub_source_8h.html" title="Declaration of tc::io::SubSource." alt="" coords="1271,155,1398,181"/>
+<area shape="rect" id="node15" href="$_local_storage_8h.html" title="Declaration of tc::io::LocalStorage." alt="" coords="1473,155,1612,181"/>
+<area shape="rect" id="node16" href="$_sub_storage_8h.html" title="Declaration of tc::io::SubStorage." alt="" coords="1636,155,1767,181"/>
+</map>

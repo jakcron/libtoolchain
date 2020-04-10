@@ -1,0 +1,14 @@
+<map id="tc/io/PathUtil.h" name="tc/io/PathUtil.h">
+<area shape="rect" id="node1" title="Declaration of tc::io::PathUtil." alt="" coords="165,5,273,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="137,155,176,181"/>
+<area shape="rect" id="node3" href="$types_8h.html" title="Declaration of generic types used by libtoolchain." alt="" coords="241,155,321,181"/>
+<area shape="rect" id="node12" href="$_path_8h.html" title="Declaration of tc::io::Path." alt="" coords="175,80,264,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,229,60,256"/>
+<area shape="rect" id="node5" title=" " alt="" coords="85,229,141,256"/>
+<area shape="rect" id="node6" title=" " alt="" coords="165,229,226,256"/>
+<area shape="rect" id="node7" title=" " alt="" coords="250,229,311,256"/>
+<area shape="rect" id="node8" title=" " alt="" coords="335,229,405,256"/>
+<area shape="rect" id="node9" title=" " alt="" coords="429,229,503,256"/>
+<area shape="rect" id="node10" href="$endian_8h.html" title="Declaration of macros and classes to unwrap primatives in an endian agnostic way." alt="" coords="528,229,615,256"/>
+<area shape="rect" id="node11" title=" " alt="" coords="534,304,609,331"/>
+</map>

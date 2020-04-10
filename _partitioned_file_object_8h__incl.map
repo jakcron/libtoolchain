@@ -1,8 +1,0 @@
-<map id="tc/fs/PartitionedFileObject.h" name="tc/fs/PartitionedFileObject.h">
-<area shape="rect" id="node2" href="$_generic_file_object_8h.html" title="Declaration of tc::fs::GenericFileObject. " alt="" coords="36,80,203,107"/>
-<area shape="rect" id="node13" href="$_shared_ptr_8h.html" title="Declaration of tc::SharedPtr. " alt="" coords="187,155,294,181"/>
-<area shape="rect" id="node3" href="$_i_file_object_8h.html" title="Declaration of tc::fs::IFileObject. " alt="" coords="36,155,163,181"/>
-<area shape="rect" id="node4" href="$types_8h.html" title="Declaration of generic types used by libtoolchain. " alt="" coords="201,229,281,256"/>
-<area shape="rect" id="node11" href="$_resource_state_8h.html" title="Declaration of tc::ResourceState. " alt="" coords="20,229,155,256"/>
-<area shape="rect" id="node9" href="$endian_8h.html" title="Declaration of macros and classes to unwrap primatives in an endian agnostic way. ..." alt="" coords="339,304,425,331"/>
-</map>

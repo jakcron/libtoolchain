@@ -1,0 +1,4 @@
+<map id="tc::io::MemoryStream" name="tc::io::MemoryStream">
+<area shape="rect" id="node1" title="A block of run&#45;time memory wrapped as an IStream object." alt="" coords="5,292,153,575"/>
+<area shape="rect" id="node2" href="$classtc_1_1io_1_1_i_stream.html" title="An interface for implementing a basic data stream handler." alt="" coords="27,5,131,244"/>
+</map>

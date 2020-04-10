@@ -1,0 +1,10 @@
+<map id="tc/ObjectDisposedException.h" name="tc/ObjectDisposedException.h">
+<area shape="rect" id="node1" title="Declaration of tc::ObjectDisposedException." alt="" coords="338,5,537,32"/>
+<area shape="rect" id="node2" href="$_file_stream_8h.html" title="Declaration of tc::io::FileStream." alt="" coords="5,80,131,107"/>
+<area shape="rect" id="node4" href="$tc_8h.html" title="Declaration of the libtoolchain namespace." alt="" coords="615,229,659,256"/>
+<area shape="rect" id="node5" href="$_stream_sink_8h.html" title="Declaration of tc::io::StreamSink." alt="" coords="155,80,285,107"/>
+<area shape="rect" id="node6" href="$_sub_sink_8h.html" title="Declaration of tc::io::SubSink." alt="" coords="310,80,421,107"/>
+<area shape="rect" id="node7" href="$_sub_storage_8h.html" title="Declaration of tc::io::SubStorage." alt="" coords="445,80,576,107"/>
+<area shape="rect" id="node8" href="$_sub_stream_8h.html" title="Declaration of tc::io::SubStream." alt="" coords="601,80,727,107"/>
+<area shape="rect" id="node3" href="$io_8h.html" title="Declaration of the input/output library." alt="" coords="408,155,467,181"/>
+</map>

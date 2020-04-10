@@ -1,0 +1,5 @@
+<map id="tc::AccessViolationException" name="tc::AccessViolationException">
+<area shape="rect" id="node1" title="The exception that is thrown when there is an attempt to read or write protected memory." alt="" coords="5,329,200,436"/>
+<area shape="rect" id="node2" href="$classtc_1_1_exception.html" title="An extension of std::exception that allows optionally specifying a module name." alt="" coords="53,131,153,281"/>
+<area shape="rect" id="node3" title=" " alt="" coords="51,5,155,83"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="tc::io::StreamSink" name="tc::io::StreamSink">
+<area shape="rect" id="node1" title="An IStream wrapped in an ISink." alt="" coords="5,175,132,311"/>
+<area shape="rect" id="node2" href="$classtc_1_1io_1_1_i_sink.html" title="An interface defining a byte data sink." alt="" coords="19,5,118,127"/>
+</map>

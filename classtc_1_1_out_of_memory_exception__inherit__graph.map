@@ -1,0 +1,5 @@
+<map id="tc::OutOfMemoryException" name="tc::OutOfMemoryException">
+<area shape="rect" id="node1" title="The exception that is thrown when there is not enough memory to continue the execution of a program." alt="" coords="5,329,187,436"/>
+<area shape="rect" id="node2" href="$classtc_1_1_exception.html" title="An extension of std::exception that allows optionally specifying a module name." alt="" coords="46,131,146,281"/>
+<area shape="rect" id="node3" title=" " alt="" coords="44,5,148,83"/>
+</map>

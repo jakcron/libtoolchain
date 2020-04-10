@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['_7egenericfileobject',['~GenericFileObject',['../classtc_1_1fs_1_1_generic_file_object.html#a1a97cb57db4bdb28c3fb1a311983eddf',1,'tc::fs::GenericFileObject']]],
-  ['_7egenericfilesystem',['~GenericFileSystem',['../classtc_1_1fs_1_1_generic_file_system.html#aba94ed73730da542e84ca64a986149d9',1,'tc::fs::GenericFileSystem']]],
-  ['_7eifileobject',['~IFileObject',['../classtc_1_1fs_1_1_i_file_object.html#aff27859c3ce46288ca89a870905dab8d',1,'tc::fs::IFileObject']]],
-  ['_7eifilesystem',['~IFileSystem',['../classtc_1_1fs_1_1_i_file_system.html#a2df82e7a1f8b7d993b8d4732ce1164b8',1,'tc::fs::IFileSystem']]],
-  ['_7esharedptr',['~SharedPtr',['../classtc_1_1_shared_ptr.html#a21f49a9897a7a039f42204f581f5c3fb',1,'tc::SharedPtr']]]
+  ['what',['what',['../classtc_1_1_exception.html#a8eff5742876ddad1d692aee6a3df7162',1,'tc::Exception']]],
+  ['wrap',['wrap',['../structle__uint16__t.html#a19cc35adcd419f50f31d7fa6ea9e329e',1,'le_uint16_t::wrap()'],['../structbe__uint16__t.html#a82cd0277bb0e8510d8da76437eafafc5',1,'be_uint16_t::wrap()'],['../structle__uint32__t.html#a3d230bf7cba5ebea53202795025402ec',1,'le_uint32_t::wrap()'],['../structbe__uint32__t.html#a670d372348149e1d86e00813df8e0fa2',1,'be_uint32_t::wrap()'],['../structle__uint64__t.html#ade8b1aa54109d88962882d9899a40d4e',1,'le_uint64_t::wrap()'],['../structbe__uint64__t.html#aabd90815f6ff3888c58365a6e1fcf1d3',1,'be_uint64_t::wrap()']]],
+  ['write',['write',['../classtc_1_1io_1_1_file_stream.html#a57c0a9acc9616e575c52e2bc84d3e61b',1,'tc::io::FileStream::write()'],['../classtc_1_1io_1_1_i_stream.html#a49f5100f8312a5f9c416108e5eae0e1e',1,'tc::io::IStream::write()'],['../classtc_1_1io_1_1_memory_stream.html#a97e19ace83b56f7f74d2fd20614a7e23',1,'tc::io::MemoryStream::write()'],['../classtc_1_1io_1_1_sub_stream.html#ab933f46ba10d78995fae7ad3f4e1552b',1,'tc::io::SubStream::write()'],['../namespacetc_1_1io.html#a835b094bc25b407e842bb0dc0bcd1b4ea1129c0e4d43f2d121652a7302712cff6',1,'tc::io::Write()']]]
 ];

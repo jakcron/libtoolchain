@@ -1,3 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classtc_1_1_shared_ptr.html" title="A smart pointer which auto&#45;deletes the embedded ptr when all references are gone. ..." alt="" coords="5,5,136,32"/>
+<area shape="rect" id="node1" href="$classtc_1_1io_1_1_i_stream.html" title="An interface for implementing a basic data stream handler." alt="" coords="5,56,109,83"/>
+<area shape="rect" id="node2" href="$classtc_1_1io_1_1_file_stream.html" title="An implementation of IStream as a wrapper to local OS file access functions." alt="" coords="170,5,293,32"/>
+<area shape="rect" id="node3" href="$classtc_1_1io_1_1_memory_stream.html" title="A block of run&#45;time memory wrapped as an IStream object." alt="" coords="157,56,305,83"/>
+<area shape="rect" id="node4" href="$classtc_1_1io_1_1_sub_stream.html" title="A wrapper around an existing IStream object that exposes a subset of the base the IStream object." alt="" coords="169,107,293,133"/>
 </map>

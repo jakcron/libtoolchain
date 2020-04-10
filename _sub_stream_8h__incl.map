@@ -1,0 +1,23 @@
+<map id="tc/io/SubStream.h" name="tc/io/SubStream.h">
+<area shape="rect" id="node1" title="Declaration of tc::io::SubStream." alt="" coords="662,5,789,32"/>
+<area shape="rect" id="node2" href="$_i_stream_8h.html" title="Declaration of tc::io::IStream." alt="" coords="192,80,299,107"/>
+<area shape="rect" id="node13" href="$_argument_null_exception_8h.html" title="Declaration of tc::ArgumentNullException." alt="" coords="323,80,507,107"/>
+<area shape="rect" id="node17" href="$_argument_out_of_range_exception_8h.html" title="Declaration of tc::ArgumentOutOfRangeException." alt="" coords="531,80,765,107"/>
+<area shape="rect" id="node18" href="$_not_supported_exception_8h.html" title="Declaration of tc::NotSupportedException." alt="" coords="711,155,897,181"/>
+<area shape="rect" id="node19" href="$_not_implemented_exception_8h.html" title="Declaration of tc::NotImplementedException." alt="" coords="840,80,1040,107"/>
+<area shape="rect" id="node20" href="$_object_disposed_exception_8h.html" title="Declaration of tc::ObjectDisposedException." alt="" coords="1065,80,1263,107"/>
+<area shape="rect" id="node3" href="$types_8h.html" title="Declaration of generic types used by libtoolchain." alt="" coords="205,155,285,181"/>
+<area shape="rect" id="node12" href="$_seek_origin_8h.html" title="Declaration of tc::io::SeekOrigin." alt="" coords="310,155,437,181"/>
+<area shape="rect" id="node4" title=" " alt="" coords="643,304,698,331"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,229,61,256"/>
+<area shape="rect" id="node6" title=" " alt="" coords="85,229,147,256"/>
+<area shape="rect" id="node7" title=" " alt="" coords="171,229,232,256"/>
+<area shape="rect" id="node8" title=" " alt="" coords="256,229,325,256"/>
+<area shape="rect" id="node9" title=" " alt="" coords="349,229,424,256"/>
+<area shape="rect" id="node10" href="$endian_8h.html" title="Declaration of macros and classes to unwrap primatives in an endian agnostic way." alt="" coords="449,229,535,256"/>
+<area shape="rect" id="node11" title=" " alt="" coords="455,304,529,331"/>
+<area shape="rect" id="node14" href="$_argument_exception_8h.html" title="Declaration of tc::ArgumentException." alt="" coords="524,155,687,181"/>
+<area shape="rect" id="node15" href="$_exception_8h.html" title="Declaration of tc::Exception." alt="" coords="751,229,857,256"/>
+<area shape="rect" id="node16" title=" " alt="" coords="765,304,843,331"/>
+<area shape="rect" id="node21" href="$_invalid_operation_exception_8h.html" title="Declaration of tc::InvalidOperationException." alt="" coords="1020,155,1217,181"/>
+</map>

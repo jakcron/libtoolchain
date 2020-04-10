@@ -1,0 +1,4 @@
+<map id="tc::io::SubSink" name="tc::io::SubSink">
+<area shape="rect" id="node1" title="A ISink that exposes a subset of a base ISink." alt="" coords="5,175,113,311"/>
+<area shape="rect" id="node2" href="$classtc_1_1io_1_1_i_sink.html" title="An interface defining a byte data sink." alt="" coords="10,5,109,127"/>
+</map>

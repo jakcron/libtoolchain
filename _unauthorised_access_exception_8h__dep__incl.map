@@ -1,0 +1,8 @@
+<map id="tc/UnauthorisedAccessException.h" name="tc/UnauthorisedAccessException.h">
+<area shape="rect" id="node1" title="Declaration of tc::UnauthorisedAccessException." alt="" coords="189,5,416,32"/>
+<area shape="rect" id="node2" href="$_file_stream_8h.html" title="Declaration of tc::io::FileStream." alt="" coords="5,80,131,107"/>
+<area shape="rect" id="node4" href="$tc_8h.html" title="Declaration of the libtoolchain namespace." alt="" coords="398,229,442,256"/>
+<area shape="rect" id="node5" href="$_local_storage_8h.html" title="Declaration of tc::io::LocalStorage." alt="" coords="155,80,293,107"/>
+<area shape="rect" id="node6" href="$_sub_storage_8h.html" title="Declaration of tc::io::SubStorage." alt="" coords="317,80,448,107"/>
+<area shape="rect" id="node3" href="$io_8h.html" title="Declaration of the input/output library." alt="" coords="260,155,319,181"/>
+</map>

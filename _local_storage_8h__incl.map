@@ -1,0 +1,29 @@
+<map id="tc/io/LocalStorage.h" name="tc/io/LocalStorage.h">
+<area shape="rect" id="node1" title="Declaration of tc::io::LocalStorage." alt="" coords="837,5,975,32"/>
+<area shape="rect" id="node2" href="$_i_storage_8h.html" title="Declaration of tc::io::IStorage." alt="" coords="199,80,309,107"/>
+<area shape="rect" id="node20" href="$_i_o_exception_8h.html" title="Declaration of tc::io::IOException." alt="" coords="839,155,973,181"/>
+<area shape="rect" id="node23" href="$_directory_not_empty_exception_8h.html" title="Declaration of tc::io::DirectoryNotEmptyException." alt="" coords="1080,80,1311,107"/>
+<area shape="rect" id="node24" href="$_directory_not_found_exception_8h.html" title="Declaration of tc::io::DirectoryNotFoundException." alt="" coords="333,80,561,107"/>
+<area shape="rect" id="node25" href="$_file_not_found_exception_8h.html" title="Declaration of tc::io::FileNotFoundException." alt="" coords="586,80,783,107"/>
+<area shape="rect" id="node26" href="$_path_too_long_exception_8h.html" title="Declaration of tc::io::PathTooLongException." alt="" coords="808,80,1004,107"/>
+<area shape="rect" id="node27" href="$_unauthorised_access_exception_8h.html" title="Declaration of tc::UnauthorisedAccessException." alt="" coords="1335,80,1562,107"/>
+<area shape="rect" id="node3" href="$types_8h.html" title="Declaration of generic types used by libtoolchain." alt="" coords="282,229,362,256"/>
+<area shape="rect" id="node12" href="$_resource_status_8h.html" title="Declaration of tc::ResourceStatus." alt="" coords="601,155,742,181"/>
+<area shape="rect" id="node14" href="$_i_stream_8h.html" title="Declaration of tc::io::IStream." alt="" coords="15,155,122,181"/>
+<area shape="rect" id="node16" href="$_path_8h.html" title="Declaration of tc::io::Path." alt="" coords="487,155,576,181"/>
+<area shape="rect" id="node18" href="$_file_mode_8h.html" title="Declaration of tc::io::FileMode." alt="" coords="197,155,311,181"/>
+<area shape="rect" id="node19" href="$_file_access_8h_source.html" title=" " alt="" coords="336,155,463,181"/>
+<area shape="rect" id="node4" title=" " alt="" coords="725,304,780,331"/>
+<area shape="rect" id="node5" title=" " alt="" coords="443,304,499,331"/>
+<area shape="rect" id="node6" title=" " alt="" coords="523,304,585,331"/>
+<area shape="rect" id="node7" title=" " alt="" coords="54,304,115,331"/>
+<area shape="rect" id="node8" title=" " alt="" coords="139,304,209,331"/>
+<area shape="rect" id="node9" title=" " alt="" coords="233,304,307,331"/>
+<area shape="rect" id="node10" href="$endian_8h.html" title="Declaration of macros and classes to unwrap primatives in an endian agnostic way." alt="" coords="332,304,419,331"/>
+<area shape="rect" id="node11" title=" " alt="" coords="338,379,413,405"/>
+<area shape="rect" id="node13" title=" " alt="" coords="644,229,699,256"/>
+<area shape="rect" id="node15" href="$_seek_origin_8h.html" title="Declaration of tc::io::SeekOrigin." alt="" coords="5,229,132,256"/>
+<area shape="rect" id="node17" title=" " alt="" coords="512,229,551,256"/>
+<area shape="rect" id="node21" href="$_exception_8h.html" title="Declaration of tc::Exception." alt="" coords="853,229,959,256"/>
+<area shape="rect" id="node22" title=" " alt="" coords="867,304,945,331"/>
+</map>

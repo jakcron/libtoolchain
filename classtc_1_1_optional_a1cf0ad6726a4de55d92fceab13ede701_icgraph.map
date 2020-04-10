@@ -1,3 +1,4 @@
 <map id="tc::Optional::isNull" name="tc::Optional::isNull">
-<area shape="rect" id="node2" href="$classtc_1_1_optional.html#a1a44b0f0c2d2349125637ce6965a5a7c" title="Operator to duplicate another Optional. " alt="" coords="184,5,336,32"/>
+<area shape="rect" id="node1" title="Determine if the Optional value exists." alt="" coords="205,5,335,32"/>
+<area shape="rect" id="node2" href="$classtc_1_1_optional.html#a1a44b0f0c2d2349125637ce6965a5a7c" title="Operator to duplicate another Optional." alt="" coords="5,5,157,32"/>
 </map>

@@ -1,0 +1,11 @@
+<map id="tc/InvalidOperationException.h" name="tc/InvalidOperationException.h">
+<area shape="rect" id="node1" title="Declaration of tc::InvalidOperationException." alt="" coords="5,5,203,32"/>
+<area shape="rect" id="node2" href="$_sub_storage_8h.html" title="Declaration of tc::io::SubStorage." alt="" coords="39,155,169,181"/>
+<area shape="rect" id="node4" href="$tc_8h.html" title="Declaration of the libtoolchain namespace." alt="" coords="386,304,430,331"/>
+<area shape="rect" id="node5" href="$_object_disposed_exception_8h.html" title="Declaration of tc::ObjectDisposedException." alt="" coords="309,80,507,107"/>
+<area shape="rect" id="node3" href="$io_8h.html" title="Declaration of the input/output library." alt="" coords="379,229,437,256"/>
+<area shape="rect" id="node6" href="$_file_stream_8h.html" title="Declaration of tc::io::FileStream." alt="" coords="193,155,319,181"/>
+<area shape="rect" id="node7" href="$_stream_sink_8h.html" title="Declaration of tc::io::StreamSink." alt="" coords="343,155,473,181"/>
+<area shape="rect" id="node8" href="$_sub_sink_8h.html" title="Declaration of tc::io::SubSink." alt="" coords="498,155,609,181"/>
+<area shape="rect" id="node9" href="$_sub_stream_8h.html" title="Declaration of tc::io::SubStream." alt="" coords="633,155,759,181"/>
+</map>

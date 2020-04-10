@@ -1,0 +1,6 @@
+<map id="tc::io::PathTooLongException" name="tc::io::PathTooLongException">
+<area shape="rect" id="node1" title="The exception that is thrown when a path or fully qualified file name is longer than the system&#45;defin..." alt="" coords="5,484,199,591"/>
+<area shape="rect" id="node2" href="$classtc_1_1io_1_1_i_o_exception.html" title="The exception that is thrown when an I/O error occurs." alt="" coords="37,329,167,436"/>
+<area shape="rect" id="node3" href="$classtc_1_1_exception.html" title="An extension of std::exception that allows optionally specifying a module name." alt="" coords="52,131,152,281"/>
+<area shape="rect" id="node4" title=" " alt="" coords="50,5,154,83"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="tc::InvalidOperationException" name="tc::InvalidOperationException">
+<area shape="rect" id="node1" title="The exception that is thrown when a method call is invalid for the object&#39;s current state." alt="" coords="6,329,197,436"/>
+<area shape="rect" id="node4" href="$classtc_1_1_object_disposed_exception.html" title="The exception that is thrown when an operation is performed on a disposed object." alt="" coords="5,484,197,591"/>
+<area shape="rect" id="node2" href="$classtc_1_1_exception.html" title="An extension of std::exception that allows optionally specifying a module name." alt="" coords="51,131,151,281"/>
+<area shape="rect" id="node3" title=" " alt="" coords="49,5,153,83"/>
+</map>

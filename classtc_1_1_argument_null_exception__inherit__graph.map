@@ -1,0 +1,6 @@
+<map id="tc::ArgumentNullException" name="tc::ArgumentNullException">
+<area shape="rect" id="node1" title="The exception that is thrown when a null reference is passed to a method that does not accept it as a..." alt="" coords="5,484,184,591"/>
+<area shape="rect" id="node2" href="$classtc_1_1_argument_exception.html" title="The exception that is thrown when one of the arguments provided to a method is not valid." alt="" coords="17,329,173,436"/>
+<area shape="rect" id="node3" href="$classtc_1_1_exception.html" title="An extension of std::exception that allows optionally specifying a module name." alt="" coords="45,131,145,281"/>
+<area shape="rect" id="node4" title=" " alt="" coords="43,5,147,83"/>
+</map>

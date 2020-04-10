@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['initialise',['initialise',['../classtc_1_1fs_1_1_partitioned_file_object.html#ab32a1982d2ac4b33cb01f49c22eebbfc',1,'tc::fs::PartitionedFileObject::initialise(const tc::fs::IFileObject &amp;file, uint64_t file_base_offset, uint64_t virtual_size)'],['../classtc_1_1fs_1_1_partitioned_file_object.html#a55af45411c3f2ae021442cc868f449a5',1,'tc::fs::PartitionedFileObject::initialise(tc::fs::IFileObject &amp;&amp;file, uint64_t file_base_offset, uint64_t virtual_size)']]],
-  ['initialisefs',['initialiseFs',['../classtc_1_1fs_1_1_sandboxed_file_system.html#a7bedb561cca2cb7cb4d34e75e826da4c',1,'tc::fs::SandboxedFileSystem::initialiseFs(const tc::fs::IFileSystem &amp;fs, const tc::fs::Path &amp;root_path)'],['../classtc_1_1fs_1_1_sandboxed_file_system.html#a2d96573aa685b906dc41712dc66bcd92',1,'tc::fs::SandboxedFileSystem::initialiseFs(tc::fs::IFileSystem &amp;&amp;fs, const tc::fs::Path &amp;root_path)']]],
-  ['isnull',['isNull',['../classtc_1_1_optional.html#a1cf0ad6726a4de55d92fceab13ede701',1,'tc::Optional::isNull()'],['../classtc_1_1_shared_ptr.html#a0062441314d4ad3605772767fa464662',1,'tc::SharedPtr::isNull()']]]
+  ['end',['end',['../classtc_1_1io_1_1_path.html#a1991d1a48aa441d72a61ba7f40efdddc',1,'tc::io::Path::end()'],['../classtc_1_1io_1_1_path.html#a5db6e70d957e749290d8d60182066003',1,'tc::io::Path::end() const']]],
+  ['error',['error',['../classtc_1_1_exception.html#aec95c5655d5724ee3999abb52e0145ae',1,'tc::Exception']]],
+  ['exception',['Exception',['../classtc_1_1_exception.html#abd14a4de5399f499d2d52853f0f30482',1,'tc::Exception::Exception() noexcept'],['../classtc_1_1_exception.html#a52534d2ad7b0f808c583c06312d08027',1,'tc::Exception::Exception(const std::string &amp;what) noexcept'],['../classtc_1_1_exception.html#a5ec4862d949017561422b45071507d02',1,'tc::Exception::Exception(const std::string &amp;module, const std::string &amp;what) noexcept']]]
 ];

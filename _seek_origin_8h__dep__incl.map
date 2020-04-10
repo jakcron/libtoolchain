@@ -1,0 +1,15 @@
+<map id="tc/io/SeekOrigin.h" name="tc/io/SeekOrigin.h">
+<area shape="rect" id="node1" title="Declaration of tc::io::SeekOrigin." alt="" coords="461,5,587,32"/>
+<area shape="rect" id="node2" href="$_i_stream_8h.html" title="Declaration of tc::io::IStream." alt="" coords="471,80,577,107"/>
+<area shape="rect" id="node3" href="$_file_stream_8h.html" title="Declaration of tc::io::FileStream." alt="" coords="5,229,131,256"/>
+<area shape="rect" id="node4" href="$io_8h.html" title="Declaration of the input/output library." alt="" coords="455,304,513,331"/>
+<area shape="rect" id="node6" href="$_i_storage_8h.html" title="Declaration of tc::io::IStorage." alt="" coords="310,155,421,181"/>
+<area shape="rect" id="node9" href="$_memory_stream_8h.html" title="Declaration of tc::io::MemoryStream." alt="" coords="574,229,725,256"/>
+<area shape="rect" id="node10" href="$_stream_sink_8h.html" title="Declaration of tc::io::StreamSink." alt="" coords="749,229,880,256"/>
+<area shape="rect" id="node11" href="$_stream_source_8h.html" title="Declaration of tc::io::StreamSource." alt="" coords="587,155,733,181"/>
+<area shape="rect" id="node12" href="$_stream_util_8h.html" title="Declaration of tc::io::StreamUtil." alt="" coords="757,155,880,181"/>
+<area shape="rect" id="node13" href="$_sub_stream_8h.html" title="Declaration of tc::io::SubStream." alt="" coords="905,155,1031,181"/>
+<area shape="rect" id="node5" href="$tc_8h.html" title="Declaration of the libtoolchain namespace." alt="" coords="462,379,506,405"/>
+<area shape="rect" id="node7" href="$_local_storage_8h.html" title="Declaration of tc::io::LocalStorage." alt="" coords="256,229,395,256"/>
+<area shape="rect" id="node8" href="$_sub_storage_8h.html" title="Declaration of tc::io::SubStorage." alt="" coords="419,229,549,256"/>
+</map>

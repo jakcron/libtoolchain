@@ -1,0 +1,4 @@
+<map id="tc::io::LocalStorage" name="tc::io::LocalStorage">
+<area shape="rect" id="node1" title="An IStorage wrapper around the existing OS FileSystem API." alt="" coords="5,277,165,501"/>
+<area shape="rect" id="node2" href="$classtc_1_1io_1_1_i_storage.html" title="An interface for implementing a basic FileSystem handler." alt="" coords="5,5,165,229"/>
+</map>

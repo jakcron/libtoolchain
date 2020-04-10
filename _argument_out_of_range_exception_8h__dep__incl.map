@@ -1,0 +1,13 @@
+<map id="tc/ArgumentOutOfRangeException.h" name="tc/ArgumentOutOfRangeException.h">
+<area shape="rect" id="node1" title="Declaration of tc::ArgumentOutOfRangeException." alt="" coords="597,5,830,32"/>
+<area shape="rect" id="node2" href="$_file_stream_8h.html" title="Declaration of tc::io::FileStream." alt="" coords="365,80,491,107"/>
+<area shape="rect" id="node4" href="$tc_8h.html" title="Declaration of the libtoolchain namespace." alt="" coords="978,229,1022,256"/>
+<area shape="rect" id="node5" href="$_memory_stream_8h.html" title="Declaration of tc::io::MemoryStream." alt="" coords="1099,80,1250,107"/>
+<area shape="rect" id="node6" href="$_overlayed_source_8h.html" title="Declaration of tc::io::OverlayedSource." alt="" coords="5,80,165,107"/>
+<area shape="rect" id="node7" href="$_padding_source_8h.html" title="Declaration of tc::io::PaddingSource." alt="" coords="190,80,341,107"/>
+<area shape="rect" id="node8" href="$_stream_util_8h.html" title="Declaration of tc::io::StreamUtil." alt="" coords="801,80,924,107"/>
+<area shape="rect" id="node9" href="$_sub_sink_8h.html" title="Declaration of tc::io::SubSink." alt="" coords="515,80,626,107"/>
+<area shape="rect" id="node10" href="$_sub_source_8h.html" title="Declaration of tc::io::SubSource." alt="" coords="650,80,777,107"/>
+<area shape="rect" id="node11" href="$_sub_stream_8h.html" title="Declaration of tc::io::SubStream." alt="" coords="949,80,1075,107"/>
+<area shape="rect" id="node3" href="$io_8h.html" title="Declaration of the input/output library." alt="" coords="612,155,671,181"/>
+</map>

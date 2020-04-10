@@ -1,5 +1,0 @@
-<map id="tc::fs::IFileObject" name="tc::fs::IFileObject">
-<area shape="rect" id="node2" href="$classtc_1_1fs_1_1_generic_file_object.html" title="A realisation of IFileObject that can be assigned (copy or move) the value of another IFileObject obj..." alt="" coords="5,285,169,509"/>
-<area shape="rect" id="node3" href="$classtc_1_1fs_1_1_local_file_object.html" title="An implementation of IFileObject as a wrapper to local OS file access functions. " alt="" coords="193,277,344,516"/>
-<area shape="rect" id="node4" href="$classtc_1_1fs_1_1_partitioned_file_object.html" title="A wrapper around an existing IFileObject object that exposes are partition (user specified offset &amp; s..." alt="" coords="369,263,550,531"/>
-</map>

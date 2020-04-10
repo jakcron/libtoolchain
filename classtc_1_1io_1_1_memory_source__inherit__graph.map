@@ -1,0 +1,4 @@
+<map id="tc::io::MemorySource" name="tc::io::MemorySource">
+<area shape="rect" id="node1" title="A block of run&#45;time memory wrapped as an ISource object." alt="" coords="5,160,152,296"/>
+<area shape="rect" id="node2" href="$classtc_1_1io_1_1_i_source.html" title="An interface defining a byte data source." alt="" coords="27,5,130,112"/>
+</map>

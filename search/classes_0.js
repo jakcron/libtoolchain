@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['be_5fuint16_5ft',['be_uint16_t',['../structbe__uint16__t.html',1,'']]],
-  ['be_5fuint32_5ft',['be_uint32_t',['../structbe__uint32__t.html',1,'']]],
-  ['be_5fuint64_5ft',['be_uint64_t',['../structbe__uint64__t.html',1,'']]]
+  ['accessviolationexception',['AccessViolationException',['../classtc_1_1_access_violation_exception.html',1,'tc']]],
+  ['argumentexception',['ArgumentException',['../classtc_1_1_argument_exception.html',1,'tc']]],
+  ['argumentnullexception',['ArgumentNullException',['../classtc_1_1_argument_null_exception.html',1,'tc']]],
+  ['argumentoutofrangeexception',['ArgumentOutOfRangeException',['../classtc_1_1_argument_out_of_range_exception.html',1,'tc']]],
+  ['arithmeticexception',['ArithmeticException',['../classtc_1_1_arithmetic_exception.html',1,'tc']]]
 ];

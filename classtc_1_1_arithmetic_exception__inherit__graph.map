@@ -1,0 +1,6 @@
+<map id="tc::ArithmeticException" name="tc::ArithmeticException">
+<area shape="rect" id="node1" title="The exception that is thrown for errors in an arithmetic, casting, or conversion operation." alt="" coords="5,329,164,436"/>
+<area shape="rect" id="node4" href="$classtc_1_1_overflow_exception.html" title="The exception that is thrown when an arithmetic, casting, or conversion operation in a checked contex..." alt="" coords="11,484,159,591"/>
+<area shape="rect" id="node2" href="$classtc_1_1_exception.html" title="An extension of std::exception that allows optionally specifying a module name." alt="" coords="35,131,135,281"/>
+<area shape="rect" id="node3" title=" " alt="" coords="33,5,137,83"/>
+</map>

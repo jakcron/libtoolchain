@@ -1,9 +1,15 @@
 var searchData=
 [
-  ['file_5flist',['file_list',['../structtc_1_1fs_1_1s_directory_listing.html#a0adc08b3eab83694d8f92dacf1653c81',1,'tc::fs::sDirectoryListing']]],
-  ['fileaccess_5fcreate',['FILEACCESS_CREATE',['../namespacetc_1_1fs.html#a1d1ada056f216d2ed93459999aa70243aea30d329773e6ee4183e2a5df9051f20',1,'tc::fs']]],
-  ['fileaccess_5fedit',['FILEACCESS_EDIT',['../namespacetc_1_1fs.html#a1d1ada056f216d2ed93459999aa70243adb80c63d27a04be3aea355f89d809c7d',1,'tc::fs']]],
-  ['fileaccess_5fread',['FILEACCESS_READ',['../namespacetc_1_1fs.html#a1d1ada056f216d2ed93459999aa70243ad0fcf06d689f3cad83a08ec8e21eacfb',1,'tc::fs']]],
-  ['fileaccessmode',['FileAccessMode',['../namespacetc_1_1fs.html#a1d1ada056f216d2ed93459999aa70243',1,'tc::fs']]],
-  ['fs_2eh',['fs.h',['../fs_8h.html',1,'']]]
+  ['file_5flist',['file_list',['../structtc_1_1io_1_1s_directory_listing.html#a340e486186766e83ffd93fc1beeb06eb',1,'tc::io::sDirectoryListing']]],
+  ['fileaccess',['FileAccess',['../namespacetc_1_1io.html#a835b094bc25b407e842bb0dc0bcd1b4e',1,'tc::io']]],
+  ['fileexistsexception',['FileExistsException',['../classtc_1_1io_1_1_file_exists_exception.html',1,'tc::io::FileExistsException'],['../classtc_1_1io_1_1_file_exists_exception.html#afefe10ff3b17062a335e95bca92a1bd5',1,'tc::io::FileExistsException::FileExistsException() noexcept'],['../classtc_1_1io_1_1_file_exists_exception.html#ad052eb30a7913dd5faf82e519d656da5',1,'tc::io::FileExistsException::FileExistsException(const std::string &amp;what) noexcept'],['../classtc_1_1io_1_1_file_exists_exception.html#a83356452235e0721f897f499d659b4a9',1,'tc::io::FileExistsException::FileExistsException(const std::string &amp;module, const std::string &amp;what) noexcept']]],
+  ['fileexistsexception_2eh',['FileExistsException.h',['../_file_exists_exception_8h.html',1,'']]],
+  ['filemode',['FileMode',['../namespacetc_1_1io.html#a56ce7bbd3bfc8e28d4c297fefbe7dadd',1,'tc::io']]],
+  ['filemode_2eh',['FileMode.h',['../_file_mode_8h.html',1,'']]],
+  ['filenotfoundexception',['FileNotFoundException',['../classtc_1_1io_1_1_file_not_found_exception.html',1,'tc::io::FileNotFoundException'],['../classtc_1_1io_1_1_file_not_found_exception.html#adc48152423c41d6146cc68334cdddda1',1,'tc::io::FileNotFoundException::FileNotFoundException() noexcept'],['../classtc_1_1io_1_1_file_not_found_exception.html#a1df014ad25f75506ba60313f45b1a313',1,'tc::io::FileNotFoundException::FileNotFoundException(const std::string &amp;what) noexcept'],['../classtc_1_1io_1_1_file_not_found_exception.html#a8033d4ee5ad203ae02b0cea369ff80a6',1,'tc::io::FileNotFoundException::FileNotFoundException(const std::string &amp;module, const std::string &amp;what) noexcept']]],
+  ['filenotfoundexception_2eh',['FileNotFoundException.h',['../_file_not_found_exception_8h.html',1,'']]],
+  ['filestream',['FileStream',['../classtc_1_1io_1_1_file_stream.html',1,'tc::io::FileStream'],['../classtc_1_1io_1_1_file_stream.html#a2f501f65b9eeaa1b149e03c8733aedc8',1,'tc::io::FileStream::FileStream()'],['../classtc_1_1io_1_1_file_stream.html#a3a12412f6b36541a00d090f68bcac67e',1,'tc::io::FileStream::FileStream(FileStream &amp;&amp;other)'],['../classtc_1_1io_1_1_file_stream.html#a010a0b5052fe24a6c0b5463729cc984d',1,'tc::io::FileStream::FileStream(const tc::io::Path &amp;path, FileMode mode, FileAccess access)']]],
+  ['filestream_2eh',['FileStream.h',['../_file_stream_8h.html',1,'']]],
+  ['flush',['flush',['../classtc_1_1io_1_1_file_stream.html#adc62e3083fd12650202aa8c4c8870367',1,'tc::io::FileStream::flush()'],['../classtc_1_1io_1_1_i_stream.html#a24822427bdde1f4ec7b6ffc8ef2fe0af',1,'tc::io::IStream::flush()'],['../classtc_1_1io_1_1_memory_stream.html#af9896e697149f80dee594675a9713f22',1,'tc::io::MemoryStream::flush()'],['../classtc_1_1io_1_1_sub_stream.html#a44832e9ef7f678b5935f73f3ddfb2516',1,'tc::io::SubStream::flush()']]],
+  ['front',['front',['../classtc_1_1io_1_1_path.html#a68e5984818c8e9c1f18f7641a366e984',1,'tc::io::Path::front()'],['../classtc_1_1io_1_1_path.html#a911cc829e7952b4b0b32ca5851607a4a',1,'tc::io::Path::front() const']]]
 ];

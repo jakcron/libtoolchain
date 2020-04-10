@@ -1,0 +1,4 @@
+<map id="tc::io::SubSource" name="tc::io::SubSource">
+<area shape="rect" id="node1" title="A ISource that exposes a subset of a base ISource." alt="" coords="5,160,128,281"/>
+<area shape="rect" id="node2" href="$classtc_1_1io_1_1_i_source.html" title="An interface defining a byte data source." alt="" coords="15,5,118,112"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="tc::io::IOException" name="tc::io::IOException">
+<area shape="rect" id="node1" title="The exception that is thrown when an I/O error occurs." alt="" coords="495,329,625,436"/>
+<area shape="rect" id="node4" href="$classtc_1_1io_1_1_directory_not_empty_exception.html" title="The exception that is thrown when a directory is not empty." alt="" coords="5,484,216,605"/>
+<area shape="rect" id="node5" href="$classtc_1_1io_1_1_directory_not_found_exception.html" title="The exception that is thrown when part of a file or directory cannot be found." alt="" coords="240,484,448,605"/>
+<area shape="rect" id="node6" href="$classtc_1_1io_1_1_file_exists_exception.html" title="The exception that is thrown when an attempt to overwrite/remove a file that exists on disk fails." alt="" coords="473,491,647,598"/>
+<area shape="rect" id="node7" href="$classtc_1_1io_1_1_file_not_found_exception.html" title="The exception that is thrown when an attempt to access a file that does not exist on disk fails." alt="" coords="672,491,867,598"/>
+<area shape="rect" id="node8" href="$classtc_1_1io_1_1_path_too_long_exception.html" title="The exception that is thrown when a path or fully qualified file name is longer than the system&#45;defin..." alt="" coords="891,491,1085,598"/>
+<area shape="rect" id="node2" href="$classtc_1_1_exception.html" title="An extension of std::exception that allows optionally specifying a module name." alt="" coords="510,131,610,281"/>
+<area shape="rect" id="node3" title=" " alt="" coords="508,5,612,83"/>
+</map>

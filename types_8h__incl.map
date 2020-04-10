@@ -1,3 +1,11 @@
 <map id="tc/types.h" name="tc/types.h">
-<area shape="rect" id="node6" href="$endian_8h.html" title="Declaration of macros and classes to unwrap primatives in an endian agnostic way. ..." alt="" coords="339,80,425,107"/>
+<area shape="rect" id="node1" title="Declaration of generic types used by libtoolchain." alt="" coords="241,5,321,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,80,60,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="85,80,141,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="165,80,226,107"/>
+<area shape="rect" id="node5" title=" " alt="" coords="250,80,311,107"/>
+<area shape="rect" id="node6" title=" " alt="" coords="335,80,405,107"/>
+<area shape="rect" id="node7" title=" " alt="" coords="429,80,503,107"/>
+<area shape="rect" id="node8" href="$endian_8h.html" title="Declaration of macros and classes to unwrap primatives in an endian agnostic way." alt="" coords="528,80,615,107"/>
+<area shape="rect" id="node9" title=" " alt="" coords="534,155,609,181"/>
 </map>

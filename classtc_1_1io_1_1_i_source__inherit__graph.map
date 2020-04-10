@@ -1,0 +1,8 @@
+<map id="tc::io::ISource" name="tc::io::ISource">
+<area shape="rect" id="node1" title="An interface defining a byte data source." alt="" coords="379,5,482,112"/>
+<area shape="rect" id="node2" href="$classtc_1_1io_1_1_memory_source.html" title="A block of run&#45;time memory wrapped as an ISource object." alt="" coords="5,160,152,296"/>
+<area shape="rect" id="node3" href="$classtc_1_1io_1_1_overlayed_source.html" title="This will replaces regions within a base source with one or more other sources, so as to override tho..." alt="" coords="176,160,333,296"/>
+<area shape="rect" id="node4" href="$classtc_1_1io_1_1_padding_source.html" title="A source that provides dummy/filler data." alt="" coords="357,167,504,289"/>
+<area shape="rect" id="node5" href="$classtc_1_1io_1_1_stream_source.html" title="An IStream wrapped in an ISource." alt="" coords="529,167,671,289"/>
+<area shape="rect" id="node6" href="$classtc_1_1io_1_1_sub_source.html" title="A ISource that exposes a subset of a base ISource." alt="" coords="696,167,819,289"/>
+</map>

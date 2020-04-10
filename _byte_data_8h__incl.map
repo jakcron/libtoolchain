@@ -1,0 +1,15 @@
+<map id="tc/ByteData.h" name="tc/ByteData.h">
+<area shape="rect" id="node1" title="Declaration of tc::ByteData." alt="" coords="419,5,522,32"/>
+<area shape="rect" id="node2" href="$types_8h.html" title="Declaration of generic types used by libtoolchain." alt="" coords="299,80,379,107"/>
+<area shape="rect" id="node11" href="$_out_of_memory_exception_8h.html" title="Declaration of tc::OutOfMemoryException." alt="" coords="511,80,697,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="550,229,605,256"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,155,61,181"/>
+<area shape="rect" id="node5" title=" " alt="" coords="85,155,147,181"/>
+<area shape="rect" id="node6" title=" " alt="" coords="171,155,232,181"/>
+<area shape="rect" id="node7" title=" " alt="" coords="256,155,325,181"/>
+<area shape="rect" id="node8" title=" " alt="" coords="349,155,424,181"/>
+<area shape="rect" id="node9" href="$endian_8h.html" title="Declaration of macros and classes to unwrap primatives in an endian agnostic way." alt="" coords="449,155,535,181"/>
+<area shape="rect" id="node10" title=" " alt="" coords="451,229,525,256"/>
+<area shape="rect" id="node12" href="$_exception_8h.html" title="Declaration of tc::Exception." alt="" coords="611,155,717,181"/>
+<area shape="rect" id="node13" title=" " alt="" coords="629,229,707,256"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="tc::UnauthorisedAccessException" name="tc::UnauthorisedAccessException">
+<area shape="rect" id="node1" title="The exception that is thrown when the operating system denies access because of an I/O error or a spe..." alt="" coords="5,329,225,436"/>
+<area shape="rect" id="node2" href="$classtc_1_1_exception.html" title="An extension of std::exception that allows optionally specifying a module name." alt="" coords="65,131,165,281"/>
+<area shape="rect" id="node3" title=" " alt="" coords="63,5,167,83"/>
+</map>

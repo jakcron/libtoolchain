@@ -1,0 +1,14 @@
+<map id="tc/ArgumentNullException.h" name="tc/ArgumentNullException.h">
+<area shape="rect" id="node1" title="Declaration of tc::ArgumentNullException." alt="" coords="727,5,911,32"/>
+<area shape="rect" id="node2" href="$_file_stream_8h.html" title="Declaration of tc::io::FileStream." alt="" coords="5,80,131,107"/>
+<area shape="rect" id="node4" href="$tc_8h.html" title="Declaration of the libtoolchain namespace." alt="" coords="1147,229,1191,256"/>
+<area shape="rect" id="node5" href="$_memory_stream_8h.html" title="Declaration of tc::io::MemoryStream." alt="" coords="155,80,306,107"/>
+<area shape="rect" id="node6" href="$_overlayed_source_8h.html" title="Declaration of tc::io::OverlayedSource." alt="" coords="331,80,491,107"/>
+<area shape="rect" id="node7" href="$_stream_sink_8h.html" title="Declaration of tc::io::StreamSink." alt="" coords="515,80,645,107"/>
+<area shape="rect" id="node8" href="$_stream_source_8h.html" title="Declaration of tc::io::StreamSource." alt="" coords="670,80,815,107"/>
+<area shape="rect" id="node9" href="$_sub_sink_8h.html" title="Declaration of tc::io::SubSink." alt="" coords="839,80,950,107"/>
+<area shape="rect" id="node10" href="$_sub_source_8h.html" title="Declaration of tc::io::SubSource." alt="" coords="974,80,1101,107"/>
+<area shape="rect" id="node11" href="$_sub_storage_8h.html" title="Declaration of tc::io::SubStorage." alt="" coords="1125,80,1256,107"/>
+<area shape="rect" id="node12" href="$_sub_stream_8h.html" title="Declaration of tc::io::SubStream." alt="" coords="1281,80,1407,107"/>
+<area shape="rect" id="node3" href="$io_8h.html" title="Declaration of the input/output library." alt="" coords="789,155,848,181"/>
+</map>

@@ -1,3 +1,8 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structtc_1_1fs_1_1s_directory_listing.html" title="Contains basic info about a directory with&#45;in a FileSystem. " alt="" coords="5,5,164,32"/>
+<area shape="rect" id="node1" href="$classtc_1_1io_1_1_i_source.html" title="An interface defining a byte data source." alt="" coords="5,107,108,133"/>
+<area shape="rect" id="node2" href="$classtc_1_1io_1_1_memory_source.html" title="A block of run&#45;time memory wrapped as an ISource object." alt="" coords="161,5,308,32"/>
+<area shape="rect" id="node3" href="$classtc_1_1io_1_1_overlayed_source.html" title="This will replaces regions within a base source with one or more other sources, so as to override tho..." alt="" coords="156,56,313,83"/>
+<area shape="rect" id="node4" href="$classtc_1_1io_1_1_padding_source.html" title="A source that provides dummy/filler data." alt="" coords="161,107,308,133"/>
+<area shape="rect" id="node5" href="$classtc_1_1io_1_1_stream_source.html" title="An IStream wrapped in an ISource." alt="" coords="163,157,306,184"/>
+<area shape="rect" id="node6" href="$classtc_1_1io_1_1_sub_source.html" title="A ISource that exposes a subset of a base ISource." alt="" coords="173,208,296,235"/>
 </map>

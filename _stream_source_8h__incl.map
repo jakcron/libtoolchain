@@ -1,0 +1,24 @@
+<map id="tc/io/StreamSource.h" name="tc/io/StreamSource.h">
+<area shape="rect" id="node1" title="Declaration of tc::io::StreamSource." alt="" coords="260,5,405,32"/>
+<area shape="rect" id="node2" href="$_i_source_8h.html" title="Declaration of tc::io::ISource." alt="" coords="337,80,443,107"/>
+<area shape="rect" id="node18" href="$_i_stream_8h.html" title="Declaration of tc::io::IStream." alt="" coords="601,80,707,107"/>
+<area shape="rect" id="node20" href="$_argument_null_exception_8h.html" title="Declaration of tc::ArgumentNullException." alt="" coords="38,155,222,181"/>
+<area shape="rect" id="node22" href="$_not_supported_exception_8h.html" title="Declaration of tc::NotSupportedException." alt="" coords="5,80,191,107"/>
+<area shape="rect" id="node3" href="$types_8h.html" title="Declaration of generic types used by libtoolchain." alt="" coords="526,229,606,256"/>
+<area shape="rect" id="node12" href="$_resource_status_8h.html" title="Declaration of tc::ResourceStatus." alt="" coords="246,155,387,181"/>
+<area shape="rect" id="node14" href="$_byte_data_8h.html" title="Declaration of tc::ByteData." alt="" coords="412,155,515,181"/>
+<area shape="rect" id="node4" title=" " alt="" coords="321,379,376,405"/>
+<area shape="rect" id="node5" title=" " alt="" coords="615,304,671,331"/>
+<area shape="rect" id="node6" title=" " alt="" coords="695,304,757,331"/>
+<area shape="rect" id="node7" title=" " alt="" coords="781,304,842,331"/>
+<area shape="rect" id="node8" title=" " alt="" coords="261,304,330,331"/>
+<area shape="rect" id="node9" title=" " alt="" coords="354,304,429,331"/>
+<area shape="rect" id="node10" href="$endian_8h.html" title="Declaration of macros and classes to unwrap primatives in an endian agnostic way." alt="" coords="504,304,591,331"/>
+<area shape="rect" id="node11" title=" " alt="" coords="510,379,585,405"/>
+<area shape="rect" id="node13" title=" " alt="" coords="236,229,291,256"/>
+<area shape="rect" id="node15" href="$_out_of_memory_exception_8h.html" title="Declaration of tc::OutOfMemoryException." alt="" coords="315,229,502,256"/>
+<area shape="rect" id="node16" href="$_exception_8h.html" title="Declaration of tc::Exception." alt="" coords="94,304,201,331"/>
+<area shape="rect" id="node17" title=" " alt="" coords="108,379,187,405"/>
+<area shape="rect" id="node19" href="$_seek_origin_8h.html" title="Declaration of tc::io::SeekOrigin." alt="" coords="591,155,717,181"/>
+<area shape="rect" id="node21" href="$_argument_exception_8h.html" title="Declaration of tc::ArgumentException." alt="" coords="49,229,211,256"/>
+</map>

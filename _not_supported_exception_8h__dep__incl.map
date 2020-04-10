@@ -1,0 +1,10 @@
+<map id="tc/NotSupportedException.h" name="tc/NotSupportedException.h">
+<area shape="rect" id="node1" title="Declaration of tc::NotSupportedException." alt="" coords="366,5,551,32"/>
+<area shape="rect" id="node2" href="$_file_stream_8h.html" title="Declaration of tc::io::FileStream." alt="" coords="5,80,131,107"/>
+<area shape="rect" id="node4" href="$tc_8h.html" title="Declaration of the libtoolchain namespace." alt="" coords="634,229,678,256"/>
+<area shape="rect" id="node5" href="$_stream_sink_8h.html" title="Declaration of tc::io::StreamSink." alt="" coords="155,80,285,107"/>
+<area shape="rect" id="node6" href="$_stream_source_8h.html" title="Declaration of tc::io::StreamSource." alt="" coords="310,80,455,107"/>
+<area shape="rect" id="node7" href="$_sub_sink_8h.html" title="Declaration of tc::io::SubSink." alt="" coords="479,80,590,107"/>
+<area shape="rect" id="node8" href="$_sub_stream_8h.html" title="Declaration of tc::io::SubStream." alt="" coords="614,80,741,107"/>
+<area shape="rect" id="node3" href="$io_8h.html" title="Declaration of the input/output library." alt="" coords="429,155,488,181"/>
+</map>
