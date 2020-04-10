@@ -19,5 +19,5 @@ private:
 	void testPushDataOnDisposedBase();
 	void testPushDataOutsideOfBaseRange();
 
-	void pushTestHelper(tc::io::ISink& sink, tc::io::IStream& base_stream, tc::ByteData& expected_data, int64_t push_offset);
+	void pushTestHelper(tc::io::ISink& sink, const std::shared_ptr<tc::io::IStream>& base_stream, tc::ByteData& expected_data, int64_t push_offset);
 };
