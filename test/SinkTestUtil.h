@@ -20,7 +20,7 @@ public:
 
 		int64_t length();
 		void setLength(int64_t length);
-		virtual void pushData(const tc::ByteData& data, int64_t offset);
+		virtual size_t pushData(const tc::ByteData& data, int64_t offset);
 	private:
 		static const std::string kClassName;
 		bool mCanSetLength;
@@ -34,7 +34,7 @@ public:
 
 		void setExpectedPushDataCfg(const tc::ByteData& data, int64_t offset);
 
-		void pushData(const tc::ByteData& data, int64_t offset);
+		size_t pushData(const tc::ByteData& data, int64_t offset);
 	private:
 		std::shared_ptr<tc::ByteData> expected_data;
 		std::shared_ptr<int64_t> expected_offset;

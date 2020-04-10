@@ -48,7 +48,7 @@ void SinkTestUtil::DummySinkBase::setLength(int64_t length)
 	mLength = length;
 }
 
-void SinkTestUtil::DummySinkBase::pushData(const tc::ByteData& data, int64_t offset)
+size_t SinkTestUtil::DummySinkBase::pushData(const tc::ByteData& data, int64_t offset)
 {
 	throw tc::NotImplementedException(kClassName, "pushData not implemented");
 }
@@ -65,7 +65,7 @@ void SinkTestUtil::DummySinkTestablePushData::setExpectedPushDataCfg(const tc::B
 	*expected_offset = offset;
 }
 
-void SinkTestUtil::DummySinkTestablePushData::pushData(const tc::ByteData& data, int64_t offset)
+size_t SinkTestUtil::DummySinkTestablePushData::pushData(const tc::ByteData& data, int64_t offset)
 {
 	std::stringstream error_ss;
 
@@ -85,4 +85,6 @@ void SinkTestUtil::DummySinkTestablePushData::pushData(const tc::ByteData& data,
 	{
 		throw tc::Exception("ByteData pushed to base sink did not have expected data.");
 	}
+
+	return data.size();
 }

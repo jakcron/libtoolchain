@@ -41,7 +41,7 @@ void tc::io::StreamSink::setLength(int64_t length)
 	mBaseStream->setLength(length);
 }
 
-void tc::io::StreamSink::pushData(const tc::ByteData& data, int64_t offset)
+size_t tc::io::StreamSink::pushData(const tc::ByteData& data, int64_t offset)
 {
 	if (mBaseStream == nullptr)
 	{
@@ -49,10 +49,6 @@ void tc::io::StreamSink::pushData(const tc::ByteData& data, int64_t offset)
 	}
 
 	mBaseStream->seek(offset, tc::io::SeekOrigin::Begin);
-	size_t data_writen_size = mBaseStream->write(data.get(), data.size());
 
-	if (data_writen_size != data.size())
-	{
-		throw tc::io::IOException(kClassName+"::pushData()", "Not all data was written to base stream.");
-	}
+	return mBaseStream->write(data.get(), data.size());
 }

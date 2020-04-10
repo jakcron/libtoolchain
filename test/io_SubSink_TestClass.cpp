@@ -4,6 +4,9 @@
 #include "SinkTestUtil.h"
 
 #include <tc.h>
+#include <tc/io/IOUtil.h>
+#include <sstream>
+#include <iomanip>
 
 void io_SubSink_TestClass::runAllTests(void)
 {
@@ -68,10 +71,10 @@ void io_SubSink_TestClass::testCreateConstructor()
 			SinkTestUtil::testSinkLength(sub_sink, sub_sink_size);
 
 			memset(data.get(), 0x33, data.size());
-			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0, data);
+			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0, data, data);
 			
 			memset(data.get(), 0xea, data.size());
-			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0x200, data);
+			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0x200, data, data);
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -301,9 +304,6 @@ void io_SubSink_TestClass::testPushDataOutsideOfBaseRange()
 	{
 		try
 		{
-			// create data to push
-			auto data = tc::ByteData(0x100);
-
 			// create base sink
 			auto base_sink = std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>(new SinkTestUtil::DummySinkTestablePushData());
 			base_sink->setLength(0x10000);
@@ -316,14 +316,21 @@ void io_SubSink_TestClass::testPushDataOutsideOfBaseRange()
 			// test
 			SinkTestUtil::testSinkLength(sub_sink, sub_sink_size);
 
-			memset(data.get(), 0x08, data.size());
-			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, sub_sink_size, data);
+			// create data to push
+			auto push_data = tc::ByteData(0x100);
+			memset(push_data.get(), 0x08, push_data.size());
 
-			std::cout << "FAIL" << std::endl;
+			// create data to expect
+			int64_t push_offset = sub_sink_size - 0x20;
+			auto expected_data = tc::ByteData(push_data.get(), tc::io::IOUtil::getWritableCount(sub_sink_size, push_offset, push_data.size()));
+
+			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, push_offset, push_data, expected_data);
+
+			std::cout << "PASS" << std::endl;
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
 		}
 	}
 	catch (const std::exception& e)
@@ -332,8 +339,14 @@ void io_SubSink_TestClass::testPushDataOutsideOfBaseRange()
 	}
 }
 
-void io_SubSink_TestClass::pushDataTestHelper(tc::io::ISink& sub_sink, const std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>& base_sink, int64_t sub_base_offset, int64_t sub_push_offset, tc::ByteData& expected_data)
+void io_SubSink_TestClass::pushDataTestHelper(tc::io::ISink& sub_sink, const std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>& base_sink, int64_t sub_base_offset, int64_t sub_push_offset, tc::ByteData& push_data, tc::ByteData& expected_data)
 {
 	base_sink->setExpectedPushDataCfg(expected_data, sub_base_offset + sub_push_offset);
-	sub_sink.pushData(expected_data, sub_push_offset);
+	size_t push_ret = sub_sink.pushData(push_data, sub_push_offset);
+	if (push_ret != expected_data.size())
+	{
+		std::stringstream error_ss;
+		error_ss << "pushData(offset: " << sub_push_offset << ") returned: " << push_ret << ", when it should have been " << expected_data.size();;
+		throw tc::Exception(error_ss.str());
+	}
 }

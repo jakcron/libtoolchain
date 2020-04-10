@@ -2,8 +2,8 @@
 	 * @file SubSink.h
 	 * @brief Declaration of tc::io::SubSink
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2020/02/08
+	 * @version 0.2
+	 * @date 2020/04/10
 	 **/
 #pragma once
 #include <tc/io/ISink.h>
@@ -58,10 +58,12 @@ public:
 		 * @param[in] data Data to be pushed to the sink.
 		 * @param[in] offset Zero-based offset in sink to push data.
 		 * 
+		 * @return Number of bytes pushed to sink.
+		 * 
 		 * @throw tc::ObjectDisposedException The base sink was not initialised.
 		 * @throw tc::ArgumentOutOfRangeException @p data was too large to be pushed to the sink.
 		 **/
-	void pushData(const tc::ByteData& data, int64_t offset);
+	size_t pushData(const tc::ByteData& data, int64_t offset);
 private:
 	static const std::string kClassName;
 

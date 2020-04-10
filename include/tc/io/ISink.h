@@ -2,8 +2,8 @@
 	 * @file ISink.h
 	 * @brief Declaration of tc::io::ISink
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2020/01/27
+	 * @version 0.2
+	 * @date 2020/04/10
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -37,8 +37,10 @@ public:
 		 * 
 		 * @param[in] data Data to be pushed to the sink.
 		 * @param[in] offset Zero-based offset in sink to push data.
+		 * 
+		 * @return Number of bytes pushed to sink.
 		 **/
-	virtual void pushData(const tc::ByteData& data, int64_t offset) = 0;
+	virtual size_t pushData(const tc::ByteData& data, int64_t offset) = 0;
 };
 
 }} // namespace tc::io

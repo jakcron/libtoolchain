@@ -60,17 +60,14 @@ void tc::io::SubSink::setLength(int64_t length)
 	throw tc::NotSupportedException(kClassName+"::setLength()", "SubSink does not support setting the length of the sub sink.");
 }
 
-void tc::io::SubSink::pushData(const tc::ByteData& data, int64_t offset)
+size_t tc::io::SubSink::pushData(const tc::ByteData& data, int64_t offset)
 {
 	if (mBaseSink == nullptr)
 	{
 		throw tc::ObjectDisposedException(kClassName+"::pushData()", "Failed to push data (no base sink)");
 	}
 
-	if (IOUtil::getAvailableSize(mSubSinkLength, offset) < data.size())
-	{
-		throw tc::ArgumentOutOfRangeException(kClassName+"::pushData()", "Data is too large to be pushed to base sink at the specified offset.");
-	}
+	auto new_data = tc::ByteData(data.get(), IOUtil::getWritableCount(mSubSinkLength, offset, data.size()));
 
-	mBaseSink->pushData(data, mBaseSinkOffset + offset);
+	return mBaseSink->pushData(new_data, mBaseSinkOffset + offset);
 }

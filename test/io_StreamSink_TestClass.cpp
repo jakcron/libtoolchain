@@ -265,7 +265,12 @@ void io_StreamSink_TestClass::pushTestHelper(tc::io::ISink& sink, const std::sha
 	std::stringstream error_ss;
 
 	// push data
-	sink.pushData(expected_data, push_offset);
+	size_t push_ret = sink.pushData(expected_data, push_offset);
+	if (push_ret != expected_data.size())
+	{
+		error_ss << "pushData(offset: " << push_offset << ") returned: " << push_ret << ", when it should have been " << expected_data.size();
+		throw tc::Exception(error_ss.str());
+	}	
 
 	// setup memory for reading result of push
 	tc::ByteData output_data(expected_data.size());
