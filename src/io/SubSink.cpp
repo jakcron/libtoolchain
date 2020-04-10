@@ -19,7 +19,7 @@ tc::io::SubSink::SubSink(const std::shared_ptr<tc::io::ISink>& sink, int64_t off
 	// validate arguments
 	if (mBaseSink == nullptr)
 	{
-		throw tc::ArgumentNullException(kClassName, "sink is null");
+		throw tc::ArgumentNullException(kClassName, "The base sink is null.");
 	}
 
 	if (offset < 0)
@@ -37,12 +37,12 @@ tc::io::SubSink::SubSink(const std::shared_ptr<tc::io::ISink>& sink, int64_t off
 	// sub sink length should not be greater than the base sink length
 	if (length > base_length)
 	{
-		throw tc::ArgumentOutOfRangeException(kClassName, "sub sink length is greater than base sink length");
+		throw tc::ArgumentOutOfRangeException(kClassName, "The sub sink length is greater than base sink length.");
 	}
 	// Base length - length is the maximum possible offset for the sub sink
 	if (offset > (base_length - length))
 	{
-		throw tc::ArgumentOutOfRangeException(kClassName, "sub sink offset is greater than the maximum possible offset given the base sink size and sub sink size");
+		throw tc::ArgumentOutOfRangeException(kClassName, "The sub sink offset is greater than the maximum possible offset given the base sink length and sub sink length.");
 	}
 	
 	// set class state
@@ -69,7 +69,7 @@ void tc::io::SubSink::pushData(const tc::ByteData& data, int64_t offset)
 
 	if (IOUtil::getAvailableSize(mSubSinkLength, offset) < data.size())
 	{
-		throw tc::ArgumentOutOfRangeException(kClassName+"::pushData()", "data was too large to be written sink at the given offset.");
+		throw tc::ArgumentOutOfRangeException(kClassName+"::pushData()", "Data is too large to be pushed to base sink at the specified offset.");
 	}
 
 	mBaseSink->pushData(data, mBaseSinkOffset + offset);
