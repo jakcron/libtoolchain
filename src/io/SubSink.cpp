@@ -1,5 +1,5 @@
 #include <tc/io/SubSink.h>
-#include <tc/io/SinkUtil.h>
+#include <tc/io/IOUtil.h>
 
 const std::string tc::io::SubSink::kClassName = "tc::io::SubSink";
 
@@ -72,9 +72,7 @@ void tc::io::SubSink::pushData(const tc::ByteData& data, int64_t offset)
 		throw tc::ObjectDisposedException(kClassName+"::pushData()", "Failed to push data (no base sink)");
 	}
 
-	int64_t writable_size = SinkUtil::getWritableSize(mSubSinkLength, offset);
-
-	if (writable_size < data.size())
+	if (IOUtil::getAvailableSize(mSubSinkLength, offset) < data.size())
 	{
 		throw tc::ArgumentOutOfRangeException(kClassName+"::pushData()", "data was too large to be written sink at the given offset.");
 	}
