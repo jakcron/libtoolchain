@@ -21,7 +21,7 @@ public:
 		/// Destructor
 	virtual ~IReadableSink() = default;
 
-		// Convert to ISource
+		/// Convert to ISource
 	virtual std::shared_ptr<tc::io::ISource>& toSource() = 0;
 };
 

@@ -62,7 +62,7 @@ public:
 		 * @brief Overlay base source with multiple sources
 		 * 
 		 * @param[in] base_source Base source to be overlayed.
-		 * @param[in] overlay_source_info Vector of sources to overlay onto the base source. @ref OverlaySourceInfo
+		 * @param[in] overlay_source_infos Vector of sources to overlay onto the base source. @ref OverlaySourceInfo
 		 * 
 		 * @throw tc::ArgumentNullException @p base_source or one of the overlay sources was null.
 		 * @throw tc::ArgumentOutOfRangeException An overlay source was smaller than the region in the base source it was supposed to overlay.

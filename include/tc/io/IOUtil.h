@@ -51,8 +51,8 @@ public:
 		/**
 		 * @brief Get size of writeable data for an IO class, given the data length, desired write offset and count.
 		 * 
-		 * @param[in] stream_length Total length of stream.
-		 * @param[in] write_offset Byte offset in stream to begin writing from.
+		 * @param[in] data_length Total length of data.
+		 * @param[in] data_offset Byte offset in data to begin writing from.
 		 * @param[in] requested_write_count Number of bytes to write.
 		 * 
 		 * @return Largest possible writeable count.
