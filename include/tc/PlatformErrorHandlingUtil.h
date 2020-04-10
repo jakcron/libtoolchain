@@ -23,7 +23,7 @@ class PlatformErrorHandlingUtil
 public:
 #ifdef _WIN32
 		/**
-		 * @brief Create a string with last error message.
+		 * @brief Create a string from Win32 error code.
 		 * 
 		 * @param[in] error Error code, returned from GetLastError().
 		 * 
