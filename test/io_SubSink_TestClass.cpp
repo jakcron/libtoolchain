@@ -14,6 +14,7 @@ void io_SubSink_TestClass::runAllTests(void)
 	testCreateWithNegativeSubSinkOffset();
 	testCreateWithNegativeSubSinkLength();
 	testCreateWithExcessiveSubSink();
+	testCreateThenSetLength();
 	testSetLengthOnDisposedBase();
 	testPushDataOnDisposedBase();
 	testPushDataOutsideOfBaseRange();
@@ -190,6 +191,45 @@ void io_SubSink_TestClass::testCreateWithExcessiveSubSink()
 			int64_t sub_sink_offset = base_sink.length() - 1;
 			int64_t sub_sink_size = 2;
 			auto sub_sink = tc::io::SubSink(std::make_shared<SinkTestUtil::DummySinkTestablePushData>(base_sink), sub_sink_offset, sub_sink_size);
+
+			std::cout << "FAIL" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "PASS (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_SubSink_TestClass::testCreateThenSetLength()
+{
+	std::cout << "[tc::io::SubSink] testCreateThenSetLength : " << std::flush;
+	try
+	{
+		try
+		{
+			// create data to push
+			auto data = tc::ByteData(0x100);
+
+			// create base sink
+			auto base_sink = SinkTestUtil::DummySinkTestablePushData();
+			base_sink.setLength(0x10000);
+
+			// create sub sink
+			int64_t sub_sink_offset = 0xcafe;
+			int64_t sub_sink_size = 0x1000;
+			auto sub_sink = tc::io::SubSink(std::make_shared<SinkTestUtil::DummySinkTestablePushData>(base_sink), sub_sink_offset, sub_sink_size);
+
+			// test
+			int64_t new_length = 0xdeadcafe;
+			sub_sink.setLength(new_length);
+
+			SinkTestUtil::testSinkLength(sub_sink, new_length);
+			
 
 			std::cout << "FAIL" << std::endl;
 		}

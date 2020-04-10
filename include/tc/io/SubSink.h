@@ -12,6 +12,7 @@
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/OutOfMemoryException.h>
 #include <tc/ObjectDisposedException.h>
+#include <tc/NotSupportedException.h>
 
 namespace tc { namespace io {
 
@@ -46,11 +47,8 @@ public:
 	int64_t length();
 
 		/**
-		 * @brief Sets the length of the sink.
-		 * 
-		 * @param[in] length The desired length of the sink in bytes.
-		 * 
-		 * @throw tc::ObjectDisposedException The base sink was not initialised.
+		 * @brief Sets the length of the sink. This is not supported for SubSink. 
+		 * @throw tc::NotSupportedException SubSink does not support setting the length of the sub sink.
 		 **/
 	void setLength(int64_t length);
 

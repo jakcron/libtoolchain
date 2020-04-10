@@ -15,6 +15,7 @@ private:
 	void testCreateWithNegativeSubSinkOffset();
 	void testCreateWithNegativeSubSinkLength();
 	void testCreateWithExcessiveSubSink();
+	void testCreateThenSetLength();
 	void testSetLengthOnDisposedBase();
 	void testPushDataOnDisposedBase();
 	void testPushDataOutsideOfBaseRange();
