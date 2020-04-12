@@ -170,8 +170,8 @@ endif
 # Dependencies
 .PHONY: deps
 deps:
-	@$(foreach lib,$(PROJECT_DEPEND_LOCAL_DIR), cd "$(ROOT_PROJECT_DEPENDENCY_PATH)/lib$(lib)" && $(MAKE) static_lib && cd "$(PROJECT_PATH)";)
+	@$(foreach lib,$(PROJECT_DEPEND_LOCAL_DIR), cd "$(ROOT_PROJECT_DEPENDENCY_PATH)/$(lib)" && $(MAKE) static_lib && cd "$(PROJECT_PATH)";)
 
 .PHONY: clean_deps
 clean_deps:
-	@$(foreach lib,$(PROJECT_DEPEND_LOCAL_DIR), cd "$(ROOT_PROJECT_DEPENDENCY_PATH)/lib$(lib)" && $(MAKE) clean && cd "$(PROJECT_PATH)";)
+	@$(foreach lib,$(PROJECT_DEPEND_LOCAL_DIR), cd "$(ROOT_PROJECT_DEPENDENCY_PATH)/$(lib)" && $(MAKE) clean && cd "$(PROJECT_PATH)";)
