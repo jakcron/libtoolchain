@@ -28,6 +28,9 @@ public:
 		/// Move constructor
 	ByteData(ByteData&& other);
 
+		/// Create from byte_t initalizer list
+	ByteData(std::initializer_list<byte_t> l);
+
 		/**
 		 * @brief Create linear memory block
 		 * 

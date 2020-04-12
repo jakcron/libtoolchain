@@ -10,6 +10,7 @@ void ByteData_TestClass::runAllTests(void)
 {
 	std::cout << "[tc::ByteData] START" << std::endl;
 	test_Constructor_DefaultConstructor();
+	test_Constructor_InitializerList();
 	test_Constructor_CreateZeroSized();
 	test_Constructor_CreateSmallSized();
 	test_Constructor_CreateLargeSized();
@@ -73,6 +74,45 @@ void ByteData_TestClass::test_Constructor_CreateZeroSized()
 			if (data.size() != 0)
 			{
 				throw tc::Exception(".size() did not return 0 when ByteData was constructed with size 0");
+			}
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void ByteData_TestClass::test_Constructor_InitializerList()
+{
+	std::cout << "[tc::ByteData] test_Constructor_InitializerList : " << std::flush;
+	try
+	{
+		try 
+		{
+			static const size_t expected_data_size = 0x10;
+			byte_t expected_data[expected_data_size] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
+			tc::ByteData data({0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f});
+
+			if (data.get() == nullptr)
+			{
+				throw tc::Exception(".get() returned nullptr when ByteData was constructed with an initializer list");
+			}
+
+			if (data.size() != expected_data_size)
+			{
+				throw tc::Exception(".size() did not return 0 when ByteData was constructed with an initializer list");
+			}
+
+			if (memcmp(data.get(), expected_data, expected_data_size) != 0)
+			{
+				throw tc::Exception(".get() did not contain expected data");	
 			}
 
 			std::cout << "PASS" << std::endl;
