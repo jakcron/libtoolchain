@@ -1,6 +1,0 @@
-[submodule "deps/libmbedtls"]
-	path = deps/libmbedtls
-	url = git@github.com:jakcron/mbedtls.git
-[submodule "deps/libpolarssl"]
-	path = deps/libpolarssl
-	url = git@github.com:jakcron/libpolarssl.git
