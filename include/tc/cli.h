@@ -10,3 +10,4 @@
 	 * @namespace   tc::cli
 	 * @brief       Namespace of the command-line interface (CLI) library
 	 */
+#include <tc/cli/FormatUtil.h>

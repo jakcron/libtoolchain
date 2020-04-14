@@ -15,6 +15,7 @@
 #include "io_SubSink_TestClass.h"
 #include "io_StreamSource_TestClass.h"
 #include "io_StreamSink_TestClass.h"
+#include "cli_FormatUtil_TestClass.h"
 
 void runTest(ITestClass* testClass)
 {
@@ -41,4 +42,5 @@ int main(int argc, char** argv)
 	runTest(new io_SubSink_TestClass());
 	runTest(new io_StreamSource_TestClass());
 	runTest(new io_StreamSink_TestClass());
+	runTest(new cli_FormatUtil_TestClass());
 }
