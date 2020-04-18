@@ -17,12 +17,12 @@ class IIvBasedEncryptor
 public:
 	virtual ~IIvBasedEncryptor() = default;
 
-	virtual size_t GetKeySize() const = 0;
-	virtual size_t GetIvSize() const = 0;
-	virtual size_t GetBlockSize() const = 0;
+	virtual size_t block_size() const = 0;
+	virtual size_t key_size() const = 0;
+	virtual size_t iv_size() const = 0;
 
-	virtual void EncryptBlock(byte_t* dst, size_t dst_size, const byte_t* iv, size_t iv_size, const byte_t* src, size_t src_size) = 0;
-	virtual void DecryptBlock(byte_t* dst, size_t dst_size, const byte_t* iv, size_t iv_size, const byte_t* src, size_t src_size) = 0;
+	virtual void encrypt(byte_t* dst, const byte_t* src, size_t size, const byte_t* iv) = 0;
+	virtual void decrypt(byte_t* dst, const byte_t* src, size_t size, const byte_t* iv) = 0;
 };
 
 }}
