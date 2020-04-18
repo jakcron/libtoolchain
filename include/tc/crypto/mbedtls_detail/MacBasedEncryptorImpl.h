@@ -47,6 +47,12 @@ public:
 
 	void encrypt(byte_t* dst, const byte_t* src, size_t size, byte_t* mac, size_t mac_size, const byte_t* nonce, size_t nonce_size, const byte_t* aad, size_t aad_size)
 	{
+		if (dst == nullptr) { /* throw exception */ }
+		if (src == nullptr) { /* throw exception */ }
+		if (mac == nullptr && mac_size != 0) { /* throw exception */ }
+		if (nonce == nullptr && nonce_size != 0) { /* throw exception */ }
+		if (aad == nullptr && aad_size != 0) { /* throw exception */ }
+
 		// mbedtls_cipher_setkey will succeed because the input was already validated
 		mbedtls_cipher_setkey(&mCtx, mKey.data(), KeyBitLen, MBEDTLS_ENCRYPT);
 
@@ -59,6 +65,12 @@ public:
 
 	bool decrypt(byte_t* dst, const byte_t* src, size_t size, const byte_t* mac, size_t mac_size, const byte_t* nonce, size_t nonce_size, const byte_t* aad, size_t aad_size)
 	{
+		if (dst == nullptr) { /* throw exception */ }
+		if (src == nullptr) { /* throw exception */ }
+		if (mac == nullptr && mac_size != 0) { /* throw exception */ }
+		if (nonce == nullptr && nonce_size != 0) { /* throw exception */ }
+		if (aad == nullptr && aad_size != 0) { /* throw exception */ }
+
 		// mbedtls_cipher_setkey will succeed because the input was already validated
 		mbedtls_cipher_setkey(&mCtx, mKey.data(), KeyBitLen, MBEDTLS_DECRYPT);
 
