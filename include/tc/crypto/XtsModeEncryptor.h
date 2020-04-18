@@ -3,7 +3,7 @@
 	 * @brief Declaration of tc::crypto::XtsModeEncryptor
 	 * @author Jack (jakcron)
 	 * @version 0.1
-	 * @date 2020/04/16
+	 * @date 2020/04/18
 	 **/
 #pragma once
 
