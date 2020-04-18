@@ -33,7 +33,7 @@ public:
 	
 	size_t block_size() const { return size_t(mbedtls_cipher_get_block_size(&mCtx)); }
 	size_t key_size() const { return KeyBitLen / 8; }
-	size_t iv_size() const { return block_size(); }
+	size_t iv_size() const { return size_t(mbedtls_cipher_get_iv_size(&mCtx)); }
 	
 
 	void initialize(const byte_t* key) 
