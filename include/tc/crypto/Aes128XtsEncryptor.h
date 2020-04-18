@@ -1,6 +1,6 @@
 	/**
-	 * @file Aes128CtrEncryptor.h
-	 * @brief Declaration of tc::crypto::Aes128CtrEncryptor
+	 * @file Aes128XtsEncryptor.h
+	 * @brief Declaration of tc::crypto::Aes128XtsEncryptor
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/04/15
@@ -19,6 +19,8 @@ namespace tc { namespace crypto {
 #endif
 
 #ifndef TC_CRYPTO_AES128XTSENCRYPTOR_NO_IMPL
+static_assert(std::is_base_of<IIvBasedEncryptor, Aes128XtsEncryptor>::value, "Aes128XtsEncryptor must be of type IIvBasedEncryptor.");
+
 void EncryptAes128Xts(byte_t* dst, const byte_t* src, size_t size, size_t sector_size, const byte_t* iv, const byte_t* key1, const byte_t* key2);
 void DecryptAes128Xts(byte_t* dst, const byte_t* src, size_t size, size_t sector_size, const byte_t* iv, const byte_t* key1, const byte_t* key2);
 #endif
