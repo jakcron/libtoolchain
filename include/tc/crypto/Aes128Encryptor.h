@@ -22,6 +22,8 @@ namespace tc { namespace crypto {
 #endif
 
 #ifndef TC_CRYPTO_AES128ENCRYPTOR_NO_IMPL
+static_assert(std::is_base_of<IEncryptor, Aes128Encryptor>::value, "Aes128Encryptor must be of type IEncryptor.");
+
 void EncryptAes128(byte_t* dst, const byte_t* src, size_t size, const byte_t* key);
 void DecryptAes128(byte_t* dst, const byte_t* src, size_t size, const byte_t* key);
 #endif

@@ -7,6 +7,7 @@
 	 **/
 #pragma once
 
+#include <tc/crypto/IEncryptor.h>
 #include <tc/crypto/IIvBasedEncryptor.h>
 #include <tc/crypto/CryptoUtil.h>
 
@@ -21,6 +22,7 @@ public:
 		mCryptCipher(),
 		mTweakCipher()
 	{
+		static_assert(std:is_base_of<IEncryptor, EcbModeCipher>, "XtsModeEncryptor can only work with IEncryptor based classes.");
 		if (mCryptCipher.block_size() != kRequiredBlockSize) { /* throw exception */ }
 	}
 

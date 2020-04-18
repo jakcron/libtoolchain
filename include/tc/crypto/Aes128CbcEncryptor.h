@@ -7,7 +7,7 @@
 	 **/
 #pragma once
 
-#include <tc/crypto/IEncryptor.h>
+#include <tc/crypto/IIvBasedEncryptor.h>
 
 #ifdef TC_CRYPTO_USE_MBEDTLS_AES_IMPL
 #include <tc/crypto/mbedtls_detail/IvBasedEncryptorImpl.h>
@@ -22,6 +22,8 @@ namespace tc { namespace crypto {
 #endif
 
 #ifndef TC_CRYPTO_AES128CBCENCRYPTOR_NO_IMPL
+static_assert(std::is_base_of<IIvBasedEncryptor, Aes128CbcEncryptor>::value, "Aes128CbcEncryptor must be of type IIvBasedEncryptor.");
+
 void EncryptAes128Cbc(byte_t* dst, const byte_t* src, size_t size, const byte_t* iv, const byte_t* key);
 void DecryptAes128Cbc(byte_t* dst, const byte_t* src, size_t size, const byte_t* iv, const byte_t* key);
 #endif
