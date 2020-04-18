@@ -8,6 +8,7 @@ void tc::crypto::CryptoUtil::XorBlock128(byte_t* dst, const byte_t* src_1, const
 
 void tc::crypto::CryptoUtil::GaloisFunc128(byte_t* tweak)
 {
+	/*
 	byte_t t = tweak[16-1];
 
 	for (byte_t i = 16-1; i > 0; i--)
@@ -16,6 +17,14 @@ void tc::crypto::CryptoUtil::GaloisFunc128(byte_t* tweak)
 	}
 
 	tweak[0] = (tweak[0] << 1) ^ (t & 0x80 ? 0x87 : 0x00);
+	*/
+	le_uint64_t* tweak_u64 = (le_uint64_t*)tweak; 
+
+    uint64_t ra = ( tweak_u64[0].unwrap() << 1 )  ^ 0x0087 >> ( 8 - ( ( tweak_u64[1].unwrap() >> 63 ) << 3 ) );
+    uint64_t rb = ( tweak_u64[0].unwrap() >> 63 ) | ( tweak_u64[1].unwrap() << 1 );
+
+	tweak_u64[0].wrap(ra);
+	tweak_u64[1].wrap(rb);
 }
 
 void tc::crypto::CryptoUtil::IncrementCounter128(byte_t* ctr, size_t incr)
