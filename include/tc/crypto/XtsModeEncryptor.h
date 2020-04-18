@@ -22,7 +22,7 @@ public:
 		mCryptCipher(),
 		mTweakCipher()
 	{
-		static_assert(std:is_base_of<IEncryptor, EcbModeCipher>, "XtsModeEncryptor can only work with IEncryptor based classes.");
+		static_assert(std::is_base_of<IEncryptor, EcbModeCipher>::value, "XtsModeEncryptor can only work with IEncryptor based classes.");
 		if (mCryptCipher.block_size() != kRequiredBlockSize) { /* throw exception */ }
 	}
 
