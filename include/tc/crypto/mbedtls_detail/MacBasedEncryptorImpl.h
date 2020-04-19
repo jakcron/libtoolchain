@@ -37,7 +37,6 @@ public:
 	size_t key_size() const { return mKey.size(); }
 	size_t nonce_size() const { return size_t(mbedtls_cipher_get_iv_size(&mCtx)); } 
 	
-
 	void initialize(const byte_t* key) 
 	{
 		if (key == nullptr) { /* throw exception */ }
