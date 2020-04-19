@@ -18,6 +18,7 @@ public:
 	static void GaloisFunc128(byte_t* tweak);
 	static void IncrementCounter128(byte_t* ctr, size_t incr);
 	static void CreateXtsTweak128(byte_t* tweak, const byte_t* base_tweak, size_t sector_index);
+	static bool IsBufferZeros(const byte_t* buffer, size_t buffer_size);
 };
 
 }} // namespace tc::crypto

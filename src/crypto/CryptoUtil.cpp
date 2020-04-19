@@ -59,3 +59,13 @@ void tc::crypto::CryptoUtil::CreateXtsTweak128(byte_t* tweak, const byte_t* base
 
 	IncrementCounter128(tweak, sector_index);
 }
+
+bool tc::crypto::CryptoUtil::IsBufferZeros(const byte_t* buffer, size_t buffer_size)
+{
+	byte_t t = 0;
+
+	for (size_t i = 0; i < buffer_size; i++)
+		t |= buffer[i];
+
+	return t == 0;
+}
