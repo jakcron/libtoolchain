@@ -1,3 +1,10 @@
+	/**
+	 * @file CryptoUtil.h
+	 * @brief Declaration of tc::crypto::CryptoUtil
+	 * @author Jack (jakcron)
+	 * @version 0.1
+	 * @date 2020/04/18
+	 **/
 #pragma once
 
 #include <tc/types.h>
