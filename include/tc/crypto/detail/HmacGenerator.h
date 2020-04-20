@@ -1,6 +1,6 @@
 	/**
 	 * @file HmacGenerator.h
-	 * @brief Declaration of tc::crypto::HmacGenerator
+	 * @brief Declaration of tc::crypto::detail::HmacGenerator
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/04/14
@@ -9,7 +9,7 @@
 
 #include <tc/crypto/IMacGenerator.h>
 
-namespace tc { namespace crypto {
+namespace tc { namespace crypto { namespace detail {
 
 template <typename HashFunction>
 class HmacGenerator : IMacGenerator
@@ -105,4 +105,4 @@ inline void HmacGenerator<HashFunction>::GetMac(byte_t* mac)
 	memcpy(mac, mMac, kMacSize);
 }
 
-}} // namespace tc::crypto
+}}} // namespace tc::crypto::detail

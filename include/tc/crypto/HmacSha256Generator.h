@@ -13,7 +13,7 @@
 #ifdef TC_CRYPTO_USE_MBEDTLS_HMAC_IMPL
 #include <tc/crypto/mbedtls_detail/HmacGeneratorImpl.h>
 #else
-#include <tc/crypto/HmacGenerator.h>
+#include <tc/crypto/detail/HmacGenerator.h>
 #endif
 
 namespace tc { namespace crypto {
@@ -23,7 +23,7 @@ namespace tc { namespace crypto {
 #ifdef TC_CRYPTO_USE_MBEDTLS_HMAC_IMPL
 	using HmacSha256Generator = mbedtls_detail::HmacGeneratorImpl<MBEDTLS_MD_SHA256, 32, 64>;
 #else
-	using HmacSha256Generator = HmacGenerator<Sha256Generator>;
+	using HmacSha256Generator = detail::HmacGenerator<Sha256Generator>;
 #endif // TC_CRYPTO_USE_MBEDTLS_HMAC_IMPL
 
 #else

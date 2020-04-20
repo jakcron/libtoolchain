@@ -29,7 +29,7 @@
 #include <tc/crypto/Sha512Generator.h>
 
 #include <tc/crypto/IMacGenerator.h>
-#include <tc/crypto/HmacGenerator.h>
+#include <tc/crypto/detail/HmacGenerator.h>
 #include <tc/crypto/HmacMd5Generator.h>
 #include <tc/crypto/HmacSha1Generator.h>
 #include <tc/crypto/HmacSha256Generator.h>

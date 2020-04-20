@@ -8,12 +8,12 @@
 #pragma once
 
 #include <tc/crypto/Aes128Encryptor.h>
-#include <tc/crypto/XtsModeEncryptor.h>
+#include <tc/crypto/detail/XtsModeEncryptor.h>
 
 namespace tc { namespace crypto {
 
 #ifndef TC_CRYPTO_AES128ENCRYPTOR_NO_IMPL
-	using Aes128XtsEncryptor = XtsModeEncryptor<Aes128Encryptor>;
+	using Aes128XtsEncryptor = detail::XtsModeEncryptor<Aes128Encryptor>;
 #else
 	#define TC_CRYPTO_AES128XTSENCRYPTOR_NO_IMPL
 #endif

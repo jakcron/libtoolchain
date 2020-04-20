@@ -1,6 +1,6 @@
 	/**
 	 * @file XtsModeEncryptor.h
-	 * @brief Declaration of tc::crypto::XtsModeEncryptor
+	 * @brief Declaration of tc::crypto::detail::XtsModeEncryptor
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/04/18
@@ -11,7 +11,7 @@
 #include <tc/crypto/IIvBasedEncryptor.h>
 #include <tc/crypto/CryptoUtil.h>
 
-namespace tc { namespace crypto {
+namespace tc { namespace crypto { namespace detail {
 
 template <class EcbModeCipher>
 class XtsModeEncryptor : public IIvBasedEncryptor
@@ -147,4 +147,4 @@ private:
 	EcbModeCipher mTweakCipher;
 };
 
-}} // namespace tc::crypto
+}}} // namespace tc::crypto::detail
