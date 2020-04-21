@@ -17,14 +17,12 @@ class IHashGenerator
 public:
 	virtual ~IHashGenerator() = default;
 
-	// static const size_t kHashSize = X;
-	// static const size_t kBlockSize = X;
-	virtual size_t GetHashSize() const = 0;
-	virtual size_t GetBlockSize() const = 0;
+	virtual size_t hash_size() const = 0;
+	virtual size_t block_size() const = 0;
 
-	virtual void Initialize() = 0;
-	virtual void Update(const byte_t* data, size_t data_size) = 0;
-	virtual void GetHash(byte_t* hash) = 0;
+	virtual void initialize() = 0;
+	virtual void update(const byte_t* data, size_t data_size) = 0;
+	virtual void getHash(byte_t* hash) = 0;
 };
 
 }}

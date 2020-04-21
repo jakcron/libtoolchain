@@ -5,8 +5,8 @@ void tc::crypto::GenerateMd5Hash(byte_t* hash, const byte_t* data, size_t data_s
 {
 	Md5Generator hashGenerator;
 
-	hashGenerator.Initialize();
-	hashGenerator.Update(data, data_size);
-	hashGenerator.GetHash(hash);
+	hashGenerator.initialize();
+	hashGenerator.update(data, data_size);
+	hashGenerator.getHash(hash);
 }
 #endif

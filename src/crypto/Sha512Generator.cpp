@@ -5,8 +5,8 @@ void tc::crypto::GenerateSha512Hash(byte_t* hash, const byte_t* data, size_t dat
 {
 	Sha512Generator hashGenerator;
 
-	hashGenerator.Initialize();
-	hashGenerator.Update(data, data_size);
-	hashGenerator.GetHash(hash);
+	hashGenerator.initialize();
+	hashGenerator.update(data, data_size);
+	hashGenerator.getHash(hash);
 }
 #endif

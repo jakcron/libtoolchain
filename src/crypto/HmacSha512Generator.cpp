@@ -5,8 +5,8 @@ void tc::crypto::GenerateHmacSha512Mac(byte_t* mac, const byte_t* data, size_t d
 {
 	HmacSha512Generator hashGenerator;
 
-	hashGenerator.Initialize(key, key_size);
-	hashGenerator.Update(data, data_size);
-	hashGenerator.GetMac(mac);
+	hashGenerator.initialize(key, key_size);
+	hashGenerator.update(data, data_size);
+	hashGenerator.getMac(mac);
 }
 #endif

@@ -16,9 +16,6 @@ template <mbedtls_md_type_t HashType, size_t MacSize, size_t BlockSize>
 class HmacGeneratorImpl : IMacGenerator
 {
 public:
-	static const size_t kMacSize = MacSize;
-	static const size_t kBlockSize = BlockSize;
-
 	HmacGeneratorImpl()
 	{
 		mbedtls_md_init(&mMdContext);
@@ -29,13 +26,15 @@ public:
 		mbedtls_md_free(&mMdContext);
 	}
 	
-	size_t GetMacSize() const { return kMacSize; }
-	size_t GetBlockSize() const { return kBlockSize; }
+	size_t mac_size() const { return kMacSize; }
+	size_t block_size() const { return kBlockSize; }
 
-	void Initialize(const byte_t* key, size_t key_size) { mbedtls_md_hmac_starts(&mMdContext, key, key_size); }
-	void Update(const byte_t* data, size_t data_size) { mbedtls_md_hmac_update(&mMdContext, data, data_size); }
-	void GetMac(byte_t* mac) { mbedtls_md_hmac_finish(&mMdContext, mac); }
+	void initialize(const byte_t* key, size_t key_size) { mbedtls_md_hmac_starts(&mMdContext, key, key_size); }
+	void update(const byte_t* data, size_t data_size) { mbedtls_md_hmac_update(&mMdContext, data, data_size); }
+	void getMac(byte_t* mac) { mbedtls_md_hmac_finish(&mMdContext, mac); }
 private:
+	static const size_t kMacSize = MacSize;
+	static const size_t kBlockSize = BlockSize;
 	mbedtls_md_context_t mMdContext;
 };
 

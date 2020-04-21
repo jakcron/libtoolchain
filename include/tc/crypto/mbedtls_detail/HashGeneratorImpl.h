@@ -16,9 +16,6 @@ template <mbedtls_md_type_t HashType, size_t HashSize, size_t BlockSize>
 class HashGeneratorImpl : IHashGenerator
 {
 public:
-	static const size_t kHashSize = HashSize;
-	static const size_t kBlockSize = BlockSize;
-
 	HashGeneratorImpl()
 	{
 		mbedtls_md_init(&mMdContext);
@@ -29,13 +26,15 @@ public:
 		mbedtls_md_free(&mMdContext);
 	}
 	
-	size_t GetHashSize() const { return kHashSize; }
-	size_t GetBlockSize() const { return kBlockSize; }
+	size_t hash_size() const { return kHashSize; }
+	size_t block_size() const { return kBlockSize; }
 
-	void Initialize() { mbedtls_md_starts(&mMdContext); }
-	void Update(const byte_t* data, size_t data_size) { mbedtls_md_update(&mMdContext, data, data_size); }
-	void GetHash(byte_t* hash) { mbedtls_md_finish(&mMdContext, hash); }
+	void initialize() { mbedtls_md_starts(&mMdContext); }
+	void update(const byte_t* data, size_t data_size) { mbedtls_md_update(&mMdContext, data, data_size); }
+	void getHash(byte_t* hash) { mbedtls_md_finish(&mMdContext, hash); }
 private:
+	static const size_t kHashSize = HashSize;
+	static const size_t kBlockSize = BlockSize;
 	mbedtls_md_context_t mMdContext;
 };
 

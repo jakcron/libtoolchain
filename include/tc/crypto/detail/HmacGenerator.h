@@ -15,26 +15,75 @@ template <typename HashFunction>
 class HmacGenerator : IMacGenerator
 {
 public:
-	static const size_t kMacSize = HashFunction::kHashSize;
-	static const size_t kBlockSize = HashFunction::kBlockSize;
-
 	HmacGenerator() :
+		mHashFunction(),
+		mKeyDigest(kBlockSize),
+		mMac(kMacSize),
 		mState(State::None)
 	{
 	}
 	~HmacGenerator()
 	{
-		memset(mKeyDigest, 0, kBlockSize);
-		memset(mMac, 0, kMacSize);
-		mState = State::None;	
+		memset(mKeyDigest.get(), 0, mKeyDigest.size());
+		memset(mMac.get(), 0, mMac.size());
+		mState = State::None;
 	}
 
-	size_t GetMacSize() const { return kMacSize; }
-	size_t GetBlockSize() const { return kBlockSize; }
+	size_t mac_size() const { return mMac.size(); }
+	size_t block_size() const { return kBlockSize; }
 
-	void Initialize(const byte_t* key, size_t key_size);
-	void Update(const byte_t* data, size_t data_size);
-	void GetMac(byte_t* mac);
+	void initialize(const byte_t* key, size_t key_size)
+	{
+		memset(mKeyDigest.get(), 0x00, mKeyDigest.size());
+
+		if (key_size > kBlockSize)
+		{
+			mHashFunction.initialize();
+			mHashFunction.update(key, key_size);
+			mHashFunction.getHash(mKeyDigest.get());
+		}
+		else
+		{
+			memcpy(mKeyDigest.get(), key, key_size);
+		}
+
+		for (uint32_t i = 0 ; i < kBlockSize / sizeof(uint32_t); i++)
+		{
+			((uint32_t*)mKeyDigest.get())[i] ^= 0x36363636;
+		}
+
+		mHashFunction.initialize();
+		mHashFunction.update(mKeyDigest.get(), mKeyDigest.size());
+
+		mState = State::Initialized;
+	}
+
+	void update(const byte_t* data, size_t data_size)
+	{
+		mHashFunction.update(data, data_size);
+	}
+
+	void getMac(byte_t* mac)
+	{
+		if (mState == State::Initialized)
+		{
+			mHashFunction.getHash(mMac.get());
+
+			for (uint32_t i = 0 ; i < kBlockSize / sizeof(uint32_t); i++)
+			{
+				((uint32_t*)mKeyDigest.get())[i] ^= 0x6A6A6A6A;
+			}
+
+			mHashFunction.initialize();
+			mHashFunction.update(mKeyDigest.get(), mKeyDigest.size());
+			mHashFunction.update(mMac.get(), mMac.size());
+			mHashFunction.getHash(mMac.get());
+
+			mState = State::Done;
+		}
+
+		memcpy(mac, mMac.get(), mMac.size());
+	}
 private:
 	enum class State
 	{
@@ -43,66 +92,13 @@ private:
 		Done
 	};
 
+	static const size_t kMacSize = HashFunction::kHashSize;
+	static const size_t kBlockSize = HashFunction::kBlockSize;
+
 	HashFunction mHashFunction;
-	byte_t mKeyDigest[kBlockSize];
-	byte_t mMac[kMacSize];
+	tc::ByteData mKeyDigest;
+	tc::ByteData mMac;
 	State mState;
 };
-
-template <typename HashFunction>
-inline void HmacGenerator<HashFunction>::Initialize(const byte_t* key, size_t key_size)
-{
-	memset(mKeyDigest, 0x00, kBlockSize);
-
-	if (key_size > kBlockSize)
-	{
-		mHashFunction.Initialize();
-		mHashFunction.Update(key, key_size);
-		mHashFunction.GetHash(mKeyDigest);
-	}
-	else
-	{
-		memcpy(mKeyDigest, key, key_size);
-	}
-
-	for (uint32_t i = 0 ; i < kBlockSize / sizeof(uint32_t); i++)
-	{
-		((uint32_t*)mKeyDigest)[i] ^= 0x36363636;
-	}
-
-	mHashFunction.Initialize();
-	mHashFunction.Update(mKeyDigest, kBlockSize);
-
-	mState = State::Initialized;
-}
-
-template <typename HashFunction>
-inline void HmacGenerator<HashFunction>::Update(const byte_t* data, size_t data_size)
-{
-	mHashFunction.Update(data, data_size);
-}
-
-template <typename HashFunction>
-inline void HmacGenerator<HashFunction>::GetMac(byte_t* mac)
-{
-	if (mState == State::Initialized)
-	{
-		mHashFunction.GetHash(mMac);
-
-		for (uint32_t i = 0 ; i < kBlockSize / sizeof(uint32_t); i++)
-		{
-			((uint32_t*)mKeyDigest)[i] ^= 0x6A6A6A6A;
-		}
-
-		mHashFunction.Initialize();
-		mHashFunction.Update(mKeyDigest, kBlockSize);
-		mHashFunction.Update(mMac, kMacSize);
-		mHashFunction.GetHash(mMac);
-
-		mState = State::Done;
-	}
-
-	memcpy(mac, mMac, kMacSize);
-}
 
 }}} // namespace tc::crypto::detail
