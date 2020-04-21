@@ -9,6 +9,8 @@
 
 #include <tc/crypto/IMacGenerator.h>
 
+#include <tc/ByteData.h>
+
 namespace tc { namespace crypto { namespace detail {
 
 template <typename HashFunction>
@@ -24,8 +26,8 @@ public:
 	}
 	~HmacGenerator()
 	{
-		memset(mKeyDigest.get(), 0, mKeyDigest.size());
-		memset(mMac.get(), 0, mMac.size());
+		memset(mKeyDigest.data(), 0, mKeyDigest.size());
+		memset(mMac.data(), 0, mMac.size());
 		mState = State::None;
 	}
 
@@ -34,26 +36,26 @@ public:
 
 	void initialize(const byte_t* key, size_t key_size)
 	{
-		memset(mKeyDigest.get(), 0x00, mKeyDigest.size());
+		memset(mKeyDigest.data(), 0x00, mKeyDigest.size());
 
 		if (key_size > kBlockSize)
 		{
 			mHashFunction.initialize();
 			mHashFunction.update(key, key_size);
-			mHashFunction.getHash(mKeyDigest.get());
+			mHashFunction.getHash(mKeyDigest.data());
 		}
 		else
 		{
-			memcpy(mKeyDigest.get(), key, key_size);
+			memcpy(mKeyDigest.data(), key, key_size);
 		}
 
 		for (uint32_t i = 0 ; i < kBlockSize / sizeof(uint32_t); i++)
 		{
-			((uint32_t*)mKeyDigest.get())[i] ^= 0x36363636;
+			((uint32_t*)mKeyDigest.data())[i] ^= 0x36363636;
 		}
 
 		mHashFunction.initialize();
-		mHashFunction.update(mKeyDigest.get(), mKeyDigest.size());
+		mHashFunction.update(mKeyDigest.data(), mKeyDigest.size());
 
 		mState = State::Initialized;
 	}
@@ -67,22 +69,22 @@ public:
 	{
 		if (mState == State::Initialized)
 		{
-			mHashFunction.getHash(mMac.get());
+			mHashFunction.getHash(mMac.data());
 
 			for (uint32_t i = 0 ; i < kBlockSize / sizeof(uint32_t); i++)
 			{
-				((uint32_t*)mKeyDigest.get())[i] ^= 0x6A6A6A6A;
+				((uint32_t*)mKeyDigest.data())[i] ^= 0x6A6A6A6A;
 			}
 
 			mHashFunction.initialize();
-			mHashFunction.update(mKeyDigest.get(), mKeyDigest.size());
-			mHashFunction.update(mMac.get(), mMac.size());
-			mHashFunction.getHash(mMac.get());
+			mHashFunction.update(mKeyDigest.data(), mKeyDigest.size());
+			mHashFunction.update(mMac.data(), mMac.size());
+			mHashFunction.getHash(mMac.data());
 
 			mState = State::Done;
 		}
 
-		memcpy(mac, mMac.get(), mMac.size());
+		memcpy(mac, mMac.data(), mMac.size());
 	}
 private:
 	enum class State

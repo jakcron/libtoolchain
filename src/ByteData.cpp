@@ -79,7 +79,7 @@ tc::ByteData& tc::ByteData::operator=(ByteData&& other)
 	return *this;
 }
 
-byte_t* tc::ByteData::get() const
+byte_t* tc::ByteData::data() const
 {
 	return mPtr.get();
 }

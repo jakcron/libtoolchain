@@ -87,18 +87,18 @@ public:
 	{
 		auto hash = tc::ByteData(this->hash_size());
 
-		mbedtls_md(mbedtls_md_info_from_type(HashType), src, src_size, hash.get());
+		mbedtls_md(mbedtls_md_info_from_type(HashType), src, src_size, hash.data());
 
-		signHash(signature, hash.get());
+		signHash(signature, hash.data());
 	}
 
 	bool verifyData(const byte_t* signature, const byte_t* src, size_t src_size)
 	{
 		auto hash = tc::ByteData(this->hash_size());
 		
-		mbedtls_md(mbedtls_md_info_from_type(HashType), src, src_size, hash.get());
+		mbedtls_md(mbedtls_md_info_from_type(HashType), src, src_size, hash.data());
 
-		return verifyHash(signature, hash.get());
+		return verifyHash(signature, hash.data());
 	}
 
 	void signHash(byte_t* signature, const byte_t* hash)

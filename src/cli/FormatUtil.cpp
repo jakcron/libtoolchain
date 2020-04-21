@@ -34,13 +34,13 @@ tc::ByteData tc::cli::FormatUtil::hexStringToBytes(const std::string& str)
 		if (byte == -1)
 			return tc::ByteData();
 
-		bytes.get()[i] = byte_t((byte & 0xf) << 4);
+		bytes.data()[i] = byte_t((byte & 0xf) << 4);
 
 		byte = charToByte(str[(i * 2) + 1]);
 		if (byte == -1)
 			return tc::ByteData();
 		
-		bytes.get()[i] |= byte_t((byte & 0xf) << 0);
+		bytes.data()[i] |= byte_t((byte & 0xf) << 0);
 	}
 
 	return bytes;
@@ -67,7 +67,7 @@ std::string tc::cli::FormatUtil::formatBytesAsStringWithLineLimit(const byte_t* 
 
 std::string tc::cli::FormatUtil::formatBytesAsStringWithLineLimit(const tc::ByteData& data, bool is_upper_case, const std::string& delimiter, size_t row_len, size_t indent_len)
 {
-	return formatBytesAsStringWithLineLimit(data.get(), data.size(), is_upper_case, delimiter, row_len, indent_len);
+	return formatBytesAsStringWithLineLimit(data.data(), data.size(), is_upper_case, delimiter, row_len, indent_len);
 }
 
 std::string tc::cli::FormatUtil::formatBytesAsString(const byte_t* data, size_t size, bool upper_case, const std::string& delimiter)
@@ -88,7 +88,7 @@ std::string tc::cli::FormatUtil::formatBytesAsString(const byte_t* data, size_t 
 
 std::string tc::cli::FormatUtil::formatBytesAsString(const tc::ByteData& data, bool is_upper_case, const std::string& delimiter)
 {
-	return formatBytesAsString(data.get(), data.size(), is_upper_case, delimiter);
+	return formatBytesAsString(data.data(), data.size(), is_upper_case, delimiter);
 }
 
 std::string tc::cli::FormatUtil::formatListWithLineLimit(const std::vector<std::string>& str_list, size_t row_len, size_t indent_len)
@@ -209,7 +209,7 @@ std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const byte_t* data, s
 
 std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const tc::ByteData& data, size_t bytes_per_row, size_t byte_group_size)
 {
-	return formatBytesAsHxdHexString(data.get(), data.size(), bytes_per_row, byte_group_size);
+	return formatBytesAsHxdHexString(data.data(), data.size(), bytes_per_row, byte_group_size);
 }
 
 std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const byte_t* data, size_t size)
@@ -219,5 +219,5 @@ std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const byte_t* data, s
 
 std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const tc::ByteData& data)
 {
-	return formatBytesAsHxdHexString(data.get(), data.size());
+	return formatBytesAsHxdHexString(data.data(), data.size());
 }

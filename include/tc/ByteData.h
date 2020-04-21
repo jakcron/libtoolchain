@@ -64,7 +64,7 @@ public:
 		/**
 		 * @brief Get data pointer
 		 **/
-	byte_t* get() const;
+	byte_t* data() const;
 
 		/**
 		 * @brief Get data size
