@@ -21,8 +21,8 @@ public:
 	virtual size_t key_size() const = 0;
 	virtual size_t signature_size() const = 0;
 
-	virtual void sign(byte_t* signature, const byte_t* src, size_t src_size) = 0;
-	virtual bool verify(const byte_t* signature, const byte_t* src, size_t src_size) = 0;
+	virtual void signData(byte_t* signature, const byte_t* src, size_t src_size) = 0;
+	virtual bool verifyData(const byte_t* signature, const byte_t* src, size_t src_size) = 0;
 };
 
 }}
