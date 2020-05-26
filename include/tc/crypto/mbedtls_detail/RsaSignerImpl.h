@@ -7,13 +7,15 @@
 	 **/
 #pragma once
 
-#include <tc/ByteData.h>
 #include <tc/crypto/ISigner.h>
 #include <tc/crypto/IHashSigner.h>
+
+#include <tc/ByteData.h>
+#include <tc/crypto/RsaKey.h>
 #include <tc/crypto/CryptoUtil.h>
 #include <tc/crypto/CryptoException.h>
 #include <tc/crypto/mbedtls_detail/MbedtlsErrorUtil.h>
-#include <tc/crypto/RsaKey.h>
+
 #include <mbedtls/entropy.h>
 #include <mbedtls/ctr_drbg.h>
 #include <mbedtls/md.h>
@@ -32,6 +34,8 @@ template <size_t KeyBitLen, int PaddingId, mbedtls_md_type_t HashType>
 class RsaSignerImpl : public ISigner, public IHashSigner
 {
 public:
+	static_assert(KeyBitLen == 1024 || KeyBitLen == 2048 || KeyBitLen == 4096, "RsaSignerImpl only supports 1024, 2048 and 4096 key bit lengths.");
+
 	RsaSignerImpl()
 	{
 		std::string pers = "tc::crypto::mbedtls_detail::RsaSignerImpl";
@@ -60,7 +64,7 @@ public:
 	size_t signature_size() const { return kKeySize; }
 	size_t hash_size() const { return mbedtls_md_get_size(mbedtls_md_info_from_type(HashType)); }
 
-	void initialize(const byte_t* n, const byte_t* p, const byte_t* q, const byte_t* d)
+	void initialize(const byte_t* n, const byte_t* p, const byte_t* q, const byte_t* d, const byte_t* e)
 	{
 		int ret = 1;
 
@@ -69,7 +73,7 @@ public:
 							   p, p == nullptr ? 0 : kKeySize / 2, \
 							   q, q == nullptr ? 0 : kKeySize / 2, \
 							   d, d == nullptr ? 0 : kKeySize, \
-							   (byte_t[]){0x01, 0x00, 0x01}, 3);
+							   e == nullptr ? (byte_t[]){0x01, 0x00, 0x01} : e, e == nullptr ? 3 : kKeySize);
 		
 		if (ret != 0) { throw tc::crypto::CryptoException("mbedtls_rsa_import_raw", MbedtlsErrorUtil::GetRsaErrorAsString(ret)); }
 
@@ -80,7 +84,13 @@ public:
 
 	void initialize(const RsaKey<KeyBitLen>& key)
 	{
-		initialize(CryptoUtil::IsBufferZeros(key.n.data(), key.n.size()) ? key.n.data() : nullptr, nullptr, nullptr, CryptoUtil::IsBufferZeros(key.private_exponent.data(), key.private_exponent.size()) ? key.private_exponent.data() : nullptr);
+		initialize(\
+			CryptoUtil::IsBufferZeros(key.n.data(), key.n.size()) ? key.n.data() : nullptr, \
+			CryptoUtil::IsBufferZeros(key.p.data(), key.p.size()) ? key.p.data() : nullptr, \
+			CryptoUtil::IsBufferZeros(key.q.data(), key.q.size()) ? key.q.data() : nullptr, \
+			CryptoUtil::IsBufferZeros(key.d.data(), key.d.size()) ? key.d.data() : nullptr, \
+			CryptoUtil::IsBufferZeros(key.e.data(), key.e.size()) ? key.e.data() : nullptr
+		);
 	}
 
 	void signData(byte_t* signature, const byte_t* src, size_t src_size)
