@@ -63,6 +63,8 @@ public:
 
 		/**
 		 * @brief Get data pointer
+		 * 
+		 * @return nullptr if @ref size() == 0
 		 **/
 	byte_t* data() const;
 
