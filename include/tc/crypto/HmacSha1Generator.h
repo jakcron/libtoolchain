@@ -17,6 +17,6 @@ using HmacSha1Generator = HmacGenerator<Sha1Generator>;
 
 void GenerateHmacSha1Mac(byte_t* mac, 
                          const byte_t* data, size_t data_size,
-						 const byte_t* key, size_t key_size);
+                         const byte_t* key, size_t key_size);
 
 }} // namespace tc::crypto
