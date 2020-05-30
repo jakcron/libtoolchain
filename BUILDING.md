@@ -3,7 +3,7 @@
 ### Requirements
 * `make`
 * `doxygen`
-* `graphvis`
+* `graphviz`
 * Terminal access
 * Typical GNU compatible development tools (e.g. `clang`, `g++`, `c++`, `ar` etc) with __C++11__ support
 
@@ -19,8 +19,8 @@
 ### Requirements
 * [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/) 2015 or 2017 or 2019
 * [Doxygen](http://www.doxygen.nl/download.html#srcbin)
-* [Graphvis](https://graphviz.gitlab.io/_pages/Download/Download_windows.html) (make sure to download the GUI)
-	* Add the location of the Graphvis `bin` directory to `$(PATH)` or create a separate enviroment variable `$(DOT_PATH)` for it.
+* [Graphviz](https://graphviz.gitlab.io/_pages/Download/Download_windows.html) (make sure to download the GUI)
+	* Add the location of the Graphviz `bin` directory to `$(PATH)` or create a separate enviroment variable `$(DOT_PATH)` for it.
 
 ### Compiling Library & Self-Test Program
 * Open `build/visualstudio/libtoolchain.sln` in Visual Studio
