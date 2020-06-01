@@ -22,7 +22,6 @@ tc::crypto::detail::Sha256Impl::~Sha256Impl()
 void tc::crypto::detail::Sha256Impl::initialize()
 {
 	mbedtls_md_starts(&(mImplCtx->mMdContext));
-	memset(mHash.data(), 0x00, mHash.size());
 	mState = State::Initialized;
 }
 
@@ -38,6 +37,8 @@ void tc::crypto::detail::Sha256Impl::getHash(byte_t* hash)
 		mbedtls_md_finish(&(mImplCtx->mMdContext), mHash.data());
 		mState = State::Done;
 	}
-
-	memcpy(hash, mHash.data(), mHash.size());	
+	if (mState == State::Done)
+	{
+		memcpy(hash, mHash.data(), mHash.size());
+	}	
 }
