@@ -179,6 +179,7 @@ public:
 		 * 
 		 * @pre
 		 * - Instance is in either Initialized or Done state.
+		 * - The size of the <tt><var>hash</var></tt> buffer must be >= @ref kHashSize.
 		 * 
 		 * @post
 		 * - Instance is now in a Done state.
@@ -204,6 +205,9 @@ private:
 	 * @param[out] hash Pointer to buffer storing hash value.
 	 * @param[in] data Pointer to input data.
 	 * @param[in] data_size Size of input data.
+	 * 
+	 * @pre
+	 * - The size of the <tt><var>hash</var></tt> buffer must be >= @ref Sha1Generator::kHashSize.
 	 * 
 	 * @post
 	 * - The calculated hash value is written to <tt><var>hash</var></tt>.
