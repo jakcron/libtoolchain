@@ -2,7 +2,7 @@
 #include <mbedtls/md.h>
 
 struct tc::crypto::detail::Sha256Impl::ImplCtx
-{	
+{
 	mbedtls_md_context_t mMdContext;
 };
 
