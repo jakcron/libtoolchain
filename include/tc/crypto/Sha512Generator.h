@@ -2,7 +2,7 @@
 	 * @file Sha512Generator.h
 	 * @brief Declaration of tc::crypto::Sha512Generator
 	 * @author Jack (jakcron)
-	 * @version 0.1
+	 * @version 0.2
 	 * @date 2020/06/01
 	 **/
 #pragma once
@@ -212,12 +212,6 @@ private:
 	 * This function calculates the hash value for input passed in the <tt><var>data</var></tt> array.
 	 * To calculate the hash value for input split across multiple arrays, use the @ref Sha512Generator class.
 	 */
-void GenerateSha512Hash(byte_t* hash, const byte_t* data, size_t data_size)
-{
-	Sha512Generator impl;
-	impl.initialize();
-	impl.update(data, data_size);
-	impl.getHash(hash);
-}
+void GenerateSha512Hash(byte_t* hash, const byte_t* data, size_t data_size);
 
 }} // namespace tc::crypto

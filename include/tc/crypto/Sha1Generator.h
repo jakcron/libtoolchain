@@ -2,7 +2,7 @@
 	 * @file Sha1Generator.h
 	 * @brief Declaration of tc::crypto::Sha1Generator
 	 * @author Jack (jakcron)
-	 * @version 0.2
+	 * @version 0.3
 	 * @date 2020/06/01
 	 **/
 #pragma once
@@ -216,12 +216,6 @@ private:
 	 * This function calculates the hash value for input passed in the <tt><var>data</var></tt> array.
 	 * To calculate the hash value for input split across multiple arrays, use the @ref Sha1Generator class.
 	 */
-void GenerateSha1Hash(byte_t* hash, const byte_t* data, size_t data_size)
-{
-	Sha1Generator impl;
-	impl.initialize();
-	impl.update(data, data_size);
-	impl.getHash(hash);
-}
+void GenerateSha1Hash(byte_t* hash, const byte_t* data, size_t data_size);
 
 }} // namespace tc::crypto

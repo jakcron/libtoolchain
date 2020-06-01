@@ -2,7 +2,7 @@
 	 * @file Md5Generator.h
 	 * @brief Declaration of tc::crypto::Md5Generator
 	 * @author Jack (jakcron)
-	 * @version 0.1
+	 * @version 0.2
 	 * @date 2020/06/01
 	 **/
 #pragma once
@@ -216,12 +216,6 @@ private:
 	 * This function calculates the hash value for input passed in the <tt><var>data</var></tt> array.
 	 * To calculate the hash value for input split across multiple arrays, use the @ref Md5Generator class.
 	 */
-void GenerateMd5Hash(byte_t* hash, const byte_t* data, size_t data_size)
-{
-	Md5Generator impl;
-	impl.initialize();
-	impl.update(data, data_size);
-	impl.getHash(hash);
-}
+void GenerateMd5Hash(byte_t* hash, const byte_t* data, size_t data_size);
 
 }} // namespace tc::crypto
