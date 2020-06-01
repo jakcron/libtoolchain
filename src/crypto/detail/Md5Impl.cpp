@@ -1,13 +1,13 @@
 #include <tc/crypto/detail/Md5Impl.h>
 #include <mbedtls/md.h>
-#include <mbedtls/oid.h>
 
 struct tc::crypto::detail::Md5Impl::ImplCtx
-{
+{	
 	mbedtls_md_context_t mMdContext;
 };
 
 tc::crypto::detail::Md5Impl::Md5Impl() :
+	mState(State::None),
 	mImplCtx(new ImplCtx())
 {
 	mbedtls_md_init(&(mImplCtx->mMdContext));
@@ -22,6 +22,8 @@ tc::crypto::detail::Md5Impl::~Md5Impl()
 void tc::crypto::detail::Md5Impl::initialize()
 {
 	mbedtls_md_starts(&(mImplCtx->mMdContext));
+	memset(mHash.data(), 0x00, mHash.size());
+	mState = State::Initialized;
 }
 
 void tc::crypto::detail::Md5Impl::update(const byte_t* src, size_t src_size)
@@ -31,5 +33,11 @@ void tc::crypto::detail::Md5Impl::update(const byte_t* src, size_t src_size)
 
 void tc::crypto::detail::Md5Impl::getHash(byte_t* hash)
 {
-	mbedtls_md_finish(&(mImplCtx->mMdContext), hash);
+	if (mState == State::Initialized)
+	{
+		mbedtls_md_finish(&(mImplCtx->mMdContext), mHash.data());
+		mState = State::Done;
+	}
+
+	memcpy(hash, mHash.data(), mHash.size());	
 }
