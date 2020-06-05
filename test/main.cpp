@@ -20,6 +20,10 @@
 #include "crypto_Sha1Generator_TestClass.h"
 #include "crypto_Sha256Generator_TestClass.h"
 #include "crypto_Sha512Generator_TestClass.h"
+#include "crypto_HmacMd5Generator_TestClass.h"
+#include "crypto_HmacSha1Generator_TestClass.h"
+#include "crypto_HmacSha256Generator_TestClass.h"
+#include "crypto_HmacSha512Generator_TestClass.h"
 
 void runTest(ITestClass* testClass)
 {
@@ -51,4 +55,8 @@ int main(int argc, char** argv)
 	runTest(new crypto_Sha1Generator_TestClass());
 	runTest(new crypto_Sha256Generator_TestClass());
 	runTest(new crypto_Sha512Generator_TestClass());
+	runTest(new crypto_HmacMd5Generator_TestClass());
+	runTest(new crypto_HmacSha1Generator_TestClass());
+	runTest(new crypto_HmacSha256Generator_TestClass());
+	runTest(new crypto_HmacSha512Generator_TestClass());
 }

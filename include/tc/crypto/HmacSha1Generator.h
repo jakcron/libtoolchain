@@ -1,6 +1,6 @@
 	/**
-	 * @file HmacGenerator.h
-	 * @brief Declaration of tc::crypto::HmacGenerator
+	 * @file HmacSha1Generator.h
+	 * @brief Declarations for API resources for HMAC-SHA-1 calculations.
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/05/30
@@ -13,10 +13,37 @@
 
 namespace tc { namespace crypto {
 
+	/**
+	 * @brief Class for calculating HMAC-SHA-1.
+	 * 
+	 * @warning SHA-1 is considered a weak message digest and its use constitutes a security risk. It should only be used to maintain compatibility with legacy systems.
+	 * 
+	 * @details This class calcualtes MAC using SHA-1.
+	 * For more information refer to @ref HmacGenerator.
+	 */
 using HmacSha1Generator = HmacGenerator<Sha1Generator>;
 
-void GenerateHmacSha1Mac(byte_t* mac, 
-                         const byte_t* data, size_t data_size,
-                         const byte_t* key, size_t key_size);
+	/**
+	 * @brief Utility function for calculating HMAC-SHA-1.
+	 * 
+	 * @warning SHA-1 is considered a weak message digest and its use constitutes a security risk. It should only be used to maintain compatibility with legacy systems.
+	 * 
+	 * @param[out] mac Pointer to the buffer storing the MAC.
+	 * @param[in]  data Pointer to input data.
+	 * @param[in]  data_size Size in bytes of input data.
+	 * @param[in]  key Pointer to key data.
+	 * @param[in]  key_size Size in bytes of key data.
+	 * 
+	 * @pre
+	 * - Size of the MAC buffer must >= <tt>HmacSha1Generator::kMacSize</tt>.
+	 * 
+	 * @post
+	 * - The MAC is written to <tt><var>mac</var></tt>.
+	 * 
+	 * @details
+	 * This function calculates a MAC for the passed in data array.
+	 * To calculate a MAC for data split into multiple arrays, use the @ref HmacSha1Generator class.
+	 */
+void GenerateHmacSha1Mac(byte_t* mac, const byte_t* data, size_t data_size, const byte_t* key, size_t key_size);
 
 }} // namespace tc::crypto
