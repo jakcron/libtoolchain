@@ -1,6 +1,6 @@
 	/**
 	 * @file Md5Generator.h
-	 * @brief Declaration of tc::crypto::Md5Generator and tc::crypto::GenerateMd5Hash
+	 * @brief Declarations for API resources for MD5 calculations.
 	 * @author Jack (jakcron)
 	 * @version 0.2
 	 * @date 2020/06/01

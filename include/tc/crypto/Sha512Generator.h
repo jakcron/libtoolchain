@@ -1,6 +1,6 @@
 	/**
 	 * @file Sha512Generator.h
-	 * @brief Declaration of tc::crypto::Sha512Generator and tc::crypto::GenerateSha512Hash
+	 * @brief Declarations for API resources for SHA-512 calculations.
 	 * @author Jack (jakcron)
 	 * @version 0.2
 	 * @date 2020/06/01

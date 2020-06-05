@@ -1,6 +1,6 @@
 	/**
 	 * @file Sha256Generator.h
-	 * @brief Declaration of tc::crypto::Sha256Generator and tc::crypto::GenerateSha256Hash
+	 * @brief Declarations for API resources for SHA-256 calculations.
 	 * @author Jack (jakcron)
 	 * @version 0.2
 	 * @date 2020/06/01
