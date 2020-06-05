@@ -79,8 +79,10 @@ public:
 
 			mState = State::Done;
 		}
-
-		std::memcpy(mac, mMac.data(), mMac.size());
+		if (mState == State::Done)
+		{
+			std::memcpy(mac, mMac.data(), mMac.size());
+		}		
 	}
 private:
 	enum class State
