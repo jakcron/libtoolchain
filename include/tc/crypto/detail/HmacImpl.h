@@ -2,8 +2,8 @@
 	 * @file HmacImpl.h
 	 * @brief Declaration of tc::crypto::detail::HmacImpl
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2020/05/28
+	 * @version 0.2
+	 * @date 2020/06/06
 	 **/
 #pragma once
 
