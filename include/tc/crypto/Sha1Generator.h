@@ -1,6 +1,6 @@
 	/**
 	 * @file Sha1Generator.h
-	 * @brief Declaration of tc::crypto::Sha1Generator
+	 * @brief Declaration of tc::crypto::Sha1Generator and tc::crypto::GenerateSha1Hash
 	 * @author Jack (jakcron)
 	 * @version 0.3
 	 * @date 2020/06/01
