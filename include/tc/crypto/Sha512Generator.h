@@ -96,7 +96,7 @@ public:
 	static const size_t kBlockSize = 128; /**< SHA-512 processing block size */
 
 		/**
-		 * @brief Default constructor
+		 * @brief Default constructor.
 		 * 
 		 * @post
 		 * - State is None. @ref initialize() must be called before use.

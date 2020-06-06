@@ -112,7 +112,7 @@ public:
 	static const size_t kBlockSize = HashFunction::kBlockSize; /**< HMAC block processing size */
 
 		/**
-		 * @brief Default constructor
+		 * @brief Default constructor.
 		 * 
 		 * @post
 		 * - State is None. @ref initialize() must be called before use.
