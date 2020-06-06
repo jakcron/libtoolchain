@@ -36,7 +36,7 @@ public:
 		mState(State::None),
 		mPassword(),
 		mSalt(),
-		mIterationCount(0),
+		mRoundCount(0),
 		mHash(),
 		mAvailableData(0),
 		mTotalDataDerived(0)
@@ -50,7 +50,7 @@ public:
 		std::memset(mPassword.data(), 0, mPassword.size());
 		std::memset(mSalt.data(), 0, mSalt.size());
 		std::memset(mDerivedData.data(), 0, mDerivedData.size());
-		mIterationCount = 0;
+		mRoundCount = 0;
 		mAvailableData = 0;
 		mTotalDataDerived = 0;
 	}
