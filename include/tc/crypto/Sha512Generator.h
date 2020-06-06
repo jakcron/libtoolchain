@@ -6,13 +6,13 @@
 	 * @date 2020/06/01
 	 **/
 #pragma once
-
 #include <tc/types.h>
 #include <tc/crypto/detail/Sha512Impl.h>
 
 namespace tc { namespace crypto {
 
 	/**
+	 * @class Sha512Generator
 	 * @brief Class for calculating SHA-512 hash.
 	 * 
 	 * @details

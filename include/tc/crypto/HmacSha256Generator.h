@@ -6,7 +6,6 @@
 	 * @date 2020/06/06
 	 **/
 #pragma once
-
 #include <tc/types.h>
 #include <tc/crypto/Sha256Generator.h>
 #include <tc/crypto/HmacGenerator.h>
@@ -14,6 +13,7 @@
 namespace tc { namespace crypto {
 
 	/**
+	 * @typedef HmacSha256Generator
 	 * @brief Class for calculating HMAC-SHA-256.
 	 * 
 	 * @details This class calcualtes MAC using SHA-256.

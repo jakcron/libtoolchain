@@ -6,11 +6,17 @@
 	 * @date 2020/06/06
 	 **/
 #pragma once
-
+#include <tc/types.h>
 #include <tc/ByteData.h>
 
 namespace tc { namespace crypto { namespace detail {
 
+	/**
+	 * @class HmacImpl
+	 * @brief This class implements HMAC as a template class.
+	 * 
+	 * @tparam HashFunction The class that implements the hash function used for HMAC calculation.
+	 */
 template <typename HashFunction>
 class HmacImpl
 {
@@ -92,10 +98,10 @@ private:
 		Done
 	};
 
-	HashFunction					mHashFunction;
-	std::array<byte_t, kBlockSize>	mKeyDigest;
-	std::array<byte_t, kMacSize>	mMac;
-	State 							mState;
+	HashFunction mHashFunction;
+	std::array<byte_t, kBlockSize> mKeyDigest;
+	std::array<byte_t, kMacSize> mMac;
+	State mState;
 };
 
 }}} // namespace tc::crypto::detail

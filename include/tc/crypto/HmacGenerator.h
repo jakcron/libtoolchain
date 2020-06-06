@@ -6,13 +6,13 @@
 	 * @date 2020/05/30
 	 **/
 #pragma once
-
 #include <tc/types.h>
 #include <tc/crypto/detail/HmacImpl.h>
 
 namespace tc { namespace crypto {
 
 	/**
+	 * @class HmacGenerator
 	 * @brief Class for calculating an HMAC.
 	 * 
 	 * @tparam HashFunction The class that implements the hash function for generating HMAC.

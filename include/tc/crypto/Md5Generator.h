@@ -6,13 +6,13 @@
 	 * @date 2020/06/01
 	 **/
 #pragma once
-
 #include <tc/types.h>
 #include <tc/crypto/detail/Md5Impl.h>
 
 namespace tc { namespace crypto {
 
 	/**
+	 * @class Md5Generator
 	 * @brief Class for calculating MD5 hash.
 	 * 
 	 * @warning MD5 is considered a weak message digest and its use constitutes a security risk. It should only be used to maintain compatibility with legacy systems.

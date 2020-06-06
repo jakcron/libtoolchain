@@ -6,11 +6,14 @@
 	 * @date 2020/06/01
 	 **/
 #pragma once
-
 #include <tc/types.h>
 
 namespace tc { namespace crypto { namespace detail {
 
+	/**
+	 * @class Sha256Impl
+	 * @brief This class implements the SHA-256 hash algorithm.
+	 */
 class Sha256Impl
 {
 public:

@@ -6,7 +6,6 @@
 	 * @date 2020/06/06
 	 **/
 #pragma once
-
 #include <tc/types.h>
 #include <tc/crypto/Md5Generator.h>
 #include <tc/crypto/HmacGenerator.h>
@@ -14,6 +13,7 @@
 namespace tc { namespace crypto {
 
 	/**
+	 * @typedef HmacMd5Generator
 	 * @brief Class for calculating HMAC-MD5.
 	 * 
 	 * @details This class calcualtes MAC using MD5.
