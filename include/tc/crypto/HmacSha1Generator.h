@@ -16,8 +16,6 @@ namespace tc { namespace crypto {
 	/**
 	 * @brief Class for calculating HMAC-SHA-1.
 	 * 
-	 * @warning SHA-1 is considered a weak message digest and its use constitutes a security risk. It should only be used to maintain compatibility with legacy systems.
-	 * 
 	 * @details This class calcualtes MAC using SHA-1.
 	 * For more information refer to @ref HmacGenerator.
 	 */
@@ -25,8 +23,6 @@ using HmacSha1Generator = HmacGenerator<Sha1Generator>;
 
 	/**
 	 * @brief Utility function for calculating HMAC-SHA-1.
-	 * 
-	 * @warning SHA-1 is considered a weak message digest and its use constitutes a security risk. It should only be used to maintain compatibility with legacy systems.
 	 * 
 	 * @param[out] mac Pointer to the buffer storing the MAC.
 	 * @param[in]  data Pointer to input data.
