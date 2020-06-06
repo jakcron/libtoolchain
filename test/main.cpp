@@ -24,6 +24,11 @@
 #include "crypto_HmacSha1Generator_TestClass.h"
 #include "crypto_HmacSha256Generator_TestClass.h"
 #include "crypto_HmacSha512Generator_TestClass.h"
+#include "crypto_Pbkdf1Md5KeyDeriver_TestClass.h"
+#include "crypto_Pbkdf1Sha1KeyDeriver_TestClass.h"
+#include "crypto_Pbkdf2Sha1KeyDeriver_TestClass.h"
+#include "crypto_Pbkdf2Sha256KeyDeriver_TestClass.h"
+#include "crypto_Pbkdf2Sha512KeyDeriver_TestClass.h"
 
 void runTest(ITestClass* testClass)
 {
@@ -59,4 +64,9 @@ int main(int argc, char** argv)
 	runTest(new crypto_HmacSha1Generator_TestClass());
 	runTest(new crypto_HmacSha256Generator_TestClass());
 	runTest(new crypto_HmacSha512Generator_TestClass());
+	runTest(new crypto_Pbkdf1Md5KeyDeriver_TestClass());
+	runTest(new crypto_Pbkdf1Sha1KeyDeriver_TestClass());
+	runTest(new crypto_Pbkdf2Sha1KeyDeriver_TestClass());
+	runTest(new crypto_Pbkdf2Sha256KeyDeriver_TestClass());
+	runTest(new crypto_Pbkdf2Sha512KeyDeriver_TestClass());
 }
