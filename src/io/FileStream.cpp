@@ -541,7 +541,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 			case (EEXIST):
 				throw tc::io::FileExistsException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EINVAL):
-				throw tc::ArgumentOutOfRangeException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));			
+				throw tc::ArgumentOutOfRangeException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EFAULT):
 				throw tc::AccessViolationException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EISDIR):
@@ -627,7 +627,7 @@ size_t tc::io::FileStream::read_impl(byte_t* ptr, size_t count)
 		switch (errno) 
 		{	
 			case (EINVAL):
-				throw tc::ArgumentOutOfRangeException(kClassName+"::read()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));			
+				throw tc::ArgumentOutOfRangeException(kClassName+"::read()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EFAULT):
 				throw tc::AccessViolationException(kClassName+"::read()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EISDIR):
@@ -703,7 +703,7 @@ int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
 		switch (errno) 
 		{
 			case (EINVAL):
-				throw tc::ArgumentOutOfRangeException(kClassName+"::seek()",  PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));			
+				throw tc::ArgumentOutOfRangeException(kClassName+"::seek()",  PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EOVERFLOW):
 				throw tc::OverflowException(kClassName+"::seek()",  PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EBADF):
