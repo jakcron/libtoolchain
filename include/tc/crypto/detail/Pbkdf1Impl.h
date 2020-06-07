@@ -62,6 +62,10 @@ public:
 		mPassword = tc::ByteData(password, password_size);
 		mSalt = tc::ByteData(salt, salt_size);
 		mRoundCount = n_rounds;
+
+		mAvailableData = 0;
+		mTotalDataDerived = 0;
+		
 		mState = State::Initialized;
 	}
 

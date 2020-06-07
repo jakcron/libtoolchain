@@ -66,6 +66,10 @@ public:
 		mSalt = tc::ByteData(salt, salt_size);
 		mRoundCount = n_rounds;
 		mBlockIndex = 1;
+
+		mAvailableData = 0;
+		mTotalDataDerived = 0;
+		
 		mState = State::Initialized;
 	}
 
