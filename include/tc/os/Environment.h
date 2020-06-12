@@ -19,7 +19,7 @@ namespace tc { namespace os {
 	 * @param[in] name Name of environment variable.
 	 * @param[out] value Reference to string to populate with variable.
 	 *
-	 * @post @p value will contain variable if the variable exists.
+	 * @post @p value will contain the environment variable if it exists.
 	 * 
 	 * @return true if operation was successful.
 	 */
