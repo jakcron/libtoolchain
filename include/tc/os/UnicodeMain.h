@@ -25,20 +25,20 @@
 	 * @param[in] env vector of UTF-8 encoded environment variables.
 	 * 
 	 * @details
-	 * You must define this method, it replaces using regular entry points like main, wmain, tmain, etc...
+	 * You must define this function, it replaces using regular entry points like main, wmain, tmain, etc...
 	 */
 int umain(const std::vector<std::string>& args, const std::vector<std::string>& env);
 
 #ifdef _WIN32
 	/**
 	 * @brief Native unicode entry point is defined here and bootstraps @ref umain().
-	 * @warning Do not call this function
+	 * @warning Do not call or define this function
 	 */
 int wmain(int argc, wchar_t* argv[], wchar_t* envp[])
 #else
 	/**
 	 * @brief Native unicode entry point is defined here and bootstraps @ref umain().
-	 * @warning Do not call this function
+	 * @warning Do not call or define this function
 	 */
 int main(int argc, char* argv[], char* envp[])
 #endif
