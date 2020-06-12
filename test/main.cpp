@@ -29,6 +29,7 @@
 #include "crypto_Pbkdf2Sha1KeyDeriver_TestClass.h"
 #include "crypto_Pbkdf2Sha256KeyDeriver_TestClass.h"
 #include "crypto_Pbkdf2Sha512KeyDeriver_TestClass.h"
+#include "crypto_PseudoRandomByteGenerator_TestClass.h"
 
 void runTest(ITestClass* testClass)
 {
@@ -38,6 +39,16 @@ void runTest(ITestClass* testClass)
 
 int main(int argc, char** argv)
 {
+	bool includeSlowTests = true;
+	if (argc > 1)
+	{
+		static const std::string kNoSlowTestFlag = "--fast";
+		if (strncmp(argv[1], kNoSlowTestFlag.c_str(), kNoSlowTestFlag.size()) == 0)
+		{
+			includeSlowTests = false;
+		}
+	}
+
 	runTest(new string_TranscodeUtil_TestClass());
 	runTest(new ByteData_TestClass());
 	runTest(new endian_TestClass());
@@ -64,9 +75,13 @@ int main(int argc, char** argv)
 	runTest(new crypto_HmacSha1Generator_TestClass());
 	runTest(new crypto_HmacSha256Generator_TestClass());
 	runTest(new crypto_HmacSha512Generator_TestClass());
-	runTest(new crypto_Pbkdf1Md5KeyDeriver_TestClass());
-	runTest(new crypto_Pbkdf1Sha1KeyDeriver_TestClass());
-	runTest(new crypto_Pbkdf2Sha1KeyDeriver_TestClass());
-	runTest(new crypto_Pbkdf2Sha256KeyDeriver_TestClass());
-	runTest(new crypto_Pbkdf2Sha512KeyDeriver_TestClass());
+	if (includeSlowTests)
+	{
+		runTest(new crypto_Pbkdf1Md5KeyDeriver_TestClass());
+		runTest(new crypto_Pbkdf1Sha1KeyDeriver_TestClass());
+		runTest(new crypto_Pbkdf2Sha1KeyDeriver_TestClass());
+		runTest(new crypto_Pbkdf2Sha256KeyDeriver_TestClass());
+		runTest(new crypto_Pbkdf2Sha512KeyDeriver_TestClass());
+	}
+	runTest(new crypto_PseudoRandomByteGenerator_TestClass());
 }
