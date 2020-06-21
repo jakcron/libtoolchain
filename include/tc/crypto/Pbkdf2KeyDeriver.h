@@ -73,7 +73,7 @@ public:
 		 * - @p salt is optional however the strength of the derived key is reduced if the salt is not sufficently random.
 		 * 
 		 * @post
-		 * - Instance is now in a Initialized state
+		 * - Instance is now in an Initialized state.
 		 * 
 		 * @throw tc::crypto::CryptoException @p n_rounds was < 1.
 		 * 
@@ -95,7 +95,7 @@ public:
 		 * @param[in]  key_size Size of key to derive.
 		 * 
 		 * @pre
-		 * - Instance is in either Initialized or Done state.
+		 * - Instance is in an Initialized state.
 		 * 
 		 * @post
 		 * - The derived key is written to <tt><var>key</var></tt>.
