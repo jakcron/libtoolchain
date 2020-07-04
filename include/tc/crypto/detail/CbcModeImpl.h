@@ -15,7 +15,7 @@ namespace tc { namespace crypto { namespace detail {
 
 	/**
 	 * @class CbcModeImpl
-	 * @brief This class implements the CBC (<b>c</c>ipher <b>b</b>lock <b>c</b>haining) mode cipher as a template class.
+	 * @brief This class implements the CBC (<b>c</b>ipher <b>b</b>lock <b>c</b>haining) mode cipher as a template class.
 	 * 
 	 * @tparam BlockCipher The class that implements the block cipher used for CBC mode encryption/decryption.
 	 * 
