@@ -438,7 +438,7 @@ void crypto_Aes256EcbEncryptor_TestClass::test_DecryptThrowsExceptionOnBadInput(
 
 			tc::ByteData data = tc::ByteData(tests[0].plaintext.size());
 
-			// reference encrypt call
+			// reference decrypt call
 			//cryptor.decrypt(data.data(), tests[0].ciphertext.data(), data.size());
 
 			try {

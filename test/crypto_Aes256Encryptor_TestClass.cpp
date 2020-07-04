@@ -10,12 +10,19 @@
 #include <tc/crypto/AesEncryptor.h>
 #include <tc/cli/FormatUtil.h>
 
+#include <tc/io/PaddingSource.h>
+
 void crypto_Aes256Encryptor_TestClass::runAllTests(void)
 {
 	std::cout << "[tc::crypto::Aes256Encryptor] START" << std::endl;
 	test_Constants();
 	test_UseClassEnc();
 	test_UseClassDec();
+
+	test_DoesNothingWhenNotInit();
+	test_InitializeThrowsExceptionOnBadInput();
+	test_EncryptThrowsExceptionOnBadInput();
+	test_DecryptThrowsExceptionOnBadInput();
 	std::cout << "[tc::crypto::Aes256Encryptor] END" << std::endl;
 }
 

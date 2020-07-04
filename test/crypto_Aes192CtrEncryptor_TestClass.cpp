@@ -404,7 +404,7 @@ void crypto_Aes192CtrEncryptor_TestClass::test_EncryptThrowsExceptionOnBadInput(
 			tc::ByteData data = tc::ByteData(tests[0].plaintext.size());
 
 			// reference encrypt call
-			//cryptor.encrypt(data.data(), tests[0].plaintext.data(), data.size());
+			//cryptor.encrypt(data.data(), tests[0].plaintext.data(), data.size(), 0);
 
 			try {
 				cryptor.encrypt(nullptr, tests[0].plaintext.data(), data.size(), 0);
@@ -459,8 +459,8 @@ void crypto_Aes192CtrEncryptor_TestClass::test_DecryptThrowsExceptionOnBadInput(
 
 			tc::ByteData data = tc::ByteData(tests[0].plaintext.size());
 
-			// reference encrypt call
-			//cryptor.decrypt(data.data(), tests[0].ciphertext.data(), data.size());
+			// reference decrypt call
+			//cryptor.decrypt(data.data(), tests[0].ciphertext.data(), data.size(), 0);
 
 			try {
 				cryptor.decrypt(nullptr, tests[0].ciphertext.data(), data.size(), 0);
