@@ -2,8 +2,6 @@
 #include <sstream>
 #include <fstream>
 
-#include <mbedtls/aes.h>
-
 #include "crypto_Aes128XtsEncryptor_TestClass.h"
 
 #include <tc/Exception.h>
