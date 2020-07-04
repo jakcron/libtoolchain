@@ -42,6 +42,6 @@ using Pbkdf1Sha1KeyDeriver = Pbkdf1KeyDeriver<Sha1Generator>;
 	 * @throw tc::crypto::CryptoException @p n_round was < 1
 	 * @throw tc::crypto::CryptoException @p key_size was too large.
 	 */
-void DeriveKeyPbkdf1Sha1(byte_t* key, size_t key_size, const byte_t* password, size_t password_size, const byte_t* salt, size_t salt_size, size_t n_round);
+void DeriveKeyPbkdf1Sha1(byte_t* key, size_t key_size, const byte_t* password, size_t password_size, const byte_t* salt, size_t salt_size, size_t n_rounds);
 
 }} // namespace tc::crypto

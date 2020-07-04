@@ -73,16 +73,16 @@ public:
 		mState = State::Initialized;
 	}
 
-	void getBytes(byte_t* out, size_t out_size)
+	void getBytes(byte_t* key, size_t key_size)
 	{
 		if (mState != State::Initialized) return;
 
 		// determine data remaining
 		size_t derivable_data = kMaxDerivableSize - mTotalDataDerived + mAvailableData;
 
-		if (out_size > derivable_data) { throw tc::crypto::CryptoException("tc::crypto::detail::Pbkdf1Impl", "Request too large."); }
+		if (key_size > derivable_data) { throw tc::crypto::CryptoException("tc::crypto::detail::Pbkdf1Impl", "Request too large."); }
 
-		while (out_size != 0)
+		while (key_size != 0)
 		{
 			// if there is no availble data then we generate more
 			if (mAvailableData == 0)
@@ -99,16 +99,16 @@ public:
 			}
 
 			// determine how much to copy in this loop
-			size_t copy_size = std::min<size_t>(out_size, mAvailableData);
+			size_t copy_size = std::min<size_t>(key_size, mAvailableData);
 
-			// copy available data into out
-			memcpy(out, mDerivedData.data() + mDerivedData.size() - mAvailableData, copy_size);
+			// copy available data into key
+			memcpy(key, mDerivedData.data() + mDerivedData.size() - mAvailableData, copy_size);
 
-			// increment out pointer so next loop will copy to the right position
-			out += copy_size;
+			// increment key pointer so next loop will copy to the right position
+			key += copy_size;
 
-			// decrement out_size so the next loop can track how much data is needed
-			out_size -= copy_size;
+			// decrement key_size so the next loop can track how much data is needed
+			key_size -= copy_size;
 
 			// decrement available digest so the next loop can determine where to copy from and generate more digest if needed
 			mAvailableData -= copy_size;

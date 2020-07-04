@@ -106,9 +106,9 @@ public:
 		 * - This method can be called successively to continue deriving key data for up to @ref kMaxDerivableSize bytes.
 		 * - If the instance is in a None state, then this call does nothing.
 		 */ 
-	void getBytes(byte_t* out, size_t out_size)
+	void getBytes(byte_t* key, size_t key_size)
 	{
-		mImpl.getBytes(out, out_size);
+		mImpl.getBytes(key, key_size);
 	}
 
 private:
