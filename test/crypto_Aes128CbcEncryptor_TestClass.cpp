@@ -251,7 +251,7 @@ void crypto_Aes128CbcEncryptor_TestClass::util_Setup_TestCases(std::vector<crypt
 
 	test_cases.clear();
 
-	// Test vectors taken from https://web.archive.org/web/20110219130849/http://www.inconteam.com/software-development/41-encryption/55-aes-test-vectors
+	// Test vectors taken from NIST SP 800-38A
 	tmp.key = tc::cli::FormatUtil::hexStringToBytes("2b7e151628aed2a6abf7158809cf4f3c");
 
 	tmp.test_name  = "Test 1";

@@ -251,7 +251,7 @@ void crypto_Aes256EcbEncryptor_TestClass::util_Setup_TestCases(std::vector<crypt
 
 	test_cases.clear();
 
-	// Test vectors taken from https://web.archive.org/web/20110219130849/http://www.inconteam.com/software-development/41-encryption/55-aes-test-vectors
+	// Test vectors taken from NIST SP 800-38A
 	tmp.key = tc::cli::FormatUtil::hexStringToBytes("603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4");
 
 	tmp.test_name  = "Test 1";
