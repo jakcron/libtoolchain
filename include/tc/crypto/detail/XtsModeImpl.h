@@ -15,7 +15,7 @@ namespace tc { namespace crypto { namespace detail {
 
 	/**
 	 * @class XtsModeImpl
-	 * @brief This class implements the XTS mode cipher as a template class.
+	 * @brief This class implements the XTS (<b>X</b>EX mode with cipher<b>t</b>ext <b>s</b>tealing) mode cipher as a template class.
 	 * 
 	 * @tparam BlockCipher The class that implements the block cipher used for XTS mode encryption/decryption.
 	 * 
