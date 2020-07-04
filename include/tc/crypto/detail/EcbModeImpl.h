@@ -15,7 +15,7 @@ namespace tc { namespace crypto { namespace detail {
 
 	/**
 	 * @class EcbModeImpl
-	 * @brief This class implements the ECB mode cipher as a template class.
+	 * @brief This class implements the ECB (<b>e</b>lectronic <b>c</b>ode<b>b</b>ook) mode cipher as a template class.
 	 * 
 	 * @tparam BlockCipher The class that implements the block cipher used for ECB mode encryption/decryption.
 	 * 
@@ -44,8 +44,8 @@ public:
 
 	void initialize(const byte_t* key, size_t key_size) 
 	{
-		if (key == nullptr) { throw tc::ArgumentNullException("EcbModeImpl::initialize()", "key1 was null."); }
-		if (key_size != kKeySize) { throw tc::ArgumentOutOfRangeException("EcbModeImpl::initialize()", "key1_size did not equal kKeySize."); }
+		if (key == nullptr) { throw tc::ArgumentNullException("EcbModeImpl::initialize()", "key was null."); }
+		if (key_size != kKeySize) { throw tc::ArgumentOutOfRangeException("EcbModeImpl::initialize()", "key_size did not equal kKeySize."); }
 
 		mCipher.initialize(key, key_size);
 		mState = State::Initialized;
