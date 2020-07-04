@@ -39,6 +39,9 @@
 #include "crypto_Aes128CbcEncryptor_TestClass.h"
 #include "crypto_Aes192CbcEncryptor_TestClass.h"
 #include "crypto_Aes256CbcEncryptor_TestClass.h"
+#include "crypto_Aes128CtrEncryptor_TestClass.h"
+#include "crypto_Aes192CtrEncryptor_TestClass.h"
+#include "crypto_Aes256CtrEncryptor_TestClass.h"
 #include "crypto_Aes128XtsEncryptor_TestClass.h"
 #include "crypto_Aes256XtsEncryptor_TestClass.h"
 
@@ -112,6 +115,9 @@ int main(int argc, char** argv)
 	runTest(new crypto_Aes128CbcEncryptor_TestClass());
 	runTest(new crypto_Aes192CbcEncryptor_TestClass());
 	runTest(new crypto_Aes256CbcEncryptor_TestClass());
+	runTest(new crypto_Aes128CtrEncryptor_TestClass());
+	runTest(new crypto_Aes192CtrEncryptor_TestClass());
+	runTest(new crypto_Aes256CtrEncryptor_TestClass());
 	runTest(new crypto_Aes128XtsEncryptor_TestClass());
 	runTest(new crypto_Aes256XtsEncryptor_TestClass());
 }
