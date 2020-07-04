@@ -15,6 +15,11 @@ private:
 	void test_UseUtilFuncEnc();
 	void test_UseUtilFuncDec();
 
+	void test_DoesNothingWhenNotInit();
+	void test_InitializeThrowsExceptionOnBadInput();
+	void test_EncryptThrowsExceptionOnBadInput();
+	void test_DecryptThrowsExceptionOnBadInput();
+
 	struct TestCase
 	{
 		std::string test_name;

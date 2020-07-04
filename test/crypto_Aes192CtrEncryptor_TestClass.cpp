@@ -10,6 +10,8 @@
 #include <tc/crypto/Aes192CtrEncryptor.h>
 #include <tc/cli/FormatUtil.h>
 
+#include <tc/io/PaddingSource.h>
+
 void crypto_Aes192CtrEncryptor_TestClass::runAllTests(void)
 {
 	std::cout << "[tc::crypto::Aes192CtrEncryptor] START" << std::endl;
@@ -18,6 +20,11 @@ void crypto_Aes192CtrEncryptor_TestClass::runAllTests(void)
 	test_UseClassDec();
 	test_UseUtilFuncEnc();
 	test_UseUtilFuncDec();
+
+	test_DoesNothingWhenNotInit();
+	test_InitializeThrowsExceptionOnBadInput();
+	test_EncryptThrowsExceptionOnBadInput();
+	test_DecryptThrowsExceptionOnBadInput();
 	std::cout << "[tc::crypto::Aes192CtrEncryptor] END" << std::endl;
 }
 
@@ -230,6 +237,250 @@ void crypto_Aes192CtrEncryptor_TestClass::test_UseUtilFuncDec()
 					ss << "Test \"" << test->test_name << "\" Failed: " << tc::cli::FormatUtil::formatBytesAsString(data, true, "") << " (expected " << tc::cli::FormatUtil::formatBytesAsString(test->plaintext, true, "");
 					throw tc::Exception(ss.str());
 				}
+			}
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void crypto_Aes192CtrEncryptor_TestClass::test_DoesNothingWhenNotInit()
+{
+	std::cout << "[tc::crypto::Aes192CtrEncryptor] test_DoesNothingWhenNotInit : " << std::flush;
+	try
+	{
+		try 
+		{
+			std::stringstream ss;
+
+			tc::crypto::Aes192CtrEncryptor cryptor;
+
+			// create data
+			tc::ByteData control_data = tc::io::PaddingSource(0xee, 0x20).pullData(0, 0x20);
+			tc::ByteData data = tc::ByteData(control_data.data(), control_data.size());
+
+			// try to decrypt without calling initialize()
+			cryptor.decrypt(data.data(), data.data(), data.size(), 0);
+
+			// test plain text			
+			if (memcmp(data.data(), control_data.data(), data.size()) != 0)
+			{
+				ss << "Failed: decrypt() operated on data when not initialized";
+				throw tc::Exception(ss.str());
+			}
+
+			// try to encrypt without calling initialize()
+			cryptor.encrypt(data.data(), data.data(), data.size(), 0);
+
+			// test plain text			
+			if (memcmp(data.data(), control_data.data(), data.size()) != 0)
+			{
+				ss << "Failed: encrypt() operated on data when not initialized";
+				throw tc::Exception(ss.str());
+			}
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void crypto_Aes192CtrEncryptor_TestClass::test_InitializeThrowsExceptionOnBadInput()
+{
+	std::cout << "[tc::crypto::Aes192CtrEncryptor] test_InitializeThrowsExceptionOnBadInput : " << std::flush;
+	try
+	{
+		try 
+		{
+			std::stringstream ss;
+
+			// create tests
+			std::vector<TestCase> tests;
+			util_Setup_TestCases(tests);
+
+			tc::crypto::Aes192CtrEncryptor cryptor;
+
+			try {
+				cryptor.initialize(nullptr, tests[0].key.size(), tests[0].iv.data(), tests[0].iv.size());
+				throw tc::Exception("Failed to throw ArgumentNullException where key==nullptr");
+			} catch(const tc::ArgumentNullException&) {
+				// all good if this was thrown.
+			}
+
+			try {
+				cryptor.initialize(tests[0].key.data(), 0, tests[0].iv.data(), tests[0].iv.size());
+				throw tc::Exception("Failed to throw ArgumentOutOfRangeException where key_size==0");
+			} catch(const tc::ArgumentOutOfRangeException&) {
+				// all good if this was thrown.
+			}
+
+			try {
+				cryptor.initialize(tests[0].key.data(), tc::crypto::Aes192CtrEncryptor::kKeySize-1, tests[0].iv.data(), tests[0].iv.size());
+				throw tc::Exception("Failed to throw ArgumentOutOfRangeException where key_size==tc::crypto::Aes192CtrEncryptor::kKeySize-1");
+			} catch(const tc::ArgumentOutOfRangeException&) {
+				// all good if this was thrown.
+			}
+
+			try {
+				cryptor.initialize(tests[0].key.data(), tc::crypto::Aes192CtrEncryptor::kKeySize+1, tests[0].iv.data(), tests[0].iv.size());
+				throw tc::Exception("Failed to throw ArgumentOutOfRangeException where key_size==tc::crypto::Aes192CtrEncryptor::kKeySize+1");
+			} catch(const tc::ArgumentOutOfRangeException&) {
+				// all good if this was thrown.
+			}
+
+			try {
+				cryptor.initialize(tests[0].key.data(), tests[0].key.size(), nullptr, tests[0].iv.size());
+				throw tc::Exception("Failed to throw ArgumentNullException where iv==nullptr");
+			} catch(const tc::ArgumentNullException&) {
+				// all good if this was thrown.
+			}
+
+			try {
+				cryptor.initialize(tests[0].key.data(), tests[0].key.size(), tests[0].iv.data(), 0);
+				throw tc::Exception("Failed to throw ArgumentOutOfRangeException where iv_size==0");
+			} catch(const tc::ArgumentOutOfRangeException&) {
+				// all good if this was thrown.
+			}
+
+			try {
+				cryptor.initialize(tests[0].key.data(), tests[0].key.size(), tests[0].iv.data(), tc::crypto::Aes192CtrEncryptor::kBlockSize-1);
+				throw tc::Exception("Failed to throw ArgumentOutOfRangeException where iv_size==kBlockSize-1");
+			} catch(const tc::ArgumentOutOfRangeException&) {
+				// all good if this was thrown.
+			}
+
+			try {
+				cryptor.initialize(tests[0].key.data(), tests[0].key.size(), tests[0].iv.data(), tc::crypto::Aes192CtrEncryptor::kBlockSize+1);
+				throw tc::Exception("Failed to throw ArgumentOutOfRangeException where iv_size==kBlockSize+1");
+			} catch(const tc::ArgumentOutOfRangeException&) {
+				// all good if this was thrown.
+			}
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void crypto_Aes192CtrEncryptor_TestClass::test_EncryptThrowsExceptionOnBadInput()
+{
+	std::cout << "[tc::crypto::Aes192CtrEncryptor] test_EncryptThrowsExceptionOnBadInput : " << std::flush;
+	try
+	{
+		try 
+		{
+			std::stringstream ss;
+
+			// create tests
+			std::vector<TestCase> tests;
+			util_Setup_TestCases(tests);
+
+			tc::crypto::Aes192CtrEncryptor cryptor;
+
+			cryptor.initialize(tests[0].key.data(), tests[0].key.size(), tests[0].iv.data(), tests[0].iv.size());
+
+			tc::ByteData data = tc::ByteData(tests[0].plaintext.size());
+
+			// reference encrypt call
+			//cryptor.encrypt(data.data(), tests[0].plaintext.data(), data.size());
+
+			try {
+				cryptor.encrypt(nullptr, tests[0].plaintext.data(), data.size(), 0);
+				throw tc::Exception("Failed to throw ArgumentNullException where dst==nullptr");
+			} catch(const tc::ArgumentNullException&) {
+				// all good if this was thrown.
+			}
+
+			try {
+				cryptor.encrypt(data.data(), nullptr, data.size(), 0);
+				throw tc::Exception("Failed to throw ArgumentNullException where src==nullptr");
+			} catch(const tc::ArgumentNullException&) {
+				// all good if this was thrown.
+			}
+
+			try {
+				cryptor.encrypt(data.data(), tests[0].plaintext.data(), 0, 0);
+				throw tc::Exception("Failed to throw ArgumentOutOfRangeException where size==0");
+			} catch(const tc::ArgumentOutOfRangeException&) {
+				// all good if this was thrown.
+			}
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void crypto_Aes192CtrEncryptor_TestClass::test_DecryptThrowsExceptionOnBadInput()
+{
+	std::cout << "[tc::crypto::Aes192CtrEncryptor] test_DecryptThrowsExceptionOnBadInput : " << std::flush;
+	try
+	{
+		try 
+		{
+			std::stringstream ss;
+
+			// create tests
+			std::vector<TestCase> tests;
+			util_Setup_TestCases(tests);
+
+			tc::crypto::Aes192CtrEncryptor cryptor;
+
+			cryptor.initialize(tests[0].key.data(), tests[0].key.size(), tests[0].iv.data(), tests[0].iv.size());
+
+			tc::ByteData data = tc::ByteData(tests[0].plaintext.size());
+
+			// reference encrypt call
+			//cryptor.decrypt(data.data(), tests[0].ciphertext.data(), data.size());
+
+			try {
+				cryptor.decrypt(nullptr, tests[0].ciphertext.data(), data.size(), 0);
+				throw tc::Exception("Failed to throw ArgumentNullException where dst==nullptr");
+			} catch(const tc::ArgumentNullException&) {
+				// all good if this was thrown.
+			}
+
+			try {
+				cryptor.decrypt(data.data(), nullptr, data.size(), 0);
+				throw tc::Exception("Failed to throw ArgumentNullException where src==nullptr");
+			} catch(const tc::ArgumentNullException&) {
+				// all good if this was thrown.
+			}
+
+			try {
+				cryptor.decrypt(data.data(), tests[0].ciphertext.data(), 0, 0);
+				throw tc::Exception("Failed to throw ArgumentOutOfRangeException where size==0");
+			} catch(const tc::ArgumentOutOfRangeException&) {
+				// all good if this was thrown.
 			}
 
 			std::cout << "PASS" << std::endl;
