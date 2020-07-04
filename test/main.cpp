@@ -30,6 +30,7 @@
 #include "crypto_Pbkdf2Sha256KeyDeriver_TestClass.h"
 #include "crypto_Pbkdf2Sha512KeyDeriver_TestClass.h"
 #include "crypto_PseudoRandomByteGenerator_TestClass.h"
+#include "crypto_Aes128Encryptor_TestClass.h"
 
 void runTest(ITestClass* testClass)
 {
@@ -84,4 +85,5 @@ int main(int argc, char** argv)
 		runTest(new crypto_Pbkdf2Sha512KeyDeriver_TestClass());
 	}
 	runTest(new crypto_PseudoRandomByteGenerator_TestClass());
+	runTest(new crypto_Aes128Encryptor_TestClass());
 }
