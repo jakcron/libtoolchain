@@ -13,6 +13,11 @@ private:
 	void test_UseClassEnc();
 	void test_UseClassDec();
 
+	void test_DoesNothingWhenNotInit();
+	void test_InitializeThrowsExceptionOnBadInput();
+	void test_EncryptThrowsExceptionOnBadInput();
+	void test_DecryptThrowsExceptionOnBadInput();
+
 	struct TestCase
 	{
 		std::string test_name;
