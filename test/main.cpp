@@ -33,8 +33,13 @@
 #include "crypto_Aes128Encryptor_TestClass.h"
 #include "crypto_Aes192Encryptor_TestClass.h"
 #include "crypto_Aes256Encryptor_TestClass.h"
+#include "crypto_Aes128EcbEncryptor_TestClass.h"
+#include "crypto_Aes192EcbEncryptor_TestClass.h"
+#include "crypto_Aes256EcbEncryptor_TestClass.h"
 #include "crypto_Aes128XtsEncryptor_TestClass.h"
 #include "crypto_Aes256XtsEncryptor_TestClass.h"
+
+#include <iostream>
 
 void runTest(ITestClass* testClass)
 {
@@ -52,6 +57,12 @@ int main(int argc, char** argv)
 		{
 			includeSlowTests = false;
 		}
+		else
+		{
+			std::cout << "usage: " << std::string(argv[0]) << " [--fast]" << std::endl;
+			return 1;
+		}
+		
 	}
 
 	runTest(new string_TranscodeUtil_TestClass());
@@ -92,6 +103,9 @@ int main(int argc, char** argv)
 	runTest(new crypto_Aes128Encryptor_TestClass());
 	runTest(new crypto_Aes192Encryptor_TestClass());
 	runTest(new crypto_Aes256Encryptor_TestClass());
+	runTest(new crypto_Aes128EcbEncryptor_TestClass());
+	runTest(new crypto_Aes192EcbEncryptor_TestClass());
+	runTest(new crypto_Aes256EcbEncryptor_TestClass());
 	runTest(new crypto_Aes128XtsEncryptor_TestClass());
 	runTest(new crypto_Aes256XtsEncryptor_TestClass());
 }
