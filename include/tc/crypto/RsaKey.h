@@ -1,6 +1,6 @@
 	/**
 	 * @file RsaKey.h
-	 * @brief Declarations for structures to contain RSA keys.
+	 * @brief Declarations for structures to store RSA keys.
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/08/27
@@ -13,7 +13,7 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @struct RsaKey
-	 * @brief This struct contains components of a RSA key. For use with RSA calculations.
+	 * @brief Struct for storing a RSA key. For use with RSA calculations.
 	 */
 struct RsaKey
 {
