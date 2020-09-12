@@ -59,10 +59,6 @@ private:
 	 * 
 	 * @post
 	 * - The generated pseudo-random data is written to <tt><var>data</var></tt>.
-	 * 
-	 * @details
-	 * This function calculates the hash value for input passed in the <tt><var>data</var></tt> array.
-	 * To calculate the hash value for input split across multiple arrays, use the @ref PseudoRandomByteGenerator class.
 	 */
 void GeneratePseudoRandomBytes(byte_t* data, size_t data_size);
 
