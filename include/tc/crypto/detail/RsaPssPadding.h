@@ -2,8 +2,8 @@
 	 * @file RsaPssPadding.h
 	 * @brief Declaration of tc::crypto::detail::RsaPssPadding
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2020/08/11
+	 * @version 0.2
+	 * @date 2020/09/12
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -16,14 +16,12 @@ namespace tc { namespace crypto { namespace detail {
 	 * @brief This class implements RSA PSS Padding as a template class.
 	 * 
 	 * @tparam HashFunction The class that implements the hash function used for padding generation.
-	 * @tparam BlockSize Size of the RSA processing block. For RSA-2048 this is 256.
 	 */
-template <typename HashFunction, size_t BlockSize>
+template <typename HashFunction>
 class RsaPssPadding
 {
 public:
 	static const size_t kHashSize = HashFunction::kHashSize;
-	static const size_t kBlockSize = BlockSize;
 
 	enum class Result
 	{
@@ -37,7 +35,7 @@ public:
 	};
 
 		/**
-		 * @note modulus_msb is usually (for byte aligned key sizes) ((kBlockSize << 3) - 1)
+		 * @note modulus_msb is usually (for byte aligned key sizes) ((block_size << 3) - 1)
 		 * @note Where (modulus_msb % 8 == 0) this fails tests. Investigation required.
 		 */
 	RsaPssPadding::Result BuildPad(byte_t* out_block, size_t block_size, const byte_t* message_digest, size_t message_digest_size, const byte_t* salt, size_t salt_size, size_t modulus_msb)
@@ -108,7 +106,7 @@ public:
 	}
 
 		/**
-		 * @note modulus_msb is usually (for byte aligned key sizes) ((kBlockSize << 3) - 1)
+		 * @note modulus_msb is usually (for byte aligned key sizes) ((block_size << 3) - 1)
 		 * @note Where (modulus_msb % 8 == 0) this fails tests. Investigation required.
 		 */
 	RsaPssPadding::Result CheckPad(const byte_t* message_digest, size_t message_digest_size, byte_t* block, size_t block_size, size_t modulus_msb)
@@ -141,7 +139,7 @@ public:
 		/*
 		 * Note: EMSA-PSS verification is over the length of N - 1 bits
 		 */
-		if (block[0] >> ( 8 - kBlockSize * 8 + modulus_msb )) { return Result::kBadInputData; }
+		if (block[0] >> ( 8 - block_size * 8 + modulus_msb )) { return Result::kBadInputData; }
 
 		/* Compensate for boundary condition when applying mask */
 		if (modulus_msb % 8 == 0)

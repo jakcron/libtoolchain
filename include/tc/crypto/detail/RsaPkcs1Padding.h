@@ -2,8 +2,8 @@
 	 * @file RsaPkcs1Padding.h
 	 * @brief Declaration of tc::crypto::detail::RsaPkcs1Padding
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2020/08/11
+	 * @version 0.2
+	 * @date 2020/09/12
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -16,14 +16,12 @@ namespace tc { namespace crypto { namespace detail {
 	 * @brief This class implements RSA PKCS1 Padding as a template class.
 	 * 
 	 * @tparam HashFunction The class that implements the hash function used for padding generation.
-	 * @tparam BlockSize Size of the RSA processing block. For RSA-2048 this is 256.
 	 */
-template <typename HashFunction, size_t BlockSize>
+template <typename HashFunction>
 class RsaPkcs1Padding
 {
 public:
 	static const size_t kHashSize = HashFunction::kHashSize;
-	static const size_t kBlockSize = BlockSize;
 
 	enum class Result
 	{
@@ -41,7 +39,7 @@ public:
 		if (block_size < 2 + 1 + HashFunction::kAsn1OidData.size() + kHashSize) { return Result::kBlockSizeTooSmall; }
 
 		// determine sizes
-		size_t padding_size = kBlockSize - 2 - 1 - HashFunction::kAsn1OidDataSize - kHashSize;
+		size_t padding_size = block_size - 2 - 1 - HashFunction::kAsn1OidDataSize - kHashSize;
 
 		// determine offsets
 		size_t padding_offset = 0x02;
@@ -78,7 +76,7 @@ public:
 		if (block_size < 2 + 1 + HashFunction::kAsn1OidData.size() + kHashSize) { return Result::kBlockSizeTooSmall; }
 
 		// determine sizes
-		size_t padding_size = kBlockSize - 2 - 1 - HashFunction::kAsn1OidDataSize - kHashSize;
+		size_t padding_size = block_size - 2 - 1 - HashFunction::kAsn1OidDataSize - kHashSize;
 
 		// determine offsets
 		size_t padding_offset = 0x02;

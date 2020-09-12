@@ -2,8 +2,8 @@
 	 * @file RsaOaepPadding.h
 	 * @brief Declaration of tc::crypto::detail::RsaOaepPadding
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2020/08/11
+	 * @version 0.2
+	 * @date 2020/09/12
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -16,14 +16,12 @@ namespace tc { namespace crypto { namespace detail {
 	 * @brief This class implements RSA OAEP Padding as a template class.
 	 * 
 	 * @tparam HashFunction The class that implements the hash function used for padding generation.
-	 * @tparam BlockSize Size of the RSA processing block. For RSA-2048 this is 256.
 	 */
-template <typename HashFunction, size_t BlockSize>
+template <typename HashFunction>
 class RsaOaepPadding
 {
 public:
 	static const size_t kHashSize = HashFunction::kHashSize;
-	static const size_t kBlockSize = BlockSize;
 
 	enum class Result
 	{
