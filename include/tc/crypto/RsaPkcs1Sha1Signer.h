@@ -2,8 +2,8 @@
 	 * @file RsaPkcs1Sha1Signer.h
 	 * @brief Declarations for API resources for RSA-PKCS1-SHA1 calculations.
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2020/09/12
+	 * @version 0.2
+	 * @date 2020/09/13
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -45,6 +45,7 @@ using Rsa4096Pkcs1Sha1Signer = RsaPkcs1Signer<512,Sha1Generator>;
 	 * @param[out] signature Pointer to the buffer storing the signature.
 	 * @param[in]  message_digest Pointer to message digest.
 	 * @param[in]  key Reference to RSA private key.
+	 * @return true if signature calculation was successful.
 	 * 
 	 * @pre
 	 * - Size of the signature buffer must >= <tt>Rsa1024Pkcs1Sha1Signer::kSignatureSize</tt>.
@@ -56,7 +57,7 @@ using Rsa4096Pkcs1Sha1Signer = RsaPkcs1Signer<512,Sha1Generator>;
 	 * This function calculates a signature for a message digest.
 	 * To calculate a message digest use the @ref Sha1Generator class.
 	 */
-void SignRsa1024Pkcs1Sha1(byte_t* signature, const byte_t* message_digest, const RsaKey& key);
+bool SignRsa1024Pkcs1Sha1(byte_t* signature, const byte_t* message_digest, const RsaKey& key);
 
 	/**
 	 * @brief Utility function for verfifying a RSA1024-PKCS1-SHA1 signature.
@@ -78,6 +79,7 @@ bool VerifyRsa1024Pkcs1Sha1(const byte_t* signature, const byte_t* message_diges
 	 * @param[out] signature Pointer to the buffer storing the signature.
 	 * @param[in]  message_digest Pointer to message digest.
 	 * @param[in]  key Reference to RSA private key.
+	 * @return true if signature calculation was successful.
 	 * 
 	 * @pre
 	 * - Size of the signature buffer must >= <tt>Rsa2048Pkcs1Sha1Signer::kSignatureSize</tt>.
@@ -89,7 +91,7 @@ bool VerifyRsa1024Pkcs1Sha1(const byte_t* signature, const byte_t* message_diges
 	 * This function calculates a signature for a message digest.
 	 * To calculate a message digest use the @ref Sha1Generator class.
 	 */
-void SignRsa2048Pkcs1Sha1(byte_t* signature, const byte_t* message_digest, const RsaKey& key);
+bool SignRsa2048Pkcs1Sha1(byte_t* signature, const byte_t* message_digest, const RsaKey& key);
 
 	/**
 	 * @brief Utility function for verfifying a RSA2048-PKCS1-SHA1 signature.
@@ -111,6 +113,7 @@ bool VerifyRsa2048Pkcs1Sha1(const byte_t* signature, const byte_t* message_diges
 	 * @param[out] signature Pointer to the buffer storing the signature.
 	 * @param[in]  message_digest Pointer to message digest.
 	 * @param[in]  key Reference to RSA private key.
+	 * @return true if signature calculation was successful.
 	 * 
 	 * @pre
 	 * - Size of the signature buffer must >= <tt>Rsa4096Pkcs1Sha1Signer::kSignatureSize</tt>.
@@ -122,7 +125,7 @@ bool VerifyRsa2048Pkcs1Sha1(const byte_t* signature, const byte_t* message_diges
 	 * This function calculates a signature for a message digest.
 	 * To calculate a message digest use the @ref Sha1Generator class.
 	 */
-void SignRsa4096Pkcs1Sha1(byte_t* signature, const byte_t* message_digest, const RsaKey& key);
+bool SignRsa4096Pkcs1Sha1(byte_t* signature, const byte_t* message_digest, const RsaKey& key);
 
 	/**
 	 * @brief Utility function for verfifying a RSA4096-PKCS1-SHA1 signature.

@@ -1,10 +1,10 @@
 #include <tc/crypto/RsaPkcs1Sha1Signer.h>
 
-void tc::crypto::SignRsa1024Pkcs1Sha1(byte_t* signature, const byte_t* message_digest, const RsaKey& key)
+bool tc::crypto::SignRsa1024Pkcs1Sha1(byte_t* signature, const byte_t* message_digest, const RsaKey& key)
 {
 	tc::crypto::Rsa1024Pkcs1Sha1Signer impl;
 	impl.initialize(key);
-	impl.sign(signature, message_digest);
+	return impl.sign(signature, message_digest);
 }
 
 bool tc::crypto::VerifyRsa1024Pkcs1Sha1(const byte_t* signature, const byte_t* message_digest, const RsaKey& key)
@@ -14,11 +14,11 @@ bool tc::crypto::VerifyRsa1024Pkcs1Sha1(const byte_t* signature, const byte_t* m
 	return impl.verify(signature, message_digest);
 }
 
-void tc::crypto::SignRsa2048Pkcs1Sha1(byte_t* signature, const byte_t* message_digest, const RsaKey& key)
+bool tc::crypto::SignRsa2048Pkcs1Sha1(byte_t* signature, const byte_t* message_digest, const RsaKey& key)
 {
 	tc::crypto::Rsa2048Pkcs1Sha1Signer impl;
 	impl.initialize(key);
-	impl.sign(signature, message_digest);
+	return impl.sign(signature, message_digest);
 }
 
 bool tc::crypto::VerifyRsa2048Pkcs1Sha1(const byte_t* signature, const byte_t* message_digest, const RsaKey& key)
@@ -28,11 +28,11 @@ bool tc::crypto::VerifyRsa2048Pkcs1Sha1(const byte_t* signature, const byte_t* m
 	return impl.verify(signature, message_digest);
 }
 
-void tc::crypto::SignRsa4096Pkcs1Sha1(byte_t* signature, const byte_t* message_digest, const RsaKey& key)
+bool tc::crypto::SignRsa4096Pkcs1Sha1(byte_t* signature, const byte_t* message_digest, const RsaKey& key)
 {
 	tc::crypto::Rsa4096Pkcs1Sha1Signer impl;
 	impl.initialize(key);
-	impl.sign(signature, message_digest);
+	return impl.sign(signature, message_digest);
 }
 
 bool tc::crypto::VerifyRsa4096Pkcs1Sha1(const byte_t* signature, const byte_t* message_digest, const RsaKey& key)

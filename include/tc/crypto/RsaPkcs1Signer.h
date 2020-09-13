@@ -2,8 +2,8 @@
 	 * @file RsaPkcs1Signer.h
 	 * @brief Declaration of tc::crypto::RsaPkcs1Signer
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2020/09/12
+	 * @version 0.2
+	 * @date 2020/09/13
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -63,7 +63,7 @@ public:
 	{}
 
 		/**
-		 * @brief Initializes the MAC calculation.
+		 * @brief Initializes the signature calculation.
 		 * 
 		 * @param[in] key Pointer to key data.
 		 * @param[in] key_size Size in bytes of key data.
@@ -72,10 +72,7 @@ public:
 		 * - Instance is now in a Initialized state
 		 * 
 		 * @details
-		 * Resets the MAC calculation state to the begin state.
-		 * 
-		 * @note
-		 * - This must be called before calculating a new MAC.
+		 * Resets the RSA calculation state with an RSA key.
 		 */
 	void initialize(const RsaKey& key)
 	{
@@ -84,48 +81,79 @@ public:
 		mState = State::Initialized;
 	}
 	
-	void sign(byte_t* signature, const byte_t* hash)
+		/**
+		 * @brief Calculate RSA-PKCS1 signature.
+		 * 
+		 * @param[out] signature Pointer to the buffer storing the signature.
+		 * @param[in]  message_digest Pointer to message digest.
+		 * @return true if signature calculation was successful.
+		 * 
+		 * @pre
+		 * - Size of the signature buffer must >= <tt>Rsa1024Pkcs1Sha256Signer::kSignatureSize</tt>.
+		 * 
+		 * @post
+		 * - The signature is written to <tt><var>signature</var></tt>.
+		 * 
+		 * @details
+		 * This function calculates a signature for a message digest.
+		 */
+	bool sign(byte_t* signature, const byte_t* message_digest)
 	{
-		if (mState != State::Initialized) return;
+		if (mState != State::Initialized) { return false; }
 
 		std::array<byte_t, kSignatureSize> block;
 		memset(block.data(), 0, block.size());
 
-		auto res = mPadImpl.BuildPad(block.data(), block.size(), hash, HashFunction::kHashSize);
-		
-		switch (res)
+		if (mPadImpl.BuildPad(block.data(), block.size(), message_digest, HashFunction::kHashSize) != detail::RsaPkcs1Padding<HashFunction>::Result::kSuccess)
 		{
-			case (detail::RsaPkcs1Padding<HashFunction>::Result::kSuccess):
-				break;
-			case (detail::RsaPkcs1Padding<HashFunction>::Result::kBlockSizeTooSmall):
-				throw tc::crypto::CryptoException("tc::crypto::RsaPkcs1Signer::sign()","KeySize too small.");
-			default:
-				throw tc::crypto::CryptoException("tc::crypto::RsaPkcs1Signer::sign()","Unexpected error has occured.");
+			return false;
+		} 
+
+		try
+		{
+			mRsaImpl.privateTransform(signature, block.data());
+		} 
+		catch (...)
+		{
+			return false;
 		}
 
-		mRsaImpl.privateTransform(signature, block.data());		
+		return true;
 	}
 
-	bool verify(const byte_t* signature, const byte_t* hash)
+		/**
+		 * @brief Verify RSA-PKCS1 signature.
+		 * 
+		 * @param[in] signature Pointer to signature.
+		 * @param[in] message_digest Pointer to message digest.
+		 * @param[in] key Reference to RSA public key.
+		 * @return true if the signature is valid, otherwise false.
+		 * 
+		 * @details
+		 * This function verifies a signature for a message digest.
+		 * To calculate a message digest use the @ref Sha256Generator class.
+		 */
+	bool verify(const byte_t* signature, const byte_t* message_digest)
 	{
-		if (mState != State::Initialized) return false;
+		if (mState != State::Initialized) { return false; }
 
 		std::array<byte_t, kSignatureSize> block;
 		memcpy(block.data(), signature, block.size());
 
-		mRsaImpl.publicTransform(block.data(), signature);		
-
-		auto res = mPadImpl.CheckPad(hash, HashFunction::kHashSize, block.data(), block.size());
-		
-		return (res == detail::RsaPkcs1Padding<HashFunction>::Result::kSuccess);
+		try {
+			mRsaImpl.publicTransform(block.data(), signature);
+		} catch (...) {
+			return false;
+		}
+				
+		return (mPadImpl.CheckPad(message_digest, HashFunction::kHashSize, block.data(), block.size()) == detail::RsaPkcs1Padding<HashFunction>::Result::kSuccess);
 	}
 
 private:
 	enum class State
 	{
 		None,
-		Initialized,
-		Done
+		Initialized
 	};
 
 	State mState;
