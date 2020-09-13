@@ -126,12 +126,10 @@ public:
 		 * 
 		 * @param[in] signature Pointer to signature.
 		 * @param[in] message_digest Pointer to message digest.
-		 * @param[in] key Reference to RSA public key.
 		 * @return true if the signature is valid, otherwise false.
 		 * 
 		 * @details
 		 * This function verifies a signature for a message digest.
-		 * To calculate a message digest use the @ref Sha256Generator class.
 		 */
 	bool verify(const byte_t* signature, const byte_t* message_digest)
 	{
