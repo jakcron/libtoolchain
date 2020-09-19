@@ -18,6 +18,7 @@ namespace tc { namespace crypto {
 	 * @class RsaPkcs1Signer
 	 * @brief Class for calculating an RSA-PKCS1 signature.
 	 * 
+	 * @tparam KeySize Size in bytes of RSA key size.
 	 * @tparam HashFunction The class that implements the hash function used with RSA-PKCS1.
 	 * 
 	 * @details
