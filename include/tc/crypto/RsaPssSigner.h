@@ -2,8 +2,8 @@
 	 * @file RsaPssSigner.h
 	 * @brief Declaration of tc::crypto::RsaPssSigner
 	 * @author Jack (jakcron)
-	 * @version 0.2
-	 * @date 2020/09/19
+	 * @version 0.3
+	 * @date 2020/09/28
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -19,12 +19,14 @@ namespace tc { namespace crypto {
 	 * @class RsaPssSigner
 	 * @brief Class for calculating an RSA-PSS signature.
 	 * 
-	 * @tparam KeySize Size in bytes of RSA key size.
+	 * @tparam KeyBitSize RSA key size in bits.
 	 * @tparam HashFunction The class that implements the hash function used with RSA-PSS.
 	 * 
 	 * @details
 	 * This class is a template class that takes a hash function implementation class as template parameter.
 	 * See @ref Rsa2048PssSha256Signer or similar for supplied realizations of this template class.
+	 * 
+	 * The <var>KeyBitSize</var> is the size in bits of the RSA key, this only supports key sizes aligned to 8 bits.
 	 * 
 	 * The implementation of <var>HashFunction</var> must satisfies the following conditions.
 	 * See @ref Sha256Generator or similar class, for more information including parameters to each function.
@@ -43,11 +45,13 @@ namespace tc { namespace crypto {
 	 * - Initialize RSA Signer state with @ref initialize().
 	 * - Sign/Verify message digest with @ref sign() / @ref verify().
 	 */
-template <size_t KeySize, class HashFunction>
+template <size_t KeyBitSize, class HashFunction>
 class RsaPssSigner
 {
 public:
-	static const size_t kSignatureSize = KeySize; /**< RSA-PSS signature size */
+	static_assert((KeyBitSize % 8) == 0, "KeyBitSize must be 8 bit aligned.");
+
+	static const size_t kSignatureSize = KeyBitSize >> 3; /**< RSA-PSS signature size */
 
 		/**
 		 * @brief Default constructor.
@@ -65,8 +69,7 @@ public:
 		/**
 		 * @brief Initializes the signature calculation.
 		 * 
-		 * @param[in] key Pointer to key data.
-		 * @param[in] key_size Size in bytes of key data.
+		 * @param[in] key RSA key data.
 		 * 
 		 * @post
 		 * - Instance is now in a Initialized state
@@ -76,7 +79,7 @@ public:
 		 */
 	void initialize(const RsaKey& key)
 	{
-		mRsaImpl.initialize(KeySize << 3, key.n.data(), key.n.size(), nullptr, 0, nullptr, 0, key.d.data(), key.d.size(), key.e.data(), key.e.size());
+		mRsaImpl.initialize(KeyBitSize, key.n.data(), key.n.size(), nullptr, 0, nullptr, 0, key.d.data(), key.d.size(), key.e.data(), key.e.size());
 		
 		mState = State::Initialized;
 	}
@@ -106,7 +109,7 @@ public:
 		mPrbgImpl.getBytes(salt.data(), salt.size());
 		// usable_salt_size: salt.size(), but if the blocksize isn't big enough, then its = KeySize - (HashFunction::kHashSize + 2)
 		// this may produce an illegal salt size (salt_size < HashFunction::kHashSize - 2), but this will be caught by BuildPad()
-		size_t usable_salt_size = std::min<size_t>(salt.size(), KeySize - (HashFunction::kHashSize + 2));
+		size_t usable_salt_size = std::min<size_t>(salt.size(), kSignatureSize - (HashFunction::kHashSize + 2));
 
 		return sign(signature, message_digest, salt.data(), usable_salt_size);
 	}
@@ -138,17 +141,15 @@ public:
 		std::array<byte_t, kSignatureSize> block;
 		memset(block.data(), 0, block.size());
 
-		if (mPadImpl.BuildPad(block.data(), block.size(), message_digest, HashFunction::kHashSize, salt, salt_size, (KeySize << 3) - 1) != detail::RsaPssPadding<HashFunction>::Result::kSuccess)
+		if (mPadImpl.BuildPad(block.data(), block.size(), message_digest, HashFunction::kHashSize, salt, salt_size, KeyBitSize - 1) != detail::RsaPssPadding<HashFunction>::Result::kSuccess)
 		{
 			return false;
 		} 
 
-		try
-		{
+		try {
 			mRsaImpl.privateTransform(signature, block.data());
 		} 
-		catch (...)
-		{
+		catch (...) {
 			return false;
 		}
 
@@ -178,7 +179,7 @@ public:
 			return false;
 		}
 				
-		return (mPadImpl.CheckPad(message_digest, HashFunction::kHashSize, block.data(), block.size(), (KeySize << 3) - 1) == detail::RsaPssPadding<HashFunction>::Result::kSuccess);
+		return (mPadImpl.CheckPad(message_digest, HashFunction::kHashSize, block.data(), block.size(), kSignatureSize - 1) == detail::RsaPssPadding<HashFunction>::Result::kSuccess);
 	}
 
 private:

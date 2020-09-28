@@ -2,8 +2,8 @@
 	 * @file RsaPssSha512Signer.h
 	 * @brief Declarations for API resources for RSA-PSS-SHA2-512 calculations.
 	 * @author Jack (jakcron)
-	 * @version 0.2
-	 * @date 2020/09/19
+	 * @version 0.3
+	 * @date 2020/09/28
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -19,7 +19,7 @@ namespace tc { namespace crypto {
 	 * @details This class uses RSA1024-PSS to sign/validate SHA2-512 message digests.
 	 * For more information refer to @ref RsaPssSigner.
 	 */
-using Rsa1024PssSha512Signer = RsaPssSigner<128,Sha512Generator>;
+using Rsa1024PssSha512Signer = RsaPssSigner<1024,Sha512Generator>;
 
 	/**
 	 * @typedef Rsa2048PssSha512Signer
@@ -28,7 +28,7 @@ using Rsa1024PssSha512Signer = RsaPssSigner<128,Sha512Generator>;
 	 * @details This class uses RSA2048-PSS to sign/validate SHA2-512 message digests.
 	 * For more information refer to @ref RsaPssSigner.
 	 */
-using Rsa2048PssSha512Signer = RsaPssSigner<256,Sha512Generator>;
+using Rsa2048PssSha512Signer = RsaPssSigner<2048,Sha512Generator>;
 
 	/**
 	 * @typedef Rsa4096PssSha512Signer
@@ -37,7 +37,7 @@ using Rsa2048PssSha512Signer = RsaPssSigner<256,Sha512Generator>;
 	 * @details This class uses RSA4096-PSS to sign/validate SHA2-512 message digests.
 	 * For more information refer to @ref RsaPssSigner.
 	 */
-using Rsa4096PssSha512Signer = RsaPssSigner<512,Sha512Generator>;
+using Rsa4096PssSha512Signer = RsaPssSigner<4096,Sha512Generator>;
 
 	/**
 	 * @brief Utility function for calculating a RSA1024-PSS-SHA2-512 signature.
