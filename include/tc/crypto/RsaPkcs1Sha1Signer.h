@@ -2,8 +2,8 @@
 	 * @file RsaPkcs1Sha1Signer.h
 	 * @brief Declarations for API resources for RSA-PKCS1-SHA1 calculations.
 	 * @author Jack (jakcron)
-	 * @version 0.2
-	 * @date 2020/09/13
+	 * @version 0.3
+	 * @date 2020/09/28
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -19,7 +19,7 @@ namespace tc { namespace crypto {
 	 * @details This class uses RSA1024-PKCS1 to sign/validate SHA1 message digests.
 	 * For more information refer to @ref RsaPkcs1Signer.
 	 */
-using Rsa1024Pkcs1Sha1Signer = RsaPkcs1Signer<128,Sha1Generator>;
+using Rsa1024Pkcs1Sha1Signer = RsaPkcs1Signer<1024,Sha1Generator>;
 
 	/**
 	 * @typedef Rsa2048Pkcs1Sha1Signer
@@ -28,7 +28,7 @@ using Rsa1024Pkcs1Sha1Signer = RsaPkcs1Signer<128,Sha1Generator>;
 	 * @details This class uses RSA2048-PKCS1 to sign/validate SHA1 message digests.
 	 * For more information refer to @ref RsaPkcs1Signer.
 	 */
-using Rsa2048Pkcs1Sha1Signer = RsaPkcs1Signer<256,Sha1Generator>;
+using Rsa2048Pkcs1Sha1Signer = RsaPkcs1Signer<2048,Sha1Generator>;
 
 	/**
 	 * @typedef Rsa4096Pkcs1Sha1Signer
@@ -37,7 +37,7 @@ using Rsa2048Pkcs1Sha1Signer = RsaPkcs1Signer<256,Sha1Generator>;
 	 * @details This class uses RSA4096-PKCS1 to sign/validate SHA1 message digests.
 	 * For more information refer to @ref RsaPkcs1Signer.
 	 */
-using Rsa4096Pkcs1Sha1Signer = RsaPkcs1Signer<512,Sha1Generator>;
+using Rsa4096Pkcs1Sha1Signer = RsaPkcs1Signer<4096,Sha1Generator>;
 
 	/**
 	 * @brief Utility function for calculating a RSA1024-PKCS1-SHA1 signature.
