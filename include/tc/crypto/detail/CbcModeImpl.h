@@ -2,11 +2,13 @@
 	 * @file CbcModeImpl.h
 	 * @brief Declaration of tc::crypto::detail::CbcModeImpl
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2020/07/04
+	 * @version 0.2
+	 * @date 2020/10/04
 	 **/
 #pragma once
 #include <tc/types.h>
+
+#include <tc/crypto/detail/BlockUtilImpl.h>
 
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/ArgumentNullException.h>
@@ -114,19 +116,6 @@ private:
 	
 	BlockCipher mCipher;
 	std::array<byte_t, kBlockSize> mIv;
-
-	template <size_t BlockSize>
-	inline void xor_block(byte_t* dst, const byte_t* src_a, const byte_t* src_b)
-	{
-		for (size_t i = 0; i < BlockSize; i++) { dst[i] = src_a[i] ^ src_b[i];}
-	}
-
-	template <>
-	inline void xor_block<16>(byte_t* dst, const byte_t* src_a, const byte_t* src_b)
-	{
-		((uint64_t*)dst)[0] = ((uint64_t*)src_a)[0] ^ ((uint64_t*)src_b)[0];
-		((uint64_t*)dst)[1] = ((uint64_t*)src_a)[1] ^ ((uint64_t*)src_b)[1];
-	}
 };
 
 }}} // namespace tc::crypto::detail
