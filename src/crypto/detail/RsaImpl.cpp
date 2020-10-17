@@ -35,7 +35,7 @@ void tc::crypto::detail::RsaImpl::initialize(size_t key_bit_size, const byte_t* 
 	if (p_size > 0 && p_size != (key_bit_size/8)/2) { throw tc::ArgumentNullException("RsaImpl::initialize()", "p_size was non-zero but not expected size."); }
 	if (q_size > 0 && q_size != (key_bit_size/8)/2) { throw tc::ArgumentNullException("RsaImpl::initialize()", "q_size was non-zero but not expected size."); }
 	if (d_size > 0 && d_size != (key_bit_size/8)) { throw tc::ArgumentNullException("RsaImpl::initialize()", "d_size was non-zero but not expected size."); }
-	//if (e_size > 0 && e_size != 3) { throw tc::ArgumentNullException("RsaImpl::initialize()", "e_size was non-zero but not expected size."); }
+	if (e_size > 0 && e_size != 3 && e_size != 4) { throw tc::ArgumentNullException("RsaImpl::initialize()", "e_size was non-zero but not expected size."); }
 
 	mImplCtx->mContext.len = key_bit_size / 8;
 
