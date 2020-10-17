@@ -84,12 +84,16 @@ public:
 		 */
 	void initialize(const RsaKey& key, const byte_t* label, size_t label_size, bool isLabelDigested = false)
 	{
+		if (key.n.size() == 0 || (key.d.size() == 0 && key.e.size() == 0))
+		{
+			throw tc::ArgumentNullException("RsaOaepEncryptor::initialize()", "key does not have minimal required key-data.");
+		}
+
 		mRsaImpl.initialize(KeyBitSize, key.n.data(), key.n.size(), nullptr, 0, nullptr, 0, key.d.data(), key.d.size(), key.e.data(), key.e.size());
-		
 
 		if (((label == nullptr) ^ (label_size == 0)))
 		{
-			throw tc::ArgumentException("RsaOaepEncryptor::initialize()", "label was null when label_size was non-zero or vice-versa.");
+			throw tc::ArgumentNullException("RsaOaepEncryptor::initialize()", "label was null when label_size was non-zero or vice-versa.");
 		}
 
 		if (isLabelDigested == true)
@@ -161,7 +165,10 @@ public:
 	bool encrypt(byte_t* block, const byte_t* message, size_t message_size, const byte_t* seed, size_t seed_size)
 	{
 		if (mState != State::Initialized) { return false; }
-		if (message_size > (kBlockSize - (2 * HashFunction::kBlockSize) - 2)) { throw tc::ArgumentOutOfRangeException("tc::crypto::RsaOaepEncryptor::encrypt()", "message_size is too large to encrypt with this KeySize");  }
+		if (message_size > (kBlockSize - (2 * HashFunction::kBlockSize) - 2)) { return false;  }
+		if (block == nullptr) { return false; }
+		if (message == nullptr || message_size == 0) { return false; }
+		if (seed == nullptr || seed_size == 0) { return false; }
 
 		std::array<byte_t, kBlockSize> encoded_message;
 		//memset(encoded_message.data(), 0, encoded_message.size());
@@ -204,6 +211,8 @@ public:
 	bool decrypt(byte_t* message, size_t& message_size, size_t message_capacity, const byte_t* block)
 	{
 		if (mState != State::Initialized) { return false; }
+		if (block == nullptr) { return false; }
+		if (message == nullptr || message_capacity == 0) { return false; }
 
 		std::array<byte_t, kBlockSize> decrypted_block;
 
