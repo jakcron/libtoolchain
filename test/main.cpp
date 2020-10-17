@@ -60,17 +60,17 @@ void runTest(ITestClass* testClass)
 
 int main(int argc, char** argv)
 {
-	bool includeSlowTests = true;
+	bool includeSlowTests = false;
 	if (argc > 1)
 	{
-		static const std::string kNoSlowTestFlag = "--fast";
+		static const std::string kNoSlowTestFlag = "--slow";
 		if (strncmp(argv[1], kNoSlowTestFlag.c_str(), kNoSlowTestFlag.size()) == 0)
 		{
-			includeSlowTests = false;
+			includeSlowTests = true;
 		}
 		else
 		{
-			std::cout << "usage: " << std::string(argv[0]) << " [--fast]" << std::endl;
+			std::cout << "usage: " << std::string(argv[0]) << " [--slow]" << std::endl;
 			return 1;
 		}
 		
