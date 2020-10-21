@@ -91,7 +91,7 @@ namespace tc { namespace crypto {
 class Sha1Generator
 {
 public:
-	static const size_t kAsn1OidDataSize = 5; /**< SHA-1 ASN.1 Encoded OID length */
+	static const size_t kAsn1OidDataSize = 15; /**< SHA-1 ASN.1 Encoded OID length */
 	static const std::array<byte_t, kAsn1OidDataSize> kAsn1OidData; /**< SHA-1 ASN.1 Encoded OID */
 
 	static const size_t kHashSize  = 20; /**< SHA-1 hash size */

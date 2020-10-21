@@ -51,7 +51,7 @@ void crypto_Sha256Generator_TestClass::test_Constants()
 			}
 
 			// check ASN.1 OID data
-			tc::ByteData kExpectedAsn1OidData = tc::cli::FormatUtil::hexStringToBytes("608648016503040201");
+			tc::ByteData kExpectedAsn1OidData = tc::cli::FormatUtil::hexStringToBytes("3031300D060960864801650304020105000420");
 			if (tc::crypto::Sha256Generator::kAsn1OidDataSize != kExpectedAsn1OidData.size())
 			{
 				ss << "kAsn1OidDataSize had value " << std::dec << tc::crypto::Sha256Generator::kAsn1OidDataSize << " (expected " << kExpectedAsn1OidData.size() << ")";

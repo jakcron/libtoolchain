@@ -89,7 +89,7 @@ namespace tc { namespace crypto {
 class Sha512Generator
 {
 public:
-	static const size_t kAsn1OidDataSize = 9; /**< SHA-512 ASN.1 Encoded OID length */
+	static const size_t kAsn1OidDataSize = 19; /**< SHA-512 ASN.1 Encoded OID length */
 	static const std::array<byte_t, kAsn1OidDataSize> kAsn1OidData; /**< SHA-512 ASN.1 Encoded OID */
 
 	static const size_t kHashSize  = 64; /**< SHA-512 hash size */
