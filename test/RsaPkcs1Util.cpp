@@ -31,7 +31,6 @@ void RsaPkcs1Util::generateRsaPkcs1TestVectors_Custom(std::vector<RsaPkcs1Util::
 			break;
 		default:
 			return;
-		
 	}
 	for (size_t i = 0; i < tests.size(); i++)
 	{

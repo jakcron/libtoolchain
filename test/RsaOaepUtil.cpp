@@ -53,7 +53,6 @@ void RsaOaepUtil::generateRsaOaepTestVectors_Custom(std::vector<RsaOaepUtil::Tes
 			break;
 		default:
 			return;
-		
 	}
 	for (size_t i = 0; i < tests.size(); i++)
 	{
