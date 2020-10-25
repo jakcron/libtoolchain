@@ -1,17 +1,15 @@
 #include <tc/crypto/Aes128CbcEncryptor.h>
 
-#ifndef TC_CRYPTO_AES128CBCENCRYPTOR_NO_IMPL
-void tc::crypto::EncryptAes128Cbc(byte_t* dst, const byte_t* src, size_t size, const byte_t* iv, const byte_t* key)
+void tc::crypto::EncryptAes128Cbc(byte_t* dst, const byte_t* src, size_t size, const byte_t* key, size_t key_size, const byte_t* iv, size_t iv_size)
 {
-	Aes128CbcEncryptor encryptor;
-	encryptor.initialize(key);
-	encryptor.encrypt(dst, src, size, iv);
+	tc::crypto::Aes128CbcEncryptor crypt;
+	crypt.initialize(key, key_size, iv, iv_size);
+	crypt.encrypt(dst, src, size);
 }
 
-void tc::crypto::DecryptAes128Cbc(byte_t* dst, const byte_t* src, size_t size, const byte_t* iv, const byte_t* key)
+void tc::crypto::DecryptAes128Cbc(byte_t* dst, const byte_t* src, size_t size, const byte_t* key, size_t key_size, const byte_t* iv, size_t iv_size)
 {
-	Aes128CbcEncryptor encryptor;
-	encryptor.initialize(key);
-	encryptor.decrypt(dst, src, size, iv);
+	tc::crypto::Aes128CbcEncryptor crypt;
+	crypt.initialize(key, key_size, iv, iv_size);
+	crypt.decrypt(dst, src, size);
 }
-#endif

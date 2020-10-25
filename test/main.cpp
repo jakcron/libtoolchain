@@ -16,6 +16,59 @@
 #include "io_StreamSource_TestClass.h"
 #include "io_StreamSink_TestClass.h"
 #include "cli_FormatUtil_TestClass.h"
+#include "crypto_Md5Generator_TestClass.h"
+#include "crypto_Sha1Generator_TestClass.h"
+#include "crypto_Sha256Generator_TestClass.h"
+#include "crypto_Sha512Generator_TestClass.h"
+#include "crypto_HmacMd5Generator_TestClass.h"
+#include "crypto_HmacSha1Generator_TestClass.h"
+#include "crypto_HmacSha256Generator_TestClass.h"
+#include "crypto_HmacSha512Generator_TestClass.h"
+#include "crypto_Pbkdf1Md5KeyDeriver_TestClass.h"
+#include "crypto_Pbkdf1Sha1KeyDeriver_TestClass.h"
+#include "crypto_Pbkdf2Sha1KeyDeriver_TestClass.h"
+#include "crypto_Pbkdf2Sha256KeyDeriver_TestClass.h"
+#include "crypto_Pbkdf2Sha512KeyDeriver_TestClass.h"
+#include "crypto_PseudoRandomByteGenerator_TestClass.h"
+#include "crypto_Aes128Encryptor_TestClass.h"
+#include "crypto_Aes192Encryptor_TestClass.h"
+#include "crypto_Aes256Encryptor_TestClass.h"
+#include "crypto_Aes128EcbEncryptor_TestClass.h"
+#include "crypto_Aes192EcbEncryptor_TestClass.h"
+#include "crypto_Aes256EcbEncryptor_TestClass.h"
+#include "crypto_Aes128CbcEncryptor_TestClass.h"
+#include "crypto_Aes192CbcEncryptor_TestClass.h"
+#include "crypto_Aes256CbcEncryptor_TestClass.h"
+#include "crypto_Aes128CtrEncryptor_TestClass.h"
+#include "crypto_Aes192CtrEncryptor_TestClass.h"
+#include "crypto_Aes256CtrEncryptor_TestClass.h"
+#include "crypto_Aes128XtsEncryptor_TestClass.h"
+#include "crypto_Aes256XtsEncryptor_TestClass.h"
+#include "crypto_Rsa1024OaepSha256Encryptor_TestClass.h"
+#include "crypto_Rsa2048OaepSha256Encryptor_TestClass.h"
+#include "crypto_Rsa4096OaepSha256Encryptor_TestClass.h"
+#include "crypto_Rsa2048OaepSha512Encryptor_TestClass.h"
+#include "crypto_Rsa4096OaepSha512Encryptor_TestClass.h"
+#include "crypto_Rsa1024Pkcs1Md5Signer_TestClass.h"
+#include "crypto_Rsa2048Pkcs1Md5Signer_TestClass.h"
+#include "crypto_Rsa4096Pkcs1Md5Signer_TestClass.h"
+#include "crypto_Rsa1024Pkcs1Sha1Signer_TestClass.h"
+#include "crypto_Rsa2048Pkcs1Sha1Signer_TestClass.h"
+#include "crypto_Rsa4096Pkcs1Sha1Signer_TestClass.h"
+#include "crypto_Rsa1024Pkcs1Sha256Signer_TestClass.h"
+#include "crypto_Rsa2048Pkcs1Sha256Signer_TestClass.h"
+#include "crypto_Rsa4096Pkcs1Sha256Signer_TestClass.h"
+#include "crypto_Rsa1024Pkcs1Sha512Signer_TestClass.h"
+#include "crypto_Rsa2048Pkcs1Sha512Signer_TestClass.h"
+#include "crypto_Rsa4096Pkcs1Sha512Signer_TestClass.h"
+#include "crypto_Rsa1024PssSha256Signer_TestClass.h"
+#include "crypto_Rsa1024PssSha512Signer_TestClass.h"
+#include "crypto_Rsa2048PssSha256Signer_TestClass.h"
+#include "crypto_Rsa2048PssSha512Signer_TestClass.h"
+#include "crypto_Rsa4096PssSha256Signer_TestClass.h"
+#include "crypto_Rsa4096PssSha512Signer_TestClass.h"
+
+#include <iostream>
 
 void runTest(ITestClass* testClass)
 {
@@ -25,6 +78,22 @@ void runTest(ITestClass* testClass)
 
 int main(int argc, char** argv)
 {
+	bool includeSlowTests = false;
+	if (argc > 1)
+	{
+		static const std::string kNoSlowTestFlag = "--slow";
+		if (strncmp(argv[1], kNoSlowTestFlag.c_str(), kNoSlowTestFlag.size()) == 0)
+		{
+			includeSlowTests = true;
+		}
+		else
+		{
+			std::cout << "usage: " << std::string(argv[0]) << " [--slow]" << std::endl;
+			return 1;
+		}
+		
+	}
+
 	runTest(new string_TranscodeUtil_TestClass());
 	runTest(new ByteData_TestClass());
 	runTest(new endian_TestClass());
@@ -43,4 +112,58 @@ int main(int argc, char** argv)
 	runTest(new io_StreamSource_TestClass());
 	runTest(new io_StreamSink_TestClass());
 	runTest(new cli_FormatUtil_TestClass());
+	runTest(new crypto_Md5Generator_TestClass());
+	runTest(new crypto_Sha1Generator_TestClass());
+	runTest(new crypto_Sha256Generator_TestClass());
+	runTest(new crypto_Sha512Generator_TestClass());
+	runTest(new crypto_HmacMd5Generator_TestClass());
+	runTest(new crypto_HmacSha1Generator_TestClass());
+	runTest(new crypto_HmacSha256Generator_TestClass());
+	runTest(new crypto_HmacSha512Generator_TestClass());
+	if (includeSlowTests)
+	{
+		runTest(new crypto_Pbkdf1Md5KeyDeriver_TestClass());
+		runTest(new crypto_Pbkdf1Sha1KeyDeriver_TestClass());
+		runTest(new crypto_Pbkdf2Sha1KeyDeriver_TestClass());
+		runTest(new crypto_Pbkdf2Sha256KeyDeriver_TestClass());
+		runTest(new crypto_Pbkdf2Sha512KeyDeriver_TestClass());
+	}
+	runTest(new crypto_PseudoRandomByteGenerator_TestClass());
+	runTest(new crypto_Aes128Encryptor_TestClass());
+	runTest(new crypto_Aes192Encryptor_TestClass());
+	runTest(new crypto_Aes256Encryptor_TestClass());
+	runTest(new crypto_Aes128EcbEncryptor_TestClass());
+	runTest(new crypto_Aes192EcbEncryptor_TestClass());
+	runTest(new crypto_Aes256EcbEncryptor_TestClass());
+	runTest(new crypto_Aes128CbcEncryptor_TestClass());
+	runTest(new crypto_Aes192CbcEncryptor_TestClass());
+	runTest(new crypto_Aes256CbcEncryptor_TestClass());
+	runTest(new crypto_Aes128CtrEncryptor_TestClass());
+	runTest(new crypto_Aes192CtrEncryptor_TestClass());
+	runTest(new crypto_Aes256CtrEncryptor_TestClass());
+	runTest(new crypto_Aes128XtsEncryptor_TestClass());
+	runTest(new crypto_Aes256XtsEncryptor_TestClass());
+	runTest(new crypto_Rsa1024OaepSha256Encryptor_TestClass());
+	runTest(new crypto_Rsa2048OaepSha256Encryptor_TestClass());
+	runTest(new crypto_Rsa4096OaepSha256Encryptor_TestClass());
+	runTest(new crypto_Rsa2048OaepSha512Encryptor_TestClass());
+	runTest(new crypto_Rsa4096OaepSha512Encryptor_TestClass());
+	runTest(new crypto_Rsa1024Pkcs1Md5Signer_TestClass());
+	runTest(new crypto_Rsa2048Pkcs1Md5Signer_TestClass());
+	runTest(new crypto_Rsa4096Pkcs1Md5Signer_TestClass());
+	runTest(new crypto_Rsa1024Pkcs1Sha1Signer_TestClass());
+	runTest(new crypto_Rsa2048Pkcs1Sha1Signer_TestClass());
+	runTest(new crypto_Rsa4096Pkcs1Sha1Signer_TestClass());
+	runTest(new crypto_Rsa1024Pkcs1Sha256Signer_TestClass());
+	runTest(new crypto_Rsa2048Pkcs1Sha256Signer_TestClass());
+	runTest(new crypto_Rsa4096Pkcs1Sha256Signer_TestClass());
+	runTest(new crypto_Rsa1024Pkcs1Sha512Signer_TestClass());
+	runTest(new crypto_Rsa2048Pkcs1Sha512Signer_TestClass());
+	runTest(new crypto_Rsa4096Pkcs1Sha512Signer_TestClass());
+	runTest(new crypto_Rsa1024PssSha256Signer_TestClass());
+	runTest(new crypto_Rsa1024PssSha512Signer_TestClass());
+	runTest(new crypto_Rsa2048PssSha256Signer_TestClass());
+	runTest(new crypto_Rsa2048PssSha512Signer_TestClass());
+	runTest(new crypto_Rsa4096PssSha256Signer_TestClass());
+	runTest(new crypto_Rsa4096PssSha512Signer_TestClass());
 }

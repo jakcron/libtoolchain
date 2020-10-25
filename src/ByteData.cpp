@@ -79,6 +79,16 @@ tc::ByteData& tc::ByteData::operator=(ByteData&& other)
 	return *this;
 }
 
+byte_t& tc::ByteData::operator[](size_t index)
+{
+	return mPtr.get()[index];
+}
+
+byte_t tc::ByteData::operator[](size_t index) const
+{
+	return mPtr.get()[index];
+}
+
 byte_t* tc::ByteData::data() const
 {
 	return mPtr.get();

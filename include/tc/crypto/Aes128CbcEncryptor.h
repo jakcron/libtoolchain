@@ -1,31 +1,94 @@
 	/**
 	 * @file Aes128CbcEncryptor.h
-	 * @brief Declaration of tc::crypto::Aes128CbcEncryptor
+	 * @brief Declarations for API resources for related to AES128-CBC mode encryption/decryption.
 	 * @author Jack (jakcron)
 	 * @version 0.1
-	 * @date 2020/04/18
+	 * @date 2020/07/04
 	 **/
 #pragma once
-
-#include <tc/crypto/IIvBasedEncryptor.h>
-
-#ifdef TC_CRYPTO_USE_MBEDTLS_AES_IMPL
-#include <tc/crypto/mbedtls_detail/IvBasedEncryptorImpl.h>
-#endif
+#include <tc/types.h>
+#include <tc/crypto/AesEncryptor.h>
+#include <tc/crypto/CbcEncryptor.h>
 
 namespace tc { namespace crypto {
 
-#ifdef TC_CRYPTO_USE_MBEDTLS_AES_IMPL
-	using Aes128CbcEncryptor = mbedtls_detail::IvBasedEncryptorImpl<MBEDTLS_CIPHER_ID_AES, 128, MBEDTLS_MODE_CBC>;
-#else
-	#define TC_CRYPTO_AES128CBCENCRYPTOR_NO_IMPL
-#endif
+	/**
+	 * @typedef Aes128CbcEncryptor
+	 * @brief Class for AES-CBC encryption/decryption with a keysize of 128 bits.
+	 * 
+	 * @details This class encrypts/decrypts data using using AES128-CBC.
+	 * For more information refer to @ref CbcEncryptor.
+	 */
+using Aes128CbcEncryptor = CbcEncryptor<Aes128Encryptor>;
 
-#ifndef TC_CRYPTO_AES128CBCENCRYPTOR_NO_IMPL
-static_assert(std::is_base_of<IIvBasedEncryptor, Aes128CbcEncryptor>::value, "Aes128CbcEncryptor must be of type IIvBasedEncryptor.");
+	/**
+	 * @brief Utility function for AES128-CBC encryption.
+	 * 
+	 * @param[out] dst Buffer where encrypted data will be written.
+	 * @param[in]  src Pointer to data to encrypt.
+	 * @param[in]  size Size in bytes of data to encrypt.
+	 * @param[in]  key Pointer to key data.
+	 * @param[in]  key_size Size in bytes of key data.
+	 * @param[in]  iv Pointer to initialization vector.
+	 * @param[in]  iv_size Size in bytes of initialization vector.
+	 * 
+	 * @pre
+	 * - @p size is a multiple of @ref Aes128CbcEncryptor::kBlockSize.
+	 * - @p key_size == @ref Aes128CbcEncryptor::kKeySize.
+	 * - @p iv_size == @ref Aes128CbcEncryptor::kBlockSize.
+	 * 
+	 * @post
+	 * - Encrypted data is written to @p dst.
+	 * 
+	 * @details
+	 * This encrypts the data in @p src, writing it to @p dst.
+	 * 
+	 * @note
+	 * - @p dst and @p src can be the same pointer.
+	 * 
+	 * @throw tc::ArgumentNullException @p dst was null.
+	 * @throw tc::ArgumentNullException @p src was null.
+	 * @throw tc::ArgumentOutOfRangeException @p size was not a multiple of @ref Aes128CbcEncryptor::kBlockSize.
+	 * @throw tc::ArgumentNullException @p key was null.
+	 * @throw tc::ArgumentOutOfRangeException @p key_size did not equal @ref Aes128CbcEncryptor::kKeySize.
+	 * @throw tc::ArgumentNullException @p iv was null.
+	 * @throw tc::ArgumentOutOfRangeException @p iv_size did not equal @ref Aes128CbcEncryptor::kBlockSize.
+	 */
+void EncryptAes128Cbc(byte_t* dst, const byte_t* src, size_t size, const byte_t* key, size_t key_size, const byte_t* iv, size_t iv_size);
 
-void EncryptAes128Cbc(byte_t* dst, const byte_t* src, size_t size, const byte_t* iv, const byte_t* key);
-void DecryptAes128Cbc(byte_t* dst, const byte_t* src, size_t size, const byte_t* iv, const byte_t* key);
-#endif
+	/**
+	 * @brief Utility function for AES128-CBC decryption.
+	 * 
+	 * @param[out] dst Buffer where decrypted data will be written.
+	 * @param[in]  src Pointer to data to decrypt.
+	 * @param[in]  size Size in bytes of data to decrypt.
+	 * @param[in]  key Pointer to key data.
+	 * @param[in]  key_size Size in bytes of key data.
+	 * @param[in]  iv Pointer to initialization vector.
+	 * @param[in]  iv_size Size in bytes of initialization vector.
+	 * 
+	 * @pre
+	 * - @p size is a multiple of @ref Aes128CbcEncryptor::kBlockSize.
+	 * - @p key_size == @ref Aes128CbcEncryptor::kKeySize.
+	 * - @p iv_size == @ref Aes128CbcEncryptor::kBlockSize.
+	 * 
+	 * @post
+	 * - Encrypted data is written to @p dst.
+	 * 
+	 * @details
+	 * This decrypts the data in @p src, writing it to @p dst.
+	 * 
+	 * @note
+	 * - @p dst and @p src can be the same pointer.
+	 * 
+	 * @throw tc::ArgumentNullException @p dst was null.
+	 * @throw tc::ArgumentNullException @p src was null.
+	 * @throw tc::ArgumentOutOfRangeException @p size was not a multiple of @ref Aes128CbcEncryptor::kBlockSize.
+	 * @throw tc::ArgumentNullException @p key was null.
+	 * @throw tc::ArgumentOutOfRangeException @p key_size did not equal @ref Aes128CbcEncryptor::kKeySize.
+	 * @throw tc::ArgumentNullException @p iv was null.
+	 * @throw tc::ArgumentOutOfRangeException @p iv_size did not equal @ref Aes128CbcEncryptor::kBlockSize.
+	 */
+void DecryptAes128Cbc(byte_t* dst, const byte_t* src, size_t size, const byte_t* key, size_t key_size, const byte_t* iv, size_t iv_size);
 
 }} // namespace tc::crypto

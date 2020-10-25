@@ -12,7 +12,7 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @class CryptoException
-	 * @brief The exception that is thrown when an cryptographic error occurs.
+	 * @brief The exception that is thrown when an cryptography error occurs.
 	 **/
 class CryptoException : public tc::Exception
 {

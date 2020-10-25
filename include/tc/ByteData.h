@@ -2,8 +2,8 @@
 	 * @file ByteData.h
 	 * @brief Declaration of tc::ByteData
 	 * @author Jack (jakcron)
-	 * @version 0.3
-	 * @date 2020/04/08
+	 * @version 0.4
+	 * @date 2020/06/07
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -60,6 +60,16 @@ public:
 		 * @brief Move assignment
 		 **/
 	ByteData& operator=(ByteData&& other);
+
+		/**
+		 * @brief Element access operator
+		 **/
+	byte_t& operator[](size_t index);
+
+		/**
+		 * @brief Const Element access operator
+		 **/
+	byte_t operator[](size_t index) const;
 
 		/**
 		 * @brief Get data pointer
