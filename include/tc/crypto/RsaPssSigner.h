@@ -79,6 +79,11 @@ public:
 		 */
 	void initialize(const RsaKey& key)
 	{
+		if (key.n.size() == 0 || (key.d.size() == 0 && key.e.size() == 0))
+		{
+			throw tc::ArgumentNullException("RsaPssSigner::initialize()", "key does not have minimal required key-data.");
+		}
+
 		mRsaImpl.initialize(KeyBitSize, key.n.data(), key.n.size(), nullptr, 0, nullptr, 0, key.d.data(), key.d.size(), key.e.data(), key.e.size());
 		
 		mState = State::Initialized;
@@ -137,6 +142,9 @@ public:
 	bool sign(byte_t* signature, const byte_t* message_digest, const byte_t* salt, size_t salt_size)
 	{
 		if (mState != State::Initialized) { return false; }
+		if (signature == nullptr) { return false; }
+		if (message_digest == nullptr) { return false; }
+		if (salt == nullptr || salt_size == 0) { return false; }
 
 		std::array<byte_t, kSignatureSize> block;
 		memset(block.data(), 0, block.size());
@@ -169,6 +177,8 @@ public:
 	bool verify(const byte_t* signature, const byte_t* message_digest)
 	{
 		if (mState != State::Initialized) { return false; }
+		if (signature == nullptr) { return false; }
+		if (message_digest == nullptr) { return false; }
 
 		std::array<byte_t, kSignatureSize> block;
 		memcpy(block.data(), signature, block.size());
@@ -178,7 +188,7 @@ public:
 		} catch (...) {
 			return false;
 		}
-				
+
 		return (mPadImpl.CheckPad(message_digest, HashFunction::kHashSize, block.data(), block.size(), kSignatureSize - 1) == detail::RsaPssPadding<HashFunction>::Result::kSuccess);
 	}
 
