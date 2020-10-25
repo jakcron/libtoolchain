@@ -13,7 +13,7 @@ namespace tc { namespace cli {
 
 	/**
 	 * @class FormatUtil
-	 * @brief
+	 * @brief A collection of utilities to format binary data as strings and vice-versa.
 	 **/
 class FormatUtil
 {
