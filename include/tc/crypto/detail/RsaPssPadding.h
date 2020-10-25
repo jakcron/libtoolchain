@@ -48,7 +48,7 @@ public:
 		{
 			expected_salt_size = kHashSize;
 		}
-		// the block size is too small for a full sized salt, but is large enought for a smaller legal sized salt
+		// the block size is too small for a full sized salt, but is large enough for a smaller legal sized salt
 		else if (block_size >= min_salt_size + kHashSize + 2)
 		{
 			expected_salt_size = block_size - kHashSize - 2;
@@ -92,7 +92,6 @@ public:
 
 		// write encoded message digest
 		compute_encoded_message_digest(out_block + message_digest_offset, message_digest, salt, salt_size);
-		out_block[0] = 0x80;
 
 		// mask db
 		apply_mgf1_mask<kHashSize>(out_block + db_offset, db_size, out_block + message_digest_offset, kHashSize);
