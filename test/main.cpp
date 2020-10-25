@@ -58,6 +58,12 @@
 #include "crypto_Rsa1024Pkcs1Sha512Signer_TestClass.h"
 #include "crypto_Rsa2048Pkcs1Sha512Signer_TestClass.h"
 #include "crypto_Rsa4096Pkcs1Sha512Signer_TestClass.h"
+#include "crypto_Rsa1024PssSha256Signer_TestClass.h"
+#include "crypto_Rsa1024PssSha512Signer_TestClass.h"
+#include "crypto_Rsa2048PssSha256Signer_TestClass.h"
+#include "crypto_Rsa2048PssSha512Signer_TestClass.h"
+#include "crypto_Rsa4096PssSha256Signer_TestClass.h"
+#include "crypto_Rsa4096PssSha512Signer_TestClass.h"
 
 #include <iostream>
 
@@ -148,4 +154,10 @@ int main(int argc, char** argv)
 	runTest(new crypto_Rsa1024Pkcs1Sha512Signer_TestClass());
 	runTest(new crypto_Rsa2048Pkcs1Sha512Signer_TestClass());
 	runTest(new crypto_Rsa4096Pkcs1Sha512Signer_TestClass());
+	runTest(new crypto_Rsa1024PssSha256Signer_TestClass());
+	runTest(new crypto_Rsa1024PssSha512Signer_TestClass());
+	runTest(new crypto_Rsa2048PssSha256Signer_TestClass());
+	runTest(new crypto_Rsa2048PssSha512Signer_TestClass());
+	runTest(new crypto_Rsa4096PssSha256Signer_TestClass());
+	runTest(new crypto_Rsa4096PssSha512Signer_TestClass());
 }
