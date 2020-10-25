@@ -51,7 +51,7 @@ void crypto_Md5Generator_TestClass::test_Constants()
 			}
 
 			// check ASN.1 OID data
-			tc::ByteData kExpectedAsn1OidData = tc::cli::FormatUtil::hexStringToBytes("2A864886F70D0205");
+			tc::ByteData kExpectedAsn1OidData = tc::cli::FormatUtil::hexStringToBytes("3020300C06082A864886F70D020505000410");
 			if (tc::crypto::Md5Generator::kAsn1OidDataSize != kExpectedAsn1OidData.size())
 			{
 				ss << "kAsn1OidDataSize had value " << std::dec << tc::crypto::Md5Generator::kAsn1OidDataSize << " (expected " << kExpectedAsn1OidData.size() << ")";

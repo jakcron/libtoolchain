@@ -91,7 +91,7 @@ namespace tc { namespace crypto {
 class Md5Generator
 {
 public:
-	static const size_t kAsn1OidDataSize = 8; /**< MD5 ASN.1 Encoded OID length */
+	static const size_t kAsn1OidDataSize = 18; /**< MD5 ASN.1 Encoded OID length */
 	static const std::array<byte_t, kAsn1OidDataSize> kAsn1OidData; /**< MD5 ASN.1 Encoded OID */
 
 	static const size_t kHashSize  = 16; /**< MD5 hash size */
