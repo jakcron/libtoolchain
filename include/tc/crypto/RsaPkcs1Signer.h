@@ -81,7 +81,7 @@ public:
 	{
 		if (key.n.size() == 0 || (key.d.size() == 0 && key.e.size() == 0))
 		{
-			throw tc::ArgumentNullException("RsaOaepEncryptor::initialize()", "key does not have minimal required key-data.");
+			throw tc::ArgumentNullException("RsaPkcs1Signer::initialize()", "key does not have minimal required key-data.");
 		}
 
 		mRsaImpl.initialize(KeyBitSize, key.n.data(), key.n.size(), nullptr, 0, nullptr, 0, key.d.data(), key.d.size(), key.e.data(), key.e.size());
