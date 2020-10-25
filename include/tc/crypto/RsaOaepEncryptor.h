@@ -125,7 +125,7 @@ public:
 		 * 
 		 * @pre
 		 * - Size of the @p block buffer must >= <tt>RsaOaepEncryptor::kBlockSize</tt>.
-		 * - The maximum size for @p message_size is <tt>RsaOaepEncryptor::kBlockSize</tt> - (2 * <tt>HashFunction::kHashSize</tt>) - 2
+		 * - The maximum size for @p message_size is <tt>RsaOaepEncryptor::kBlockSize</tt> - (2 * <tt>HashFunction::kHashSize</tt>) - 2.
 		 * 
 		 * @post
 		 * - The encrypted block is written to <tt><var>block</var></tt>.
@@ -150,11 +150,15 @@ public:
 		 * @param[out] block Pointer to the buffer storing the encrypted RSA block.
 		 * @param[in]  message Pointer to message.
 		 * @param[in]  message_size Size of message.
+		 * @param[in]  seed Pointer to random seed.
+		 * @param[in]  seed_size Size of random seed.
 		 * @return true if encryption was successful.
 		 * 
 		 * @pre
 		 * - Size of the @p block buffer must >= <tt>RsaOaepEncryptor::kBlockSize</tt>.
-		 * - The maximum size for @p message_size is <tt>RsaOaepEncryptor::kBlockSize</tt> - (2 * <tt>HashFunction::kHashSize</tt>) - 2
+		 * - The maximum size for @p message_size is <tt>RsaOaepEncryptor::kBlockSize</tt> - (2 * <tt>HashFunction::kHashSize</tt>) - 2.
+		 * - Size of the @p seed buffer must be == <tt>HashFunction::kHashSize</tt>.
+		 * - The seed should be random or the security of the encryption is reduced.
 		 * 
 		 * @post
 		 * - The encrypted block is written to <tt><var>block</var></tt>.

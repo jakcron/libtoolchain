@@ -74,7 +74,7 @@ public:
 		 * - Instance is in initialized state.
 		 * 
 		 * @details
-		 * This transforms @ref kBlockSize number of bytes of data from @p src, writing it to @p dst.
+		 * This transforms block_size number of bytes of data from @p src, writing it to @p dst.
 		 * 
 		 * @note 
 		 *  - @p dst and @p src can be the same pointer.
@@ -94,7 +94,7 @@ public:
 		 * - Instance is in initialized state.
 		 * 
 		 * @details
-		 * This transforms @ref kBlockSize number of bytes of data from @p src, writing it to @p dst.
+		 * This transforms block_size number of bytes of data from @p src, writing it to @p dst.
 		 * 
 		 * @note 
 		 *  - @p dst and @p src can be the same pointer.
