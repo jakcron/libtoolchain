@@ -36,8 +36,8 @@ void crypto_Rsa4096Pkcs1Sha512Signer_TestClass::test_Constants()
 		{
 			std::stringstream ss;
 
-			// check block size
-			static const size_t kExpectedSignatureSize = 512;
+			// check signature size
+			static const size_t kExpectedSignatureSize = 4096 >> 3;
 			if (tc::crypto::Rsa4096Pkcs1Sha512Signer::kSignatureSize != kExpectedSignatureSize)
 			{
 				ss << "kSignatureSize had value " << std::dec << tc::crypto::Rsa4096Pkcs1Sha512Signer::kSignatureSize << " (expected " << kExpectedSignatureSize << ")";

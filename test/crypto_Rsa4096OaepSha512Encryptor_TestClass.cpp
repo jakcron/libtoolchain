@@ -38,7 +38,7 @@ void crypto_Rsa4096OaepSha512Encryptor_TestClass::test_Constants()
 			std::stringstream ss;
 
 			// check block size
-			static const size_t kExpectedBlockSize = 512;
+			static const size_t kExpectedBlockSize = 4096 >> 3;
 			if (tc::crypto::Rsa4096OaepSha512Encryptor::kBlockSize != kExpectedBlockSize)
 			{
 				ss << "kBlockSize had value " << std::dec << tc::crypto::Rsa4096OaepSha512Encryptor::kBlockSize << " (expected " << kExpectedBlockSize << ")";
