@@ -236,7 +236,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 			creation_flag = OPEN_ALWAYS;
 			break;
 		default:
-			throw tc::ArgumentOutOfRangeException(kClassName+"open()", "Illegal value for mode");
+			throw tc::ArgumentOutOfRangeException(kClassName+"::open()", "Illegal value for mode");
 	}
 
 	// process access
@@ -261,7 +261,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 			share_mode_flag = 0;
 			break;
 		default:
-			throw tc::ArgumentOutOfRangeException(kClassName+"open()", "Illegal value for access");
+			throw tc::ArgumentOutOfRangeException(kClassName+"::open()", "Illegal value for access");
 	}
 	
 	// validate use of write dependent flags (open existing is the only one that supports no write flag)
@@ -478,7 +478,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 			open_flag |= O_APPEND | O_CREAT;
 			break;
 		default:
-			throw tc::ArgumentOutOfRangeException(kClassName+"open()", "Illegal value for mode");
+			throw tc::ArgumentOutOfRangeException(kClassName+"::open()", "Illegal value for mode");
 	}
 
 	// process access
@@ -509,18 +509,18 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 #endif
 			break;
 		default:
-			throw tc::ArgumentOutOfRangeException(kClassName+"open()", "Illegal value for access");
+			throw tc::ArgumentOutOfRangeException(kClassName+"::open()", "Illegal value for access");
 	}
 
 	// validate use of write dependent flags
 	if ((open_flag & (O_APPEND | O_TRUNC | O_CREAT)) && !(open_flag & (O_WRONLY|O_RDWR))) 
 	{
-		throw tc::ArgumentException(kClassName+"open()", "Stream open mode requires write access, but write access was not allowed");
+		throw tc::ArgumentException(kClassName+"::open()", "Stream open mode requires write access, but write access was not allowed");
 	}
 	// explicitly check APPEND as being write only
 	if ((open_flag & (O_APPEND)) && (open_flag & (O_RDWR))) 
 	{
-		throw tc::ArgumentException(kClassName+"open()", "Stream opened in Append mode can only work with Write access. ReadWrite is not permitted");
+		throw tc::ArgumentException(kClassName+"::open()", "Stream opened in Append mode can only work with Write access. ReadWrite is not permitted");
 	}
 
 	// open file handle with Read/Write for User, Read for Group, nothing for others
@@ -535,13 +535,13 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 			case (EROFS):
 				throw tc::UnauthorisedAccessException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENAMETOOLONG):
-				throw tc::io::PathTooLongException(kClassName+"open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
+				throw tc::io::PathTooLongException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENOENT):
-				throw tc::io::FileNotFoundException(kClassName+"open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
+				throw tc::io::FileNotFoundException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EEXIST):
-				throw tc::io::FileExistsException(kClassName+"open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
+				throw tc::io::FileExistsException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EINVAL):
-				throw tc::ArgumentOutOfRangeException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));			
+				throw tc::ArgumentOutOfRangeException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EFAULT):
 				throw tc::AccessViolationException(kClassName+"::open()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EISDIR):
@@ -627,7 +627,7 @@ size_t tc::io::FileStream::read_impl(byte_t* ptr, size_t count)
 		switch (errno) 
 		{	
 			case (EINVAL):
-				throw tc::ArgumentOutOfRangeException(kClassName+"::read()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));			
+				throw tc::ArgumentOutOfRangeException(kClassName+"::read()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EFAULT):
 				throw tc::AccessViolationException(kClassName+"::read()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EISDIR):
@@ -703,7 +703,7 @@ int64_t tc::io::FileStream::seek_impl(int64_t offset, SeekOrigin origin)
 		switch (errno) 
 		{
 			case (EINVAL):
-				throw tc::ArgumentOutOfRangeException(kClassName+"::seek()",  PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));			
+				throw tc::ArgumentOutOfRangeException(kClassName+"::seek()",  PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EOVERFLOW):
 				throw tc::OverflowException(kClassName+"::seek()",  PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EBADF):

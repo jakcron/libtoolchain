@@ -92,7 +92,7 @@ void cli_FormatUtil_TestClass::testHexStringToBytes()
 				throw tc::Exception(ss.str());
 			}
 
-			if (out.size() != 0 && memcmp(out.get(), test->out_data.get(), out.size()) != 0)
+			if (out.size() != 0 && memcmp(out.data(), test->out_data.data(), out.size()) != 0)
 			{
 				ss << "Test(" << test->test_name << ") to convert str(" << test->in_string << ") returned ByteData with wrong data";
 				throw tc::Exception(ss.str());
@@ -140,7 +140,7 @@ void cli_FormatUtil_TestClass::testFormatBytesAsString()
 		// run tests
 		for (auto test = tests.begin(); test != tests.end(); test++)
 		{
-			std::string res = tc::cli::FormatUtil::formatBytesAsString(test->in_data.get(), test->in_data.size(), test->in_is_uppercase, test->in_delimiter);
+			std::string res = tc::cli::FormatUtil::formatBytesAsString(test->in_data.data(), test->in_data.size(), test->in_is_uppercase, test->in_delimiter);
 
 			if (res != test->out_string)
 			{
@@ -189,7 +189,7 @@ void cli_FormatUtil_TestClass::testFormatBytesAsStringWithLineLimit()
 		// run tests
 		for (auto test = tests.begin(); test != tests.end(); test++)
 		{
-			std::string res = tc::cli::FormatUtil::formatBytesAsStringWithLineLimit(test->in_data.get(), test->in_data.size(), false, "", test->in_row_len, test->in_indent_len);
+			std::string res = tc::cli::FormatUtil::formatBytesAsStringWithLineLimit(test->in_data.data(), test->in_data.size(), false, "", test->in_row_len, test->in_indent_len);
 
 			if (res != test->out_string)
 			{

@@ -7,11 +7,13 @@
 	 **/
 #pragma once
 #include <string>
+#include <array>
 #include <vector>
 #include <cstdint>
 #include <cstring>
 #include <memory>
 #include <algorithm>
+#include <type_traits>
 #include <tc/endian.h>
 
 #ifdef _WIN32
