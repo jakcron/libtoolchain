@@ -1,7 +1,7 @@
 # libtoolchain - Toolchain Development Library
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 ![Language](https://img.shields.io/badge/langauge-c++11-blue.svg)
-![Platform](https://img.shields.io/badge/platform-linux--x86__64%20%7C%20linux--i386%20%7C%20win--x86__64%20%7C%20win--i386%20%7C%20macos--x86__64-lightgrey.svg)
+![Platform](https://img.shields.io/badge/platform-linux:%20x86__64,%20i386%20%7C%20win:%20x86__64,%20i386%20%7C%20macos:%20x86__64,%20arm64-lightgrey.svg)
 
 ![Version](https://img.shields.io/badge/version-0.4.0%20%7C%20prerelease-green.svg)
 
