@@ -14,7 +14,7 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @typedef Rsa2048OaepSha512Encryptor
-	 * @brief Class for generating and verifying RSA2048-OAEP-SHA2-512 signatures.
+	 * @brief Class for RSA2048-OAEP-SHA2-512 encryption/decryption.
 	 * 
 	 * @details This class uses RSA2048-OAEP to sign/validate SHA2-512 message digests.
 	 * For more information refer to @ref RsaOaepEncryptor.
@@ -23,7 +23,7 @@ using Rsa2048OaepSha512Encryptor = RsaOaepEncryptor<2048,Sha512Generator>;
 
 	/**
 	 * @typedef Rsa4096OaepSha512Encryptor
-	 * @brief Class for generating and verifying RSA4096-OAEP-SHA2-512 signatures.
+	 * @brief Class for RSA4096-OAEP-SHA2-512 encryption/decryption.
 	 * 
 	 * @details This class uses RSA4096-OAEP to sign/validate SHA2-512 message digests.
 	 * For more information refer to @ref RsaOaepEncryptor.

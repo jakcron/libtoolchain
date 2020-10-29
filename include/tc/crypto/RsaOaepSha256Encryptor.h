@@ -14,7 +14,7 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @typedef Rsa1024OaepSha256Encryptor
-	 * @brief Class for generating and verifying RSA1024-OAEP-SHA2-256 signatures.
+	 * @brief Class for RSA1024-OAEP-SHA2-256 encryption/decryption.
 	 * 
 	 * @details This class uses RSA1024-OAEP to sign/validate SHA2-256 message digests.
 	 * For more information refer to @ref RsaOaepEncryptor.
@@ -23,7 +23,7 @@ using Rsa1024OaepSha256Encryptor = RsaOaepEncryptor<1024,Sha256Generator>;
 
 	/**
 	 * @typedef Rsa2048OaepSha256Encryptor
-	 * @brief Class for generating and verifying RSA2048-OAEP-SHA2-256 signatures.
+	 * @brief Class for RSA2048-OAEP-SHA2-256 encryption/decryption.
 	 * 
 	 * @details This class uses RSA2048-OAEP to sign/validate SHA2-256 message digests.
 	 * For more information refer to @ref RsaOaepEncryptor.
@@ -32,7 +32,7 @@ using Rsa2048OaepSha256Encryptor = RsaOaepEncryptor<2048,Sha256Generator>;
 
 	/**
 	 * @typedef Rsa4096OaepSha256Encryptor
-	 * @brief Class for generating and verifying RSA4096-OAEP-SHA2-256 signatures.
+	 * @brief Class for RSA4096-OAEP-SHA2-256 encryption/decryption.
 	 * 
 	 * @details This class uses RSA4096-OAEP to sign/validate SHA2-256 message digests.
 	 * For more information refer to @ref RsaOaepEncryptor.
