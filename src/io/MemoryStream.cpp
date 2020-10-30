@@ -64,7 +64,7 @@ size_t tc::io::MemoryStream::read(byte_t* ptr, size_t count)
 
 	count = IOUtil::getReadableCount(IOUtil::castSizeToInt64(mData.size()), mPosition, count);
 
-	memcpy(ptr, mData.get() + mPosition, count);
+	memcpy(ptr, mData.data() + mPosition, count);
 
 	mPosition += IOUtil::castSizeToInt64(count);
 
@@ -86,7 +86,7 @@ size_t tc::io::MemoryStream::write(const byte_t* ptr, size_t count)
 
 	count = IOUtil::getWritableCount(IOUtil::castSizeToInt64(mData.size()), mPosition, count);
 
-	memcpy(mData.get() + mPosition, ptr, count);
+	memcpy(mData.data() + mPosition, ptr, count);
 
 	mPosition += IOUtil::castSizeToInt64(count);
 
@@ -128,7 +128,7 @@ void tc::io::MemoryStream::setLength(int64_t length)
 	size_t copy_len = std::min<size_t>(data.size(), mData.size());
 
 	// copy from old to new ByteData
-	memcpy(data.get(), mData.get(), copy_len);
+	memcpy(data.data(), mData.data(), copy_len);
 
 	// re-assign mData (this frees the old mData)
 	mData = data;

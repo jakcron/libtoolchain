@@ -67,7 +67,7 @@ size_t tc::io::SubSink::pushData(const tc::ByteData& data, int64_t offset)
 		throw tc::ObjectDisposedException(kClassName+"::pushData()", "Failed to push data (no base sink)");
 	}
 
-	auto new_data = tc::ByteData(data.get(), IOUtil::getWritableCount(mSubSinkLength, offset, data.size()));
+	auto new_data = tc::ByteData(data.data(), IOUtil::getWritableCount(mSubSinkLength, offset, data.size()));
 
 	return mBaseSink->pushData(new_data, mBaseSinkOffset + offset);
 }
