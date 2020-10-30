@@ -1508,7 +1508,7 @@ void io_FileStream_TestClass::test_Read_SomeDataFromMiddle()
 		{
 			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
 
-			size_t offset;
+			int64_t offset;
 			size_t size;
 
 			offset = 01;

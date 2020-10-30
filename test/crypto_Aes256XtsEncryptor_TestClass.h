@@ -25,7 +25,7 @@ private:
 		std::string test_name;
 		tc::ByteData key1;
 		tc::ByteData key2;
-		uint64_t data_unit;
+		size_t data_unit;
 		uint64_t data_unit_sequence_number;
 		tc::ByteData plaintext;
 		tc::ByteData ciphertext;
