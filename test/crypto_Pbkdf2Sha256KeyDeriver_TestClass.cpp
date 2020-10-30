@@ -15,7 +15,14 @@ void crypto_Pbkdf2Sha256KeyDeriver_TestClass::runAllTests(void)
 	test_ConfirmTestVector_Class();
 	test_ConfirmTestVector_UtilFunc();
 	test_WillThrowExceptionOnZeroRounds();
-	test_WillThrowExceptionOnTooLargeDkSize();
+	if (std::numeric_limits<size_t>::max() < std::numeric_limits<uint64_t>::max())
+	{
+		std::cout << "[tc::crypto::Pbkdf2Sha256KeyDeriver] test_WillThrowExceptionOnTooLargeDkSize : SKIP (Cannot perform this test non 64bit systems)" << std::endl;
+	}
+	else
+	{
+		test_WillThrowExceptionOnTooLargeDkSize();
+	}
 	test_GetBytesWithoutInitDoesNothing();
 	std::cout << "[tc::crypto::Pbkdf2Sha256KeyDeriver] END" << std::endl;
 }
@@ -30,7 +37,7 @@ void crypto_Pbkdf2Sha256KeyDeriver_TestClass::test_Constants()
 			std::stringstream ss;
 
 			// check max derivable size
-			static const size_t kExpectedMaxDerivableSize = 0xffffffff * tc::crypto::Sha256Generator::kHashSize;
+			static const uint64_t kExpectedMaxDerivableSize = uint64_t(0xffffffff) * uint64_t(tc::crypto::Sha256Generator::kHashSize);
 			if (tc::crypto::Pbkdf2Sha256KeyDeriver::kMaxDerivableSize != kExpectedMaxDerivableSize)
 			{
 				ss << "kMaxDerivableSize had value " << std::dec << tc::crypto::Pbkdf2Sha256KeyDeriver::kMaxDerivableSize << " (expected " << kExpectedMaxDerivableSize << ")";
@@ -184,6 +191,7 @@ void crypto_Pbkdf2Sha256KeyDeriver_TestClass::test_WillThrowExceptionOnZeroRound
 
 void crypto_Pbkdf2Sha256KeyDeriver_TestClass::test_WillThrowExceptionOnTooLargeDkSize()
 {
+	// this test relies on size_t being 64bit, since the maximum kMaxDerivableSize is uint64_t, manually generating kMaxDerivableSize bytes would take very long. The point of this test is to refuse it outright which can't be done on 32bit systems.
 	std::cout << "[tc::crypto::Pbkdf2Sha256KeyDeriver] test_WillThrowExceptionOnTooLargeDkSize : " << std::flush;
 	try
 	{
@@ -212,7 +220,7 @@ void crypto_Pbkdf2Sha256KeyDeriver_TestClass::test_WillThrowExceptionOnTooLargeD
 				tc::crypto::Pbkdf2Sha256KeyDeriver keydev;
 
 				keydev.initialize((const byte_t*)tests[0].in_password.c_str(), tests[0].in_password.size(), (const byte_t*)tests[0].in_salt.c_str(), tests[0].in_salt.size(), tests[0].in_rounds);
-				
+
 				// nullptr because we expect this to fail outright and allocating kMaxDerivableSize+1 is too large
 				keydev.getBytes(nullptr, tc::crypto::Pbkdf2Sha256KeyDeriver::kMaxDerivableSize + 1);
 
@@ -262,7 +270,7 @@ void crypto_Pbkdf2Sha256KeyDeriver_TestClass::test_GetBytesWithoutInitDoesNothin
 
 			if (cmp != 1)
 			{
-				throw tc::Exception("getBytes() operated inspite of not being initialized.");
+				throw tc::Exception("getBytes() operated in spite of not being initialized.");
 			}
 
 			std::cout << "PASS" << std::endl;
