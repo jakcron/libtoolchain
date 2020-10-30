@@ -50,7 +50,7 @@ void tc::crypto::detail::RsaKeyGeneratorImpl::generateKey(size_t key_bit_size, b
 	int ret = 1;
 	
 	// generate key
-	ret = mbedtls_rsa_gen_key(&(mImplCtx->rsa), mbedtls_ctr_drbg_random, &(mImplCtx->ctr_drbg), key_bit_size, 0x10001);
+	ret = mbedtls_rsa_gen_key(&(mImplCtx->rsa), mbedtls_ctr_drbg_random, &(mImplCtx->ctr_drbg), uint32_t(key_bit_size), 0x10001);
 	switch (ret)
 	{
 		case (0):
