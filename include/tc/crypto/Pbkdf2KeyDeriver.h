@@ -47,7 +47,7 @@ template <class HashFunction>
 class Pbkdf2KeyDeriver
 {
 public:
-	static const size_t kMaxDerivableSize = 0xffffffff * HashFunction::kHashSize; /**< Maximum total key data that can be derived */
+	static const uint64_t kMaxDerivableSize = uint64_t(0xffffffff) * uint64_t(HashFunction::kHashSize); /**< Maximum total key data that can be derived */
 
 		/**
 		 * @brief Default constructor
