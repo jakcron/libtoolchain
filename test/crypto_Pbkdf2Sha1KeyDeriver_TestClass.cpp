@@ -15,7 +15,14 @@ void crypto_Pbkdf2Sha1KeyDeriver_TestClass::runAllTests(void)
 	test_ConfirmTestVector_Class();
 	test_ConfirmTestVector_UtilFunc();
 	test_WillThrowExceptionOnZeroRounds();
-	test_WillThrowExceptionOnTooLargeDkSize();
+	if (std::numeric_limits<size_t>::max() < std::numeric_limits<uint64_t>::max())
+	{
+		std::cout << "[tc::crypto::Pbkdf2Sha1KeyDeriver] test_WillThrowExceptionOnTooLargeDkSize : SKIP (Cannot perform this test non 64bit systems)" << std::endl;
+	}
+	else
+	{
+		test_WillThrowExceptionOnTooLargeDkSize();
+	}
 	test_GetBytesWithoutInitDoesNothing();
 	std::cout << "[tc::crypto::Pbkdf2Sha1KeyDeriver] END" << std::endl;
 }
@@ -30,7 +37,7 @@ void crypto_Pbkdf2Sha1KeyDeriver_TestClass::test_Constants()
 			std::stringstream ss;
 
 			// check max derivable size
-			static const size_t kExpectedMaxDerivableSize = 0xffffffff * tc::crypto::Sha1Generator::kHashSize;
+			static const uint64_t kExpectedMaxDerivableSize = uint64_t(0xffffffff) * uint64_t(tc::crypto::Sha1Generator::kHashSize);
 			if (tc::crypto::Pbkdf2Sha1KeyDeriver::kMaxDerivableSize != kExpectedMaxDerivableSize)
 			{
 				ss << "kMaxDerivableSize had value " << std::dec << tc::crypto::Pbkdf2Sha1KeyDeriver::kMaxDerivableSize << " (expected " << kExpectedMaxDerivableSize << ")";

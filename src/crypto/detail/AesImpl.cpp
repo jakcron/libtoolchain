@@ -26,8 +26,8 @@ void tc::crypto::detail::AesImpl::initialize(const byte_t* key, size_t key_size)
 	if (key == nullptr) { throw tc::ArgumentNullException("AesImpl::initialize()", "key was null."); }
 	if (key_size != 16 && key_size != 24 && key_size != 32) { throw tc::ArgumentOutOfRangeException("AesImpl::initialize()", "key_size did not equal 16, 24 or 32."); }
 
-	mbedtls_aes_setkey_enc(&(mImplCtx->mEncContext), key, key_size * 8);
-	mbedtls_aes_setkey_dec(&(mImplCtx->mDecContext), key, key_size * 8);
+	mbedtls_aes_setkey_enc(&(mImplCtx->mEncContext), key, uint32_t(key_size) * 8);
+	mbedtls_aes_setkey_dec(&(mImplCtx->mDecContext), key, uint32_t(key_size) * 8);
 
 	mState = State::Initialized;
 }

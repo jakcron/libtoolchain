@@ -30,7 +30,7 @@ template <typename HashFunction>
 class Pbkdf1Impl
 {
 public:
-	static const size_t kMaxDerivableSize = HashFunction::kHashSize; /**< Maximum total data that can be derived */
+	static const uint64_t kMaxDerivableSize = HashFunction::kHashSize; /**< Maximum total data that can be derived */
 
 	Pbkdf1Impl() :
 		mState(State::None),
@@ -74,7 +74,7 @@ public:
 		if (mState != State::Initialized) return;
 
 		// determine data remaining
-		size_t derivable_data = kMaxDerivableSize - mTotalDataDerived + mAvailableData;
+		uint64_t derivable_data = kMaxDerivableSize - mTotalDataDerived + mAvailableData;
 
 		if (key_size > derivable_data) { throw tc::crypto::CryptoException("tc::crypto::detail::Pbkdf1Impl", "Request too large."); }
 
@@ -92,7 +92,7 @@ public:
 			}
 
 			// determine how much to copy in this loop
-			size_t copy_size = std::min<size_t>(key_size, mAvailableData);
+			size_t copy_size = std::min<size_t>(key_size, size_t(std::min<uint64_t>(mAvailableData, std::numeric_limits<size_t>::max())));
 
 			// copy available data into key
 			memcpy(key, mDerivedData.data() + mDerivedData.size() - mAvailableData, copy_size);
@@ -122,8 +122,8 @@ private:
 
 	HashFunction mHash;
 	std::array<byte_t, HashFunction::kHashSize> mDerivedData;
-	size_t mAvailableData;
-	size_t mTotalDataDerived;
+	uint64_t mAvailableData;
+	uint64_t mTotalDataDerived;
 
 	void deriveBytes()
 	{

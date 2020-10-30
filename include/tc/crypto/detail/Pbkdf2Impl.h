@@ -32,7 +32,7 @@ template <typename HashFunction>
 class Pbkdf2Impl
 {
 public:
-	static const size_t kMaxDerivableSize = 0xffffffff * HashFunction::kHashSize; /**< Maximum total data that can be derived */
+	static const uint64_t kMaxDerivableSize = uint64_t(0xffffffff) * uint64_t(HashFunction::kHashSize); /**< Maximum total data that can be derived */
 
 	Pbkdf2Impl() :
 		mState(State::None),
@@ -78,7 +78,7 @@ public:
 		if (mState != State::Initialized) return;
 
 		// determine data remaining
-		size_t derivable_data = kMaxDerivableSize - mTotalDataDerived + mAvailableData;
+		uint64_t derivable_data = kMaxDerivableSize - mTotalDataDerived + mAvailableData;
 
 		if (key_size > derivable_data) { throw tc::crypto::CryptoException("tc::crypto::detail::Pbkdf1Impl", "Request too large."); }
 
@@ -98,8 +98,8 @@ public:
 				mTotalDataDerived += mDerivedData.size();
 			}
 
-			// determine how much to copy in this loop
-			size_t copy_size = std::min<size_t>(key_size, mAvailableData);
+			// determine how much to copy in this loop 
+			size_t copy_size = std::min<size_t>(key_size, size_t(std::min<uint64_t>(mAvailableData, std::numeric_limits<size_t>::max())));
 
 			// copy available data into key
 			memcpy(key, mDerivedData.data() + mDerivedData.size() - mAvailableData, copy_size);
@@ -131,9 +131,9 @@ private:
 
 	HmacGenerator<HashFunction> mHmac;
 	std::array<byte_t, kMacSize> mDerivedData;
-	size_t mAvailableData;
-	size_t mTotalDataDerived;
-	size_t mBlockIndex;
+	uint64_t mAvailableData;
+	uint64_t mTotalDataDerived;
+	uint32_t mBlockIndex;
 
 	void deriveBytes()
 	{
