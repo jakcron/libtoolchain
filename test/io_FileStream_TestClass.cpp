@@ -1508,7 +1508,7 @@ void io_FileStream_TestClass::test_Read_SomeDataFromMiddle()
 		{
 			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
 
-			size_t offset;
+			int64_t offset;
 			size_t size;
 
 			offset = 01;
@@ -1728,13 +1728,13 @@ void io_FileStream_TestClass::test_Write_OverwriteSomeDataFromZero()
 	{
 		auto padding = tc::io::PaddingSource(0xff, kRandomString.size());
 		auto padding_data = padding.pullData(0, padding.length());
-		helper_CreateFileForReading(kAsciiFilePath, padding_data.get(), padding_data.size());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.data(), padding_data.size());
 
 		try 
 		{
 			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
 
-			const byte_t* original_ptr = padding_data.get();
+			const byte_t* original_ptr = padding_data.data();
 			size_t original_size = padding_data.size();
 
 			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
@@ -1746,10 +1746,10 @@ void io_FileStream_TestClass::test_Write_OverwriteSomeDataFromZero()
 
 			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
 
-			memcpy(expected_file_layout.get(), original_ptr, original_size);
-			memcpy(expected_file_layout.get() + written_data_offset, written_data_ptr, written_data_size);
+			memcpy(expected_file_layout.data(), original_ptr, original_size);
+			memcpy(expected_file_layout.data() + written_data_offset, written_data_ptr, written_data_size);
 
-			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.get(), expected_file_layout.size());
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.data(), expected_file_layout.size());
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -1773,13 +1773,13 @@ void io_FileStream_TestClass::test_Write_OverwriteSomeDataFromMiddle()
 	{
 		auto padding = tc::io::PaddingSource(0xee, kRandomString.size());
 		auto padding_data = padding.pullData(0, padding.length());
-		helper_CreateFileForReading(kAsciiFilePath, padding_data.get(), padding_data.size());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.data(), padding_data.size());
 
 		try 
 		{
 			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
 
-			const byte_t* original_ptr = padding_data.get();
+			const byte_t* original_ptr = padding_data.data();
 			size_t original_size = padding_data.size();
 
 			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
@@ -1791,10 +1791,10 @@ void io_FileStream_TestClass::test_Write_OverwriteSomeDataFromMiddle()
 
 			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
 
-			memcpy(expected_file_layout.get(), original_ptr, original_size);
-			memcpy(expected_file_layout.get() + written_data_offset, written_data_ptr, written_data_size);
+			memcpy(expected_file_layout.data(), original_ptr, original_size);
+			memcpy(expected_file_layout.data() + written_data_offset, written_data_ptr, written_data_size);
 
-			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.get(), expected_file_layout.size());
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.data(), expected_file_layout.size());
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -1818,13 +1818,13 @@ void io_FileStream_TestClass::test_Write_ExtendStreamSizeThruWritingDataFromZero
 	{
 		auto padding = tc::io::PaddingSource(0xee, 0x20);
 		auto padding_data = padding.pullData(0, padding.length());
-		helper_CreateFileForReading(kAsciiFilePath, padding_data.get(), padding_data.size());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.data(), padding_data.size());
 
 		try 
 		{
 			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
 
-			const byte_t* original_ptr = padding_data.get();
+			const byte_t* original_ptr = padding_data.data();
 			size_t original_size = padding_data.size();
 
 			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
@@ -1836,10 +1836,10 @@ void io_FileStream_TestClass::test_Write_ExtendStreamSizeThruWritingDataFromZero
 
 			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
 
-			memcpy(expected_file_layout.get(), original_ptr, original_size);
-			memcpy(expected_file_layout.get() + written_data_offset, written_data_ptr, written_data_size);
+			memcpy(expected_file_layout.data(), original_ptr, original_size);
+			memcpy(expected_file_layout.data() + written_data_offset, written_data_ptr, written_data_size);
 
-			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.get(), expected_file_layout.size());
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.data(), expected_file_layout.size());
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -1863,13 +1863,13 @@ void io_FileStream_TestClass::test_Write_ExtendStreamSizeThruWritingDataFromMidd
 	{
 		auto padding = tc::io::PaddingSource(0xee, 0x20);
 		auto padding_data = padding.pullData(0, padding.length());
-		helper_CreateFileForReading(kAsciiFilePath, padding_data.get(), padding_data.size());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.data(), padding_data.size());
 
 		try 
 		{
 			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Write);
 
-			const byte_t* original_ptr = padding_data.get();
+			const byte_t* original_ptr = padding_data.data();
 			size_t original_size = padding_data.size();
 
 			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
@@ -1881,10 +1881,10 @@ void io_FileStream_TestClass::test_Write_ExtendStreamSizeThruWritingDataFromMidd
 
 			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
 
-			memcpy(expected_file_layout.get(), original_ptr, original_size);
-			memcpy(expected_file_layout.get() + written_data_offset, written_data_ptr, written_data_size);
+			memcpy(expected_file_layout.data(), original_ptr, original_size);
+			memcpy(expected_file_layout.data() + written_data_offset, written_data_ptr, written_data_size);
 
-			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.get(), expected_file_layout.size());
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.data(), expected_file_layout.size());
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -1908,13 +1908,13 @@ void io_FileStream_TestClass::test_Write_BeyondEnd()
 	{
 		auto padding = tc::io::PaddingSource(0xee, 0x20);
 		auto padding_data = padding.pullData(0, padding.length());
-		helper_CreateFileForReading(kAsciiFilePath, padding_data.get(), padding_data.size());
+		helper_CreateFileForReading(kAsciiFilePath, padding_data.data(), padding_data.size());
 
 		try 
 		{
 			auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::OpenOrCreate, tc::io::FileAccess::Write);
 
-			const byte_t* original_ptr = padding_data.get();
+			const byte_t* original_ptr = padding_data.data();
 			size_t original_size = padding_data.size();
 
 			const byte_t* written_data_ptr = (const byte_t*)kRandomString.c_str();
@@ -1925,10 +1925,10 @@ void io_FileStream_TestClass::test_Write_BeyondEnd()
 			stream.dispose();
 
 			auto expected_file_layout = tc::ByteData(std::max<size_t>(original_size, written_data_offset + written_data_size));
-			memcpy(expected_file_layout.get(), original_ptr, original_size);
-			memcpy(expected_file_layout.get() + written_data_offset, written_data_ptr, written_data_size);
+			memcpy(expected_file_layout.data(), original_ptr, original_size);
+			memcpy(expected_file_layout.data() + written_data_offset, written_data_ptr, written_data_size);
 
-			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.get(), expected_file_layout.size());
+			helper_ValidateFileContents(kAsciiFilePath, expected_file_layout.data(), expected_file_layout.size());
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -2036,7 +2036,7 @@ void io_FileStream_TestClass::helper_ValidateFileContents(const std::string& pat
 	}
 
 	auto datablob = tc::ByteData(data_len);
-	test_file.read((char*)datablob.get(), data_len);
+	test_file.read((char*)datablob.data(), data_len);
 
 	if (test_file.fail())
 	{
@@ -2045,7 +2045,7 @@ void io_FileStream_TestClass::helper_ValidateFileContents(const std::string& pat
 
 	test_file.close();
 
-	if (memcmp(datablob.get(), data, data_len) != 0)
+	if (memcmp(datablob.data(), data, data_len) != 0)
 	{
 		throw tc::Exception("helper_ValidateFileContents : Invalid file contents");
 	}

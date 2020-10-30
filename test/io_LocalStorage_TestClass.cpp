@@ -45,7 +45,7 @@ void io_LocalStorage_TestClass::test_CreateFile_NotExist()
 	{
 		tc::io::LocalStorage local_storage;
 
-		local_storage.createFile(kAsciiFilePath);		
+		local_storage.createFile(kAsciiFilePath);
 
 		std::cout << "PASS" << std::endl;
 	}
@@ -62,7 +62,7 @@ void io_LocalStorage_TestClass::test_CreateFile_DoesExist()
 	{
 		tc::io::LocalStorage local_storage;
 
-		local_storage.createFile(kAsciiFilePath);		
+		local_storage.createFile(kAsciiFilePath);
 
 		std::cout << "PASS" << std::endl;
 	}
@@ -79,7 +79,7 @@ void io_LocalStorage_TestClass::test_CreateFile_UnicodePath()
 	{
 		tc::io::LocalStorage local_storage;
 
-		local_storage.createFile(kUtf8TestPath);		
+		local_storage.createFile(kUtf8TestPath);
 
 		std::cout << "PASS" << std::endl;
 	}
@@ -96,7 +96,7 @@ void io_LocalStorage_TestClass::test_RemoveFile_DoesExist()
 	{
 		tc::io::LocalStorage local_storage;
 
-		local_storage.removeFile(kAsciiFilePath);		
+		local_storage.removeFile(kAsciiFilePath);
 
 		std::cout << "PASS" << std::endl;
 	}
@@ -129,7 +129,7 @@ void io_LocalStorage_TestClass::test_RemoveFile_UnicodePath()
 	{
 		tc::io::LocalStorage local_storage;
 
-		local_storage.removeFile(kUtf8TestPath);		
+		local_storage.removeFile(kUtf8TestPath);
 
 		std::cout << "PASS" << std::endl;
 	}

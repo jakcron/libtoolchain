@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtoolchain-test", "libtoo
 		{E194E4B8-1482-40A2-901B-75D4387822E9} = {E194E4B8-1482-40A2-901B-75D4387822E9}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmbedtls", "..\..\deps\libmbedtls\build\visualstudio\libmbedtls\libmbedtls.vcxproj", "{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +36,14 @@ Global
 		{12EFBD9F-6A4F-4B2C-AFCA-165A64CC2B45}.Release|x64.Build.0 = Release|x64
 		{12EFBD9F-6A4F-4B2C-AFCA-165A64CC2B45}.Release|x86.ActiveCfg = Release|Win32
 		{12EFBD9F-6A4F-4B2C-AFCA-165A64CC2B45}.Release|x86.Build.0 = Release|Win32
+		{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}.Debug|x64.ActiveCfg = Debug|x64
+		{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}.Debug|x64.Build.0 = Debug|x64
+		{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}.Debug|x86.ActiveCfg = Debug|Win32
+		{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}.Debug|x86.Build.0 = Debug|Win32
+		{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}.Release|x64.ActiveCfg = Release|x64
+		{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}.Release|x64.Build.0 = Release|x64
+		{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}.Release|x86.ActiveCfg = Release|Win32
+		{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

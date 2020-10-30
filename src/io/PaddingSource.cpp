@@ -28,7 +28,7 @@ tc::ByteData tc::io::PaddingSource::pullData(int64_t offset, size_t count)
 {
 	tc::ByteData data(IOUtil::getReadableCount(mSourceLength, offset, count));
 
-	memset(data.get(), mPaddingByte, data.size());
+	memset(data.data(), mPaddingByte, data.size());
 	
 	return data;
 }

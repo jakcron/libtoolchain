@@ -70,10 +70,10 @@ void io_SubSink_TestClass::testCreateConstructor()
 			// test
 			SinkTestUtil::testSinkLength(sub_sink, sub_sink_size);
 
-			memset(data.get(), 0x33, data.size());
+			memset(data.data(), 0x33, data.size());
 			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0, data, data);
 			
-			memset(data.get(), 0xea, data.size());
+			memset(data.data(), 0xea, data.size());
 			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0x200, data, data);
 
 			std::cout << "PASS" << std::endl;
@@ -318,11 +318,11 @@ void io_SubSink_TestClass::testPushDataOutsideOfBaseRange()
 
 			// create data to push
 			auto push_data = tc::ByteData(0x100);
-			memset(push_data.get(), 0x08, push_data.size());
+			memset(push_data.data(), 0x08, push_data.size());
 
 			// create data to expect
 			int64_t push_offset = sub_sink_size - 0x20;
-			auto expected_data = tc::ByteData(push_data.get(), tc::io::IOUtil::getWritableCount(sub_sink_size, push_offset, push_data.size()));
+			auto expected_data = tc::ByteData(push_data.data(), tc::io::IOUtil::getWritableCount(sub_sink_size, push_offset, push_data.size()));
 
 			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, push_offset, push_data, expected_data);
 

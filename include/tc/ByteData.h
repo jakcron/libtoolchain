@@ -2,8 +2,8 @@
 	 * @file ByteData.h
 	 * @brief Declaration of tc::ByteData
 	 * @author Jack (jakcron)
-	 * @version 0.3
-	 * @date 2020/04/08
+	 * @version 0.4
+	 * @date 2020/06/07
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -27,6 +27,9 @@ public:
 
 		/// Move constructor
 	ByteData(ByteData&& other);
+
+		/// Create from byte_t initalizer list
+	ByteData(std::initializer_list<byte_t> l);
 
 		/**
 		 * @brief Create linear memory block
@@ -59,9 +62,21 @@ public:
 	ByteData& operator=(ByteData&& other);
 
 		/**
-		 * @brief Get data pointer
+		 * @brief Element access operator
 		 **/
-	byte_t* get() const;
+	byte_t& operator[](size_t index);
+
+		/**
+		 * @brief Const Element access operator
+		 **/
+	byte_t operator[](size_t index) const;
+
+		/**
+		 * @brief Get data pointer
+		 * 
+		 * @return nullptr if @ref size() == 0
+		 **/
+	byte_t* data() const;
 
 		/**
 		 * @brief Get data size

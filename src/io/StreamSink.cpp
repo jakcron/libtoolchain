@@ -50,5 +50,5 @@ size_t tc::io::StreamSink::pushData(const tc::ByteData& data, int64_t offset)
 
 	mBaseStream->seek(offset, tc::io::SeekOrigin::Begin);
 
-	return mBaseStream->write(data.get(), data.size());
+	return mBaseStream->write(data.data(), data.size());
 }

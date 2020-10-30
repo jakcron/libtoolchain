@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -85,7 +85,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -96,7 +96,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -111,7 +111,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -119,13 +119,72 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\deps\libmbedtls\build\visualstudio\libmbedtls\libmbedtls.vcxproj">
+      <Project>{7a7c66f3-2b5b-4e23-85d8-2a74fedad92c}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\libtoolchain\libtoolchain.vcxproj">
       <Project>{e194e4b8-1482-40a2-901b-75d4387822e9}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\test\ByteData_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\cli_FormatUtil_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes128CtrEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes128EcbEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes128Encryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes128XtsEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes192CbcEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes192CtrEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes192EcbEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes192Encryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes256CbcEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes256CtrEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes256EcbEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes256Encryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes256XtsEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_HmacMd5Generator_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_HmacSha1Generator_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_HmacSha256Generator_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_HmacSha512Generator_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Md5Generator_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Pbkdf1Md5KeyDeriver_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Pbkdf1Sha1KeyDeriver_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Pbkdf2Sha1KeyDeriver_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Pbkdf2Sha256KeyDeriver_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Pbkdf2Sha512KeyDeriver_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_PseudoRandomByteGenerator_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa1024OaepSha256Encryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa1024Pkcs1Md5Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha1Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha256Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha512Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa1024PssSha256Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa1024PssSha512Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048OaepSha256Encryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048OaepSha512Encryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048Pkcs1Md5Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha1Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha256Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha512Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048PssSha256Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048PssSha512Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096OaepSha256Encryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096OaepSha512Encryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096Pkcs1Md5Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha1Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha256Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha512Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096PssSha256Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096PssSha512Signer_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Sha1Generator_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Sha256Generator_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Sha512Generator_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\Optional_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\PbkdfUtil.cpp" />
+    <ClCompile Include="..\..\..\test\RsaOaepUtil.cpp" />
+    <ClCompile Include="..\..\..\test\RsaPkcs1Util.cpp" />
+    <ClCompile Include="..\..\..\test\RsaPssUtil.cpp" />
     <ClCompile Include="..\..\..\test\SinkTestUtil.cpp" />
     <ClCompile Include="..\..\..\test\SourceTestUtil.cpp" />
     <ClCompile Include="..\..\..\test\StorageTestUtil.cpp" />
@@ -149,8 +208,64 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\test\ByteData_TestClass.h" />
+    <ClInclude Include="..\..\..\test\cli_FormatUtil_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes128CtrEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes128EcbEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes128Encryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes128XtsEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes192CbcEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes192CtrEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes192EcbEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes192Encryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes256CbcEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes256CtrEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes256EcbEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes256Encryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes256XtsEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_HmacMd5Generator_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_HmacSha1Generator_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_HmacSha256Generator_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_HmacSha512Generator_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Md5Generator_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Pbkdf1Md5KeyDeriver_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Pbkdf1Sha1KeyDeriver_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Pbkdf2Sha1KeyDeriver_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Pbkdf2Sha256KeyDeriver_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Pbkdf2Sha512KeyDeriver_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_PseudoRandomByteGenerator_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa1024OaepSha256Encryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa1024Pkcs1Md5Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha1Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha256Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha512Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa1024PssSha256Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa1024PssSha512Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048OaepSha256Encryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048OaepSha512Encryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048Pkcs1Md5Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha1Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha256Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha512Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048PssSha256Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048PssSha512Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096OaepSha256Encryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096OaepSha512Encryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096Pkcs1Md5Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha1Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha256Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha512Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096PssSha256Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096PssSha512Signer_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Sha1Generator_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Sha256Generator_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Sha512Generator_TestClass.h" />
     <ClInclude Include="..\..\..\test\ITestClass.h" />
     <ClInclude Include="..\..\..\test\Optional_TestClass.h" />
+    <ClInclude Include="..\..\..\test\PbkdfUtil.h" />
+    <ClInclude Include="..\..\..\test\RsaOaepUtil.h" />
+    <ClInclude Include="..\..\..\test\RsaPkcs1Util.h" />
+    <ClInclude Include="..\..\..\test\RsaPssUtil.h" />
     <ClInclude Include="..\..\..\test\SinkTestUtil.h" />
     <ClInclude Include="..\..\..\test\SourceTestUtil.h" />
     <ClInclude Include="..\..\..\test\StorageTestUtil.h" />

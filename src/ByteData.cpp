@@ -17,6 +17,16 @@ tc::ByteData::ByteData(tc::ByteData&& other) :
 	other.mSize = 0;
 }
 
+tc::ByteData::ByteData(std::initializer_list<byte_t> l) :
+	ByteData(l.size(), false)
+{
+	size_t i = 0;
+	for (auto itr = l.begin(); itr != l.end(); itr++, i++)
+	{
+		mPtr.get()[i] = *itr;
+	}
+}
+
 tc::ByteData::ByteData(size_t size, bool clear_memory)
 {
 	if (size == 0)
@@ -69,7 +79,17 @@ tc::ByteData& tc::ByteData::operator=(ByteData&& other)
 	return *this;
 }
 
-byte_t* tc::ByteData::get() const
+byte_t& tc::ByteData::operator[](size_t index)
+{
+	return mPtr.get()[index];
+}
+
+byte_t tc::ByteData::operator[](size_t index) const
+{
+	return mPtr.get()[index];
+}
+
+byte_t* tc::ByteData::data() const
 {
 	return mPtr.get();
 }

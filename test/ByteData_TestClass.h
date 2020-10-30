@@ -8,6 +8,7 @@ public:
 	void runAllTests();
 private:
 	void test_Constructor_DefaultConstructor();
+	void test_Constructor_InitializerList();
 	void test_Constructor_CreateZeroSized();
 	void test_Constructor_CreateSmallSized();
 	void test_Constructor_CreateLargeSized();

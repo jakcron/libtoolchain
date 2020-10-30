@@ -16,6 +16,9 @@
 // sub namespaces
 #include <tc/string.h>
 #include <tc/io.h>
+#include <tc/os.h>
+#include <tc/crypto.h>
+#include <tc/cli.h>
 
 // exceptions
 #include <tc/Exception.h>
