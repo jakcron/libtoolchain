@@ -27,7 +27,7 @@ using Aes192CtrEncryptor = CtrEncryptor<Aes192Encryptor>;
 	 * @param[out] dst Buffer where encrypted data will be written.
 	 * @param[in]  src Pointer to data to encrypt.
 	 * @param[in]  size Size in bytes of data to encrypt.
-	 * @param[in]  block_number Block number to update counter with.
+	 * @param[in]  block_number Block number of initial block to encrypt.
 	 * @param[in]  key Pointer to key data.
 	 * @param[in]  key_size Size in bytes of key data.
 	 * @param[in]  iv Pointer to initialization vector.
@@ -63,7 +63,7 @@ void EncryptAes192Ctr(byte_t* dst, const byte_t* src, size_t size, uint64_t bloc
 	 * @param[out] dst Buffer where decrypted data will be written.
 	 * @param[in]  src Pointer to data to decrypt.
 	 * @param[in]  size Size in bytes of data to decrypt.
-	 * @param[in]  block_number Block number to update counter with.
+	 * @param[in]  block_number Block number of initial block to encrypt.
 	 * @param[in]  key Pointer to key data.
 	 * @param[in]  key_size Size in bytes of key data.
 	 * @param[in]  iv Pointer to initialization vector.
@@ -75,7 +75,7 @@ void EncryptAes192Ctr(byte_t* dst, const byte_t* src, size_t size, uint64_t bloc
 	 * - @p iv_size == @ref Aes192CtrEncryptor::kBlockSize.
 	 * 
 	 * @post
-	 * - Encrypted data is written to @p dst.
+	 * - Decrypted data is written to @p dst.
 	 * 
 	 * @details
 	 * This decrypts the data in @p src, writing it to @p dst.

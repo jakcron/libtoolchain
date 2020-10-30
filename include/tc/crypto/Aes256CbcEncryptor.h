@@ -73,7 +73,7 @@ void EncryptAes256Cbc(byte_t* dst, const byte_t* src, size_t size, const byte_t*
 	 * - @p iv_size == @ref Aes256CbcEncryptor::kBlockSize.
 	 * 
 	 * @post
-	 * - Encrypted data is written to @p dst.
+	 * - Decrypted data is written to @p dst.
 	 * 
 	 * @details
 	 * This decrypts the data in @p src, writing it to @p dst.

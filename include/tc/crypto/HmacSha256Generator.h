@@ -1,6 +1,6 @@
 	/**
 	 * @file HmacSha256Generator.h
-	 * @brief Declarations for API resources for HMAC-SHA-256 calculations.
+	 * @brief Declarations for API resources for HMAC-SHA2-256 calculations.
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/06/06
@@ -14,15 +14,15 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @typedef HmacSha256Generator
-	 * @brief Class for calculating HMAC-SHA-256.
+	 * @brief Class for calculating HMAC-SHA2-256.
 	 * 
-	 * @details This class calcualtes MAC using SHA-256.
+	 * @details This class calcualtes MAC using SHA2-256.
 	 * For more information refer to @ref HmacGenerator.
 	 */
 using HmacSha256Generator = HmacGenerator<Sha256Generator>;
 
 	/**
-	 * @brief Utility function for calculating HMAC-SHA-256.
+	 * @brief Utility function for calculating HMAC-SHA2-256.
 	 * 
 	 * @param[out] mac Pointer to the buffer storing the MAC.
 	 * @param[in]  data Pointer to input data.

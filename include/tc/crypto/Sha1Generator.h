@@ -1,6 +1,6 @@
 	/**
 	 * @file Sha1Generator.h
-	 * @brief Declarations for API resources for SHA-1 calculations.
+	 * @brief Declarations for API resources for SHA1 calculations.
 	 * @author Jack (jakcron)
 	 * @version 0.3
 	 * @date 2020/06/01
@@ -13,9 +13,9 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @class Sha1Generator
-	 * @brief Class for calculating SHA-1 hash.
+	 * @brief Class for calculating SHA1 hash.
 	 * 
-	 * @warning SHA-1 is considered a weak message digest and its use constitutes a security risk. It should only be used to maintain compatibility with legacy systems.
+	 * @warning SHA1 is considered a weak message digest and its use constitutes a security risk. It should only be used to maintain compatibility with legacy systems.
 	 * 
 	 * @details
 	 * This class has three states:
@@ -91,11 +91,11 @@ namespace tc { namespace crypto {
 class Sha1Generator
 {
 public:
-	static const size_t kAsn1OidDataSize = 15; /**< SHA-1 ASN.1 Encoded OID length */
-	static const std::array<byte_t, kAsn1OidDataSize> kAsn1OidData; /**< SHA-1 ASN.1 Encoded OID */
+	static const size_t kAsn1OidDataSize = 15; /**< SHA1 ASN.1 Encoded OID length */
+	static const std::array<byte_t, kAsn1OidDataSize> kAsn1OidData; /**< SHA1 ASN.1 Encoded OID */
 
-	static const size_t kHashSize  = 20; /**< SHA-1 hash size */
-	static const size_t kBlockSize = 64; /**< SHA-1 processing block size */
+	static const size_t kHashSize  = 20; /**< SHA1 hash size */
+	static const size_t kBlockSize = 64; /**< SHA1 processing block size */
 
 		/**
 		 * @brief Default constructor.
@@ -198,9 +198,9 @@ private:
 };
 
 	/**
-	 * @brief Utility function for calculating the SHA-1 hash.
+	 * @brief Utility function for calculating the SHA1 hash.
 	 * 
-	 * @warning SHA-1 is considered a weak message digest and its use constitutes a security risk. It should only be used to maintain compatibility with legacy systems.
+	 * @warning SHA1 is considered a weak message digest and its use constitutes a security risk. It should only be used to maintain compatibility with legacy systems.
 	 * 
 	 * @param[out] hash Pointer to buffer storing hash value.
 	 * @param[in] data Pointer to input data.

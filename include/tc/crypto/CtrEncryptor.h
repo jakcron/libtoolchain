@@ -95,7 +95,7 @@ public:
 		 * @param[out] dst Buffer where encrypted data will be written.
 		 * @param[in]  src Pointer to data to encrypt.
 		 * @param[in]  size Size in bytes of data to encrypt.
-		 * @param[in]  block_number Block number to update counter with.
+		 * @param[in]  block_number Block number of initial block to encrypt.
 		 * 
 		 * @pre
 		 * - @p size > 0.
@@ -124,7 +124,7 @@ public:
 		 * @param[out] dst Buffer where decrypted data will be written.
 		 * @param[in]  src Pointer to data to decrypt.
 		 * @param[in]  size Size in bytes of data to decrypt.
-		 * @param[in]  block_number Block number to update counter with.
+		 * @param[in]  block_number Block number of initial block to encrypt.
 		 * 
 		 * @pre
 		 * - @p size > 0.

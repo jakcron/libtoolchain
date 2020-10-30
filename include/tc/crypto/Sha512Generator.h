@@ -1,6 +1,6 @@
 	/**
 	 * @file Sha512Generator.h
-	 * @brief Declarations for API resources for SHA-512 calculations.
+	 * @brief Declarations for API resources for SHA2-512 calculations.
 	 * @author Jack (jakcron)
 	 * @version 0.2
 	 * @date 2020/06/01
@@ -13,7 +13,7 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @class Sha512Generator
-	 * @brief Class for calculating SHA-512 hash.
+	 * @brief Class for calculating SHA2-512 hash.
 	 * 
 	 * @details
 	 * This class has three states:
@@ -89,11 +89,11 @@ namespace tc { namespace crypto {
 class Sha512Generator
 {
 public:
-	static const size_t kAsn1OidDataSize = 19; /**< SHA-512 ASN.1 Encoded OID length */
-	static const std::array<byte_t, kAsn1OidDataSize> kAsn1OidData; /**< SHA-512 ASN.1 Encoded OID */
+	static const size_t kAsn1OidDataSize = 19; /**< SHA2-512 ASN.1 Encoded OID length */
+	static const std::array<byte_t, kAsn1OidDataSize> kAsn1OidData; /**< SHA2-512 ASN.1 Encoded OID */
 
-	static const size_t kHashSize  = 64; /**< SHA-512 hash size */
-	static const size_t kBlockSize = 128; /**< SHA-512 processing block size */
+	static const size_t kHashSize  = 64; /**< SHA2-512 hash size */
+	static const size_t kBlockSize = 128; /**< SHA2-512 processing block size */
 
 		/**
 		 * @brief Default constructor.
@@ -196,7 +196,7 @@ private:
 };
 
 	/**
-	 * @brief Utility function for calculating the SHA-512 hash.
+	 * @brief Utility function for calculating the SHA2-512 hash.
 	 * 
 	 * @param[out] hash Pointer to buffer storing hash value.
 	 * @param[in] data Pointer to input data.

@@ -1,6 +1,6 @@
 	/**
 	 * @file HmacSha512Generator.h
-	 * @brief Declarations for API resources for HMAC-SHA-512 calculations.
+	 * @brief Declarations for API resources for HMAC-SHA2-512 calculations.
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/06/06
@@ -14,15 +14,15 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @typedef HmacSha512Generator
-	 * @brief Class for calculating HMAC-SHA-512.
+	 * @brief Class for calculating HMAC-SHA2-512.
 	 * 
-	 * @details This class calcualtes MAC using SHA-512.
+	 * @details This class calcualtes MAC using SHA2-512.
 	 * For more information refer to @ref HmacGenerator.
 	 */
 using HmacSha512Generator = HmacGenerator<Sha512Generator>;
 
 	/**
-	 * @brief Utility function for calculating HMAC-SHA-512.
+	 * @brief Utility function for calculating HMAC-SHA2-512.
 	 * 
 	 * @param[out] mac Pointer to the buffer storing the MAC.
 	 * @param[in]  data Pointer to input data.

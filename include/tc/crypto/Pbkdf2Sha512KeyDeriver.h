@@ -1,6 +1,6 @@
 	/**
 	 * @file Pbkdf2Sha512KeyDeriver.h
-	 * @brief Declarations for API resources for PBKDF2-SHA-512 key derivation.
+	 * @brief Declarations for API resources for PBKDF2-SHA2-512 key derivation.
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/06/06
@@ -14,15 +14,15 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @typedef Pbkdf2Sha512KeyDeriver
-	 * @brief Class for deriving a key using PBKDF2-SHA-512.
+	 * @brief Class for deriving a key using PBKDF2-SHA2-512.
 	 * 
-	 * @details This class derives a key using PBKDF2-SHA-512.
+	 * @details This class derives a key using PBKDF2-SHA2-512.
 	 * For more information refer to @ref Pbkdf2KeyDeriver.
 	 */
 using Pbkdf2Sha512KeyDeriver = Pbkdf2KeyDeriver<Sha512Generator>;
 
 	/**
-	 * @brief Utility function for deriving a key using PBKDF2-SHA-512.
+	 * @brief Utility function for deriving a key using PBKDF2-SHA2-512.
 	 * 
 	 * @param[out] key Pointer to the buffer storing the derived key.
 	 * @param[in]  key_size Size of key to derive.

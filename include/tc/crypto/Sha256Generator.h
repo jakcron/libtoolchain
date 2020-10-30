@@ -1,6 +1,6 @@
 	/**
 	 * @file Sha256Generator.h
-	 * @brief Declarations for API resources for SHA-256 calculations.
+	 * @brief Declarations for API resources for SHA2-256 calculations.
 	 * @author Jack (jakcron)
 	 * @version 0.2
 	 * @date 2020/06/01
@@ -13,7 +13,7 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @class Sha256Generator
-	 * @brief Class for calculating SHA-256 hash.
+	 * @brief Class for calculating SHA2-256 hash.
 	 * 
 	 * @details
 	 * This class has three states:
@@ -89,11 +89,11 @@ namespace tc { namespace crypto {
 class Sha256Generator
 {
 public:
-	static const size_t kAsn1OidDataSize = 19; /**< SHA-256 ASN.1 Encoded OID length */
-	static const std::array<byte_t, kAsn1OidDataSize> kAsn1OidData; /**< SHA-256 ASN.1 Encoded OID */
+	static const size_t kAsn1OidDataSize = 19; /**< SHA2-256 ASN.1 Encoded OID length */
+	static const std::array<byte_t, kAsn1OidDataSize> kAsn1OidData; /**< SHA2-256 ASN.1 Encoded OID */
 
-	static const size_t kHashSize  = 32; /**< SHA-256 hash size */
-	static const size_t kBlockSize = 64; /**< SHA-256 processing block size */
+	static const size_t kHashSize  = 32; /**< SHA2-256 hash size */
+	static const size_t kBlockSize = 64; /**< SHA2-256 processing block size */
 
 		/**
 		 * @brief Default constructor.
@@ -195,7 +195,7 @@ private:
 };
 
 	/**
-	 * @brief Utility function for calculating the SHA-256 hash.
+	 * @brief Utility function for calculating the SHA2-256 hash.
 	 * 
 	 * @param[out] hash Pointer to buffer storing hash value.
 	 * @param[in] data Pointer to input data.

@@ -16,7 +16,7 @@ namespace tc { namespace crypto {
 	 * @typedef Rsa2048OaepSha512Encryptor
 	 * @brief Class for RSA2048-OAEP-SHA2-512 encryption/decryption.
 	 * 
-	 * @details This class uses RSA2048-OAEP to sign/validate SHA2-512 message digests.
+	 * @details This class encrypts/decrypts data using RSA2048-OAEP-SHA2-512.
 	 * For more information refer to @ref RsaOaepEncryptor.
 	 */
 using Rsa2048OaepSha512Encryptor = RsaOaepEncryptor<2048,Sha512Generator>;
@@ -25,7 +25,7 @@ using Rsa2048OaepSha512Encryptor = RsaOaepEncryptor<2048,Sha512Generator>;
 	 * @typedef Rsa4096OaepSha512Encryptor
 	 * @brief Class for RSA4096-OAEP-SHA2-512 encryption/decryption.
 	 * 
-	 * @details This class uses RSA4096-OAEP to sign/validate SHA2-512 message digests.
+	 * @details This class encrypts/decrypts data using RSA4096-OAEP-SHA2-512.
 	 * For more information refer to @ref RsaOaepEncryptor.
 	 */
 using Rsa4096OaepSha512Encryptor = RsaOaepEncryptor<4096,Sha512Generator>;

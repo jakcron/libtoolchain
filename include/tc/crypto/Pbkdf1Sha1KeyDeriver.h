@@ -1,6 +1,6 @@
 	/**
 	 * @file Pbkdf1Sha1KeyDeriver.h
-	 * @brief Declarations for API resources for PBKDF1-SHA-1 key derivation.
+	 * @brief Declarations for API resources for PBKDF1-SHA1 key derivation.
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/06/06
@@ -14,15 +14,15 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @typedef Pbkdf1Sha1KeyDeriver
-	 * @brief Class for deriving a key using PBKDF1-SHA-1.
+	 * @brief Class for deriving a key using PBKDF1-SHA1.
 	 * 
-	 * @details This class derives a key using PBKDF1-SHA-1.
+	 * @details This class derives a key using PBKDF1-SHA1.
 	 * For more information refer to @ref Pbkdf1KeyDeriver.
 	 */
 using Pbkdf1Sha1KeyDeriver = Pbkdf1KeyDeriver<Sha1Generator>;
 
 	/**
-	 * @brief Utility function for deriving a key using PBKDF1-SHA-1.
+	 * @brief Utility function for deriving a key using PBKDF1-SHA1.
 	 * 
 	 * @param[out] key Pointer to the buffer storing the derived key.
 	 * @param[in]  key_size Size of key to derive.

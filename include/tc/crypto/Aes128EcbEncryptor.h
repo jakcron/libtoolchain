@@ -65,7 +65,7 @@ void EncryptAes128Ecb(byte_t* dst, const byte_t* src, size_t size, const byte_t*
 	 * - @p key_size == @ref Aes128EcbEncryptor::kKeySize.
 	 * 
 	 * @post
-	 * - Encrypted data is written to @p dst.
+	 * - Decrypted data is written to @p dst.
 	 * 
 	 * @details
 	 * This decrypts the data in @p src, writing it to @p dst.

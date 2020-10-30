@@ -16,7 +16,7 @@ namespace tc { namespace crypto {
 	 * @typedef Rsa1024OaepSha256Encryptor
 	 * @brief Class for RSA1024-OAEP-SHA2-256 encryption/decryption.
 	 * 
-	 * @details This class uses RSA1024-OAEP to sign/validate SHA2-256 message digests.
+	 * @details This class encrypts/decrypts data using RSA1024-OAEP-SHA2-256.
 	 * For more information refer to @ref RsaOaepEncryptor.
 	 */
 using Rsa1024OaepSha256Encryptor = RsaOaepEncryptor<1024,Sha256Generator>;
@@ -25,7 +25,7 @@ using Rsa1024OaepSha256Encryptor = RsaOaepEncryptor<1024,Sha256Generator>;
 	 * @typedef Rsa2048OaepSha256Encryptor
 	 * @brief Class for RSA2048-OAEP-SHA2-256 encryption/decryption.
 	 * 
-	 * @details This class uses RSA2048-OAEP to sign/validate SHA2-256 message digests.
+	 * @details This class encrypts/decrypts data using RSA2048-OAEP-SHA2-256.
 	 * For more information refer to @ref RsaOaepEncryptor.
 	 */
 using Rsa2048OaepSha256Encryptor = RsaOaepEncryptor<2048,Sha256Generator>;
@@ -34,7 +34,7 @@ using Rsa2048OaepSha256Encryptor = RsaOaepEncryptor<2048,Sha256Generator>;
 	 * @typedef Rsa4096OaepSha256Encryptor
 	 * @brief Class for RSA4096-OAEP-SHA2-256 encryption/decryption.
 	 * 
-	 * @details This class uses RSA4096-OAEP to sign/validate SHA2-256 message digests.
+	 * @details This class encrypts/decrypts data using RSA4096-OAEP-SHA2-256.
 	 * For more information refer to @ref RsaOaepEncryptor.
 	 */
 using Rsa4096OaepSha256Encryptor = RsaOaepEncryptor<4096,Sha256Generator>;
