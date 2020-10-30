@@ -6,7 +6,7 @@ bool tc::os::getEnvVar(const std::string& name, std::string& value)
 #ifdef _WIN32
 	// convert utf-8 to utf-16 for wide char functions
 	std::u16string utf16_name;
-	PathUtil::pathToWindowsUTF16(name, utf16_name);
+	tc::string::TranscodeUtil::UTF8ToUTF16(name, utf16_name);
 
 	// get size of environment variable
 	size_t required_size = 0;
