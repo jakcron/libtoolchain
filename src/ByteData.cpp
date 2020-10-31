@@ -89,6 +89,16 @@ byte_t tc::ByteData::operator[](size_t index) const
 	return mPtr.get()[index];
 }
 
+bool tc::ByteData::operator==(const ByteData& other) const
+{
+	return (this->mSize == other.mSize && memcmp(this->mPtr.get(), other.mPtr.get(), this->mSize) == 0);
+}
+
+bool tc::ByteData::operator!=(const ByteData& other) const
+{
+	return !(*this == other);
+}
+
 byte_t* tc::ByteData::data() const
 {
 	return mPtr.get();

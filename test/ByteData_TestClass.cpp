@@ -20,6 +20,8 @@ void ByteData_TestClass::runAllTests(void)
 	test_ImplicitCopy_CopyOntoInitiallisedByteData();
 	test_ImplicitMove_CopyInSameScope();
 	test_ImplicitMove_MoveOntoInitiallisedByteData();
+	test_EqualityOperator();
+	test_InequalityOperator();
 	std::cout << "[tc::ByteData] END" << std::endl;
 }
 
@@ -428,7 +430,7 @@ void ByteData_TestClass::test_ImplicitMove_CopyInSameScope()
 
 void ByteData_TestClass::test_ImplicitMove_MoveOntoInitiallisedByteData()
 {
-	std::cout << "[tc::ByteData] test_ImplicitCopy_CopyOntoInitiallisedByteData : " << std::flush;
+	std::cout << "[tc::ByteData] test_ImplicitMove_MoveOntoInitiallisedByteData : " << std::flush;
 	try
 	{
 		try 
@@ -462,6 +464,54 @@ void ByteData_TestClass::test_ImplicitMove_MoveOntoInitiallisedByteData()
 			{
 				throw tc::Exception("data2 after being constructed by move from data, had the same size");
 			}
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void ByteData_TestClass::test_EqualityOperator()
+{
+	std::cout << "[tc::ByteData] test_EqualityOperator : " << std::flush;
+	try
+	{
+		try 
+		{
+			std::stringstream error_ss;
+
+			// TODO write this test
+
+			std::cout << "PASS" << std::endl;
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void ByteData_TestClass::test_InequalityOperator()
+{
+	std::cout << "[tc::ByteData] test_InequalityOperator : " << std::flush;
+	try
+	{
+		try 
+		{
+			std::stringstream error_ss;
+
+			// TODO write this test
 
 			std::cout << "PASS" << std::endl;
 		}
