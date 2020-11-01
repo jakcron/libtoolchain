@@ -487,7 +487,77 @@ void ByteData_TestClass::test_EqualityOperator()
 		{
 			std::stringstream error_ss;
 
-			// TODO write this test
+			static const size_t kControlDataSize = 0x10;
+			const byte_t kControlData[kControlDataSize] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
+
+			auto control_data = tc::ByteData(kControlData, kControlDataSize);
+
+			// test 1 - data is the same
+			{
+				auto same_data = tc::ByteData(kControlData, kControlDataSize);
+				if ((control_data == same_data) != true)
+				{
+					throw tc::Exception("operator==(control, test) returned false for identical ByteData");
+				}
+				if ((same_data == control_data) != true)
+				{
+					throw tc::Exception("operator==(test, control) returned false for identical ByteData");
+				}
+			}
+
+			// test 2 - truncated ByteData
+			{
+				auto smaller = tc::ByteData(control_data.data(), control_data.size()-1);
+				if ((control_data == smaller) != false)
+				{
+					throw tc::Exception("operator==(control, test) returned true for when compared to truncated ByteData");
+				}
+				if ((smaller == control_data) != false)
+				{
+					throw tc::Exception("operator==(test, control) returned true for when compared to truncated ByteData");
+				}
+			}
+
+			// test 3 - same size different ByteData
+			{
+				auto different = tc::ByteData(control_data);
+				different[different.size()-1] = 0xff;
+				if ((control_data == different) != false)
+				{
+					throw tc::Exception("operator==(control, test) returned true for when compared to same size but different ByteData");
+				}
+				if ((different == control_data) != false)
+				{
+					throw tc::Exception("operator==(test, control) returned true for when compared to same size but different ByteData");
+				}
+			}
+
+			// test 4 - null ByteData
+			{
+				auto empty_data = tc::ByteData();
+				if ((control_data == empty_data) != false)
+				{
+					throw tc::Exception("operator==(control, test) returned true for when compared to empty ByteData");
+				}
+				if ((empty_data == control_data) != false)
+				{
+					throw tc::Exception("operator==(test, control) returned true for when compared to empty ByteData");
+				}
+			}
+			
+			// test 5 - null to null
+			{
+				auto empty_data = tc::ByteData();
+				auto empty_data2 = tc::ByteData();
+				if ((empty_data2 == empty_data) != true)
+				{
+					throw tc::Exception("operator==(empty, empty2) returned true for when comparing two empty ByteData");
+				}
+				if ((empty_data == empty_data2) != true)
+				{
+					throw tc::Exception("operator==(empty2, empty) returned true for when comparing two empty ByteData");
+				}
+			}
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -511,7 +581,77 @@ void ByteData_TestClass::test_InequalityOperator()
 		{
 			std::stringstream error_ss;
 
-			// TODO write this test
+			static const size_t kControlDataSize = 0x10;
+			const byte_t kControlData[kControlDataSize] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
+
+			auto control_data = tc::ByteData(kControlData, kControlDataSize);
+
+			// test 1 - data is the same
+			{
+				auto same_data = tc::ByteData(kControlData, kControlDataSize);
+				if ((control_data != same_data) != false)
+				{
+					throw tc::Exception("operator!=(control, test) returned false for identical ByteData");
+				}
+				if ((same_data != control_data) != false)
+				{
+					throw tc::Exception("operator!=(test, control) returned false for identical ByteData");
+				}
+			}
+
+			// test 2 - truncated ByteData
+			{
+				auto smaller = tc::ByteData(control_data.data(), control_data.size()-1);
+				if ((control_data != smaller) != true)
+				{
+					throw tc::Exception("operator!=(control, test) returned true for when compared to truncated ByteData");
+				}
+				if ((smaller != control_data) != true)
+				{
+					throw tc::Exception("operator!=(test, control) returned true for when compared to truncated ByteData");
+				}
+			}
+
+			// test 3 - same size different ByteData
+			{
+				auto different = tc::ByteData(control_data);
+				different[different.size()-1] = 0xff;
+				if ((control_data != different) != true)
+				{
+					throw tc::Exception("operator!=(control, test) returned true for when compared to same size but different ByteData");
+				}
+				if ((different != control_data) != true)
+				{
+					throw tc::Exception("operator!=(test, control) returned true for when compared to same size but different ByteData");
+				}
+			}
+
+			// test 4 - null ByteData
+			{
+				auto empty_data = tc::ByteData();
+				if ((control_data != empty_data) != true)
+				{
+					throw tc::Exception("operator!=(control, test) returned true for when compared to empty ByteData");
+				}
+				if ((empty_data != control_data) != true)
+				{
+					throw tc::Exception("operator!=(test, control) returned true for when compared to empty ByteData");
+				}
+			}
+			
+			// test 5 - null to null
+			{
+				auto empty_data = tc::ByteData();
+				auto empty_data2 = tc::ByteData();
+				if ((empty_data2 != empty_data) != false)
+				{
+					throw tc::Exception("operator!=(empty, empty2) returned true for when comparing two empty ByteData");
+				}
+				if ((empty_data != empty_data2) != false)
+				{
+					throw tc::Exception("operator!=(empty2, empty) returned true for when comparing two empty ByteData");
+				}
+			}
 
 			std::cout << "PASS" << std::endl;
 		}
