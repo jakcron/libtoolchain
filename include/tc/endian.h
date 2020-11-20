@@ -7,6 +7,7 @@
 	 **/
 #pragma once
 #include <cinttypes>
+#include <type_traits>
 
 static inline uint16_t __local_bswap16(uint16_t x) {
 	return ((x << 8) & 0xff00) | ((x >> 8) & 0x00ff);
@@ -125,3 +126,115 @@ public:
 private:
 	uint64_t mVar;
 };
+
+namespace tc {
+
+	/**
+	 * @struct le16
+	 * @brief Wrapper that allows accessing a little-endian uint16_t regardless of processor endianness 
+	 **/
+template <typename T>
+struct le16 {
+public:
+	static_assert(sizeof(T) == sizeof(uint16_t), "le16 requires T to be 16 bit.");
+	static_assert(std::is_pod<T>::value, "le16 requires T to be a POD.");
+
+		/// Unwrap value
+	inline T unwrap() const { auto tmp = __le_uint16(mVar); return *((T*)(&tmp)); }
+		/// Wrap value
+	inline void wrap(const T& var) { mVar = __le_uint16(*((uint16_t*)(&var))); }
+private:
+	uint16_t mVar;
+};
+
+	/**
+	 * @struct be16
+	 * @brief Wrapper that allows accessing a big-endian uint16_t regardless of processor endianness 
+	 **/
+template <typename T>
+struct be16 {
+public:
+	static_assert(sizeof(T) == sizeof(uint16_t), "be16 requires T to be 16 bit.");
+	static_assert(std::is_pod<T>::value, "be16 requires T to be a POD.");
+
+		/// Unwrap value
+	inline T unwrap() const { auto tmp = __be_uint16(mVar); return *((T*)(&tmp)); }
+		/// Wrap value
+	inline void wrap(const T& var) { mVar = __be_uint16(*((uint16_t*)(&var))); }
+private:
+	uint16_t mVar;
+};
+
+	/**
+	 * @struct le32
+	 * @brief Wrapper that allows accessing a little-endian uint32_t regardless of processor endianness 
+	 **/
+template <typename T>
+struct le32 {
+public:
+	static_assert(sizeof(T) == sizeof(uint32_t), "le32 requires T to be 32 bit.");
+	static_assert(std::is_pod<T>::value, "le32 requires T to be a POD.");
+
+		/// Unwrap value
+	inline T unwrap() const { auto tmp = __le_uint32(mVar); return *((T*)(&tmp)); }
+		/// Wrap value
+	inline void wrap(const T& var) { mVar = __le_uint32(*((uint32_t*)(&var))); }
+private:
+	uint32_t mVar;
+};
+
+	/**
+	 * @struct be32
+	 * @brief Wrapper that allows accessing a big-endian uint32_t regardless of processor endianness 
+	 **/
+template <typename T>
+struct be32 {
+public:
+	static_assert(sizeof(T) == sizeof(uint32_t), "be32 requires T to be 32 bit.");
+	static_assert(std::is_pod<T>::value, "be32 requires T to be a POD.");
+
+		/// Unwrap value
+	inline T unwrap() const { auto tmp = __be_uint32(mVar); return *((T*)(&tmp)); }
+		/// Wrap value
+	inline void wrap(const T& var) { mVar = __be_uint32(*((uint32_t*)(&var))); }
+private:
+	uint32_t mVar;
+};
+
+	/**
+	 * @struct le64
+	 * @brief Wrapper that allows accessing a little-endian uint64_t regardless of processor endianness 
+	 **/
+template <typename T>
+struct le64 {
+public:
+	static_assert(sizeof(T) == sizeof(uint64_t), "le64 requires T to be 64 bit.");
+	static_assert(std::is_pod<T>::value, "le64 requires T to be a POD.");
+
+		/// Unwrap value
+	inline T unwrap() const { auto tmp = __le_uint64(mVar); return *((T*)(&tmp)); }
+		/// Wrap value
+	inline void wrap(const T& var) { mVar = __le_uint64(*((uint64_t*)(&var))); }
+private:
+	uint64_t mVar;
+};
+
+	/**
+	 * @struct be64
+	 * @brief Wrapper that allows accessing a big-endian uint64_t regardless of processor endianness 
+	 **/
+template <typename T>
+struct be64 {
+public:
+	static_assert(sizeof(T) == sizeof(uint64_t), "be64 requires T to be 64 bit.");
+	static_assert(std::is_pod<T>::value, "be64 requires T to be a POD.");
+
+		/// Unwrap value
+	inline T unwrap() const { auto tmp = __be_uint64(mVar); return *((T*)(&tmp)); }
+		/// Wrap value
+	inline void wrap(const T& var) { mVar = __be_uint64(*((uint64_t*)(&var))); }
+private:
+	uint64_t mVar;
+};
+
+} // namespace tc
