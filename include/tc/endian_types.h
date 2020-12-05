@@ -1,9 +1,9 @@
 	/**
-	 * @file endian.h
-	 * @brief Declaration of macros and classes to unwrap primatives in an endian agnostic way
+	 * @file endian_types.h
+	 * @brief Declaration of macros and classes to unwrap primatives in an endian agnostic way.
 	 * @author Jack (jakcron)
 	 * @version 0.1
-	 * @date 2019/01/15
+	 * @date 2020/12/05
 	 **/
 #pragma once
 #include <cinttypes>
@@ -131,7 +131,7 @@ namespace tc {
 
 	/**
 	 * @struct le16
-	 * @brief Wrapper that allows accessing a little-endian uint16_t regardless of processor endianness 
+	 * @brief Wrapper that allows accessing a little-endian 16-bit POD regardless of processor endianness 
 	 **/
 template <typename T>
 struct le16 {
@@ -149,7 +149,7 @@ private:
 
 	/**
 	 * @struct be16
-	 * @brief Wrapper that allows accessing a big-endian uint16_t regardless of processor endianness 
+	 * @brief Wrapper that allows accessing a big-endian 16-bit POD regardless of processor endianness 
 	 **/
 template <typename T>
 struct be16 {
@@ -167,7 +167,7 @@ private:
 
 	/**
 	 * @struct le32
-	 * @brief Wrapper that allows accessing a little-endian uint32_t regardless of processor endianness 
+	 * @brief Wrapper that allows accessing a little-endian 32-bit POD regardless of processor endianness 
 	 **/
 template <typename T>
 struct le32 {
@@ -185,7 +185,7 @@ private:
 
 	/**
 	 * @struct be32
-	 * @brief Wrapper that allows accessing a big-endian uint32_t regardless of processor endianness 
+	 * @brief Wrapper that allows accessing a big-endian 32-bit POD regardless of processor endianness 
 	 **/
 template <typename T>
 struct be32 {
@@ -203,7 +203,7 @@ private:
 
 	/**
 	 * @struct le64
-	 * @brief Wrapper that allows accessing a little-endian uint64_t regardless of processor endianness 
+	 * @brief Wrapper that allows accessing a little-endian 64-bit POD regardless of processor endianness 
 	 **/
 template <typename T>
 struct le64 {
@@ -221,7 +221,7 @@ private:
 
 	/**
 	 * @struct be64
-	 * @brief Wrapper that allows accessing a big-endian uint64_t regardless of processor endianness 
+	 * @brief Wrapper that allows accessing a big-endian 64-bit POD regardless of processor endianness 
 	 **/
 template <typename T>
 struct be64 {
