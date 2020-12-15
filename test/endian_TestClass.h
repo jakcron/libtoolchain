@@ -21,4 +21,10 @@ private:
 	void testLeUint64Class();
 	void testLeUint32Class();
 	void testLeUint16Class();
+	void testBe64TemplateClass();
+	void testBe32TemplateClass();
+	void testBe16TemplateClass();
+	void testLe64TemplateClass();
+	void testLe32TemplateClass();
+	void testLe16TemplateClass();
 };

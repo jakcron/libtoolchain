@@ -21,6 +21,12 @@ void endian_TestClass::runAllTests()
 	testLeUint64Class();
 	testLeUint32Class();
 	testLeUint16Class();
+	testBe64TemplateClass();
+	testBe32TemplateClass();
+	testBe16TemplateClass();
+	testLe64TemplateClass();
+	testLe32TemplateClass();
+	testLe16TemplateClass();
 	std::cout << "[:: endian] END" << std::endl;
 }
 
@@ -419,6 +425,216 @@ void endian_TestClass::testLeUint16Class()
 		if (memcmp(x_raw, x_raw_expected, sizeof(uint16_t)) != 0 || x_raw_ptr->unwrap() != x_expected)
 		{
 			throw tc::Exception("le_uint16_t::wrap() did not wrap test value correectly");
+		}
+		
+		std::cout << "PASS" << std::endl;
+	}
+	catch (const tc::Exception& e)
+	{
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+	}
+}
+
+void endian_TestClass::testBe64TemplateClass()
+{
+	std::cout << "[tc::be64<uint64_t>] testBe64TemplateClass : " << std::flush;
+	try 
+	{
+		uint8_t x_raw[sizeof(uint64_t)] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef };
+		uint8_t x_raw_expected[sizeof(uint64_t)] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef };
+		tc::be64<uint64_t>* x_raw_ptr = (tc::be64<uint64_t>*)&x_raw;
+		uint64_t x_expected = 0x0123456789abcdef;
+
+		if (x_raw_ptr->unwrap() != x_expected)
+		{
+			throw tc::Exception("tc::be64<uint64_t>::unwrap() did not return expected result");
+		}
+
+		x_raw_ptr->wrap(0);
+		if (x_raw_ptr->unwrap() != 0)
+		{
+			throw tc::Exception("tc::be64<uint64_t>::wrap() did not wrap value 0x0 correctly");
+		}
+
+		x_raw_ptr->wrap(x_expected);
+		if (memcmp(x_raw, x_raw_expected, sizeof(uint64_t)) != 0 || x_raw_ptr->unwrap() != x_expected)
+		{
+			throw tc::Exception("tc::be64<uint64_t>::wrap() did not wrap test value correectly");
+		}
+		
+		std::cout << "PASS" << std::endl;
+	}
+	catch (const tc::Exception& e)
+	{
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+	}
+}
+
+void endian_TestClass::testBe32TemplateClass()
+{
+	std::cout << "[tc::be32<uint32_t>] testBe32TemplateClass : " << std::flush;
+	try 
+	{
+		uint8_t x_raw[sizeof(uint32_t)] = { 0x01, 0x23, 0x45, 0x67 };
+		uint8_t x_raw_expected[sizeof(uint32_t)] = { 0x01, 0x23, 0x45, 0x67 };
+		tc::be32<uint32_t>* x_raw_ptr = (tc::be32<uint32_t>*)&x_raw;
+		uint32_t x_expected = 0x01234567;
+
+		if (x_raw_ptr->unwrap() != x_expected)
+		{
+			throw tc::Exception("tc::be32<uint32_t>::unwrap() did not return expected result");
+		}
+
+		x_raw_ptr->wrap(0);
+		if (x_raw_ptr->unwrap() != 0)
+		{
+			throw tc::Exception("tc::be32<uint32_t>::wrap() did not wrap value 0x0 correctly");
+		}
+
+		x_raw_ptr->wrap(x_expected);
+		if (memcmp(x_raw, x_raw_expected, sizeof(uint32_t)) != 0 || x_raw_ptr->unwrap() != x_expected)
+		{
+			throw tc::Exception("tc::be32<uint32_t>::wrap() did not wrap test value correectly");
+		}
+		
+		std::cout << "PASS" << std::endl;
+	}
+	catch (const tc::Exception& e)
+	{
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+	}
+}
+
+void endian_TestClass::testBe16TemplateClass()
+{
+	std::cout << "[tc::be16<uint16_t>] testBe16TemplateClass : " << std::flush;
+	try 
+	{
+		uint8_t x_raw[sizeof(uint16_t)] = { 0x01, 0x23 };
+		uint8_t x_raw_expected[sizeof(uint16_t)] = { 0x01, 0x23 };
+		tc::be16<uint16_t>* x_raw_ptr = (tc::be16<uint16_t>*)&x_raw;
+		uint16_t x_expected = 0x0123;
+
+		if (x_raw_ptr->unwrap() != x_expected)
+		{
+			throw tc::Exception("tc::be16<uint16_t>::unwrap() did not return expected result");
+		}
+
+		x_raw_ptr->wrap(0);
+		if (x_raw_ptr->unwrap() != 0)
+		{
+			throw tc::Exception("tc::be16<uint16_t>::wrap() did not wrap value 0x0 correctly");
+		}
+
+		x_raw_ptr->wrap(x_expected);
+		if (memcmp(x_raw, x_raw_expected, sizeof(uint16_t)) != 0 || x_raw_ptr->unwrap() != x_expected)
+		{
+			throw tc::Exception("tc::be16<uint16_t>::wrap() did not wrap test value correectly");
+		}
+		
+		std::cout << "PASS" << std::endl;
+	}
+	catch (const tc::Exception& e)
+	{
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+	}
+}
+
+void endian_TestClass::testLe64TemplateClass()
+{
+	std::cout << "[tc::le64<uint64_t>] testLe64TemplateClass : " << std::flush;
+	try 
+	{
+		uint8_t x_raw[sizeof(uint64_t)] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef };
+		uint8_t x_raw_expected[sizeof(uint64_t)] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef };
+		tc::le64<uint64_t>* x_raw_ptr = (tc::le64<uint64_t>*)&x_raw;
+		uint64_t x_expected = 0xefcdab8967452301;
+
+		if (x_raw_ptr->unwrap() != x_expected)
+		{
+			throw tc::Exception("tc::le64<uint64_t>::unwrap() did not return expected result");
+		}
+
+		x_raw_ptr->wrap(0);
+		if (x_raw_ptr->unwrap() != 0)
+		{
+			throw tc::Exception("tc::le64<uint64_t>::wrap() did not wrap value 0x0 correctly");
+		}
+
+		x_raw_ptr->wrap(x_expected);
+		if (memcmp(x_raw, x_raw_expected, sizeof(uint64_t)) != 0 || x_raw_ptr->unwrap() != x_expected)
+		{
+			throw tc::Exception("tc::le64<uint64_t>::wrap() did not wrap test value correectly");
+		}
+		
+		std::cout << "PASS" << std::endl;
+	}
+	catch (const tc::Exception& e)
+	{
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+	}
+}
+
+void endian_TestClass::testLe32TemplateClass()
+{
+	std::cout << "[::tc::le32<uint32_t>] testLe32TemplateClass : " << std::flush;
+	try 
+	{
+		uint8_t x_raw[sizeof(uint32_t)] = { 0x01, 0x23, 0x45, 0x67 };
+		uint8_t x_raw_expected[sizeof(uint32_t)] = { 0x01, 0x23, 0x45, 0x67 };
+		tc::le32<uint32_t>* x_raw_ptr = (tc::le32<uint32_t>*)&x_raw;
+		uint32_t x_expected = 0x67452301;
+
+		if (x_raw_ptr->unwrap() != x_expected)
+		{
+			throw tc::Exception("tc::le32<uint32_t>::unwrap() did not return expected result");
+		}
+
+		x_raw_ptr->wrap(0);
+		if (x_raw_ptr->unwrap() != 0)
+		{
+			throw tc::Exception("tc::le32<uint32_t>::wrap() did not wrap value 0x0 correctly");
+		}
+
+		x_raw_ptr->wrap(x_expected);
+		if (memcmp(x_raw, x_raw_expected, sizeof(uint32_t)) != 0 || x_raw_ptr->unwrap() != x_expected)
+		{
+			throw tc::Exception("tc::le32<uint32_t>::wrap() did not wrap test value correectly");
+		}
+		
+		std::cout << "PASS" << std::endl;
+	}
+	catch (const tc::Exception& e)
+	{
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+	}
+}
+
+void endian_TestClass::testLe16TemplateClass()
+{
+	std::cout << "[tc::le16<uint16_t>] testLe16TemplateClass : " << std::flush;
+	try 
+	{
+		uint8_t x_raw[sizeof(uint16_t)] = { 0x01, 0x23 };
+		uint8_t x_raw_expected[sizeof(uint16_t)] = { 0x01, 0x23 };
+		tc::le16<uint16_t>* x_raw_ptr = (tc::le16<uint16_t>*)&x_raw;
+		uint16_t x_expected = 0x2301;
+
+		if (x_raw_ptr->unwrap() != x_expected)
+		{
+			throw tc::Exception("tc::le16<uint16_t>::unwrap() did not return expected result");
+		}
+
+		x_raw_ptr->wrap(0);
+		if (x_raw_ptr->unwrap() != 0)
+		{
+			throw tc::Exception("tc::le16<uint16_t>::wrap() did not wrap value 0x0 correctly");
+		}
+
+		x_raw_ptr->wrap(x_expected);
+		if (memcmp(x_raw, x_raw_expected, sizeof(uint16_t)) != 0 || x_raw_ptr->unwrap() != x_expected)
+		{
+			throw tc::Exception("tc::le16<uint16_t>::wrap() did not wrap test value correectly");
 		}
 		
 		std::cout << "PASS" << std::endl;
