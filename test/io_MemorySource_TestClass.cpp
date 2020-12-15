@@ -10,8 +10,9 @@ void io_MemorySource_TestClass::runAllTests(void)
 {
 	std::cout << "[tc::io::MemorySource] START" << std::endl;
 	testDefaultConstructor();
-	testCreateFromByteData();
-	testCreateFromMemoryPointer();
+	testInitializeByCopyWithByteData();
+	testInitializeByMoveWithByteData();
+	testInitializeByCopyWithMemoryPointer();
 	testNegativeOffset();
 	testTooLargeOffset();
 	std::cout << "[tc::io::MemorySource] END" << std::endl;
@@ -42,9 +43,9 @@ void io_MemorySource_TestClass::testDefaultConstructor()
 	}
 }
 
-void io_MemorySource_TestClass::testCreateFromByteData()
+void io_MemorySource_TestClass::testInitializeByCopyWithByteData()
 {
-	std::cout << "[tc::io::MemorySource] testCreateFromByteData : " << std::flush;
+	std::cout << "[tc::io::MemorySource] testInitializeByCopyWithByteData : " << std::flush;
 	try
 	{
 		try
@@ -72,9 +73,49 @@ void io_MemorySource_TestClass::testCreateFromByteData()
 	}
 }
 
-void io_MemorySource_TestClass::testCreateFromMemoryPointer()
+void io_MemorySource_TestClass::testInitializeByMoveWithByteData()
 {
-	std::cout << "[tc::io::MemorySource] testCreateFromMemoryPointer : " << std::flush;
+	std::cout << "[tc::io::MemorySource] testInitializeByMoveWithByteData : " << std::flush;
+	try
+	{
+		try
+		{
+			int64_t length = 0xcafe;
+			tc::ByteData control_data(length);
+			memset(control_data.data(), 0xff, control_data.size());
+			tc::ByteData experiment_data = control_data;
+
+			tc::io::MemorySource source = tc::io::MemorySource(std::move(experiment_data));
+
+			if (experiment_data.size() != 0)
+			{
+				throw tc::Exception("experiment_data.size() != 0 after being moved from.");
+			}
+			if (experiment_data.data() != nullptr)
+			{
+				throw tc::Exception("experiment_data.data() != nullptr after being moved from.");
+			}
+
+			SourceTestUtil::testSourceLength(source, length);
+			SourceTestUtil::pullTestHelper(source, 0, control_data.size(), control_data.size(), control_data.data());
+			SourceTestUtil::pullTestHelper(source, 0, control_data.size()*2, control_data.size(), control_data.data());
+
+			std::cout << "PASS" << std::endl;	
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_MemorySource_TestClass::testInitializeByCopyWithMemoryPointer()
+{
+	std::cout << "[tc::io::MemorySource] testInitializeByCopyWithMemoryPointer : " << std::flush;
 	try
 	{
 		try
