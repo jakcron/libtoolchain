@@ -9,12 +9,14 @@
 #include <string>
 #include <array>
 #include <vector>
+#include <map>
 #include <cstdint>
 #include <cstring>
 #include <memory>
 #include <algorithm>
 #include <type_traits>
-#include <tc/endian.h>
+#include <tc/endian_types.h>
+#include <tc/bitwise_types.h>
 
 #ifdef _WIN32
 #define NOMINMAX
