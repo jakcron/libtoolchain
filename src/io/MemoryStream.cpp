@@ -24,6 +24,13 @@ tc::io::MemoryStream::MemoryStream(const tc::ByteData& byte_data) :
 
 }
 
+tc::io::MemoryStream::MemoryStream(tc::ByteData&& byte_data) :
+	mData(std::move(byte_data)),
+	mPosition(0)
+{
+
+}
+
 tc::io::MemoryStream::MemoryStream(const byte_t* data, size_t len) :
 	mData(data, len),
 	mPosition(0)

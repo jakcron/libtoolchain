@@ -40,16 +40,23 @@ public:
 	MemoryStream(size_t length);
 
 		/** 
-		 * @brief Create MemoryStream from a tc::ByteData object.
+		 * @brief Initialize MemoryStream (by copy) with a tc::ByteData object.
 		 * 
 		 * @param[in] byte_data The base data to create the MemoryStream from.
 		 **/
 	MemoryStream(const tc::ByteData& byte_data);
 
 		/** 
-		 * @brief Create MemoryStream from a memory pointer.
+		 * @brief Initialize MemoryStream (by move) with a tc::ByteData object.
 		 * 
-		 * @param[in] data Pointer to memory which will populate this MemoryStream.
+		 * @param[in] byte_data The base data to create the MemoryStream from.
+		 **/
+	MemoryStream(tc::ByteData&& byte_data);
+
+		/** 
+		 * @brief Initialize MemoryStream (by copy) with a block of memory.
+		 * 
+		 * @param[in] data Pointer to memory block which will populate this MemoryStream.
 		 * @param[in] len Length of data to copy int this MemoryStream.
 		 **/
 	MemoryStream(const byte_t* data, size_t len);
