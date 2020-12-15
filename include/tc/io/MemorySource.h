@@ -24,17 +24,24 @@ public:
 	MemorySource();
 
 		/** 
-		 * @brief Create MemorySource from a tc::ByteData object.
+		 * @brief Initializw MemorySource (by copy) with a tc::ByteData object.
 		 * 
 		 * @param[in] byte_data The base data to create the MemorySource from.
 		 **/
 	MemorySource(const tc::ByteData& byte_data);
 
 		/** 
-		 * @brief Create MemorySource from a memory pointer.
+		 * @brief Initialize MemorySource (by move) with a tc::ByteData object.
 		 * 
-		 * @param[in] data Pointer to memory which will populate this MemorySource.
-		 * @param[in] len Length of data to copy int this MemorySource.
+		 * @param[in] byte_data The base data to create the MemorySource from.
+		 **/
+	MemorySource(tc::ByteData&& byte_data);
+
+		/** 
+		 * @brief Initialize MemorySource (by copy) with a block of memory.
+		 * 
+		 * @param[in] data Pointer to block of memory which will populate this MemorySource.
+		 * @param[in] len Length of data to copy into this MemorySource.
 		 **/
 	MemorySource(const byte_t* data, size_t len);
 
