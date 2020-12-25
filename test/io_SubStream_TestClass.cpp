@@ -17,7 +17,7 @@ void io_SubStream_TestClass::runAllTests(void)
 
 void io_SubStream_TestClass::testProperties()
 {
-	std::cout << "[tc::io::SubStream] testSize : " << std::flush;
+	std::cout << "[tc::io::SubStream] testProperties : " << std::flush;
 	try
 	{
 		class DummyStream : public StreamTestUtil::DummyStreamBase
@@ -40,30 +40,75 @@ void io_SubStream_TestClass::testProperties()
 			auto substream = std::shared_ptr<tc::io::SubStream>(new tc::io::SubStream());
 			if (substream->canSeek() != false)
 			{
-				throw tc::Exception("canSeek() returned false when base stream was null.");
+				throw tc::Exception("canSeek() returned true when base stream was null.");
 			}
 			if (substream->canRead() != false)
 			{
-				throw tc::Exception("canRead() returned false when base stream was null.");
+				throw tc::Exception("canRead() returned true when base stream was null.");
 			}
 			if (substream->canWrite() != false)
 			{
-				throw tc::Exception("canWrite() returned false when base stream was null.");
+				throw tc::Exception("canWrite() returned true when base stream was null.");
 			}
 
 			// create proper substream
-			substream = std::shared_ptr<tc::io::SubStream>(new tc::io::SubStream(dummy_stream, 0x56, 0x1000));
+			substream = std::shared_ptr<tc::io::SubStream>(new tc::io::SubStream(dummy_stream, substream_offset, substream_length));
 			if (substream->canSeek() != true)
 			{
-				throw tc::Exception("canSeek() returned true when base stream was valid.");
+				throw tc::Exception("canSeek() returned false when base stream was valid.");
 			}
 			if (substream->canRead() != true)
 			{
-				throw tc::Exception("canRead() returned true when base stream was valid.");
+				throw tc::Exception("canRead() returned false when base stream was valid.");
 			}
 			if (substream->canWrite() != true)
 			{
-				throw tc::Exception("canWrite() returned true when base stream was valid.");
+				throw tc::Exception("canWrite() returned false when base stream was valid.");
+			}
+
+			// basestream has canRead==false
+			dummy_stream->init(0x10000, false, true, true, false, true);
+			if (substream->canSeek() != true)
+			{
+				throw tc::Exception("canSeek() returned false when base stream was valid.");
+			}
+			if (substream->canRead() != false)
+			{
+				throw tc::Exception("canRead() returned true when base stream was valid, but basestream->canRead() was false.");
+			}
+			if (substream->canWrite() != true)
+			{
+				throw tc::Exception("canWrite() returned false when base stream was valid.");
+			}
+
+			// basestream has canWrite==false
+			dummy_stream->init(0x10000, true, false, true, false, true);
+			if (substream->canSeek() != true)
+			{
+				throw tc::Exception("canSeek() returned false when base stream was valid.");
+			}
+			if (substream->canRead() != true)
+			{
+				throw tc::Exception("canRead() returned false when base stream was valid.");
+			}
+			if (substream->canWrite() != false)
+			{
+				throw tc::Exception("canWrite() returned true when base stream was valid, but basestream->canWrite() was false.");
+			}
+
+			// basestream has canSeek==false
+			dummy_stream->init(0x10000, true, true, false, false, true);
+			if (substream->canSeek() != false)
+			{
+				throw tc::Exception("canSeek() returned true when base stream was valid, but basestream->canSeek() was false.");
+			}
+			if (substream->canRead() != true)
+			{
+				throw tc::Exception("canRead() returned false when base stream was valid.");
+			}
+			if (substream->canWrite() != true)
+			{
+				throw tc::Exception("canWrite() returned false when base stream was valid.");
 			}
 
 			std::cout << "PASS" << std::endl;
