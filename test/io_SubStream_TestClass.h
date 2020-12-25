@@ -10,6 +10,7 @@ class io_SubStream_TestClass : public ITestClass
 public:
 	void runAllTests();
 private:
+	void testProperties();
 	void testSize();
 	void testSeekPos();
 	void testRead();

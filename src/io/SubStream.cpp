@@ -65,16 +65,16 @@ tc::io::SubStream::SubStream(const std::shared_ptr<tc::io::IStream>& stream, int
 
 bool tc::io::SubStream::canRead() const
 {
-	return mBaseStream == nullptr ? mBaseStream->canRead() : false;
+	return mBaseStream == nullptr ? false : mBaseStream->canRead();
 }
 
 bool tc::io::SubStream::canWrite() const
 {
-	return mBaseStream == nullptr ? mBaseStream->canWrite() : false;
+	return mBaseStream == nullptr ? false : mBaseStream->canWrite();
 }
 bool tc::io::SubStream::canSeek() const
 {
-	return mBaseStream == nullptr ? mBaseStream->canSeek() : false;
+	return mBaseStream == nullptr ? false : mBaseStream->canSeek();
 }
 
 int64_t tc::io::SubStream::length()
