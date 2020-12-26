@@ -57,6 +57,31 @@ bool tc::io::Path::operator!=(const Path& other) const
 	return !(this->operator==(other));
 }
 
+bool tc::io::Path::operator<(const Path& other) const
+{
+	int cmp_score = 0;
+
+	auto self_itr = this->begin();
+	auto other_itr = other.begin();
+
+	// in this loop for as long as both path has an itr, it'll compare them
+	for (; self_itr != this->end() && other_itr != other.end(); self_itr++, other_itr++)
+	{
+		cmp_score = self_itr->compare(*other_itr);
+		if (cmp_score != 0)
+			break;
+	}
+
+	// if one of the itrs isn't the end, then that one is "larger"
+	// it can't be both or the prior loop won't have ended
+	if (self_itr != this->end() || other_itr != other.end())
+	{
+		cmp_score = self_itr == this->end() ? -1 : 1;
+	}
+
+	return cmp_score < 0;
+}
+
 tc::io::Path::iterator tc::io::Path::begin()
 {
 	return mUnicodePath.begin();

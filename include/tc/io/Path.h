@@ -82,6 +82,9 @@ public:
 		/// Inequality operator
 	bool operator!=(const Path& other) const;
 
+		/// Comparison operator
+	bool operator<(const Path& other) const;
+
 		/**
 		 * @brief Returns a reference to the first element in the container.
 		 * 
