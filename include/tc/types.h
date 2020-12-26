@@ -24,3 +24,11 @@
 
 	/// Alias uint8_t to byte_t to more explicity indicate its role in memory related contexts
 using byte_t = uint8_t;
+
+namespace tc {
+	bool is_size_t_not_64bit();
+	bool is_too_large_for_int64_t(size_t val);
+	bool is_too_large_for_int64_t(uint64_t val);
+	bool is_too_large_for_size_t(int64_t val);
+	bool is_too_large_for_size_t(uint64_t val);
+}
