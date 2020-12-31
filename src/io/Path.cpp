@@ -74,7 +74,7 @@ bool tc::io::Path::operator<(const Path& other) const
 
 	// if one of the itrs isn't the end, then that one is "larger"
 	// it can't be both or the prior loop won't have ended
-	if (self_itr != this->end() || other_itr != other.end())
+	if (cmp_score == 0 && (self_itr != this->end() || other_itr != other.end()))
 	{
 		cmp_score = self_itr == this->end() ? -1 : 1;
 	}
