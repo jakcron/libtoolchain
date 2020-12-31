@@ -46,14 +46,23 @@ tc::ByteData tc::cli::FormatUtil::hexStringToBytes(const std::string& str)
 	return bytes;
 }
 
-std::string tc::cli::FormatUtil::formatBytesAsStringWithLineLimit(const byte_t* data, size_t len, bool upper_case, const std::string& delimiter, size_t row_len, size_t indent_len)
+std::string tc::cli::FormatUtil::formatBytesAsStringWithLineLimit(const byte_t* data, size_t len, bool upper_case, const std::string& delimiter, size_t row_len, size_t indent_len, bool print_first_indent)
 {
 	std::stringstream ss;
 
+	// create indentation string
+	std::string indent_str = "";
+	for (size_t i = 0; i < indent_len; i++)
+	{
+		indent_str += " ";
+	}
+
+	const byte_t* original_data = data;
+
 	for (size_t print_len = 0; len > 0; len -= print_len, data += print_len)
 	{
-		for (size_t j = 0; j < indent_len; j++)
-			ss << " ";
+		if (data != original_data || print_first_indent)
+			ss << indent_str;
 
 		print_len = std::min<size_t>(len, row_len);  
 
@@ -63,11 +72,6 @@ std::string tc::cli::FormatUtil::formatBytesAsStringWithLineLimit(const byte_t* 
 	}
 
 	return ss.str();
-}
-
-std::string tc::cli::FormatUtil::formatBytesAsStringWithLineLimit(const tc::ByteData& data, bool is_upper_case, const std::string& delimiter, size_t row_len, size_t indent_len)
-{
-	return formatBytesAsStringWithLineLimit(data.data(), data.size(), is_upper_case, delimiter, row_len, indent_len);
 }
 
 std::string tc::cli::FormatUtil::formatBytesAsString(const byte_t* data, size_t size, bool upper_case, const std::string& delimiter)
@@ -86,12 +90,7 @@ std::string tc::cli::FormatUtil::formatBytesAsString(const byte_t* data, size_t 
 	return ss.str();
 }
 
-std::string tc::cli::FormatUtil::formatBytesAsString(const tc::ByteData& data, bool is_upper_case, const std::string& delimiter)
-{
-	return formatBytesAsString(data.data(), data.size(), is_upper_case, delimiter);
-}
-
-std::string tc::cli::FormatUtil::formatListWithLineLimit(const std::vector<std::string>& str_list, size_t row_len, size_t indent_len)
+std::string tc::cli::FormatUtil::formatListWithLineLimit(const std::vector<std::string>& str_list, size_t row_len, size_t indent_len, bool print_first_indent)
 {
 	if (str_list.size() == 0)
 	{
@@ -122,8 +121,9 @@ std::string tc::cli::FormatUtil::formatListWithLineLimit(const std::vector<std::
 			if (itr != str_list.begin())
 				ss << delimiter_str << std::endl;
 
-			// print indent
-			ss << indent_str;
+			// print indent if this isn't the first string or the user has opted into printing the indent regardless
+			if (itr != str_list.begin() || print_first_indent)
+				ss << indent_str;
 
 			// reset printed_len
 			printed_len = 0;
@@ -207,17 +207,7 @@ std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const byte_t* data, s
 	return ss.str();
 }
 
-std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const tc::ByteData& data, size_t bytes_per_row, size_t byte_group_size)
-{
-	return formatBytesAsHxdHexString(data.data(), data.size(), bytes_per_row, byte_group_size);
-}
-
 std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const byte_t* data, size_t size)
 {
 	return formatBytesAsHxdHexString(data, size, 0x10, 1);
-}
-
-std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const tc::ByteData& data)
-{
-	return formatBytesAsHxdHexString(data.data(), data.size());
 }
