@@ -220,7 +220,7 @@ void Optional_TestClass::testCopyOperatorFromExistingOptional()
 			{
 				throw tc::Exception("Copy operator created an object with a set state, but isNull() returned true");
 			}
-			if (bar.isSet() == true)
+			if (bar.isSet() == false)
 			{
 				throw tc::Exception("Copy operator created an object with a set state, but isSet() returned false");
 			}
