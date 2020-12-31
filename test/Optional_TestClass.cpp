@@ -23,14 +23,17 @@ void Optional_TestClass::testDefaultConstructor()
 	std::cout << "[tc::Optional] testDefaultConstructor : " << std::flush;
 	try
 	{
-		// if statement so that foo is out of scope so it can be created and destroyed implicitly
-		if (true)
 		{
 			tc::Optional<int> foo;
 
 			if (foo.isNull() == false)
 			{
-				throw tc::Exception("Default constructor created an object with an incorrect null state");
+				throw tc::Exception("Default constructor created an object with null state, but isNull() returned false");
+			}
+
+			if (foo.isSet() == true)
+			{
+				throw tc::Exception("Default constructor created an object with null state, but isSet() returned true");
 			}
 		}
 
@@ -48,8 +51,6 @@ void Optional_TestClass::testWrapConstructor()
 	std::cout << "[tc::Optional] testWrapConstructor : " << std::flush;
 	try
 	{
-		// if statement so that foo is out of scope so it can be created and destroyed implicitly
-		if (true)
 		{
 			int testInt = 42;
 
@@ -57,7 +58,12 @@ void Optional_TestClass::testWrapConstructor()
 
 			if (foo.isNull() == true)
 			{
-				throw tc::Exception("Wrapping constructor created an object with an incorrect null state");
+				throw tc::Exception("Wrapping constructor created an object with a valid state, but isNull() returned true");
+			}
+
+			if (foo.isSet() == false)
+			{
+				throw tc::Exception("Wrapping constructor created an object with a valid state, but isSet() returned false");
 			}
 
 			if (foo.get() != testInt)
@@ -79,15 +85,18 @@ void Optional_TestClass::testCopyConstructorFromNullOptional()
 	std::cout << "[tc::Optional] testCopyConstructorFromNullOptional : " << std::flush;
 	try
 	{
-		// if statement so that foo is out of scope so it can be created and destroyed implicitly
-		if (true)
 		{
 			tc::Optional<int> foo;
 			tc::Optional<int> bar(foo);
 
 			if (bar.isNull() == false)
 			{
-				throw tc::Exception("Copy constructor created an object with an incorrect null state");
+				throw tc::Exception("Copy constructor created an object with a null state, but isNull() returned false");
+			}
+
+			if (bar.isSet() == true)
+			{
+				throw tc::Exception("Copy constructor created an object with a null state, but isSet() returned true");
 			}
 		}
 
@@ -104,8 +113,6 @@ void Optional_TestClass::testCopyConstructorFromExistingOptional()
 	std::cout << "[tc::Optional] testCopyConstructorFromExistingOptional : " << std::flush;
 	try
 	{
-		// if statement so that foo is out of scope so it can be created and destroyed implicitly
-		if (true)
 		{
 			int testInt = 42;
 
@@ -114,7 +121,11 @@ void Optional_TestClass::testCopyConstructorFromExistingOptional()
 
 			if (bar.isNull() == true)
 			{
-				throw tc::Exception("Copy constructor created an object with an incorrect null state");
+				throw tc::Exception("Copy constructor created an object with a set state, but isNull() returned true");
+			}
+			if (bar.isSet() == false)
+			{
+				throw tc::Exception("Copy constructor created an object with a set state, but isSet() returned true");
 			}
 
 			if (bar.get() != testInt)
@@ -136,8 +147,6 @@ void Optional_TestClass::testWrapOperator()
 	std::cout << "[tc::Optional] testWrapOperator : " << std::flush;
 	try
 	{
-		// if statement so that foo is out of scope so it can be created and destroyed implicitly
-		if (true)
 		{
 			int testInt = 42;
 
@@ -147,7 +156,11 @@ void Optional_TestClass::testWrapOperator()
 
 			if (foo.isNull() == true)
 			{
-				throw tc::Exception("Wrap operator created an object with an incorrect null state");
+				throw tc::Exception("Wrap operator created an object with a set state, but isNull() returned true");
+			}
+			if (foo.isSet() == false)
+			{
+				throw tc::Exception("Wrap operator created an object with a set state, but isSet() returned false");
 			}
 
 			if (foo.get() != testInt)
@@ -169,15 +182,18 @@ void Optional_TestClass::testCopyOperatorFromNullOptional()
 	std::cout << "[tc::Optional] testCopyOperatorFromNullOptional : " << std::flush;
 	try
 	{
-		// if statement so that foo is out of scope so it can be created and destroyed implicitly
-		if (true)
 		{
 			tc::Optional<int> foo;
 			tc::Optional<int> bar  = foo;
 
 			if (bar.isNull() == false)
 			{
-				throw tc::Exception("Copy operator created an object with an incorrect null state");
+				throw tc::Exception("Copy operator created an object with a null state, but isNull() returned false");
+			}
+
+			if (bar.isSet() == true)
+			{
+				throw tc::Exception("Copy operator created an object with a null state, but isSet() returned false");
 			}
 		}
 
@@ -194,8 +210,6 @@ void Optional_TestClass::testCopyOperatorFromExistingOptional()
 	std::cout << "[tc::Optional] testCopyOperatorFromExistingOptional : " << std::flush;
 	try
 	{
-		// if statement so that foo is out of scope so it can be created and destroyed implicitly
-		if (true)
 		{
 			int testInt = 42;
 
@@ -204,7 +218,11 @@ void Optional_TestClass::testCopyOperatorFromExistingOptional()
 
 			if (bar.isNull() == true)
 			{
-				throw tc::Exception("Copy operator created an object with an incorrect null state");
+				throw tc::Exception("Copy operator created an object with a set state, but isNull() returned true");
+			}
+			if (bar.isSet() == true)
+			{
+				throw tc::Exception("Copy operator created an object with a set state, but isSet() returned false");
 			}
 
 			if (bar.get() != testInt)
@@ -226,8 +244,6 @@ void Optional_TestClass::testMakeNullOnNullOptional()
 	std::cout << "[tc::Optional] testMakeNullOnNullOptional : " << std::flush;
 	try
 	{
-		// if statement so that foo is out of scope so it can be created and destroyed implicitly
-		if (true)
 		{
 			tc::Optional<int> foo;
 
@@ -235,7 +251,12 @@ void Optional_TestClass::testMakeNullOnNullOptional()
 
 			if (foo.isNull() == false)
 			{
-				throw tc::Exception("Object had incorrect null state");
+				throw tc::Exception("A null Object was nulled by makeNull(), but isNull() returned false");
+			}
+
+			if (foo.isSet() == true)
+			{
+				throw tc::Exception("A null Object was nulled by makeNull() but isSet() returned true");
 			}
 		}
 
@@ -252,8 +273,6 @@ void Optional_TestClass::testMakeNullOnExistingOptional()
 	std::cout << "[tc::Optional] testMakeNullOnExistingOptional : " << std::flush;
 	try
 	{
-		// if statement so that foo is out of scope so it can be created and destroyed implicitly
-		if (true)
 		{
 			int testInt = 42;
 
@@ -263,7 +282,12 @@ void Optional_TestClass::testMakeNullOnExistingOptional()
 
 			if (foo.isNull() == false)
 			{
-				throw tc::Exception("Object had incorrect null state");
+				throw tc::Exception("A set Object was nulled by makeNull(), but isNull() returned false");
+			}
+
+			if (foo.isSet() == true)
+			{
+				throw tc::Exception("A set Object was nulled by makeNull(), but isSet() returned true");
 			}
 		}
 
