@@ -90,6 +90,12 @@ std::string tc::cli::FormatUtil::formatBytesAsString(const byte_t* data, size_t 
 	return ss.str();
 }
 
+std::string tc::cli::FormatUtil::formatBytesAsString(const tc::ByteData& data, bool upper_case, const std::string& delimiter)
+{
+	return formatBytesAsString(data.data(), data.size(), upper_case, delimiter);
+}
+
+
 std::string tc::cli::FormatUtil::formatListWithLineLimit(const std::vector<std::string>& str_list, size_t row_len, size_t indent_len, bool print_first_indent)
 {
 	if (str_list.size() == 0)

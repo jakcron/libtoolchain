@@ -334,7 +334,7 @@ void cli_FormatUtil_TestClass::testFormatBytesAsHxdHexString()
 		// run tests
 		for (auto test = tests.begin(); test != tests.end(); test++)
 		{
-			std::string res = tc::cli::FormatUtil::formatBytesAsHxdHexString(test->in_data, test->in_bytes_per_row, test->in_byte_group_size);
+			std::string res = tc::cli::FormatUtil::formatBytesAsHxdHexString(test->in_data.data(), test->in_data.size(), test->in_bytes_per_row, test->in_byte_group_size);
 
 			if (res != test->out_string)
 			{

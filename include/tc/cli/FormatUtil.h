@@ -42,6 +42,17 @@ public:
 	static std::string formatBytesAsString(const byte_t* data, size_t size, bool is_upper_case, const std::string& delimiter);
 
 		/**
+		 * @brief Format tc::ByteData as a hexadecimal string.
+		 * 
+		 * @param[in] data Reference to tc::ByteData object to format.
+		 * @param[in] is_upper_case Format bytes in upper case. If false the bytes will be formatted in lower case.
+		 * @param[in] delimiter String to separate formated bytes with.
+		 * 
+		 * @return Formatted string
+		 **/
+	static std::string formatBytesAsString(const tc::ByteData& data, bool is_upper_case, const std::string& delimiter);
+
+		/**
 		 * @brief Format raw bytes as a hexadecimal string. Introducing a new-line to keep each row within a certain size.
 		 * 
 		 * @param[in] data Pointer to bytes to format.
