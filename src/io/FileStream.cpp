@@ -577,7 +577,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	// if this is a directory throw an exception
 	if (S_ISDIR(stat_buf.st_mode))
 	{
-		throw tc::io::IOException(kClassName+"::open()", "Path refers to a directory not a file");
+		throw tc::io::FileNotFoundException(kClassName+"::open()", "Path refers to a directory not a file");
 	}
 
 	// set state flags
