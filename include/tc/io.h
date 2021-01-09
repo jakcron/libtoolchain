@@ -17,10 +17,12 @@
 #include <tc/io/FileStream.h>
 #include <tc/io/SubStream.h>
 #include <tc/io/MemoryStream.h>
+#include <tc/io/CachedBlockStream.h>
 
 #include <tc/io/IStorage.h>
 #include <tc/io/LocalStorage.h>
 #include <tc/io/SubStorage.h>
+#include <tc/io/VirtualFileSystem.h>
 
 #include <tc/io/ISink.h>
 #include <tc/io/SubSink.h>
