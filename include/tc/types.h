@@ -27,8 +27,8 @@ using byte_t = uint8_t;
 
 namespace tc {
 	bool is_size_t_not_64bit();
-	bool is_too_large_for_int64_t(size_t val);
-	bool is_too_large_for_int64_t(uint64_t val);
-	bool is_too_large_for_size_t(int64_t val);
-	bool is_too_large_for_size_t(uint64_t val);
+	bool is_size_t_too_large_for_int64_t(size_t val);
+	bool is_uint64_t_too_large_for_int64_t(uint64_t val);
+	bool is_int64_t_too_large_for_size_t(int64_t val);
+	bool is_uint64_t_too_large_for_size_t(uint64_t val);
 }
