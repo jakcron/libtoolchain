@@ -2,7 +2,7 @@
 #include "ITestClass.h"
 #include <tc/types.h>
 
-class bitfieldByteLEBitLE_TestClass : public ITestClass
+class bn_bitfieldByteBEBitBE_TestClass : public ITestClass
 {
 public:
 	void runAllTests();
@@ -13,7 +13,7 @@ private:
 	void test_ResetBit();
 	void test_FlipBit();
 
-	using testtype_t = tc::bitfield<sizeof(uint32_t), true, true>;
+	using testtype_t = tc::bn::bitfield<sizeof(uint32_t), false, false>;
 
 	void helper_TestBit(const std::string& test_name, const testtype_t& bitfield, const std::vector<size_t>& expected_set_bits);
 };

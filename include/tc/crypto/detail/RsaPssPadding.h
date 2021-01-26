@@ -208,7 +208,7 @@ private:
 	{
 		HashFunction hash;
 		std::array<byte_t, HashSize> mask;
-		be_uint32_t beRoundNum;
+		tc::bn::be32<uint32_t> beRoundNum;
 
 		for (size_t round_idx = 0, round_num = (dst_size + HashSize - 1) / HashSize; round_idx < round_num; round_idx++)
 		{
@@ -219,7 +219,7 @@ private:
 			
 			// update using big endian round num
 			beRoundNum.wrap(round_idx);
-			hash.update((byte_t*)&beRoundNum, sizeof(be_uint32_t));
+			hash.update((byte_t*)&beRoundNum, sizeof(tc::bn::be32<uint32_t>));
 
 			// get mask
 			hash.getHash(mask.data());

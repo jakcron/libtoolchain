@@ -5,26 +5,26 @@
 
 #include <tc/types.h>
 
-#include "bitfieldByteBEBitBE_TestClass.h"
+#include "bn_bitfieldByteLEBitBE_TestClass.h"
 
 //---------------------------------------------------------
 
-void bitfieldByteBEBitBE_TestClass::runAllTests(void)
+void bn_bitfieldByteLEBitBE_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::bitfield<BE,BE>] START" << std::endl;
+	std::cout << "[tc::bn::bitfield<LE,BE>] START" << std::endl;
 	test_Size();
 	test_TestBit();
 	test_SetBit();
 	test_ResetBit();
 	test_FlipBit();
-	std::cout << "[tc::bitfield<BE,BE>] END" << std::endl;
+	std::cout << "[tc::bn::bitfield<LE,BE>] END" << std::endl;
 }
 
 //---------------------------------------------------------
 
-void bitfieldByteBEBitBE_TestClass::test_Size()
+void bn_bitfieldByteLEBitBE_TestClass::test_Size()
 {
-	std::cout << "[tc::bitfield<BE,BE>] test_Size : " << std::flush;
+	std::cout << "[tc::bn::bitfield<LE,BE>] test_Size : " << std::flush;
 	try
 	{
 		try 
@@ -33,7 +33,7 @@ void bitfieldByteBEBitBE_TestClass::test_Size()
 
 			// check size
 			static const size_t kBitFieldSize = sizeof(uint32_t);
-			tc::bitfield<kBitFieldSize, false, false> bf;
+			tc::bn::bitfield<kBitFieldSize, true, false> bf;
 			if (sizeof(bf) != kBitFieldSize)
 			{
 				ss << "sizeof(bf) had value " << std::dec << sizeof(bf) << " (expected " << kBitFieldSize << ")";
@@ -53,9 +53,9 @@ void bitfieldByteBEBitBE_TestClass::test_Size()
 	}
 }
 
-void bitfieldByteBEBitBE_TestClass::test_TestBit()
+void bn_bitfieldByteLEBitBE_TestClass::test_TestBit()
 {
-	std::cout << "[tc::bitfield<BE,BE>] test_TestBit : " << std::flush;
+	std::cout << "[tc::bn::bitfield<LE,BE>] test_TestBit : " << std::flush;
 	try
 	{
 		try 
@@ -79,22 +79,22 @@ void bitfieldByteBEBitBE_TestClass::test_TestBit()
 			// set byte0 bit0
 			*((uint32_t*)&bf) = 0;
 			bf_raw[0] = 0x01;
-			helper_TestBit("byte0bit0 test", bf, {31});
+			helper_TestBit("byte0bit0 test", bf, {7});
 
 			// set byte0 bit7
 			*((uint32_t*)&bf) = 0;
 			bf_raw[0] = 0x80;
-			helper_TestBit("byte0bit7 test", bf, {24});
+			helper_TestBit("byte0bit7 test", bf, {0});
 
 			// set byte3 bit0
 			*((uint32_t*)&bf) = 0;
 			bf_raw[3] = 0x01;
-			helper_TestBit("byte3bit0 test", bf, {7});
+			helper_TestBit("byte3bit0 test", bf, {31});
 
 			// set byte3 bit7
 			*((uint32_t*)&bf) = 0;
 			bf_raw[3] = 0x80;
-			helper_TestBit("byte3bit7 test", bf, {0});
+			helper_TestBit("byte3bit7 test", bf, {24});
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -109,9 +109,9 @@ void bitfieldByteBEBitBE_TestClass::test_TestBit()
 	}
 }
 
-void bitfieldByteBEBitBE_TestClass::test_SetBit()
+void bn_bitfieldByteLEBitBE_TestClass::test_SetBit()
 {
-	std::cout << "[tc::bitfield<BE,BE>] test_SetBit : " << std::flush;
+	std::cout << "[tc::bn::bitfield<LE,BE>] test_SetBit : " << std::flush;
 	try
 	{
 		try 
@@ -146,9 +146,9 @@ void bitfieldByteBEBitBE_TestClass::test_SetBit()
 	}
 }
 
-void bitfieldByteBEBitBE_TestClass::test_ResetBit()
+void bn_bitfieldByteLEBitBE_TestClass::test_ResetBit()
 {
-	std::cout << "[tc::bitfield<BE,BE>] test_ResetBit : " << std::flush;
+	std::cout << "[tc::bn::bitfield<LE,BE>] test_ResetBit : " << std::flush;
 	try
 	{
 		try 
@@ -183,9 +183,9 @@ void bitfieldByteBEBitBE_TestClass::test_ResetBit()
 	}
 }
 
-void bitfieldByteBEBitBE_TestClass::test_FlipBit()
+void bn_bitfieldByteLEBitBE_TestClass::test_FlipBit()
 {
-	std::cout << "[tc::bitfield<BE,BE>] test_FlipBit : " << std::flush;
+	std::cout << "[tc::bn::bitfield<LE,BE>] test_FlipBit : " << std::flush;
 	try
 	{
 		try 
@@ -220,7 +220,7 @@ void bitfieldByteBEBitBE_TestClass::test_FlipBit()
 	}
 }
 
-void bitfieldByteBEBitBE_TestClass::helper_TestBit(const std::string& test_name, const testtype_t& bitfield, const std::vector<size_t>& expected_set_bits)
+void bn_bitfieldByteLEBitBE_TestClass::helper_TestBit(const std::string& test_name, const testtype_t& bitfield, const std::vector<size_t>& expected_set_bits)
 {
 	std::stringstream ss;
 	for (size_t i = 0; i < bitfield.bit_size(); i++)

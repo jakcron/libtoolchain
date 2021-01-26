@@ -15,8 +15,7 @@
 #include <memory>
 #include <algorithm>
 #include <type_traits>
-#include <tc/endian_types.h>
-#include <tc/binary_utils.h>
+#include <tc/bn.h>
 
 #ifdef _WIN32
 #define NOMINMAX

@@ -1,13 +1,15 @@
 
-/**
- * @file utf8.h
- * @brief Declaration of UTF-8 constants and macros
- * @author Jack (jakcron)
- * @version 0.1
- * @date 2019/01/15
- */
+	/**
+	 * @file utf8.h
+	 * @brief Declaration of UTF-8 constants and macros
+	 * @author Jack (jakcron)
+	 * @version 0.2
+	 * @date 2021/01/26
+	 */
 #pragma once
 #include <tc/types.h>
+
+namespace tc { namespace string { namespace detail {
 
 static const char32_t kUtf8AsciiStart = 0x00;
 static const char32_t kUtf8AsciiEnd = 0x7F;
@@ -17,7 +19,6 @@ static const char32_t kUtf83ByteStart = 0x800;
 static const char32_t kUtf83ByteEnd = 0x7FFF;
 static const char32_t kUtf84ByteStart = 0x8000;
 static const char32_t kUtf84ByteEnd = 0x10FFFF;
-
 
 static inline uint8_t make_utf8_prefix(uint8_t prefix_bits) { return ((uint8_t)(-1)) << (8 - prefix_bits); }
 static inline uint8_t make_utf8_mask(uint8_t prefix_bits) { return ((uint8_t)(-1)) >> (prefix_bits + 1); }
@@ -34,3 +35,5 @@ static inline uint8_t get_utf8_prefix(uint8_t utf8_chr)
 	}
 	return prefix;
 }
+
+}}} // namespace tc::string::detail

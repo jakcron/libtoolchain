@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{12EFBD9F-6A4F-4B2C-AFCA-165A64CC2B45}</ProjectGuid>
     <RootNamespace>libtoolchaintest</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -127,6 +127,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\test\bn_bitfieldByteBEBitBE_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_bitfieldByteBEBitLE_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_bitfieldByteLEBitBE_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_bitfieldByteLEBitLE_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_endian_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\ByteData_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\cli_FormatUtil_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.cpp" />
@@ -189,7 +194,6 @@
     <ClCompile Include="..\..\..\test\SourceTestUtil.cpp" />
     <ClCompile Include="..\..\..\test\StorageTestUtil.cpp" />
     <ClCompile Include="..\..\..\test\StreamTestUtil.cpp" />
-    <ClCompile Include="..\..\..\test\endian_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_FileStream_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_LocalStorage_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_MemorySource_TestClass.cpp" />
@@ -207,6 +211,11 @@
     <ClCompile Include="..\..\..\test\string_TranscodeUtil_TestClass.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\test\bn_bitfieldByteBEBitBE_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_bitfieldByteBEBitLE_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_bitfieldByteLEBitBE_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_bitfieldByteLEBitLE_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_endian_TestClass.h" />
     <ClInclude Include="..\..\..\test\ByteData_TestClass.h" />
     <ClInclude Include="..\..\..\test\cli_FormatUtil_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.h" />
@@ -270,7 +279,6 @@
     <ClInclude Include="..\..\..\test\SourceTestUtil.h" />
     <ClInclude Include="..\..\..\test\StorageTestUtil.h" />
     <ClInclude Include="..\..\..\test\StreamTestUtil.h" />
-    <ClInclude Include="..\..\..\test\endian_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_FileStream_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_LocalStorage_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_MemorySource_TestClass.h" />

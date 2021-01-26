@@ -9,10 +9,11 @@
 #include <cinttypes>
 #include <type_traits>
 
+namespace tc { namespace bn { namespace detail {
+
 static inline uint16_t __local_bswap16(uint16_t x) {
 	return ((x << 8) & 0xff00) | ((x >> 8) & 0x00ff);
 }
-
 
 static inline uint32_t __local_bswap32(uint32_t x) {
 	return	((x << 24) & 0xff000000 ) |
@@ -43,91 +44,9 @@ static inline uint32_t __le_uint32(uint32_t a) { return __local_bswap32(a); }
 static inline uint16_t __le_uint16(uint16_t a) { return __local_bswap16(a); }
 #endif
 
-	/**
-	 * @struct le_uint16_t
-	 * @brief Wrapper that allows accessing a little-endian uint16_t regardless of processor endianness 
-	 **/
-struct le_uint16_t {
-public:
-		/// Unwrap value
-	inline uint16_t unwrap() const { return __le_uint16(mVar);}
-		/// Wrap value
-	inline void wrap(uint16_t var) { mVar = __le_uint16(var); }
-private:
-	uint16_t mVar;
-};
+}}} // namespace tc::bn::detail
 
-	/**
-	 * @struct be_uint16_t
-	 * @brief Wrapper that allows accessing a big-endian uint16_t regardless of processor endianness 
-	 **/
-struct be_uint16_t {
-public:
-		/// Unwrap value
-	inline uint16_t unwrap() const { return __be_uint16(mVar);}
-		/// Wrap value
-	inline void wrap(uint16_t var) { mVar = __be_uint16(var); }
-private:
-	uint16_t mVar;
-};
-
-	/**
-	 * @struct le_uint32_t
-	 * @brief Wrapper that allows accessing a little-endian uint32_t regardless of processor endianness 
-	 **/
-struct le_uint32_t {
-public:
-		/// Unwrap value
-	inline uint32_t unwrap() const { return __le_uint32(mVar);}
-		/// Wrap value
-	inline void wrap(uint32_t var) { mVar = __le_uint32(var); }
-private:
-	uint32_t mVar;
-};
-
-	/**
-	 * @struct be_uint32_t
-	 * @brief Wrapper that allows accessing a big-endian uint32_t regardless of processor endianness 
-	 **/
-struct be_uint32_t {
-public:
-		/// Unwrap value
-	inline uint32_t unwrap() const { return __be_uint32(mVar);}
-		/// Wrap value
-	inline void wrap(uint32_t var) { mVar = __be_uint32(var); }
-private:
-	uint32_t mVar;
-};
-
-	/**
-	 * @struct le_uint64_t
-	 * @brief Wrapper that allows accessing a little-endian uint64_t regardless of processor endianness 
-	 **/
-struct le_uint64_t {
-public:
-		/// Unwrap value
-	inline uint64_t unwrap() const { return __le_uint64(mVar);}
-		/// Wrap value
-	inline void wrap(uint64_t var) { mVar = __le_uint64(var); }
-private:
-	uint64_t mVar;
-};
-
-	/**
-	 * @struct be_uint64_t
-	 * @brief Wrapper that allows accessing a big-endian uint64_t regardless of processor endianness 
-	 **/
-struct be_uint64_t {
-public:
-		/// Unwrap value
-	inline uint64_t unwrap() const { return __be_uint64(mVar);}
-		/// Wrap value
-	inline void wrap(uint64_t var) { mVar = __be_uint64(var); }
-private:
-	uint64_t mVar;
-};
-
-namespace tc {
+namespace tc { namespace bn {
 
 	/**
 	 * @struct le16
@@ -140,9 +59,9 @@ public:
 	static_assert(std::is_pod<T>::value, "le16 requires T to be a POD.");
 
 		/// Unwrap value
-	inline T unwrap() const { auto tmp = __le_uint16(mVar); return *((T*)(&tmp)); }
+	inline T unwrap() const { auto tmp = detail::__le_uint16(mVar); return *((T*)(&tmp)); }
 		/// Wrap value
-	inline void wrap(const T& var) { mVar = __le_uint16(*((uint16_t*)(&var))); }
+	inline void wrap(const T& var) { mVar = detail::__le_uint16(*((uint16_t*)(&var))); }
 private:
 	uint16_t mVar;
 };
@@ -158,9 +77,9 @@ public:
 	static_assert(std::is_pod<T>::value, "be16 requires T to be a POD.");
 
 		/// Unwrap value
-	inline T unwrap() const { auto tmp = __be_uint16(mVar); return *((T*)(&tmp)); }
+	inline T unwrap() const { auto tmp = detail::__be_uint16(mVar); return *((T*)(&tmp)); }
 		/// Wrap value
-	inline void wrap(const T& var) { mVar = __be_uint16(*((uint16_t*)(&var))); }
+	inline void wrap(const T& var) { mVar = detail::__be_uint16(*((uint16_t*)(&var))); }
 private:
 	uint16_t mVar;
 };
@@ -176,9 +95,9 @@ public:
 	static_assert(std::is_pod<T>::value, "le32 requires T to be a POD.");
 
 		/// Unwrap value
-	inline T unwrap() const { auto tmp = __le_uint32(mVar); return *((T*)(&tmp)); }
+	inline T unwrap() const { auto tmp = detail::__le_uint32(mVar); return *((T*)(&tmp)); }
 		/// Wrap value
-	inline void wrap(const T& var) { mVar = __le_uint32(*((uint32_t*)(&var))); }
+	inline void wrap(const T& var) { mVar = detail::__le_uint32(*((uint32_t*)(&var))); }
 private:
 	uint32_t mVar;
 };
@@ -194,9 +113,9 @@ public:
 	static_assert(std::is_pod<T>::value, "be32 requires T to be a POD.");
 
 		/// Unwrap value
-	inline T unwrap() const { auto tmp = __be_uint32(mVar); return *((T*)(&tmp)); }
+	inline T unwrap() const { auto tmp = detail::__be_uint32(mVar); return *((T*)(&tmp)); }
 		/// Wrap value
-	inline void wrap(const T& var) { mVar = __be_uint32(*((uint32_t*)(&var))); }
+	inline void wrap(const T& var) { mVar = detail::__be_uint32(*((uint32_t*)(&var))); }
 private:
 	uint32_t mVar;
 };
@@ -212,9 +131,9 @@ public:
 	static_assert(std::is_pod<T>::value, "le64 requires T to be a POD.");
 
 		/// Unwrap value
-	inline T unwrap() const { auto tmp = __le_uint64(mVar); return *((T*)(&tmp)); }
+	inline T unwrap() const { auto tmp = detail::__le_uint64(mVar); return *((T*)(&tmp)); }
 		/// Wrap value
-	inline void wrap(const T& var) { mVar = __le_uint64(*((uint64_t*)(&var))); }
+	inline void wrap(const T& var) { mVar = detail::__le_uint64(*((uint64_t*)(&var))); }
 private:
 	uint64_t mVar;
 };
@@ -230,11 +149,16 @@ public:
 	static_assert(std::is_pod<T>::value, "be64 requires T to be a POD.");
 
 		/// Unwrap value
-	inline T unwrap() const { auto tmp = __be_uint64(mVar); return *((T*)(&tmp)); }
+	inline T unwrap() const { auto tmp = detail::__be_uint64(mVar); return *((T*)(&tmp)); }
 		/// Wrap value
-	inline void wrap(const T& var) { mVar = __be_uint64(*((uint64_t*)(&var))); }
+	inline void wrap(const T& var) { mVar = detail::__be_uint64(*((uint64_t*)(&var))); }
 private:
 	uint64_t mVar;
 };
 
-} // namespace tc
+}} // namespace tc::bn
+
+namespace tc { namespace bn {
+
+
+}} // namespace tc::bn

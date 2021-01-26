@@ -32,7 +32,7 @@ inline void incr_counter(byte_t* counter, uint64_t incr)
 template <>
 inline void incr_counter<16>(byte_t* counter, uint64_t incr)
 {
-	be_uint64_t* counter_words = (be_uint64_t*)counter;
+	tc::bn::be64<uint64_t>* counter_words = (tc::bn::be64<uint64_t>*)counter;
 
 	uint64_t carry = incr;
 	for (size_t i = 0; carry != 0 ; i = ((i + 1) % 2))

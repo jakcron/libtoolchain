@@ -144,9 +144,9 @@ private:
 		mHmac.update(mSalt.data(), mSalt.size());
 
 		// Update HMAC with BigEndian block index
-		be_uint32_t be_block_index;
+		tc::bn::be32<uint32_t> be_block_index;
 		be_block_index.wrap(mBlockIndex);
-		mHmac.update((const byte_t*)&be_block_index, sizeof(be_uint32_t));
+		mHmac.update((const byte_t*)&be_block_index, sizeof(tc::bn::be32<uint32_t>));
 
 		// Save MAC to temporary value
 		std::array<byte_t, kMacSize> mac;
