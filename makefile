@@ -101,7 +101,7 @@ else ifeq ($(PROJECT_PLATFORM), MACOS)
 	#CC = 
 	#CXX =
 	WARNFLAGS = -Wall -Wno-unused-value -Wno-unused-private-field
-	ARCHFLAGS = -target $(PROJECT_PLATFORM_ARCH)-apple-macos11.0
+	ARCHFLAGS = -arch $(PROJECT_PLATFORM_ARCH)
 	INC +=
 	LIB +=
 	ARFLAGS = rc	
