@@ -27,9 +27,17 @@ tc::io::SubStorage::SubStorage(const std::shared_ptr<tc::io::IStorage>& storage,
 	// set class state
 	mSubStoragePath = tc::io::Path("/");
 
+	// save current path
+	// TODO make a more robust light touch approach to setting current directory.
+	tc::io::Path current_path;
+	mBaseStorage->getWorkingDirectory(current_path);
+
 	// get full path of root
 	mBaseStorage->setWorkingDirectory(base_path);
 	mBaseStorage->getWorkingDirectory(mBaseStoragePath);
+
+	// restore current path
+	mBaseStorage->setWorkingDirectory(current_path);
 }
 
 tc::ResourceStatus tc::io::SubStorage::state()
@@ -143,7 +151,7 @@ void tc::io::SubStorage::setWorkingDirectory(const tc::io::Path& path)
 	subPathToRealPath(path, real_path);
 
 	// set current directory
-	mBaseStorage->setWorkingDirectory(real_path);
+	//mBaseStorage->setWorkingDirectory(real_path);
 
 	// save current directory
 	realPathToSubPath(real_path, mSubStoragePath);
@@ -153,7 +161,7 @@ void tc::io::SubStorage::getDirectoryListing(const tc::io::Path& path, sDirector
 {
 	if (mBaseStorage == nullptr)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::setWorkingDirectory()", "Failed to get directory listing (no base storage)");
+		throw tc::ObjectDisposedException(kClassName+"::getDirectoryListing()", "Failed to get directory listing (no base storage)");
 	}
 
 	// convert substorage path to real path
