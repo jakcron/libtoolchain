@@ -12,6 +12,6 @@
 	 */
 #include <tc/bn/binary_utils.h>
 #include <tc/bn/endian_types.h>
-#include <tc/bn/bitfield.h>
+#include <tc/bn/bitarray.h>
 #include <tc/bn/string.h>
 #include <tc/bn/pad.h>
