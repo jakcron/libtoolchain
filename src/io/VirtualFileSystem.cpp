@@ -37,14 +37,6 @@ tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemMeta& fs_meta, cons
 		throw tc::InvalidOperationException(mModuleLabel, "Failed to located root directory");
 	}
 
-	/*
-	auto dir_listing = mFsMeta.dir_entries.at(root_itr->second).dir_listing;
-	for (auto itr = dir_listing.file_list.begin(); itr != dir_listing.file_list.end(); itr++)
-	{
-		std::cout << "get fucked: " << *itr;
-	}
-	*/
-
 	mCurDir = &mFsMeta.dir_entries.at(root_itr->second);
 }
 
