@@ -39,7 +39,6 @@ public:
 
 	Aes128CbcEncryptedStream();
 	Aes128CbcEncryptedStream(const std::shared_ptr<tc::io::IStream>& stream, const key_t& key, const iv_t& iv);
-	Aes128CbcEncryptedStream(const std::shared_ptr<tc::io::IStream>& stream, const std::vector<KeyConfig>& key_cfg);
 
 		/**
 		 * @brief Indicates whether the current stream supports reading.
@@ -148,15 +147,8 @@ private:
 	inline int64_t blockToOffset(size_t block) { return tc::io::IOUtil::castSizeToInt64(block) * tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CbcEncryptor::kBlockSize); };
 
 	// encryption cfg
-	struct CryptorRange
-	{
-		std::shared_ptr<tc::crypto::Aes128CbcEncryptor> cryptor;
-		uint64_t begin_block; // inclusive
-		uint64_t end_block; // exclusive
-	};
-	std::list<CryptorRange> mCryptorRange;
-
-	void decrypt(byte_t* dst, const byte_t* src, size_t size, uint64_t block_number);
+	key_t mKey;
+	iv_t mIv;
 };
 
 }} // namespace tc::crypto

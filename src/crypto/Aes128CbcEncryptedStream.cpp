@@ -10,17 +10,13 @@
 
 tc::crypto::Aes128CbcEncryptedStream::Aes128CbcEncryptedStream() :
 	mModuleLabel("tc::crypto::Aes128CbcEncryptedStream"),
-	mBaseStream(),
-	mCryptorRange()
+	mBaseStream()
 {
+	memset(mKey.data(), 0, mKey.size());
+	memset(mIv.data(), 0, mIv.size());
 }
 
 tc::crypto::Aes128CbcEncryptedStream::Aes128CbcEncryptedStream(const std::shared_ptr<tc::io::IStream>& stream, const key_t& key, const iv_t& iv) :
-	Aes128CbcEncryptedStream(stream, {{key, iv, 0, -1}})
-{
-}
-
-tc::crypto::Aes128CbcEncryptedStream::Aes128CbcEncryptedStream(const std::shared_ptr<tc::io::IStream>& stream, const std::vector<KeyConfig>& key_cfg) :
 	Aes128CbcEncryptedStream()
 {
 	mBaseStream = stream;
@@ -38,34 +34,13 @@ tc::crypto::Aes128CbcEncryptedStream::Aes128CbcEncryptedStream(const std::shared
 	{
 		throw tc::InvalidOperationException(mModuleLabel, "stream does not support seeking.");
 	}
-
-	// import keys
-	CryptorRange range;
-	for (auto itr = key_cfg.begin(); itr != key_cfg.end(); itr++)
+	if ((mBaseStream->length() % sizeof(block_t)) != 0)
 	{
-		range.cryptor = std::shared_ptr<tc::crypto::Aes128CbcEncryptor>(new tc::crypto::Aes128CbcEncryptor());
-		range.cryptor->initialize(itr->key.data(), itr->key.size(), itr->iv.data(), itr->iv.size());
-		range.begin_block = uint64_t(itr->begin_offset) / uint64_t(sizeof(block_t));
-		if (itr->end_offset == -1)
-			range.end_block = uint64_t(mBaseStream->length()) / uint64_t(sizeof(block_t));
-		else
-			range.end_block = uint64_t(itr->end_offset) / uint64_t(sizeof(block_t));
-
-		mCryptorRange.push_back(std::move(range));
+		throw tc::InvalidOperationException(mModuleLabel, "stream does is not block aligned.");
 	}
 
-	/*
-	std::cout << "[Aes128CbcEncryptedStream]" << std::endl;
-	std::cout << " Length: 0x" << std::hex << mBaseStream->length() << std::endl;
-	for (auto itr = mCryptorRange.begin(); itr != mCryptorRange.end(); itr++)
-	{
-		std::cout << " CryptoRange:" << std::endl;
-		std::cout << "   BeginBlock: 0x" << itr->begin_block;
-		std::cout << " (offset: 0x" << itr->begin_block * 0x10 << ")" << std::endl;
-		std::cout << "   EndBlock: 0x" << itr->end_block;
-		std::cout << " (offset: 0x" << itr->end_block * 0x10 << ")" << std::endl;
-	}
-	*/
+	mKey = key;
+	mIv = iv;
 }
 
 bool tc::crypto::Aes128CbcEncryptedStream::canRead() const
@@ -112,18 +87,18 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 	int64_t begin_read_offset = this->position();
 	int64_t end_read_offset   = begin_read_offset + tc::io::IOUtil::castSizeToInt64(count);
 	int64_t begin_aligned_offset = begin_read_offset - offsetInBlock(begin_read_offset);
-	int64_t end_aligned_offset   = end_read_offset - offsetInBlock(end_read_offset) + (offsetInBlock(end_read_offset) ? mDataStreamBlockSize : 0x0);
+	int64_t end_aligned_offset   = end_read_offset - offsetInBlock(end_read_offset) + (offsetInBlock(end_read_offset) ? sizeof(block_t) : 0x0);
 	size_t block_num = offsetToBlock(end_aligned_offset - begin_aligned_offset);
 
 	bool read_partial_begin_block     = false;
 	size_t partial_begin_block        = offsetToBlock(begin_read_offset);
 	size_t partial_begin_block_offset = 0;
-	size_t partial_begin_block_size   = mDataStreamBlockSize;
+	size_t partial_begin_block_size   = sizeof(block_t);
 
 	bool read_partial_end_block     = false;
 	size_t partial_end_block        = offsetToBlock(end_read_offset);
 	size_t partial_end_block_offset = 0;
-	size_t partial_end_block_size   = mDataStreamBlockSize;
+	size_t partial_end_block_size   = sizeof(block_t);
 
 	if (offsetInBlock(begin_read_offset) != 0)
 	{
@@ -136,7 +111,7 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 		if (partial_begin_block == partial_end_block)
 		{
 			read_partial_begin_block = true;
-			partial_begin_block_size -= (mDataStreamBlockSize - offsetInBlock(end_read_offset));
+			partial_begin_block_size -= (sizeof(block_t) - offsetInBlock(end_read_offset));
 		}
 		else
 		{
@@ -189,11 +164,26 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 
 	// read un-aligned begin block
 	if (read_partial_begin_block)
-	{	
+	{
+		// read iv	
+		iv_t iv;
+		if (partial_begin_block == 0)
+		{
+			iv = mIv;
+		}
+		else
+		{
+			this->seek(blockToOffset(partial_begin_block-1), tc::io::SeekOrigin::Begin);
+			mBaseStream->read(iv.data(), iv.size());
+		}
+		
 		// read block
 		this->seek(blockToOffset(partial_begin_block), tc::io::SeekOrigin::Begin);
 		mBaseStream->read(partial_block.data(), partial_block.size());
 		
+		// decrypt block
+		tc::crypto::DecryptAes128Cbc(partial_block.data(), partial_block.data(), partial_block.size(), mKey.data(), mKey.size(), iv.data(), iv.size());
+
 		// copy out block carving
 		memcpy(ptr + data_read_count, partial_block.data() + partial_begin_block_offset, partial_begin_block_size);
 
@@ -204,10 +194,24 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 	// read continous blocks
 	if (continuous_block_num > 0)
 	{
+		// read iv	
+		iv_t iv;
+		if (continuous_begin_block == 0)
+		{
+			iv = mIv;
+		}
+		else
+		{
+			this->seek(blockToOffset(continuous_begin_block-1), tc::io::SeekOrigin::Begin);
+			mBaseStream->read(iv.data(), iv.size());
+		}
+
 		// read blocks
 		this->seek(blockToOffset(continuous_begin_block), tc::io::SeekOrigin::Begin);
 		mBaseStream->read(ptr + data_read_count, continuous_block_num * sizeof(block_t));
 		
+		// decrypt blocks
+		tc::crypto::DecryptAes128Cbc(ptr + data_read_count, ptr + data_read_count, continuous_block_num * sizeof(block_t), mKey.data(), mKey.size(), iv.data(), iv.size());
 
 		// increment data read count
 		data_read_count += continuous_block_num * sizeof(block_t);
@@ -216,11 +220,24 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 	// read un-aligned end block
 	if (read_partial_end_block)
 	{
+		// read iv	
+		iv_t iv;
+		if (partial_end_block == 0)
+		{
+			iv = mIv;
+		}
+		else
+		{
+			this->seek(blockToOffset(partial_end_block-1), tc::io::SeekOrigin::Begin);
+			mBaseStream->read(iv.data(), iv.size());
+		}
+
 		// read block
 		this->seek(blockToOffset(partial_end_block), tc::io::SeekOrigin::Begin);
 		mBaseStream->read(partial_block.data(), partial_block.size());
-		
-		
+
+		// decrypt block
+		tc::crypto::DecryptAes128Cbc(partial_block.data(), partial_block.data(), partial_block.size(), mKey.data(), mKey.size(), iv.data(), iv.size());
 
 		// copy out block carving
 		memcpy(ptr + data_read_count, partial_block.data() + partial_end_block_offset, partial_end_block_size);
@@ -280,36 +297,5 @@ void tc::crypto::Aes128CbcEncryptedStream::dispose()
 
 		// release ptr
 		mBaseStream.reset();
-	}
-	
-	mCryptorRange.clear();
-}
-
-void tc::crypto::Aes128CbcEncryptedStream::decrypt(byte_t* dst, const byte_t* src, size_t size, uint64_t block_number)
-{
-	// decrypt data iterating thru the cryptor ranges
-	uint64_t cur_block = block_number;
-	size_t cryptor_decrypted_data = 0;
-	for (size_t decrypted_count = 0; decrypted_count < size; decrypted_count += cryptor_decrypted_data)
-	{
-		for (auto itr = mCryptorRange.begin(); itr != mCryptorRange.end(); itr++)
-		{
-			if (cur_block >= itr->begin_block && cur_block < itr->end_block)
-			{
-				cryptor_decrypted_data = size_t(std::min<int64_t>(size - decrypted_count, sizeof(block_t) * (itr->end_block - cur_block)));
-				
-				if (cryptor_decrypted_data > 0)
-					itr->cryptor->decrypt(dst + decrypted_count, src + decrypted_count, cryptor_decrypted_data, cur_block);
-
-				cur_block += cryptor_decrypted_data / sizeof(block_t);
-				break;
-			}
-		}
-
-		// cryptor_decrypted_data will be 0 if no cryptor range was selected
-		if (cryptor_decrypted_data == 0)
-		{
-			throw tc::InvalidOperationException(mModuleLabel+"::decrypt()", "Could not determine cryptor for data read.");
-		}
-	}
+	}	
 }
