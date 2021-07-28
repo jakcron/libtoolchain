@@ -25,25 +25,25 @@ public:
 	public:
 		virtual ~IOptionHandler() = default;
 
+		virtual const std::vector<std::string>& getOptionStrings() const = 0;
 
-		virtual size_t processOption(const std::string& option, const std::vector<std::string>& params);
+		virtual void processOption(const std::string& option, const std::vector<std::string>& params) = 0;
 	};
 
 	OptionParserNew();
 
-	
+	void registerOptionHandler(const std::shared_ptr<IOptionHandler>& handler);
+	void registerUnrecognisedOptionHandler(const std::shared_ptr<IOptionHandler>& handler);
 
-	void parseOptions(const std::vector<std::string>& args);
-	void parseOptions(const std::vector<std::string>& args, size_t pos, size_t num);
+	void processOptions(const std::vector<std::string>& args);
+	void processOptions(const std::vector<std::string>& args, size_t pos, size_t num);
 
-	
 private:
-	OptionParserNew();
 	std::string mModuleLabel;
 
-	void addOption(const std::string& opt);
-	void addOptionParameter(const std::string& opt, const std::string& param);
-	std::map<std::string, std::vector<std::string>> mOptions;
+	void handleOption(const std::string& opt, const std::vector<std::string>& params);
+	std::map<std::string, std::shared_ptr<IOptionHandler>> mOptions;
+	std::shared_ptr<IOptionHandler> mUnkOptHandler;
 };
 
 }} // namespace tc::cli
