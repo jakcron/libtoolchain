@@ -3,9 +3,39 @@
 #include <iostream>
 #include <sstream>
 
-tc::cli::OptionParser::OptionParser(const std::vector<std::string>& args) :
+tc::cli::OptionParser::OptionParser() :
 	mModuleLabel("OptionParser"),
-	mOptions()
+	mOptions(),
+	mUnkOptHandler(nullptr)
+{
+}
+
+void tc::cli::OptionParser::registerOptionHandler(const std::shared_ptr<IOptionHandler>& handler)
+{
+	if (handler == nullptr)
+	{
+		// throw exception
+		throw tc::ArgumentNullException(mModuleLabel, "OptionHandler was null.");
+	}
+
+	for (auto itr = handler->getOptionStrings().begin(); itr != handler->getOptionStrings().end(); itr++)
+	{
+		mOptions.insert(std::pair<std::string, std::shared_ptr<IOptionHandler>>(*itr, handler));
+	}
+}
+
+void tc::cli::OptionParser::registerUnrecognisedOptionHandler(const std::shared_ptr<IOptionHandler>& handler)
+{
+	if (handler == nullptr)
+	{
+		// throw exception
+		throw tc::ArgumentNullException(mModuleLabel, "OptionHandler was null.");
+	}
+
+	mUnkOptHandler = handler;
+}
+
+void tc::cli::OptionParser::processOptions(const std::vector<std::string>& args)
 {
 	/*
 	std::cout << "OptionParser" << std::endl;
@@ -19,13 +49,17 @@ tc::cli::OptionParser::OptionParser(const std::vector<std::string>& args) :
 
 	//std::cout << "Begin parsing options" << std::endl;
 
-	std::string key = std::string();
+	std::string opt = std::string();
+	std::vector<std::string> params = std::vector<std::string>();
 	for (auto itr = args.begin(); itr != args.end(); itr++)
 	{
 		//std::cout << "itr=" << *itr << std::endl;
 
-		// determine if this is an option or option parameter
-		// starting with "-" indicates it is an option
+		// (1) parse the current string
+		std::string tmp_opt = std::string();
+		std::string tmp_param = std::string();
+
+		// if the string begins with '-' then it is an option (which may be compound)
 		if (itr->compare(0,1,"-") == 0)
 		{
 			//std::cout << "looks like an option" << std::endl;
@@ -35,178 +69,85 @@ tc::cli::OptionParser::OptionParser(const std::vector<std::string>& args) :
 			if (equalsign_pos == std::string::npos)
 			{
 				//std::cout << "the option looks like a solo option" << std::endl;
-				key = *itr;
-				addOption(key);
-				// create entry or sth
+				tmp_opt = *itr;				
 			}
 			else
 			{
-				//std::cout << "the option looks like a compound option=param" << std::endl;
-				std::string opt = itr->substr(0, equalsign_pos);
-				std::string param = itr->substr(equalsign_pos + 1, itr->length() - (equalsign_pos + 1));
-				//std::cout << " > opt :   " << opt << std::endl;
-				//std::cout << " > param : " << param << std::endl;
+				//std::cout << "the option looks like a compound opt=param" << std::endl;
+				tmp_opt = itr->substr(0, equalsign_pos);
+				tmp_param = itr->substr(equalsign_pos + 1, itr->length() - (equalsign_pos + 1));
+				//std::cout << " > opt :   " << tmp_opt << std::endl;
+				//std::cout << " > param : " << tmp_param << std::endl;
 				// --path=here
 				// 0123456789a
 				// --path : pos=0, size = 6 = equalsign_pos
 				// here : pos = 7 = eqialsign_pos + 1, size = 4 = 11 - 7 = itr->length() -(equalsign_pos+1)
-				addOption(opt);
-				addOptionParameter(opt, param);
-
-				// clear opt key
-				key = std::string();
+				
 			}
 			
 		}
-		// if this an option parameter, check we have saved the option
-		else if (key.empty() == false)
-		{
-			//std::cout << "looks like a parameter" << std::endl;
-			addOptionParameter(key, *itr);
-		}
+		// otherwise it is a param
 		else
 		{
-			throw tc::ArgumentException(mModuleLabel, "Option parameter was provided without an option.");
-		}	
-	}
-}
+			tmp_param = *itr;
+		}
 
-tc::cli::OptionParser::OptionParser(const std::vector<std::string>& args, size_t pos, size_t num) :
-	OptionParser({args.begin()+pos, args.begin()+pos+num})
-{
-}
+		// (2) interprete it in the context of the current state
 
-bool tc::cli::OptionParser::getUnrecognisedOptions(const std::vector<std::string>& known_opts, std::vector<std::string>& unrecognised_opts)
-{
-	unrecognised_opts.clear();
-
-	for (auto itr = mOptions.begin(); itr != mOptions.end(); itr++)
-	{
-		if (std::find(known_opts.begin(), known_opts.end(), itr->first) == known_opts.end())
+		// the user has indicated the end of the current option
+		// hand off to option handler and clear state
+		if (opt.empty() == false && tmp_opt.empty() == false)
 		{
-			unrecognised_opts.push_back(itr->first);
-		}	 
-	}
+			handleOption(opt, params);
 
-	return unrecognised_opts.empty() == false;
-}
+			opt = std::string();
+			params = std::vector<std::string>();
+		}
 
-bool tc::cli::OptionParser::getOption(const std::string& opt) const
-{
-	return getOption(std::vector<std::string>({opt}));
-}
-
-bool tc::cli::OptionParser::getOption(const std::vector<std::string>& opts) const
-{
-	std::vector<std::string> params;
-	return getOption(opts, params, true, 0);
-}
-
-bool tc::cli::OptionParser::getOption(const std::initializer_list<std::string>& opts) const
-{
-	return getOption(std::vector<std::string>(opts));
-}
-
-bool tc::cli::OptionParser::getOption(const std::string& opt, std::string& param) const
-{
-	return getOption(std::vector<std::string>({opt}), param);
-}
-
-bool tc::cli::OptionParser::getOption(const std::vector<std::string>& opts, std::string& param) const
-{
-	std::vector<std::string> params;
-	bool result = getOption(opts, params, true, 1);
-	if (result != false) param = params[0];
-	return result;
-}
-
-bool tc::cli::OptionParser::getOption(const std::initializer_list<std::string>& opts, std::string& param) const
-{
-	return getOption(std::vector<std::string>(opts), param);
-}
-
-bool tc::cli::OptionParser::getOption(const std::string& opt, std::vector<std::string>& params) const
-{
-	return getOption(std::vector<std::string>({opt}), params);
-}
-
-bool tc::cli::OptionParser::getOption(const std::vector<std::string>& opts, std::vector<std::string>& params) const
-{
-	return getOption(opts, params, false, 0);
-}
-
-bool tc::cli::OptionParser::getOption(const std::initializer_list<std::string>& opts, std::vector<std::string>& params) const
-{
-	return getOption(std::vector<std::string>(opts), params);
-}
-
-bool tc::cli::OptionParser::getOption(const std::string& opt, std::vector<std::string>& params, bool restrict_param_num, size_t param_num) const
-{
-	return getOption(std::vector<std::string>({opt}), params, restrict_param_num, param_num);
-}
-
-bool tc::cli::OptionParser::getOption(const std::vector<std::string>& opts, std::vector<std::string>& params, bool restrict_param_num, size_t param_num) const
-{
-	//std::cout << "getOption() BEGIN" << std::endl;
-
-	std::vector<std::string> existing_opts;
-
-	params.clear();
-	for (auto itr = opts.begin(); itr != opts.end(); itr++)
-	{
-		auto map_itr = mOptions.find(*itr);
-
-		if (map_itr != mOptions.end())
+		// if tmp_opt isn't empty then make it the option
+		if (tmp_opt.empty() == false)
 		{
-			existing_opts.push_back(*itr);
-			params.insert(params.end(), map_itr->second.begin(), map_itr->second.end());
+			opt = tmp_opt;
+		}
+
+		// if tmp_param isn't empty then add it to the param list
+		if (tmp_param.empty() == false)
+		{
+			// if there is no option set, then this is a head-less parameter, throw exception
+			if (opt.empty() == true)
+			{
+				throw tc::ArgumentException(mModuleLabel, "Option parameter was provided without an option.");
+			}
+			params.push_back(tmp_param);
 		}
 	}
 
-	if (existing_opts.empty() == false && restrict_param_num && params.size() != param_num)
+	// process dangling opt/params
+	if (opt.empty() == false)
 	{
-		std::stringstream ss;
-		ss << (existing_opts.size() > 1 ? "Options " : "Option ");
-		for (auto itr = existing_opts.begin(); itr != existing_opts.end(); itr++)
-		{
-			if (itr != existing_opts.begin())
-				ss << ", ";
-			ss << *itr;
-		}
-		switch (param_num)
-		{
-			case 0:
-				ss << " takes no parameters";
-				break;
-			case 1:
-				ss << " requires one parameter";
-				break;
-			default:
-				ss << " requires " << param_num << " parameters";
-		}
-		throw tc::ArgumentException(mModuleLabel, ss.str());
+		handleOption(opt, params);
 	}
-
-	//std::cout << "getOption() END" << std::endl;
-
-	return existing_opts.empty() == false;
 }
 
-bool tc::cli::OptionParser::getOption(const std::initializer_list<std::string>& opts, std::vector<std::string>& params, bool restrict_param_num, size_t param_num) const
+void tc::cli::OptionParser::processOptions(const std::vector<std::string>& args, size_t pos, size_t num)
 {
-	return getOption(std::vector<std::string>(opts), params, restrict_param_num, param_num);
+	processOptions({args.begin()+pos, args.begin()+pos+num});
 }
 
-void tc::cli::OptionParser::addOption(const std::string& opt)
+void tc::cli::OptionParser::handleOption(const std::string& opt, const std::vector<std::string>& params)
 {
 	auto itr = mOptions.find(opt);
 	if (itr == mOptions.end())
 	{
-		mOptions.insert(std::pair<std::string, std::vector<std::string>>(opt, std::vector<std::string>()));
+		if (mUnkOptHandler != nullptr)
+		{
+			mUnkOptHandler->processOption(opt, params);
+		}
+		else
+		{
+			//throw tc::ArgumentException(mModuleLabel, fmt::format("Option \"{}\" is not recognised.", (*itr)));
+			throw tc::ArgumentException(mModuleLabel, "Option is not recognised.");
+		}
 	}
-}
-
-void tc::cli::OptionParser::addOptionParameter(const std::string& opt, const std::string& param)
-{
-	mOptions[opt].push_back(param);
+	itr->second->processOption(opt, params);
 }
