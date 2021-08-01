@@ -21,10 +21,10 @@ namespace tc { namespace cli {
 	 * 
 	 * The format of command-line arguments varies by system and convention. This class supports the following styles of command-line options:
 	 * * "--opt": Option name prefixed by "--" with no parameters,
-	 * * "--opt=var": Option name prefixed by "--" with only one parameter delimetered by "=",
+	 * * "--opt=var": Option name prefixed by "--" with only one parameter delimited by "=",
 	 * * "--opt var1 var2": Option name prefixed by "--" with one or more parameters delimited by white space,
 	 * * "-opt": Option name prefixed by "-" with no parameters,
-	 * * "-opt=var": Option name prefixed by "-" with one parameter delimetered by "=",
+	 * * "-opt=var": Option name prefixed by "-" with one parameter delimited by "=",
 	 * * "-opt var1 var2": Option name prefixed by "-" with one or more parameters delimited by white space,
 	 * 
 	 * When parsing options from command-line arguments, it will (in order of occurence) collect the option name and the parameters that follow in 
