@@ -8,7 +8,6 @@
 #include <vector>
 #include <map>
 #include <string>
-#include <tc/Optional.h>
 #include <tc/ArgumentException.h>
 #include <tc/ArgumentNullException.h>
 
@@ -28,15 +27,9 @@ namespace tc { namespace cli {
 	 * * "-opt=var": Option name prefixed by "-" with one parameter delimetered by "=",
 	 * * "-opt var1 var2": Option name prefixed by "-" with one or more parameters delimited by white space,
 	 * 
-	 * Command-line options take the form of an option name prefixed with one or two dash characters (e.g. "-i" or "--infile-path") followed by zero or more option values.
-	 * Some conventions will allow multiple aliases for a given option (e.g. "-r", "-R", "--recursive"). 
-	 * 
-	 * Option values can be considered as parameters to the option. Examples include:
-	 * 1) Toggling a flag withing program logic: e.g. enabling read-only mode for a forensics tool may used "--read-only" or "-r" as options with no parameters, since the name implies the state.
-	 * 2) Passing a variable into the program: e.g. setting the file path for an input file, may use "--infile path/to/file" or "-i path/to/file", an option with one parameter.
-	 * 
-	 * 
-	 * 
+	 * When parsing options from command-line arguments, it will (in order of occurence) collect the option name and the parameters that follow in 
+	 * accordance to the above rules, and defer to the user defined @ref tc::cli::OptionParser::IOptionHandler for this option. If none is defined 
+	 * it will throw a @ref tc::ArgumentException, or alternatively a user defined unknown option handler (also a @ref tc::cli::OptionParser::IOptionHandler).
 	 * 
 	 * For example, say we have some state struct like this:
 	 * @code
@@ -51,21 +44,25 @@ namespace tc { namespace cli {
 	 * someprogram -sku <your SKU code here>
 	 * @endcode
 	 * 
-	 * Then a possible IOptionHandler could be implemented as follows:
+	 * Then a possible IOptionHandler for "-sku <your SKU code here>" could be implemented as follows:
 	 * @code
 	 * class SkuOptionHandler : public tc::cli::OptionParser::IOptionHandler
 	 * {
 	 * public:
+	 * 	// The constructor is where you link the object to the state you want to modify in the call-back
 	 * 	SkuOptionHandler(UserOpt& user_opt) : 
 	 * 		mUserOpt(user_opt),
 	 * 		mOptStrings({"-sku"})
 	 * 	{}
 	 * 
+	 * 	// OptionParser uses this to determine which IOptionHandler to use, so this should return all aliases of the option
 	 * 	const std::vector<std::string>& getOptionStrings() const
 	 * 	{
 	 * 		return mOptStrings;
 	 * 	}
 	 * 
+	 * 	// This is what is called when OptionParser defers to IOptionHandler to process the option and any arguments
+	 * 	// In your implementation this is where you validate the data and modify your linked state data accordingly
 	 * 	void processOption(const std::string& option, const std::vector<std::string>& params)
 	 * 	{
 	 * 		// validate number of paramaters (in this case you we only want 1 parameter)
@@ -82,27 +79,40 @@ namespace tc { namespace cli {
 	 * };
 	 * @endcode
 	 * 
-	 * Then register SkuOptionHandler with the OptionParser using OptionParser::registerOptionHandler():
+	 * Defining an unknown option handler is optional, but at a minimum allows customising the exception.
 	 * @code
+	 * class UnkOptionHandler : public tc::cli::OptionParser::IOptionHandler
+	 * {
+	 * public:
+	 * 	UnkOptionHandler()
+	 * 	{}
 	 * 
-	 * UserOpt user_opt;
+	 * 	// this throws an exception as it should not be called
+	 * 	const std::vector<std::string>& getOptionStrings() const
+	 * 	{
+	 * 		throw tc::InvalidOperationException("getOptionStrings() not defined for UnkOptionHandler.");
+	 * 	}
 	 * 
-	 * tc::cli::OptionParser opt_parser;
-	 * 
-	 * opt_parser.registerOptionHandler(std::shared_ptr<SkuOptionHandler>(new SkuOptionHandler(user_opt)))
-	 * 
+	 * 	void processOption(const std::string& option, const std::vector<std::string>& params)
+	 * 	{
+	 * 		throw tc::Exception("Unrecognized option: \"" + option + "\"");
+	 * 	}
+	 * private:
+	 * };
 	 * @endcode
 	 * 
 	 * Then process the command-line arguments with OptionParser::processOptions():
 	 * @code
-	 * // In this example processOptions
 	 * int umain(const std::vector<std::string>& args, const std::vector<std::string>& env)
 	 * {
 	 * 	UserOpt user_opt;
 	 * 	tc::cli::OptionParser opt_parser;
 	 * 
 	 * 	// register the option handler for "-sku"
-	 * 	opt_parser.registerOptionHandler(std::shared_ptr<SkuOptionHandler>(new SkuOptionHandler(user_opt)))
+	 * 	opt_parser.registerOptionHandler(std::shared_ptr<SkuOptionHandler>(new SkuOptionHandler(user_opt)));
+	 * 
+	 * 	// register the unknown option handler
+	 * 	opt_parser.registerUnrecognisedOptionHandler(std::shared_ptr<UnkOptionHandler>(new UnkOptionHandler()));
 	 * 
 	 * 	// since args will include at args[0], the program executable path, use the overload of processOptions that selects a sub vector of args.
 	 * 	opt_parser.processOptions(args, 1, args.size()-1);
