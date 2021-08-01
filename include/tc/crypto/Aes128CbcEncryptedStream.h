@@ -20,7 +20,7 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @class Aes128CbcEncryptedStream
-	 * @brief Class for reading from a stream that is encrypted with AES128-CTR.
+	 * @brief Class for reading from a stream that is encrypted with AES128-CBC.
 	 */
 class Aes128CbcEncryptedStream : public tc::io::IStream
 {
@@ -28,14 +28,6 @@ public:
 	using key_t = std::array<byte_t, tc::crypto::Aes128CbcEncryptor::kKeySize>;
 	using iv_t = std::array<byte_t, tc::crypto::Aes128CbcEncryptor::kBlockSize>;
 	using block_t = std::array<byte_t, tc::crypto::Aes128CbcEncryptor::kBlockSize>;
-
-	struct KeyConfig
-	{
-		key_t key;
-		iv_t iv;
-		int64_t begin_offset; // inclusive
-		int64_t end_offset; // exclusive
-	};
 
 	Aes128CbcEncryptedStream();
 	Aes128CbcEncryptedStream(const std::shared_ptr<tc::io::IStream>& stream, const key_t& key, const iv_t& iv);
