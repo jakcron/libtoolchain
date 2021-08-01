@@ -29,7 +29,7 @@ namespace tc { namespace cli {
 	 * 
 	 * When parsing options from command-line arguments, it will (in order of occurence) collect the option name and the parameters that follow in 
 	 * accordance to the above rules, and defer to the user defined @ref tc::cli::OptionParser::IOptionHandler for this option. If none is defined 
-	 * it will throw a @ref tc::ArgumentException, or alternatively a user defined unknown option handler (also a @ref tc::cli::OptionParser::IOptionHandler).
+	 * it will throw a @ref tc::ArgumentException, or alternatively defer to a user defined unknown option handler (also a @ref tc::cli::OptionParser::IOptionHandler).
 	 * 
 	 * For example, say we have some state struct like this:
 	 * @code
