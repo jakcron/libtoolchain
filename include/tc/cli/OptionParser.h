@@ -16,58 +16,7 @@ namespace tc { namespace cli {
 
 	/**
 	 * @class OptionParser
-	 * @brief Class for parsing commandline arguments
-	 * 
-	 * This class uses call-backs to handle processing of command-line arguments.
-	 * 
-	 * For example, say we have some state struct like this
-	 * @code
-	 * struct UserOpt
-	 * {
-	 *    std::string sku_code;
-	 * };
-	 * 
-	 * UserOpt user_opt;
-	 * @endcode 
-	 * 
-	 * And the command-line should be formatted like this:
-	 * @code
-	 * someprogram -sku <your SKU code here>
-	 * @endcode
-	 * 
-	 * Then a possible IOptionHandler could be implemented as follows
-	 * @code
-	 * class SkuOptionHandler : public tc::cli::OptionParserNew::IOptionHandler
-	 * {
-	 * public:
-	 * 	SkuOptionHandler(UserOpt& user_opt) : 
-	 * 		mUserOpt(user_opt),
-	 * 		mOptStrings({"-sku"})
-	 * 	{}
-	 * 
-	 * 	const std::vector<std::string>& getOptionStrings() const
-	 * 	{
-	 * 		return mOptStrings;
-	 * 	}
-	 * 
-	 * 	void processOption(const std::string& option, const std::vector<std::string>& params)
-	 * 	{
-	 * 		// validate number of paramaters (in this case you we only want 1 parameter)
-	 * 		if (params.size() != 1)
-	 * 		{
-	 * 			throw tc::ArgumentOutOfRangeException(fmt::format("Option \"{:s}\" requires a parameter.", option));
-	 * 		}
-	 * 
-	 * 		mUserOpt.sku_code = params[0];
-	 * 	}
-	 * private:
-	 * 	UserOpt& mUserOpt;
-	 * 	std::vector<std::string> mOptStrings;
-	 * };
-	 * 
-	 * @endcode
-	 * 
-	 * A @ref OptionParser::IOptionHandler class must be implemented and registered with the OptionParser instance
+	 * @brief Class for parsing command-line options
 	 */
 class OptionParser
 {
