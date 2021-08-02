@@ -58,6 +58,7 @@ void tc::cli::OptionParser::processOptions(const std::vector<std::string>& args)
 		// (1) parse the current string
 		std::string tmp_opt = std::string();
 		std::string tmp_param = std::string();
+		bool is_compound = false;
 
 		// if the string begins with '-' then it is an option (which may be compound)
 		if (itr->compare(0,1,"-") == 0)
@@ -82,7 +83,7 @@ void tc::cli::OptionParser::processOptions(const std::vector<std::string>& args)
 				// 0123456789a
 				// --path : pos=0, size = 6 = equalsign_pos
 				// here : pos = 7 = eqialsign_pos + 1, size = 4 = 11 - 7 = itr->length() -(equalsign_pos+1)
-				
+				is_compound = true;
 			}
 			
 		}
@@ -119,6 +120,15 @@ void tc::cli::OptionParser::processOptions(const std::vector<std::string>& args)
 				throw tc::ArgumentException(mModuleLabel, "Option parameter was provided without an option.");
 			}
 			params.push_back(tmp_param);
+		}
+
+		// compound options only accept one parameter
+		if (is_compound)
+		{
+			handleOption(opt, params);
+
+			opt = std::string();
+			params = std::vector<std::string>();
 		}
 	}
 
