@@ -20,6 +20,7 @@
 #include "io_StreamSource_TestClass.h"
 #include "io_StreamSink_TestClass.h"
 #include "cli_FormatUtil_TestClass.h"
+#include "cli_OptionParser_TestClass.h"
 #include "crypto_Md5Generator_TestClass.h"
 #include "crypto_Sha1Generator_TestClass.h"
 #include "crypto_Sha256Generator_TestClass.h"
@@ -120,6 +121,7 @@ int main(int argc, char** argv)
 	runTest(new io_StreamSource_TestClass());
 	runTest(new io_StreamSink_TestClass());
 	runTest(new cli_FormatUtil_TestClass());
+	runTest(new cli_OptionParser_TestClass());
 	runTest(new crypto_Md5Generator_TestClass());
 	runTest(new crypto_Sha1Generator_TestClass());
 	runTest(new crypto_Sha256Generator_TestClass());
