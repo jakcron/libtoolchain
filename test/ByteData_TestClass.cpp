@@ -98,23 +98,27 @@ void ByteData_TestClass::test_Constructor_InitializerList()
 	{
 		try 
 		{
+			std::stringstream error_ss;
 			static const size_t expected_data_size = 0x10;
 			byte_t expected_data[expected_data_size] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
 			tc::ByteData data({0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f});
 
 			if (data.data() == nullptr)
 			{
-				throw tc::Exception(".data() returned nullptr when ByteData was constructed with an initializer list");
+				error_ss << ".data() returned nullptr when ByteData was constructed with an initializer list";
+				throw tc::Exception(error_ss.str());
 			}
 
 			if (data.size() != expected_data_size)
 			{
-				throw tc::Exception(".size() did not return 0 when ByteData was constructed with an initializer list");
+				error_ss << ".size() did not return " << expected_data_size << " when ByteData was constructed with an initializer list";
+				throw tc::Exception(error_ss.str());
 			}
 
 			if (memcmp(data.data(), expected_data, expected_data_size) != 0)
 			{
-				throw tc::Exception(".data() did not contain expected data");	
+				error_ss << ".data() did not contain expected data";
+				throw tc::Exception(error_ss.str());
 			}
 
 			std::cout << "PASS" << std::endl;
