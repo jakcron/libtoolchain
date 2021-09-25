@@ -22,32 +22,32 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{E194E4B8-1482-40A2-901B-75D4387822E9}</ProjectGuid>
     <RootNamespace>libtoolchain</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -125,6 +125,7 @@
     <ClInclude Include="..\..\..\include\tc\ArgumentOutOfRangeException.h" />
     <ClInclude Include="..\..\..\include\tc\ArithmeticException.h" />
     <ClInclude Include="..\..\..\include\tc\ByteData.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\Aes128CbcEncryptedStream.h" />
     <ClInclude Include="..\..\..\include\tc\Exception.h" />
     <ClInclude Include="..\..\..\include\tc\InvalidOperationException.h" />
     <ClInclude Include="..\..\..\include\tc\NotImplementedException.h" />
@@ -258,6 +259,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\ByteData.cpp" />
+    <ClCompile Include="..\..\..\src\crypto\Aes128CbcEncryptedStream.cpp" />
     <ClCompile Include="..\..\..\src\Exception.cpp" />
     <ClCompile Include="..\..\..\src\PlatformErrorHandlingUtil.cpp" />
     <ClCompile Include="..\..\..\src\cli\FormatUtil.cpp" />

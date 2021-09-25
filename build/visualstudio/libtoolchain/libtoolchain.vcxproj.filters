@@ -211,6 +211,9 @@
     <ClCompile Include="..\..\..\src\string\TranscodeUtil.cpp">
       <Filter>Source Files\string</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\Aes128CbcEncryptedStream.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\tc.h">
@@ -620,6 +623,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\string\detail\utf16.h">
       <Filter>Header Files\tc\string\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\Aes128CbcEncryptedStream.h">
+      <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
