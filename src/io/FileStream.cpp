@@ -292,6 +292,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 		switch (error)
 		{
 			case (ERROR_FILE_NOT_FOUND):
+			case (ERROR_PATH_NOT_FOUND):
 				throw tc::io::FileNotFoundException(kClassName+"::open()", PlatformErrorHandlingUtil::GetLastErrorString(error));
 			case (ERROR_FILE_EXISTS):
 				throw tc::io::FileExistsException(kClassName+"::open()", PlatformErrorHandlingUtil::GetLastErrorString(error));
