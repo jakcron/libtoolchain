@@ -8,6 +8,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <memory>
 #include <tc/ArgumentException.h>
 #include <tc/ArgumentNullException.h>
 
