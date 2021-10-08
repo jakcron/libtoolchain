@@ -218,7 +218,7 @@ private:
 			hash.update(src, src_size);
 			
 			// update using big endian round num
-			beRoundNum.wrap(round_idx);
+			beRoundNum.wrap((uint32_t)round_idx);
 			hash.update((byte_t*)&beRoundNum, sizeof(tc::bn::be32<uint32_t>));
 
 			// get mask
