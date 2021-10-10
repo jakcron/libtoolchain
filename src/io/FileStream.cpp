@@ -198,6 +198,9 @@ void tc::io::FileStream::dispose()
 }
 
 #ifdef _WIN32
+
+#pragma warning(disable : 4065) // disable warning for switch case with only default case
+
 void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, FileAccess access)
 {
 	// convert Path to unicode string
@@ -441,6 +444,9 @@ void tc::io::FileStream::flush_impl()
 		FlushFileBuffers(mFileHandle->handle);
 	}
 }
+
+#pragma warning(default : 4065)  // reenable warning for switch case with only default case
+
 #else
 void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, FileAccess access)
 {
