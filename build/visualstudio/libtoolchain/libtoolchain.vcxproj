@@ -331,7 +331,7 @@
     <ClCompile Include="..\..\..\src\types.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\deps\libmbedtls\build\visualstudio\libmbedtls\libmbedtls.vcxproj">
+    <ProjectReference Include="$(SolutionDir)..\..\deps\libmbedtls\build\visualstudio\libmbedtls\libmbedtls.vcxproj">
       <Project>{7a7c66f3-2b5b-4e23-85d8-2a74fedad92c}</Project>
     </ProjectReference>
   </ItemGroup>
