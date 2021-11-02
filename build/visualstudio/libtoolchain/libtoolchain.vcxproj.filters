@@ -291,7 +291,7 @@
     <ClInclude Include="..\..\..\include\tc\bn\binary_utils.h">
       <Filter>Header Files\tc\bn</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\bn\bitfield.h">
+    <ClInclude Include="..\..\..\include\tc\bn\bitarray.h">
       <Filter>Header Files\tc\bn</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\bn\endian_types.h">

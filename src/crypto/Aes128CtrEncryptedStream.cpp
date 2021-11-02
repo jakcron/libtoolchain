@@ -254,10 +254,13 @@ void tc::crypto::Aes128CtrEncryptedStream::decrypt(byte_t* dst, const byte_t* sr
 		{
 			if (cur_block >= itr->begin_block && cur_block < itr->end_block)
 			{
-				cryptor_decrypted_data = size_t(std::min<int64_t>(size - decrypted_count, sizeof(block_t) * (itr->end_block - cur_block)));
+				size_t range_remaining = sizeof(block_t) * size_t(itr->end_block - cur_block);
+				size_t encrypted_remaining = size - decrypted_count;
+
+				cryptor_decrypted_data = std::min<size_t>(encrypted_remaining, range_remaining);
 				
 				if (cryptor_decrypted_data > 0)
-					itr->cryptor->decrypt(dst + decrypted_count, src + decrypted_count, cryptor_decrypted_data, cur_block);
+					itr->cryptor->decrypt(dst + decrypted_count, src + decrypted_count, cryptor_decrypted_data, (cur_block - itr->begin_block));
 
 				cur_block += cryptor_decrypted_data / sizeof(block_t);
 				break;

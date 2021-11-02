@@ -77,6 +77,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -86,6 +87,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -97,6 +99,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -112,6 +115,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -140,7 +144,7 @@
     <ClInclude Include="..\..\..\include\tc\string\detail\utf8.h" />
     <ClInclude Include="..\..\..\include\tc\UnauthorisedAccessException.h" />
     <ClInclude Include="..\..\..\include\tc\bn\binary_utils.h" />
-    <ClInclude Include="..\..\..\include\tc\bn\bitfield.h" />
+    <ClInclude Include="..\..\..\include\tc\bn\bitarray.h" />
     <ClInclude Include="..\..\..\include\tc\bn\endian_types.h" />
     <ClInclude Include="..\..\..\include\tc\bn\pad.h" />
     <ClInclude Include="..\..\..\include\tc\bn\string.h" />

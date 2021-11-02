@@ -246,19 +246,22 @@
     <ClCompile Include="..\..\..\test\RsaPssUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\bn_bitfieldByteBEBitBE_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\bn_bitarrayByteBEBitBE_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\bn_bitfieldByteBEBitLE_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\bn_bitarrayByteBEBitLE_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\bn_bitfieldByteLEBitBE_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\bn_bitarrayByteLEBitBE_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\bn_bitfieldByteLEBitLE_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\bn_bitarrayByteLEBitLE_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\bn_endian_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\cli_OptionParser_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -494,19 +497,22 @@
     <ClInclude Include="..\..\..\test\RsaPssUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\bn_bitfieldByteBEBitBE_TestClass.h">
+    <ClInclude Include="..\..\..\test\bn_bitarrayByteBEBitBE_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\bn_bitfieldByteBEBitLE_TestClass.h">
+    <ClInclude Include="..\..\..\test\bn_bitarrayByteBEBitLE_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\bn_bitfieldByteLEBitBE_TestClass.h">
+    <ClInclude Include="..\..\..\test\bn_bitarrayByteLEBitBE_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\bn_bitfieldByteLEBitLE_TestClass.h">
+    <ClInclude Include="..\..\..\test\bn_bitarrayByteLEBitLE_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\bn_endian_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\cli_OptionParser_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

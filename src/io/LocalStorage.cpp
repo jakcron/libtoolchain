@@ -8,6 +8,9 @@
 #ifdef _WIN32
 #include <direct.h>
 #include <cstdlib>
+
+#pragma warning(disable : 4065) // disable warning for switch case with only default case
+
 #else
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -16,8 +19,6 @@
 #include <sys/types.h>
 #include <dirent.h>
 #endif
-
-#include <iostream>
 
 const std::string tc::io::LocalStorage::kClassName = "tc::io::LocalStorage";
 
@@ -424,3 +425,8 @@ void tc::io::LocalStorage::getDirectoryListing(const tc::io::Path& path, sDirect
 	info.file_list = child_file_name_list;
 }
 
+#ifdef _WIN32
+
+#pragma warning(default : 4065) // reenable warning for switch case with only default case
+
+#endif

@@ -77,6 +77,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -86,6 +87,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -97,6 +99,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -112,6 +115,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -127,13 +131,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\test\bn_bitfieldByteBEBitBE_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\bn_bitfieldByteBEBitLE_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\bn_bitfieldByteLEBitBE_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\bn_bitfieldByteLEBitLE_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_bitarrayByteBEBitBE_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_bitarrayByteBEBitLE_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_bitarrayByteLEBitBE_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_bitarrayByteLEBitLE_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\bn_endian_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\ByteData_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\cli_FormatUtil_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\cli_OptionParser_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes128CtrEncryptor_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes128EcbEncryptor_TestClass.cpp" />
@@ -211,13 +216,14 @@
     <ClCompile Include="..\..\..\test\string_TranscodeUtil_TestClass.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\test\bn_bitfieldByteBEBitBE_TestClass.h" />
-    <ClInclude Include="..\..\..\test\bn_bitfieldByteBEBitLE_TestClass.h" />
-    <ClInclude Include="..\..\..\test\bn_bitfieldByteLEBitBE_TestClass.h" />
-    <ClInclude Include="..\..\..\test\bn_bitfieldByteLEBitLE_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_bitarrayByteBEBitBE_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_bitarrayByteBEBitLE_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_bitarrayByteLEBitBE_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_bitarrayByteLEBitLE_TestClass.h" />
     <ClInclude Include="..\..\..\test\bn_endian_TestClass.h" />
     <ClInclude Include="..\..\..\test\ByteData_TestClass.h" />
     <ClInclude Include="..\..\..\test\cli_FormatUtil_TestClass.h" />
+    <ClInclude Include="..\..\..\test\cli_OptionParser_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes128CtrEncryptor_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes128EcbEncryptor_TestClass.h" />

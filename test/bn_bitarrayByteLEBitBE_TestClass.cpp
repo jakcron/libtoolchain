@@ -5,26 +5,26 @@
 
 #include <tc/types.h>
 
-#include "bn_bitfieldByteLEBitLE_TestClass.h"
+#include "bn_bitarrayByteLEBitBE_TestClass.h"
 
 //---------------------------------------------------------
 
-void bn_bitfieldByteLEBitLE_TestClass::runAllTests(void)
+void bn_bitarrayByteLEBitBE_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::bn::bitfield<LE,LE>] START" << std::endl;
+	std::cout << "[tc::bn::bitarray<LE,BE>] START" << std::endl;
 	test_Size();
 	test_TestBit();
 	test_SetBit();
 	test_ResetBit();
 	test_FlipBit();
-	std::cout << "[tc::bn::bitfield<LE,LE>] END" << std::endl;
+	std::cout << "[tc::bn::bitarray<LE,BE>] END" << std::endl;
 }
 
 //---------------------------------------------------------
 
-void bn_bitfieldByteLEBitLE_TestClass::test_Size()
+void bn_bitarrayByteLEBitBE_TestClass::test_Size()
 {
-	std::cout << "[tc::bn::bitfield<LE,LE>] test_Size : " << std::flush;
+	std::cout << "[tc::bn::bitarray<LE,BE>] test_Size : " << std::flush;
 	try
 	{
 		try 
@@ -32,11 +32,11 @@ void bn_bitfieldByteLEBitLE_TestClass::test_Size()
 			std::stringstream ss;
 
 			// check size
-			static const size_t kBitFieldSize = sizeof(uint32_t);
-			tc::bn::bitfield<kBitFieldSize, true, true> bf;
-			if (sizeof(bf) != kBitFieldSize)
+			static const size_t kBitArraySize = sizeof(uint32_t);
+			tc::bn::bitarray<kBitArraySize, true, false> bf;
+			if (sizeof(bf) != kBitArraySize)
 			{
-				ss << "sizeof(bf) had value " << std::dec << sizeof(bf) << " (expected " << kBitFieldSize << ")";
+				ss << "sizeof(bf) had value " << std::dec << sizeof(bf) << " (expected " << kBitArraySize << ")";
 				throw tc::Exception(ss.str());
 			}
 
@@ -53,9 +53,9 @@ void bn_bitfieldByteLEBitLE_TestClass::test_Size()
 	}
 }
 
-void bn_bitfieldByteLEBitLE_TestClass::test_TestBit()
+void bn_bitarrayByteLEBitBE_TestClass::test_TestBit()
 {
-	std::cout << "[tc::bn::bitfield<LE,LE>] test_TestBit : " << std::flush;
+	std::cout << "[tc::bn::bitarray<LE,BE>] test_TestBit : " << std::flush;
 	try
 	{
 		try 
@@ -79,22 +79,22 @@ void bn_bitfieldByteLEBitLE_TestClass::test_TestBit()
 			// set byte0 bit0
 			*((uint32_t*)&bf) = 0;
 			bf_raw[0] = 0x01;
-			helper_TestBit("byte0bit0 test", bf, {0});
+			helper_TestBit("byte0bit0 test", bf, {7});
 
 			// set byte0 bit7
 			*((uint32_t*)&bf) = 0;
 			bf_raw[0] = 0x80;
-			helper_TestBit("byte0bit7 test", bf, {7});
+			helper_TestBit("byte0bit7 test", bf, {0});
 
 			// set byte3 bit0
 			*((uint32_t*)&bf) = 0;
 			bf_raw[3] = 0x01;
-			helper_TestBit("byte3bit0 test", bf, {24});
+			helper_TestBit("byte3bit0 test", bf, {31});
 
 			// set byte3 bit7
 			*((uint32_t*)&bf) = 0;
 			bf_raw[3] = 0x80;
-			helper_TestBit("byte3bit7 test", bf, {31});
+			helper_TestBit("byte3bit7 test", bf, {24});
 
 			std::cout << "PASS" << std::endl;
 		}
@@ -109,9 +109,9 @@ void bn_bitfieldByteLEBitLE_TestClass::test_TestBit()
 	}
 }
 
-void bn_bitfieldByteLEBitLE_TestClass::test_SetBit()
+void bn_bitarrayByteLEBitBE_TestClass::test_SetBit()
 {
-	std::cout << "[tc::bn::bitfield<LE,LE>] test_SetBit : " << std::flush;
+	std::cout << "[tc::bn::bitarray<LE,BE>] test_SetBit : " << std::flush;
 	try
 	{
 		try 
@@ -146,9 +146,9 @@ void bn_bitfieldByteLEBitLE_TestClass::test_SetBit()
 	}
 }
 
-void bn_bitfieldByteLEBitLE_TestClass::test_ResetBit()
+void bn_bitarrayByteLEBitBE_TestClass::test_ResetBit()
 {
-	std::cout << "[tc::bn::bitfield<LE,LE>] test_ResetBit : " << std::flush;
+	std::cout << "[tc::bn::bitarray<LE,BE>] test_ResetBit : " << std::flush;
 	try
 	{
 		try 
@@ -183,9 +183,9 @@ void bn_bitfieldByteLEBitLE_TestClass::test_ResetBit()
 	}
 }
 
-void bn_bitfieldByteLEBitLE_TestClass::test_FlipBit()
+void bn_bitarrayByteLEBitBE_TestClass::test_FlipBit()
 {
-	std::cout << "[tc::bn::bitfield<LE,LE>] test_FlipBit : " << std::flush;
+	std::cout << "[tc::bn::bitarray<LE,BE>] test_FlipBit : " << std::flush;
 	try
 	{
 		try 
@@ -220,18 +220,18 @@ void bn_bitfieldByteLEBitLE_TestClass::test_FlipBit()
 	}
 }
 
-void bn_bitfieldByteLEBitLE_TestClass::helper_TestBit(const std::string& test_name, const testtype_t& bitfield, const std::vector<size_t>& expected_set_bits)
+void bn_bitarrayByteLEBitBE_TestClass::helper_TestBit(const std::string& test_name, const testtype_t& bitarray, const std::vector<size_t>& expected_set_bits)
 {
 	std::stringstream ss;
-	for (size_t i = 0; i < bitfield.bit_size(); i++)
+	for (size_t i = 0; i < bitarray.bit_size(); i++)
 	{
-		bool res = bitfield.test(i);
+		bool res = bitarray.test(i);
 		bool expected_res = std::find(expected_set_bits.begin(), expected_set_bits.end(), i) != expected_set_bits.end();
 		if (res != expected_res)
 		{
 			if (test_name.empty() == false)
 				ss << test_name << " : ";
-			ss << "bitfield.test(" << std::dec << i << ") had value " << std::boolalpha << res << " (expected " << std::boolalpha << expected_res << ")";
+			ss << "bitarray.test(" << std::dec << i << ") had value " << std::boolalpha << res << " (expected " << std::boolalpha << expected_res << ")";
 			throw tc::Exception(ss.str());
 		}
 	}

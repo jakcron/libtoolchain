@@ -5,26 +5,26 @@
 
 #include <tc/types.h>
 
-#include "bn_bitfieldByteBEBitLE_TestClass.h"
+#include "bn_bitarrayByteBEBitLE_TestClass.h"
 
 //---------------------------------------------------------
 
-void bn_bitfieldByteBEBitLE_TestClass::runAllTests(void)
+void bn_bitarrayByteBEBitLE_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::bn::bitfield<BE,LE>] START" << std::endl;
+	std::cout << "[tc::bn::bitarray<BE,LE>] START" << std::endl;
 	test_Size();
 	test_TestBit();
 	test_SetBit();
 	test_ResetBit();
 	test_FlipBit();
-	std::cout << "[tc::bn::bitfield<BE,LE>] END" << std::endl;
+	std::cout << "[tc::bn::bitarray<BE,LE>] END" << std::endl;
 }
 
 //---------------------------------------------------------
 
-void bn_bitfieldByteBEBitLE_TestClass::test_Size()
+void bn_bitarrayByteBEBitLE_TestClass::test_Size()
 {
-	std::cout << "[tc::bn::bitfield<BE,LE>] test_Size : " << std::flush;
+	std::cout << "[tc::bn::bitarray<BE,LE>] test_Size : " << std::flush;
 	try
 	{
 		try 
@@ -32,11 +32,11 @@ void bn_bitfieldByteBEBitLE_TestClass::test_Size()
 			std::stringstream ss;
 
 			// check size
-			static const size_t kBitFieldSize = sizeof(uint32_t);
-			tc::bn::bitfield<kBitFieldSize, false, true> bf;
-			if (sizeof(bf) != kBitFieldSize)
+			static const size_t kBitArraySize = sizeof(uint32_t);
+			tc::bn::bitarray<kBitArraySize, false, true> bf;
+			if (sizeof(bf) != kBitArraySize)
 			{
-				ss << "sizeof(bf) had value " << std::dec << sizeof(bf) << " (expected " << kBitFieldSize << ")";
+				ss << "sizeof(bf) had value " << std::dec << sizeof(bf) << " (expected " << kBitArraySize << ")";
 				throw tc::Exception(ss.str());
 			}
 
@@ -53,9 +53,9 @@ void bn_bitfieldByteBEBitLE_TestClass::test_Size()
 	}
 }
 
-void bn_bitfieldByteBEBitLE_TestClass::test_TestBit()
+void bn_bitarrayByteBEBitLE_TestClass::test_TestBit()
 {
-	std::cout << "[tc::bn::bitfield<BE,LE>] test_TestBit : " << std::flush;
+	std::cout << "[tc::bn::bitarray<BE,LE>] test_TestBit : " << std::flush;
 	try
 	{
 		try 
@@ -109,9 +109,9 @@ void bn_bitfieldByteBEBitLE_TestClass::test_TestBit()
 	}
 }
 
-void bn_bitfieldByteBEBitLE_TestClass::test_SetBit()
+void bn_bitarrayByteBEBitLE_TestClass::test_SetBit()
 {
-	std::cout << "[tc::bn::bitfield<BE,LE>] test_SetBit : " << std::flush;
+	std::cout << "[tc::bn::bitarray<BE,LE>] test_SetBit : " << std::flush;
 	try
 	{
 		try 
@@ -146,9 +146,9 @@ void bn_bitfieldByteBEBitLE_TestClass::test_SetBit()
 	}
 }
 
-void bn_bitfieldByteBEBitLE_TestClass::test_ResetBit()
+void bn_bitarrayByteBEBitLE_TestClass::test_ResetBit()
 {
-	std::cout << "[tc::bn::bitfield<BE,LE>] test_ResetBit : " << std::flush;
+	std::cout << "[tc::bn::bitarray<BE,LE>] test_ResetBit : " << std::flush;
 	try
 	{
 		try 
@@ -183,9 +183,9 @@ void bn_bitfieldByteBEBitLE_TestClass::test_ResetBit()
 	}
 }
 
-void bn_bitfieldByteBEBitLE_TestClass::test_FlipBit()
+void bn_bitarrayByteBEBitLE_TestClass::test_FlipBit()
 {
-	std::cout << "[tc::bn::bitfield<BE,LE>] test_FlipBit : " << std::flush;
+	std::cout << "[tc::bn::bitarray<BE,LE>] test_FlipBit : " << std::flush;
 	try
 	{
 		try 
@@ -220,18 +220,18 @@ void bn_bitfieldByteBEBitLE_TestClass::test_FlipBit()
 	}
 }
 
-void bn_bitfieldByteBEBitLE_TestClass::helper_TestBit(const std::string& test_name, const testtype_t& bitfield, const std::vector<size_t>& expected_set_bits)
+void bn_bitarrayByteBEBitLE_TestClass::helper_TestBit(const std::string& test_name, const testtype_t& bitarray, const std::vector<size_t>& expected_set_bits)
 {
 	std::stringstream ss;
-	for (size_t i = 0; i < bitfield.bit_size(); i++)
+	for (size_t i = 0; i < bitarray.bit_size(); i++)
 	{
-		bool res = bitfield.test(i);
+		bool res = bitarray.test(i);
 		bool expected_res = std::find(expected_set_bits.begin(), expected_set_bits.end(), i) != expected_set_bits.end();
 		if (res != expected_res)
 		{
 			if (test_name.empty() == false)
 				ss << test_name << " : ";
-			ss << "bitfield.test(" << std::dec << i << ") had value " << std::boolalpha << res << " (expected " << std::boolalpha << expected_res << ")";
+			ss << "bitarray.test(" << std::dec << i << ") had value " << std::boolalpha << res << " (expected " << std::boolalpha << expected_res << ")";
 			throw tc::Exception(ss.str());
 		}
 	}

@@ -1,10 +1,10 @@
 #include "string_TranscodeUtil_TestClass.h"
 #include "ByteData_TestClass.h"
 #include "bn_endian_TestClass.h"
-#include "bn_bitfieldByteBEBitBE_TestClass.h"
-#include "bn_bitfieldByteBEBitLE_TestClass.h"
-#include "bn_bitfieldByteLEBitBE_TestClass.h"
-#include "bn_bitfieldByteLEBitLE_TestClass.h"
+#include "bn_bitarrayByteBEBitBE_TestClass.h"
+#include "bn_bitarrayByteBEBitLE_TestClass.h"
+#include "bn_bitarrayByteLEBitBE_TestClass.h"
+#include "bn_bitarrayByteLEBitLE_TestClass.h"
 #include "Optional_TestClass.h"
 #include "io_Path_TestClass.h"
 #include "io_LocalStorage_TestClass.h"
@@ -102,10 +102,10 @@ int main(int argc, char** argv)
 	runTest(new string_TranscodeUtil_TestClass());
 	runTest(new ByteData_TestClass());
 	runTest(new bn_endian_TestClass());
-	runTest(new bn_bitfieldByteBEBitBE_TestClass());
-	runTest(new bn_bitfieldByteBEBitLE_TestClass());
-	runTest(new bn_bitfieldByteLEBitBE_TestClass());
-	runTest(new bn_bitfieldByteLEBitLE_TestClass());
+	runTest(new bn_bitarrayByteBEBitBE_TestClass());
+	runTest(new bn_bitarrayByteBEBitLE_TestClass());
+	runTest(new bn_bitarrayByteLEBitBE_TestClass());
+	runTest(new bn_bitarrayByteLEBitLE_TestClass());
 	runTest(new Optional_TestClass());
 	runTest(new io_Path_TestClass());
 	runTest(new io_LocalStorage_TestClass());
