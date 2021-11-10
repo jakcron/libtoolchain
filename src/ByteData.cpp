@@ -39,7 +39,7 @@ tc::ByteData::ByteData(size_t size, bool clear_memory)
 		{
 			mPtr = std::unique_ptr<byte_t>(new byte_t[size]);
 		} 
-		catch (std::bad_alloc) 
+		catch (const std::bad_alloc&) 
 		{
 			throw tc::OutOfMemoryException(kClassName, "std::bad_alloc thrown");
 		}
