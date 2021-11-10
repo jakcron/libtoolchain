@@ -1,6 +1,6 @@
 # C++/C Recursive Project Makefile 
 # (c) Jack
-# Version 5
+# Version 6 (20211110)
 
 # Project Name
 PROJECT_NAME = libtoolchain
@@ -112,8 +112,8 @@ CXXFLAGS = -std=c++11 $(INC) $(WARNFLAGS) $(ARCHFLAGS) -fPIC
 CFLAGS = -std=c11 $(INC) $(WARNFLAGS) $(ARCHFLAGS) -fPIC
 
 # Object Files
-SRC_OBJ = $(foreach dir,$(PROJECT_SRC_SUBDIRS),$(subst .cpp,.o,$(wildcard $(dir)/*.cpp))) $(foreach dir,$(PROJECT_SRC_SUBDIRS),$(subst .c,.o,$(wildcard $(dir)/*.c)))
-TESTSRC_OBJ = $(foreach dir,$(PROJECT_TESTSRC_SUBDIRS),$(subst .cpp,.o,$(wildcard $(dir)/*.cpp))) $(foreach dir,$(PROJECT_TESTSRC_SUBDIRS),$(subst .c,.o,$(wildcard $(dir)/*.c)))
+SRC_OBJ = $(foreach dir,$(PROJECT_SRC_SUBDIRS),$(subst .cpp,.o,$(wildcard $(dir)/*.cpp))) $(foreach dir,$(PROJECT_SRC_SUBDIRS),$(subst .cc,.o,$(wildcard $(dir)/*.cc))) $(foreach dir,$(PROJECT_SRC_SUBDIRS),$(subst .c,.o,$(wildcard $(dir)/*.c)))
+TESTSRC_OBJ = $(foreach dir,$(PROJECT_TESTSRC_SUBDIRS),$(subst .cpp,.o,$(wildcard $(dir)/*.cpp))) $(foreach dir,$(PROJECT_TESTSRC_SUBDIRS),$(subst .cc,.o,$(wildcard $(dir)/*.cc))) $(foreach dir,$(PROJECT_TESTSRC_SUBDIRS),$(subst .c,.o,$(wildcard $(dir)/*.c)))
 
 # all is the default, user should specify what the default should do
 #	- 'static_lib' for building static library
@@ -131,6 +131,10 @@ clean: clean_object_files remove_binary_dir
 	@$(CC) $(CFLAGS) -c $< -o $@ 
 
 %.o: %.cpp
+	@echo CXX $<
+	@$(CXX) $(CXXFLAGS) -c $< -o $@ 
+
+%.o: %.cc
 	@echo CXX $<
 	@$(CXX) $(CXXFLAGS) -c $< -o $@ 
 
