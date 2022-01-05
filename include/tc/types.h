@@ -15,6 +15,7 @@
 #include <memory>
 #include <algorithm>
 #include <type_traits>
+#include <limits>
 #include <tc/bn.h>
 
 #ifdef _WIN32
