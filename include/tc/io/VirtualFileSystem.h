@@ -21,7 +21,7 @@ namespace tc { namespace io {
 	 * * a @ref VirtualFileSystem::FileSystemMeta struct which contains vectors of directory and file entries, including mapping between absolute tc::io::Path to dir/file entry.
 	 * * optionally an implementation of @ref VirtualFileSystem::IPathResolver to determine the absolute path from a relative path and the current directory. Providing a custom IPathResolver implementation is only required when special logic (like case insensitivity) is required to resolve the correct absolute path.
 	 **/	
-class VirtualFileSystem : public tc::io::IStorage
+class VirtualFileSystem : public tc::io::IFileSystem
 {
 public:
 	struct FileSystemMeta

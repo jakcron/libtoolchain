@@ -6,7 +6,7 @@
 class StorageTestUtil
 {
 public:
-	class DummyStorageBase : public tc::io::IStorage
+	class DummyStorageBase : public tc::io::IFileSystem
 	{
 	public:
 		DummyStorageBase()

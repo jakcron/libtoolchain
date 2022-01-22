@@ -9,10 +9,10 @@ tc::io::SubStorage::SubStorage() :
 {
 }
 
-tc::io::SubStorage::SubStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& base_path) :
+tc::io::SubStorage::SubStorage(const std::shared_ptr<tc::io::IFileSystem>& storage, const tc::io::Path& base_path) :
 	SubStorage()
 {
-	// copy IStorage ptr
+	// copy IFileSystem ptr
 	mBaseStorage = storage;
 	
 	if (mBaseStorage == nullptr)

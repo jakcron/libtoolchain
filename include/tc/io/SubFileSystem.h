@@ -17,9 +17,9 @@ namespace tc { namespace io {
 
 	/**
 	 * @class SubStorage
-	 * @brief A wrapper around an existing IStorage object that exposes a subset of the base IStorage directory tree.
+	 * @brief A wrapper around an existing IFileSystem object that exposes a subset of the base IFileSystem directory tree.
 	 **/
-class SubStorage : public tc::io::IStorage
+class SubStorage : public tc::io::IFileSystem
 {
 public:
 
@@ -32,13 +32,13 @@ public:
 		/** 
 		 * @brief Create SubStorage
 		 * 
-		 * @param[in] storage The base IStorage object which this sub storage will derive from.
+		 * @param[in] storage The base IFileSystem object which this sub storage will derive from.
 		 * @param[in] base_path The path to the subdirectory used as the substream root directory.
 		 * 
 		 * @throw tc::ArgumentNullException @p storage is @a nullptr.
 		 * @throw tc::InvalidOperationException @p storage was not in a ready state
 		 **/
-	SubStorage(const std::shared_ptr<tc::io::IStorage>& storage, const tc::io::Path& base_path);
+	SubStorage(const std::shared_ptr<tc::io::IFileSystem>& storage, const tc::io::Path& base_path);
 
 	tc::ResourceStatus state();
 	void dispose();
@@ -119,7 +119,7 @@ public:
 private:
 	static const std::string kClassName;
 	
-	std::shared_ptr<tc::io::IStorage> mBaseStorage;
+	std::shared_ptr<tc::io::IFileSystem> mBaseStorage;
 	tc::io::Path mBaseStoragePath;
 	tc::io::Path mSubStoragePath;
 

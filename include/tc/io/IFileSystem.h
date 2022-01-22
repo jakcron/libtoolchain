@@ -1,6 +1,6 @@
 	/**
 	 * @file IFileSystem.h
-	 * @brief Declaration of tc::io::IStorage
+	 * @brief Declaration of tc::io::IFileSystem
 	 * @author Jack (jakcron)
 	 * @version 0.6
 	 * @date 2019/06/18
@@ -34,7 +34,7 @@ struct sDirectoryListing
 };
 
 	/**
-	 * @class IStorage
+	 * @class IFileSystem
 	 * 
 	 * @brief An interface for implementing a basic FileSystem handler.
 	 *
@@ -45,20 +45,20 @@ struct sDirectoryListing
 	 * - Directory management (create, remove)
 	 * - Directory listing
 	 * 
-	 * @note IStorage uses the tc::io::Path class to represent a path, not as a literal string.
-	 * @note It is up to the implementation of IStorage to validate and process tc::io::Path objects.
+	 * @note IFileSystem uses the tc::io::Path class to represent a path, not as a literal string.
+	 * @note It is up to the implementation of IFileSystem to validate and process tc::io::Path objects.
 	 * @note It is up to the implementation to enforce tc::io::FileMode & tc::io::FileAccess.
 	 **/
-class IStorage
+class IFileSystem
 {
 public:
 		/**
 		 * @brief Destructor
 		 **/
-	virtual ~IStorage() = default;
+	virtual ~IFileSystem() = default;
 
 		/**
-		 * @brief Get state of IStorage
+		 * @brief Get state of IFileSystem
 		 * @return ResourceStatus
 		 **/
 	virtual tc::ResourceStatus state() = 0;

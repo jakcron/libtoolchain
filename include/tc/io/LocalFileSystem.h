@@ -23,9 +23,9 @@ namespace tc { namespace io {
 
 	/**
 	 * @class LocalStorage
-	 * @brief An IStorage wrapper around the existing OS FileSystem API.
+	 * @brief An IFileSystem wrapper around the existing OS FileSystem API.
 	 **/
-class LocalStorage : public tc::io::IStorage
+class LocalStorage : public tc::io::IFileSystem
 {
 public:
 		/// Default Constructor
@@ -37,7 +37,7 @@ public:
 
 		/** 
 		 * @brief Remove a file
-		 * @param[in] path A relative or absolute path for the file that the current @ref IStorage object will remove.
+		 * @param[in] path A relative or absolute path for the file that the current @ref IFileSystem object will remove.
 		 * 
 		 * @throw tc::UnauthorisedAccessException @p path specified a read-only file.
 		 * @throw tc::UnauthorisedAccessException @p path is a directory.
@@ -52,7 +52,7 @@ public:
 
 		/** 
 		 * @brief Open a file
-		 * @param[in] path A relative or absolute path for the file that the current @ref IStorage object will open an @ref IStream for.
+		 * @param[in] path A relative or absolute path for the file that the current @ref IFileSystem object will open an @ref IStream for.
 		 * @param[in] mode One of the enumeration values that determines how to open or create the file.
 		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the @ref IStream object. This also determines the values returned by the @ref IStream::canRead and @ref IStream::canWrite methods of the IStream object. @ref IStream::canSeek is true if path specifies a disk file.
 		 * @param[out] stream Pointer to IStream object to be instantiated
