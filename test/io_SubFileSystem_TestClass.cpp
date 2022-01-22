@@ -4,24 +4,24 @@
 #include "io_SubFileSystem_TestClass.h"
 #include "FileSystemTestUtil.h"
 
-void io_SubStorage_TestClass::runAllTests(void)
+void io_SubFileSystem_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::io::SubStorage] START" << std::endl;
-	testSubStorageRootPath();
+	std::cout << "[tc::io::SubFileSystem] START" << std::endl;
+	testSubFileSystemRootPath();
 	testCreateFile();
 	testOpenFile();
 	testRemoveFile();
 	testCreateDirectory();
 	testRemoveDirectory();
 	testGetDirectoryListing();
-	testNavigateUpSubStorageEscape();
-	testOpenFileOutsideSubStorage();
-	std::cout << "[tc::io::SubStorage] END" << std::endl;
+	testNavigateUpSubFileSystemEscape();
+	testOpenFileOutsideSubFileSystem();
+	std::cout << "[tc::io::SubFileSystem] END" << std::endl;
 }
 
-void io_SubStorage_TestClass::testSubStorageRootPath()
+void io_SubFileSystem_TestClass::testSubFileSystemRootPath()
 {
-	std::cout << "[tc::io::SubStorage] testSubStorageRootPath : " << std::flush;
+	std::cout << "[tc::io::SubFileSystem] testSubFileSystemRootPath : " << std::flush;
 	try
 	{
 		class DummyStorage : public StorageTestUtil::DummyStorageBase
@@ -43,7 +43,7 @@ void io_SubStorage_TestClass::testSubStorageRootPath()
 		try
 		{
 			// get substorage filesystem
-			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + sub_storage_relative_root);
+			tc::io::SubFileSystem sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + sub_storage_relative_root);
 
 			// save substorage real path
 			tc::io::Path sub_storage_real_root;
@@ -53,7 +53,7 @@ void io_SubStorage_TestClass::testSubStorageRootPath()
 			// check the substorage is generating the correct path
 			if (sub_storage_real_root != dummyio_curdir + sub_storage_relative_root)
 			{
-				throw tc::Exception("SubStorage root directory did not have expected absolute real path");
+				throw tc::Exception("SubFileSystem root directory did not have expected absolute real path");
 			}
 
 			std::cout << "PASS" << std::endl;
@@ -71,9 +71,9 @@ void io_SubStorage_TestClass::testSubStorageRootPath()
 	}
 }
 
-void io_SubStorage_TestClass::testCreateFile()
+void io_SubFileSystem_TestClass::testCreateFile()
 {
-	std::cout << "[tc::io::SubStorage] testCreateFile : " << std::flush;
+	std::cout << "[tc::io::SubFileSystem] testCreateFile : " << std::flush;
 	try
 	{
 		class DummyStorage : public StorageTestUtil::DummyStorageBase
@@ -104,7 +104,7 @@ void io_SubStorage_TestClass::testCreateFile()
 		try
 		{
 			// get substorage filesystem
-			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
+			tc::io::SubFileSystem sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
 
 			// attempt to create file
 			sub_storage.createFile(tc::io::Path("/a_dir/testfile"));
@@ -122,9 +122,9 @@ void io_SubStorage_TestClass::testCreateFile()
 	}
 }
 
-void io_SubStorage_TestClass::testOpenFile()
+void io_SubFileSystem_TestClass::testOpenFile()
 {
-	std::cout << "[tc::io::SubStorage] testOpenFile : " << std::flush;
+	std::cout << "[tc::io::SubFileSystem] testOpenFile : " << std::flush;
 	try
 	{
 		class DummyStorage : public StorageTestUtil::DummyStorageBase
@@ -159,7 +159,7 @@ void io_SubStorage_TestClass::testOpenFile()
 		try
 		{
 			// get substorage filesystem
-			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
+			tc::io::SubFileSystem sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
 
 			// attempt to open file
 			std::shared_ptr<tc::io::IStream> file;
@@ -178,9 +178,9 @@ void io_SubStorage_TestClass::testOpenFile()
 	}
 }
 
-void io_SubStorage_TestClass::testRemoveFile()
+void io_SubFileSystem_TestClass::testRemoveFile()
 {
-	std::cout << "[tc::io::SubStorage] testRemoveFile : " << std::flush;
+	std::cout << "[tc::io::SubFileSystem] testRemoveFile : " << std::flush;
 	try
 	{
 		class DummyStorage : public StorageTestUtil::DummyStorageBase
@@ -211,7 +211,7 @@ void io_SubStorage_TestClass::testRemoveFile()
 		try
 		{
 			// get substorage filesystem
-			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
+			tc::io::SubFileSystem sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
 
 			// attempt to delete file
 			sub_storage.removeFile(tc::io::Path("/a_dir/testfile"));
@@ -230,9 +230,9 @@ void io_SubStorage_TestClass::testRemoveFile()
 }
 
 
-void io_SubStorage_TestClass::testCreateDirectory()
+void io_SubFileSystem_TestClass::testCreateDirectory()
 {
-	std::cout << "[tc::io::SubStorage] testCreateDirectory : " << std::flush;
+	std::cout << "[tc::io::SubFileSystem] testCreateDirectory : " << std::flush;
 	try
 	{
 		class DummyStorage : public StorageTestUtil::DummyStorageBase
@@ -263,7 +263,7 @@ void io_SubStorage_TestClass::testCreateDirectory()
 		try
 		{
 			// get substorage filesystem
-			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
+			tc::io::SubFileSystem sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
 
 			// attempt to create directory
 			sub_storage.createDirectory(tc::io::Path("/a_dir/testdir/hey"));
@@ -281,9 +281,9 @@ void io_SubStorage_TestClass::testCreateDirectory()
 	}
 }
 
-void io_SubStorage_TestClass::testRemoveDirectory()
+void io_SubFileSystem_TestClass::testRemoveDirectory()
 {
-	std::cout << "[tc::io::SubStorage] testRemoveDirectory : " << std::flush;
+	std::cout << "[tc::io::SubFileSystem] testRemoveDirectory : " << std::flush;
 	try
 	{
 		class DummyStorage : public StorageTestUtil::DummyStorageBase
@@ -314,7 +314,7 @@ void io_SubStorage_TestClass::testRemoveDirectory()
 		try
 		{
 			// get substorage filesystem
-			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
+			tc::io::SubFileSystem sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
 
 			// attempt to remove directory
 			sub_storage.removeDirectory(tc::io::Path("/a_dir/testdir/hey"));
@@ -332,9 +332,9 @@ void io_SubStorage_TestClass::testRemoveDirectory()
 	}
 }
 
-void io_SubStorage_TestClass::testGetDirectoryListing()
+void io_SubFileSystem_TestClass::testGetDirectoryListing()
 {
-	std::cout << "[tc::io::SubStorage] testGetDirectoryListing : " << std::flush;
+	std::cout << "[tc::io::SubFileSystem] testGetDirectoryListing : " << std::flush;
 	try
 	{
 		class DummyStorage : public StorageTestUtil::DummyStorageBase
@@ -369,7 +369,7 @@ void io_SubStorage_TestClass::testGetDirectoryListing()
 		try
 		{
 			// get substorage filesystem
-			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
+			tc::io::SubFileSystem sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + testdir_path);
 
 			// save substorage dir info
 			tc::io::sDirectoryListing sb_dir_info;
@@ -419,9 +419,9 @@ void io_SubStorage_TestClass::testGetDirectoryListing()
 }
 
 
-void io_SubStorage_TestClass::testNavigateUpSubStorageEscape()
+void io_SubFileSystem_TestClass::testNavigateUpSubFileSystemEscape()
 {
-	std::cout << "[tc::io::SubStorage] testNavigateUpSubStorageEscape : " << std::flush;
+	std::cout << "[tc::io::SubFileSystem] testNavigateUpSubFileSystemEscape : " << std::flush;
 	try
 	{
 		class DummyStorage : public StorageTestUtil::DummyStorageBase
@@ -459,7 +459,7 @@ void io_SubStorage_TestClass::testNavigateUpSubStorageEscape()
 		try
 		{
 			// get substorage filesystem
-			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + sub_storage_relative_root);
+			tc::io::SubFileSystem sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + sub_storage_relative_root);
 
 			// get info about current directory
 			tc::io::sDirectoryListing dir_info;
@@ -467,7 +467,7 @@ void io_SubStorage_TestClass::testNavigateUpSubStorageEscape()
 			
 			if (dir_info.abs_path != tc::io::Path("/"))
 			{
-				throw tc::Exception("SubStorage directory path not as expected");
+				throw tc::Exception("SubFileSystem directory path not as expected");
 			}
 
 			if (storage.getLastUsedPath() != dummyio_curdir + sub_storage_relative_root)
@@ -488,9 +488,9 @@ void io_SubStorage_TestClass::testNavigateUpSubStorageEscape()
 	}
 }
 
-void io_SubStorage_TestClass::testOpenFileOutsideSubStorage()
+void io_SubFileSystem_TestClass::testOpenFileOutsideSubFileSystem()
 {
-	std::cout << "[tc::io::SubStorage] testOpenFileOutsideSubStorage : " << std::flush;
+	std::cout << "[tc::io::SubFileSystem] testOpenFileOutsideSubFileSystem : " << std::flush;
 	try
 	{
 		class DummyStorage : public StorageTestUtil::DummyStorageBase
@@ -531,7 +531,7 @@ void io_SubStorage_TestClass::testOpenFileOutsideSubStorage()
 		// test accessing file outside of substorage
 		try {
 			// get substorage filesystem
-			tc::io::SubStorage sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + sub_storage_relative_root);
+			tc::io::SubFileSystem sub_storage(std::make_shared<DummyStorage>(storage), dummyio_curdir + sub_storage_relative_root);
 			  
 			// try to open the file just outside the substorage
 			sub_storage.setWorkingDirectory(tc::io::Path("/"));

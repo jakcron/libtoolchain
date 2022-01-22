@@ -1,16 +1,16 @@
 #include <tc/io/SubFileSystem.h>
 
-const std::string tc::io::SubStorage::kClassName = "tc::io::SubStorage";
+const std::string tc::io::SubFileSystem::kClassName = "tc::io::SubFileSystem";
 
-tc::io::SubStorage::SubStorage() :
+tc::io::SubFileSystem::SubFileSystem() :
 	mBaseStorage(),
 	mBaseStoragePath(),
 	mSubStoragePath()
 {
 }
 
-tc::io::SubStorage::SubStorage(const std::shared_ptr<tc::io::IFileSystem>& storage, const tc::io::Path& base_path) :
-	SubStorage()
+tc::io::SubFileSystem::SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>& storage, const tc::io::Path& base_path) :
+	SubFileSystem()
 {
 	// copy IFileSystem ptr
 	mBaseStorage = storage;
@@ -40,12 +40,12 @@ tc::io::SubStorage::SubStorage(const std::shared_ptr<tc::io::IFileSystem>& stora
 	mBaseStorage->setWorkingDirectory(current_path);
 }
 
-tc::ResourceStatus tc::io::SubStorage::state()
+tc::ResourceStatus tc::io::SubFileSystem::state()
 {
 	return mBaseStorage.get() ? mBaseStorage->state() : tc::ResourceStatus(RESFLAG_NOINIT);
 }
 
-void tc::io::SubStorage::dispose()
+void tc::io::SubFileSystem::dispose()
 {
 	if (mBaseStorage.get() != nullptr)
 		mBaseStorage->dispose();
@@ -54,7 +54,7 @@ void tc::io::SubStorage::dispose()
 	(mSubStoragePath).clear();
 }
 
-void tc::io::SubStorage::createFile(const tc::io::Path& path)
+void tc::io::SubFileSystem::createFile(const tc::io::Path& path)
 {
 	if (mBaseStorage == nullptr)
 	{
@@ -69,7 +69,7 @@ void tc::io::SubStorage::createFile(const tc::io::Path& path)
 	mBaseStorage->createFile(real_path);
 }
 
-void tc::io::SubStorage::removeFile(const tc::io::Path& path)
+void tc::io::SubFileSystem::removeFile(const tc::io::Path& path)
 {
 	if (mBaseStorage == nullptr)
 	{
@@ -84,7 +84,7 @@ void tc::io::SubStorage::removeFile(const tc::io::Path& path)
 	mBaseStorage->removeFile(real_path);
 }
 
-void tc::io::SubStorage::openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream)
+void tc::io::SubFileSystem::openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream)
 {
 	if (mBaseStorage == nullptr)
 	{
@@ -99,7 +99,7 @@ void tc::io::SubStorage::openFile(const tc::io::Path& path, tc::io::FileMode mod
 	return mBaseStorage->openFile(real_path, mode, access, stream);
 }
 
-void tc::io::SubStorage::createDirectory(const tc::io::Path& path)
+void tc::io::SubFileSystem::createDirectory(const tc::io::Path& path)
 {
 	if (mBaseStorage == nullptr)
 	{
@@ -114,7 +114,7 @@ void tc::io::SubStorage::createDirectory(const tc::io::Path& path)
 	mBaseStorage->createDirectory(real_path);
 }
 
-void tc::io::SubStorage::removeDirectory(const tc::io::Path& path)
+void tc::io::SubFileSystem::removeDirectory(const tc::io::Path& path)
 {
 	if (mBaseStorage == nullptr)
 	{
@@ -129,7 +129,7 @@ void tc::io::SubStorage::removeDirectory(const tc::io::Path& path)
 	mBaseStorage->removeDirectory(real_path);
 }
 
-void tc::io::SubStorage::getWorkingDirectory(tc::io::Path& path)
+void tc::io::SubFileSystem::getWorkingDirectory(tc::io::Path& path)
 {
 	if (mBaseStorage == nullptr)
 	{
@@ -139,7 +139,7 @@ void tc::io::SubStorage::getWorkingDirectory(tc::io::Path& path)
 	path = mSubStoragePath;
 }
 
-void tc::io::SubStorage::setWorkingDirectory(const tc::io::Path& path)
+void tc::io::SubFileSystem::setWorkingDirectory(const tc::io::Path& path)
 {
 	if (mBaseStorage == nullptr)
 	{
@@ -157,7 +157,7 @@ void tc::io::SubStorage::setWorkingDirectory(const tc::io::Path& path)
 	realPathToSubPath(real_path, mSubStoragePath);
 }
 
-void tc::io::SubStorage::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
+void tc::io::SubFileSystem::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
 {
 	if (mBaseStorage == nullptr)
 	{
@@ -183,7 +183,7 @@ void tc::io::SubStorage::getDirectoryListing(const tc::io::Path& path, sDirector
 	info = real_info;
 }
 
-void tc::io::SubStorage::subPathToRealPath(const tc::io::Path& substorage_path, tc::io::Path& real_path)
+void tc::io::SubFileSystem::subPathToRealPath(const tc::io::Path& substorage_path, tc::io::Path& real_path)
 {
 	tc::io::Path substorage_current_dir;
 	tc::io::Path substorage_path_;
@@ -208,7 +208,7 @@ void tc::io::SubStorage::subPathToRealPath(const tc::io::Path& substorage_path, 
 	real_path = mBaseStoragePath + safe_substorage_path;
 }
 
-void tc::io::SubStorage::realPathToSubPath(const tc::io::Path& real_path, tc::io::Path& substorage_path)
+void tc::io::SubFileSystem::realPathToSubPath(const tc::io::Path& real_path, tc::io::Path& substorage_path)
 {
 	// get iterator for real path
 	tc::io::Path::const_iterator real_path_itr = real_path.begin();
@@ -238,7 +238,7 @@ void tc::io::SubStorage::realPathToSubPath(const tc::io::Path& real_path, tc::io
 	}
 }
 
-void tc::io::SubStorage::sanitiseInputPath(const tc::io::Path& unsafe_path, tc::io::Path& safe_path) const
+void tc::io::SubFileSystem::sanitiseInputPath(const tc::io::Path& unsafe_path, tc::io::Path& safe_path) const
 {
 	//for (size_t i = 0; i < unsafe_path.getPathElementList().size(); i++)
 	for (tc::io::Path::const_iterator itr = unsafe_path.begin(); itr != unsafe_path.end(); itr++)

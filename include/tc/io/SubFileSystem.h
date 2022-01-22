@@ -1,6 +1,6 @@
 	/**
 	 * @file SubFileSystem.h
-	 * @brief Declaration of tc::io::SubStorage
+	 * @brief Declaration of tc::io::SubFileSystem
 	 * @author Jack (jakcron)
 	 * @version 0.4
 	 * @date 2020/01/26
@@ -16,21 +16,21 @@
 namespace tc { namespace io {
 
 	/**
-	 * @class SubStorage
+	 * @class SubFileSystem
 	 * @brief A wrapper around an existing IFileSystem object that exposes a subset of the base IFileSystem directory tree.
 	 **/
-class SubStorage : public tc::io::IFileSystem
+class SubFileSystem : public tc::io::IFileSystem
 {
 public:
 
 		/**
 		 * @brief Default constructor
-		 * @post This will create an unusable SubStorage, it will have to be assigned from a valid SubStorage object to be usable.
+		 * @post This will create an unusable SubFileSystem, it will have to be assigned from a valid SubFileSystem object to be usable.
 		 **/
-	SubStorage();
+	SubFileSystem();
 
 		/** 
-		 * @brief Create SubStorage
+		 * @brief Create SubFileSystem
 		 * 
 		 * @param[in] storage The base IFileSystem object which this sub storage will derive from.
 		 * @param[in] base_path The path to the subdirectory used as the substream root directory.
@@ -38,7 +38,7 @@ public:
 		 * @throw tc::ArgumentNullException @p storage is @a nullptr.
 		 * @throw tc::InvalidOperationException @p storage was not in a ready state
 		 **/
-	SubStorage(const std::shared_ptr<tc::io::IFileSystem>& storage, const tc::io::Path& base_path);
+	SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>& storage, const tc::io::Path& base_path);
 
 	tc::ResourceStatus state();
 	void dispose();
