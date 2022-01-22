@@ -181,7 +181,13 @@ void tc::io::VirtualFileSystem::DefaultPathResolver::resolvePath(const tc::io::P
 		if (*itr == ".")
 			continue;
 		else if (*itr == "..")
-			tmp.pop_back();
+		{
+			// ".." is the parent directory, so if there are path elements then we remove from the back to "go to the parent directory"
+			if (!tmp.empty())
+				tmp.pop_back();
+			else
+				continue;
+		}
 		else
 			tmp.push_back(*itr);
 	}
