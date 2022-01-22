@@ -81,7 +81,7 @@ void tc::cli::OptionParser::processOptions(const std::vector<std::string>& args)
 			{
 				//std::cout << "the option looks like a compound opt=param" << std::endl;
 				tmp_opt = itr->substr(0, equalsign_pos);
-				tmp_param = itr->substr(equalsign_pos + 1, itr->length() - (equalsign_pos + 1));
+				tmp_param = itr->substr(equalsign_pos + 1, std::string::npos);
 				//std::cout << " > opt :   " << tmp_opt << std::endl;
 				//std::cout << " > param : " << tmp_param << std::endl;
 				// --path=here
