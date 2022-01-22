@@ -1,13 +1,15 @@
 	/**
 	 * @file    OptionParser.h
 	 * @brief   Declaration of tc::cli::OptionParser
-	 * @date    2021/07/13
+	 * @date    2022/01/22
 	 * @authors Jack (jakcron)
 	 */
 #pragma once
 #include <vector>
 #include <map>
+#include <list>
 #include <string>
+#include <regex>
 #include <memory>
 #include <tc/ArgumentException.h>
 #include <tc/ArgumentNullException.h>
@@ -37,15 +39,16 @@ namespace tc { namespace cli {
 	 * struct UserOpt
 	 * {
 	 *    std::string sku_code;
+	 * 	  std::map<std::string, std::string> environment_vars;
 	 * };
 	 * @endcode 
 	 * 
 	 * And the command-line is intended be formatted as follows:
 	 * @code
-	 * someprogram -sku <your SKU code here>
+	 * someprogram -sku <your SKU code here> -DVAR1=<value for variable key VAR1 here> -DVAR2=<value for variable key VAR2 here>
 	 * @endcode
 	 * 
-	 * Then a possible IOptionHandler for "-sku <your SKU code here>" could be implemented as follows:
+	 * A possible IOptionHandler for "-sku <your SKU code here>" could be implemented as follows:
 	 * @code
 	 * class SkuOptionHandler : public tc::cli::OptionParser::IOptionHandler
 	 * {
@@ -53,7 +56,8 @@ namespace tc { namespace cli {
 	 * 	// The constructor is where you link the object to the state you want to modify in the call-back
 	 * 	SkuOptionHandler(UserOpt& user_opt) : 
 	 * 		mUserOpt(user_opt),
-	 * 		mOptStrings({"-sku"})
+	 * 		mOptStrings({"-sku"}), // here we define an array of literal options to match against
+	 *		mOptRegex()
 	 * 	{}
 	 * 
 	 * 	// OptionParser uses this to determine which IOptionHandler to use, so this should return all aliases of the option
@@ -61,6 +65,12 @@ namespace tc { namespace cli {
 	 * 	{
 	 * 		return mOptStrings;
 	 * 	}
+	 *
+	 *	// OptionParser uses this to determine which IOptionHandler to use, so this should return all regex patterns that will match for the option
+	 * 	const std::vector<std::string>& getOptionRegexPatterns() const
+	 * 	{
+	 *		return mOptRegex;
+	 *	}
 	 * 
 	 * 	// This is what is called when OptionParser defers to IOptionHandler to process the option and any arguments
 	 * 	// In your implementation this is where you validate the data and modify your linked state data accordingly
@@ -77,6 +87,50 @@ namespace tc { namespace cli {
 	 * private:
 	 * 	UserOpt& mUserOpt;
 	 * 	std::vector<std::string> mOptStrings;
+	 *  std::vector<std::string> mOptRegex;
+	 * };
+	 * @endcode
+	 *
+	 * A possible IOptionHandler for generic "-DKEY=VALUE" could be implemented as follows:
+	 * @code
+	 * class KeyValueOptionHandler : public tc::cli::OptionParser::IOptionHandler
+	 * {
+	 * public:
+	 * 	// The constructor is where you link the object to the state you want to modify in the call-back
+	 * 	KeyValueOptionHandler(UserOpt& user_opt) : 
+	 * 		mUserOpt(user_opt),
+	 * 		mOptStrings(),
+	 * 		mOptRegex({"(-D)(.+)"}) // here we define a REGEX pattern to match the beginning of the option "-D" followed by the key.
+	 * 	{}
+	 * 
+	 * 	// OptionParser uses this to determine which IOptionHandler to use, so this should return all aliases of the option
+	 * 	const std::vector<std::string>& getOptionStrings() const
+	 * 	{
+	 * 		return mOptStrings;
+	 * 	}
+	 * 
+	 *	// OptionParser uses this to determine which IOptionHandler to use, so this should return all regex patterns that will match for the option
+	 * 	const std::vector<std::string>& getOptionRegexPatterns() const
+	 * 	{
+	 * 		return mOptRegex;
+	 *	}
+	 *
+	 * 	// This is what is called when OptionParser defers to IOptionHandler to process the option and any arguments
+	 * 	// In your implementation this is where you validate the data and modify your linked state data accordingly
+	 * 	void processOption(const std::string& option, const std::vector<std::string>& params)
+	 * 	{
+	 * 		// validate number of paramaters (in this case you we only want 1 parameter)
+	 * 		if (params.size() != 1)
+	 * 		{
+	 * 			throw tc::ArgumentOutOfRangeException("Option \"" + option + "\" requires a parameter.");
+	 * 		}
+	 * 
+	 * 		mUserOpt.environment_vars.insert(std::pair<std::string>(option.substr(2), params[0]));
+	 * 	}
+	 * private:
+	 * 	UserOpt& mUserOpt;
+	 * 	std::vector<std::string> mOptStrings;
+	 *  std::vector<std::string> mOptRegex;
 	 * };
 	 * @endcode
 	 * 
@@ -92,6 +146,12 @@ namespace tc { namespace cli {
 	 * 	const std::vector<std::string>& getOptionStrings() const
 	 * 	{
 	 * 		throw tc::InvalidOperationException("getOptionStrings() not defined for UnkOptionHandler.");
+	 * 	}
+	 *
+	 * 	// this throws an exception as it should not be called
+	 * 	const std::vector<std::string>& getOptionRegexPatterns() const
+	 * 	{
+	 * 		throw tc::InvalidOperationException("getOptionRegexPatterns() not defined for UnkOptionHandler.");
 	 * 	}
 	 * 
 	 * 	void processOption(const std::string& option, const std::vector<std::string>& params)
@@ -111,6 +171,9 @@ namespace tc { namespace cli {
 	 * 
 	 * 	// register the option handler for "-sku"
 	 * 	opt_parser.registerOptionHandler(std::shared_ptr<SkuOptionHandler>(new SkuOptionHandler(user_opt)));
+	 *
+	 * 	// register the option handler for "-DKEY=VALUE"
+	 * 	opt_parser.registerOptionHandler(std::shared_ptr<KeyValueOptionHandler>(new KeyValueOptionHandler(user_opt)));
 	 * 
 	 * 	// register the unknown option handler
 	 * 	opt_parser.registerUnrecognisedOptionHandler(std::shared_ptr<UnkOptionHandler>(new UnkOptionHandler()));
@@ -119,8 +182,13 @@ namespace tc { namespace cli {
 	 * 	opt_parser.processOptions(args, 1, args.size()-1);
 	 * 
 	 * 	// user_opt.sku_type will now be populated if it was set via command-line with "-sku"
+	 * 	// user_opt.environment_vars will now be populated if it was set via command-line with "-DKEY=VALUE" style options.
 	 * 
 	 * 	std::cout << "SKUCODE: \"" << user_opt.sku_code << "\"" << std::endl;
+	 * 	for (auto itr = user_opt.environment_vars.begin(); itr != environment_vars.end(); itr++)
+	 * 	{
+	 * 		std::cout << "EnvVar: [" << itr->first << "] -> [" << itr->second << "]" << std::endl;
+	 * 	}
 	 * 
 	 * 	// finish program
 	 * 	return 0;
@@ -146,6 +214,11 @@ public:
 			 * @brief Returns a vector of aliases for the option this will handle.
 			 */
 		virtual const std::vector<std::string>& getOptionStrings() const = 0;
+
+			/**
+			 * @brief Returns a vector of option regex patterns that this will handle.
+			 */
+		virtual const std::vector<std::string>& getOptionRegexPatterns() const = 0;
 
 			/**
 			 * @brief Processes command-line option and any parameters.
@@ -193,7 +266,8 @@ private:
 	std::string mModuleLabel;
 
 	void handleOption(const std::string& opt, const std::vector<std::string>& params);
-	std::map<std::string, std::shared_ptr<IOptionHandler>> mOptions;
+	std::map<std::string, std::shared_ptr<IOptionHandler>> mOptionaAliasMap;
+	std::list<std::pair<std::regex, std::shared_ptr<IOptionHandler>>> mOptionRegexList;
 	std::shared_ptr<IOptionHandler> mUnkOptHandler;
 };
 

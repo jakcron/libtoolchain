@@ -5,7 +5,7 @@
 
 tc::cli::OptionParser::OptionParser() :
 	mModuleLabel("OptionParser"),
-	mOptions(),
+	mOptionaAliasMap(),
 	mUnkOptHandler(nullptr)
 {
 }
@@ -20,7 +20,12 @@ void tc::cli::OptionParser::registerOptionHandler(const std::shared_ptr<IOptionH
 
 	for (auto itr = handler->getOptionStrings().begin(); itr != handler->getOptionStrings().end(); itr++)
 	{
-		mOptions.insert(std::pair<std::string, std::shared_ptr<IOptionHandler>>(*itr, handler));
+		mOptionaAliasMap.insert(std::pair<std::string, std::shared_ptr<IOptionHandler>>(*itr, handler));
+	}
+
+	for (auto itr = handler->getOptionRegexPatterns().begin(); itr != handler->getOptionRegexPatterns().end(); itr++)
+	{
+		mOptionRegexList.push_back(std::pair<std::regex, std::shared_ptr<IOptionHandler>>(std::regex(*itr), handler));
 	}
 }
 
@@ -146,18 +151,33 @@ void tc::cli::OptionParser::processOptions(const std::vector<std::string>& args,
 
 void tc::cli::OptionParser::handleOption(const std::string& opt, const std::vector<std::string>& params)
 {
-	auto itr = mOptions.find(opt);
-	if (itr == mOptions.end())
+	// attempt to locate a literal alias
+	auto aliasItr = mOptionaAliasMap.find(opt);
+	if (aliasItr != mOptionaAliasMap.end())
 	{
-		if (mUnkOptHandler != nullptr)
+		aliasItr->second->processOption(opt, params);
+		return;
+	}
+
+	// attempt to pattern match
+	for (auto regexItr = mOptionRegexList.begin(); regexItr != mOptionRegexList.end(); regexItr++)
+	{
+		if (std::regex_match(opt, regexItr->first))
 		{
-			mUnkOptHandler->processOption(opt, params);
-		}
-		else
-		{
-			//throw tc::ArgumentException(mModuleLabel, fmt::format("Option \"{}\" is not recognised.", (*itr)));
-			throw tc::ArgumentException(mModuleLabel, "Option is not recognised.");
+			regexItr->second->processOption(opt, params);
+			return;
 		}
 	}
-	itr->second->processOption(opt, params);
+
+	// attempt to use unknown option handler 
+	if (mUnkOptHandler != nullptr)
+	{
+		mUnkOptHandler->processOption(opt, params);
+		return;
+	}
+	
+	// if no handler is located, throw exception
+
+	//throw tc::ArgumentException(mModuleLabel, fmt::format("Option \"{}\" is not recognised.", (opt)));
+	throw tc::ArgumentException(mModuleLabel, "Option is not recognised.");
 }
