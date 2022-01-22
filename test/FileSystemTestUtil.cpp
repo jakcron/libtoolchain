@@ -1,3 +1,3 @@
 #include "FileSystemTestUtil.h"
 
-const std::string StorageTestUtil::DummyStorageBase::kClassName = "DummyStorageBase";
+const std::string FileSystemTestUtil::DummyStorageBase::kClassName = "DummyStorageBase";

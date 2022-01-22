@@ -3,7 +3,7 @@
 #include <tc/io.h>
 #include <tc/NotImplementedException.h>
 
-class StorageTestUtil
+class FileSystemTestUtil
 {
 public:
 	class DummyStorageBase : public tc::io::IFileSystem

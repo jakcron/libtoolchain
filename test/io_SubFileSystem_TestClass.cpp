@@ -24,7 +24,7 @@ void io_SubFileSystem_TestClass::testSubFileSystemRootPath()
 	std::cout << "[tc::io::SubFileSystem] testSubFileSystemRootPath : " << std::flush;
 	try
 	{
-		class DummyStorage : public StorageTestUtil::DummyStorageBase
+		class DummyStorage : public FileSystemTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -76,7 +76,7 @@ void io_SubFileSystem_TestClass::testCreateFile()
 	std::cout << "[tc::io::SubFileSystem] testCreateFile : " << std::flush;
 	try
 	{
-		class DummyStorage : public StorageTestUtil::DummyStorageBase
+		class DummyStorage : public FileSystemTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -127,7 +127,7 @@ void io_SubFileSystem_TestClass::testOpenFile()
 	std::cout << "[tc::io::SubFileSystem] testOpenFile : " << std::flush;
 	try
 	{
-		class DummyStorage : public StorageTestUtil::DummyStorageBase
+		class DummyStorage : public FileSystemTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -183,7 +183,7 @@ void io_SubFileSystem_TestClass::testRemoveFile()
 	std::cout << "[tc::io::SubFileSystem] testRemoveFile : " << std::flush;
 	try
 	{
-		class DummyStorage : public StorageTestUtil::DummyStorageBase
+		class DummyStorage : public FileSystemTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -235,7 +235,7 @@ void io_SubFileSystem_TestClass::testCreateDirectory()
 	std::cout << "[tc::io::SubFileSystem] testCreateDirectory : " << std::flush;
 	try
 	{
-		class DummyStorage : public StorageTestUtil::DummyStorageBase
+		class DummyStorage : public FileSystemTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -286,7 +286,7 @@ void io_SubFileSystem_TestClass::testRemoveDirectory()
 	std::cout << "[tc::io::SubFileSystem] testRemoveDirectory : " << std::flush;
 	try
 	{
-		class DummyStorage : public StorageTestUtil::DummyStorageBase
+		class DummyStorage : public FileSystemTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -337,7 +337,7 @@ void io_SubFileSystem_TestClass::testGetDirectoryListing()
 	std::cout << "[tc::io::SubFileSystem] testGetDirectoryListing : " << std::flush;
 	try
 	{
-		class DummyStorage : public StorageTestUtil::DummyStorageBase
+		class DummyStorage : public FileSystemTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
@@ -424,7 +424,7 @@ void io_SubFileSystem_TestClass::testNavigateUpSubFileSystemEscape()
 	std::cout << "[tc::io::SubFileSystem] testNavigateUpSubFileSystemEscape : " << std::flush;
 	try
 	{
-		class DummyStorage : public StorageTestUtil::DummyStorageBase
+		class DummyStorage : public FileSystemTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage() :
@@ -493,7 +493,7 @@ void io_SubFileSystem_TestClass::testOpenFileOutsideSubFileSystem()
 	std::cout << "[tc::io::SubFileSystem] testOpenFileOutsideSubFileSystem : " << std::flush;
 	try
 	{
-		class DummyStorage : public StorageTestUtil::DummyStorageBase
+		class DummyStorage : public FileSystemTestUtil::DummyStorageBase
 		{
 		public:
 			DummyStorage()
