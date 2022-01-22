@@ -108,7 +108,7 @@ int main(int argc, char** argv)
 	runTest(new bn_bitarrayByteLEBitLE_TestClass());
 	runTest(new Optional_TestClass());
 	runTest(new io_Path_TestClass());
-	runTest(new io_LocalStorage_TestClass());
+	runTest(new io_LocalFileSystem_TestClass());
 	runTest(new io_FileStream_TestClass());
 	runTest(new io_MemoryStream_TestClass());
 	runTest(new io_SubStream_TestClass());

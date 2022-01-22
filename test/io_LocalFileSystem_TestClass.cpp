@@ -5,15 +5,15 @@
 
 #include <tc.h>
 
-std::string io_LocalStorage_TestClass::kDirPath = "./testdir";
-std::string io_LocalStorage_TestClass::kUtf8DirPath = "./ЀЁЂЃЄЅテスト/";
-std::string io_LocalStorage_TestClass::kAsciiFilePath = "LocalFileTest.bin";
-std::string io_LocalStorage_TestClass::kUtf8TestPath = "ЀЁЂЃЄЅ-מבחן-тест-テスト.bin";
-std::string io_LocalStorage_TestClass::kNotExistFilePath = "ThisDoesNotExist.bin";
+std::string io_LocalFileSystem_TestClass::kDirPath = "./testdir";
+std::string io_LocalFileSystem_TestClass::kUtf8DirPath = "./ЀЁЂЃЄЅテスト/";
+std::string io_LocalFileSystem_TestClass::kAsciiFilePath = "LocalFileTest.bin";
+std::string io_LocalFileSystem_TestClass::kUtf8TestPath = "ЀЁЂЃЄЅ-מבחן-тест-テスト.bin";
+std::string io_LocalFileSystem_TestClass::kNotExistFilePath = "ThisDoesNotExist.bin";
 
-void io_LocalStorage_TestClass::runAllTests(void)
+void io_LocalFileSystem_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::io::LocalStorage] START" << std::endl;
+	std::cout << "[tc::io::LocalFileSystem] START" << std::endl;
 	test_CreateFile_NotExist();
 	test_CreateFile_DoesExist();
 	test_CreateFile_UnicodePath();
@@ -35,15 +35,15 @@ void io_LocalStorage_TestClass::runAllTests(void)
 	test_ChangeWorkingDirectory_DoesExist();
 	test_ChangeWorkingDirectory_NotExist();
 	test_ChangeWorkingDirectory_UnicodePath();
-	std::cout << "[tc::io::LocalStorage] END" << std::endl;
+	std::cout << "[tc::io::LocalFileSystem] END" << std::endl;
 }
 
-void io_LocalStorage_TestClass::test_CreateFile_NotExist()
+void io_LocalFileSystem_TestClass::test_CreateFile_NotExist()
 {
-	std::cout << "[tc::io::LocalStorage] test_CreateFile_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_CreateFile_NotExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		local_storage.createFile(kAsciiFilePath);
 
@@ -55,12 +55,12 @@ void io_LocalStorage_TestClass::test_CreateFile_NotExist()
 	}
 }
 
-void io_LocalStorage_TestClass::test_CreateFile_DoesExist()
+void io_LocalFileSystem_TestClass::test_CreateFile_DoesExist()
 {
-	std::cout << "[tc::io::LocalStorage] test_CreateFile_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_CreateFile_DoesExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		local_storage.createFile(kAsciiFilePath);
 
@@ -72,12 +72,12 @@ void io_LocalStorage_TestClass::test_CreateFile_DoesExist()
 	}
 }
 
-void io_LocalStorage_TestClass::test_CreateFile_UnicodePath()
+void io_LocalFileSystem_TestClass::test_CreateFile_UnicodePath()
 {
-	std::cout << "[tc::io::LocalStorage] test_CreateFile_UnicodePath : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_CreateFile_UnicodePath : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		local_storage.createFile(kUtf8TestPath);
 
@@ -89,12 +89,12 @@ void io_LocalStorage_TestClass::test_CreateFile_UnicodePath()
 	}
 }
 
-void io_LocalStorage_TestClass::test_RemoveFile_DoesExist()
+void io_LocalFileSystem_TestClass::test_RemoveFile_DoesExist()
 {
-	std::cout << "[tc::io::LocalStorage] test_RemoveFile_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveFile_DoesExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		local_storage.removeFile(kAsciiFilePath);
 
@@ -106,12 +106,12 @@ void io_LocalStorage_TestClass::test_RemoveFile_DoesExist()
 	}
 }
 
-void io_LocalStorage_TestClass::test_RemoveFile_NotExist()
+void io_LocalFileSystem_TestClass::test_RemoveFile_NotExist()
 {
-	std::cout << "[tc::io::LocalStorage] test_RemoveFile_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveFile_NotExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		local_storage.removeFile(kNotExistFilePath);
 		std::cout << "FAIL (Did not throw exception when stream was not present on FS)" << std::endl;
@@ -122,12 +122,12 @@ void io_LocalStorage_TestClass::test_RemoveFile_NotExist()
 	}
 }
 
-void io_LocalStorage_TestClass::test_RemoveFile_UnicodePath()
+void io_LocalFileSystem_TestClass::test_RemoveFile_UnicodePath()
 {
-	std::cout << "[tc::io::LocalStorage] test_RemoveFile_UnicodePath : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveFile_UnicodePath : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		local_storage.removeFile(kUtf8TestPath);
 
@@ -139,12 +139,12 @@ void io_LocalStorage_TestClass::test_RemoveFile_UnicodePath()
 	}
 }
 
-void io_LocalStorage_TestClass::test_CreateDirectory_NotExist()
+void io_LocalFileSystem_TestClass::test_CreateDirectory_NotExist()
 {
-	std::cout << "[tc::io::LocalStorage] test_CreateDirectory_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_CreateDirectory_NotExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		local_storage.createDirectory(kDirPath);
 		std::cout << "PASS" << std::endl;
@@ -155,12 +155,12 @@ void io_LocalStorage_TestClass::test_CreateDirectory_NotExist()
 	}
 }
 
-void io_LocalStorage_TestClass::test_CreateDirectory_DoesExist()
+void io_LocalFileSystem_TestClass::test_CreateDirectory_DoesExist()
 {
-	std::cout << "[tc::io::LocalStorage] test_CreateDirectory_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_CreateDirectory_DoesExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		local_storage.createDirectory(kDirPath);
 		std::cout << "PASS" << std::endl;
@@ -171,12 +171,12 @@ void io_LocalStorage_TestClass::test_CreateDirectory_DoesExist()
 	}
 }
 
-void io_LocalStorage_TestClass::test_CreateDirectory_UnicodePath()
+void io_LocalFileSystem_TestClass::test_CreateDirectory_UnicodePath()
 {
-	std::cout << "[tc::io::LocalStorage] test_CreateDirectory_UnicodePath : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_CreateDirectory_UnicodePath : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		local_storage.createDirectory(kUtf8DirPath);
 		std::cout << "PASS" << std::endl;
@@ -187,12 +187,12 @@ void io_LocalStorage_TestClass::test_CreateDirectory_UnicodePath()
 	}
 }
 
-void io_LocalStorage_TestClass::test_RemoveDirectory_DoesExist()
+void io_LocalFileSystem_TestClass::test_RemoveDirectory_DoesExist()
 {
-	std::cout << "[tc::io::LocalStorage] test_RemoveDirectory_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveDirectory_DoesExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		local_storage.removeDirectory(kDirPath);
 		std::cout << "PASS" << std::endl;
@@ -203,12 +203,12 @@ void io_LocalStorage_TestClass::test_RemoveDirectory_DoesExist()
 	}
 }
 
-void io_LocalStorage_TestClass::test_RemoveDirectory_NotExist()
+void io_LocalFileSystem_TestClass::test_RemoveDirectory_NotExist()
 {
-	std::cout << "[tc::io::LocalStorage] test_RemoveDirectory_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveDirectory_NotExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		local_storage.removeDirectory(kDirPath);
 		std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
@@ -219,12 +219,12 @@ void io_LocalStorage_TestClass::test_RemoveDirectory_NotExist()
 	}
 }
 
-void io_LocalStorage_TestClass::test_RemoveDirectory_UnicodePath()
+void io_LocalFileSystem_TestClass::test_RemoveDirectory_UnicodePath()
 {
-	std::cout << "[tc::io::LocalStorage] test_RemoveDirectory_UnicodePath : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveDirectory_UnicodePath : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		local_storage.removeDirectory(kUtf8DirPath);
 		std::cout << "PASS" << std::endl;
@@ -235,12 +235,12 @@ void io_LocalStorage_TestClass::test_RemoveDirectory_UnicodePath()
 	}
 }
 
-void io_LocalStorage_TestClass::test_RemoveDirectory_HasChildren()
+void io_LocalFileSystem_TestClass::test_RemoveDirectory_HasChildren()
 {
-	std::cout << "[tc::io::LocalStorage] test_RemoveDirectory_HasChildren : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveDirectory_HasChildren : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 	
 		tc::io::Path dir_child_path = tc::io::Path(kDirPath) + tc::io::Path(kUtf8DirPath);
 		tc::io::Path stream_child_path = tc::io::Path(kDirPath) + tc::io::Path(kAsciiFilePath);
@@ -268,12 +268,12 @@ void io_LocalStorage_TestClass::test_RemoveDirectory_HasChildren()
 	}
 }
 
-void io_LocalStorage_TestClass::test_RemoveDirectory_NotDirectoryActuallyFile()
+void io_LocalFileSystem_TestClass::test_RemoveDirectory_NotDirectoryActuallyFile()
 {
-	std::cout << "[tc::io::LocalStorage] test_RemoveDirectory_NotDirectoryActuallyFile : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_RemoveDirectory_NotDirectoryActuallyFile : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 		try 
 		{
 			local_storage.createFile(kAsciiFilePath);
@@ -293,12 +293,12 @@ void io_LocalStorage_TestClass::test_RemoveDirectory_NotDirectoryActuallyFile()
 	}
 }
 
-void io_LocalStorage_TestClass::test_GetDirectoryListing_DoesExist()
+void io_LocalFileSystem_TestClass::test_GetDirectoryListing_DoesExist()
 {
-	std::cout << "[tc::io::LocalStorage] test_GetDirectoryListing_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_GetDirectoryListing_DoesExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		std::vector<std::string> file_list;
 		std::vector<std::string> dir_list;
@@ -367,12 +367,12 @@ void io_LocalStorage_TestClass::test_GetDirectoryListing_DoesExist()
 	}
 }
 
-void io_LocalStorage_TestClass::test_GetDirectoryListing_NotExist()
+void io_LocalFileSystem_TestClass::test_GetDirectoryListing_NotExist()
 {
-	std::cout << "[tc::io::LocalStorage] test_GetDirectoryListing_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_GetDirectoryListing_NotExist : " << std::flush;
 	try 
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		tc::io::sDirectoryListing info;
 		local_storage.getDirectoryListing(kNotExistFilePath, info);
@@ -384,12 +384,12 @@ void io_LocalStorage_TestClass::test_GetDirectoryListing_NotExist()
 	}
 }
 
-void io_LocalStorage_TestClass::test_GetDirectoryListing_UnicodePath()
+void io_LocalFileSystem_TestClass::test_GetDirectoryListing_UnicodePath()
 {
-	std::cout << "[tc::io::LocalStorage] test_GetDirectoryListing_UnicodePath : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_GetDirectoryListing_UnicodePath : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 
 		std::vector<std::string> file_list;
 		std::vector<std::string> dir_list;
@@ -458,12 +458,12 @@ void io_LocalStorage_TestClass::test_GetDirectoryListing_UnicodePath()
 	}
 }
 
-void io_LocalStorage_TestClass::test_ChangeWorkingDirectory_DoesExist()
+void io_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_DoesExist()
 {
-	std::cout << "[tc::io::LocalStorage] test_ChangeWorkingDirectory_DoesExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_ChangeWorkingDirectory_DoesExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 		
 		tc::io::Path old_dir;
 		local_storage.getWorkingDirectory(old_dir);
@@ -488,12 +488,12 @@ void io_LocalStorage_TestClass::test_ChangeWorkingDirectory_DoesExist()
 	}
 }
 
-void io_LocalStorage_TestClass::test_ChangeWorkingDirectory_NotExist()
+void io_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_NotExist()
 {
-	std::cout << "[tc::io::LocalStorage] test_ChangeWorkingDirectory_NotExist : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_ChangeWorkingDirectory_NotExist : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 		
 		local_storage.setWorkingDirectory(kNotExistFilePath);
 		std::cout << "FAIL (did not throw exception on expected error)" << std::endl;
@@ -504,12 +504,12 @@ void io_LocalStorage_TestClass::test_ChangeWorkingDirectory_NotExist()
 	}
 }
 
-void io_LocalStorage_TestClass::test_ChangeWorkingDirectory_UnicodePath()
+void io_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_UnicodePath()
 {
-	std::cout << "[tc::io::LocalStorage] test_ChangeWorkingDirectory_UnicodePath : " << std::flush;
+	std::cout << "[tc::io::LocalFileSystem] test_ChangeWorkingDirectory_UnicodePath : " << std::flush;
 	try
 	{
-		tc::io::LocalStorage local_storage;
+		tc::io::LocalFileSystem local_storage;
 		
 		tc::io::Path old_dir;
 		local_storage.getWorkingDirectory(old_dir);
