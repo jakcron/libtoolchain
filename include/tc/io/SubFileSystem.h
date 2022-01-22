@@ -32,13 +32,13 @@ public:
 		/** 
 		 * @brief Create SubFileSystem
 		 * 
-		 * @param[in] storage The base IFileSystem object which this sub storage will derive from.
+		 * @param[in] file_system The base IFileSystem object which this sub file_system will derive from.
 		 * @param[in] base_path The path to the subdirectory used as the substream root directory.
 		 * 
-		 * @throw tc::ArgumentNullException @p storage is @a nullptr.
-		 * @throw tc::InvalidOperationException @p storage was not in a ready state
+		 * @throw tc::ArgumentNullException @p file_system is @a nullptr.
+		 * @throw tc::InvalidOperationException @p file_system was not in a ready state.
 		 **/
-	SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>& storage, const tc::io::Path& base_path);
+	SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>& file_system, const tc::io::Path& base_path);
 
 	tc::ResourceStatus state();
 	void dispose();
@@ -103,7 +103,7 @@ public:
 		 * @param[in] path A relative or absolute path to directory.
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
-		 * @throw tc::UnauthorisedAccessException Substorage escape detected.
+		 * @throw tc::UnauthorisedAccessException Sub filesystem escape detected.
 		 **/
 	void setWorkingDirectory(const tc::io::Path& path);
 
@@ -113,18 +113,18 @@ public:
 		 * @param[out] info The sDirectoryListing object to populate
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
-		 * @throw tc::UnauthorisedAccessException Substorage escape detected.
+		 * @throw tc::UnauthorisedAccessException Sub filesystem escape detected.
 		 **/
 	void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info);
 private:
 	static const std::string kClassName;
 	
-	std::shared_ptr<tc::io::IFileSystem> mBaseStorage;
-	tc::io::Path mBaseStoragePath;
-	tc::io::Path mSubStoragePath;
+	std::shared_ptr<tc::io::IFileSystem> mBaseFileSystem;
+	tc::io::Path mBaseFileSystemPath;
+	tc::io::Path mSubFileSystemPath;
 
-	void subPathToRealPath(const tc::io::Path& substorage_path, tc::io::Path& real_path);
-	void realPathToSubPath(const tc::io::Path& real_path, tc::io::Path& substorage_path);
+	void subPathToRealPath(const tc::io::Path& sub_path, tc::io::Path& real_path);
+	void realPathToSubPath(const tc::io::Path& real_path, tc::io::Path& sub_path);
 	void sanitiseInputPath(const tc::io::Path& unsafe_path, tc::io::Path& safe_path) const;
 };
 
