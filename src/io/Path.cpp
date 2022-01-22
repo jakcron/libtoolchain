@@ -152,6 +152,11 @@ size_t tc::io::Path::size() const
 	return mUnicodePath.size();
 }
 
+bool tc::io::Path::empty() const
+{
+	return mUnicodePath.empty();
+}
+
 void tc::io::Path::initialisePath(const std::string& src)
 {
 	size_t windows_slash_count = 0;

@@ -2,8 +2,8 @@
  * @file Path.h
  * @brief Declaration of tc::io::Path
  * @author Jack (jakcron)
- * @version 0.3
- * @date 2019/05/10
+ * @version 0.4
+ * @date 2022/01/22
  */
 #pragma once
 #include <list>
@@ -134,13 +134,21 @@ public:
 		/// End Iterator, points to after the last element
 	iterator end();
 
-			/// Const End Iterator, points to after the last element
+		/// Const End Iterator, points to after the last element
 	const_iterator end() const;
 
-		/// Remove element at the front of the path
+		/**
+		 * @brief Remove element at the front of the path
+		 * 
+		 * @note Calling pop_front on an empty container is undefined.
+		 **/
 	void pop_front();
 
-		/// Remove element at the back of the path
+		/**
+		 * @brief Remove element at the back of the path
+		 * 
+		 * @note Calling pop_back on an empty container is undefined.
+		 **/
 	void pop_back();
 
 		/// Insert path element at the front of the path
@@ -153,7 +161,10 @@ public:
 	void clear();
 
 		/// Get number of path elements
-	size_t size() const;	
+	size_t size() const;
+
+		/// Checks whether the path is empty 
+	bool empty() const;	
 private:
 	static const std::string kClassName;
 
