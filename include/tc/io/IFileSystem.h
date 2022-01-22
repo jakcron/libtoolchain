@@ -1,5 +1,5 @@
 	/**
-	 * @file IStorage.h
+	 * @file IFileSystem.h
 	 * @brief Declaration of tc::io::IStorage
 	 * @author Jack (jakcron)
 	 * @version 0.6

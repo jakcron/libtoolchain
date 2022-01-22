@@ -1,4 +1,4 @@
-#include <tc/io/SubStorage.h>
+#include <tc/io/SubFileSystem.h>
 
 const std::string tc::io::SubStorage::kClassName = "tc::io::SubStorage";
 

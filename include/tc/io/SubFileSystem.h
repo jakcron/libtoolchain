@@ -1,12 +1,12 @@
 	/**
-	 * @file SubStorage.h
+	 * @file SubFileSystem.h
 	 * @brief Declaration of tc::io::SubStorage
 	 * @author Jack (jakcron)
 	 * @version 0.4
 	 * @date 2020/01/26
 	 **/
 #pragma once
-#include <tc/io/IStorage.h>
+#include <tc/io/IFileSystem.h>
 
 #include <tc/ArgumentNullException.h>
 #include <tc/InvalidOperationException.h>

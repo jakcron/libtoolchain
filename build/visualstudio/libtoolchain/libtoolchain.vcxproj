@@ -233,9 +233,9 @@
     <ClInclude Include="..\..\..\include\tc\io\IReadableSink.h" />
     <ClInclude Include="..\..\..\include\tc\io\ISink.h" />
     <ClInclude Include="..\..\..\include\tc\io\ISource.h" />
-    <ClInclude Include="..\..\..\include\tc\io\IStorage.h" />
+    <ClInclude Include="..\..\..\include\tc\io\IFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\io\IStream.h" />
-    <ClInclude Include="..\..\..\include\tc\io\LocalStorage.h" />
+    <ClInclude Include="..\..\..\include\tc\io\LocalFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\io\MemorySource.h" />
     <ClInclude Include="..\..\..\include\tc\io\MemoryStream.h" />
     <ClInclude Include="..\..\..\include\tc\io\OverlayedSource.h" />
@@ -249,7 +249,7 @@
     <ClInclude Include="..\..\..\include\tc\io\StreamUtil.h" />
     <ClInclude Include="..\..\..\include\tc\io\SubSink.h" />
     <ClInclude Include="..\..\..\include\tc\io\SubSource.h" />
-    <ClInclude Include="..\..\..\include\tc\io\SubStorage.h" />
+    <ClInclude Include="..\..\..\include\tc\io\SubFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\io\SubStream.h" />
     <ClInclude Include="..\..\..\include\tc\io\VirtualFileSystem.h" />
     <ClInclude Include="..\..\..\include\tc\io.h" />
@@ -315,7 +315,7 @@
     <ClCompile Include="..\..\..\src\io\CachedBlockStream.cpp" />
     <ClCompile Include="..\..\..\src\io\FileStream.cpp" />
     <ClCompile Include="..\..\..\src\io\IOUtil.cpp" />
-    <ClCompile Include="..\..\..\src\io\LocalStorage.cpp" />
+    <ClCompile Include="..\..\..\src\io\LocalFileSystem.cpp" />
     <ClCompile Include="..\..\..\src\io\MemorySource.cpp" />
     <ClCompile Include="..\..\..\src\io\MemoryStream.cpp" />
     <ClCompile Include="..\..\..\src\io\OverlayedSource.cpp" />
@@ -327,7 +327,7 @@
     <ClCompile Include="..\..\..\src\io\StreamUtil.cpp" />
     <ClCompile Include="..\..\..\src\io\SubSink.cpp" />
     <ClCompile Include="..\..\..\src\io\SubSource.cpp" />
-    <ClCompile Include="..\..\..\src\io\SubStorage.cpp" />
+    <ClCompile Include="..\..\..\src\io\SubFileSystem.cpp" />
     <ClCompile Include="..\..\..\src\io\SubStream.cpp" />
     <ClCompile Include="..\..\..\src\io\VirtualFileSystem.cpp" />
     <ClCompile Include="..\..\..\src\os\Environment.cpp" />

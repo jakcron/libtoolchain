@@ -27,7 +27,7 @@
     <ClCompile Include="..\..\..\test\SourceTestUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\StorageTestUtil.cpp">
+    <ClCompile Include="..\..\..\test\FileSystemTestUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\StreamTestUtil.cpp">
@@ -36,7 +36,7 @@
     <ClCompile Include="..\..\..\test\io_FileStream_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\io_LocalStorage_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\io_LocalFileSystem_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\io_MemorySource_TestClass.cpp">
@@ -66,7 +66,7 @@
     <ClCompile Include="..\..\..\test\io_SubSource_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\io_SubStorage_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\io_SubFileSystem_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\io_SubStream_TestClass.cpp">
@@ -281,7 +281,7 @@
     <ClInclude Include="..\..\..\test\SourceTestUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\StorageTestUtil.h">
+    <ClInclude Include="..\..\..\test\FileSystemTestUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\StreamTestUtil.h">
@@ -290,7 +290,7 @@
     <ClInclude Include="..\..\..\test\io_FileStream_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\io_LocalStorage_TestClass.h">
+    <ClInclude Include="..\..\..\test\io_LocalFileSystem_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\io_MemorySource_TestClass.h">
@@ -320,7 +320,7 @@
     <ClInclude Include="..\..\..\test\io_SubSource_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\io_SubStorage_TestClass.h">
+    <ClInclude Include="..\..\..\test\io_SubFileSystem_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\io_SubStream_TestClass.h">

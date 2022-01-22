@@ -1,12 +1,12 @@
 	/**
-	 * @file LocalStorage.h
+	 * @file LocalFileSystem.h
 	 * @brief Declaration of tc::io::LocalStorage
 	 * @author Jack (jakcron)
 	 * @version 0.5
 	 * @date 2019/06/18
 	 **/
 #pragma once
-#include <tc/io/IStorage.h>
+#include <tc/io/IFileSystem.h>
 
 #include <tc/io/IOException.h>
 #include <tc/io/DirectoryNotEmptyException.h>

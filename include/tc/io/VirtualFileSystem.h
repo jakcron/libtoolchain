@@ -6,7 +6,7 @@
 	 * @date 2021/01/09
 	 **/
 #pragma once
-#include <tc/io/IStorage.h>
+#include <tc/io/IFileSystem.h>
 #include <tc/io/DirectoryNotFoundException.h>
 #include <tc/io/FileNotFoundException.h>
 

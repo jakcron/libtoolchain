@@ -160,7 +160,7 @@
     <ClCompile Include="..\..\..\src\io\IOUtil.cpp">
       <Filter>Source Files\io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\io\LocalStorage.cpp">
+    <ClCompile Include="..\..\..\src\io\LocalFileSystem.cpp">
       <Filter>Source Files\io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\io\MemorySource.cpp">
@@ -196,7 +196,7 @@
     <ClCompile Include="..\..\..\src\io\SubSource.cpp">
       <Filter>Source Files\io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\io\SubStorage.cpp">
+    <ClCompile Include="..\..\..\src\io\SubFileSystem.cpp">
       <Filter>Source Files\io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\io\SubStream.cpp">
@@ -552,13 +552,13 @@
     <ClInclude Include="..\..\..\include\tc\io\ISource.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\io\IStorage.h">
+    <ClInclude Include="..\..\..\include\tc\io\IFileSystem.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\io\IStream.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\io\LocalStorage.h">
+    <ClInclude Include="..\..\..\include\tc\io\LocalFileSystem.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\io\MemorySource.h">
@@ -600,7 +600,7 @@
     <ClInclude Include="..\..\..\include\tc\io\SubSource.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\io\SubStorage.h">
+    <ClInclude Include="..\..\..\include\tc\io\SubFileSystem.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\io\SubStream.h">

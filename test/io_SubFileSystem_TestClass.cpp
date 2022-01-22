@@ -1,8 +1,8 @@
 #include <tc/Exception.h>
 #include <iostream>
 
-#include "io_SubStorage_TestClass.h"
-#include "StorageTestUtil.h"
+#include "io_SubFileSystem_TestClass.h"
+#include "FileSystemTestUtil.h"
 
 void io_SubStorage_TestClass::runAllTests(void)
 {

@@ -19,9 +19,9 @@
 #include <tc/io/MemoryStream.h>
 #include <tc/io/CachedBlockStream.h>
 
-#include <tc/io/IStorage.h>
-#include <tc/io/LocalStorage.h>
-#include <tc/io/SubStorage.h>
+#include <tc/io/IFileSystem.h>
+#include <tc/io/LocalFileSystem.h>
+#include <tc/io/SubFileSystem.h>
 #include <tc/io/VirtualFileSystem.h>
 
 #include <tc/io/ISink.h>

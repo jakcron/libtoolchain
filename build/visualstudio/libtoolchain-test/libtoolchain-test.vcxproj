@@ -197,10 +197,10 @@
     <ClCompile Include="..\..\..\test\RsaPssUtil.cpp" />
     <ClCompile Include="..\..\..\test\SinkTestUtil.cpp" />
     <ClCompile Include="..\..\..\test\SourceTestUtil.cpp" />
-    <ClCompile Include="..\..\..\test\StorageTestUtil.cpp" />
+    <ClCompile Include="..\..\..\test\FileSystemTestUtil.cpp" />
     <ClCompile Include="..\..\..\test\StreamTestUtil.cpp" />
     <ClCompile Include="..\..\..\test\io_FileStream_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\io_LocalStorage_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_LocalFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_MemorySource_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_MemoryStream_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_OverlayedSource_TestClass.cpp" />
@@ -210,7 +210,7 @@
     <ClCompile Include="..\..\..\test\io_StreamSource_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_SubSink_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_SubSource_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\io_SubStorage_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_SubFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_SubStream_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\main.cpp" />
     <ClCompile Include="..\..\..\test\string_TranscodeUtil_TestClass.cpp" />
@@ -283,10 +283,10 @@
     <ClInclude Include="..\..\..\test\RsaPssUtil.h" />
     <ClInclude Include="..\..\..\test\SinkTestUtil.h" />
     <ClInclude Include="..\..\..\test\SourceTestUtil.h" />
-    <ClInclude Include="..\..\..\test\StorageTestUtil.h" />
+    <ClInclude Include="..\..\..\test\FileSystemTestUtil.h" />
     <ClInclude Include="..\..\..\test\StreamTestUtil.h" />
     <ClInclude Include="..\..\..\test\io_FileStream_TestClass.h" />
-    <ClInclude Include="..\..\..\test\io_LocalStorage_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_LocalFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_MemorySource_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_MemoryStream_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_OverlayedSource_TestClass.h" />
@@ -296,7 +296,7 @@
     <ClInclude Include="..\..\..\test\io_StreamSource_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_SubSink_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_SubSource_TestClass.h" />
-    <ClInclude Include="..\..\..\test\io_SubStorage_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_SubFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_SubStream_TestClass.h" />
     <ClInclude Include="..\..\..\test\string_TranscodeUtil_TestClass.h" />
   </ItemGroup>

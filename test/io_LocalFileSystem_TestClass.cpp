@@ -1,7 +1,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "io_LocalStorage_TestClass.h"
+#include "io_LocalFileSystem_TestClass.h"
 
 #include <tc.h>
 

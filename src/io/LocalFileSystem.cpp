@@ -1,4 +1,4 @@
-#include <tc/io/LocalStorage.h>
+#include <tc/io/LocalFileSystem.h>
 #include <tc/io/FileStream.h>
 #include <tc/io/PathUtil.h>
 #include <tc/PlatformErrorHandlingUtil.h>
