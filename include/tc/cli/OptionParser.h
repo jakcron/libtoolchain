@@ -1,9 +1,10 @@
 	/**
-	 * @file    OptionParser.h
-	 * @brief   Declaration of tc::cli::OptionParser
-	 * @date    2022/01/22
-	 * @authors Jack (jakcron)
-	 */
+	 * @file OptionParser.h
+	 * @brief Declaration of tc::cli::OptionParser
+	 * @author Jack (jakcron)
+	 * @version 0.2
+	 * @date 2022/01/22
+	 **/
 #pragma once
 #include <vector>
 #include <map>
