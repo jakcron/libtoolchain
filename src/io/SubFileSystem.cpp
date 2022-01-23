@@ -28,7 +28,6 @@ tc::io::SubFileSystem::SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>&
 	mSubFileSystemPath = tc::io::Path("/");
 
 	// save current path
-	// TODO make a more robust light touch approach to setting current directory.
 	tc::io::Path current_path;
 	mBaseFileSystem->getWorkingDirectory(current_path);
 
@@ -150,8 +149,16 @@ void tc::io::SubFileSystem::setWorkingDirectory(const tc::io::Path& path)
 	tc::io::Path real_path;
 	subPathToRealPath(path, real_path);
 
-	// set current directory
-	//mBaseFileSystem->setWorkingDirectory(real_path);
+	// save previous basefs working directory path
+	tc::io::Path prev_working_directory;
+	mBaseFileSystem->getWorkingDirectory(prev_working_directory);
+
+	// set and get working directory path so that real_path is populated with the full real path
+	mBaseFileSystem->setWorkingDirectory(real_path);
+	mBaseFileSystem->getWorkingDirectory(real_path);
+
+	// restore previous basefs working directory path
+	mBaseFileSystem->setWorkingDirectory(prev_working_directory);
 
 	// save current directory
 	realPathToSubPath(real_path, mSubFileSystemPath);
@@ -227,6 +234,9 @@ void tc::io::SubFileSystem::realPathToSubPath(const tc::io::Path& real_path, tc:
 			throw tc::UnauthorisedAccessException(kClassName, "Sub filesystem escape detected");
 		}
 	}
+
+	// clear sub_path
+	sub_path = tc::io::Path();
 
 	// Put root char
 	sub_path.push_back("");

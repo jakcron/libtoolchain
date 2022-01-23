@@ -37,6 +37,8 @@ public:
 		 * 
 		 * @throw tc::ArgumentNullException @p file_system is @a nullptr.
 		 * @throw tc::InvalidOperationException @p file_system was not in a ready state.
+		 *
+		 * @note This will temporarily change and then restore the base filesystem current working directory.
 		 **/
 	SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>& file_system, const tc::io::Path& base_path);
 
@@ -95,6 +97,8 @@ public:
 		 * @param[out] path Path object to populate
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
+		 *
+		 * @note This will temporarily change and then restore the base filesystem current working directory.
 		 **/
 	void getWorkingDirectory(tc::io::Path& path);
 
