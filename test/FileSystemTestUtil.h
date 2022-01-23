@@ -6,10 +6,10 @@
 class FileSystemTestUtil
 {
 public:
-	class DummyStorageBase : public tc::io::IFileSystem
+	class DummyFileSystemBase : public tc::io::IFileSystem
 	{
 	public:
-		DummyStorageBase()
+		DummyFileSystemBase()
 		{
 			init();
 		}
@@ -17,7 +17,7 @@ public:
 		void init()
 		{
 			dispose();
-			mCurDir = std::make_shared<tc::io::Path>();
+			mCurDir = std::make_shared<tc::io::Path>(tc::io::Path("/some/initial/path/"));
 			mState.set(tc::RESFLAG_READY);
 		}
 
