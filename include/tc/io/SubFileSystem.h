@@ -2,8 +2,8 @@
 	 * @file SubFileSystem.h
 	 * @brief Declaration of tc::io::SubFileSystem
 	 * @author Jack (jakcron)
-	 * @version 0.4
-	 * @date 2020/01/26
+	 * @version 0.5
+	 * @date 2022/01/23
 	 **/
 #pragma once
 #include <tc/io/IFileSystem.h>
