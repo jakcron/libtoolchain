@@ -3,19 +3,19 @@
 ![Language](https://img.shields.io/badge/langauge-c++11-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-linux:%20x86__64,%20i386%20%7C%20win:%20x86__64,%20i386%20%7C%20macos:%20x86__64,%20arm64-lightgrey.svg)
 
-![Version](https://img.shields.io/badge/version-0.4.0%20%7C%20prerelease-green.svg)
+![Version](https://img.shields.io/badge/version-0.5.0%20%7C%20prerelease-green.svg)
 
 Library to ease the development of toolchain applications.
 
-This library aims to help with the busy work that is common to many toolchain development projects including:
+This library helps with the busy work that is common to many toolchain development projects including:
 * Cross platform unicode entry-point
+* Command-line argument processing
 * Cross platform FileSystem IO with large file support for both 32bit & 64bit targets and unicode path support
 * String transcoding (UTF-8/UTF-16/UTF-32)
 * Extensible abstractions for generating and processing binary data
 * Properly integrated wrappers for Cryptographic Algorithms (AES, RSA, SHA, HMAC, PBKDF1/PBKDF2, PRBG)
 
 Planned features:
-* CLI argv processing
 * Serialisation of human readable formats (XML, JSON, YAML, INI, CSV, etc)
 * Properly integrated wrappers for Cryptographic Algorithms (Eliptic Curve, etc)
 * Properly integrated wrappers for Compression Algorithms (LZ4, etc)
@@ -30,7 +30,7 @@ Planned features:
 * `test/` - Test program source code
 * `Makefile` - Root makefile (GNU/Unix build system file)
 * `LICENCE` - Distribution License 
-* `Doxyfile`  -  Doxygen config
+* `Doxyfile` -  Doxygen config
 
 # Building
 For GNU/unix systems `make` can be used. For native Windows, Visual Studio project files are provided.
