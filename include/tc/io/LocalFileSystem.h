@@ -2,8 +2,8 @@
 	 * @file LocalFileSystem.h
 	 * @brief Declaration of tc::io::LocalFileSystem
 	 * @author Jack (jakcron)
-	 * @version 0.5
-	 * @date 2019/06/18
+	 * @version 0.6
+	 * @date 2022/01/23
 	 **/
 #pragma once
 #include <tc/io/IFileSystem.h>
@@ -33,6 +33,20 @@ public:
 
 	tc::ResourceStatus state();
 	void dispose();
+
+		/** 
+		 * @brief Create a new file
+		 * 
+		 * @param[in] path A relative or absolute path to file.
+		 * 
+		 * @throw tc::ArgumentException @p path contains invalid characters or is empty.
+		 * @throw tc::NotSupportedException @p path refers to an unsupported non-file device.
+		 * @throw tc::io::IOException An unspecfied I/O error occurred. Or the stream has been closed.
+		 * @throw tc::SecurityException The caller does not have the required permission.
+		 * @throw tc::io::DirectoryNotFoundException The specified path is invalid, such as being on an unmapped drive.
+		 * @throw tc::UnauthorisedAccessException The @p access requested is not permitted by the operating system for the specified @p path.
+		 * @throw tc::io::PathTooLongException The specified @p path, file name, or both exceed the system-defined maximum length.
+		 **/
 	void createFile(const tc::io::Path& path);
 
 		/** 
