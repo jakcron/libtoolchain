@@ -27,6 +27,7 @@ void io_Path_TestClass::runAllTests(void)
 	test_Scenario_AppendStressTest();
 	test_Operator_EqualityTest();
 	test_Operator_InequalityTest();
+	test_Operator_LessThanTest();
 	std::cout << "[tc::io::Path] END" << std::endl;
 }
 
@@ -405,6 +406,54 @@ void io_Path_TestClass::test_Operator_InequalityTest()
 
 		if ((path_a != path_b) == false)
 			throw tc::Exception("operator!=() did not return true for unequal Path objects");
+
+		std::cout << "PASS"  << std::endl;
+	}
+	catch (const tc::Exception& e)
+	{
+		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+	}
+}
+
+void io_Path_TestClass::test_Operator_LessThanTest()
+{
+	std::cout << "[tc::io::Path] test_Operator_LessThanTest : " << std::flush;
+	try
+	{
+		std::string raw_path_a = "/a/path/to/check/";
+		std::string raw_path_b = "/a/path/to/check/that/is/longer";
+		std::string raw_path_c = "/a/path/";
+		std::string raw_path_d = "/very/different/path/";
+		tc::io::Path path_a(raw_path_a);
+		tc::io::Path path_a_duplicate(raw_path_a);
+		tc::io::Path path_b(raw_path_b);
+		tc::io::Path path_c(raw_path_c);
+		tc::io::Path path_d(raw_path_d);
+
+		// /a/path/to/check/ is not less than a copy of itself
+		if ((path_a < path_a_duplicate) != false)
+		{
+			throw tc::Exception("operator<() returned true for equal Path objects");
+		}
+
+		// /a/path/to/check/ is less than /a/path/to/check/that/is/longer
+		if ((path_a < path_b) != true)
+		{
+			throw tc::Exception("operator<() returned false for Path objects where (" + raw_path_a + ") < (" + raw_path_b + ")");
+		}
+
+		// /a/path/to/check/ is not less than /a/path/
+		if ((path_a < path_c) != false)
+		{
+			throw tc::Exception("operator<() returned true for Path objects where (" + raw_path_a + ") < (" + raw_path_c + ")");
+		}
+
+		// /a/path/to/check/ is less than /very/different/path/
+		if ((path_a < path_d) != true)
+		{
+			throw tc::Exception("operator<() returned false for Path objects where (" + raw_path_a + ") < (" + raw_path_d + ")");
+		}
+
 
 		std::cout << "PASS"  << std::endl;
 	}

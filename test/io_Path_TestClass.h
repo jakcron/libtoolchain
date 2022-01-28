@@ -30,4 +30,5 @@ private:
 	void test_Scenario_AppendStressTest();
 	void test_Operator_EqualityTest();
 	void test_Operator_InequalityTest();
+	void test_Operator_LessThanTest();
 };
