@@ -8,8 +8,10 @@
 Library to ease the development of toolchain applications.
 
 This library helps with the busy work that is common to many toolchain development projects including:
-* Cross platform unicode entry-point
-* Command-line argument processing
+* Cross platform support (macOS/Windows/GNU)
+* Unicode entry-point (`umain()`)
+* Command-line option processing
+* Formating binary data for command-line output
 * Cross platform FileSystem IO with large file support for both 32bit & 64bit targets and unicode path support
 * String transcoding (UTF-8/UTF-16/UTF-32)
 * Extensible abstractions for generating and processing binary data
