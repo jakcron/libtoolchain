@@ -42,7 +42,12 @@ void io_Path_TestClass::testPathComposition(const std::string& test_name, const 
 
 		if (path.size() != expected_element_count)
 		{
-			throw tc::Exception("Path did not have expected element count");
+			throw tc::Exception("Path did not have expected element count (size() returned unexpected value.)");
+		}
+
+		if (path.empty() != (expected_element_count == 0))
+		{
+			throw tc::Exception("Path did not have expected element count (empty() returned unexpected value.)");
 		}
 
 		if (path_type == UNIX_PATH)
@@ -84,7 +89,12 @@ void io_Path_TestClass::test_Constructor_Default()
 		
 		if (path_empty.size() != 0)
 		{
-			throw tc::Exception("Default constructor did not create a path with 0 elements");
+			throw tc::Exception("Default constructor did not create a path with 0 elements (size() != 0)");
+		}
+
+		if (path_empty.empty() != true)
+		{
+			throw tc::Exception("Default constructor did not create an empty path (empty() != true)");
 		}
 
 		if (path_empty.begin() != path_empty.end())
@@ -234,6 +244,11 @@ void io_Path_TestClass::test_Method_clear()
 			throw tc::Exception(".size() did not have expected value of 0 after .clear()");
 		}
 
+		if (path.empty() != true)
+		{
+			throw tc::Exception(".empty() did not have expected value of true after .clear()");
+		}
+
 		if (path.begin() != path.end())
 		{
 			throw tc::Exception(".begin() != .end() after .clear()");
@@ -326,6 +341,11 @@ void io_Path_TestClass::test_Scenario_AppendStressTest()
 		if (path.size() != expected_element_count)
 		{
 			throw tc::Exception("unexpected number of path elements");
+		}
+
+		if (path.empty() != (expected_element_count == 0))
+		{
+			throw tc::Exception("Path did not have expected element count (empty() returned unexpected value.)");
 		}
 
 		tc::io::Path::const_iterator itr = path.end();
