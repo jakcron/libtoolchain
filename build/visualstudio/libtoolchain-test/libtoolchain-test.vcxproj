@@ -131,15 +131,20 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\test\bn_binaryutils_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\bn_bitarrayByteBEBitBE_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\bn_bitarrayByteBEBitLE_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\bn_bitarrayByteLEBitBE_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\bn_bitarrayByteLEBitLE_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\bn_endian_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_pad_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_string_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\ByteData_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\cli_FormatUtil_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\cli_OptionParser_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes128CbcEncryptedStream_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes128CtrEncryptedStream_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes128CtrEncryptor_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes128EcbEncryptor_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes128Encryptor_TestClass.cpp" />
@@ -199,6 +204,7 @@
     <ClCompile Include="..\..\..\test\SourceTestUtil.cpp" />
     <ClCompile Include="..\..\..\test\FileSystemTestUtil.cpp" />
     <ClCompile Include="..\..\..\test\StreamTestUtil.cpp" />
+    <ClCompile Include="..\..\..\test\io_CachedBlockStream_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_FileStream_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_LocalFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_MemorySource_TestClass.cpp" />
@@ -212,19 +218,25 @@
     <ClCompile Include="..\..\..\test\io_SubSource_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_SubFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_SubStream_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_VirtualFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\main.cpp" />
     <ClCompile Include="..\..\..\test\string_TranscodeUtil_TestClass.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\test\bn_binaryutils_TestClass.h" />
     <ClInclude Include="..\..\..\test\bn_bitarrayByteBEBitBE_TestClass.h" />
     <ClInclude Include="..\..\..\test\bn_bitarrayByteBEBitLE_TestClass.h" />
     <ClInclude Include="..\..\..\test\bn_bitarrayByteLEBitBE_TestClass.h" />
     <ClInclude Include="..\..\..\test\bn_bitarrayByteLEBitLE_TestClass.h" />
     <ClInclude Include="..\..\..\test\bn_endian_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_pad_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_string_TestClass.h" />
     <ClInclude Include="..\..\..\test\ByteData_TestClass.h" />
     <ClInclude Include="..\..\..\test\cli_FormatUtil_TestClass.h" />
     <ClInclude Include="..\..\..\test\cli_OptionParser_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes128CbcEncryptedStream_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes128CtrEncryptedStream_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes128CtrEncryptor_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes128EcbEncryptor_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes128Encryptor_TestClass.h" />
@@ -285,6 +297,7 @@
     <ClInclude Include="..\..\..\test\SourceTestUtil.h" />
     <ClInclude Include="..\..\..\test\FileSystemTestUtil.h" />
     <ClInclude Include="..\..\..\test\StreamTestUtil.h" />
+    <ClInclude Include="..\..\..\test\io_CachedBlockStream_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_FileStream_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_LocalFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_MemorySource_TestClass.h" />
@@ -298,6 +311,7 @@
     <ClInclude Include="..\..\..\test\io_SubSource_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_SubFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_SubStream_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_VirtualFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\string_TranscodeUtil_TestClass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

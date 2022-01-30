@@ -9,6 +9,7 @@
 void cli_OptionParser_TestClass::runAllTests(void)
 {
 	std::cout << "[tc::cli::OptionParser] START" << std::endl;
+	std::cout << "[tc::cli::OptionParser] FAIL (NO TESTS)" << std::endl;
 	test_Constructor_DefaultConstructor();
 	std::cout << "[tc::cli::OptionParser] END" << std::endl;
 }
