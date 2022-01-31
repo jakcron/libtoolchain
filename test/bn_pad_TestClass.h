@@ -10,4 +10,5 @@ class bn_pad_TestClass : public ITestClass
 public:
 	void runAllTests();
 private:
+	void test_CorrectSize();
 };
