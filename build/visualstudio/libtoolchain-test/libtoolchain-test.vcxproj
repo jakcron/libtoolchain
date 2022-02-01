@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(SolutionDir)..\..\deps\libfmt\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -86,7 +86,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(SolutionDir)..\..\deps\libfmt\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -98,7 +98,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(SolutionDir)..\..\deps\libfmt\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -114,7 +114,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(SolutionDir)..\..\deps\libfmt\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -125,6 +125,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\deps\libmbedtls\build\visualstudio\libmbedtls\libmbedtls.vcxproj">
       <Project>{7a7c66f3-2b5b-4e23-85d8-2a74fedad92c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\deps\libfmt\build\visualstudio\libfmt\libfmt.vcxproj">
+      <Project>{f4b0540e-0aae-4006-944b-356944ef61fa}</Project>
     </ProjectReference>
     <ProjectReference Include="..\libtoolchain\libtoolchain.vcxproj">
       <Project>{e194e4b8-1482-40a2-901b-75d4387822e9}</Project>

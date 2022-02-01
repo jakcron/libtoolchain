@@ -12,6 +12,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtoolchain-test", "libtoo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmbedtls", "..\..\deps\libmbedtls\build\visualstudio\libmbedtls\libmbedtls.vcxproj", "{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}"
 EndProject
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libfmt", "..\..\deps\libfmt\build\visualstudio\libfmt\libfmt.vcxproj", "{f4b0540e-0aae-4006-944b-356944ef61fa}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
