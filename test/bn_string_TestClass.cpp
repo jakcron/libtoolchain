@@ -1,30 +1,30 @@
-#include <cstring>
 #include <tc/Exception.h>
-#include <iostream>
+#include <fmt/core.h>
 
 #include "bn_string_TestClass.h"
 
 void bn_string_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::bn::string] START" << std::endl;
+	fmt::print("[tc::bn::string] START\n");
 	test_CodedSizeEqualsLogicalSize();
 	test_CodedSizeGreaterThanLogicalSize();
-	std::cout << "[tc::bn::string] END" << std::endl;
+	fmt::print("[tc::bn::string] END\n");
 }
 
 void bn_string_TestClass::test_CodedSizeEqualsLogicalSize()
 {
-	std::cout << "[tc::bn::string] test_CodedSizeEqualsLogicalSize : " << std::flush;
+	fmt::print("[tc::bn::string] test_CodedSizeEqualsLogicalSize : ");
 	try
 	{
 		try 
 		{
 			// create bn::string with encoded size of 16 bytes (and implicit logical size of 16)
-			tc::bn::string<16> bn_string;
+			static const size_t kEncodedSize = 16;
+			tc::bn::string<kEncodedSize> bn_string;
 
-			if (sizeof(bn_string) != 16)
+			if (sizeof(bn_string) != kEncodedSize)
 			{
-				throw tc::Exception("sizeof(tc::bn::string<16>) did not return ENCODED_SIZE (16)");
+				throw tc::Exception(fmt::format("sizeof(tc::bn::string<{:d}>) did not return ENCODED_SIZE ({:d})", kEncodedSize, kEncodedSize));
 			}
 
 			// test string with zeros for data
@@ -35,9 +35,9 @@ void bn_string_TestClass::test_CodedSizeEqualsLogicalSize()
 				throw tc::Exception(".size() did not return 0 (was cleared before use)");
 			}
 
-			if (bn_string.max_size() != 16)
+			if (bn_string.max_size() != kEncodedSize)
 			{
-				throw tc::Exception(".max_size() did not return LOGICAL_SIZE (16)");
+				throw tc::Exception(fmt::format("max_size() did not return LOGICAL_SIZE ({:d})", kEncodedSize));
 			}
 
 			// test string after "hello" is written to it
@@ -73,22 +73,22 @@ void bn_string_TestClass::test_CodedSizeEqualsLogicalSize()
 				throw tc::Exception(".str() did not honour the max_size() when generating the string.");
 			}
 
-			std::cout << "PASS" << std::endl;
+			fmt::print("PASS\n");
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			fmt::print("FAIL ({:s})\n", e.error());
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		fmt::print("UNHANDLED EXCEPTION ({:s})\n", e.what());
 	}
 }
 
 void bn_string_TestClass::test_CodedSizeGreaterThanLogicalSize()
 {
-	std::cout << "[tc::bn::string] test_CodedSizeGreaterThanLogicalSize : " << std::flush;
+	fmt::print("[tc::bn::string] test_CodedSizeGreaterThanLogicalSize : ");
 	try
 	{
 		try 
@@ -100,7 +100,7 @@ void bn_string_TestClass::test_CodedSizeGreaterThanLogicalSize()
 
 			if (sizeof(bn_string) != kEncodedSize)
 			{
-				throw tc::Exception("sizeof(tc::bn::string<64,50>) did not return ENCODED_SIZE (64)");
+				throw tc::Exception(fmt::format("sizeof(tc::bn::string<{:d},{:d}>) did not return ENCODED_SIZE ({:d})", kEncodedSize, kLogicalSize, kEncodedSize));
 			}
 
 			// test string with zeros for data
@@ -149,15 +149,15 @@ void bn_string_TestClass::test_CodedSizeGreaterThanLogicalSize()
 				throw tc::Exception(".str() did not honour the max_size() when generating the string.");
 			}
 
-			std::cout << "PASS" << std::endl;
+			fmt::print("PASS\n");
 		}
 		catch (const tc::Exception& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			fmt::print("FAIL ({:s})\n", e.error());
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		fmt::print("UNHANDLED EXCEPTION ({:s})\n", e.what());
 	}
 }
