@@ -24,12 +24,12 @@ namespace tc { namespace cli {
 	 * This class processes command-line options according to user defined implementations of @ref tc::cli::OptionParser::IOptionHandler that are registered with this class.
 	 * 
 	 * The format of command-line arguments varies by system and convention. This class supports the following styles of command-line options:
-	 * * "--opt": Option name prefixed by "--" with no parameters,
-	 * * "--opt=var": Option name prefixed by "--" with only one parameter delimited by "=",
-	 * * "--opt var1 var2": Option name prefixed by "--" with one or more parameters delimited by white space,
-	 * * "-opt": Option name prefixed by "-" with no parameters,
-	 * * "-opt=var": Option name prefixed by "-" with one parameter delimited by "=",
-	 * * "-opt var1 var2": Option name prefixed by "-" with one or more parameters delimited by white space,
+	 * * @b --opt : Option name prefixed by "--" with no parameters,
+	 * * @b --opt=var : Option name prefixed by "--" with only one parameter delimited by "=",
+	 * * @b --opt @b var1 @b var2 : Option name prefixed by "--" with one or more parameters delimited by white space,
+	 * * @b -opt : Option name prefixed by "-" with no parameters,
+	 * * @b -opt=var : Option name prefixed by "-" with one parameter delimited by "=",
+	 * * @b -opt @b var1 @b var2 : Option name prefixed by "-" with one or more parameters delimited by white space,
 	 * 
 	 * When parsing options from command-line arguments, it will (in order of occurence) collect the option name and the parameters that follow in 
 	 * accordance to the above rules, and defer to the user defined @ref tc::cli::OptionParser::IOptionHandler for this option. If none is defined 
@@ -39,8 +39,8 @@ namespace tc { namespace cli {
 	 * @code
 	 * struct UserOpt
 	 * {
-	 *    std::string sku_code;
-	 * 	  std::map<std::string, std::string> environment_vars;
+	 * 	std::string sku_code;
+	 * 	std::map<std::string, std::string> environment_vars;
 	 * };
 	 * @endcode 
 	 * 
@@ -58,7 +58,7 @@ namespace tc { namespace cli {
 	 * 	SkuOptionHandler(UserOpt& user_opt) : 
 	 * 		mUserOpt(user_opt),
 	 * 		mOptStrings({"-sku"}), // here we define an array of literal options to match against
-	 *		mOptRegex()
+	 * 		mOptRegex()
 	 * 	{}
 	 * 
 	 * 	// OptionParser uses this to determine which IOptionHandler to use, so this should return all aliases of the option
@@ -67,11 +67,11 @@ namespace tc { namespace cli {
 	 * 		return mOptStrings;
 	 * 	}
 	 *
-	 *	// OptionParser uses this to determine which IOptionHandler to use, so this should return all regex patterns that will match for the option
+	 * 	// OptionParser uses this to determine which IOptionHandler to use, so this should return all regex patterns that will match for the option
 	 * 	const std::vector<std::string>& getOptionRegexPatterns() const
 	 * 	{
-	 *		return mOptRegex;
-	 *	}
+	 * 		return mOptRegex;
+	 * 	}
 	 * 
 	 * 	// This is what is called when OptionParser defers to IOptionHandler to process the option and any arguments
 	 * 	// In your implementation this is where you validate the data and modify your linked state data accordingly
@@ -88,7 +88,7 @@ namespace tc { namespace cli {
 	 * private:
 	 * 	UserOpt& mUserOpt;
 	 * 	std::vector<std::string> mOptStrings;
-	 *  std::vector<std::string> mOptRegex;
+	 * 	std::vector<std::string> mOptRegex;
 	 * };
 	 * @endcode
 	 *
@@ -110,11 +110,11 @@ namespace tc { namespace cli {
 	 * 		return mOptStrings;
 	 * 	}
 	 * 
-	 *	// OptionParser uses this to determine which IOptionHandler to use, so this should return all regex patterns that will match for the option
+	 * 	// OptionParser uses this to determine which IOptionHandler to use, so this should return all regex patterns that will match for the option
 	 * 	const std::vector<std::string>& getOptionRegexPatterns() const
 	 * 	{
 	 * 		return mOptRegex;
-	 *	}
+	 * 	}
 	 *
 	 * 	// This is what is called when OptionParser defers to IOptionHandler to process the option and any arguments
 	 * 	// In your implementation this is where you validate the data and modify your linked state data accordingly
@@ -131,7 +131,7 @@ namespace tc { namespace cli {
 	 * private:
 	 * 	UserOpt& mUserOpt;
 	 * 	std::vector<std::string> mOptStrings;
-	 *  std::vector<std::string> mOptRegex;
+	 * 	std::vector<std::string> mOptRegex;
 	 * };
 	 * @endcode
 	 * 
