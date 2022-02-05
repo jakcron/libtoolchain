@@ -1,7 +1,6 @@
 #include <tc/cli/OptionParser.h>
 
-#include <iostream>
-#include <sstream>
+#include <fmt/core.h>
 
 tc::cli::OptionParser::OptionParser() :
 	mModuleLabel("OptionParser"),
@@ -43,22 +42,21 @@ void tc::cli::OptionParser::registerUnrecognisedOptionHandler(const std::shared_
 void tc::cli::OptionParser::processOptions(const std::vector<std::string>& args)
 {
 	/*
-	std::cout << "OptionParser" << std::endl;
-	std::cout << "  args:" << std::endl;
-	
+	fmt::print("OptionParser\n");
+	fmt::print("  args:\n");
 	for (auto itr = args.begin(); itr != args.end(); itr++)
 	{
-		std::cout << "  #" << *itr << "#" << std::endl;
+		fmt::print("  #{:s}#\n", *itr);
 	}
 	*/
 
-	//std::cout << "Begin parsing options" << std::endl;
+	//fmt::print("Begin parsing options\n");
 
 	std::string opt = std::string();
 	std::vector<std::string> params = std::vector<std::string>();
 	for (auto itr = args.begin(); itr != args.end(); itr++)
 	{
-		//std::cout << "itr=" << *itr << std::endl;
+		//fmt::print("itr={:s}\n", *itr);
 
 		// (1) parse the current string
 		std::string tmp_opt = std::string();
@@ -68,22 +66,22 @@ void tc::cli::OptionParser::processOptions(const std::vector<std::string>& args)
 		// if the string begins with '-' then it is an option (which may be compound)
 		if (itr->compare(0,1,"-") == 0)
 		{
-			//std::cout << "looks like an option" << std::endl;
+			//fmt::print("looks like an option\n");
 
 			// if there is an "=" in this, then this is a compound option & paramter
 			size_t equalsign_pos = itr->find('=');
 			if (equalsign_pos == std::string::npos)
 			{
-				//std::cout << "the option looks like a solo option" << std::endl;
+				//fmt::print("the option looks like a solo option\n");
 				tmp_opt = *itr;				
 			}
 			else
 			{
-				//std::cout << "the option looks like a compound opt=param" << std::endl;
+				//fmt::print("the option looks like a compound opt=param\n");
 				tmp_opt = itr->substr(0, equalsign_pos);
 				tmp_param = itr->substr(equalsign_pos + 1, std::string::npos);
-				//std::cout << " > opt :   " << tmp_opt << std::endl;
-				//std::cout << " > param : " << tmp_param << std::endl;
+				//fmt::print(" > opt :   {:s}\n", tmp_opt);
+				//fmt::print(" > param : {:s}\n", tmp_param);
 				// --path=here
 				// 0123456789a
 				// --path : pos=0, size = 6 = equalsign_pos
@@ -177,7 +175,5 @@ void tc::cli::OptionParser::handleOption(const std::string& opt, const std::vect
 	}
 	
 	// if no handler is located, throw exception
-
-	//throw tc::ArgumentException(mModuleLabel, fmt::format("Option \"{}\" is not recognised.", (opt)));
-	throw tc::ArgumentException(mModuleLabel, "Option is not recognised.");
+	throw tc::ArgumentException(mModuleLabel, fmt::format("Option \"{}\" is not recognised.", opt));
 }
