@@ -11,6 +11,7 @@ void bn_binaryutils_TestClass::runAllTests(void)
 	test_RoundUpFunc();
 	test_AlignFunc();
 	test_MakeStructMagicU32Func();
+	test_MakeStructMagicU64Func();
 	std::cout << "[tc::bn (BinaryUtils)] END" << std::endl;
 }
 
