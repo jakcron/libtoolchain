@@ -230,27 +230,33 @@ public:
 		virtual void processOption(const std::string& option, const std::vector<std::string>& params) = 0;
 	};
 
+		/// Default Constructor
 	OptionParser();
-
 
 		/**
 		 * @brief Register an IOptionHandler to handle an option.
 		 * 
 		 * @param[in] handler Shared pointer to the IOptionHandler.
-		 */ 
+		 *
+		 * @throw tc::ArgumentNullException @p handler was null.
+		 */
 	void registerOptionHandler(const std::shared_ptr<IOptionHandler>& handler);
 
 		/**
 		 * @brief Register an IOptionHandler to handle all unrecognised options. Only use this extra processing of unrecognised options is required beyond a generic exception.
 		 * 
 		 * @param[in] handler Shared pointer to the IOptionHandler.
-		 */ 
+		 *
+		 * @throw tc::ArgumentNullException @p handler was null.
+		 */
 	void registerUnrecognisedOptionHandler(const std::shared_ptr<IOptionHandler>& handler);
 
 		/**
 		 * @brief Process a vector of command-line args in accordance with the registered option handlers.
 		 * 
 		 * @param[in] args Command-line args to process.
+		 *
+		 * @throw tc::ArgumentException An option was not recognised, or otherwise malformed. 
 		 */
 	void processOptions(const std::vector<std::string>& args);
 
@@ -260,6 +266,8 @@ public:
 		 * @param[in] args Command-line args to process.
 		 * @param[in] pos Position in args vector to begin with.
 		 * @param[in] num Number of elements in the args vector to process.
+		 *
+		 * @throw tc::ArgumentException An option was not recognised, or otherwise malformed. 
 		 */
 	void processOptions(const std::vector<std::string>& args, size_t pos, size_t num);
 
