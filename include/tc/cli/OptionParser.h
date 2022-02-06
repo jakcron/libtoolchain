@@ -14,6 +14,7 @@
 #include <memory>
 #include <tc/ArgumentException.h>
 #include <tc/ArgumentNullException.h>
+#include <tc/ArgumentOutOfRangeException.h>
 
 namespace tc { namespace cli {
 
@@ -239,6 +240,7 @@ public:
 		 * @param[in] handler Shared pointer to the IOptionHandler.
 		 *
 		 * @throw tc::ArgumentNullException @p handler was null.
+		 * @throw tc::ArgumentOutOfRangeException @p handler had no option strings or regex patterns.
 		 */
 	void registerOptionHandler(const std::shared_ptr<IOptionHandler>& handler);
 

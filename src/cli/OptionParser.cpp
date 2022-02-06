@@ -17,6 +17,11 @@ void tc::cli::OptionParser::registerOptionHandler(const std::shared_ptr<IOptionH
 		throw tc::ArgumentNullException(mModuleLabel, "OptionHandler was null.");
 	}
 
+	if (handler->getOptionStrings().empty() && handler->getOptionRegexPatterns().empty())
+	{
+		throw tc::ArgumentOutOfRangeException(mModuleLabel, "OptionHandler had no option strings or regex patterns.");
+	}
+
 	for (auto itr = handler->getOptionStrings().begin(); itr != handler->getOptionStrings().end(); itr++)
 	{
 		mOptionaAliasMap.insert(std::pair<std::string, std::shared_ptr<IOptionHandler>>(*itr, handler));
