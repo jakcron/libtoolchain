@@ -19,6 +19,7 @@
 #include <tc/ObjectDisposedException.h>
 #include <tc/OverflowException.h>
 #include <tc/UnauthorisedAccessException.h>
+#include <tc/SecurityException.h>
 #include <tc/io/IOException.h>
 #include <tc/io/FileExistsException.h>
 #include <tc/io/FileNotFoundException.h>
