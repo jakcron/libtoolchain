@@ -32,13 +32,13 @@ public:
 		/** 
 		 * @brief Create SubFileSystem
 		 * 
-		 * @param[in] file_system The base IFileSystem object which this sub file_system will derive from.
+		 * @param[in] file_system The base IFileSystem object which this sub file-system will derive from.
 		 * @param[in] base_path The path to the subdirectory used as the substream root directory.
 		 * 
 		 * @throw tc::ArgumentNullException @p file_system is @a nullptr.
 		 * @throw tc::InvalidOperationException @p file_system was not in a ready state.
 		 *
-		 * @note This will temporarily change and then restore the base filesystem current working directory.
+		 * @note This will temporarily change and then restore the base file-system current working directory.
 		 **/
 	SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>& file_system, const tc::io::Path& base_path);
 
@@ -50,7 +50,7 @@ public:
 		 * 
 		 * @param[in] path A relative or absolute path to file.
 		 * 
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
 		 **/
 	void createFile(const tc::io::Path& path);
 
@@ -59,7 +59,7 @@ public:
 		 * 
 		 * @param[in] path A relative or absolute path to file.
 		 * 
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
 		 **/
 	void removeFile(const tc::io::Path& path);
 
@@ -71,7 +71,7 @@ public:
 		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the @ref IStream object. This also determines the values returned by the @ref IStream::canRead and @ref IStream::canWrite methods of the IStream object. @ref IStream::canSeek is true if path specifies a disk file.
 		 * @param[out] stream Pointer to IStream object to be instantiated
 		 * 
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
 		 **/
 	void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream);
 	
@@ -80,7 +80,7 @@ public:
 		 * 
 		 * @param[in] path A relative or absolute path to directory.
 		 * 
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
 		 **/
 	void createDirectory(const tc::io::Path& path);
 
@@ -88,7 +88,7 @@ public:
 		 * @brief Remove a directory
 		 * @param[in] path A relative or absolute path to directory.
 		 * 
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
 		 **/
 	void removeDirectory(const tc::io::Path& path);
 
@@ -96,9 +96,9 @@ public:
 		 * @brief Get the full path of the working directory
 		 * @param[out] path Path object to populate
 		 * 
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
 		 *
-		 * @note This will temporarily change and then restore the base filesystem current working directory.
+		 * @note This will temporarily change and then restore the base file-system current working directory.
 		 **/
 	void getWorkingDirectory(tc::io::Path& path);
 
@@ -106,8 +106,8 @@ public:
 		 * @brief Change the working directory
 		 * @param[in] path A relative or absolute path to directory.
 		 * 
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
-		 * @throw tc::UnauthorisedAccessException Sub filesystem escape detected.
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
+		 * @throw tc::UnauthorisedAccessException Sub file-system escape detected.
 		 **/
 	void setWorkingDirectory(const tc::io::Path& path);
 
@@ -116,8 +116,8 @@ public:
 		 * @param[in] path A relative or absolute path to directory.
 		 * @param[out] info The sDirectoryListing object to populate
 		 * 
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
-		 * @throw tc::UnauthorisedAccessException Sub filesystem escape detected.
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
+		 * @throw tc::UnauthorisedAccessException Sub file-system escape detected.
 		 **/
 	void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info);
 private:
