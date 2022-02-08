@@ -21,12 +21,11 @@ namespace tc { namespace io {
 	 * 
 	 * @details
 	 * The intended use-case for VirtualFileSystem is for when the user must read/parse the file-system structures directly instead of using the OS to mount it.
-	 * The user parses the file-system structures to create a file-system snapshot (see @ref VirtualFileSystem::FileSystemSnapshot) which is used by VirtualFileSystem to create a IFileSystem shim.
+	 * The user generates a file-system snapshot from the file-system structures (see @ref VirtualFileSystem::FileSystemSnapshot) and supplies that to VirtualFileSystem to create a IFileSystem shim.
 	 *
 	 * User supplies:
 	 * * a @ref VirtualFileSystem::FileSystemSnapshot struct which contains vectors of directory and file entries, including mapping between absolute tc::io::Path and a dir/file entry.
 	 * * optionally an implementation of @ref VirtualFileSystem::IPathResolver to determine the absolute path from a relative path and the current directory. Providing a custom IPathResolver implementation is only required when special logic (like case insensitivity) is required to resolve the correct absolute path.
-	 *
 	 **/	
 class VirtualFileSystem : public tc::io::IFileSystem
 {
