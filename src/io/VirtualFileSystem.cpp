@@ -1,24 +1,17 @@
 #include <tc/io/VirtualFileSystem.h>
 
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <tc/cli.h>
-#include <tc/io.h>
-#include <tc/string.h>
-
 tc::io::VirtualFileSystem::VirtualFileSystem() :
 	mModuleLabel("tc::io::VirtualFileSystem"),
 	mCurDir(nullptr),
-	mFsMeta(),
+	mFsSnapshot(),
 	mPathResolver()
 {
 }
 
-tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemMeta& fs_meta, const std::shared_ptr<IPathResolver>& path_resolver) :
+tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemSnapshot& fs_snapshot, const std::shared_ptr<IPathResolver>& path_resolver) :
 	VirtualFileSystem()
 {
-	mFsMeta = fs_meta;
+	mFsSnapshot = fs_snapshot;
 	mPathResolver = path_resolver;
 
 	// Use default path resolver if none was provided
@@ -31,13 +24,23 @@ tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemMeta& fs_meta, cons
 	tc::io::Path root_path;
 	mPathResolver->resolvePath(tc::io::Path("/"), tc::io::Path("/"), root_path);
 
-	auto root_itr = mFsMeta.dir_hash_map.find(root_path);
-	if (root_itr == mFsMeta.dir_hash_map.end())
+	auto root_itr = mFsSnapshot.dir_entry_path_map.find(root_path);
+	if (root_itr == mFsSnapshot.dir_entry_path_map.end())
+	{
+		throw tc::InvalidOperationException(mModuleLabel, "Failed to located root directory");
+	}
+	// if the path was not found in the map, throw exception
+	if (root_itr == mFsSnapshot.dir_entry_path_map.end())
+	{
+		throw tc::InvalidOperationException(mModuleLabel, "Failed to located root directory");
+	}
+	// if the dir_entry index isn't valid, throw exception
+	if (root_itr->second >= mFsSnapshot.dir_entries.size())
 	{
 		throw tc::InvalidOperationException(mModuleLabel, "Failed to located root directory");
 	}
 
-	mCurDir = &mFsMeta.dir_entries.at(root_itr->second);
+	mCurDir = &mFsSnapshot.dir_entries.at(root_itr->second);
 }
 
 tc::ResourceStatus tc::io::VirtualFileSystem::state()
@@ -48,10 +51,10 @@ tc::ResourceStatus tc::io::VirtualFileSystem::state()
 void tc::io::VirtualFileSystem::dispose()
 {
 	mCurDir = nullptr;
-	mFsMeta.dir_entries.clear();
-	mFsMeta.file_entries.clear();
-	mFsMeta.dir_hash_map.clear();
-	mFsMeta.file_hash_map.clear();
+	mFsSnapshot.dir_entries.clear();
+	mFsSnapshot.file_entries.clear();
+	mFsSnapshot.dir_entry_path_map.clear();
+	mFsSnapshot.file_entry_path_map.clear();
 	mPathResolver.reset();
 }
 
@@ -77,20 +80,31 @@ void tc::io::VirtualFileSystem::openFile(const tc::io::Path& path, tc::io::FileM
 
 	if (mode != tc::io::FileMode::Open)
 	{
-		throw tc::io::FileNotFoundException(mModuleLabel, "This file-system is read-only, only FileMode::Open is supported.");
+		throw tc::NotSupportedException(mModuleLabel, "This file-system is read-only, only FileMode::Open is supported.");
 	}
 	if (access != tc::io::FileAccess::Read)
 	{
-		throw tc::io::FileNotFoundException(mModuleLabel, "This file-system is read-only, only FileAccess::Read is supported.");
+		throw tc::NotSupportedException(mModuleLabel, "This file-system is read-only, only FileAccess::Read is supported.");
 	}
 
-	auto file_itr = mFsMeta.file_hash_map.find(resolved_path);
-	if (file_itr == mFsMeta.file_hash_map.end())
+	auto file_itr = mFsSnapshot.file_entry_path_map.find(resolved_path);
+	// if resolved_path does not exist in the map, throw exception
+	if (file_itr == mFsSnapshot.file_entry_path_map.end())
+	{
+		throw tc::io::FileNotFoundException(mModuleLabel, "File does not exist.");
+	}
+	// if the file_entry index isn't valid or leads to a null IStream pointer, throw exception
+	if (file_itr->second >= mFsSnapshot.file_entries.size() || mFsSnapshot.file_entries.at(file_itr->second).stream == nullptr)
+	{
+		throw tc::io::FileNotFoundException(mModuleLabel, "File does not exist.");
+	}
+	// if the stream has invalid properties, throw exception
+	if ( !(mFsSnapshot.file_entries.at(file_itr->second).stream->canRead() == true && mFsSnapshot.file_entries.at(file_itr->second).stream->canWrite() == false) )
 	{
 		throw tc::io::FileNotFoundException(mModuleLabel, "File does not exist.");
 	}
 
-	stream = mFsMeta.file_entries.at(file_itr->second).stream;
+	stream = mFsSnapshot.file_entries.at(file_itr->second).stream;
 }
 
 void tc::io::VirtualFileSystem::createDirectory(const tc::io::Path& path)
@@ -123,13 +137,19 @@ void tc::io::VirtualFileSystem::setWorkingDirectory(const tc::io::Path& path)
 	tc::io::Path resolved_path;
 	mPathResolver->resolvePath(path, mCurDir->dir_listing.abs_path, resolved_path);
 
-	auto dir_itr = mFsMeta.dir_hash_map.find(resolved_path);
-	if (dir_itr == mFsMeta.dir_hash_map.end())
+	auto dir_itr = mFsSnapshot.dir_entry_path_map.find(resolved_path);
+	// if the path was not found in the map, throw exception
+	if (dir_itr == mFsSnapshot.dir_entry_path_map.end())
+	{
+		throw tc::io::DirectoryNotFoundException(mModuleLabel, "Directory does not exist.");
+	}
+	// if the dir_entry index isn't valid, throw exception
+	if (dir_itr->second >= mFsSnapshot.dir_entries.size())
 	{
 		throw tc::io::DirectoryNotFoundException(mModuleLabel, "Directory does not exist.");
 	}
 
-	mCurDir = &mFsMeta.dir_entries.at(dir_itr->second);
+	mCurDir = &mFsSnapshot.dir_entries.at(dir_itr->second);
 }
 
 void tc::io::VirtualFileSystem::getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info)
@@ -143,13 +163,19 @@ void tc::io::VirtualFileSystem::getDirectoryListing(const tc::io::Path& path, tc
 
 	mPathResolver->resolvePath(path, mCurDir->dir_listing.abs_path, resolved_path);
 
-	auto dir_itr = mFsMeta.dir_hash_map.find(resolved_path);
-	if (dir_itr == mFsMeta.dir_hash_map.end())
+	auto dir_itr = mFsSnapshot.dir_entry_path_map.find(resolved_path);
+	// if the path was not found in the map, throw exception
+	if (dir_itr == mFsSnapshot.dir_entry_path_map.end())
+	{
+		throw tc::io::DirectoryNotFoundException(mModuleLabel, "Directory does not exist.");
+	}
+	// if the dir_entry index isn't valid, throw exception
+	if (dir_itr->second >= mFsSnapshot.dir_entries.size())
 	{
 		throw tc::io::DirectoryNotFoundException(mModuleLabel, "Directory does not exist.");
 	}
 
-	info = mFsMeta.dir_entries.at(dir_itr->second).dir_listing;
+	info = mFsSnapshot.dir_entries.at(dir_itr->second).dir_listing;
 }
 
 tc::io::VirtualFileSystem::DefaultPathResolver::DefaultPathResolver()
