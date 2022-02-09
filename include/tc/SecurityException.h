@@ -33,7 +33,7 @@ public:
 		 * - module() == ""
 		 * - error() == what
 		 **/
-	SystemException(const std::string& what) noexcept :
+	SecurityException(const std::string& what) noexcept :
 		tc::Exception(what)
 	{}
 
@@ -48,7 +48,7 @@ public:
 		 * - module() == module
 		 * - error() == what
 		 **/
-	SystemException(const std::string& module, const std::string& what) noexcept :
+	SecurityException(const std::string& module, const std::string& what) noexcept :
 		tc::Exception(module, what)
 	{
 	}
