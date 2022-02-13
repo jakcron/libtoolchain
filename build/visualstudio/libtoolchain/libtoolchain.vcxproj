@@ -220,7 +220,6 @@
     <ClInclude Include="..\..\..\include\tc\crypto\detail\Sha512Impl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\XtsModeImpl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto.h" />
-    <ClInclude Include="..\..\..\include\tc\io\CachedBlockStream.h" />
     <ClInclude Include="..\..\..\include\tc\io\DirectoryNotEmptyException.h" />
     <ClInclude Include="..\..\..\include\tc\io\DirectoryNotFoundException.h" />
     <ClInclude Include="..\..\..\include\tc\io\FileAccess.h" />
@@ -312,7 +311,6 @@
     <ClCompile Include="..\..\..\src\crypto\detail\Sha1Impl.cpp" />
     <ClCompile Include="..\..\..\src\crypto\detail\Sha256Impl.cpp" />
     <ClCompile Include="..\..\..\src\crypto\detail\Sha512Impl.cpp" />
-    <ClCompile Include="..\..\..\src\io\CachedBlockStream.cpp" />
     <ClCompile Include="..\..\..\src\io\FileStream.cpp" />
     <ClCompile Include="..\..\..\src\io\IOUtil.cpp" />
     <ClCompile Include="..\..\..\src\io\LocalFileSystem.cpp" />

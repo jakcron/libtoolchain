@@ -279,9 +279,6 @@
     <ClCompile Include="..\..\..\test\crypto_Aes128CtrEncryptedStream_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\io_CachedBlockStream_TestClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\test\io_VirtualFileSystem_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -549,9 +546,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\crypto_Aes128CtrEncryptedStream_TestClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\test\io_CachedBlockStream_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\io_VirtualFileSystem_TestClass.h">
