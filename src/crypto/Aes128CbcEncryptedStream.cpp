@@ -151,12 +151,12 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 
 	if (block_num == 0)
 	{
-		tc::InvalidOperationException(mModuleLabel, "Invalid block number (0 blocks, would have returned before now if count==0)");
+		tc::InvalidOperationException(mModuleLabel+"::read()", "Invalid block number (0 blocks, would have returned before now if count==0)");
 	}
 
 	if (block_num < continuous_block_num)
 	{
-		tc::InvalidOperationException(mModuleLabel, "Invalid block number (underflow error)");
+		tc::InvalidOperationException(mModuleLabel+"::read()", "Invalid block number (underflow error)");
 	}
 
 	// allocate memory for partial block
@@ -255,7 +255,12 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 
 size_t tc::crypto::Aes128CbcEncryptedStream::write(const byte_t* ptr, size_t count)
 {
-	throw tc::NotImplementedException(mModuleLabel+"::write()", "write is not supported for Aes128CbcEncryptedStream");
+	if (mBaseStream == nullptr)
+	{
+		throw tc::ObjectDisposedException(mModuleLabel+"::write()", "Failed to set stream position (stream is disposed)");
+	}
+
+	throw tc::NotSupportedException(mModuleLabel+"::write()", "write is not supported for Aes128CbcEncryptedStream");
 }
 
 int64_t tc::crypto::Aes128CbcEncryptedStream::seek(int64_t offset, tc::io::SeekOrigin origin)
