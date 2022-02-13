@@ -2,8 +2,8 @@
 	 * @file    Aes128CtrEncryptedStream.h
 	 * @brief   Declaration of tc::crypto::Aes128CtrEncryptedStream
 	 * @author  Jack (jakcron)
-	 * @version 0.1
-	 * @date    2021/01/09
+	 * @version 0.2
+	 * @date    2022/02/13
 	 **/
 #pragma once
 #include <list>
@@ -13,6 +13,7 @@
 
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/ObjectDisposedException.h>
+#include <tc/NotSupportedException.h>
 #include <tc/io/IOException.h>
 
 namespace tc { namespace crypto {
@@ -28,17 +29,8 @@ public:
 	using counter_t = std::array<byte_t, tc::crypto::Aes128CtrEncryptor::kBlockSize>;
 	using block_t = std::array<byte_t, tc::crypto::Aes128CtrEncryptor::kBlockSize>;
 
-	struct KeyConfig
-	{
-		key_t key;
-		counter_t counter;
-		int64_t begin_offset; // inclusive
-		int64_t end_offset; // exclusive
-	};
-
 	Aes128CtrEncryptedStream();
 	Aes128CtrEncryptedStream(const std::shared_ptr<tc::io::IStream>& stream, const key_t& key, const counter_t& counter);
-	Aes128CtrEncryptedStream(const std::shared_ptr<tc::io::IStream>& stream, const std::vector<KeyConfig>& key_cfg);
 
 		/**
 		 * @brief Indicates whether the current stream supports reading.
@@ -142,17 +134,9 @@ private:
 
 	// base source
 	std::shared_ptr<tc::io::IStream> mBaseStream;
-
+	
 	// encryption cfg
-	struct CryptorRange
-	{
-		std::shared_ptr<tc::crypto::Aes128CtrEncryptor> cryptor;
-		uint64_t begin_block; // inclusive
-		uint64_t end_block; // exclusive
-	};
-	std::list<CryptorRange> mCryptorRange;
-
-	void decrypt(byte_t* dst, const byte_t* src, size_t size, uint64_t block_number);
+	std::shared_ptr<tc::crypto::Aes128CtrEncryptor> mCryptor;
 };
 
 }} // namespace tc::crypto

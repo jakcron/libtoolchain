@@ -1,26 +1,31 @@
 #include <tc/crypto/Aes128CtrEncryptedStream.h>
-#include <tc/io/SubStream.h>
 #include <tc/io/IOUtil.h>
 #include <tc/io/StreamUtil.h>
 
-#include <iostream>
-#include <iomanip>
-#include <sstream>
+/*
+#include <fmt/core.h>
 #include <tc/cli/FormatUtil.h>
+*/
+
+// inline utils
+inline uint64_t castInt64ToUint64(int64_t val) { return val < 0 ? 0 : uint64_t(val); }
+inline int64_t castUint64ToInt64(uint64_t val) { return (int64_t)std::min<uint64_t>(val, uint64_t(std::numeric_limits<int64_t>::max())); }
+
+inline uint64_t offsetToBlockIndex(int64_t offset) { return castInt64ToUint64(offset / tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CtrEncryptor::kBlockSize)); };
+inline int64_t blockIndexToOffset(uint64_t block_index) { return castUint64ToInt64(block_index) * tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CtrEncryptor::kBlockSize); };
+
+inline size_t lengthToBlockNum(int64_t length) { return tc::io::IOUtil::castInt64ToSize(length / tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CtrEncryptor::kBlockSize)); };
+inline size_t offsetInBlock(int64_t offset) { return tc::io::IOUtil::castInt64ToSize(offset % tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CtrEncryptor::kBlockSize)); };
+
 
 tc::crypto::Aes128CtrEncryptedStream::Aes128CtrEncryptedStream() :
 	mModuleLabel("tc::crypto::Aes128CtrEncryptedStream"),
 	mBaseStream(),
-	mCryptorRange()
+	mCryptor(std::shared_ptr<tc::crypto::Aes128CtrEncryptor>(new tc::crypto::Aes128CtrEncryptor()))
 {
 }
 
 tc::crypto::Aes128CtrEncryptedStream::Aes128CtrEncryptedStream(const std::shared_ptr<tc::io::IStream>& stream, const key_t& key, const counter_t& counter) :
-	Aes128CtrEncryptedStream(stream, {{key, counter, 0, -1}})
-{
-}
-
-tc::crypto::Aes128CtrEncryptedStream::Aes128CtrEncryptedStream(const std::shared_ptr<tc::io::IStream>& stream, const std::vector<KeyConfig>& key_cfg) :
 	Aes128CtrEncryptedStream()
 {
 	mBaseStream = stream;
@@ -39,33 +44,8 @@ tc::crypto::Aes128CtrEncryptedStream::Aes128CtrEncryptedStream(const std::shared
 		throw tc::InvalidOperationException(mModuleLabel, "stream does not support seeking.");
 	}
 
-	// import keys
-	CryptorRange range;
-	for (auto itr = key_cfg.begin(); itr != key_cfg.end(); itr++)
-	{
-		range.cryptor = std::shared_ptr<tc::crypto::Aes128CtrEncryptor>(new tc::crypto::Aes128CtrEncryptor());
-		range.cryptor->initialize(itr->key.data(), itr->key.size(), itr->counter.data(), itr->counter.size());
-		range.begin_block = uint64_t(itr->begin_offset) / uint64_t(sizeof(block_t));
-		if (itr->end_offset == -1)
-			range.end_block = uint64_t(mBaseStream->length()) / uint64_t(sizeof(block_t));
-		else
-			range.end_block = uint64_t(itr->end_offset) / uint64_t(sizeof(block_t));
-
-		mCryptorRange.push_back(std::move(range));
-	}
-
-	/*
-	std::cout << "[Aes128CtrEncryptedStream]" << std::endl;
-	std::cout << " Length: 0x" << std::hex << mBaseStream->length() << std::endl;
-	for (auto itr = mCryptorRange.begin(); itr != mCryptorRange.end(); itr++)
-	{
-		std::cout << " CryptoRange:" << std::endl;
-		std::cout << "   BeginBlock: 0x" << itr->begin_block;
-		std::cout << " (offset: 0x" << itr->begin_block * 0x10 << ")" << std::endl;
-		std::cout << "   EndBlock: 0x" << itr->end_block;
-		std::cout << " (offset: 0x" << itr->end_block * 0x10 << ")" << std::endl;
-	}
-	*/
+	// initialise cryptor
+	mCryptor->initialize(key.data(), key.size(), counter.data(), counter.size());
 }
 
 bool tc::crypto::Aes128CtrEncryptedStream::canRead() const
@@ -99,10 +79,14 @@ size_t tc::crypto::Aes128CtrEncryptedStream::read(byte_t* ptr, size_t count)
 		throw tc::ObjectDisposedException(mModuleLabel+"::read()", "Failed to read from stream (stream is disposed)");
 	}
 
+	// track read_count
+	size_t data_read_count = 0;
+
 	// get predicted read count
-	count = tc::io::IOUtil::getReadableCount(mBaseStream->length(), mBaseStream->position(), count);
+	count = tc::io::IOUtil::getReadableCount(this->length(), this->position(), count);
 	
-	if (count == 0) return 0;
+	// if count is 0 just return
+	if (count == 0) return data_read_count;
 
 	// get current position
 	int64_t current_pos = mBaseStream->position();
@@ -111,92 +95,148 @@ size_t tc::crypto::Aes128CtrEncryptedStream::read(byte_t* ptr, size_t count)
 		throw tc::InvalidOperationException(mModuleLabel+"::read()", "Current stream position is negative.");
 	}
 
-	//std::cout << "current pos 0x" << std::hex << current_pos << std::endl;
+	// determine begin & end offsets
+	int64_t begin_read_offset    = current_pos;
+	int64_t end_read_offset      = begin_read_offset + tc::io::IOUtil::castSizeToInt64(count);
+	int64_t begin_aligned_offset = begin_read_offset - tc::io::IOUtil::castSizeToInt64(offsetInBlock(begin_read_offset));
+	int64_t end_aligned_offset   = end_read_offset - tc::io::IOUtil::castSizeToInt64(offsetInBlock(end_read_offset)) + tc::io::IOUtil::castSizeToInt64(offsetInBlock(end_read_offset) ? sizeof(block_t) : 0x0);
+	size_t block_num             = lengthToBlockNum(end_aligned_offset - begin_aligned_offset);
 
-	// determine begin point (begin point can be a partital block)
-	uint64_t begin_block = uint64_t(current_pos) / uint64_t(sizeof(block_t));
-	//int64_t begin_block_offset = int64_t(begin_block) * int64_t(sizeof(block_t));
-	size_t begin_block_read_offset = size_t(uint64_t(current_pos) % uint64_t(sizeof(block_t)));
-	size_t begin_block_read_size = sizeof(block_t) - begin_block_read_offset;
-	bool has_partial_begin_block = begin_block_read_offset > 0;
+	bool read_partial_begin_block       = false;
+	uint64_t partial_begin_block_index  = offsetToBlockIndex(begin_read_offset);
+	size_t partial_begin_block_offset   = 0;
+	size_t partial_begin_block_size     = sizeof(block_t);
 
-	// determine end point
-	uint64_t end_block = uint64_t(current_pos + int64_t(count)) / uint64_t(sizeof(block_t));
-	//int64_t end_block_offset = int64_t(end_block) * int64_t(sizeof(block_t));
-	size_t end_block_read_offset = 0;
-	size_t end_block_read_size = size_t(uint64_t(current_pos + int64_t(count)) % uint64_t(sizeof(block_t)));
-	bool has_partial_end_block = end_block_read_size > 0;
+	bool read_partial_end_block         = false;
+	uint64_t partial_end_block_index    = offsetToBlockIndex(end_read_offset);
+	size_t partial_end_block_offset     = 0;
+	size_t partial_end_block_size       = sizeof(block_t);
 
-	// middle continuous section
-	uint64_t middle_section_block = has_partial_begin_block ? begin_block+1 : begin_block;
-	//int64_t middle_section_block_offset = int64_t(middle_section_block) * int64_t(sizeof(block_t));
-	size_t middle_section_read_size = count - (has_partial_begin_block ? begin_block_read_size : 0) - (has_partial_end_block ? end_block_read_size : 0);
-
-	// begin decryption
-	size_t total_read_count = 0;
-	//size_t read_count = 0;
-	block_t partial_block;
-	//mBaseStream->seek(begin_block_offset, tc::io::SeekOrigin::Begin);
-
-	// if partial begin block
-	if (has_partial_begin_block)
+	if (offsetInBlock(begin_read_offset) != 0)
 	{
-		//std::cout << "Partial Begin Block" << std::endl;
-		//mBaseStream->seek(begin_block_offset, tc::io::SeekOrigin::Begin);
-		/*
-		read_count = mBaseStream->read(partial_block.data() + begin_block_read_offset, begin_block_read_size);
-		if (read_count != begin_block_read_size)
+		read_partial_begin_block   = true;
+		partial_begin_block_offset += offsetInBlock(begin_read_offset);
+		partial_begin_block_size   -= partial_begin_block_offset;
+	}
+	if (offsetInBlock(end_read_offset) != 0)
+	{
+		if (partial_begin_block_index == partial_end_block_index)
 		{
-			std::cout << "begin_block_read_size, partial block read failure" << std::endl;
+			read_partial_begin_block = true;
+			partial_begin_block_size -= (sizeof(block_t) - offsetInBlock(end_read_offset));
 		}
-		*/
-		
-		mBaseStream->read(partial_block.data() + begin_block_read_offset, begin_block_read_size);
-		decrypt(partial_block.data(), partial_block.data(), partial_block.size(), begin_block);
-		memcpy(ptr + total_read_count, partial_block.data() + begin_block_read_offset, begin_block_read_size);
-		total_read_count += begin_block_read_size;
+		else
+		{
+			read_partial_end_block = true;
+			partial_end_block_size = offsetInBlock(end_read_offset);
+		}
 	}
 
-	// middle continious section
-	//std::cout << "Contiguous blocks" << std::endl;
-	//mBaseStream->seek(middle_section_block_offset, tc::io::SeekOrigin::Begin);
+	size_t continuous_block_num           = block_num - (size_t)read_partial_begin_block - (size_t)read_partial_end_block;
+	uint64_t continuous_begin_block_index = (continuous_block_num == 0) ? 0 : (offsetToBlockIndex(begin_aligned_offset) + (uint64_t)read_partial_begin_block);
+
 	/*
-	read_count = mBaseStream->read(ptr, middle_section_read_size);
-	if (read_count != middle_section_read_size)
+	fmt::print("##############################################\n");
+	fmt::print("count:                  0x{:x}\n", count);
+	fmt::print("begin_read_offset:      0x{:x}\n", begin_read_offset);
+	fmt::print("end_read_offset:        0x{:x}\n", end_read_offset);
+	fmt::print("begin_aligned_offset:   0x{:x}\n", begin_aligned_offset);
+	fmt::print("end_aligned_offset:     0x{:x}\n", end_aligned_offset);
+	fmt::print("block_num:              0x{:x}\n", block_num);
+	
+	fmt::print("partial_begin:\n");
+	fmt::print("  read_block:           {}\n", read_partial_begin_block);
+	fmt::print("  block_index:          0x{:x}\n", partial_begin_block_index);
+	fmt::print("  offset:               0x{:x}\n", partial_begin_block_offset);
+	fmt::print("  size:                 0x{:x}\n", partial_begin_block_size);
+	
+	fmt::print("partial_end:\n");
+	fmt::print("  read_block:           {}\n", read_partial_end_block);
+	fmt::print("  block_index:          0x{:x}\n", partial_end_block_index);
+	fmt::print("  offset:               0x{:x}\n", partial_end_block_offset);
+	fmt::print("  size:                 0x{:x}\n", partial_end_block_size);
+
+	fmt::print("continuous:\n");
+	fmt::print("  block_index:          0x{:x}\n", continuous_begin_block_index);
+	fmt::print("  block_num:            0x{:x}\n", continuous_block_num);
+	*/	
+
+	if (block_num == 0)
 	{
-		std::cout << "middle_section_read_size, block(s) read failure" << std::endl;
+		tc::InvalidOperationException(mModuleLabel+"::read()", "Invalid block number (0 blocks, would have returned before now if count==0)");
 	}
-	*/
-	mBaseStream->read(ptr, middle_section_read_size);
-	decrypt(ptr + total_read_count, ptr + total_read_count, middle_section_read_size, middle_section_block);
-	total_read_count += middle_section_read_size;
 
-	// if partial end block
-	if (has_partial_end_block)
+	if (block_num < continuous_block_num)
 	{
-		//std::cout << "Partial Begin Block" << std::endl;
-		//mBaseStream->seek(end_block_offset, tc::io::SeekOrigin::Begin);
-		/*
-		read_count = mBaseStream->read(partial_block.data() + end_block_read_offset, end_block_read_size);
-		if (read_count != end_block_read_size)
-		{
-			std::cout << "end_block_read_size, partial block read failure" << std::endl;
-		}
-		*/
-		mBaseStream->read(partial_block.data() + end_block_read_offset, end_block_read_size);
-		decrypt(partial_block.data(), partial_block.data(), partial_block.size(), end_block);
-		memcpy(ptr + total_read_count, partial_block.data() + end_block_read_offset, end_block_read_size);
-		total_read_count += end_block_read_size;
+		tc::InvalidOperationException(mModuleLabel+"::read()", "Invalid block number (underflow error)");
 	}
 
-	//mBaseStream->seek(current_pos + total_read_count, tc::io::SeekOrigin::Begin);
+	// allocate memory for partial block
+	tc::ByteData partial_block = tc::ByteData(sizeof(block_t));
 
-	return total_read_count;
+	// read un-aligned begin block
+	if (read_partial_begin_block)
+	{	
+		// read block
+		this->seek(blockIndexToOffset(partial_begin_block_index), tc::io::SeekOrigin::Begin);
+		mBaseStream->read(partial_block.data(), partial_block.size());
+		
+		// decrypt block
+		mCryptor->decrypt(partial_block.data(), partial_block.data(), partial_block.size(), partial_begin_block_index);
+
+		// copy out block carving
+		memcpy(ptr + data_read_count, partial_block.data() + partial_begin_block_offset, partial_begin_block_size);
+
+		// increment data read count
+		data_read_count += partial_begin_block_size;
+	}
+
+	// read continous blocks
+	if (continuous_block_num > 0)
+	{
+		// read blocks
+		this->seek(blockIndexToOffset(continuous_begin_block_index), tc::io::SeekOrigin::Begin);
+		mBaseStream->read(ptr + data_read_count, continuous_block_num * sizeof(block_t));
+		
+		// decrypt blocks
+		mCryptor->decrypt(ptr + data_read_count, ptr + data_read_count, continuous_block_num * sizeof(block_t), continuous_begin_block_index);
+
+		// increment data read count
+		data_read_count += continuous_block_num * sizeof(block_t);
+	}
+	
+	// read un-aligned end block
+	if (read_partial_end_block)
+	{
+		// read block
+		this->seek(blockIndexToOffset(partial_end_block_index), tc::io::SeekOrigin::Begin);
+		mBaseStream->read(partial_block.data(), partial_block.size());
+
+		// decrypt block
+		mCryptor->decrypt(partial_block.data(), partial_block.data(), partial_block.size(), partial_end_block_index);
+
+		// copy out block carving
+		memcpy(ptr + data_read_count, partial_block.data() + partial_end_block_offset, partial_end_block_size);
+
+		// increment
+		data_read_count += partial_end_block_size;
+	}
+
+	// restore expected logical position
+	this->seek(begin_read_offset + tc::io::IOUtil::castSizeToInt64(data_read_count), tc::io::SeekOrigin::Begin);
+
+	// return data read count
+	return data_read_count;
 }
 
 size_t tc::crypto::Aes128CtrEncryptedStream::write(const byte_t* ptr, size_t count)
 {
-	throw tc::NotImplementedException(mModuleLabel+"::write()", "write is not supported for Aes128CtrEncryptedStream");
+	if (mBaseStream == nullptr)
+	{
+		throw tc::ObjectDisposedException(mModuleLabel+"::write()", "Failed to set stream position (stream is disposed)");
+	}
+
+	throw tc::NotSupportedException(mModuleLabel+"::write()", "write is not supported for Aes128CtrEncryptedStream");
 }
 
 int64_t tc::crypto::Aes128CtrEncryptedStream::seek(int64_t offset, tc::io::SeekOrigin origin)
@@ -231,7 +271,7 @@ void tc::crypto::Aes128CtrEncryptedStream::flush()
 
 void tc::crypto::Aes128CtrEncryptedStream::dispose()
 {
-	if (mBaseStream.get() != nullptr)
+	if (mBaseStream != nullptr)
 	{
 		// dispose base stream
 		mBaseStream->dispose();
@@ -239,38 +279,6 @@ void tc::crypto::Aes128CtrEncryptedStream::dispose()
 		// release ptr
 		mBaseStream.reset();
 	}
-	
-	mCryptorRange.clear();
-}
-
-void tc::crypto::Aes128CtrEncryptedStream::decrypt(byte_t* dst, const byte_t* src, size_t size, uint64_t block_number)
-{
-	// decrypt data iterating thru the cryptor ranges
-	uint64_t cur_block = block_number;
-	size_t cryptor_decrypted_data = 0;
-	for (size_t decrypted_count = 0; decrypted_count < size; decrypted_count += cryptor_decrypted_data)
-	{
-		for (auto itr = mCryptorRange.begin(); itr != mCryptorRange.end(); itr++)
-		{
-			if (cur_block >= itr->begin_block && cur_block < itr->end_block)
-			{
-				size_t range_remaining = sizeof(block_t) * size_t(itr->end_block - cur_block);
-				size_t encrypted_remaining = size - decrypted_count;
-
-				cryptor_decrypted_data = std::min<size_t>(encrypted_remaining, range_remaining);
-				
-				if (cryptor_decrypted_data > 0)
-					itr->cryptor->decrypt(dst + decrypted_count, src + decrypted_count, cryptor_decrypted_data, (cur_block - itr->begin_block));
-
-				cur_block += cryptor_decrypted_data / sizeof(block_t);
-				break;
-			}
-		}
-
-		// cryptor_decrypted_data will be 0 if no cryptor range was selected
-		if (cryptor_decrypted_data == 0)
-		{
-			throw tc::InvalidOperationException(mModuleLabel+"::decrypt()", "Could not determine cryptor for data read.");
-		}
-	}
+	if (mCryptor != nullptr)
+		mCryptor.reset();
 }
