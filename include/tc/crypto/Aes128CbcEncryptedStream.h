@@ -2,18 +2,18 @@
 	 * @file    Aes128CbcEncryptedStream.h
 	 * @brief   Declaration of tc::crypto::Aes128CbcEncryptedStream
 	 * @author  Jack (jakcron)
-	 * @version 0.1
-	 * @date    2021/01/09
+	 * @version 0.2
+	 * @date    2022/02/13
 	 **/
 #pragma once
 #include <list>
 #include <tc/ByteData.h>
 #include <tc/io/IStream.h>
-#include <tc/io/IOUtil.h>
 #include <tc/crypto/Aes128CbcEncryptor.h>
 
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/ObjectDisposedException.h>
+#include <tc/NotSupportedException.h>
 #include <tc/io/IOException.h>
 
 namespace tc { namespace crypto {
@@ -134,13 +134,11 @@ private:
 
 	// base source
 	std::shared_ptr<tc::io::IStream> mBaseStream;
-	inline size_t offsetToBlock(int64_t offset) { return tc::io::IOUtil::castInt64ToSize(offset / tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CbcEncryptor::kBlockSize)); };
-	inline size_t offsetInBlock(int64_t offset) { return tc::io::IOUtil::castInt64ToSize(offset % tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CbcEncryptor::kBlockSize)); };
-	inline int64_t blockToOffset(size_t block) { return tc::io::IOUtil::castSizeToInt64(block) * tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CbcEncryptor::kBlockSize); };
 
 	// encryption cfg
 	key_t mKey;
 	iv_t mIv;
+
 };
 
 }} // namespace tc::crypto

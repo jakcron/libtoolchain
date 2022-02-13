@@ -1,12 +1,21 @@
 #include <tc/crypto/Aes128CbcEncryptedStream.h>
-#include <tc/io/SubStream.h>
 #include <tc/io/IOUtil.h>
 #include <tc/io/StreamUtil.h>
 
-#include <iostream>
-#include <iomanip>
-#include <sstream>
+/*
+#include <fmt/core.h>
 #include <tc/cli/FormatUtil.h>
+*/
+
+// inline utils
+inline uint64_t castInt64ToUint64(int64_t val) { return val < 0 ? 0 : uint64_t(val); }
+inline int64_t castUint64ToInt64(uint64_t val) { return (int64_t)std::min<uint64_t>(val, uint64_t(std::numeric_limits<int64_t>::max())); }
+
+inline uint64_t offsetToBlockIndex(int64_t offset) { return castInt64ToUint64(offset / tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CbcEncryptor::kBlockSize)); };
+inline int64_t blockIndexToOffset(uint64_t block_index) { return castUint64ToInt64(block_index) * tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CbcEncryptor::kBlockSize); };
+
+inline size_t lengthToBlockNum(int64_t length) { return tc::io::IOUtil::castInt64ToSize(length / tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CbcEncryptor::kBlockSize)); };
+inline size_t offsetInBlock(int64_t offset) { return tc::io::IOUtil::castInt64ToSize(offset % tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CbcEncryptor::kBlockSize)); };
 
 tc::crypto::Aes128CbcEncryptedStream::Aes128CbcEncryptedStream() :
 	mModuleLabel("tc::crypto::Aes128CbcEncryptedStream"),
@@ -91,21 +100,21 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 	}
 
 	// determine begin & end offsets
-	int64_t begin_read_offset = this->position();
-	int64_t end_read_offset   = begin_read_offset + tc::io::IOUtil::castSizeToInt64(count);
-	int64_t begin_aligned_offset = begin_read_offset - offsetInBlock(begin_read_offset);
-	int64_t end_aligned_offset   = end_read_offset - offsetInBlock(end_read_offset) + (offsetInBlock(end_read_offset) ? sizeof(block_t) : 0x0);
-	size_t block_num = offsetToBlock(end_aligned_offset - begin_aligned_offset);
+	int64_t begin_read_offset    = current_pos;
+	int64_t end_read_offset      = begin_read_offset + tc::io::IOUtil::castSizeToInt64(count);
+	int64_t begin_aligned_offset = begin_read_offset - tc::io::IOUtil::castSizeToInt64(offsetInBlock(begin_read_offset));
+	int64_t end_aligned_offset   = end_read_offset - tc::io::IOUtil::castSizeToInt64(offsetInBlock(end_read_offset)) + tc::io::IOUtil::castSizeToInt64(offsetInBlock(end_read_offset) ? sizeof(block_t) : 0x0);
+	size_t block_num             = lengthToBlockNum(end_aligned_offset - begin_aligned_offset);
 
-	bool read_partial_begin_block     = false;
-	size_t partial_begin_block        = offsetToBlock(begin_read_offset);
-	size_t partial_begin_block_offset = 0;
-	size_t partial_begin_block_size   = sizeof(block_t);
+	bool read_partial_begin_block       = false;
+	uint64_t partial_begin_block_index  = offsetToBlockIndex(begin_read_offset);
+	size_t partial_begin_block_offset   = 0;
+	size_t partial_begin_block_size     = sizeof(block_t);
 
-	bool read_partial_end_block     = false;
-	size_t partial_end_block        = offsetToBlock(end_read_offset);
-	size_t partial_end_block_offset = 0;
-	size_t partial_end_block_size   = sizeof(block_t);
+	bool read_partial_end_block         = false;
+	uint64_t partial_end_block_index    = offsetToBlockIndex(end_read_offset);
+	size_t partial_end_block_offset     = 0;
+	size_t partial_end_block_size       = sizeof(block_t);
 
 	if (offsetInBlock(begin_read_offset) != 0)
 	{
@@ -115,7 +124,7 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 	}
 	if (offsetInBlock(end_read_offset) != 0)
 	{
-		if (partial_begin_block == partial_end_block)
+		if (partial_begin_block_index == partial_end_block_index)
 		{
 			read_partial_begin_block = true;
 			partial_begin_block_size -= (sizeof(block_t) - offsetInBlock(end_read_offset));
@@ -127,33 +136,33 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 		}
 	}
 
-	size_t continuous_block_num   = block_num - (size_t)read_partial_begin_block - (size_t)read_partial_end_block;
-	size_t continuous_begin_block = (continuous_block_num == 0) ? 0 : (offsetToBlock(begin_aligned_offset) + (size_t)read_partial_begin_block);
+	size_t continuous_block_num           = block_num - (size_t)read_partial_begin_block - (size_t)read_partial_end_block;
+	uint64_t continuous_begin_block_index = (continuous_block_num == 0) ? 0 : (offsetToBlockIndex(begin_aligned_offset) + (uint64_t)read_partial_begin_block);
 
 	/*
-	std::cout << "##############################################" << std::endl;
-	std::cout << "count:                  0x" << std::hex << count << std::endl;
-	std::cout << "begin_read_offset:      0x" << std::hex << begin_read_offset << std::endl;
-	std::cout << "end_read_offset:        0x" << std::hex << end_read_offset << std::endl;
-	std::cout << "begin_aligned_offset:   0x" << std::hex << begin_aligned_offset << std::endl;
-	std::cout << "end_aligned_offset:     0x" << std::hex << end_aligned_offset << std::endl;
-	std::cout << "block_num:              0x" << std::hex << block_num << std::endl;
+	fmt::print("##############################################\n");
+	fmt::print("count:                  0x{:x}\n", count);
+	fmt::print("begin_read_offset:      0x{:x}\n", begin_read_offset);
+	fmt::print("end_read_offset:        0x{:x}\n", end_read_offset);
+	fmt::print("begin_aligned_offset:   0x{:x}\n", begin_aligned_offset);
+	fmt::print("end_aligned_offset:     0x{:x}\n", end_aligned_offset);
+	fmt::print("block_num:              0x{:x}\n", block_num);
 	
-	std::cout << "partial_begin:" << std::endl;
-	std::cout << "  read_block:           " << std::boolalpha << read_partial_begin_block << std::endl;
-	std::cout << "  block:                0x" << std::hex << partial_begin_block << std::endl;
-	std::cout << "  offset:               0x" << std::hex << partial_begin_block_offset << std::endl;
-	std::cout << "  size:                 0x" << std::hex << partial_begin_block_size << std::endl;
+	fmt::print("partial_begin:\n");
+	fmt::print("  read_block:           {}\n", read_partial_begin_block);
+	fmt::print("  block_index:          0x{:x}\n", partial_begin_block_index);
+	fmt::print("  offset:               0x{:x}\n", partial_begin_block_offset);
+	fmt::print("  size:                 0x{:x}\n", partial_begin_block_size);
+	
+	fmt::print("partial_end:\n");
+	fmt::print("  read_block:           {}\n", read_partial_end_block);
+	fmt::print("  block_index:          0x{:x}\n", partial_end_block_index);
+	fmt::print("  offset:               0x{:x}\n", partial_end_block_offset);
+	fmt::print("  size:                 0x{:x}\n", partial_end_block_size);
 
-	std::cout << "partial_end:" << std::endl;
-	std::cout << "  read_block:           " << std::boolalpha << read_partial_end_block << std::endl;
-	std::cout << "  block:                0x" << std::hex << partial_end_block << std::endl;
-	std::cout << "  offset:               0x" << std::hex << partial_end_block_offset << std::endl;
-	std::cout << "  size:                 0x" << std::hex << partial_end_block_size << std::endl;
-
-	std::cout << "continuous:" << std::endl;
-	std::cout << "  block:                0x" << std::hex << continuous_begin_block << std::endl;
-	std::cout << "  block_num:            0x" << std::hex << continuous_block_num << std::endl;
+	fmt::print("continuous:\n");
+	fmt::print("  block_index:          0x{:x}\n", continuous_begin_block_index);
+	fmt::print("  block_num:            0x{:x}\n", continuous_block_num);
 	*/
 
 	if (block_num == 0)
@@ -174,18 +183,18 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 	{
 		// read iv	
 		iv_t iv;
-		if (partial_begin_block == 0)
+		if (partial_begin_block_index == 0)
 		{
 			iv = mIv;
 		}
 		else
 		{
-			this->seek(blockToOffset(partial_begin_block-1), tc::io::SeekOrigin::Begin);
+			this->seek(blockIndexToOffset(partial_begin_block_index-1), tc::io::SeekOrigin::Begin);
 			mBaseStream->read(iv.data(), iv.size());
 		}
 		
 		// read block
-		this->seek(blockToOffset(partial_begin_block), tc::io::SeekOrigin::Begin);
+		this->seek(blockIndexToOffset(partial_begin_block_index), tc::io::SeekOrigin::Begin);
 		mBaseStream->read(partial_block.data(), partial_block.size());
 		
 		// decrypt block
@@ -203,18 +212,18 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 	{
 		// read iv	
 		iv_t iv;
-		if (continuous_begin_block == 0)
+		if (continuous_begin_block_index == 0)
 		{
 			iv = mIv;
 		}
 		else
 		{
-			this->seek(blockToOffset(continuous_begin_block-1), tc::io::SeekOrigin::Begin);
+			this->seek(blockIndexToOffset(continuous_begin_block_index-1), tc::io::SeekOrigin::Begin);
 			mBaseStream->read(iv.data(), iv.size());
 		}
 
 		// read blocks
-		this->seek(blockToOffset(continuous_begin_block), tc::io::SeekOrigin::Begin);
+		this->seek(blockIndexToOffset(continuous_begin_block_index), tc::io::SeekOrigin::Begin);
 		mBaseStream->read(ptr + data_read_count, continuous_block_num * sizeof(block_t));
 		
 		// decrypt blocks
@@ -229,18 +238,18 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 	{
 		// read iv	
 		iv_t iv;
-		if (partial_end_block == 0)
+		if (partial_end_block_index == 0)
 		{
 			iv = mIv;
 		}
 		else
 		{
-			this->seek(blockToOffset(partial_end_block-1), tc::io::SeekOrigin::Begin);
+			this->seek(blockIndexToOffset(partial_end_block_index-1), tc::io::SeekOrigin::Begin);
 			mBaseStream->read(iv.data(), iv.size());
 		}
 
 		// read block
-		this->seek(blockToOffset(partial_end_block), tc::io::SeekOrigin::Begin);
+		this->seek(blockIndexToOffset(partial_end_block_index), tc::io::SeekOrigin::Begin);
 		mBaseStream->read(partial_block.data(), partial_block.size());
 
 		// decrypt block
