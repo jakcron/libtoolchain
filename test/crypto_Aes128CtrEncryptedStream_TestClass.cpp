@@ -221,17 +221,45 @@ void crypto_Aes128CtrEncryptedStream_TestClass::util_Setup_TestCases(std::vector
 	tmp.read_plaintext = tc::ByteData(plaintext.data() + tmp.read_offset, tmp.read_size);
 	test_cases.push_back(tmp);
 
-	tmp.test_name  = "Tests 1-4";
+	tmp.test_name  = "Test read all blocks";
 	tmp.ciphertext = ciphertext;
 	tmp.read_offset = 0x0;
 	tmp.read_size = 0x40;
 	tmp.read_plaintext = tc::ByteData(plaintext.data() + tmp.read_offset, tmp.read_size);
 	test_cases.push_back(tmp);
 
-	tmp.test_name  = "Tests 1-4 (un-aligned read)";
+	tmp.test_name  = "Test un-aligned read over blocks 1-2";
 	tmp.ciphertext = ciphertext;
 	tmp.read_offset = 0x17;
-	tmp.read_size = 0x19;
+	tmp.read_size = 0x11;
+	tmp.read_plaintext = tc::ByteData(plaintext.data() + tmp.read_offset, tmp.read_size);
+	test_cases.push_back(tmp);
+
+	tmp.test_name  = "Test un-aligned read over blocks 0-3";
+	tmp.ciphertext = ciphertext;
+	tmp.read_offset = 0x07;
+	tmp.read_size = 0x31;
+	tmp.read_plaintext = tc::ByteData(plaintext.data() + tmp.read_offset, tmp.read_size);
+	test_cases.push_back(tmp);
+
+	tmp.test_name  = "Test partial block 0 read";
+	tmp.ciphertext = ciphertext;
+	tmp.read_offset = 0x2;
+	tmp.read_size = 0x8;
+	tmp.read_plaintext = tc::ByteData(plaintext.data() + tmp.read_offset, tmp.read_size);
+	test_cases.push_back(tmp);
+
+	tmp.test_name  = "Test partial block 1 read";
+	tmp.ciphertext = ciphertext;
+	tmp.read_offset = 0x12;
+	tmp.read_size = 0x8;
+	tmp.read_plaintext = tc::ByteData(plaintext.data() + tmp.read_offset, tmp.read_size);
+	test_cases.push_back(tmp);
+
+	tmp.test_name  = "Test partial block 3 read";
+	tmp.ciphertext = ciphertext;
+	tmp.read_offset = 0x32;
+	tmp.read_size = 0x8;
 	tmp.read_plaintext = tc::ByteData(plaintext.data() + tmp.read_offset, tmp.read_size);
 	test_cases.push_back(tmp);
 }
