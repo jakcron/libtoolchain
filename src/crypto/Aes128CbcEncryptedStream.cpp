@@ -83,6 +83,13 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 	// if count is 0 just return
 	if (count == 0) return data_read_count;
 
+	// get current position
+	int64_t current_pos = mBaseStream->position();
+	if (current_pos < 0)
+	{
+		throw tc::InvalidOperationException(mModuleLabel+"::read()", "Current stream position is negative.");
+	}
+
 	// determine begin & end offsets
 	int64_t begin_read_offset = this->position();
 	int64_t end_read_offset   = begin_read_offset + tc::io::IOUtil::castSizeToInt64(count);
