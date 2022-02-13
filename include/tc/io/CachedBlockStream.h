@@ -12,6 +12,7 @@
 
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/ObjectDisposedException.h>
+#include <tc/NotSupportedException.h>
 #include <tc/io/IOException.h>
 
 namespace tc { namespace io {

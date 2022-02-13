@@ -1,12 +1,8 @@
 #include <tc/io/CachedBlockStream.h>
-#include <tc/io/SubStream.h>
 #include <tc/io/IOUtil.h>
 #include <tc/io/StreamUtil.h>
 
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <tc/cli/FormatUtil.h>
+#include <fmt/core.h>
 
 tc::io::CachedBlockStream::CachedBlockStream() :
 	mModuleLabel("tc::io::CachedBlockStream"),
@@ -112,7 +108,12 @@ size_t tc::io::CachedBlockStream::read(byte_t* ptr, size_t count)
 
 size_t tc::io::CachedBlockStream::write(const byte_t* ptr, size_t count)
 {
-	throw tc::NotImplementedException(mModuleLabel+"::write()", "write is not supported for CachedBlockStream");
+	if (mBaseStream == nullptr)
+	{
+		throw tc::ObjectDisposedException(mModuleLabel+"::write()", "Failed to set stream length (stream is disposed)");
+	}
+
+	throw tc::NotSupportedException(mModuleLabel+"::write()", "write is not supported for CachedBlockStream");
 }
 
 int64_t tc::io::CachedBlockStream::seek(int64_t offset, tc::io::SeekOrigin origin)
@@ -122,7 +123,7 @@ int64_t tc::io::CachedBlockStream::seek(int64_t offset, tc::io::SeekOrigin origi
 		throw tc::ObjectDisposedException(mModuleLabel+"::seek()", "Failed to set stream position (stream is disposed)");
 	}
 
-	//std::cout << "CachedBlockStream::seek() calls length() -> " << mBaseStream->length() << std::endl;
+	//fmt::print("CachedBlockStream::seek() calls length() -> {:x}\n", mBaseStream->length());
 
 	mLogicalPosition = tc::io::StreamUtil::getSeekResult(offset, origin, mLogicalPosition, mBaseStream->length());
 
