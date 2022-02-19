@@ -112,8 +112,8 @@ public:
 
 		/**
 		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written. @ref write is not implemented for @ref Aes128CtrEncryptedStream.
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 * @throw tc::NotImplementedException @ref write is not implemented for @ref Aes128CtrEncryptedStream.
+		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	size_t write(const byte_t* ptr, size_t count);
 

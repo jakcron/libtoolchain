@@ -21,7 +21,7 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @class Aes128CbcEncryptedStream
-	 * @brief Class for reading from a stream that is encrypted with AES128-CTR.
+	 * @brief Class for reading from a stream that is encrypted with AES128-CBC.
 	 * @details This class takes an encrypted IStream, encryption parameters and creates an IStream that will transparently decrypt data when reading.
 	 */
 class Aes128CbcEncryptedStream : public tc::io::IStream
@@ -113,8 +113,8 @@ public:
 
 		/**
 		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written. @ref write is not implemented for @ref Aes128CbcEncryptedStream.
-		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 * @throw tc::NotImplementedException @ref write is not implemented for @ref Aes128CbcEncryptedStream.
+		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	size_t write(const byte_t* ptr, size_t count);
 
