@@ -21,7 +21,8 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @class Aes128CbcEncryptedStream
-	 * @brief Class for reading from a stream that is encrypted with AES128-CBC.
+	 * @brief Class for reading from a stream that is encrypted with AES128-CTR.
+	 * @details This class takes an encrypted IStream, encryption parameters and creates an IStream that will transparently decrypt data when reading.
 	 */
 class Aes128CbcEncryptedStream : public tc::io::IStream
 {
