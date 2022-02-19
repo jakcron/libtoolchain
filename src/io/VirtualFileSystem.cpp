@@ -62,7 +62,7 @@ void tc::io::VirtualFileSystem::createFile(const tc::io::Path& path)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::createFile()", "VirtualFileSystem not initialised");
+		throw tc::ObjectDisposedException(mModuleLabel+"::createFile()", "VirtualFileSystem not initialized");
 	}
 
 	throw tc::NotImplementedException(mModuleLabel+"::createFile()", "createFile is not supported for VirtualFileSystem");
@@ -72,7 +72,7 @@ void tc::io::VirtualFileSystem::removeFile(const tc::io::Path& path)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::removeFile()", "VirtualFileSystem not initialised");
+		throw tc::ObjectDisposedException(mModuleLabel+"::removeFile()", "VirtualFileSystem not initialized");
 	}
 
 	throw tc::NotImplementedException(mModuleLabel+"::removeFile()", "removeFile is not supported for VirtualFileSystem");
@@ -82,7 +82,7 @@ void tc::io::VirtualFileSystem::openFile(const tc::io::Path& path, tc::io::FileM
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::openFile()", "VirtualFileSystem not initialised");
+		throw tc::ObjectDisposedException(mModuleLabel+"::openFile()", "VirtualFileSystem not initialized");
 	}
 
 	tc::io::Path resolved_path;
@@ -121,7 +121,7 @@ void tc::io::VirtualFileSystem::createDirectory(const tc::io::Path& path)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::createDirectory()", "VirtualFileSystem not initialised");
+		throw tc::ObjectDisposedException(mModuleLabel+"::createDirectory()", "VirtualFileSystem not initialized");
 	}
 
 	throw tc::NotImplementedException(mModuleLabel+"::createDirectory()", "createDirectory is not supported for VirtualFileSystem");
@@ -131,7 +131,7 @@ void tc::io::VirtualFileSystem::removeDirectory(const tc::io::Path& path)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::removeDirectory()", "VirtualFileSystem not initialised");
+		throw tc::ObjectDisposedException(mModuleLabel+"::removeDirectory()", "VirtualFileSystem not initialized");
 	}
 
 	throw tc::NotImplementedException(mModuleLabel+"::removeDirectory()", "removeDirectory is not supported for VirtualFileSystem");
@@ -141,7 +141,7 @@ void tc::io::VirtualFileSystem::getWorkingDirectory(tc::io::Path& path)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::getWorkingDirectory()", "VirtualFileSystem not initialised");
+		throw tc::ObjectDisposedException(mModuleLabel+"::getWorkingDirectory()", "VirtualFileSystem not initialized");
 	}
 
 	path = mCurDir->dir_listing.abs_path;
@@ -151,7 +151,7 @@ void tc::io::VirtualFileSystem::setWorkingDirectory(const tc::io::Path& path)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::setWorkingDirectory()", "VirtualFileSystem not initialised");
+		throw tc::ObjectDisposedException(mModuleLabel+"::setWorkingDirectory()", "VirtualFileSystem not initialized");
 	}
 
 	tc::io::Path resolved_path;
@@ -176,7 +176,7 @@ void tc::io::VirtualFileSystem::getDirectoryListing(const tc::io::Path& path, tc
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::getDirectoryListing()", "VirtualFileSystem not initialised");
+		throw tc::ObjectDisposedException(mModuleLabel+"::getDirectoryListing()", "VirtualFileSystem not initialized");
 	}
 
 	tc::io::Path resolved_path;

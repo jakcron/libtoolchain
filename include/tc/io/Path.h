@@ -170,7 +170,7 @@ private:
 
 	std::list<std::string> mUnicodePath;
 
-	void initialisePath(const std::string& src);
+	void initializePath(const std::string& src);
 	void appendPath(const std::list<std::string>& other);
 };
 

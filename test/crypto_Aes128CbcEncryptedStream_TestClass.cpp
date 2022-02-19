@@ -29,7 +29,7 @@ void crypto_Aes128CbcEncryptedStream_TestClass::test_CreateEmptyStream_DefaultCo
 			try
 			{
 				stream.read(nullptr, 0);
-				throw tc::Exception(".read() did not throw tc::ObjectDisposedException for uninitialised Aes128CbcEncryptedStream");
+				throw tc::Exception(".read() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
 			}
 			catch (tc::ObjectDisposedException&) {
 				// do nothing
@@ -38,7 +38,7 @@ void crypto_Aes128CbcEncryptedStream_TestClass::test_CreateEmptyStream_DefaultCo
 			try
 			{
 				stream.write(nullptr, 0);
-				throw tc::Exception(".write() did not throw tc::ObjectDisposedException for uninitialised Aes128CbcEncryptedStream");
+				throw tc::Exception(".write() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
 			}
 			catch (tc::ObjectDisposedException&) {
 				// do nothing
@@ -47,7 +47,7 @@ void crypto_Aes128CbcEncryptedStream_TestClass::test_CreateEmptyStream_DefaultCo
 			try
 			{
 				stream.seek(0, tc::io::SeekOrigin::Begin);
-				throw tc::Exception(".seek() did not throw tc::ObjectDisposedException for uninitialised Aes128CbcEncryptedStream");
+				throw tc::Exception(".seek() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
 			}
 			catch (tc::ObjectDisposedException&) {
 				// do nothing
@@ -56,7 +56,7 @@ void crypto_Aes128CbcEncryptedStream_TestClass::test_CreateEmptyStream_DefaultCo
 			try
 			{
 				stream.setLength(0);
-				throw tc::Exception(".setLength() did not throw tc::ObjectDisposedException for uninitialised Aes128CbcEncryptedStream");
+				throw tc::Exception(".setLength() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
 			}
 			catch (tc::ObjectDisposedException&) {
 				// do nothing
@@ -65,7 +65,7 @@ void crypto_Aes128CbcEncryptedStream_TestClass::test_CreateEmptyStream_DefaultCo
 			try
 			{
 				stream.flush();
-				throw tc::Exception(".flush() did not throw tc::ObjectDisposedException for uninitialised Aes128CbcEncryptedStream");
+				throw tc::Exception(".flush() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
 			}
 			catch (tc::ObjectDisposedException&) {
 				// do nothing
@@ -102,18 +102,18 @@ void crypto_Aes128CbcEncryptedStream_TestClass::test_CreateValidStream_CreateCon
 			try
 			{
 				stream.write(nullptr, 0);
-				throw tc::Exception(".write() did not throw tc::NotSupportedException for initialised Aes128CbcEncryptedStream");
+				throw tc::Exception(".write() did not throw tc::NotImplementedException for initialized Aes128CbcEncryptedStream");
 			}
-			catch (tc::NotSupportedException&) {
+			catch (tc::NotImplementedException&) {
 				// do nothing
 			}
 
 			try
 			{
 				stream.setLength(0);
-				throw tc::Exception(".setLength() did not throw tc::NotSupportedException for initialised Aes128CbcEncryptedStream");
+				throw tc::Exception(".setLength() did not throw tc::NotImplementedException for initialized Aes128CbcEncryptedStream");
 			}
-			catch (tc::NotSupportedException&) {
+			catch (tc::NotImplementedException&) {
 				// do nothing
 			}
 

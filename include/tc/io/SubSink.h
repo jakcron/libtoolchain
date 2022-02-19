@@ -61,7 +61,7 @@ public:
 		 * 
 		 * @return Number of bytes pushed to sink.
 		 * 
-		 * @throw tc::ObjectDisposedException The base sink was not initialised.
+		 * @throw tc::ObjectDisposedException The base sink was not initialized.
 		 * @throw tc::ArgumentOutOfRangeException @p data was too large to be pushed to the sink.
 		 **/
 	size_t pushData(const tc::ByteData& data, int64_t offset);

@@ -158,7 +158,7 @@ private:
 		// do HMAC rounds
 		for (size_t round = 1; round < mRoundCount; round++)
 		{
-			// initialise HMAC again from password
+			// initialize HMAC again from password
 			mHmac.initialize(mPassword.data(), mPassword.size());
 
 			// update hmac with old hmac digest

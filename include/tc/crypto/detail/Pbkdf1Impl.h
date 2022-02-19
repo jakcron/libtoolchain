@@ -144,7 +144,7 @@ private:
 		// do rounds 1 thru mRoundCount (prev round hash)
 		for (size_t round = 1; round < mRoundCount; round++)
 		{
-			// initialise hash
+			// initialize hash
 			mHash.initialize();
 
 			// update with previous round hash
