@@ -14,6 +14,7 @@
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/ObjectDisposedException.h>
 #include <tc/NotSupportedException.h>
+#include <tc/NotImplementedException.h>
 #include <tc/io/IOException.h>
 
 namespace tc { namespace crypto {
@@ -21,15 +22,48 @@ namespace tc { namespace crypto {
 	/**
 	 * @class Aes128CtrEncryptedStream
 	 * @brief Class for reading from a stream that is encrypted with AES128-CTR.
+	 * @details This class takes an encrypted IStream, encryption parameters and creates an IStream that will transparently decrypt data when reading.
 	 */
 class Aes128CtrEncryptedStream : public tc::io::IStream
 {
 public:
+		/**
+		 * @brief This is the data-type for AES128-CTR key used with Aes128CtrEncryptedStream.
+		 * 
+		 */
 	using key_t = std::array<byte_t, tc::crypto::Aes128CtrEncryptor::kKeySize>;
+
+		/**
+		 * @brief This is the data-type for AES128-CTR block counter used with Aes128CtrEncryptedStream.
+		 * 
+		 */
 	using counter_t = std::array<byte_t, tc::crypto::Aes128CtrEncryptor::kBlockSize>;
+
+		/**
+		 * @brief This is the data-type for AES128-CTR data block used with Aes128CtrEncryptedStream.
+		 * 
+		 */
 	using block_t = std::array<byte_t, tc::crypto::Aes128CtrEncryptor::kBlockSize>;
 
+		/**
+		 * @brief Default Constructor
+		 * @post This will create an uninitialized Aes128CtrEncryptedStream, it will have to be assigned from a valid Aes128CtrEncryptedStream object to be usable.
+		 **/
 	Aes128CtrEncryptedStream();
+
+		/** 
+		 * @brief Create Aes128CtrEncryptedStream
+		 * 
+		 * @param[in] stream  The base IStream object which this stream will decrypt data from.
+		 * @param[in] key     AES128 Encryption Key. See @ref key_t.
+		 * @param[in] counter AES128-CTR Counter relative to offset 0x0 of the base stream. See @ref counter_t.
+		 * 
+		 * @pre The sub stream must be a subset of the base stream.
+		 * @pre A stream must support seeking for @ref seek to work. 
+		 * 
+		 * @throw tc::ArgumentNullException @p stream is a @p nullptr.
+		 * @throw tc::NotSupportedException The base stream does not support seeking or reading.
+		 **/
 	Aes128CtrEncryptedStream(const std::shared_ptr<tc::io::IStream>& stream, const key_t& key, const counter_t& counter);
 
 		/**
@@ -77,19 +111,9 @@ public:
 	size_t read(byte_t* ptr, size_t count);
 
 		/**
-		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
-		 * 
-		 * @param[in] ptr Pointer to an array of bytes. This method copies @p count bytes from @p ptr to the current stream.
-		 * @param[in] count The number of bytes to be written to the current stream.
-		 * 
-		 * @return The total number of bytes written to the stream. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
-		 * 
-		 * @pre A stream must support writing for @ref write to work. 
-		 * @note Use @ref canWrite to determine if this stream supports writing.
-		 * @note Exceptions thrown by the base stream are not altered/intercepted, refer to that module's documentation for those exceptions.
-		 * 
-		 * @throw tc::ArgumentOutOfRangeException @p count exceeds the length of writeable data in the sub stream.
+		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written. @ref write is not implemented for @ref Aes128CtrEncryptedStream.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
+		 * @throw tc::NotImplementedException @ref write is not implemented for @ref Aes128CtrEncryptedStream.
 		 **/
 	size_t write(const byte_t* ptr, size_t count);
 
@@ -111,8 +135,8 @@ public:
 	int64_t seek(int64_t offset, tc::io::SeekOrigin origin);
 
 		/**
-		 * @brief Sets the length of the current stream. This is not implemented for @ref SubStream.
-		 * @throw tc::NotImplementedException @ref setLength is not implemented for @ref SubStream
+		 * @brief Sets the length of the current stream. This is not implemented for @ref Aes128CtrEncryptedStream.
+		 * @throw tc::NotImplementedException @ref setLength is not implemented for @ref Aes128CtrEncryptedStream.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	void setLength(int64_t length);

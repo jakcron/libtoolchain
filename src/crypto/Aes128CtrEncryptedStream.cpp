@@ -37,14 +37,14 @@ tc::crypto::Aes128CtrEncryptedStream::Aes128CtrEncryptedStream(const std::shared
 	}
 	if (mBaseStream->canRead() == false)
 	{
-		throw tc::InvalidOperationException(mModuleLabel, "stream does not support reading.");
+		throw tc::NotSupportedException(mModuleLabel, "stream does not support reading.");
 	}
 	if (mBaseStream->canSeek() == false)
 	{
-		throw tc::InvalidOperationException(mModuleLabel, "stream does not support seeking.");
+		throw tc::NotSupportedException(mModuleLabel, "stream does not support seeking.");
 	}
 
-	// initialise cryptor
+	// initialize cryptor
 	mCryptor->initialize(key.data(), key.size(), counter.data(), counter.size());
 }
 
@@ -236,7 +236,7 @@ size_t tc::crypto::Aes128CtrEncryptedStream::write(const byte_t* ptr, size_t cou
 		throw tc::ObjectDisposedException(mModuleLabel+"::write()", "Failed to set stream position (stream is disposed)");
 	}
 
-	throw tc::NotSupportedException(mModuleLabel+"::write()", "write is not supported for Aes128CtrEncryptedStream");
+	throw tc::NotImplementedException(mModuleLabel+"::write()", "write is not implemented for Aes128CtrEncryptedStream");
 }
 
 int64_t tc::crypto::Aes128CtrEncryptedStream::seek(int64_t offset, tc::io::SeekOrigin origin)
@@ -256,7 +256,7 @@ void tc::crypto::Aes128CtrEncryptedStream::setLength(int64_t length)
 		throw tc::ObjectDisposedException(mModuleLabel+"::setLength()", "Failed to set stream length (stream is disposed)");
 	}
 
-	throw tc::NotSupportedException(mModuleLabel+"::setLength()", "setLength is not supported for Aes128CtrEncryptedStream");
+	throw tc::NotImplementedException(mModuleLabel+"::setLength()", "setLength is not implemented for Aes128CtrEncryptedStream");
 }
 
 void tc::crypto::Aes128CtrEncryptedStream::flush()
