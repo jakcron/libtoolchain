@@ -153,7 +153,7 @@ void tc::io::SubStream::setLength(int64_t length)
 		throw tc::ObjectDisposedException(kClassName+"::setLength()", "Failed to set stream length (stream is disposed)");
 	}
 
-	throw tc::NotSupportedException(kClassName+"::setLength()", "setLength is not supported for SubStream");
+	throw tc::NotImplementedException(kClassName+"::setLength()", "setLength is not implemented for SubStream");
 }
 
 void tc::io::SubStream::flush()

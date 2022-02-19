@@ -9,7 +9,7 @@
 #include <tc/io/IFileSystem.h>
 
 #include <tc/ObjectDisposedException.h>
-#include <tc/NotSupportedException.h>
+#include <tc/NotImplementedException.h>
 #include <tc/io/DirectoryNotFoundException.h>
 #include <tc/io/FileNotFoundException.h>
 
@@ -124,21 +124,21 @@ public:
 
 		/** 
 		 * @brief Create a new file
-		 * @details This method is not supported for VirtualFileSystem.
+		 * @details This method is not implemented for VirtualFileSystem.
 		 * 
 		 * @param[in] path A relative or absolute path to file.
 		 * 
-		 * @throw tc::NotSupportedException This method is not supported for VirtualFileSystem.
+		 * @throw tc::NotImplementedException This method is not implemented for VirtualFileSystem.
 		 **/
 	void createFile(const tc::io::Path& path);
 
 		/** 
 		 * @brief Remove a file
-		 * @details This method is not supported for VirtualFileSystem.
+		 * @details This method is not implemented for VirtualFileSystem.
 		 * 
 		 * @param[in] path A relative or absolute path to file.
 		 * 
-		 * @throw tc::NotSupportedException This method is not supported for VirtualFileSystem.
+		 * @throw tc::NotImplementedException This method is not implemented for VirtualFileSystem.
 		 **/
 	void removeFile(const tc::io::Path& path);
 
@@ -151,28 +151,28 @@ public:
 		 * @param[out] stream Pointer to IStream object to be instantiated.
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
-		 * @throw tc::NotSupportedException Unsupported access/mode ( @p mode was not @ref tc::io::FileMode::Open, or @p access was not @ref tc::io::FileAccess::Read).
+		 * @throw tc::NotImplementedException Unsupported access/mode ( @p mode was not @ref tc::io::FileMode::Open, or @p access was not @ref tc::io::FileAccess::Read).
 		 * @throw tc::io::FileNotFoundException File was not found.
 		 **/
 	void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream);
 	
 		/** 
 		 * @brief Create a new directory
-		 * @details This method is not supported for VirtualFileSystem.
+		 * @details This method is not implemented for VirtualFileSystem.
 		 * 
 		 * @param[in] path A relative or absolute path to directory.
 		 * 
-		 * @throw tc::NotSupportedException This method is not supported for VirtualFileSystem.
+		 * @throw tc::NotImplementedException This method is not implemented for VirtualFileSystem.
 		 **/
 	void createDirectory(const tc::io::Path& path);
 
 		/** 
 		 * @brief Remove a directory
-		 * @details This method is not supported for VirtualFileSystem.
+		 * @details This method is not implemented for VirtualFileSystem.
 		 * 
 		 * @param[in] path A relative or absolute path to directory.
 		 * 
-		 * @throw tc::NotSupportedException This method is not supported for VirtualFileSystem.
+		 * @throw tc::NotImplementedException This method is not implemented for VirtualFileSystem.
 		 **/
 	void removeDirectory(const tc::io::Path& path);
 

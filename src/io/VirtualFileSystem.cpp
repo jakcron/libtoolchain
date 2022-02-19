@@ -65,7 +65,7 @@ void tc::io::VirtualFileSystem::createFile(const tc::io::Path& path)
 		throw tc::ObjectDisposedException(mModuleLabel+"::createFile()", "VirtualFileSystem not initialised");
 	}
 
-	throw tc::NotSupportedException(mModuleLabel+"::createFile()", "createFile is not supported for VirtualFileSystem");
+	throw tc::NotImplementedException(mModuleLabel+"::createFile()", "createFile is not supported for VirtualFileSystem");
 }
 
 void tc::io::VirtualFileSystem::removeFile(const tc::io::Path& path)
@@ -75,7 +75,7 @@ void tc::io::VirtualFileSystem::removeFile(const tc::io::Path& path)
 		throw tc::ObjectDisposedException(mModuleLabel+"::removeFile()", "VirtualFileSystem not initialised");
 	}
 
-	throw tc::NotSupportedException(mModuleLabel+"::removeFile()", "removeFile is not supported for VirtualFileSystem");
+	throw tc::NotImplementedException(mModuleLabel+"::removeFile()", "removeFile is not supported for VirtualFileSystem");
 }
 
 void tc::io::VirtualFileSystem::openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream)
@@ -90,11 +90,11 @@ void tc::io::VirtualFileSystem::openFile(const tc::io::Path& path, tc::io::FileM
 
 	if (mode != tc::io::FileMode::Open)
 	{
-		throw tc::NotSupportedException(mModuleLabel+"::openFile()", "This file-system is read-only, only FileMode::Open is supported.");
+		throw tc::NotImplementedException(mModuleLabel+"::openFile()", "This file-system is read-only, only FileMode::Open is supported.");
 	}
 	if (access != tc::io::FileAccess::Read)
 	{
-		throw tc::NotSupportedException(mModuleLabel+"::openFile()", "This file-system is read-only, only FileAccess::Read is supported.");
+		throw tc::NotImplementedException(mModuleLabel+"::openFile()", "This file-system is read-only, only FileAccess::Read is supported.");
 	}
 
 	auto file_itr = mFsSnapshot.file_entry_path_map.find(resolved_path);
@@ -124,7 +124,7 @@ void tc::io::VirtualFileSystem::createDirectory(const tc::io::Path& path)
 		throw tc::ObjectDisposedException(mModuleLabel+"::createDirectory()", "VirtualFileSystem not initialised");
 	}
 
-	throw tc::NotSupportedException(mModuleLabel+"::createDirectory()", "createDirectory is not supported for VirtualFileSystem");
+	throw tc::NotImplementedException(mModuleLabel+"::createDirectory()", "createDirectory is not supported for VirtualFileSystem");
 }
 
 void tc::io::VirtualFileSystem::removeDirectory(const tc::io::Path& path)
@@ -134,7 +134,7 @@ void tc::io::VirtualFileSystem::removeDirectory(const tc::io::Path& path)
 		throw tc::ObjectDisposedException(mModuleLabel+"::removeDirectory()", "VirtualFileSystem not initialised");
 	}
 
-	throw tc::NotSupportedException(mModuleLabel+"::removeDirectory()", "removeDirectory is not supported for VirtualFileSystem");
+	throw tc::NotImplementedException(mModuleLabel+"::removeDirectory()", "removeDirectory is not supported for VirtualFileSystem");
 }
 
 void tc::io::VirtualFileSystem::getWorkingDirectory(tc::io::Path& path)
