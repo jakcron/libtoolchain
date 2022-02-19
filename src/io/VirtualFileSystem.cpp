@@ -25,10 +25,6 @@ tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemSnapshot& fs_snapsh
 	mPathResolver->resolvePath(tc::io::Path("/"), tc::io::Path("/"), root_path);
 
 	auto root_itr = mFsSnapshot.dir_entry_path_map.find(root_path);
-	if (root_itr == mFsSnapshot.dir_entry_path_map.end())
-	{
-		throw tc::InvalidOperationException(mModuleLabel, "Failed to located root directory");
-	}
 	// if the path was not found in the map, throw exception
 	if (root_itr == mFsSnapshot.dir_entry_path_map.end())
 	{
@@ -45,7 +41,7 @@ tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemSnapshot& fs_snapsh
 
 tc::ResourceStatus tc::io::VirtualFileSystem::state()
 {
-	return mCurDir == nullptr? tc::ResourceStatus(tc::RESFLAG_NOINIT) : tc::ResourceStatus(tc::RESFLAG_READY);
+	return mCurDir == nullptr? tc::ResourceStatus(1 << tc::RESFLAG_NOINIT) : tc::ResourceStatus(1 << tc::RESFLAG_READY);
 }
 
 void tc::io::VirtualFileSystem::dispose()

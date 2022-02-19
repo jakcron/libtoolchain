@@ -41,7 +41,7 @@ tc::io::SubFileSystem::SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>&
 
 tc::ResourceStatus tc::io::SubFileSystem::state()
 {
-	return mBaseFileSystem.get() ? mBaseFileSystem->state() : tc::ResourceStatus(RESFLAG_NOINIT);
+	return mBaseFileSystem.get() ? mBaseFileSystem->state() : tc::ResourceStatus(1 << tc::RESFLAG_NOINIT);
 }
 
 void tc::io::SubFileSystem::dispose()
