@@ -19,10 +19,10 @@ inline size_t offsetInBlock(int64_t offset) { return tc::io::IOUtil::castInt64To
 
 tc::crypto::Aes128CbcEncryptedStream::Aes128CbcEncryptedStream() :
 	mModuleLabel("tc::crypto::Aes128CbcEncryptedStream"),
-	mBaseStream()
+	mBaseStream(),
+	mCryptor(std::shared_ptr<tc::crypto::Aes128CbcEncryptor>(new tc::crypto::Aes128CbcEncryptor()))
 {
-	memset(mKey.data(), 0, mKey.size());
-	memset(mIv.data(), 0, mIv.size());
+	memset(mBaseIv.data(), 0, mBaseIv.size());
 }
 
 tc::crypto::Aes128CbcEncryptedStream::Aes128CbcEncryptedStream(const std::shared_ptr<tc::io::IStream>& stream, const key_t& key, const iv_t& iv) :
@@ -37,19 +37,20 @@ tc::crypto::Aes128CbcEncryptedStream::Aes128CbcEncryptedStream(const std::shared
 	}
 	if (mBaseStream->canRead() == false)
 	{
-		throw tc::InvalidOperationException(mModuleLabel, "stream does not support reading.");
+		throw tc::NotSupportedException(mModuleLabel, "stream does not support reading.");
 	}
 	if (mBaseStream->canSeek() == false)
 	{
-		throw tc::InvalidOperationException(mModuleLabel, "stream does not support seeking.");
+		throw tc::NotSupportedException(mModuleLabel, "stream does not support seeking.");
 	}
 	if ((mBaseStream->length() % sizeof(block_t)) != 0)
 	{
-		throw tc::InvalidOperationException(mModuleLabel, "stream does is not block aligned.");
+		throw tc::NotSupportedException(mModuleLabel, "stream does is not block aligned.");
 	}
 
-	mKey = key;
-	mIv = iv;
+	// initialize cryptor
+	mCryptor->initialize(key.data(), key.size(), iv.data(), iv.size());
+	mBaseIv = iv;
 }
 
 bool tc::crypto::Aes128CbcEncryptedStream::canRead() const
@@ -185,20 +186,21 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 		iv_t iv;
 		if (partial_begin_block_index == 0)
 		{
-			iv = mIv;
+			iv = mBaseIv;
 		}
 		else
 		{
 			this->seek(blockIndexToOffset(partial_begin_block_index-1), tc::io::SeekOrigin::Begin);
 			mBaseStream->read(iv.data(), iv.size());
 		}
+		mCryptor->update_iv(iv.data(), iv.size());
 		
 		// read block
 		this->seek(blockIndexToOffset(partial_begin_block_index), tc::io::SeekOrigin::Begin);
 		mBaseStream->read(partial_block.data(), partial_block.size());
 		
 		// decrypt block
-		tc::crypto::DecryptAes128Cbc(partial_block.data(), partial_block.data(), partial_block.size(), mKey.data(), mKey.size(), iv.data(), iv.size());
+		mCryptor->decrypt(partial_block.data(), partial_block.data(), partial_block.size());
 
 		// copy out block carving
 		memcpy(ptr + data_read_count, partial_block.data() + partial_begin_block_offset, partial_begin_block_size);
@@ -214,20 +216,21 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 		iv_t iv;
 		if (continuous_begin_block_index == 0)
 		{
-			iv = mIv;
+			iv = mBaseIv;
 		}
 		else
 		{
 			this->seek(blockIndexToOffset(continuous_begin_block_index-1), tc::io::SeekOrigin::Begin);
 			mBaseStream->read(iv.data(), iv.size());
 		}
+		mCryptor->update_iv(iv.data(), iv.size());
 
 		// read blocks
 		this->seek(blockIndexToOffset(continuous_begin_block_index), tc::io::SeekOrigin::Begin);
 		mBaseStream->read(ptr + data_read_count, continuous_block_num * sizeof(block_t));
 		
 		// decrypt blocks
-		tc::crypto::DecryptAes128Cbc(ptr + data_read_count, ptr + data_read_count, continuous_block_num * sizeof(block_t), mKey.data(), mKey.size(), iv.data(), iv.size());
+		mCryptor->decrypt(ptr + data_read_count, ptr + data_read_count, continuous_block_num * sizeof(block_t));
 
 		// increment data read count
 		data_read_count += continuous_block_num * sizeof(block_t);
@@ -240,20 +243,21 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 		iv_t iv;
 		if (partial_end_block_index == 0)
 		{
-			iv = mIv;
+			iv = mBaseIv;
 		}
 		else
 		{
 			this->seek(blockIndexToOffset(partial_end_block_index-1), tc::io::SeekOrigin::Begin);
 			mBaseStream->read(iv.data(), iv.size());
 		}
+		mCryptor->update_iv(iv.data(), iv.size());
 
 		// read block
 		this->seek(blockIndexToOffset(partial_end_block_index), tc::io::SeekOrigin::Begin);
 		mBaseStream->read(partial_block.data(), partial_block.size());
 
 		// decrypt block
-		tc::crypto::DecryptAes128Cbc(partial_block.data(), partial_block.data(), partial_block.size(), mKey.data(), mKey.size(), iv.data(), iv.size());
+		mCryptor->decrypt(partial_block.data(), partial_block.data(), partial_block.size());
 
 		// copy out block carving
 		memcpy(ptr + data_read_count, partial_block.data() + partial_end_block_offset, partial_end_block_size);
@@ -276,7 +280,7 @@ size_t tc::crypto::Aes128CbcEncryptedStream::write(const byte_t* ptr, size_t cou
 		throw tc::ObjectDisposedException(mModuleLabel+"::write()", "Failed to set stream position (stream is disposed)");
 	}
 
-	throw tc::NotSupportedException(mModuleLabel+"::write()", "write is not supported for Aes128CbcEncryptedStream");
+	throw tc::NotImplementedException(mModuleLabel+"::write()", "write is not implemented for Aes128CbcEncryptedStream");
 }
 
 int64_t tc::crypto::Aes128CbcEncryptedStream::seek(int64_t offset, tc::io::SeekOrigin origin)
@@ -296,7 +300,7 @@ void tc::crypto::Aes128CbcEncryptedStream::setLength(int64_t length)
 		throw tc::ObjectDisposedException(mModuleLabel+"::setLength()", "Failed to set stream length (stream is disposed)");
 	}
 
-	throw tc::NotSupportedException(mModuleLabel+"::setLength()", "setLength is not supported for Aes128CbcEncryptedStream");
+	throw tc::NotImplementedException(mModuleLabel+"::setLength()", "setLength is not implemented for Aes128CbcEncryptedStream");
 }
 
 void tc::crypto::Aes128CbcEncryptedStream::flush()

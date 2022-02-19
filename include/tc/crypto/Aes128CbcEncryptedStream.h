@@ -14,6 +14,7 @@
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/ObjectDisposedException.h>
 #include <tc/NotSupportedException.h>
+#include <tc/NotImplementedException.h>
 #include <tc/io/IOException.h>
 
 namespace tc { namespace crypto {
@@ -25,11 +26,44 @@ namespace tc { namespace crypto {
 class Aes128CbcEncryptedStream : public tc::io::IStream
 {
 public:
+		/**
+		 * @brief This is the data-type for AES128-CBC key used with Aes128CbcEncryptedStream.
+		 * 
+		 */
 	using key_t = std::array<byte_t, tc::crypto::Aes128CbcEncryptor::kKeySize>;
+
+		/**
+		 * @brief This is the data-type for AES128-CBC initialization vector used with Aes128CbcEncryptedStream.
+		 * 
+		 */
 	using iv_t = std::array<byte_t, tc::crypto::Aes128CbcEncryptor::kBlockSize>;
+
+		/**
+		 * @brief This is the data-type for AES128-CBC data block used with Aes128CbcEncryptedStream.
+		 * 
+		 */
 	using block_t = std::array<byte_t, tc::crypto::Aes128CbcEncryptor::kBlockSize>;
 
+		/**
+		 * @brief Default Constructor
+		 * @post This will create an uninitialized Aes128CbcEncryptedStream, it will have to be assigned from a valid Aes128CbcEncryptedStream object to be usable.
+		 **/
 	Aes128CbcEncryptedStream();
+
+		/** 
+		 * @brief Create Aes128CbcEncryptedStream
+		 * 
+		 * @param[in] stream  The base IStream object which this stream will decrypt data from.
+		 * @param[in] key     AES128 Encryption Key. See @ref Aes128CbcEncryptedStream::key_t.
+		 * @param[in] iv      AES128-CBC Initilization vector relative to offset 0x0 of the base stream. See @ref Aes128CbcEncryptedStream::iv_t.
+		 * 
+		 * @pre The sub stream must be a subset of the base stream.
+		 * @pre A stream must support seeking for @ref seek to work. 
+		 * 
+		 * @throw tc::ArgumentNullException @p stream is a @p nullptr.
+		 * @throw tc::NotSupportedException The base stream does not support seeking or reading.
+		 * @throw tc::NotSupportedException The base stream is not block aligned.
+		 **/
 	Aes128CbcEncryptedStream(const std::shared_ptr<tc::io::IStream>& stream, const key_t& key, const iv_t& iv);
 
 		/**
@@ -77,19 +111,9 @@ public:
 	size_t read(byte_t* ptr, size_t count);
 
 		/**
-		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
-		 * 
-		 * @param[in] ptr Pointer to an array of bytes. This method copies @p count bytes from @p ptr to the current stream.
-		 * @param[in] count The number of bytes to be written to the current stream.
-		 * 
-		 * @return The total number of bytes written to the stream. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
-		 * 
-		 * @pre A stream must support writing for @ref write to work. 
-		 * @note Use @ref canWrite to determine if this stream supports writing.
-		 * @note Exceptions thrown by the base stream are not altered/intercepted, refer to that module's documentation for those exceptions.
-		 * 
-		 * @throw tc::ArgumentOutOfRangeException @p count exceeds the length of writeable data in the sub stream.
+		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written. @ref write is not implemented for @ref Aes128CbcEncryptedStream.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
+		 * @throw tc::NotImplementedException @ref write is not implemented for @ref Aes128CbcEncryptedStream.
 		 **/
 	size_t write(const byte_t* ptr, size_t count);
 
@@ -111,8 +135,8 @@ public:
 	int64_t seek(int64_t offset, tc::io::SeekOrigin origin);
 
 		/**
-		 * @brief Sets the length of the current stream. This is not implemented for @ref SubStream.
-		 * @throw tc::NotImplementedException @ref setLength is not implemented for @ref SubStream
+		 * @brief Sets the length of the current stream. This is not implemented for @ref Aes128CbcEncryptedStream.
+		 * @throw tc::NotImplementedException @ref setLength is not implemented for @ref Aes128CbcEncryptedStream.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	void setLength(int64_t length);
@@ -136,9 +160,8 @@ private:
 	std::shared_ptr<tc::io::IStream> mBaseStream;
 
 	// encryption cfg
-	key_t mKey;
-	iv_t mIv;
-
+	std::shared_ptr<tc::crypto::Aes128CbcEncryptor> mCryptor;
+	iv_t mBaseIv;
 };
 
 }} // namespace tc::crypto
