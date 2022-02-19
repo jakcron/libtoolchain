@@ -26,9 +26,18 @@
 using byte_t = uint8_t;
 
 namespace tc {
+		/// Returns if type size_t is not 64bit.
 	bool is_size_t_not_64bit();
+
+		/// Returns if a value of type size_t is too large to be stored as int64_t.
 	bool is_size_t_too_large_for_int64_t(size_t val);
+
+		/// Returns if a value of type uint64_t is too large to be stored as int64_t.
 	bool is_uint64_t_too_large_for_int64_t(uint64_t val);
+
+		/// Returns if a value of type int64_t is too large to be stored as size_t.
 	bool is_int64_t_too_large_for_size_t(int64_t val);
+
+		/// Returns if a value of type uint64_t is too large to be stored as size_t.
 	bool is_uint64_t_too_large_for_size_t(uint64_t val);
 }
