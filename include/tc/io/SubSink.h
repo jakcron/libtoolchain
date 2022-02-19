@@ -13,6 +13,7 @@
 #include <tc/OutOfMemoryException.h>
 #include <tc/ObjectDisposedException.h>
 #include <tc/NotSupportedException.h>
+#include <tc/NotImplementedException.h>
 
 namespace tc { namespace io {
 
@@ -48,7 +49,7 @@ public:
 
 		/**
 		 * @brief Sets the length of the sink. This is not supported for SubSink. 
-		 * @throw tc::NotSupportedException SubSink does not support setting the length of the sub sink.
+		 * @throw tc::NotImplemented setLength is not implemented for SubSink.
 		 **/
 	void setLength(int64_t length);
 
