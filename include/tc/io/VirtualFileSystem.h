@@ -61,7 +61,7 @@ public:
 			 * @struct DirEntry
 			 * @brief This struct contains data for the directory entry.
 			 * @details
-			 * This currently contains only a @ref tc::io:DirectoryListing.
+			 * This currently contains only a @ref tc::io::sDirectoryListing.
 			 *
 			 * DirEntries are used to confirm that a directory exists, and also to provide the sDirectoryListing for getDirectoryListing()
 			 */
@@ -94,10 +94,23 @@ public:
 		std::map<tc::io::Path, size_t> file_entry_path_map;
 	};
 
+		/**
+		 * @class IPathResolver
+		 * @brief This is an interface for a class that resolves relative paths to absolute paths.
+		 * @details Resolving a path to its absolute path is critical to VirtualFileSystem, as all files/directories are indentified by their absolute path. Implementing IPathResolver is only required where special logic (like case insensitivity) is required to resolve the correct absolute path.
+		 */
 	class IPathResolver
 	{
 	public:
 		virtual ~IPathResolver() = default;
+			/**
+			 * @brief Resolve path to absolute path
+			 * @details Resolving a path to its absolute path is critical to VirtualFileSystem, as all files/directories are indentified by their absolute path.
+			 * 
+			 * @param in_path Input path.
+			 * @param current_working_directory Path of current working directory.
+			 * @param resolved_path Output path to write resolved absolute path.
+			 */
 		virtual void resolvePath(const tc::io::Path& in_path, const tc::io::Path& current_working_directory, tc::io::Path& resolved_path) = 0;
 	};
 
