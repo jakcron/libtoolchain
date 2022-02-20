@@ -7,9 +7,11 @@
 	 **/
 #pragma once
 #include <tc/io/IFileSystem.h>
+#include <tc/io/BasicPathResolver.h>
 
 #include <tc/ObjectDisposedException.h>
 #include <tc/NotImplementedException.h>
+#include <tc/NotSupportedException.h>
 #include <tc/io/DirectoryNotFoundException.h>
 #include <tc/io/FileNotFoundException.h>
 
@@ -25,7 +27,7 @@ namespace tc { namespace io {
 	 *
 	 * User supplies:
 	 * * a @ref VirtualFileSystem::FileSystemSnapshot struct which contains vectors of directory and file entries, including mapping between absolute tc::io::Path and a dir/file entry.
-	 * * optionally an implementation of @ref VirtualFileSystem::IPathResolver to determine the absolute path from a relative path and the current directory. Providing a custom IPathResolver implementation is only required when special logic (like case insensitivity) is required to resolve the correct absolute path.
+	 * * optionally an implementation of @ref tc::io::IPathResolver to determine the absolute path from a relative path and the current directory. Providing a custom IPathResolver implementation is only required when special logic (like case insensitivity) is required to resolve the correct absolute path.
 	 **/	
 class VirtualFileSystem : public tc::io::IFileSystem
 {
@@ -95,26 +97,6 @@ public:
 	};
 
 		/**
-		 * @class IPathResolver
-		 * @brief This is an interface for a class that resolves relative paths to absolute paths.
-		 * @details Resolving a path to its absolute path is critical to VirtualFileSystem, as all files/directories are indentified by their absolute path. Implementing IPathResolver is only required where special logic (like case insensitivity) is required to resolve the correct absolute path.
-		 */
-	class IPathResolver
-	{
-	public:
-		virtual ~IPathResolver() = default;
-			/**
-			 * @brief Resolve path to absolute path
-			 * @details Resolving a path to its absolute path is critical to VirtualFileSystem, as all files/directories are indentified by their absolute path.
-			 * 
-			 * @param in_path Input path.
-			 * @param current_working_directory Path of current working directory.
-			 * @param resolved_path Output path to write resolved absolute path.
-			 */
-		virtual void resolvePath(const tc::io::Path& in_path, const tc::io::Path& current_working_directory, tc::io::Path& resolved_path) = 0;
-	};
-
-		/**
 		 * @brief Default constructor
 		 * @post This will create an unusable VirtualFileSystem, it will have to be assigned from a valid VirtualFileSystem object to be usable.
 		 **/
@@ -124,11 +106,11 @@ public:
 		 * @brief Create VirtualFileSystem
 		 * 
 		 * @param[in] fs_snapshot The FileSystemSnapshot object which this VirtualFileSystem will use to process file-system requests.
-		 * @param[in] path_resolver Pointer to IPathResolver object that resolves relative paths to absolute paths. If not provided a default path resolver is used.
+		 * @param[in] path_resolver Pointer to @ref tc::io::IPathResolver object that resolves relative paths to absolute paths. If @p nullptr, @ref tc::io::BasicPathResolver will be used.
 		 * 
 		 * @throw tc::InvalidOperationException @p fs_snapshot Did not contain a root directory entry.
 		 **/
-	VirtualFileSystem(const FileSystemSnapshot& fs_snapshot, const std::shared_ptr<IPathResolver>& path_resolver = nullptr);
+	VirtualFileSystem(const FileSystemSnapshot& fs_snapshot, const std::shared_ptr<tc::io::IPathResolver>& path_resolver = nullptr);
 
 	tc::ResourceStatus state();
 
@@ -142,6 +124,7 @@ public:
 		 * @param[in] path A relative or absolute path to file.
 		 * 
 		 * @throw tc::NotImplementedException This method is not implemented for VirtualFileSystem.
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
 		 **/
 	void createFile(const tc::io::Path& path);
 
@@ -152,6 +135,7 @@ public:
 		 * @param[in] path A relative or absolute path to file.
 		 * 
 		 * @throw tc::NotImplementedException This method is not implemented for VirtualFileSystem.
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
 		 **/
 	void removeFile(const tc::io::Path& path);
 
@@ -160,11 +144,11 @@ public:
 		 * 
 		 * @param[in] path A relative or absolute path to file.
 		 * @param[in] mode One of the enumeration values that determines how to open or create the file. This must be @ref tc::io::FileMode::Open for VirtualFileSystem.
-		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the @ref IStream object. This must be @ref tc::io::FileAccess::Read for VirtualFileSystem. This also determines the values returned by the @ref IStream::canRead and @ref IStream::canWrite methods of the IStream object. @ref IStream::canSeek is true if path specifies a disk file.
+		 * @param[in] access One of the enumeration values that determines how the file can be accessed by the @ref IStream object. This must be @ref tc::io::FileAccess::Read for VirtualFileSystem.
 		 * @param[out] stream Pointer to IStream object to be instantiated.
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
-		 * @throw tc::NotImplementedException Unsupported access/mode ( @p mode was not @ref tc::io::FileMode::Open, or @p access was not @ref tc::io::FileAccess::Read).
+		 * @throw tc::NotSupportedException Unsupported access/mode ( @p mode was not @ref tc::io::FileMode::Open, or @p access was not @ref tc::io::FileAccess::Read).
 		 * @throw tc::io::FileNotFoundException File was not found.
 		 **/
 	void openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream);
@@ -176,6 +160,7 @@ public:
 		 * @param[in] path A relative or absolute path to directory.
 		 * 
 		 * @throw tc::NotImplementedException This method is not implemented for VirtualFileSystem.
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
 		 **/
 	void createDirectory(const tc::io::Path& path);
 
@@ -186,6 +171,7 @@ public:
 		 * @param[in] path A relative or absolute path to directory.
 		 * 
 		 * @throw tc::NotImplementedException This method is not implemented for VirtualFileSystem.
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
 		 **/
 	void removeDirectory(const tc::io::Path& path);
 
@@ -220,15 +206,7 @@ private:
 
 	FileSystemSnapshot::DirEntry* mCurDir;
 	FileSystemSnapshot mFsSnapshot;
-	std::shared_ptr<IPathResolver> mPathResolver;
-
-	class DefaultPathResolver : public IPathResolver
-	{
-	public:
-		DefaultPathResolver();
-
-		void resolvePath(const tc::io::Path& in_path, const tc::io::Path& current_working_directory, tc::io::Path& resolved_path);
-	};
+	std::shared_ptr<tc::io::IPathResolver> mPathResolver;
 };
 
 }} // namespace tc::io

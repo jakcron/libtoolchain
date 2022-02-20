@@ -8,7 +8,7 @@ tc::io::VirtualFileSystem::VirtualFileSystem() :
 {
 }
 
-tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemSnapshot& fs_snapshot, const std::shared_ptr<IPathResolver>& path_resolver) :
+tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemSnapshot& fs_snapshot, const std::shared_ptr<tc::io::IPathResolver>& path_resolver) :
 	VirtualFileSystem()
 {
 	mFsSnapshot = fs_snapshot;
@@ -17,7 +17,7 @@ tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemSnapshot& fs_snapsh
 	// Use default path resolver if none was provided
 	if (mPathResolver == nullptr)
 	{
-		mPathResolver = std::shared_ptr<DefaultPathResolver>(new DefaultPathResolver());
+		mPathResolver = std::shared_ptr<tc::io::BasicPathResolver>(new tc::io::BasicPathResolver());
 	}
 	
 	// get root directory
@@ -86,11 +86,11 @@ void tc::io::VirtualFileSystem::openFile(const tc::io::Path& path, tc::io::FileM
 
 	if (mode != tc::io::FileMode::Open)
 	{
-		throw tc::NotImplementedException(mModuleLabel+"::openFile()", "This file-system is read-only, only FileMode::Open is supported.");
+		throw tc::NotSupportedException(mModuleLabel+"::openFile()", "This file-system is read-only, only FileMode::Open is supported.");
 	}
 	if (access != tc::io::FileAccess::Read)
 	{
-		throw tc::NotImplementedException(mModuleLabel+"::openFile()", "This file-system is read-only, only FileAccess::Read is supported.");
+		throw tc::NotSupportedException(mModuleLabel+"::openFile()", "This file-system is read-only, only FileAccess::Read is supported.");
 	}
 
 	auto file_itr = mFsSnapshot.file_entry_path_map.find(resolved_path);
@@ -192,50 +192,4 @@ void tc::io::VirtualFileSystem::getDirectoryListing(const tc::io::Path& path, tc
 	}
 
 	info = mFsSnapshot.dir_entries.at(dir_itr->second).dir_listing;
-}
-
-tc::io::VirtualFileSystem::DefaultPathResolver::DefaultPathResolver()
-{
-
-}
-
-void tc::io::VirtualFileSystem::DefaultPathResolver::resolvePath(const tc::io::Path& in_path, const tc::io::Path& current_working_directory, tc::io::Path& resolved_path)
-{
-	tc::io::Path in_tmp = in_path;
-	tc::io::Path tmp = current_working_directory;
-	
-	 // clear the empty root path name (this should always be true, check done for readablility)
-	if (tmp.front().empty())
-		tmp.pop_front();
-	
-	// if input has empty root path at front, then this is an absolute path
-	if (in_tmp.front().empty())
-	{
-		in_tmp.pop_front();
-
-		// also clear tmp
-		tmp.clear();
-	}
-
-	// combine in_tmp with tmp
-	for (auto itr = in_tmp.begin(); itr != in_tmp.end(); itr++)
-	{
-		if (*itr == ".")
-			continue;
-		else if (*itr == "..")
-		{
-			// ".." is the parent directory, so if there are path elements then we remove from the back to "go to the parent directory"
-			if (!tmp.empty())
-				tmp.pop_back();
-			else
-				continue;
-		}
-		else
-			tmp.push_back(*itr);
-	}
-
-	// re-add empty root path name
-	tmp.push_front("");
-
-	resolved_path = tmp;
 }
