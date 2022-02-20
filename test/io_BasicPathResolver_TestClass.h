@@ -10,6 +10,7 @@ public:
 private:
 	void test_ResolveRootDirRelativePaths();
 	void test_ResolveWorkingDirectoryRelativePaths();
+	void test_ThrowsExceptionOnRelativeWorkingDir();
 
 	void util_RunResolutionTest(const tc::io::Path& in_path, const tc::io::Path& in_working_dir_path, const tc::io::Path& expected_resolved_path);
 };

@@ -12,6 +12,7 @@ void io_BasicPathResolver_TestClass::runAllTests(void)
 	fmt::print("[tc::io::BasicPathResolver] START\n");
 	test_ResolveRootDirRelativePaths();
 	test_ResolveWorkingDirectoryRelativePaths();
+	test_ThrowsExceptionOnRelativeWorkingDir();
 	fmt::print("[tc::io::BasicPathResolver] END\n");
 }
 
@@ -93,6 +94,37 @@ void io_BasicPathResolver_TestClass::test_ResolveWorkingDirectoryRelativePaths()
 				util_RunResolutionTest(tc::io::Path(itr->in_path), tc::io::Path(itr->in_working_directory_path), tc::io::Path(itr->expected_resolved_path));
 			}
 			
+
+			fmt::print("PASS\n");
+		}
+		catch (const tc::Exception& e)
+		{
+			fmt::print("FAIL ({:s})\n", e.error());
+		}
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("UNHANDLED EXCEPTION ({:s})\n", e.what());
+	}
+}
+
+void io_BasicPathResolver_TestClass::test_ThrowsExceptionOnRelativeWorkingDir()
+{
+	fmt::print("[tc::io::BasicPathResolver] test_ThrowsExceptionOnRelativeWorkingDir : ");
+	try
+	{
+		try 
+		{
+
+			try 
+			{
+				util_RunResolutionTest(tc::io::Path("a/relative/path"), tc::io::Path("another/relative/path"), tc::io::Path());
+				throw tc::Exception(".resolvePath() did not throw tc::ArgumentOutOfRangeException when the current working directory was not an absolute path.");
+			}
+			catch (const tc::ArgumentOutOfRangeException&)
+			{
+				// do nothing
+			}
 
 			fmt::print("PASS\n");
 		}
