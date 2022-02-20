@@ -1,9 +1,6 @@
 #pragma once
 #include "ITestClass.h"
 
-#include <tc/io/VirtualFileSystem.h>
-
-
 class io_VirtualFileSystem_TestClass : public ITestClass
 {
 public:

@@ -1,5 +1,7 @@
 #include <tc/Exception.h>
 #include <fmt/core.h>
+
+#include <tc/io/VirtualFileSystem.h>
 #include <tc/io/PathUtil.h>
 
 #include "io_VirtualFileSystem_TestClass.h"
