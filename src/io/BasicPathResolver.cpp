@@ -1,52 +1,59 @@
 #include <tc/io/BasicPathResolver.h>
 
-tc::io::BasicPathResolver::BasicPathResolver()
+tc::io::BasicPathResolver::BasicPathResolver() :
+	mModuleLabel("tc::io::BasicPathResolver")
 {
 
 }
 
 void tc::io::BasicPathResolver::resolvePath(const tc::io::Path& in_path, const tc::io::Path& current_working_directory, tc::io::Path& resolved_path)
 {
-	tc::io::Path in_tmp = in_path;
-	tc::io::Path tmp = current_working_directory;
-	
-	 // clear the empty root path name (this should always be true, check done for readablility)
-	if (tmp.front().empty())
-		tmp.pop_front();
-	
-	// if input has empty root path at front, then this is an absolute path
-	if (in_tmp.front().empty())
+	// check current working directory has a root path element at the front,
+	if (current_working_directory.empty() || current_working_directory.front() != "")
 	{
-		in_tmp.pop_front();
-
-		// also clear tmp
-		tmp.clear();
+		throw tc::ArgumentOutOfRangeException(mModuleLabel, "current_working_directory is not an absolute path.");
 	}
 
-	// combine in_tmp with tmp
-	for (auto itr = in_tmp.begin(); itr != in_tmp.end(); itr++)
+	// create output path
+	tc::io::Path resolved_path_tmp;
+
+	// get iterator for input path
+	auto in_path_itr = in_path.begin();
+	
+	// if the begining of the path isn't empty and is the first element root path name, then the input path is an absolute path 
+	if (in_path_itr != in_path.end() && *in_path_itr == "")
+	{
+		in_path_itr++;
+
+		resolved_path_tmp = tc::io::Path("/");
+	}
+	else
+	{
+		resolved_path_tmp = current_working_directory;
+	}
+
+	// combine in_path with resolved_path_tmp
+	for (; in_path_itr != in_path.end(); in_path_itr++)
 	{
         // ignore "current directory" alias
-		if (*itr == ".")
+		if (*in_path_itr == ".")
 			continue;
         // ignore empty path elements
-        if (*itr == "")
+        else if (*in_path_itr == "")
             continue;
         // navigate up for "parent directory" alias
-		else if (*itr == "..")
+		else if (*in_path_itr == "..")
 		{
 			// ".." is the parent directory, so if there are path elements then we remove from the back to "go to the parent directory"
-			if (!tmp.empty())
-				tmp.pop_back();
+			if (resolved_path_tmp.size() > 1)
+				resolved_path_tmp.pop_back();
 			else
 				continue;
 		}
 		else
-			tmp.push_back(*itr);
+			resolved_path_tmp.push_back(*in_path_itr);
 	}
 
-	// re-add empty root path name
-	tmp.push_front("");
-
-	resolved_path = tmp;
+	// export resolved path
+	resolved_path = resolved_path_tmp;
 }
