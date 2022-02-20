@@ -10,6 +10,7 @@
 #include "bn_bitarrayByteLEBitLE_TestClass.h"
 #include "Optional_TestClass.h"
 #include "io_Path_TestClass.h"
+#include "io_BasicPathResolver_TestClass.h"
 #include "io_LocalFileSystem_TestClass.h"
 #include "io_FileStream_TestClass.h"
 #include "io_MemoryStream_TestClass.h"
@@ -117,6 +118,7 @@ int main(int argc, char** argv)
 	runTest(new bn_bitarrayByteLEBitLE_TestClass());
 	runTest(new Optional_TestClass());
 	runTest(new io_Path_TestClass());
+	runTest(new io_BasicPathResolver_TestClass());
 	runTest(new io_LocalFileSystem_TestClass());
 	runTest(new io_FileStream_TestClass());
 	runTest(new io_MemoryStream_TestClass());

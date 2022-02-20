@@ -26,8 +26,13 @@ void tc::io::BasicPathResolver::resolvePath(const tc::io::Path& in_path, const t
 	// combine in_tmp with tmp
 	for (auto itr = in_tmp.begin(); itr != in_tmp.end(); itr++)
 	{
+        // ignore "current directory" alias
 		if (*itr == ".")
 			continue;
+        // ignore empty path elements
+        if (*itr == "")
+            continue;
+        // navigate up for "parent directory" alias
 		else if (*itr == "..")
 		{
 			// ".." is the parent directory, so if there are path elements then we remove from the back to "go to the parent directory"

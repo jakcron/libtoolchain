@@ -12,7 +12,7 @@ namespace tc { namespace io {
 
 	    /**
 		 * @class BasicPathResolver
-		 * @brief This implementation of IPathResolver resolves a relative path to an absolute path, resolving only `.`, `..`, empty path elements.
+		 * @brief This implementation of IPathResolver resolves a path and working directory to an absolute path, resolving only '`.`', '`..`' and empty path elements.
 		 * @details This does not consider the local file-system/environemnt, so links or `~` will not be resolved properly. It is intended for processing archived/stand-alone filesystems.
 		 */
 	class BasicPathResolver : public tc::io::IPathResolver
