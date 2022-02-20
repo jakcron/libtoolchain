@@ -102,18 +102,18 @@ void crypto_Aes128CtrEncryptedStream_TestClass::test_CreateValidStream_CreateCon
 			try
 			{
 				stream.write(nullptr, 0);
-				throw tc::Exception(".write() did not throw tc::NotSupportedException for initialized Aes128CtrEncryptedStream");
+				throw tc::Exception(".write() did not throw tc::NotImplementedException for initialized Aes128CtrEncryptedStream");
 			}
-			catch (tc::NotSupportedException&) {
+			catch (tc::NotImplementedException&) {
 				// do nothing
 			}
 
 			try
 			{
 				stream.setLength(0);
-				throw tc::Exception(".setLength() did not throw tc::NotSupportedException for initialized Aes128CtrEncryptedStream");
+				throw tc::Exception(".setLength() did not throw tc::NotImplementedException for initialized Aes128CtrEncryptedStream");
 			}
-			catch (tc::NotSupportedException&) {
+			catch (tc::NotImplementedException&) {
 				// do nothing
 			}
 
