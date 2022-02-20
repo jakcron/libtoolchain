@@ -7,6 +7,7 @@
 	 **/
 #pragma once
 #include <tc/io/IFileSystem.h>
+#include <tc/io/BasicPathResolver.h>
 
 #include <tc/ArgumentNullException.h>
 #include <tc/InvalidOperationException.h>
@@ -121,15 +122,16 @@ public:
 		 **/
 	void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info);
 private:
-	static const std::string kClassName;
+	const std::string mModuleLabel;
 	
 	std::shared_ptr<tc::io::IFileSystem> mBaseFileSystem;
 	tc::io::Path mBaseFileSystemPath;
 	tc::io::Path mSubFileSystemPath;
 
+	tc::io::BasicPathResolver mPathResolver;
+
 	void subPathToRealPath(const tc::io::Path& sub_path, tc::io::Path& real_path);
 	void realPathToSubPath(const tc::io::Path& real_path, tc::io::Path& sub_path);
-	void sanitiseInputPath(const tc::io::Path& unsafe_path, tc::io::Path& safe_path) const;
 };
 
 }} // namespace tc::io
