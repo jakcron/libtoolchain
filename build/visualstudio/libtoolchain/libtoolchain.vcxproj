@@ -220,6 +220,7 @@
     <ClInclude Include="..\..\..\include\tc\crypto\detail\Sha512Impl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\XtsModeImpl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto.h" />
+    <ClInclude Include="..\..\..\include\tc\io\BasicPathResolver.h" />
     <ClInclude Include="..\..\..\include\tc\io\DirectoryNotEmptyException.h" />
     <ClInclude Include="..\..\..\include\tc\io\DirectoryNotFoundException.h" />
     <ClInclude Include="..\..\..\include\tc\io\FileAccess.h" />
@@ -229,6 +230,7 @@
     <ClInclude Include="..\..\..\include\tc\io\FileStream.h" />
     <ClInclude Include="..\..\..\include\tc\io\IOException.h" />
     <ClInclude Include="..\..\..\include\tc\io\IOUtil.h" />
+    <ClInclude Include="..\..\..\include\tc\io\IPathResolver.h" />
     <ClInclude Include="..\..\..\include\tc\io\IReadableSink.h" />
     <ClInclude Include="..\..\..\include\tc\io\ISink.h" />
     <ClInclude Include="..\..\..\include\tc\io\ISource.h" />
@@ -311,6 +313,7 @@
     <ClCompile Include="..\..\..\src\crypto\detail\Sha1Impl.cpp" />
     <ClCompile Include="..\..\..\src\crypto\detail\Sha256Impl.cpp" />
     <ClCompile Include="..\..\..\src\crypto\detail\Sha512Impl.cpp" />
+    <ClCompile Include="..\..\..\src\io\BasicPathResolver.cpp" />
     <ClCompile Include="..\..\..\src\io\FileStream.cpp" />
     <ClCompile Include="..\..\..\src\io\IOUtil.cpp" />
     <ClCompile Include="..\..\..\src\io\LocalFileSystem.cpp" />

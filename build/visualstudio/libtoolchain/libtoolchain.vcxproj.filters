@@ -151,6 +151,9 @@
     <ClCompile Include="..\..\..\src\crypto\detail\Sha512Impl.cpp">
       <Filter>Source Files\crypto\detail</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\io\BasicPathResolver.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\io\FileStream.cpp">
       <Filter>Source Files\io</Filter>
     </ClCompile>
@@ -510,6 +513,9 @@
     <ClInclude Include="..\..\..\include\tc\crypto\detail\XtsModeImpl.h">
       <Filter>Header Files\tc\crypto\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\BasicPathResolver.h">
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\io\DirectoryNotEmptyException.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
@@ -535,6 +541,9 @@
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\io\IOUtil.h">
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\IPathResolver.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\io\IReadableSink.h">
