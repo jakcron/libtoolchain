@@ -1,7 +1,8 @@
 #include <tc/io/VirtualFileSystem.h>
 
+const std::string tc::io::VirtualFileSystem::kClassName = "tc::io::VirtualFileSystem";
+
 tc::io::VirtualFileSystem::VirtualFileSystem() :
-	mModuleLabel("tc::io::VirtualFileSystem"),
 	mCurDir(nullptr),
 	mFsSnapshot(),
 	mPathResolver()
@@ -28,12 +29,12 @@ tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemSnapshot& fs_snapsh
 	// if the path was not found in the map, throw exception
 	if (root_itr == mFsSnapshot.dir_entry_path_map.end())
 	{
-		throw tc::InvalidOperationException(mModuleLabel, "Failed to located root directory");
+		throw tc::InvalidOperationException(kClassName, "Failed to located root directory");
 	}
 	// if the dir_entry index isn't valid, throw exception
 	if (root_itr->second >= mFsSnapshot.dir_entries.size())
 	{
-		throw tc::InvalidOperationException(mModuleLabel, "Failed to located root directory");
+		throw tc::InvalidOperationException(kClassName, "Failed to located root directory");
 	}
 
 	mCurDir = &mFsSnapshot.dir_entries.at(root_itr->second);
@@ -58,27 +59,27 @@ void tc::io::VirtualFileSystem::createFile(const tc::io::Path& path)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::createFile()", "VirtualFileSystem not initialized");
+		throw tc::ObjectDisposedException(kClassName+"::createFile()", "VirtualFileSystem not initialized");
 	}
 
-	throw tc::NotImplementedException(mModuleLabel+"::createFile()", "createFile is not supported for VirtualFileSystem");
+	throw tc::NotImplementedException(kClassName+"::createFile()", "createFile is not supported for VirtualFileSystem");
 }
 
 void tc::io::VirtualFileSystem::removeFile(const tc::io::Path& path)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::removeFile()", "VirtualFileSystem not initialized");
+		throw tc::ObjectDisposedException(kClassName+"::removeFile()", "VirtualFileSystem not initialized");
 	}
 
-	throw tc::NotImplementedException(mModuleLabel+"::removeFile()", "removeFile is not supported for VirtualFileSystem");
+	throw tc::NotImplementedException(kClassName+"::removeFile()", "removeFile is not supported for VirtualFileSystem");
 }
 
 void tc::io::VirtualFileSystem::openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::openFile()", "VirtualFileSystem not initialized");
+		throw tc::ObjectDisposedException(kClassName+"::openFile()", "VirtualFileSystem not initialized");
 	}
 
 	tc::io::Path resolved_path;
@@ -86,28 +87,28 @@ void tc::io::VirtualFileSystem::openFile(const tc::io::Path& path, tc::io::FileM
 
 	if (mode != tc::io::FileMode::Open)
 	{
-		throw tc::NotSupportedException(mModuleLabel+"::openFile()", "This file-system is read-only, only FileMode::Open is supported.");
+		throw tc::NotSupportedException(kClassName+"::openFile()", "This file-system is read-only, only FileMode::Open is supported.");
 	}
 	if (access != tc::io::FileAccess::Read)
 	{
-		throw tc::NotSupportedException(mModuleLabel+"::openFile()", "This file-system is read-only, only FileAccess::Read is supported.");
+		throw tc::NotSupportedException(kClassName+"::openFile()", "This file-system is read-only, only FileAccess::Read is supported.");
 	}
 
 	auto file_itr = mFsSnapshot.file_entry_path_map.find(resolved_path);
 	// if resolved_path does not exist in the map, throw exception
 	if (file_itr == mFsSnapshot.file_entry_path_map.end())
 	{
-		throw tc::io::FileNotFoundException(mModuleLabel+"::openFile()", "File does not exist.");
+		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist.");
 	}
 	// if the file_entry index isn't valid or leads to a null IStream pointer, throw exception
 	if (file_itr->second >= mFsSnapshot.file_entries.size() || mFsSnapshot.file_entries.at(file_itr->second).stream == nullptr)
 	{
-		throw tc::io::FileNotFoundException(mModuleLabel+"::openFile()", "File does not exist.");
+		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist.");
 	}
 	// if the stream has invalid properties, throw exception
 	if ( !(mFsSnapshot.file_entries.at(file_itr->second).stream->canRead() == true && mFsSnapshot.file_entries.at(file_itr->second).stream->canWrite() == false) )
 	{
-		throw tc::io::FileNotFoundException(mModuleLabel+"::openFile()", "File does not exist.");
+		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist.");
 	}
 
 	stream = mFsSnapshot.file_entries.at(file_itr->second).stream;
@@ -117,27 +118,27 @@ void tc::io::VirtualFileSystem::createDirectory(const tc::io::Path& path)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::createDirectory()", "VirtualFileSystem not initialized");
+		throw tc::ObjectDisposedException(kClassName+"::createDirectory()", "VirtualFileSystem not initialized");
 	}
 
-	throw tc::NotImplementedException(mModuleLabel+"::createDirectory()", "createDirectory is not supported for VirtualFileSystem");
+	throw tc::NotImplementedException(kClassName+"::createDirectory()", "createDirectory is not supported for VirtualFileSystem");
 }
 
 void tc::io::VirtualFileSystem::removeDirectory(const tc::io::Path& path)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::removeDirectory()", "VirtualFileSystem not initialized");
+		throw tc::ObjectDisposedException(kClassName+"::removeDirectory()", "VirtualFileSystem not initialized");
 	}
 
-	throw tc::NotImplementedException(mModuleLabel+"::removeDirectory()", "removeDirectory is not supported for VirtualFileSystem");
+	throw tc::NotImplementedException(kClassName+"::removeDirectory()", "removeDirectory is not supported for VirtualFileSystem");
 }
 
 void tc::io::VirtualFileSystem::getWorkingDirectory(tc::io::Path& path)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::getWorkingDirectory()", "VirtualFileSystem not initialized");
+		throw tc::ObjectDisposedException(kClassName+"::getWorkingDirectory()", "VirtualFileSystem not initialized");
 	}
 
 	path = mCurDir->dir_listing.abs_path;
@@ -147,7 +148,7 @@ void tc::io::VirtualFileSystem::setWorkingDirectory(const tc::io::Path& path)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::setWorkingDirectory()", "VirtualFileSystem not initialized");
+		throw tc::ObjectDisposedException(kClassName+"::setWorkingDirectory()", "VirtualFileSystem not initialized");
 	}
 
 	tc::io::Path resolved_path;
@@ -157,12 +158,12 @@ void tc::io::VirtualFileSystem::setWorkingDirectory(const tc::io::Path& path)
 	// if the path was not found in the map, throw exception
 	if (dir_itr == mFsSnapshot.dir_entry_path_map.end())
 	{
-		throw tc::io::DirectoryNotFoundException(mModuleLabel+"::setWorkingDirectory()", "Directory does not exist.");
+		throw tc::io::DirectoryNotFoundException(kClassName+"::setWorkingDirectory()", "Directory does not exist.");
 	}
 	// if the dir_entry index isn't valid, throw exception
 	if (dir_itr->second >= mFsSnapshot.dir_entries.size())
 	{
-		throw tc::io::DirectoryNotFoundException(mModuleLabel+"::setWorkingDirectory()", "Directory does not exist.");
+		throw tc::io::DirectoryNotFoundException(kClassName+"::setWorkingDirectory()", "Directory does not exist.");
 	}
 
 	mCurDir = &mFsSnapshot.dir_entries.at(dir_itr->second);
@@ -172,7 +173,7 @@ void tc::io::VirtualFileSystem::getDirectoryListing(const tc::io::Path& path, tc
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::getDirectoryListing()", "VirtualFileSystem not initialized");
+		throw tc::ObjectDisposedException(kClassName+"::getDirectoryListing()", "VirtualFileSystem not initialized");
 	}
 
 	tc::io::Path resolved_path;
@@ -183,12 +184,12 @@ void tc::io::VirtualFileSystem::getDirectoryListing(const tc::io::Path& path, tc
 	// if the path was not found in the map, throw exception
 	if (dir_itr == mFsSnapshot.dir_entry_path_map.end())
 	{
-		throw tc::io::DirectoryNotFoundException(mModuleLabel+"::getDirectoryListing()", "Directory does not exist.");
+		throw tc::io::DirectoryNotFoundException(kClassName+"::getDirectoryListing()", "Directory does not exist.");
 	}
 	// if the dir_entry index isn't valid, throw exception
 	if (dir_itr->second >= mFsSnapshot.dir_entries.size())
 	{
-		throw tc::io::DirectoryNotFoundException(mModuleLabel+"::getDirectoryListing()", "Directory does not exist.");
+		throw tc::io::DirectoryNotFoundException(kClassName+"::getDirectoryListing()", "Directory does not exist.");
 	}
 
 	info = mFsSnapshot.dir_entries.at(dir_itr->second).dir_listing;

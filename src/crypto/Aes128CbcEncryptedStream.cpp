@@ -17,8 +17,10 @@ inline int64_t blockIndexToOffset(uint64_t block_index) { return castUint64ToInt
 inline size_t lengthToBlockNum(int64_t length) { return tc::io::IOUtil::castInt64ToSize(length / tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CbcEncryptor::kBlockSize)); };
 inline size_t offsetInBlock(int64_t offset) { return tc::io::IOUtil::castInt64ToSize(offset % tc::io::IOUtil::castSizeToInt64(tc::crypto::Aes128CbcEncryptor::kBlockSize)); };
 
+
+const std::string tc::crypto::Aes128CbcEncryptedStream::kClassName = "tc::crypto::Aes128CbcEncryptedStream";
+
 tc::crypto::Aes128CbcEncryptedStream::Aes128CbcEncryptedStream() :
-	mModuleLabel("tc::crypto::Aes128CbcEncryptedStream"),
 	mBaseStream(),
 	mCryptor(std::shared_ptr<tc::crypto::Aes128CbcEncryptor>(new tc::crypto::Aes128CbcEncryptor()))
 {
@@ -33,19 +35,19 @@ tc::crypto::Aes128CbcEncryptedStream::Aes128CbcEncryptedStream(const std::shared
 	// validate stream properties
 	if (mBaseStream == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel, "stream is null.");
+		throw tc::ObjectDisposedException(kClassName, "stream is null.");
 	}
 	if (mBaseStream->canRead() == false)
 	{
-		throw tc::NotSupportedException(mModuleLabel, "stream does not support reading.");
+		throw tc::NotSupportedException(kClassName, "stream does not support reading.");
 	}
 	if (mBaseStream->canSeek() == false)
 	{
-		throw tc::NotSupportedException(mModuleLabel, "stream does not support seeking.");
+		throw tc::NotSupportedException(kClassName, "stream does not support seeking.");
 	}
 	if ((mBaseStream->length() % sizeof(block_t)) != 0)
 	{
-		throw tc::NotSupportedException(mModuleLabel, "stream does is not block aligned.");
+		throw tc::NotSupportedException(kClassName, "stream does is not block aligned.");
 	}
 
 	// initialize cryptor
@@ -81,7 +83,7 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 {
 	if (mBaseStream == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::read()", "Failed to read from stream (stream is disposed)");
+		throw tc::ObjectDisposedException(kClassName+"::read()", "Failed to read from stream (stream is disposed)");
 	}
 
 	// track read_count
@@ -97,7 +99,7 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 	int64_t current_pos = mBaseStream->position();
 	if (current_pos < 0)
 	{
-		throw tc::InvalidOperationException(mModuleLabel+"::read()", "Current stream position is negative.");
+		throw tc::InvalidOperationException(kClassName+"::read()", "Current stream position is negative.");
 	}
 
 	// determine begin & end offsets
@@ -168,12 +170,12 @@ size_t tc::crypto::Aes128CbcEncryptedStream::read(byte_t* ptr, size_t count)
 
 	if (block_num == 0)
 	{
-		tc::InvalidOperationException(mModuleLabel+"::read()", "Invalid block number (0 blocks, would have returned before now if count==0)");
+		tc::InvalidOperationException(kClassName+"::read()", "Invalid block number (0 blocks, would have returned before now if count==0)");
 	}
 
 	if (block_num < continuous_block_num)
 	{
-		tc::InvalidOperationException(mModuleLabel+"::read()", "Invalid block number (underflow error)");
+		tc::InvalidOperationException(kClassName+"::read()", "Invalid block number (underflow error)");
 	}
 
 	// allocate memory for partial block
@@ -277,17 +279,17 @@ size_t tc::crypto::Aes128CbcEncryptedStream::write(const byte_t* ptr, size_t cou
 {
 	if (mBaseStream == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::write()", "Failed to set stream position (stream is disposed)");
+		throw tc::ObjectDisposedException(kClassName+"::write()", "Failed to set stream position (stream is disposed)");
 	}
 
-	throw tc::NotImplementedException(mModuleLabel+"::write()", "write is not implemented for Aes128CbcEncryptedStream");
+	throw tc::NotImplementedException(kClassName+"::write()", "write is not implemented for Aes128CbcEncryptedStream");
 }
 
 int64_t tc::crypto::Aes128CbcEncryptedStream::seek(int64_t offset, tc::io::SeekOrigin origin)
 {
 	if (mBaseStream == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::seek()", "Failed to set stream position (stream is disposed)");
+		throw tc::ObjectDisposedException(kClassName+"::seek()", "Failed to set stream position (stream is disposed)");
 	}
 
 	return mBaseStream->seek(offset, origin);
@@ -297,17 +299,17 @@ void tc::crypto::Aes128CbcEncryptedStream::setLength(int64_t length)
 {
 	if (mBaseStream == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::setLength()", "Failed to set stream length (stream is disposed)");
+		throw tc::ObjectDisposedException(kClassName+"::setLength()", "Failed to set stream length (stream is disposed)");
 	}
 
-	throw tc::NotImplementedException(mModuleLabel+"::setLength()", "setLength is not implemented for Aes128CbcEncryptedStream");
+	throw tc::NotImplementedException(kClassName+"::setLength()", "setLength is not implemented for Aes128CbcEncryptedStream");
 }
 
 void tc::crypto::Aes128CbcEncryptedStream::flush()
 {
 	if (mBaseStream == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::seek()", "Failed to flush stream (stream is disposed)");
+		throw tc::ObjectDisposedException(kClassName+"::seek()", "Failed to flush stream (stream is disposed)");
 	}
 
 	mBaseStream->flush();

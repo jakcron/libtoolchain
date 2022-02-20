@@ -274,7 +274,7 @@ public:
 	void processOptions(const std::vector<std::string>& args, size_t pos, size_t num);
 
 private:
-	std::string mModuleLabel;
+	static const std::string kClassName;
 
 	void handleOption(const std::string& opt, const std::vector<std::string>& params);
 	std::map<std::string, std::shared_ptr<IOptionHandler>> mOptionaAliasMap;

@@ -23,9 +23,8 @@
 const std::string tc::io::LocalFileSystem::kClassName = "tc::io::LocalFileSystem";
 
 tc::io::LocalFileSystem::LocalFileSystem() :
-	mState()
+	mState(1 << tc::RESFLAG_READY)
 {
-	mState = (1 << tc::RESFLAG_READY);
 }
 
 tc::ResourceStatus tc::io::LocalFileSystem::state()
@@ -35,7 +34,7 @@ tc::ResourceStatus tc::io::LocalFileSystem::state()
 
 void tc::io::LocalFileSystem::dispose()
 {
-	mState = 0;
+	mState = (1 << tc::RESFLAG_NOINIT);
 }
 
 void tc::io::LocalFileSystem::createFile(const tc::io::Path& path)

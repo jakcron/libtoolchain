@@ -122,7 +122,7 @@ public:
 		 **/
 	void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info);
 private:
-	const std::string mModuleLabel;
+	static const std::string kClassName;
 	
 	std::shared_ptr<tc::io::IFileSystem> mBaseFileSystem;
 	tc::io::Path mBaseFileSystemPath;

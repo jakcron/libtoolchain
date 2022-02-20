@@ -2,8 +2,9 @@
 
 #include <fmt/core.h>
 
+const std::string tc::cli::OptionParser::kClassName = "tc::cli::OptionParser";
+
 tc::cli::OptionParser::OptionParser() :
-	mModuleLabel("OptionParser"),
 	mOptionaAliasMap(),
 	mUnkOptHandler(nullptr)
 {
@@ -14,12 +15,12 @@ void tc::cli::OptionParser::registerOptionHandler(const std::shared_ptr<IOptionH
 	if (handler == nullptr)
 	{
 		// throw exception
-		throw tc::ArgumentNullException(mModuleLabel, "OptionHandler was null.");
+		throw tc::ArgumentNullException(kClassName, "OptionHandler was null.");
 	}
 
 	if (handler->getOptionStrings().empty() && handler->getOptionRegexPatterns().empty())
 	{
-		throw tc::ArgumentOutOfRangeException(mModuleLabel, "OptionHandler had no option strings or regex patterns.");
+		throw tc::ArgumentOutOfRangeException(kClassName, "OptionHandler had no option strings or regex patterns.");
 	}
 
 	for (auto itr = handler->getOptionStrings().begin(); itr != handler->getOptionStrings().end(); itr++)
@@ -38,7 +39,7 @@ void tc::cli::OptionParser::registerUnrecognisedOptionHandler(const std::shared_
 	if (handler == nullptr)
 	{
 		// throw exception
-		throw tc::ArgumentNullException(mModuleLabel, "OptionHandler was null.");
+		throw tc::ArgumentNullException(kClassName, "OptionHandler was null.");
 	}
 
 	mUnkOptHandler = handler;
@@ -125,7 +126,7 @@ void tc::cli::OptionParser::processOptions(const std::vector<std::string>& args)
 			// if there is no option set, then this is a head-less parameter, throw exception
 			if (opt.empty() == true)
 			{
-				throw tc::ArgumentException(mModuleLabel, "Option parameter was provided without an option.");
+				throw tc::ArgumentException(kClassName, "Option parameter was provided without an option.");
 			}
 			params.push_back(tmp_param);
 		}
@@ -180,5 +181,5 @@ void tc::cli::OptionParser::handleOption(const std::string& opt, const std::vect
 	}
 	
 	// if no handler is located, throw exception
-	throw tc::ArgumentException(mModuleLabel, fmt::format("Option \"{}\" is not recognised.", opt));
+	throw tc::ArgumentException(kClassName, fmt::format("Option \"{}\" is not recognised.", opt));
 }

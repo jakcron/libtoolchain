@@ -36,7 +36,7 @@ namespace tc { namespace io {
 			 */
 		void resolvePath(const tc::io::Path& in_path, const tc::io::Path& current_working_directory, tc::io::Path& resolved_path);
 	private:
-		std::string mModuleLabel;
+		static const std::string kClassName;
 	};
 
 }} // namespace tc::io

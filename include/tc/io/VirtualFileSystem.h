@@ -202,8 +202,8 @@ public:
 		 **/
 	void getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info);
 private:
-	std::string mModuleLabel;
-
+	static const std::string kClassName;
+	
 	FileSystemSnapshot::DirEntry* mCurDir;
 	FileSystemSnapshot mFsSnapshot;
 	std::shared_ptr<tc::io::IPathResolver> mPathResolver;

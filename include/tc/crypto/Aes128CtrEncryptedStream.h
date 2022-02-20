@@ -154,7 +154,7 @@ public:
 		 **/
 	void dispose();
 private:
-	std::string mModuleLabel;
+	static const std::string kClassName;
 
 	// base source
 	std::shared_ptr<tc::io::IStream> mBaseStream;

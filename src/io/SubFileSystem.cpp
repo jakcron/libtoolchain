@@ -1,7 +1,8 @@
 #include <tc/io/SubFileSystem.h>
 
+const std::string tc::io::SubFileSystem::kClassName = "tc::io::SubFileSystem";
+
 tc::io::SubFileSystem::SubFileSystem() :
-	mModuleLabel("tc::io::SubFileSystem"),
 	mBaseFileSystem(),
 	mBaseFileSystemPath(),
 	mSubFileSystemPath(),
@@ -17,11 +18,11 @@ tc::io::SubFileSystem::SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>&
 	
 	if (mBaseFileSystem == nullptr)
 	{
-		throw tc::ArgumentNullException(mModuleLabel, "file_system is null");
+		throw tc::ArgumentNullException(kClassName, "file_system is null");
 	}
 	else if (mBaseFileSystem->state().test(RESFLAG_READY) == false)
 	{
-		throw tc::InvalidOperationException(mModuleLabel, "file_system is not ready");
+		throw tc::InvalidOperationException(kClassName, "file_system is not ready");
 	}
 
 	// set class state
@@ -57,7 +58,7 @@ void tc::io::SubFileSystem::createFile(const tc::io::Path& path)
 {
 	if (mBaseFileSystem == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::createFile()", "Failed to create file (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::createFile()", "Failed to create file (no base file system)");
 	}
 
 	// convert sub filesystem path to real path
@@ -72,7 +73,7 @@ void tc::io::SubFileSystem::removeFile(const tc::io::Path& path)
 {
 	if (mBaseFileSystem == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::removeFile()", "Failed to remove file (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::removeFile()", "Failed to remove file (no base file system)");
 	}
 
 	// convert sub filesystem path to real path
@@ -87,7 +88,7 @@ void tc::io::SubFileSystem::openFile(const tc::io::Path& path, tc::io::FileMode 
 {
 	if (mBaseFileSystem == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::openFile()", "Failed to open file (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::openFile()", "Failed to open file (no base file system)");
 	}
 
 	// convert sub filesystem path to real path
@@ -102,7 +103,7 @@ void tc::io::SubFileSystem::createDirectory(const tc::io::Path& path)
 {
 	if (mBaseFileSystem == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::createDirectory()", "Failed to create directory (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::createDirectory()", "Failed to create directory (no base file system)");
 	}
 
 	// convert sub filesystem path to real path
@@ -117,7 +118,7 @@ void tc::io::SubFileSystem::removeDirectory(const tc::io::Path& path)
 {
 	if (mBaseFileSystem == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::removeDirectory()", "Failed to remove directory (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::removeDirectory()", "Failed to remove directory (no base file system)");
 	}
 
 	// convert sub filesystem path to real path
@@ -132,7 +133,7 @@ void tc::io::SubFileSystem::getWorkingDirectory(tc::io::Path& path)
 {
 	if (mBaseFileSystem == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::getWorkingDirectory()", "Failed to get current working directory (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (no base file system)");
 	}
 
 	path = mSubFileSystemPath;
@@ -142,7 +143,7 @@ void tc::io::SubFileSystem::setWorkingDirectory(const tc::io::Path& path)
 {
 	if (mBaseFileSystem == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::setWorkingDirectory()", "Failed to set current working directory (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::setWorkingDirectory()", "Failed to set current working directory (no base file system)");
 	}
 
 	// convert sub filesystem path to real path
@@ -168,7 +169,7 @@ void tc::io::SubFileSystem::getDirectoryListing(const tc::io::Path& path, sDirec
 {
 	if (mBaseFileSystem == nullptr)
 	{
-		throw tc::ObjectDisposedException(mModuleLabel+"::getDirectoryListing()", "Failed to get directory listing (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::getDirectoryListing()", "Failed to get directory listing (no base file system)");
 	}
 
 	// convert sub filesystem path to real path
@@ -216,7 +217,7 @@ void tc::io::SubFileSystem::realPathToSubPath(const tc::io::Path& real_path, tc:
 	// determine if the path is large enough to preclude the root path
 	if (real_path.size() < mBaseFileSystemPath.size())
 	{
-		throw tc::UnauthorisedAccessException(mModuleLabel, "Sub filesystem escape detected");
+		throw tc::UnauthorisedAccessException(kClassName, "Sub filesystem escape detected");
 	}
 
 	// confirm the real path includes the root path
@@ -224,7 +225,7 @@ void tc::io::SubFileSystem::realPathToSubPath(const tc::io::Path& real_path, tc:
 	{
 		if (*real_path_itr != *root_path_itr)
 		{
-			throw tc::UnauthorisedAccessException(mModuleLabel, "Sub filesystem escape detected");
+			throw tc::UnauthorisedAccessException(kClassName, "Sub filesystem escape detected");
 		}
 	}
 

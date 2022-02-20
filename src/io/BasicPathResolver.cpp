@@ -1,9 +1,9 @@
 #include <tc/io/BasicPathResolver.h>
 
-tc::io::BasicPathResolver::BasicPathResolver() :
-	mModuleLabel("tc::io::BasicPathResolver")
-{
+const std::string tc::io::BasicPathResolver::kClassName = "tc::io::BasicPathResolver";
 
+tc::io::BasicPathResolver::BasicPathResolver()
+{
 }
 
 void tc::io::BasicPathResolver::resolvePath(const tc::io::Path& in_path, const tc::io::Path& current_working_directory, tc::io::Path& resolved_path)
@@ -11,7 +11,7 @@ void tc::io::BasicPathResolver::resolvePath(const tc::io::Path& in_path, const t
 	// check current working directory has a root path element at the front,
 	if (current_working_directory.empty() || current_working_directory.front() != "")
 	{
-		throw tc::ArgumentOutOfRangeException(mModuleLabel, "current_working_directory is not an absolute path.");
+		throw tc::ArgumentOutOfRangeException(kClassName, "current_working_directory is not an absolute path.");
 	}
 
 	// create output path
