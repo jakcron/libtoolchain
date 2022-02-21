@@ -58,12 +58,17 @@ public:
 	static_assert(sizeof(T) == sizeof(uint16_t), "le16 requires T to be 16 bit.");
 	static_assert(std::is_pod<T>::value, "le16 requires T to be a POD.");
 
+		/// Unwrap value (Implicit)
+	operator T() const { return unwrap(); }
+		/// Wrap value (Implicit)
+	le16& operator=(const T& var) { wrap(var); return *this; }
+
 		/// Unwrap value
-	inline T unwrap() const { auto tmp = detail::__le_uint16(mVar); return *((T*)(&tmp)); }
+	inline T unwrap() const { return (T)detail::__le_uint16((uint16_t)mVar); }
 		/// Wrap value
-	inline void wrap(const T& var) { mVar = detail::__le_uint16(*((uint16_t*)(&var))); }
+	inline void wrap(const T& var) { mVar = (T)detail::__le_uint16((uint16_t)var); }
 private:
-	uint16_t mVar;
+	T mVar;
 };
 
 	/**
@@ -76,12 +81,17 @@ public:
 	static_assert(sizeof(T) == sizeof(uint16_t), "be16 requires T to be 16 bit.");
 	static_assert(std::is_pod<T>::value, "be16 requires T to be a POD.");
 
+		/// Unwrap value (Implicit)
+	operator T() const { return unwrap(); }
+		/// Wrap value (Implicit)
+	be16& operator=(const T& var) { wrap(var); return *this; }
+
 		/// Unwrap value
-	inline T unwrap() const { auto tmp = detail::__be_uint16(mVar); return *((T*)(&tmp)); }
+	inline T unwrap() const { return (T)detail::__be_uint16((uint16_t)mVar); }
 		/// Wrap value
-	inline void wrap(const T& var) { mVar = detail::__be_uint16(*((uint16_t*)(&var))); }
+	inline void wrap(const T& var) { mVar = (T)detail::__be_uint16((uint16_t)var); }
 private:
-	uint16_t mVar;
+	T mVar;
 };
 
 	/**
@@ -94,12 +104,17 @@ public:
 	static_assert(sizeof(T) == sizeof(uint32_t), "le32 requires T to be 32 bit.");
 	static_assert(std::is_pod<T>::value, "le32 requires T to be a POD.");
 
+		/// Unwrap value (Implicit)
+	operator T() const { return unwrap(); }
+		/// Wrap value (Implicit)
+	le32& operator=(const T& var) { wrap(var); return *this; }
+
 		/// Unwrap value
-	inline T unwrap() const { auto tmp = detail::__le_uint32(mVar); return *((T*)(&tmp)); }
+	inline T unwrap() const { return (T)detail::__le_uint32((uint32_t)mVar); }
 		/// Wrap value
-	inline void wrap(const T& var) { mVar = detail::__le_uint32(*((uint32_t*)(&var))); }
+	inline void wrap(const T& var) { mVar = (T)detail::__le_uint32((uint32_t)var); }
 private:
-	uint32_t mVar;
+	T mVar;
 };
 
 	/**
@@ -112,12 +127,17 @@ public:
 	static_assert(sizeof(T) == sizeof(uint32_t), "be32 requires T to be 32 bit.");
 	static_assert(std::is_pod<T>::value, "be32 requires T to be a POD.");
 
+		/// Unwrap value (Implicit)
+	operator T() const { return unwrap(); }
+		/// Wrap value (Implicit)
+	be32& operator=(const T& var) { wrap(var); return *this; }
+
 		/// Unwrap value
-	inline T unwrap() const { auto tmp = detail::__be_uint32(mVar); return *((T*)(&tmp)); }
+	inline T unwrap() const { return (T)detail::__be_uint32((uint32_t)mVar); }
 		/// Wrap value
-	inline void wrap(const T& var) { mVar = detail::__be_uint32(*((uint32_t*)(&var))); }
+	inline void wrap(const T& var) { mVar = (T)detail::__be_uint32((uint32_t)var); }
 private:
-	uint32_t mVar;
+	T mVar;
 };
 
 	/**
@@ -130,12 +150,17 @@ public:
 	static_assert(sizeof(T) == sizeof(uint64_t), "le64 requires T to be 64 bit.");
 	static_assert(std::is_pod<T>::value, "le64 requires T to be a POD.");
 
+		/// Unwrap value (Implicit)
+	operator T() const { return unwrap(); }
+		/// Wrap value (Implicit)
+	le64& operator=(const T& var) { wrap(var); return *this; }
+
 		/// Unwrap value
-	inline T unwrap() const { auto tmp = detail::__le_uint64(mVar); return *((T*)(&tmp)); }
+	inline T unwrap() const { return (T)detail::__le_uint64((uint64_t)mVar); }
 		/// Wrap value
-	inline void wrap(const T& var) { mVar = detail::__le_uint64(*((uint64_t*)(&var))); }
+	inline void wrap(const T& var) { mVar = (T)detail::__le_uint64((uint64_t)var); }
 private:
-	uint64_t mVar;
+	T mVar;
 };
 
 	/**
@@ -148,12 +173,17 @@ public:
 	static_assert(sizeof(T) == sizeof(uint64_t), "be64 requires T to be 64 bit.");
 	static_assert(std::is_pod<T>::value, "be64 requires T to be a POD.");
 
+		/// Unwrap value (Implicit)
+	operator T() const { return unwrap(); }
+		/// Wrap value (Implicit)
+	be64& operator=(const T& var) { wrap(var); return *this; }
+
 		/// Unwrap value
-	inline T unwrap() const { auto tmp = detail::__be_uint64(mVar); return *((T*)(&tmp)); }
+	inline T unwrap() const { return (T)detail::__be_uint64((uint64_t)mVar); }
 		/// Wrap value
-	inline void wrap(const T& var) { mVar = detail::__be_uint64(*((uint64_t*)(&var))); }
+	inline void wrap(const T& var) { mVar = (T)detail::__be_uint64((uint64_t)var); }
 private:
-	uint64_t mVar;
+	T mVar;
 };
 
 }} // namespace tc::bn
