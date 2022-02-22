@@ -2,58 +2,102 @@
 
 const std::string tc::io::BasicPathResolver::kClassName = "tc::io::BasicPathResolver";
 
-tc::io::BasicPathResolver::BasicPathResolver()
+tc::io::BasicPathResolver::BasicPathResolver() :
+	BasicPathResolver(tc::io::Path("/"), {})
+{}
+
+tc::io::BasicPathResolver::BasicPathResolver(const tc::io::Path& current_directory_path) :
+	BasicPathResolver(current_directory_path, {})
+{}
+
+tc::io::BasicPathResolver::BasicPathResolver(const tc::io::Path& current_directory_path, const std::vector<std::string>& root_names) :
+	mCurrentDirPath(),
+	mValidRootLabels(root_names)
 {
+	setCurrentDirectory(current_directory_path);
 }
 
-void tc::io::BasicPathResolver::resolvePath(const tc::io::Path& in_path, const tc::io::Path& current_working_directory, tc::io::Path& resolved_path)
+
+void tc::io::BasicPathResolver::setCurrentDirectory(const tc::io::Path& path)
 {
-	// check current working directory has a root path element at the front,
-	if (current_working_directory.empty() || current_working_directory.front() != "")
+	if (path.empty())
 	{
-		throw tc::ArgumentOutOfRangeException(kClassName, "current_working_directory is not an absolute path.");
+		tc::ArgumentOutOfRangeException(kClassName, "path was empty.");
 	}
 
+	// add root label to list if it isn't already present (this assumes path isn't relative, and we are going to trust the user)
+	if (std::find(mValidRootLabels.begin(), mValidRootLabels.end(), path.front()) == mValidRootLabels.end())
+	{
+		mValidRootLabels.push_back(path.front());
+	}
+
+	mCurrentDirPath = path;
+}
+
+const tc::io::Path& tc::io::BasicPathResolver::getCurrentDirectory() const
+{
+	return mCurrentDirPath;
+}
+
+void tc::io::BasicPathResolver::setValidRootLabels(const std::vector<std::string>& root_labels)
+{
+	mValidRootLabels = root_labels;
+}
+
+const std::vector<std::string>& tc::io::BasicPathResolver::getValidRootLabels() const
+{
+	return mValidRootLabels;
+}
+
+void tc::io::BasicPathResolver::resolveCanonicalPath(const tc::io::Path& path, tc::io::Path& canonical_path) const
+{
+	canonical_path = resolveCanonicalPath(path);
+}
+
+tc::io::Path tc::io::BasicPathResolver::resolveCanonicalPath(const tc::io::Path& path) const
+{
 	// create output path
-	tc::io::Path resolved_path_tmp;
+	tc::io::Path canonical_path;
 
 	// get iterator for input path
-	auto in_path_itr = in_path.begin();
+	auto path_itr = path.begin();
 	
-	// if the begining of the path isn't empty and is the first element root path name, then the input path is an absolute path 
-	if (in_path_itr != in_path.end() && *in_path_itr == "")
+	// if the begining of the path exists and is a valid root label, then the input path is an absolute (but not necessarily canonical) path
+	if (path_itr != path.end() && std::find(mValidRootLabels.begin(), mValidRootLabels.end(), *path_itr) != mValidRootLabels.end())
 	{
-		in_path_itr++;
+		// the beginning of canonical_path is the path root name
+		canonical_path = tc::io::Path(*path_itr + "/");
 
-		resolved_path_tmp = tc::io::Path("/");
+		// increment path iterator
+		path_itr++;
 	}
 	else
 	{
-		resolved_path_tmp = current_working_directory;
+		// the beginning of the canonical_path is the current directory path
+		canonical_path = mCurrentDirPath;
 	}
 
-	// combine in_path with resolved_path_tmp
-	for (; in_path_itr != in_path.end(); in_path_itr++)
+	// process relative elements of path, combining with the base canonical_path
+	for (; path_itr != path.end(); path_itr++)
 	{
         // ignore "current directory" alias
-		if (*in_path_itr == ".")
+		if (*path_itr == ".")
 			continue;
         // ignore empty path elements
-        else if (*in_path_itr == "")
+        else if (*path_itr == "")
             continue;
         // navigate up for "parent directory" alias
-		else if (*in_path_itr == "..")
+		else if (*path_itr == "..")
 		{
 			// ".." is the parent directory, so if there are path elements then we remove from the back to "go to the parent directory"
-			if (resolved_path_tmp.size() > 1)
-				resolved_path_tmp.pop_back();
+			if (canonical_path.size() > 1)
+				canonical_path.pop_back();
 			else
 				continue;
 		}
 		else
-			resolved_path_tmp.push_back(*in_path_itr);
+			canonical_path.push_back(*path_itr);
 	}
 
-	// export resolved path
-	resolved_path = resolved_path_tmp;
+	return canonical_path;
 }

@@ -9,7 +9,7 @@ tc::io::VirtualFileSystem::VirtualFileSystem() :
 {
 }
 
-tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemSnapshot& fs_snapshot, const std::shared_ptr<tc::io::IPathResolver>& path_resolver) :
+tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemSnapshot& fs_snapshot, const std::shared_ptr<tc::io::IPortablePathResolver>& path_resolver) :
 	VirtualFileSystem()
 {
 	mFsSnapshot = fs_snapshot;
@@ -22,10 +22,9 @@ tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemSnapshot& fs_snapsh
 	}
 	
 	// get root directory
-	tc::io::Path root_path;
-	mPathResolver->resolvePath(tc::io::Path("/"), tc::io::Path("/"), root_path);
+	tc::io::Path canonical_root_path = mPathResolver->resolveCanonicalPath(tc::io::Path("/"));
 
-	auto root_itr = mFsSnapshot.dir_entry_path_map.find(root_path);
+	auto root_itr = mFsSnapshot.dir_entry_path_map.find(canonical_root_path);
 	// if the path was not found in the map, throw exception
 	if (root_itr == mFsSnapshot.dir_entry_path_map.end())
 	{
@@ -82,8 +81,7 @@ void tc::io::VirtualFileSystem::openFile(const tc::io::Path& path, tc::io::FileM
 		throw tc::ObjectDisposedException(kClassName+"::openFile()", "VirtualFileSystem not initialized");
 	}
 
-	tc::io::Path resolved_path;
-	mPathResolver->resolvePath(path, mCurDir->dir_listing.abs_path, resolved_path);
+	tc::io::Path resolved_path = mPathResolver->resolveCanonicalPath(path);
 
 	if (mode != tc::io::FileMode::Open)
 	{
@@ -151,8 +149,7 @@ void tc::io::VirtualFileSystem::setWorkingDirectory(const tc::io::Path& path)
 		throw tc::ObjectDisposedException(kClassName+"::setWorkingDirectory()", "VirtualFileSystem not initialized");
 	}
 
-	tc::io::Path resolved_path;
-	mPathResolver->resolvePath(path, mCurDir->dir_listing.abs_path, resolved_path);
+	tc::io::Path resolved_path = mPathResolver->resolveCanonicalPath(path);
 
 	auto dir_itr = mFsSnapshot.dir_entry_path_map.find(resolved_path);
 	// if the path was not found in the map, throw exception
@@ -167,6 +164,7 @@ void tc::io::VirtualFileSystem::setWorkingDirectory(const tc::io::Path& path)
 	}
 
 	mCurDir = &mFsSnapshot.dir_entries.at(dir_itr->second);
+	mPathResolver->setCurrentDirectory(mCurDir->dir_listing.abs_path);
 }
 
 void tc::io::VirtualFileSystem::getDirectoryListing(const tc::io::Path& path, tc::io::sDirectoryListing& info)
@@ -176,9 +174,7 @@ void tc::io::VirtualFileSystem::getDirectoryListing(const tc::io::Path& path, tc
 		throw tc::ObjectDisposedException(kClassName+"::getDirectoryListing()", "VirtualFileSystem not initialized");
 	}
 
-	tc::io::Path resolved_path;
-
-	mPathResolver->resolvePath(path, mCurDir->dir_listing.abs_path, resolved_path);
+	tc::io::Path resolved_path = mPathResolver->resolveCanonicalPath(path);
 
 	auto dir_itr = mFsSnapshot.dir_entry_path_map.find(resolved_path);
 	// if the path was not found in the map, throw exception

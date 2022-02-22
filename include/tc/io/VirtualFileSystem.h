@@ -27,7 +27,7 @@ namespace tc { namespace io {
 	 *
 	 * User supplies:
 	 * * a @ref VirtualFileSystem::FileSystemSnapshot struct which contains vectors of directory and file entries, including mapping between absolute tc::io::Path and a dir/file entry.
-	 * * optionally an implementation of @ref tc::io::IPathResolver to determine the absolute path from a relative path and the current directory. Providing a custom IPathResolver implementation is only required when special logic (like case insensitivity) is required to resolve the correct absolute path.
+	 * * optionally an implementation of @ref tc::io::IPortablePathResolver to determine the absolute path from a relative path and the current directory. Providing a custom IPortablePathResolver implementation is only required when special logic (like case insensitivity) is required to resolve the correct absolute path.
 	 **/	
 class VirtualFileSystem : public tc::io::IFileSystem
 {
@@ -106,11 +106,11 @@ public:
 		 * @brief Create VirtualFileSystem
 		 * 
 		 * @param[in] fs_snapshot The FileSystemSnapshot object which this VirtualFileSystem will use to process file-system requests.
-		 * @param[in] path_resolver Pointer to @ref tc::io::IPathResolver object that resolves relative paths to absolute paths. If @p nullptr, @ref tc::io::BasicPathResolver will be used.
+		 * @param[in] path_resolver Pointer to @ref tc::io::IPortablePathResolver object that resolves relative paths to absolute paths. If @p nullptr, @ref tc::io::BasicPathResolver will be used.
 		 * 
 		 * @throw tc::InvalidOperationException @p fs_snapshot Did not contain a root directory entry.
 		 **/
-	VirtualFileSystem(const FileSystemSnapshot& fs_snapshot, const std::shared_ptr<tc::io::IPathResolver>& path_resolver = nullptr);
+	VirtualFileSystem(const FileSystemSnapshot& fs_snapshot, const std::shared_ptr<tc::io::IPortablePathResolver>& path_resolver = nullptr);
 
 	tc::ResourceStatus state();
 
@@ -206,7 +206,7 @@ private:
 	
 	FileSystemSnapshot::DirEntry* mCurDir;
 	FileSystemSnapshot mFsSnapshot;
-	std::shared_ptr<tc::io::IPathResolver> mPathResolver;
+	std::shared_ptr<tc::io::IPortablePathResolver> mPathResolver;
 };
 
 }} // namespace tc::io
