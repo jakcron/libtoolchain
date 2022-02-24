@@ -4,7 +4,6 @@
 #include <tc/Exception.h>
 
 #include <fmt/core.h>
-
 #include <sstream>
 #include <iostream>
 
@@ -253,6 +252,21 @@ std::u32string tc::io::Path::to_u32string(Format format) const
 
 	// return
 	return u32string;
+}
+
+tc::io::Path::operator std::string() const
+{
+	return to_string(Format::Native);
+}
+
+tc::io::Path::operator std::u16string() const
+{
+	return to_u16string(Format::Native);
+}
+
+tc::io::Path::operator std::u32string() const
+{
+	return to_u32string(Format::Native);
 }
 
 void tc::io::Path::initializePath(const std::string& src)

@@ -222,14 +222,14 @@ public:
 		 */
 	std::u32string to_u32string(Format format = Format::Native) const;
 
-		/// Implicit conversion to std::string
-	operator std::string() const { return to_string(Format::Native); };
+		/// Implicit conversion to a natively formatted std::string
+	operator std::string() const;
 
-		/// Implicit conversion to std::string
-	operator std::u16string() const { return to_u16string(Format::Native); };
+		/// Implicit conversion to a natively formatted std::string
+	operator std::u16string() const;
 
-		/// Implicit conversion to std::string
-	operator std::u32string() const { return to_u32string(Format::Native); };
+		/// Implicit conversion to a natively formatted std::string
+	operator std::u32string() const;
 private:
 	static const std::string kClassName;
 
