@@ -8,15 +8,10 @@ class io_Path_TestClass : public ITestClass
 public:
 	void runAllTests();
 private:
-	enum PathType
-	{
-		UNIX_PATH,
-		WIN32_PATH
-	};
 	
 	// generic tests
-	void testPathComposition(const std::string& test_name, const std::string& raw_path, const std::string& expected_path, size_t expected_element_count, PathType path_type);
-	void testPathComposition(const std::string& test_name, const std::string& raw_path, size_t expected_element_count, PathType path_type);
+	void testPathComposition(const std::string& test_name, const std::string& raw_path, const std::string& expected_path, size_t expected_element_count, tc::io::Path::Format path_format);
+	void testPathComposition(const std::string& test_name, const std::string& raw_path, size_t expected_element_count, tc::io::Path::Format path_format);
 	
 	// specific tests
 	void test_Constructor_Default();

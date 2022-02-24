@@ -11,12 +11,13 @@ void io_Path_TestClass::runAllTests(void)
 {
 	std::cout << "[tc::io::Path] START" << std::endl;
 	test_Constructor_Default();
-	testPathComposition("test_PathComposition_EmptyPath", "", 0, UNIX_PATH);
-	testPathComposition("test_PathComposition_RootPath", "/", 1, UNIX_PATH);
-	testPathComposition("test_PathComposition_LastCharIsSlash", "some/path/ends/in/slash/", "some/path/ends/in/slash", 5, UNIX_PATH);
-	testPathComposition("test_PathComposition_RelativePath", "a dir/a subdir", 2, UNIX_PATH);
-	testPathComposition("test_PathComposition_AbsoluteUnixPath", "/usr/bin/bash", 4, UNIX_PATH);
-	testPathComposition("test_PathComposition_AbsoluteWindowsPath", "C:\\Users\\TestUser\\Desktop\\hi.txt", 5, WIN32_PATH);
+	testPathComposition("test_PathComposition_EmptyPath", "", 0, tc::io::Path::Format::POSIX);
+	testPathComposition("test_PathComposition_PosixRootPath", "/", 1, tc::io::Path::Format::POSIX);
+	testPathComposition("test_PathComposition_WindowsRootPath", "C:\\", 1, tc::io::Path::Format::Win32);
+	testPathComposition("test_PathComposition_LastCharIsSlash", "some/path/ends/in/slash/", "some/path/ends/in/slash", 5, tc::io::Path::Format::POSIX);
+	testPathComposition("test_PathComposition_RelativePath", "a dir/a subdir", 2, tc::io::Path::Format::POSIX);
+	testPathComposition("test_PathComposition_AbsolutePosixPath", "/usr/bin/bash", 4, tc::io::Path::Format::POSIX);
+	testPathComposition("test_PathComposition_AbsoluteWindowsPath", "C:\\Users\\TestUser\\Desktop\\hi.txt", 5, tc::io::Path::Format::Win32);
 	test_Method_pop_front();
 	test_Method_pop_back();
 	test_Method_push_front();
@@ -33,13 +34,13 @@ void io_Path_TestClass::runAllTests(void)
 
 //---------------------------------------------------------
 
-void io_Path_TestClass::testPathComposition(const std::string& test_name, const std::string& raw_path, const std::string& expected_path, size_t expected_element_count, PathType path_type)
+void io_Path_TestClass::testPathComposition(const std::string& test_name, const std::string& raw_path, const std::string& expected_path, size_t expected_element_count, tc::io::Path::Format path_format)
 {
 	std::cout << "[tc::io::Path] " << test_name << " : " << std::flush;
 	try
 	{
 		tc::io::Path path(raw_path);
-		std::string utf8_path;
+		std::string utf8_path = path.to_string(path_format);
 
 		if (path.size() != expected_element_count)
 		{
@@ -49,21 +50,11 @@ void io_Path_TestClass::testPathComposition(const std::string& test_name, const 
 		if (path.empty() != (expected_element_count == 0))
 		{
 			throw tc::Exception("Path did not have expected element count (empty() returned unexpected value.)");
-		}
-
-		if (path_type == UNIX_PATH)
-			tc::io::PathUtil::pathToUnixUTF8(path, utf8_path);
-		else
-		{
-			std::u16string utf16_path;
-			tc::io::PathUtil::pathToWindowsUTF16(path, utf16_path);
-			tc::string::TranscodeUtil::UTF16ToUTF8(utf16_path, utf8_path);
-		}
-			
+		}	
 
 		if (utf8_path != expected_path)
 		{
-			throw tc::Exception("Composed path did not match expected output");
+			throw tc::Exception("Composed path did not match expected output (to_string() returned unexpected value.)");
 		}
 
 		std::cout << "PASS" << std::endl;
@@ -74,9 +65,9 @@ void io_Path_TestClass::testPathComposition(const std::string& test_name, const 
 	}
 }
 
-void io_Path_TestClass::testPathComposition(const std::string& test_name, const std::string& raw_path, size_t expected_element_count, PathType path_type)
+void io_Path_TestClass::testPathComposition(const std::string& test_name, const std::string& raw_path, size_t expected_element_count, tc::io::Path::Format path_format)
 {
-	testPathComposition(test_name, raw_path, raw_path, expected_element_count, path_type);
+	testPathComposition(test_name, raw_path, raw_path, expected_element_count, path_format);
 }
 
 //---------------------------------------------------------

@@ -1,14 +1,19 @@
-#include <sstream>
+
 #include <tc/io/Path.h>
 #include <tc/string.h>
 #include <tc/Exception.h>
 
+#include <fmt/core.h>
+
+#include <sstream>
 #include <iostream>
 
+static const char kWindowsPathDelimiter = '\\'; /**< Path delimiter used on Microsoft Windows based systems */
+static const char kPosixPathDelimiter = '/'; /**< Path delimiter used on POSIX based systems */
 #ifdef _WIN32
-static const char kNativePathDelimiter = tc::io::Path::kWindowsPathDelimiter; /**< Path delimiter for the native OS */
+static const char kNativePathDelimiter = kWindowsPathDelimiter; /**< Path delimiter for the native environment */
 #else
-static const char kNativePathDelimiter = tc::io::Path::kUnixPathDelimiter; /**< Path delimiter for the native OS */
+static const char kNativePathDelimiter = kPosixPathDelimiter; /**< Path delimiter for the native environment */
 #endif
 
 const std::string tc::io::Path::kClassName = "tc::io::Path";
@@ -157,19 +162,112 @@ bool tc::io::Path::empty() const
 	return mUnicodePath.empty();
 }
 
+tc::io::Path tc::io::Path::subpath(size_t pos, size_t len) const
+{
+	tc::io::Path out_path;
+
+	auto itr = begin();
+	size_t index = 0;
+
+	// while the out_path size is less than len and the iterator hasn't ended
+	while ( out_path.size() < len && itr != end() )
+	{
+		// provided the index >= pos save the element
+		if (index >= pos)
+		{
+			out_path.push_back(*itr);
+		}
+
+		itr++;
+		index++;
+	}
+
+	return out_path;
+}
+
+tc::io::Path tc::io::Path::subpath(const_iterator begin, const_iterator end) const
+{
+	tc::io::Path out_path;
+
+	for (auto itr = begin; itr != end && itr != this->end(); itr++)
+	{
+		out_path.push_back(*itr);
+	}
+
+	return out_path;
+}
+
+std::string tc::io::Path::to_string(Format format) const
+{
+	std::string path_str = "";
+
+	std::string path_delimiter_str;
+	switch (format)
+	{
+	case (Path::Format::Native):
+		path_delimiter_str = fmt::format("{:c}", kNativePathDelimiter);
+		break;
+	case (Path::Format::POSIX):
+		path_delimiter_str = fmt::format("{:c}", kPosixPathDelimiter);
+		break;
+	case (Path::Format::Win32):
+		path_delimiter_str = fmt::format("{:c}", kWindowsPathDelimiter);
+		break;
+	default:
+		throw tc::ArgumentException(kClassName, "Invalid Format type.");
+	}
+
+	// special case where the path has one element and it's empty (posix root path "/")
+	if (this->size() == 1 && this->front() == "")
+		return path_delimiter_str;
+
+	for (const_iterator itr = this->begin(); itr != this->end(); itr++)
+	{
+		path_str += *itr;
+		if (itr != --(this->end()))
+			path_str += path_delimiter_str;
+	}
+
+	return path_str;
+}
+
+std::u16string tc::io::Path::to_u16string(Format format) const
+{
+	std::string u8string = to_string(format);
+	std::u16string u16string;
+
+	// convert
+	string::TranscodeUtil::UTF8ToUTF16(u8string, u16string);
+
+	// return
+	return u16string;
+}
+
+std::u32string tc::io::Path::to_u32string(Format format) const
+{
+	std::string u8string = to_string(format);
+	std::u32string u32string;
+
+	// convert
+	string::TranscodeUtil::UTF8ToUTF32(u8string, u32string);
+
+	// return
+	return u32string;
+}
+
 void tc::io::Path::initializePath(const std::string& src)
 {
 	size_t windows_slash_count = 0;
-	size_t unix_slash_count = 0;
+	size_t posix_slash_count = 0;
 	for (size_t i = 0; i < src.size(); i++)
 	{
 		if (src[i] == kWindowsPathDelimiter)
 			windows_slash_count += 1;
-		else if (src[i] == kUnixPathDelimiter)
-			unix_slash_count += 1;
+		else if (src[i] == kPosixPathDelimiter)
+			posix_slash_count += 1;
 	}
 
-	if (windows_slash_count != 0 && unix_slash_count != 0)
+	if (windows_slash_count != 0 && posix_slash_count != 0)
 	{
 		throw tc::Exception(kClassName, "Both Windows and Unix path delimiters are present in path");
 	}
@@ -177,8 +275,8 @@ void tc::io::Path::initializePath(const std::string& src)
 	char path_delimiter = kNativePathDelimiter;
 	if (windows_slash_count > 0)
 		path_delimiter = kWindowsPathDelimiter;
-	else if (unix_slash_count > 0)
-		path_delimiter = kUnixPathDelimiter;
+	else if (posix_slash_count > 0)
+		path_delimiter = kPosixPathDelimiter;
 
 
 	std::stringstream src_stream(src);
