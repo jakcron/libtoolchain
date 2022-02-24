@@ -32,23 +32,6 @@ namespace tc { namespace io {
 			 * @return tc::io::Path Canonical current directory path.
 			 */
 		virtual const tc::io::Path& getCurrentDirectory() const = 0;
-
-			/**
-			 * @brief Resolve path to its canonical path
-			 * 
-			 * @param path Input path.
-			 * @param canonical_path Output path to write resolved canonical path.
-			 */
-		virtual void resolveCanonicalPath(const tc::io::Path& path, tc::io::Path& canonical_path) const = 0;
-
-			/**
-			 * @brief Resolve path to its canonical path
-			 * 
-			 * @param path Input path.
-			 * 
-			 * @return Resolved canonical path.
-			 */
-		virtual tc::io::Path resolveCanonicalPath(const tc::io::Path& path) const = 0;
 	};
 
 }} // namespace tc::io
