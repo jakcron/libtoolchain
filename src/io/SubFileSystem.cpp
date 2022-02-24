@@ -4,9 +4,8 @@ const std::string tc::io::SubFileSystem::kClassName = "tc::io::SubFileSystem";
 
 tc::io::SubFileSystem::SubFileSystem() :
 	mBaseFileSystem(),
-	mBaseFileSystemPath(),
-	mSubFileSystemPath(),
-	mPathResolver()
+	mBasePathResolver(),
+	mSubPathResolver()
 {
 }
 
@@ -23,21 +22,23 @@ tc::io::SubFileSystem::SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>&
 	else if (mBaseFileSystem->state().test(RESFLAG_READY) == false)
 	{
 		throw tc::InvalidOperationException(kClassName, "file_system is not ready");
-	}
-
-	// set class state
-	mSubFileSystemPath = tc::io::Path("/");
+	}	
 
 	// save current path
-	tc::io::Path current_path;
-	mBaseFileSystem->getWorkingDirectory(current_path);
+	tc::io::Path prev_canonical_base_path;
+	mBaseFileSystem->getWorkingDirectory(prev_canonical_base_path);
 
 	// get full path of root
+	tc::io::Path canonical_base_path;
 	mBaseFileSystem->setWorkingDirectory(base_path);
-	mBaseFileSystem->getWorkingDirectory(mBaseFileSystemPath);
+	mBaseFileSystem->getWorkingDirectory(canonical_base_path);
 
 	// restore current path
-	mBaseFileSystem->setWorkingDirectory(current_path);
+	mBaseFileSystem->setWorkingDirectory(prev_canonical_base_path);
+
+	// set state for path resolvers
+	mBasePathResolver.setCurrentDirectory(canonical_base_path);
+	mSubPathResolver.setCurrentDirectory(tc::io::Path("/"));
 }
 
 tc::ResourceStatus tc::io::SubFileSystem::state()
@@ -49,9 +50,9 @@ void tc::io::SubFileSystem::dispose()
 {
 	if (mBaseFileSystem.get() != nullptr)
 		mBaseFileSystem->dispose();
-	
-	mBaseFileSystemPath.clear();
-	mSubFileSystemPath.clear();
+
+	mBasePathResolver = tc::io::BasicPathResolver();
+	mSubPathResolver = tc::io::BasicPathResolver();
 }
 
 void tc::io::SubFileSystem::createFile(const tc::io::Path& path)
@@ -65,7 +66,7 @@ void tc::io::SubFileSystem::createFile(const tc::io::Path& path)
 	tc::io::Path real_path;
 	subPathToRealPath(path, real_path);
 
-	// delete file
+	// create file
 	mBaseFileSystem->createFile(real_path);
 }
 
@@ -136,7 +137,7 @@ void tc::io::SubFileSystem::getWorkingDirectory(tc::io::Path& path)
 		throw tc::ObjectDisposedException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (no base file system)");
 	}
 
-	path = mSubFileSystemPath;
+	path = mSubPathResolver.getCurrentDirectory();
 }
 
 void tc::io::SubFileSystem::setWorkingDirectory(const tc::io::Path& path)
@@ -147,22 +148,24 @@ void tc::io::SubFileSystem::setWorkingDirectory(const tc::io::Path& path)
 	}
 
 	// convert sub filesystem path to real path
-	tc::io::Path real_path;
-	subPathToRealPath(path, real_path);
+	tc::io::Path canonical_base_path;
+	subPathToRealPath(path, canonical_base_path);
 
 	// save previous basefs working directory path
-	tc::io::Path prev_working_directory;
-	mBaseFileSystem->getWorkingDirectory(prev_working_directory);
+	tc::io::Path prev_canonical_base_path;
+	mBaseFileSystem->getWorkingDirectory(prev_canonical_base_path);
 
-	// set and get working directory path so that real_path is populated with the full real path
-	mBaseFileSystem->setWorkingDirectory(real_path);
-	mBaseFileSystem->getWorkingDirectory(real_path);
+	// set and get working directory path so that canonical_base_path is populated with the full real path
+	mBaseFileSystem->setWorkingDirectory(canonical_base_path);
+	mBaseFileSystem->getWorkingDirectory(canonical_base_path);
 
 	// restore previous basefs working directory path
-	mBaseFileSystem->setWorkingDirectory(prev_working_directory);
+	mBaseFileSystem->setWorkingDirectory(prev_canonical_base_path);
 
 	// save current directory
-	realPathToSubPath(real_path, mSubFileSystemPath);
+	tc::io::Path canonical_sub_path;
+	realPathToSubPath(canonical_base_path, canonical_sub_path);
+	mSubPathResolver.setCurrentDirectory(canonical_sub_path);
 }
 
 void tc::io::SubFileSystem::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
@@ -173,71 +176,41 @@ void tc::io::SubFileSystem::getDirectoryListing(const tc::io::Path& path, sDirec
 	}
 
 	// convert sub filesystem path to real path
-	tc::io::Path real_path;
-	subPathToRealPath(path, real_path);
+	tc::io::Path canonical_base_path;
+	subPathToRealPath(path, canonical_base_path);
 
 	// get real directory info
-	tc::io::sDirectoryListing real_info;
-	mBaseFileSystem->getDirectoryListing(real_path, real_info);
+	tc::io::sDirectoryListing dir_info;
+	mBaseFileSystem->getDirectoryListing(canonical_base_path, dir_info);
 
 	// convert directory absolute path
-	tc::io::Path subfilesystem_dir_path;
-	realPathToSubPath(real_info.abs_path, subfilesystem_dir_path);
+	tc::io::Path canonical_sub_path;
+	realPathToSubPath(dir_info.abs_path, canonical_sub_path);
 	
 	// update info with sub filesystem path
-	real_info.abs_path = subfilesystem_dir_path;
+	dir_info.abs_path = canonical_sub_path;
 
 	// write object to output
-	info = real_info;
+	info = dir_info;
 }
 
 void tc::io::SubFileSystem::subPathToRealPath(const tc::io::Path& sub_path, tc::io::Path& real_path)
 {
-	// get absolute sub path
-	tc::io::Path absolute_sub_path;
-	mPathResolver.resolvePath(sub_path, mSubFileSystemPath, absolute_sub_path);
+	// get canonical sub path
+	tc::io::Path canonical_sub_path = mSubPathResolver.resolveCanonicalPath(sub_path);
 
-	// remove root path element from absolute sub path to make it relative
-	if (absolute_sub_path.empty() == false && absolute_sub_path.front() == "")
-		absolute_sub_path.pop_front();
-
-	// get absolute base path
-	tc::io::Path absolute_base_path;
-	mPathResolver.resolvePath(absolute_sub_path, mBaseFileSystemPath, absolute_base_path);
-	
-	// the real path the absolute base path
-	real_path = absolute_base_path;
+	// get canonical base path
+	real_path = mBasePathResolver.resolveCanonicalPath(canonical_sub_path.subpath(1, tc::io::Path::npos));
 }
 
 void tc::io::SubFileSystem::realPathToSubPath(const tc::io::Path& real_path, tc::io::Path& sub_path)
 {
-	// get iterator for real path
-	tc::io::Path::const_iterator real_path_itr = real_path.begin();
+	tc::io::Path canonical_base_path = mBasePathResolver.getCurrentDirectory();
 
-	// determine if the path is large enough to preclude the root path
-	if (real_path.size() < mBaseFileSystemPath.size())
+	if (real_path.subpath(0, canonical_base_path.size()) != canonical_base_path)
 	{
 		throw tc::UnauthorisedAccessException(kClassName, "Sub filesystem escape detected");
 	}
 
-	// confirm the real path includes the root path
-	for (tc::io::Path::const_iterator root_path_itr = mBaseFileSystemPath.begin(); root_path_itr != mBaseFileSystemPath.end(); root_path_itr++, real_path_itr++)
-	{
-		if (*real_path_itr != *root_path_itr)
-		{
-			throw tc::UnauthorisedAccessException(kClassName, "Sub filesystem escape detected");
-		}
-	}
-
-	// clear sub_path
-	sub_path = tc::io::Path();
-
-	// Put root char
-	sub_path.push_back("");
-
-	// save all path elements after the root sub filesystem path
-	for (; real_path_itr != real_path.end(); real_path_itr++)
-	{
-		sub_path.push_back(*real_path_itr);
-	}
+	sub_path = tc::io::Path("/") + real_path.subpath(canonical_base_path.size(), tc::io::Path::npos);
 }

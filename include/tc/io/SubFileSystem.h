@@ -125,10 +125,9 @@ private:
 	static const std::string kClassName;
 	
 	std::shared_ptr<tc::io::IFileSystem> mBaseFileSystem;
-	tc::io::Path mBaseFileSystemPath;
-	tc::io::Path mSubFileSystemPath;
 
-	tc::io::BasicPathResolver mPathResolver;
+	tc::io::BasicPathResolver mBasePathResolver;
+	tc::io::BasicPathResolver mSubPathResolver;
 
 	void subPathToRealPath(const tc::io::Path& sub_path, tc::io::Path& real_path);
 	void realPathToSubPath(const tc::io::Path& real_path, tc::io::Path& sub_path);
