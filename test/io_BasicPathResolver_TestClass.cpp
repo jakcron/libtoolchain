@@ -107,22 +107,18 @@ void io_BasicPathResolver_TestClass::test_ResolveWorkingDirectoryRelativePaths()
 	}
 }
 
+
+
 void io_BasicPathResolver_TestClass::util_RunResolutionTest(const tc::io::Path& in_path, const tc::io::Path& in_working_dir_path, const tc::io::Path& expected_resolved_path)
 {
 	tc::io::BasicPathResolver res;
 
-	tc::io::Path resolved_path;
-	res.resolvePath(in_path, in_working_dir_path, resolved_path);
+	res.setCurrentDirectory(in_working_dir_path);
+
+	tc::io::Path resolved_path = res.resolveCanonicalPath(in_path);
 
 	if (resolved_path != expected_resolved_path)
 	{
-		std::string in_path_str, in_working_dir_path_str, expected_resolved_path_str, resolved_path_str;
-
-		tc::io::PathUtil::pathToUnixUTF8(in_path, in_path_str);
-		tc::io::PathUtil::pathToUnixUTF8(in_working_dir_path, in_working_dir_path_str);
-		tc::io::PathUtil::pathToUnixUTF8(expected_resolved_path, expected_resolved_path_str);
-		tc::io::PathUtil::pathToUnixUTF8(resolved_path, resolved_path_str);
-
-		throw tc::Exception(fmt::format("Resolve (path=\"{:s}\", workingdir= \"{:s}\") returned \"{:s}\"  (expected: \"{:s}\").", in_path_str, in_working_dir_path_str, resolved_path_str, expected_resolved_path_str));
+		throw tc::Exception(fmt::format("Resolve (path=\"{:s}\", workingdir= \"{:s}\") returned \"{:s}\"  (expected: \"{:s}\").", (std::string)in_path, (std::string)in_working_dir_path, (std::string)resolved_path, (std::string)expected_resolved_path));
 	}
 }
