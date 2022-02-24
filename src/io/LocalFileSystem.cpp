@@ -1,6 +1,5 @@
 #include <tc/io/LocalFileSystem.h>
 #include <tc/io/FileStream.h>
-#include <tc/io/PathUtil.h>
 #include <tc/PlatformErrorHandlingUtil.h>
 #include <tc/Exception.h>
 #include <tc/string.h>
@@ -46,8 +45,7 @@ void tc::io::LocalFileSystem::removeFile(const tc::io::Path& path)
 {
 #ifdef _WIN32
 	// convert Path to unicode string
-	std::u16string unicode_path;
-	PathUtil::pathToWindowsUTF16(path, unicode_path);
+	std::u16string unicode_path = path.to_u16string(tc::io::Path::Format::Win32);
 
 	// delete file
 	if (DeleteFileW((LPCWSTR)unicode_path.c_str()) == false)
@@ -61,8 +59,7 @@ void tc::io::LocalFileSystem::removeFile(const tc::io::Path& path)
 	}	
 #else
 	// convert Path to unicode string
-	std::string unicode_path;
-	PathUtil::pathToUnixUTF8(path, unicode_path);
+	std::string unicode_path = path.to_string(tc::io::Path::Format::POSIX);
 
 	if (unlink(unicode_path.c_str()) == -1)
 	{
@@ -98,8 +95,7 @@ void tc::io::LocalFileSystem::createDirectory(const tc::io::Path& path)
 {
 #ifdef _WIN32
 	// convert Path to unicode string
-	std::u16string unicode_path;
-	PathUtil::pathToWindowsUTF16(path, unicode_path);
+	std::u16string unicode_path = path.to_u16string(tc::io::Path::Format::Win32);
 
 	// create directory
 	if (CreateDirectoryW((LPCWSTR)unicode_path.c_str(), nullptr) == false && GetLastError() != ERROR_ALREADY_EXISTS)
@@ -113,8 +109,7 @@ void tc::io::LocalFileSystem::createDirectory(const tc::io::Path& path)
 	}
 #else
 	// convert Path to unicode string
-	std::string unicode_path;
-	PathUtil::pathToUnixUTF8(path, unicode_path);
+	std::string unicode_path = path.to_string(tc::io::Path::Format::POSIX);
 
 	if (mkdir(unicode_path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1 && errno != EEXIST)
 	{
@@ -147,8 +142,7 @@ void tc::io::LocalFileSystem::removeDirectory(const tc::io::Path& path)
 {
 #ifdef _WIN32
 	// convert Path to unicode string
-	std::u16string unicode_path;
-	PathUtil::pathToWindowsUTF16(path, unicode_path);
+	std::u16string unicode_path = path.to_u16string(tc::io::Path::Format::Win32);
 
 	if (RemoveDirectoryW((wchar_t*)unicode_path.c_str()) == false)
 	{
@@ -163,8 +157,7 @@ void tc::io::LocalFileSystem::removeDirectory(const tc::io::Path& path)
 	}
 #else
 	// convert Path to unicode string
-	std::string unicode_path;
-	PathUtil::pathToUnixUTF8(path, unicode_path);
+	std::string unicode_path = path.to_string(tc::io::Path::Format::POSIX);
 
 	if (rmdir(unicode_path.c_str()) == -1)
 	{
@@ -237,8 +230,7 @@ void tc::io::LocalFileSystem::setWorkingDirectory(const tc::io::Path& path)
 {
 #ifdef _WIN32
 	// convert Path to unicode string
-	std::u16string unicode_path;
-	PathUtil::pathToWindowsUTF16(path, unicode_path);
+	std::u16string unicode_path = path.to_u16string(tc::io::Path::Format::Win32);
 
 	// delete file
 	if (SetCurrentDirectoryW((LPCWSTR)unicode_path.c_str()) == false)
@@ -252,8 +244,7 @@ void tc::io::LocalFileSystem::setWorkingDirectory(const tc::io::Path& path)
 	}
 #else
 	// convert Path to unicode string
-	std::string unicode_path;
-	PathUtil::pathToUnixUTF8(path, unicode_path);
+	std::string unicode_path = path.to_string(tc::io::Path::Format::POSIX);
 
 	// get full path to directory
 	if (chdir(unicode_path.c_str()) != 0)
@@ -286,8 +277,7 @@ void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDir
 	Path wildcard_path = path + tc::io::Path("*");
 
 	// convert Path to unicode string
-	std::u16string unicode_path;
-	PathUtil::pathToWindowsUTF16(wildcard_path, unicode_path);
+	std::u16string unicode_path = wildcard_path.to_u16string(tc::io::Path::Format::Win32);
 
 	HANDLE dir_handle = INVALID_HANDLE_VALUE;
 	WIN32_FIND_DATAW dir_entry;
@@ -346,13 +336,11 @@ void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDir
 	// restore current directory
 	setWorkingDirectory(prev_current_dir);
 #else
-	std::string unicode_path;
-	DIR *dp;
-
 	// convert Path to unicode string
-	PathUtil::pathToUnixUTF8(path, unicode_path);
+	std::string unicode_path = path.to_string(tc::io::Path::Format::POSIX);
 	
 	// open directory
+	DIR *dp;
 	dp = opendir(unicode_path.c_str());
 	if (dp == nullptr)
 	{

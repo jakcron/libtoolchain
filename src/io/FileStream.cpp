@@ -1,5 +1,4 @@
 #include <tc/io/FileStream.h>
-#include <tc/io/PathUtil.h>
 #include <tc/PlatformErrorHandlingUtil.h>
 
 #ifdef _WIN32
@@ -204,8 +203,7 @@ void tc::io::FileStream::dispose()
 void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, FileAccess access)
 {
 	// convert Path to unicode string
-	std::u16string unicode_path;
-	PathUtil::pathToWindowsUTF16(path, unicode_path);
+	std::u16string unicode_path = path.to_u16string(tc::io::Path::Format::Win32);
 
 	DWORD access_flag = 0;
 	DWORD share_mode_flag = 0;
@@ -451,8 +449,7 @@ void tc::io::FileStream::flush_impl()
 void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, FileAccess access)
 {
 	// convert Path to unicode string
-	std::string unicode_path;
-	PathUtil::pathToUnixUTF8(path, unicode_path);
+	std::string unicode_path = path.to_string(tc::io::Path::Format::POSIX);
 
 	// open file
 	int open_flag = 0;
