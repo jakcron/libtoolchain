@@ -2,8 +2,8 @@
 	 * @file BasicPathResolver.h
 	 * @brief Declaration of tc::io::BasicPathResolver
 	 * @author Jack (jakcron)
-	 * @version 0.2
-	 * @date 2022/02/22
+	 * @version 0.3
+	 * @date 2022/02/25
 	 **/
 #pragma once
 #include <tc/io/IPortablePathResolver.h>
@@ -15,7 +15,16 @@ namespace tc { namespace io {
 	    /**
 		 * @class BasicPathResolver
 		 * @brief This implementation of IPortablePathResolver resolves a path and current directory to canonical path, resolving only '`.`', '`..`' and empty path elements.
-		 * @details This does not consider the local file-system/environment, so links or '`~`' will not be resolved properly. It is intended for processing archived/portable filesystems.
+		 * @details 
+		 * This does not consider the local file-system/environment, so links or '`~`' will not be resolved properly. It is intended for processing archived/portable filesystems.
+		 * 
+		 * This supports custom root labels. A root label being the first element of absolute/canonical paths.
+		 * * For POSIX this is an empty string, e.g. the empty string prior to / in "/some/path/to/a/file"
+		 * * For Windows systems this is the drive letter, e.g. "C:" in "C:\some\path\to\a\file"
+		 * 
+		 * BasicPathResolver maintains a list of root labels to determine if a path being resolved is absolute or relative, including:
+		 * * Implicit Root Label : This is the first element in the current working directory, will change if the current working directory changes.
+		 * * Explicit Root Labels : This is a list of root labels supplied separately via @ref setExplicitRootLabels().
 		 */
 	class BasicPathResolver : public tc::io::IPortablePathResolver
 	{
@@ -23,7 +32,7 @@ namespace tc { namespace io {
 			/**
 			 * @brief Default Constructor
 			 * 
-			 * @post The current directory will be "/" and the list of allowed root path names will be { "" }.
+			 * @post The current directory will be "/" and the list of explicit root labels will be {}.
 			 */
 		BasicPathResolver();
 
@@ -32,7 +41,7 @@ namespace tc { namespace io {
 			 * 
 			 * @param[in] current_directory_path Canonical path for the current directory.
 			 * 
-			 * @post The current directory will be @p current_directory_path and the list of allowed root path names will be { @p current_directory_path.front() }.
+			 * @post The current directory will be @p current_directory_path and the list of explicit root labels will be {}.
 			 */
 		BasicPathResolver(const tc::io::Path& current_directory_path);
 
@@ -40,11 +49,11 @@ namespace tc { namespace io {
 			 * @brief Create BasicPathResolver
 			 * 
 			 * @param[in] current_directory_path Canonical path for the current directory.
-			 * @param[in] root_names Vector of valid root path names for this path resolver.
+			 * @param[in] root_labels Vector of valid root path names for this path resolver.
 			 * 
-			 * @post The current directory will be @p current_directory_path and the list of allowed root path names will be the merge of @p current_directory_path.front() and @p root_names .
+			 * @post The current directory will be @p current_directory_path and the list of explicit root labels will be @p root_labels .
 			 */
-		BasicPathResolver(const tc::io::Path& current_directory_path, const std::vector<std::string>& root_names);
+		BasicPathResolver(const tc::io::Path& current_directory_path, const std::vector<std::string>& root_labels);
 
 			/**
 			 * @brief Set the current directory path
@@ -63,17 +72,16 @@ namespace tc { namespace io {
 		const tc::io::Path& getCurrentDirectory() const;
 
 			/**
-			 * @brief Set valid root labels
-			 * @details 
-			 * The first element of a canonical path is the root label, for POSIX this is empty "" as in "/some/path", for Windows this is a drive letter e.g. "C:" as in "C:\some\path".
-			 * By setting a full list, when resolving paths to canonical paths, the first element can be checked to determine if the path is relative or absolute.
+			 * @brief Set explicit root labels
+			 * @details
+			 * This is only required where multiple root labels need to be registered.
 			 * 
-			 * @param root_label Vector of root labels
+			 * @param root_labels Vector of root labels
 			 */
-		void setValidRootLabels(const std::vector<std::string>& root_label);
+		void setExplicitRootLabels(const std::vector<std::string>& root_labels);
 
-			/// Get valid root labels
-		const std::vector<std::string>& getValidRootLabels() const;
+			/// Get explicit root labels
+		const std::vector<std::string>& getExplicitRootLabels() const;
 
 			/**
 			 * @brief Resolve path to its canonical path
@@ -95,7 +103,7 @@ namespace tc { namespace io {
 		static const std::string kClassName;
 
 		tc::io::Path mCurrentDirPath;
-		std::vector<std::string> mValidRootLabels;
+		std::vector<std::string> mExplicitRootLabels;
 	};
 
 }} // namespace tc::io

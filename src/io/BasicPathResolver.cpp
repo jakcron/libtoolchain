@@ -12,7 +12,7 @@ tc::io::BasicPathResolver::BasicPathResolver(const tc::io::Path& current_directo
 
 tc::io::BasicPathResolver::BasicPathResolver(const tc::io::Path& current_directory_path, const std::vector<std::string>& root_names) :
 	mCurrentDirPath(),
-	mValidRootLabels(root_names)
+	mExplicitRootLabels(root_names)
 {
 	setCurrentDirectory(current_directory_path);
 }
@@ -22,13 +22,7 @@ void tc::io::BasicPathResolver::setCurrentDirectory(const tc::io::Path& path)
 {
 	if (path.empty())
 	{
-		tc::ArgumentOutOfRangeException(kClassName, "path was empty.");
-	}
-
-	// add root label to list if it isn't already present (this assumes path isn't relative, and we are going to trust the user)
-	if (std::find(mValidRootLabels.begin(), mValidRootLabels.end(), path.front()) == mValidRootLabels.end())
-	{
-		mValidRootLabels.push_back(path.front());
+		throw tc::ArgumentOutOfRangeException(kClassName, "path was empty.");
 	}
 
 	mCurrentDirPath = path;
@@ -39,14 +33,14 @@ const tc::io::Path& tc::io::BasicPathResolver::getCurrentDirectory() const
 	return mCurrentDirPath;
 }
 
-void tc::io::BasicPathResolver::setValidRootLabels(const std::vector<std::string>& root_labels)
+void tc::io::BasicPathResolver::setExplicitRootLabels(const std::vector<std::string>& root_labels)
 {
-	mValidRootLabels = root_labels;
+	mExplicitRootLabels = root_labels;
 }
 
-const std::vector<std::string>& tc::io::BasicPathResolver::getValidRootLabels() const
+const std::vector<std::string>& tc::io::BasicPathResolver::getExplicitRootLabels() const
 {
-	return mValidRootLabels;
+	return mExplicitRootLabels;
 }
 
 void tc::io::BasicPathResolver::resolveCanonicalPath(const tc::io::Path& path, tc::io::Path& canonical_path) const
@@ -63,7 +57,7 @@ tc::io::Path tc::io::BasicPathResolver::resolveCanonicalPath(const tc::io::Path&
 	auto path_itr = path.begin();
 	
 	// if the begining of the path exists and is a valid root label, then the input path is an absolute (but not necessarily canonical) path
-	if (path_itr != path.end() && std::find(mValidRootLabels.begin(), mValidRootLabels.end(), *path_itr) != mValidRootLabels.end())
+	if (path_itr != path.end() && (std::find(mExplicitRootLabels.begin(), mExplicitRootLabels.end(), *path_itr) != mExplicitRootLabels.end() || *path_itr == mCurrentDirPath.front()))
 	{
 		// the beginning of canonical_path is the path root name
 		canonical_path = tc::io::Path(*path_itr + "/");
