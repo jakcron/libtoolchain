@@ -13,6 +13,10 @@
 #include <tc/io/Path.h>
 #include <tc/io/PathUtil.h>
 
+#include <tc/io/IPathResolver.h>
+#include <tc/io/IPortablePathResolver.h>
+#include <tc/io/BasicPathResolver.h>
+
 #include <tc/io/IStream.h>
 #include <tc/io/FileStream.h>
 #include <tc/io/SubStream.h>
