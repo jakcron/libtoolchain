@@ -1,7 +1,8 @@
 #include <tc/Exception.h>
 #include <tc/io/PathUtil.h>
-#include <iostream>
-#include <sstream>
+
+#include <fmt/core.h>
+#include <fmt/ranges.h>
 
 #include "io_Path_TestClass.h"
 
@@ -9,102 +10,268 @@
 
 void io_Path_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::io::Path] START" << std::endl;
+	fmt::print("[tc::io::Path] START\n");
 	test_Constructor_Default();
-	testPathComposition("test_PathComposition_EmptyPath", "", 0, tc::io::Path::Format::POSIX);
-	testPathComposition("test_PathComposition_PosixRootPath", "/", 1, tc::io::Path::Format::POSIX);
-	testPathComposition("test_PathComposition_WindowsRootPath", "C:\\", 1, tc::io::Path::Format::Win32);
-	testPathComposition("test_PathComposition_LastCharIsSlash", "some/path/ends/in/slash/", "some/path/ends/in/slash", 5, tc::io::Path::Format::POSIX);
-	testPathComposition("test_PathComposition_RelativePath", "a dir/a subdir", 2, tc::io::Path::Format::POSIX);
-	testPathComposition("test_PathComposition_AbsolutePosixPath", "/usr/bin/bash", 4, tc::io::Path::Format::POSIX);
-	testPathComposition("test_PathComposition_AbsoluteWindowsPath", "C:\\Users\\TestUser\\Desktop\\hi.txt", 5, tc::io::Path::Format::Win32);
+	test_Constructor_InitializerList();
+	test_Constructor_u8string();
+	test_Constructor_u16string();
+	test_Constructor_u32string();
 	test_Method_pop_front();
 	test_Method_pop_back();
 	test_Method_push_front();
 	test_Method_push_back();
 	test_Method_clear();
+	test_Method_substr_withPosLen();
+	test_Method_substr_withIterator();
+	test_Method_to_string();
+	test_Method_to_u16string();
+	test_Method_to_u32string();
+	test_Operator_string();
+	test_Operator_u16string();
+	test_Operator_u32string();
 	test_Operator_Addition();
 	test_Operator_Append();
 	test_Scenario_AppendStressTest();
 	test_Operator_EqualityTest();
 	test_Operator_InequalityTest();
 	test_Operator_LessThanTest();
-	std::cout << "[tc::io::Path] END" << std::endl;
-}
-
-//---------------------------------------------------------
-
-void io_Path_TestClass::testPathComposition(const std::string& test_name, const std::string& raw_path, const std::string& expected_path, size_t expected_element_count, tc::io::Path::Format path_format)
-{
-	std::cout << "[tc::io::Path] " << test_name << " : " << std::flush;
-	try
-	{
-		tc::io::Path path(raw_path);
-		std::string utf8_path = path.to_string(path_format);
-
-		if (path.size() != expected_element_count)
-		{
-			throw tc::Exception("Path did not have expected element count (size() returned unexpected value.)");
-		}
-
-		if (path.empty() != (expected_element_count == 0))
-		{
-			throw tc::Exception("Path did not have expected element count (empty() returned unexpected value.)");
-		}	
-
-		if (utf8_path != expected_path)
-		{
-			throw tc::Exception("Composed path did not match expected output (to_string() returned unexpected value.)");
-		}
-
-		std::cout << "PASS" << std::endl;
-	}
-	catch (const tc::Exception& e)
-	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl;
-	}
-}
-
-void io_Path_TestClass::testPathComposition(const std::string& test_name, const std::string& raw_path, size_t expected_element_count, tc::io::Path::Format path_format)
-{
-	testPathComposition(test_name, raw_path, raw_path, expected_element_count, path_format);
+	fmt::print("[tc::io::Path] END\n");
 }
 
 //---------------------------------------------------------
 
 void io_Path_TestClass::test_Constructor_Default()
 {
-	std::cout << "[tc::io::Path] test_Constructor_Default : " << std::flush;
+	fmt::print("[tc::io::Path] test_Constructor_Default : ");
 	try
 	{
 		tc::io::Path path_empty;
 		
 		if (path_empty.size() != 0)
 		{
-			throw tc::Exception("Default constructor did not create a path with 0 elements (size() != 0)");
+			throw tc::Exception("Default constructor did not create a path with 0 elements (.size() != 0)");
 		}
 
 		if (path_empty.empty() != true)
 		{
-			throw tc::Exception("Default constructor did not create an empty path (empty() != true)");
+			throw tc::Exception("Default constructor did not create an empty path (.empty() != true)");
 		}
 
 		if (path_empty.begin() != path_empty.end())
 		{
-			throw tc::Exception("Default constructor did not create an empty path where begin()==end()");
+			throw tc::Exception("Default constructor did not create an empty path (.begin() == .end())");
 		}
 
-		std::cout << "PASS"  << std::endl;
+		fmt::print("PASS\n");
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
+	}
+}
+
+void io_Path_TestClass::test_Constructor_InitializerList()
+{
+	fmt::print("[tc::io::Path] test_Constructor_InitializerList : ");
+	try
+	{
+		tc::io::Path path = {"a", "path", "from", "an", "initializer", "list"};
+		std::list<std::string> expected_elements = {"a", "path", "from", "an", "initializer", "list"};
+		
+		if (path.size() != expected_elements.size())
+		{
+			throw tc::Exception(fmt::format("InitializerList constructor did not create a path with {} elements (.size() == {})", expected_elements.size(), path.size()));
+		}
+
+		if (path.empty() != false)
+		{
+			throw tc::Exception("InitializerList constructor created an empty path (.empty() != false)");
+		}
+
+		if (path.begin() == path.end())
+		{
+			throw tc::Exception("InitializerList constructor created an empty path (.begin() == .end())");
+		}
+
+		for (auto pathItr = path.begin(), expItr = expected_elements.begin(); pathItr != path.end(); pathItr++, expItr++)
+		{
+			if (*pathItr != *expItr)
+			{
+				throw tc::Exception(fmt::format("InitializerList constructer created a path with unexpected elements (Path contained {}, expected {})", std::list<std::string>(path.begin(), path.end()), expected_elements) );
+			}
+		}
+
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
+	}
+}
+
+void io_Path_TestClass::test_Constructor_u8string()
+{
+	fmt::print("[tc::io::Path] test_Constructor_u8string : ");
+	try
+	{
+		struct Test
+		{
+			std::string path_string;
+			tc::io::Path expected_path;
+		};
+		std::vector<Test> tests {
+			{"", tc::io::Path({})},
+			{"/", tc::io::Path({""})},
+			{"C:\\", tc::io::Path({"C:"})},
+			{"~/.ssh/id_rsa", tc::io::Path({"~", ".ssh", "id_rsa"})},
+			{"C:\\Users\\Administrator\\Desktop", tc::io::Path({"C:", "Users", "Administrator", "Desktop"})},
+		};
+
+		for (auto itr = tests.begin(); itr != tests.end(); itr++)
+		{
+			tc::io::Path path = itr->path_string;
+			if (path != itr->expected_path)
+			{
+				throw tc::Exception(fmt::format("Failed to convert \"{}\" to path. (Path contained {}, expected {})", itr->path_string, std::list<std::string>(path.begin(), path.end()), std::list<std::string>(itr->expected_path.begin(), itr->expected_path.end())));
+			}
+		}
+
+		try
+		{
+			tc::io::Path("A/Mix\\Of/Path\\Separators");
+			throw tc::Exception("Path(const std::string&) constructor did not throw tc::ArgumentException where there was a mix of path separators.");
+		}
+		catch(const tc::ArgumentException&)
+		{
+			// do nothing
+		}
+
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
+	}
+}
+
+void io_Path_TestClass::test_Constructor_u16string()
+{
+	fmt::print("[tc::io::Path] test_Constructor_u16string : ");
+	try
+	{
+		struct Test
+		{
+			std::u16string path_string;
+			tc::io::Path expected_path;
+		};
+		std::vector<Test> tests {
+			{u"", tc::io::Path({})},
+			{u"/", tc::io::Path({""})},
+			{u"C:\\", tc::io::Path({"C:"})},
+			{u"~/.ssh/id_rsa", tc::io::Path({"~", ".ssh", "id_rsa"})},
+			{u"C:\\Users\\Administrator\\Desktop", tc::io::Path({"C:", "Users", "Administrator", "Desktop"})},
+		};
+
+		for (auto itr = tests.begin(); itr != tests.end(); itr++)
+		{
+			tc::io::Path path = itr->path_string;
+			if (path != itr->expected_path)
+			{
+				std::string u8_string;
+				tc::string::TranscodeUtil::UTF16ToUTF8(itr->path_string, u8_string);
+				throw tc::Exception(fmt::format("Failed to convert u\"{}\" to path. (Path contained {}, expected {})", u8_string, std::list<std::string>(path.begin(), path.end()), std::list<std::string>(itr->expected_path.begin(), itr->expected_path.end())));
+			}
+		}
+
+		try
+		{
+			tc::io::Path(u"A/Mix\\Of/Path\\Separators");
+			throw tc::Exception("Path(const std::u16string&) constructor did not throw tc::ArgumentException where there was a mix of path separators.");
+		}
+		catch(const tc::ArgumentException&)
+		{
+			// do nothing
+		}
+
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
+	}
+}
+
+void io_Path_TestClass::test_Constructor_u32string()
+{
+	fmt::print("[tc::io::Path] test_Constructor_u32string : ");
+	try
+	{
+		struct Test
+		{
+			std::u32string path_string;
+			tc::io::Path expected_path;
+		};
+		std::vector<Test> tests {
+			{U"", tc::io::Path({})},
+			{U"/", tc::io::Path({""})},
+			{U"C:\\", tc::io::Path({"C:"})},
+			{U"~/.ssh/id_rsa", tc::io::Path({"~", ".ssh", "id_rsa"})},
+			{U"C:\\Users\\Administrator\\Desktop", tc::io::Path({"C:", "Users", "Administrator", "Desktop"})},
+		};
+
+		for (auto itr = tests.begin(); itr != tests.end(); itr++)
+		{
+			tc::io::Path path = itr->path_string;
+			if (path != itr->expected_path)
+			{
+				std::string u8_string;
+				tc::string::TranscodeUtil::UTF32ToUTF8(itr->path_string, u8_string);
+				throw tc::Exception(fmt::format("Failed to convert U\"{}\" to path. (Path contained {}, expected {})", u8_string, std::list<std::string>(path.begin(), path.end()), std::list<std::string>(itr->expected_path.begin(), itr->expected_path.end())));
+			}
+		}
+
+		try
+		{
+			tc::io::Path(U"A/Mix\\Of/Path\\Separators");
+			throw tc::Exception("Path(const std::u32string&) constructor did not throw tc::ArgumentException where there was a mix of path separators.");
+		}
+		catch(const tc::ArgumentException&)
+		{
+			// do nothing
+		}
+		
+
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
 	}
 }
 
 void io_Path_TestClass::test_Method_pop_front()
 {
-	std::cout << "[tc::io::Path] test_Method_pop_front : " << std::flush;
+	fmt::print("[tc::io::Path] test_Method_pop_front : ");
 	try
 	{
 		tc::io::Path path("a/b/c/d/e/f/g/h/i/j");
@@ -122,17 +289,21 @@ void io_Path_TestClass::test_Method_pop_front()
 			}
 		}
 
-		std::cout << "PASS"  << std::endl;
+		fmt::print("PASS\n");
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
 	}
 }
 
 void io_Path_TestClass::test_Method_pop_back()
 {
-	std::cout << "[tc::io::Path] test_Method_pop_back : " << std::flush;
+	fmt::print("[tc::io::Path] test_Method_pop_back : ");
 	try
 	{
 		tc::io::Path path("a/b/c/d/e/f/g/h/i/j");
@@ -150,17 +321,21 @@ void io_Path_TestClass::test_Method_pop_back()
 			}
 		}
 
-		std::cout << "PASS"  << std::endl;
+		fmt::print("PASS\n");
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
 	}
 }
 
 void io_Path_TestClass::test_Method_push_front()
 {
-	std::cout << "[tc::io::Path] test_Method_push_front : " << std::flush;
+	fmt::print("[tc::io::Path] test_Method_push_front : ");
 	try
 	{
 		tc::io::Path path("");
@@ -182,17 +357,21 @@ void io_Path_TestClass::test_Method_push_front()
 			}
 		}
 
-		std::cout << "PASS"  << std::endl;
+		fmt::print("PASS\n");
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
 	}
 }
 
 void io_Path_TestClass::test_Method_push_back()
 {
-	std::cout << "[tc::io::Path] test_Method_push_back : " << std::flush;
+	fmt::print("[tc::io::Path] test_Method_push_back : ");
 	try
 	{
 		tc::io::Path path("");
@@ -214,17 +393,21 @@ void io_Path_TestClass::test_Method_push_back()
 			}
 		}
 
-		std::cout << "PASS"  << std::endl;
+		fmt::print("PASS\n");
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
 	}
 }
 
 void io_Path_TestClass::test_Method_clear()
 {
-	std::cout << "[tc::io::Path] test_Method_clear : " << std::flush;
+	fmt::print("[tc::io::Path] test_Method_clear : ");
 	try
 	{
 		tc::io::Path path("a/b/c/d/e/f/g/h/i/j");
@@ -246,17 +429,552 @@ void io_Path_TestClass::test_Method_clear()
 			throw tc::Exception(".begin() != .end() after .clear()");
 		}
 
-		std::cout << "PASS"  << std::endl;
+		fmt::print("PASS\n");
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
+	}
+}
+
+void io_Path_TestClass::test_Method_substr_withPosLen()
+{
+	fmt::print("[tc::io::Path] test_Method_substr_withPosLen : ");
+	try
+	{
+		struct Test
+		{
+			tc::io::Path path;
+			size_t pos;
+			size_t len;
+			tc::io::Path exp_subpath;
+		};
+		std::vector<Test> tests {
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, tc::io::Path::npos, {"a","b","c","d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 1, tc::io::Path::npos, {"b","c","d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 2, tc::io::Path::npos, {"c","d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 3, tc::io::Path::npos, {"d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 4, tc::io::Path::npos, {"e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 5, tc::io::Path::npos, {"f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 6, tc::io::Path::npos, {"g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 7, tc::io::Path::npos, {"h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 8, tc::io::Path::npos, {"i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 9, tc::io::Path::npos, {"j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 10, tc::io::Path::npos, {}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 11, tc::io::Path::npos, {}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 12, tc::io::Path::npos, {}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 13, tc::io::Path::npos, {}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 12, {"a","b","c","d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 11, {"a","b","c","d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 10, {"a","b","c","d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 9, {"a","b","c","d","e","f","g","h","i"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 8, {"a","b","c","d","e","f","g","h"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 7, {"a","b","c","d","e","f","g"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 6, {"a","b","c","d","e","f"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 5, {"a","b","c","d","e"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 4, {"a","b","c","d"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 3, {"a","b","c"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 2, {"a","b"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 1, {"a"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 0, {}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 1, 4, {"b","c","d","e"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 2, 4, {"c","d","e","f"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 3, 4, {"d","e","f","g"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 4, 4, {"e","f","g","h"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 5, 4, {"f","g","h","i"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 6, 4, {"g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 7, 4, {"h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 8, 4, {"i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 9, 4, {"j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 10, 4, {}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, tc::io::Path::npos, tc::io::Path::npos, {}},
+		};
+
+		for (auto itr = tests.begin(); itr != tests.end(); itr++)
+		{
+			tc::io::Path subpath = itr->path.subpath(itr->pos, itr->len);
+
+			if (subpath != itr->exp_subpath)
+			{
+				throw tc::Exception(fmt::format(".subpath(pos={},len={}) returned incorrect sub path (returned {}, expected {})", itr->pos, itr->len, std::list<std::string>(subpath.begin(), subpath.end()), std::list<std::string>(itr->exp_subpath.begin(), itr->exp_subpath.end())));
+			}
+		}
+
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
+	}
+}
+
+void io_Path_TestClass::test_Method_substr_withIterator()
+{
+	fmt::print("[tc::io::Path] test_Method_substr_withIterator : ");
+	try
+	{
+		struct Test
+		{
+			tc::io::Path path;
+			size_t pos;
+			size_t len;
+			tc::io::Path exp_subpath;
+		};
+		std::vector<Test> tests {
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, tc::io::Path::npos, {"a","b","c","d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 1, tc::io::Path::npos, {"b","c","d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 2, tc::io::Path::npos, {"c","d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 3, tc::io::Path::npos, {"d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 4, tc::io::Path::npos, {"e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 5, tc::io::Path::npos, {"f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 6, tc::io::Path::npos, {"g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 7, tc::io::Path::npos, {"h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 8, tc::io::Path::npos, {"i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 9, tc::io::Path::npos, {"j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 10, tc::io::Path::npos, {}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 11, tc::io::Path::npos, {}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 12, tc::io::Path::npos, {}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 13, tc::io::Path::npos, {}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 12, {"a","b","c","d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 11, {"a","b","c","d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 10, {"a","b","c","d","e","f","g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 9, {"a","b","c","d","e","f","g","h","i"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 8, {"a","b","c","d","e","f","g","h"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 7, {"a","b","c","d","e","f","g"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 6, {"a","b","c","d","e","f"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 5, {"a","b","c","d","e"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 4, {"a","b","c","d"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 3, {"a","b","c"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 2, {"a","b"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 1, {"a"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 0, 0, {}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 1, 4, {"b","c","d","e"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 2, 4, {"c","d","e","f"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 3, 4, {"d","e","f","g"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 4, 4, {"e","f","g","h"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 5, 4, {"f","g","h","i"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 6, 4, {"g","h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 7, 4, {"h","i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 8, 4, {"i","j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 9, 4, {"j"}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, 10, 4, {}},
+			{{"a","b","c","d","e","f","g","h","i","j"}, tc::io::Path::npos, tc::io::Path::npos, {}},
+		};
+
+		for (auto testItr = tests.begin(); testItr != tests.end(); testItr++)
+		{
+			tc::io::Path::iterator subPathBeginItr = testItr->path.end(), subPathEndItr = testItr->path.end();
+
+			size_t pos = 0;
+			for (auto pathItr = testItr->path.begin(); pathItr != testItr->path.end(); pathItr++)
+			{
+				if (pos == testItr->pos)
+					subPathBeginItr = pathItr;
+				if (pos == (testItr->pos + testItr->len))
+					subPathEndItr = pathItr;
+
+				pos++;
+			}
+
+			tc::io::Path subpath = testItr->path.subpath(subPathBeginItr, subPathEndItr);
+
+			if (subpath != testItr->exp_subpath)
+			{
+				throw tc::Exception(fmt::format(".subpath(begin,end) note({},{}) returned incorrect sub path (returned {}, expected {})", testItr->pos, testItr->len, std::list<std::string>(subpath.begin(), subpath.end()), std::list<std::string>(testItr->exp_subpath.begin(), testItr->exp_subpath.end())));
+			}
+		}
+
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
+	}
+}
+
+void io_Path_TestClass::test_Method_to_string()
+{
+	fmt::print("[tc::io::Path] test_Method_to_string : ");
+	try
+	{
+		struct Test
+		{
+			tc::io::Path path;
+			std::string exp_posix_str;
+			std::string exp_win32_str;
+		};
+		std::vector<Test> tests {
+			{{}, "", ""}, // empty path
+			{{""}, "/", ""}, // POSIX root path
+			{{"C:"}, "C:", "C:\\"}, // windows root path
+			{{"c:"}, "c:", "c:\\"}, // windows root path
+			{{"data:"}, "data:", "data:"}, // this is a counter test to test the special case handling root paths in POSIX and Win32 formatting
+			{{"some", "relative", "path", "that", "has", "seven", "elements"}, "some/relative/path/that/has/seven/elements", "some\\relative\\path\\that\\has\\seven\\elements"}, // relative path
+			{{"a dir", "a subdir"}, "a dir/a subdir", "a dir\\a subdir"}, // shorter relative path with spaces
+			{{"", "usr", "bin", "bash"}, "/usr/bin/bash", "\\usr\\bin\\bash"}, // absoulute POSIX path
+			{{"C:", "Users", "TestUser", "Desktop", "hi.txt"}, "C:/Users/TestUser/Desktop/hi.txt", "C:\\Users\\TestUser\\Desktop\\hi.txt"}, // absoulute Win32 path
+			{{"示例文本", "サンプルテキスト", "δείγμα κειμένου", "טקסט לדוגמה"}, "示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה", "示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה"} // non-ASCII characters (chinese, japanese, greek, hebrew)
+		};
+
+		for (auto itr = tests.begin(); itr != tests.end(); itr++)
+		{
+#ifdef _WIN32
+			std::string exp_native_str = itr->exp_win32_str;
+#else
+			std::string exp_native_str = itr->exp_posix_str;
+#endif
+
+			std::string native_str = itr->path.to_string(tc::io::Path::Format::Native);
+			std::string posix_str = itr->path.to_string(tc::io::Path::Format::POSIX);
+			std::string win32_str = itr->path.to_string(tc::io::Path::Format::Win32);
+
+			if (native_str != exp_native_str)
+			{
+				throw tc::Exception(fmt::format(".to_string(Format::Native) failed to format path as string. (returned: \"{}\", expected: \"{}\")", native_str, exp_native_str));
+			}
+
+			if (posix_str != itr->exp_posix_str)
+			{
+				throw tc::Exception(fmt::format(".to_string(Format::POSIX) failed to format path as string. (returned: \"{}\", expected: \"{}\")", posix_str, itr->exp_posix_str));
+			}
+
+			if (win32_str != itr->exp_win32_str)
+			{
+				throw tc::Exception(fmt::format(".to_string(Format::Win32) failed to format path as string. (returned: \"{}\", expected: \"{}\")", win32_str, itr->exp_win32_str));
+			}
+		}
+
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
+	}
+}
+
+void io_Path_TestClass::test_Method_to_u16string()
+{
+	fmt::print("[tc::io::Path] test_Method_to_u16string : ");
+	try
+	{
+		struct Test
+		{
+			tc::io::Path path;
+			std::u16string exp_posix_str;
+			std::u16string exp_win32_str;
+		};
+		std::vector<Test> tests {
+			{{}, u"", u""}, // empty path
+			{{""}, u"/", u""}, // POSIX root path
+			{{"C:"}, u"C:", u"C:\\"}, // windows root path
+			{{"data:"}, u"data:", u"data:"}, // this is a counter test to test the special case handling root paths in POSIX and Win32 formatting
+			{{"some", "relative", "path", "that", "has", "seven", "elements"}, u"some/relative/path/that/has/seven/elements", u"some\\relative\\path\\that\\has\\seven\\elements"}, // relative path
+			{{"a dir", "a subdir"}, u"a dir/a subdir", u"a dir\\a subdir"}, // shorter relative path with spaces
+			{{"", "usr", "bin", "bash"}, u"/usr/bin/bash", u"\\usr\\bin\\bash"}, // absoulute POSIX path
+			{{"C:", "Users", "TestUser", "Desktop", "hi.txt"}, u"C:/Users/TestUser/Desktop/hi.txt", u"C:\\Users\\TestUser\\Desktop\\hi.txt"}, // absoulute Win32 path
+			{{"示例文本", "サンプルテキスト", "δείγμα κειμένου", "טקסט לדוגמה"}, u"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה", u"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה"} // non-ASCII characters (chinese, japanese, greek, hebrew)
+		};
+
+		for (auto itr = tests.begin(); itr != tests.end(); itr++)
+		{
+#ifdef _WIN32
+			std::u16string exp_native_str = itr->exp_win32_str;
+#else
+			std::u16string exp_native_str = itr->exp_posix_str;
+#endif
+
+			std::u16string native_str = itr->path.to_u16string(tc::io::Path::Format::Native);
+			std::u16string posix_str = itr->path.to_u16string(tc::io::Path::Format::POSIX);
+			std::u16string win32_str = itr->path.to_u16string(tc::io::Path::Format::Win32);
+
+			if (native_str != exp_native_str)
+			{
+				std::string u8_path_str, u8_exp_path_str;
+				tc::string::TranscodeUtil::UTF16ToUTF8(native_str, u8_path_str);
+				tc::string::TranscodeUtil::UTF16ToUTF8(exp_native_str, u8_exp_path_str);
+				throw tc::Exception(fmt::format(".to_u16string(Format::Native) failed to format path as u16string. (returned: \"{}\", expected: \"{}\")", u8_path_str, u8_exp_path_str));
+			}
+
+			if (posix_str != itr->exp_posix_str)
+			{
+				std::string u8_path_str, u8_exp_path_str;
+				tc::string::TranscodeUtil::UTF16ToUTF8(posix_str, u8_path_str);
+				tc::string::TranscodeUtil::UTF16ToUTF8(itr->exp_posix_str, u8_exp_path_str);
+				throw tc::Exception(fmt::format(".to_u16string(Format::POSIX) failed to format path as u16string. (returned: \"{}\", expected: \"{}\")", u8_path_str, u8_exp_path_str));
+			}
+
+			if (win32_str != itr->exp_win32_str)
+			{
+				std::string u8_path_str, u8_exp_path_str;
+				tc::string::TranscodeUtil::UTF16ToUTF8(win32_str, u8_path_str);
+				tc::string::TranscodeUtil::UTF16ToUTF8(itr->exp_win32_str, u8_exp_path_str);
+				throw tc::Exception(fmt::format(".to_u16string(Format::Win32) failed to format path as u16string. (returned: \"{}\", expected: \"{}\")", u8_path_str, u8_exp_path_str));
+			}
+		}
+		
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
+	}
+}
+
+void io_Path_TestClass::test_Method_to_u32string()
+{
+	fmt::print("[tc::io::Path] test_Method_to_u32string : ");
+	try
+	{
+		struct Test
+		{
+			tc::io::Path path;
+			std::u32string exp_posix_str;
+			std::u32string exp_win32_str;
+		};
+		std::vector<Test> tests {
+			{{}, U"", U""}, // empty path
+			{{""}, U"/", U""}, // POSIX root path
+			{{"C:"}, U"C:", U"C:\\"}, // windows root path
+			{{"data:"}, U"data:", U"data:"}, // this is a counter test to test the special case handling root paths in POSIX and Win32 formatting
+			{{"some", "relative", "path", "that", "has", "seven", "elements"}, U"some/relative/path/that/has/seven/elements", U"some\\relative\\path\\that\\has\\seven\\elements"}, // relative path
+			{{"a dir", "a subdir"}, U"a dir/a subdir", U"a dir\\a subdir"}, // shorter relative path with spaces
+			{{"", "usr", "bin", "bash"}, U"/usr/bin/bash", U"\\usr\\bin\\bash"}, // absoulute POSIX path
+			{{"C:", "Users", "TestUser", "Desktop", "hi.txt"}, U"C:/Users/TestUser/Desktop/hi.txt", U"C:\\Users\\TestUser\\Desktop\\hi.txt"}, // absoulute Win32 path
+			{{"示例文本", "サンプルテキスト", "δείγμα κειμένου", "טקסט לדוגמה"}, U"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה", U"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה"} // non-ASCII characters (chinese, japanese, greek, hebrew)
+		};
+
+		for (auto itr = tests.begin(); itr != tests.end(); itr++)
+		{
+#ifdef _WIN32
+			std::u32string exp_native_str = itr->exp_win32_str;
+#else
+			std::u32string exp_native_str = itr->exp_posix_str;
+#endif
+
+			std::u32string native_str = itr->path.to_u32string(tc::io::Path::Format::Native);
+			std::u32string posix_str = itr->path.to_u32string(tc::io::Path::Format::POSIX);
+			std::u32string win32_str = itr->path.to_u32string(tc::io::Path::Format::Win32);
+
+			if (native_str != exp_native_str)
+			{
+				std::string u8_path_str, u8_exp_path_str;
+				tc::string::TranscodeUtil::UTF32ToUTF8(native_str, u8_path_str);
+				tc::string::TranscodeUtil::UTF32ToUTF8(exp_native_str, u8_exp_path_str);
+				throw tc::Exception(fmt::format(".to_u32string(Format::Native) failed to format path as u32string. (returned: \"{}\", expected: \"{}\")", u8_path_str, u8_exp_path_str));
+			}
+
+			if (posix_str != itr->exp_posix_str)
+			{
+				std::string u8_path_str, u8_exp_path_str;
+				tc::string::TranscodeUtil::UTF32ToUTF8(posix_str, u8_path_str);
+				tc::string::TranscodeUtil::UTF32ToUTF8(itr->exp_posix_str, u8_exp_path_str);
+				throw tc::Exception(fmt::format(".to_u32string(Format::POSIX) failed to format path as u32string. (returned: \"{}\", expected: \"{}\")", u8_path_str, u8_exp_path_str));
+			}
+
+			if (win32_str != itr->exp_win32_str)
+			{
+				std::string u8_path_str, u8_exp_path_str;
+				tc::string::TranscodeUtil::UTF32ToUTF8(win32_str, u8_path_str);
+				tc::string::TranscodeUtil::UTF32ToUTF8(itr->exp_win32_str, u8_exp_path_str);
+				throw tc::Exception(fmt::format(".to_u32string(Format::Win32) failed to format path as u32string. (returned: \"{}\", expected: \"{}\")", u8_path_str, u8_exp_path_str));
+			}
+		}
+		
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
+	}
+}
+
+void io_Path_TestClass::test_Operator_string()
+{
+	fmt::print("[tc::io::Path] test_Operator_string : ");
+	try
+	{
+		struct Test
+		{
+			tc::io::Path path;
+			std::string exp_posix_str;
+			std::string exp_win32_str;
+		};
+		std::vector<Test> tests {
+			{{}, "", ""}, // empty path
+			{{""}, "/", ""}, // POSIX root path
+			{{"C:"}, "C:", "C:\\"}, // windows root path
+			{{"c:"}, "c:", "c:\\"}, // windows root path
+			{{"data:"}, "data:", "data:"}, // this is a counter test to test the special case handling root paths in POSIX and Win32 formatting
+			{{"some", "relative", "path", "that", "has", "seven", "elements"}, "some/relative/path/that/has/seven/elements", "some\\relative\\path\\that\\has\\seven\\elements"}, // relative path
+			{{"a dir", "a subdir"}, "a dir/a subdir", "a dir\\a subdir"}, // shorter relative path with spaces
+			{{"", "usr", "bin", "bash"}, "/usr/bin/bash", "\\usr\\bin\\bash"}, // absoulute POSIX path
+			{{"C:", "Users", "TestUser", "Desktop", "hi.txt"}, "C:/Users/TestUser/Desktop/hi.txt", "C:\\Users\\TestUser\\Desktop\\hi.txt"}, // absoulute Win32 path
+			{{"示例文本", "サンプルテキスト", "δείγμα κειμένου", "טקסט לדוגמה"}, "示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה", "示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה"} // non-ASCII characters (chinese, japanese, greek, hebrew)
+		};
+
+		for (auto itr = tests.begin(); itr != tests.end(); itr++)
+		{
+#ifdef _WIN32
+			std::string exp_native_str = itr->exp_win32_str;
+#else
+			std::string exp_native_str = itr->exp_posix_str;
+#endif
+
+			std::string native_str = itr->path;
+
+			if (native_str != exp_native_str)
+			{
+				throw tc::Exception(fmt::format("operator string() failed to format path as string. (returned: \"{}\", expected: \"{}\")", native_str, exp_native_str));
+			}
+		}
+
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
+	}
+}
+
+void io_Path_TestClass::test_Operator_u16string()
+{
+	fmt::print("[tc::io::Path] test_Operator_u16string : ");
+	try
+	{
+		struct Test
+		{
+			tc::io::Path path;
+			std::u16string exp_posix_str;
+			std::u16string exp_win32_str;
+		};
+		std::vector<Test> tests {
+			{{}, u"", u""}, // empty path
+			{{""}, u"/", u""}, // POSIX root path
+			{{"C:"}, u"C:", u"C:\\"}, // windows root path
+			{{"data:"}, u"data:", u"data:"}, // this is a counter test to test the special case handling root paths in POSIX and Win32 formatting
+			{{"some", "relative", "path", "that", "has", "seven", "elements"}, u"some/relative/path/that/has/seven/elements", u"some\\relative\\path\\that\\has\\seven\\elements"}, // relative path
+			{{"a dir", "a subdir"}, u"a dir/a subdir", u"a dir\\a subdir"}, // shorter relative path with spaces
+			{{"", "usr", "bin", "bash"}, u"/usr/bin/bash", u"\\usr\\bin\\bash"}, // absoulute POSIX path
+			{{"C:", "Users", "TestUser", "Desktop", "hi.txt"}, u"C:/Users/TestUser/Desktop/hi.txt", u"C:\\Users\\TestUser\\Desktop\\hi.txt"}, // absoulute Win32 path
+			{{"示例文本", "サンプルテキスト", "δείγμα κειμένου", "טקסט לדוגמה"}, u"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה", u"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה"} // non-ASCII characters (chinese, japanese, greek, hebrew)
+		};
+
+		for (auto itr = tests.begin(); itr != tests.end(); itr++)
+		{
+#ifdef _WIN32
+			std::u16string exp_native_str = itr->exp_win32_str;
+#else
+			std::u16string exp_native_str = itr->exp_posix_str;
+#endif
+
+			std::u16string native_str = itr->path;
+
+			if (native_str != exp_native_str)
+			{
+				std::string u8_path_str, u8_exp_path_str;
+				tc::string::TranscodeUtil::UTF16ToUTF8(native_str, u8_path_str);
+				tc::string::TranscodeUtil::UTF16ToUTF8(exp_native_str, u8_exp_path_str);
+				throw tc::Exception(fmt::format("operator u16string() failed to format path as u16string. (returned: \"{}\", expected: \"{}\")", u8_path_str, u8_exp_path_str));
+			}
+		}
+		
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
+	}
+}
+
+void io_Path_TestClass::test_Operator_u32string()
+{
+	fmt::print("[tc::io::Path] test_Operator_u32string : ");
+	try
+	{
+		struct Test
+		{
+			tc::io::Path path;
+			std::u32string exp_posix_str;
+			std::u32string exp_win32_str;
+		};
+		std::vector<Test> tests {
+			{{}, U"", U""}, // empty path
+			{{""}, U"/", U""}, // POSIX root path
+			{{"C:"}, U"C:", U"C:\\"}, // windows root path
+			{{"data:"}, U"data:", U"data:"}, // this is a counter test to test the special case handling root paths in POSIX and Win32 formatting
+			{{"some", "relative", "path", "that", "has", "seven", "elements"}, U"some/relative/path/that/has/seven/elements", U"some\\relative\\path\\that\\has\\seven\\elements"}, // relative path
+			{{"a dir", "a subdir"}, U"a dir/a subdir", U"a dir\\a subdir"}, // shorter relative path with spaces
+			{{"", "usr", "bin", "bash"}, U"/usr/bin/bash", U"\\usr\\bin\\bash"}, // absoulute POSIX path
+			{{"C:", "Users", "TestUser", "Desktop", "hi.txt"}, U"C:/Users/TestUser/Desktop/hi.txt", U"C:\\Users\\TestUser\\Desktop\\hi.txt"}, // absoulute Win32 path
+			{{"示例文本", "サンプルテキスト", "δείγμα κειμένου", "טקסט לדוגמה"}, U"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה", U"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה"} // non-ASCII characters (chinese, japanese, greek, hebrew)
+		};
+
+		for (auto itr = tests.begin(); itr != tests.end(); itr++)
+		{
+#ifdef _WIN32
+			std::u32string exp_native_str = itr->exp_win32_str;
+#else
+			std::u32string exp_native_str = itr->exp_posix_str;
+#endif
+
+			std::u32string native_str = itr->path;
+
+			if (native_str != exp_native_str)
+			{
+				std::string u8_path_str, u8_exp_path_str;
+				tc::string::TranscodeUtil::UTF32ToUTF8(native_str, u8_path_str);
+				tc::string::TranscodeUtil::UTF32ToUTF8(exp_native_str, u8_exp_path_str);
+				throw tc::Exception(fmt::format("operator u32string() failed to format path as u32string. (returned: \"{}\", expected: \"{}\")", u8_path_str, u8_exp_path_str));
+			}
+		}
+		
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
 	}
 }
 
 void io_Path_TestClass::test_Operator_Addition()
 {
-	std::cout << "[tc::io::Path] test_Operator_Addition : " << std::flush;
+	fmt::print("[tc::io::Path] test_Operator_Addition : ");
 	try
 	{
 		const std::string raw_path_a = "foo/bar/";
@@ -275,17 +993,21 @@ void io_Path_TestClass::test_Operator_Addition()
 			throw tc::Exception("operator+() did not operate produce expected output");
 		}
 
-		std::cout << "PASS"  << std::endl;
+		fmt::print("PASS\n");
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
 	}
 }
 
 void io_Path_TestClass::test_Operator_Append()
 {
-	std::cout << "[tc::io::Path] test_Operator_Append : " << std::flush;
+	fmt::print("[tc::io::Path] test_Operator_Append : ");
 	try
 	{
 		const std::string raw_path_a = "foo/bar/";
@@ -304,17 +1026,21 @@ void io_Path_TestClass::test_Operator_Append()
 			throw tc::Exception("operator+() did not operate produce expected output");
 		}
 
-		std::cout << "PASS"  << std::endl;
+		fmt::print("PASS\n");
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
 	}
 }
 
 void io_Path_TestClass::test_Scenario_AppendStressTest()
 {
-	std::cout << "[tc::io::Path] test_Scenario_AppendStressTest : " << std::flush;
+	fmt::print("[tc::io::Path] test_Scenario_AppendStressTest : ");
 	try
 	{
 		const std::string raw_dir_path = "foo/bar/";
@@ -356,17 +1082,21 @@ void io_Path_TestClass::test_Scenario_AppendStressTest()
 			throw tc::Exception("Unexpected value for tested path element");
 		}
 
-		std::cout << "PASS"  << std::endl;
+		fmt::print("PASS\n");
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
 	}
 }
 
 void io_Path_TestClass::test_Operator_EqualityTest()
 {
-	std::cout << "[tc::io::Path] test_Operator_EqualityTest : " << std::flush;
+	fmt::print("[tc::io::Path] test_Operator_EqualityTest : ");
 	try
 	{
 		std::string raw_path_0 = "a directory/a subdirectory";
@@ -377,17 +1107,21 @@ void io_Path_TestClass::test_Operator_EqualityTest()
 		if ((path_a == path_b) == false)
 			throw tc::Exception("operator==() did not return true for equal Path objects");
 
-		std::cout << "PASS"  << std::endl;
+		fmt::print("PASS\n");
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
 	}
 }
 
 void io_Path_TestClass::test_Operator_InequalityTest()
 {
-	std::cout << "[tc::io::Path] test_Operator_InequalityTest : " << std::flush;
+	fmt::print("[tc::io::Path] test_Operator_InequalityTest : ");
 	try
 	{
 		std::string raw_path_0 = "a directory/a subdirectory";
@@ -398,17 +1132,21 @@ void io_Path_TestClass::test_Operator_InequalityTest()
 		if ((path_a != path_b) == false)
 			throw tc::Exception("operator!=() did not return true for unequal Path objects");
 
-		std::cout << "PASS"  << std::endl;
+		fmt::print("PASS\n");
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
 	}
 }
 
 void io_Path_TestClass::test_Operator_LessThanTest()
 {
-	std::cout << "[tc::io::Path] test_Operator_LessThanTest : " << std::flush;
+	fmt::print("[tc::io::Path] test_Operator_LessThanTest : ");
 	try
 	{
 		std::string raw_path_a = "/a/path/to/check/";
@@ -446,10 +1184,14 @@ void io_Path_TestClass::test_Operator_LessThanTest()
 		}
 
 
-		std::cout << "PASS"  << std::endl;
+		fmt::print("PASS\n");
 	}
 	catch (const tc::Exception& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		fmt::print("FAIL ({})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL UNEXPECTED ({})", e.what());
 	}
 }
