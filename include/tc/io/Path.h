@@ -2,12 +2,14 @@
  * @file Path.h
  * @brief Declaration of tc::io::Path
  * @author Jack (jakcron)
- * @version 0.4
- * @date 2022/01/22
+ * @version 0.5
+ * @date 2022/02/27
  */
 #pragma once
 #include <list>
 #include <tc/types.h>
+
+#include <tc/ArgumentException.h>
 
 namespace tc { namespace io {
 
@@ -46,13 +48,18 @@ public:
 		/// Default Constructor
 	Path();
 
+		/// Initalizer List Constructor
+	Path(std::initializer_list<std::string> list);
+
 		/**
 		 * @brief Create Path from a literal UTF-8 encoded string
 		 * 
 		 * @param[in] path UTF-8 encoded path
 		 * 
 		 * @pre
-		 * - path can have either forward or backward slash path delimiters ('/' or '\') but not both
+		 * - @p path can have either forward or backward slash path separators ('/' or '\') but not both
+		 * 
+		 * @throws tc::ArgumentException Path literal has both forward ('/') and backward ('\') path separators.
 		 * 
 		 * @note No filtering or processing of special characters is done (e.g. '.', '~')
 		 **/
@@ -64,7 +71,9 @@ public:
 		 * @param[in] path UTF-16 encoded path
 		 * 
 		 * @pre
-		 * - path can have either forward or backward slash path delimiters ('/' or '\') but not both
+		 * - @p path can have either forward or backward slash path separators ('/' or '\') but not both
+		 * 
+		 * @throws tc::ArgumentException Path literal has both forward ('/') and backward ('\') path separators.
 		 * 
 		 * @note 
 		 * No filtering or processing of special characters is done (e.g. '.', '~')
@@ -77,7 +86,9 @@ public:
 		 * @param[in] path UTF-32 encoded path
 		 * 
 		 * @pre
-		 * - path can have either forward or backward slash path delimiters ('/' or '\') but not both
+		 * - @p path can have either forward or backward slash path separators ('/' or '\') but not both
+		 * 
+		 * @throws tc::ArgumentException Path literal has both forward ('/') and backward ('\') path separators.
 		 * 
 		 * @note 
 		 * No filtering or processing of special characters is done (e.g. '.', '~')

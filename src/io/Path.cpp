@@ -6,19 +6,25 @@
 #include <fmt/core.h>
 #include <sstream>
 #include <iostream>
+#include <regex>
 
-static const char kWindowsPathDelimiter = '\\'; /**< Path delimiter used on Microsoft Windows based systems */
-static const char kPosixPathDelimiter = '/'; /**< Path delimiter used on POSIX based systems */
+static const char kWindowsPathSeparator = '\\'; /**< Path separator used on Microsoft Windows based systems */
+static const char kPosixPathSeparator = '/'; /**< Path separator used on POSIX based systems */
 #ifdef _WIN32
-static const char kNativePathDelimiter = kWindowsPathDelimiter; /**< Path delimiter for the native environment */
+static const char kNativePathSeparator = kWindowsPathSeparator; /**< Path separator for the native environment */
 #else
-static const char kNativePathDelimiter = kPosixPathDelimiter; /**< Path delimiter for the native environment */
+static const char kNativePathSeparator = kPosixPathSeparator; /**< Path separator for the native environment */
 #endif
 
 const std::string tc::io::Path::kClassName = "tc::io::Path";
 
 tc::io::Path::Path()
 {}
+
+tc::io::Path::Path(std::initializer_list<std::string> list) :
+	mUnicodePath(list)
+{
+}
 
 tc::io::Path::Path(const std::string& path)
 {
@@ -200,31 +206,45 @@ std::string tc::io::Path::to_string(Format format) const
 {
 	std::string path_str = "";
 
-	std::string path_delimiter_str;
+	if (format == Path::Format::Native)
+	{
+#ifdef _WIN32
+		format = Path::Format::Win32;
+#else
+		format = Path::Format::POSIX;
+#endif	
+	}
+
+	std::string path_separator_str;
 	switch (format)
 	{
-	case (Path::Format::Native):
-		path_delimiter_str = fmt::format("{:c}", kNativePathDelimiter);
-		break;
 	case (Path::Format::POSIX):
-		path_delimiter_str = fmt::format("{:c}", kPosixPathDelimiter);
+		path_separator_str = fmt::format("{:c}", kPosixPathSeparator);
 		break;
 	case (Path::Format::Win32):
-		path_delimiter_str = fmt::format("{:c}", kWindowsPathDelimiter);
+		path_separator_str = fmt::format("{:c}", kWindowsPathSeparator);
 		break;
 	default:
 		throw tc::ArgumentException(kClassName, "Invalid Format type.");
 	}
 
-	// special case where the path has one element and it's empty (posix root path "/")
-	if (this->size() == 1 && this->front() == "")
-		return path_delimiter_str;
+	// special case where the path has one element and its the root path
+	if (this->size() == 1)
+	{
+		// for POSIX style this is the empty string ("/")
+		if (format == Path::Format::POSIX && this->front() == "")
+			return path_separator_str;
+		// for Win32 style this is a drive letter followed by ':' e.g. ("C:\")
+		else if (format == Path::Format::Win32 && std::regex_match(this->front(), std::regex("^([A-Z,a-z]):")))
+			return fmt::format("{}{}", this->front(), path_separator_str);
+	} 
 
 	for (const_iterator itr = this->begin(); itr != this->end(); itr++)
 	{
 		path_str += *itr;
+		// don't print path separator where it would be trailing character
 		if (itr != --(this->end()))
-			path_str += path_delimiter_str;
+			path_str += path_separator_str;
 	}
 
 	return path_str;
@@ -275,22 +295,22 @@ void tc::io::Path::initializePath(const std::string& src)
 	size_t posix_slash_count = 0;
 	for (size_t i = 0; i < src.size(); i++)
 	{
-		if (src[i] == kWindowsPathDelimiter)
+		if (src[i] == kWindowsPathSeparator)
 			windows_slash_count += 1;
-		else if (src[i] == kPosixPathDelimiter)
+		else if (src[i] == kPosixPathSeparator)
 			posix_slash_count += 1;
 	}
 
 	if (windows_slash_count != 0 && posix_slash_count != 0)
 	{
-		throw tc::Exception(kClassName, "Both Windows and Unix path delimiters are present in path");
+		throw tc::ArgumentException(kClassName, "Path literal has both forward ('/') and backward ('\\') path separators.");
 	}
 
-	char path_delimiter = kNativePathDelimiter;
+	char path_delimiter = kNativePathSeparator;
 	if (windows_slash_count > 0)
-		path_delimiter = kWindowsPathDelimiter;
+		path_delimiter = kWindowsPathSeparator;
 	else if (posix_slash_count > 0)
-		path_delimiter = kPosixPathDelimiter;
+		path_delimiter = kPosixPathSeparator;
 
 
 	std::stringstream src_stream(src);
