@@ -546,6 +546,9 @@
     <ClInclude Include="..\..\..\include\tc\io\IPathResolver.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\IPortablePathResolver.h">
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\io\IReadableSink.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>

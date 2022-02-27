@@ -231,6 +231,7 @@
     <ClInclude Include="..\..\..\include\tc\io\IOException.h" />
     <ClInclude Include="..\..\..\include\tc\io\IOUtil.h" />
     <ClInclude Include="..\..\..\include\tc\io\IPathResolver.h" />
+    <ClInclude Include="..\..\..\include\tc\io\IPortablePathResolver.h" />
     <ClInclude Include="..\..\..\include\tc\io\IReadableSink.h" />
     <ClInclude Include="..\..\..\include\tc\io\ISink.h" />
     <ClInclude Include="..\..\..\include\tc\io\ISource.h" />
