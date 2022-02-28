@@ -1,6 +1,6 @@
 	/**
 	 * @file BlockUtilImpl.h
-	 * @brief Declaration of tc::crypto::detail::AesImpl
+	 * @brief Declaration of block utility functions for tc::crypto
 	 * @author Jack (jakcron)
 	 * @version 0.1
 	 * @date 2020/10/04
