@@ -145,10 +145,7 @@
     <ClCompile Include="..\..\..\src\crypto\detail\Sha1Impl.cpp">
       <Filter>Source Files\crypto\detail</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\detail\Sha256Impl.cpp">
-      <Filter>Source Files\crypto\detail</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\detail\Sha512Impl.cpp">
+    <ClCompile Include="..\..\..\src\crypto\detail\Sha2Impl.cpp">
       <Filter>Source Files\crypto\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\io\BasicPathResolver.cpp">
@@ -504,10 +501,7 @@
     <ClInclude Include="..\..\..\include\tc\crypto\detail\Sha1Impl.h">
       <Filter>Header Files\tc\crypto\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\detail\Sha256Impl.h">
-      <Filter>Header Files\tc\crypto\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\detail\Sha512Impl.h">
+    <ClInclude Include="..\..\..\include\tc\crypto\detail\Sha2Impl.h">
       <Filter>Header Files\tc\crypto\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\detail\XtsModeImpl.h">

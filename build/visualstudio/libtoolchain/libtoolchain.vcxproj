@@ -216,8 +216,7 @@
     <ClInclude Include="..\..\..\include\tc\crypto\detail\RsaPkcs1Padding.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\RsaPssPadding.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\Sha1Impl.h" />
-    <ClInclude Include="..\..\..\include\tc\crypto\detail\Sha256Impl.h" />
-    <ClInclude Include="..\..\..\include\tc\crypto\detail\Sha512Impl.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\detail\Sha2Impl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\XtsModeImpl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto.h" />
     <ClInclude Include="..\..\..\include\tc\io\BasicPathResolver.h" />
@@ -312,8 +311,7 @@
     <ClCompile Include="..\..\..\src\crypto\detail\RsaImpl.cpp" />
     <ClCompile Include="..\..\..\src\crypto\detail\RsaKeyGeneratorImpl.cpp" />
     <ClCompile Include="..\..\..\src\crypto\detail\Sha1Impl.cpp" />
-    <ClCompile Include="..\..\..\src\crypto\detail\Sha256Impl.cpp" />
-    <ClCompile Include="..\..\..\src\crypto\detail\Sha512Impl.cpp" />
+    <ClCompile Include="..\..\..\src\crypto\detail\Sha2Impl.cpp" />
     <ClCompile Include="..\..\..\src\io\BasicPathResolver.cpp" />
     <ClCompile Include="..\..\..\src\io\FileStream.cpp" />
     <ClCompile Include="..\..\..\src\io\IOUtil.cpp" />
