@@ -83,7 +83,7 @@ public:
 		 * @note Use @ref canRead to determine if this stream supports reading.
 		 * @note Exceptions thrown by the base stream are not altered/intercepted, refer to that module's documentation for those exceptions.
 		 * 
-		 * @throw tc::ArgumentOutOfRangeException @p count exceeds the length of readable data in the sub stream.
+		 * @throw tc::ArgumentOutOfRangeException @p count exceeds the length of readable data.
 		 * @throw tc::NotSupportedException Stream does not support reading.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
@@ -101,7 +101,7 @@ public:
 		 * @note Use @ref canWrite to determine if this stream supports writing.
 		 * @note Exceptions thrown by the base stream are not altered/intercepted, refer to that module's documentation for those exceptions.
 		 * 
-		 * @throw tc::ArgumentOutOfRangeException @p count exceeds the length of writeable data in the sub stream.
+		 * @throw tc::ArgumentOutOfRangeException @p count exceeds the length of writeable data.
 		 * @throw tc::NotSupportedException Stream does not support writing.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
@@ -126,8 +126,8 @@ public:
 	int64_t seek(int64_t offset, SeekOrigin origin);
 
 		/**
-		 * @brief Sets the length of the current stream. This is not implemented for @ref SubStream.
-		 * @throw tc::NotImplementedException @ref setLength is not implemented for @ref SubStream
+		 * @brief Sets the length of the current stream. This is not implemented for @ref ConcatenatedStream.
+		 * @throw tc::NotImplementedException @ref setLength is not implemented for @ref ConcatenatedStream
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	void setLength(int64_t length);
