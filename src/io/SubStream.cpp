@@ -3,7 +3,6 @@
 #include <tc/io/StreamUtil.h>
 #include <algorithm>
 
-
 const std::string tc::io::SubStream::kClassName = "tc::io::SubStream";
 
 tc::io::SubStream::SubStream() :
