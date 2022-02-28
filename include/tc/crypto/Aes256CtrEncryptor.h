@@ -93,4 +93,23 @@ void EncryptAes256Ctr(byte_t* dst, const byte_t* src, size_t size, uint64_t bloc
 	 */
 void DecryptAes256Ctr(byte_t* dst, const byte_t* src, size_t size, uint64_t block_number, const byte_t* key, size_t key_size, const byte_t* iv, size_t iv_size);
 
+	/**
+	 * @brief Utility function for incrementing a AES256-CTR block counter.
+	 * 
+	 * @param[in,out] counter Pointer to block counter to increment.
+	 * @param[in]     incr Value to increment the block counter with.
+	 * 
+	 * @pre
+	 * - @p counter != nullptr
+	 * 
+	 * @post
+	 * - Block counter @p counter is incremented by the value of @p incr.
+	 * 
+	 * @details
+	 * This increments the block counter (@p counter) (used in CTR-Mode as the initialization vector) by the value of @p incr.
+	 * 
+	 * @throw tc::ArgumentNullException @p counter was null.
+	 */
+void IncrementCounterAes256Ctr(byte_t* counter, uint64_t incr);
+
 }} // namespace tc::crypto

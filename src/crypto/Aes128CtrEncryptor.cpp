@@ -13,3 +13,12 @@ void tc::crypto::DecryptAes128Ctr(byte_t* dst, const byte_t* src, size_t size, u
 	crypt.initialize(key, key_size, iv, iv_size);
 	crypt.decrypt(dst, src, size, block_number);
 }
+
+void tc::crypto::IncrementCounterAes128Ctr(byte_t* counter, uint64_t incr)
+{
+	if (counter == nullptr)
+	{
+		throw tc::ArgumentOutOfRangeException("counter was null.");
+	}
+	tc::crypto::detail::incr_counter<16>(counter, incr);
+}
