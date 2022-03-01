@@ -285,6 +285,9 @@
     <ClCompile Include="..\..\..\test\io_BasicPathResolver_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\io_ConcatenatedStream_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\test\ByteData_TestClass.h">
@@ -555,6 +558,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\io_BasicPathResolver_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\io_ConcatenatedStream_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

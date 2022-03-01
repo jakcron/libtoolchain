@@ -208,6 +208,7 @@
     <ClCompile Include="..\..\..\test\FileSystemTestUtil.cpp" />
     <ClCompile Include="..\..\..\test\StreamTestUtil.cpp" />
     <ClCompile Include="..\..\..\test\io_BasicPathResolver_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_ConcatenatedStream_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_FileStream_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_LocalFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_MemorySource_TestClass.cpp" />
@@ -301,6 +302,7 @@
     <ClInclude Include="..\..\..\test\FileSystemTestUtil.h" />
     <ClInclude Include="..\..\..\test\StreamTestUtil.h" />
     <ClInclude Include="..\..\..\test\io_BasicPathResolver_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_ConcatenatedStream_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_FileStream_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_LocalFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_MemorySource_TestClass.h" />

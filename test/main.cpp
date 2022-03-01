@@ -15,6 +15,7 @@
 #include "io_FileStream_TestClass.h"
 #include "io_MemoryStream_TestClass.h"
 #include "io_SubStream_TestClass.h"
+#include "io_ConcatenatedStream_TestClass.h"
 #include "io_SubFileSystem_TestClass.h"
 #include "io_VirtualFileSystem_TestClass.h"
 #include "io_PaddingSource_TestClass.h"
@@ -123,6 +124,7 @@ int main(int argc, char** argv)
 	runTest(new io_FileStream_TestClass());
 	runTest(new io_MemoryStream_TestClass());
 	runTest(new io_SubStream_TestClass());
+	runTest(new io_ConcatenatedStream_TestClass());
 	runTest(new io_SubFileSystem_TestClass());
 	runTest(new io_VirtualFileSystem_TestClass());
 	runTest(new io_PaddingSource_TestClass());
