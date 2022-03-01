@@ -21,6 +21,7 @@
 #include <tc/io/FileStream.h>
 #include <tc/io/SubStream.h>
 #include <tc/io/MemoryStream.h>
+#include <tc/io/ConcatenatedStream.h>
 
 #include <tc/io/IFileSystem.h>
 #include <tc/io/LocalFileSystem.h>
