@@ -13,6 +13,7 @@
 #include <tc/NotSupportedException.h>
 #include <tc/NotImplementedException.h>
 #include <tc/ObjectDisposedException.h>
+#include <tc/io/IOException.h>
 
 namespace tc { namespace io {
 
@@ -40,7 +41,6 @@ public:
 		 * 
 		 * @throw tc::ArgumentNullException One of the base streams in @p stream_list was @p nullptr.
 		 * @throw tc::NotSupportedException List of streams did not all support either read or write
-		 * @throw tc::ArgumentOutOfRangeException @p offset or @p length is negative or otherwise invalid given the length of the base stream.
 		 **/
 	ConcatenatedStream(const std::vector<std::shared_ptr<tc::io::IStream>>& stream_list);
 
@@ -83,7 +83,7 @@ public:
 		 * @note Use @ref canRead to determine if this stream supports reading.
 		 * @note Exceptions thrown by the base stream are not altered/intercepted, refer to that module's documentation for those exceptions.
 		 * 
-		 * @throw tc::ArgumentOutOfRangeException @p count exceeds the length of readable data.
+		 * @throw tc::io::IOException Failed to read data from an underlying stream.
 		 * @throw tc::NotSupportedException Stream does not support reading.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
@@ -101,7 +101,7 @@ public:
 		 * @note Use @ref canWrite to determine if this stream supports writing.
 		 * @note Exceptions thrown by the base stream are not altered/intercepted, refer to that module's documentation for those exceptions.
 		 * 
-		 * @throw tc::ArgumentOutOfRangeException @p count exceeds the length of writeable data.
+		 * @throw tc::io::IOException Failed to write data to an underlying stream.
 		 * @throw tc::NotSupportedException Stream does not support writing.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
@@ -119,6 +119,7 @@ public:
 		 * @note Use @ref canSeek to determine if this stream supports seeking.
 		 * @note Exceptions thrown by the base stream are not altered/intercepted, refer to that module's documentation for those exceptions.
 		 * 
+		 * @throw tc::io::IOException Failed to seek because underlying stream could not be determined.
 		 * @throw tc::ArgumentOutOfRangeException @p origin contains an invalid value.
 		 * @throw tc::NotSupportedException Stream does not support seeking.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
@@ -147,16 +148,33 @@ public:
 private:
 	static const std::string kClassName;
 
-	struct StreamInfo
+	struct StreamRange
 	{
 		int64_t offset;
 		int64_t length;
+
+		StreamRange() : offset(0), length(0) {}
+		StreamRange(int64_t offset) : offset(offset), length(0) {}
+		StreamRange(int64_t offset, int64_t length) : offset(offset), length(length) {}
+
+		bool operator<(const StreamRange& other) const 
+		{
+			return (this->offset < other.offset && (this->offset + this->length) <= other.offset);
+		}
+	};
+
+	struct StreamInfo
+	{
+		StreamRange range;
 		std::shared_ptr<tc::io::IStream> stream;
 	};
 
 	std::vector<StreamInfo> mStreamList;
+	std::map<StreamRange, size_t> mStreamListMap;
 	std::vector<StreamInfo>::iterator mCurrentStream;
 
+	
+	
 	// static stream properties
 	bool mCanRead;
 	bool mCanWrite;
