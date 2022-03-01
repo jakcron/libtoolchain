@@ -276,6 +276,7 @@ void tc::io::ConcatenatedStream::flush()
 		throw tc::ObjectDisposedException(kClassName+"flush()", "Stream was disposed.");
 	}
 
+	// TODO: determine if flushing should be done for all streams here, or automatically as streams are no longer the current stream.
 	mCurrentStream->stream->flush();
 }
 
