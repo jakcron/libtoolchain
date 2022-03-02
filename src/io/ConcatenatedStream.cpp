@@ -231,21 +231,30 @@ int64_t tc::io::ConcatenatedStream::seek(int64_t offset, SeekOrigin origin)
 	// seek is < mStreamLength : we find the stream in the map and set the relative position 
 	else if (absolute_seek_pos < mStreamLength)
 	{
-		auto rangeItr = mStreamListMap.find(StreamRange(absolute_seek_pos));
-		if (rangeItr == mStreamListMap.end())
+		// before we do a map lookup, check if the current stream has the range the offset sits in
+		if ((absolute_seek_pos >= mCurrentStream->range.offset) && (absolute_seek_pos < (mCurrentStream->range.offset + mCurrentStream->range.length)))
 		{
-			throw tc::io::IOException(kClassName+"seek()", "Failed to seek because underlying stream could not be determined.");
+			mCurrentStream->stream->seek(absolute_seek_pos - mCurrentStream->range.offset, tc::io::SeekOrigin::Begin);
 		}
-
-		if (rangeItr->second > mStreamList.size())
+		// look up the correct stream in the map
+		else
 		{
-			throw tc::io::IOException(kClassName+"seek()", "Failed to seek because underlying stream could not be determined.");
-		}
+			auto rangeItr = mStreamListMap.find(StreamRange(absolute_seek_pos));
+			if (rangeItr == mStreamListMap.end())
+			{
+				throw tc::io::IOException(kClassName+"seek()", "Failed to seek because underlying stream could not be determined.");
+			}
 
-		mCurrentStream = mStreamList.begin() + rangeItr->second;
-		mCurrentStream->stream->seek(absolute_seek_pos - mCurrentStream->range.offset, tc::io::SeekOrigin::Begin);
+			if (rangeItr->second > mStreamList.size())
+			{
+				throw tc::io::IOException(kClassName+"seek()", "Failed to seek because underlying stream could not be determined.");
+			}
+
+			mCurrentStream = mStreamList.begin() + rangeItr->second;
+			mCurrentStream->stream->seek(absolute_seek_pos - mCurrentStream->range.offset, tc::io::SeekOrigin::Begin);
+		}
 	}
-	// seek is > mStreamLength : we use the end stream and seek to the end of it
+	// seek is >= mStreamLength : we use the end stream and seek to the end of it
 	else
 	{
 		mCurrentStream = --mStreamList.end();
