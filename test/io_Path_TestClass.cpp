@@ -625,7 +625,7 @@ void io_Path_TestClass::test_Method_to_string()
 			{{"a dir", "a subdir"}, "a dir/a subdir", "a dir\\a subdir"}, // shorter relative path with spaces
 			{{"", "usr", "bin", "bash"}, "/usr/bin/bash", "\\usr\\bin\\bash"}, // absoulute POSIX path
 			{{"C:", "Users", "TestUser", "Desktop", "hi.txt"}, "C:/Users/TestUser/Desktop/hi.txt", "C:\\Users\\TestUser\\Desktop\\hi.txt"}, // absoulute Win32 path
-			{{"示例文本", "サンプルテキスト", "δείγμα κειμένου", "טקסט לדוגמה"}, "示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה", "示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה"} // non-ASCII characters (chinese, japanese, greek, hebrew)
+			{{std::string(u8"示例文本"), std::string(u8"サンプルテキスト"), std::string(u8"δείγμα κειμένου"), std::string(u8"טקסט לדוגמה")}, std::string(u8"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה"), std::string(u8"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה")} // non-ASCII characters (chinese, japanese, greek, hebrew)
 		};
 
 		for (auto itr = tests.begin(); itr != tests.end(); itr++)
@@ -688,7 +688,7 @@ void io_Path_TestClass::test_Method_to_u16string()
 			{{"a dir", "a subdir"}, u"a dir/a subdir", u"a dir\\a subdir"}, // shorter relative path with spaces
 			{{"", "usr", "bin", "bash"}, u"/usr/bin/bash", u"\\usr\\bin\\bash"}, // absoulute POSIX path
 			{{"C:", "Users", "TestUser", "Desktop", "hi.txt"}, u"C:/Users/TestUser/Desktop/hi.txt", u"C:\\Users\\TestUser\\Desktop\\hi.txt"}, // absoulute Win32 path
-			{{"示例文本", "サンプルテキスト", "δείγμα κειμένου", "טקסט לדוגמה"}, u"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה", u"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה"} // non-ASCII characters (chinese, japanese, greek, hebrew)
+			{{std::string(u8"示例文本"), std::string(u8"サンプルテキスト"), std::string(u8"δείγμα κειμένου"), std::string(u8"טקסט לדוגמה")}, std::u16string(u"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה"), std::u16string(u"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה")} // non-ASCII characters (chinese, japanese, greek, hebrew)
 		};
 
 		for (auto itr = tests.begin(); itr != tests.end(); itr++)
@@ -760,7 +760,7 @@ void io_Path_TestClass::test_Method_to_u32string()
 			{{"a dir", "a subdir"}, U"a dir/a subdir", U"a dir\\a subdir"}, // shorter relative path with spaces
 			{{"", "usr", "bin", "bash"}, U"/usr/bin/bash", U"\\usr\\bin\\bash"}, // absoulute POSIX path
 			{{"C:", "Users", "TestUser", "Desktop", "hi.txt"}, U"C:/Users/TestUser/Desktop/hi.txt", U"C:\\Users\\TestUser\\Desktop\\hi.txt"}, // absoulute Win32 path
-			{{"示例文本", "サンプルテキスト", "δείγμα κειμένου", "טקסט לדוגמה"}, U"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה", U"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה"} // non-ASCII characters (chinese, japanese, greek, hebrew)
+			{{std::string(u8"示例文本"), std::string(u8"サンプルテキスト"), std::string(u8"δείγμα κειμένου"), std::string(u8"טקסט לדוגמה")}, std::u32string(U"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה"), std::u32string(U"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה")} // non-ASCII characters (chinese, japanese, greek, hebrew)
 		};
 
 		for (auto itr = tests.begin(); itr != tests.end(); itr++)
@@ -833,7 +833,7 @@ void io_Path_TestClass::test_Operator_string()
 			{{"a dir", "a subdir"}, "a dir/a subdir", "a dir\\a subdir"}, // shorter relative path with spaces
 			{{"", "usr", "bin", "bash"}, "/usr/bin/bash", "\\usr\\bin\\bash"}, // absoulute POSIX path
 			{{"C:", "Users", "TestUser", "Desktop", "hi.txt"}, "C:/Users/TestUser/Desktop/hi.txt", "C:\\Users\\TestUser\\Desktop\\hi.txt"}, // absoulute Win32 path
-			{{"示例文本", "サンプルテキスト", "δείγμα κειμένου", "טקסט לדוגמה"}, "示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה", "示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה"} // non-ASCII characters (chinese, japanese, greek, hebrew)
+			{{std::string(u8"示例文本"), std::string(u8"サンプルテキスト"), std::string(u8"δείγμα κειμένου"), std::string(u8"טקסט לדוגמה")}, std::string(u8"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה"), std::string(u8"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה")} // non-ASCII characters (chinese, japanese, greek, hebrew)
 		};
 
 		for (auto itr = tests.begin(); itr != tests.end(); itr++)
@@ -884,7 +884,7 @@ void io_Path_TestClass::test_Operator_u16string()
 			{{"a dir", "a subdir"}, u"a dir/a subdir", u"a dir\\a subdir"}, // shorter relative path with spaces
 			{{"", "usr", "bin", "bash"}, u"/usr/bin/bash", u"\\usr\\bin\\bash"}, // absoulute POSIX path
 			{{"C:", "Users", "TestUser", "Desktop", "hi.txt"}, u"C:/Users/TestUser/Desktop/hi.txt", u"C:\\Users\\TestUser\\Desktop\\hi.txt"}, // absoulute Win32 path
-			{{"示例文本", "サンプルテキスト", "δείγμα κειμένου", "טקסט לדוגמה"}, u"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה", u"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה"} // non-ASCII characters (chinese, japanese, greek, hebrew)
+			{{std::string(u8"示例文本"), std::string(u8"サンプルテキスト"), std::string(u8"δείγμα κειμένου"), std::string(u8"טקסט לדוגמה")}, std::u16string(u"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה"), std::u16string(u"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה")} // non-ASCII characters (chinese, japanese, greek, hebrew)
 		};
 
 		for (auto itr = tests.begin(); itr != tests.end(); itr++)
@@ -938,7 +938,7 @@ void io_Path_TestClass::test_Operator_u32string()
 			{{"a dir", "a subdir"}, U"a dir/a subdir", U"a dir\\a subdir"}, // shorter relative path with spaces
 			{{"", "usr", "bin", "bash"}, U"/usr/bin/bash", U"\\usr\\bin\\bash"}, // absoulute POSIX path
 			{{"C:", "Users", "TestUser", "Desktop", "hi.txt"}, U"C:/Users/TestUser/Desktop/hi.txt", U"C:\\Users\\TestUser\\Desktop\\hi.txt"}, // absoulute Win32 path
-			{{"示例文本", "サンプルテキスト", "δείγμα κειμένου", "טקסט לדוגמה"}, U"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה", U"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה"} // non-ASCII characters (chinese, japanese, greek, hebrew)
+			{{std::string(u8"示例文本"), std::string(u8"サンプルテキスト"), std::string(u8"δείγμα κειμένου"), std::string(u8"טקסט לדוגמה")}, std::u32string(U"示例文本/サンプルテキスト/δείγμα κειμένου/טקסט לדוגמה"), std::u32string(U"示例文本\\サンプルテキスト\\δείγμα κειμένου\\טקסט לדוגמה")} // non-ASCII characters (chinese, japanese, greek, hebrew)
 		};
 
 		for (auto itr = tests.begin(); itr != tests.end(); itr++)
