@@ -1740,7 +1740,7 @@ void io_VirtualFileSystem_TestClass::test_WorksForAllValidPaths_OpenFile()
 					throw tc::Exception(fmt::format(".openFile() returned a stream where length was 0x{:x} (expected 0x{:x}) for file \"{:s}\".", actual_length, expected_length, literal_path));
 				}
 			}
-			catch (tc::io::FileNotFoundException& e)
+			catch (tc::io::FileNotFoundException&)
 			{
 				throw tc::Exception(fmt::format(".openFile() threw tc::io::FileNotFoundException where file (\"{:s}\") did exist.", literal_path));
 			}
