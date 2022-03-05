@@ -29,18 +29,26 @@ tc::io::ConcatenatedStream::ConcatenatedStream(const std::vector<std::shared_ptr
 	// process stream list
 	for (auto itr = stream_list.begin(); itr != stream_list.end(); itr++)
 	{
+		// skip null streams
 		if (*itr == nullptr)
-		{
-			throw tc::ArgumentNullException(kClassName, "One of the input streams was null.");
-		}
+			continue;
+		// skip empty streams
+		if ((*itr)->length() == 0)
+			continue;
+		// skip streams that can't be read or writen to (so it's useless)
+		if ((*itr)->canRead() == false && (*itr)->canWrite() == false)
+			continue;
 
+		// create stream info for the input stream
 		StreamInfo info;
+		// range is from the current concatenated stream position for the length of the input stream
 		info.range = StreamRange(mStreamLength, (*itr)->length());
 		info.stream = *itr;
 
+		// throw an exception if the input stream range overlaps with an existing range (which shouldn't be possible)
 		if (mStreamListMap.find(info.range) != mStreamListMap.end())
 		{
-			throw tc::Exception(kClassName, "Poor state management.");
+			throw tc::Exception(kClassName, "Poor state management detected.");
 		}
 
 		if (info.stream->canRead() == false)
@@ -60,6 +68,11 @@ tc::io::ConcatenatedStream::ConcatenatedStream(const std::vector<std::shared_ptr
 	if (!can_read && !can_write)
 	{
 		throw tc::NotSupportedException(kClassName, "Stream does not support read or write.");
+	}
+	// check the stream is usable
+	if (mStreamLength == 0)
+	{
+		throw tc::NotSupportedException(kClassName, "Stream had no length.");
 	}
 
 	// save iterator to current stream

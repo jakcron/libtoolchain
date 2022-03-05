@@ -8,7 +8,6 @@
 #pragma once
 #include <tc/io/IStream.h>
 
-#include <tc/ArgumentNullException.h>
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/NotSupportedException.h>
 #include <tc/NotImplementedException.h>
@@ -39,8 +38,8 @@ public:
 		 * @pre All base streams must support reading for @ref read() to work.
 		 * @pre All base streams must support writing for @ref write() to work.
 		 * 
-		 * @throw tc::ArgumentNullException One of the base streams in @p stream_list was @p nullptr.
-		 * @throw tc::NotSupportedException List of streams did not all support either read or write
+		 * @throw tc::NotSupportedException List of streams did not all support either read or write.
+		 * @throw tc::NotSupportedException List of streams combined to a stream with no length.
 		 **/
 	ConcatenatedStream(const std::vector<std::shared_ptr<tc::io::IStream>>& stream_list);
 
