@@ -117,7 +117,7 @@ size_t tc::io::ConcatenatedStream::read(byte_t* ptr, size_t count)
 		// read data and throw exception if unexpected read count is returned
 		if (readable_count_for_current_stream != mCurrentStream->stream->read(ptr + (readable_count - remaining_readable_count), readable_count_for_current_stream))
 		{
-			throw tc::io::IOException(kClassName, "Reading from one of the base streams returned less data than expected.");
+			throw tc::io::IOException(kClassName+"read()", "Reading from one of the base streams returned less data than expected.");
 		}
 
 		// decrement the remaining readable count
@@ -126,12 +126,12 @@ size_t tc::io::ConcatenatedStream::read(byte_t* ptr, size_t count)
 		// if there is more data to be read, increment the current stream
 		if (remaining_readable_count != 0)
 		{
-			mCurrentStream++;
+			updateCurrentStream(mCurrentStream + 1);
 
 			// make sure we haven't somehow reached the end before we expected
 			if (mCurrentStream == mStreamList.end())
 			{
-				throw tc::io::IOException(kClassName, "More data was expected to be readable but end of stream list was reached.");
+				throw tc::io::IOException(kClassName+"read()", "More data was expected to be readable but end of stream list was reached.");
 			}
 
 			// correct the position the 0x0 if not already
@@ -139,7 +139,7 @@ size_t tc::io::ConcatenatedStream::read(byte_t* ptr, size_t count)
 			{
 				if (!mCanSeek)
 				{
-					throw tc::io::IOException(kClassName, "Tried to continue reading from the next stream but the position was not 0, and seek was not supported.");
+					throw tc::io::IOException(kClassName+"read()", "Tried to continue reading from the next stream but the position was not 0, and seek was not supported.");
 				}
 				
 				mCurrentStream->stream->seek(0, tc::io::SeekOrigin::Begin);
@@ -171,7 +171,7 @@ size_t tc::io::ConcatenatedStream::write(const byte_t* ptr, size_t count)
 		// write data and throw exception if unexpected write count is returned
 		if (writable_count_for_current_stream != mCurrentStream->stream->write(ptr + (writable_count - remaining_writable_count), writable_count_for_current_stream))
 		{
-			throw tc::io::IOException(kClassName, "Writing from one of the base streams returned less data than expected.");
+			throw tc::io::IOException(kClassName+"write()", "Writing from one of the base streams returned less data than expected.");
 		}
 
 		// decrement the remaining writable count
@@ -180,12 +180,12 @@ size_t tc::io::ConcatenatedStream::write(const byte_t* ptr, size_t count)
 		// if there is more data to be write, increment the current stream
 		if (remaining_writable_count != 0)
 		{
-			mCurrentStream++;
+			updateCurrentStream(mCurrentStream + 1);
 
 			// make sure we haven't somehow reached the end before we expected
 			if (mCurrentStream == mStreamList.end())
 			{
-				throw tc::io::IOException(kClassName, "More data was expected to be writable but end of stream list was reached.");
+				throw tc::io::IOException(kClassName+"write()", "More data was expected to be writable but end of stream list was reached.");
 			}
 
 			// correct the position the 0x0 if not already
@@ -193,7 +193,7 @@ size_t tc::io::ConcatenatedStream::write(const byte_t* ptr, size_t count)
 			{
 				if (!mCanSeek)
 				{
-					throw tc::io::IOException(kClassName, "Tried to continue writing from the next stream but the position was not 0, and seek was not supported.");
+					throw tc::io::IOException(kClassName+"write()", "Tried to continue writing from the next stream but the position was not 0, and seek was not supported.");
 				}
 				
 				mCurrentStream->stream->seek(0, tc::io::SeekOrigin::Begin);
@@ -221,7 +221,7 @@ int64_t tc::io::ConcatenatedStream::seek(int64_t offset, SeekOrigin origin)
 	// seek is <= 0 : we use the first stream and set the position to 0
 	if (absolute_seek_pos <= 0)
 	{
-		mCurrentStream = mStreamList.begin();
+		updateCurrentStream(mStreamList.begin());
 		if (mCurrentStream == mStreamList.end())
 		{
 			throw tc::io::IOException(kClassName+"seek()", "Failed to seek because underlying stream could not be determined.");	
@@ -250,14 +250,14 @@ int64_t tc::io::ConcatenatedStream::seek(int64_t offset, SeekOrigin origin)
 				throw tc::io::IOException(kClassName+"seek()", "Failed to seek because underlying stream could not be determined.");
 			}
 
-			mCurrentStream = mStreamList.begin() + rangeItr->second;
+			updateCurrentStream(mStreamList.begin() + rangeItr->second);
 			mCurrentStream->stream->seek(absolute_seek_pos - mCurrentStream->range.offset, tc::io::SeekOrigin::Begin);
 		}
 	}
 	// seek is >= mStreamLength : we use the end stream and seek to the end of it
 	else
 	{
-		mCurrentStream = --mStreamList.end();
+		updateCurrentStream(--mStreamList.end());
 		if (mCurrentStream == mStreamList.end())
 		{
 			throw tc::io::IOException(kClassName+"seek()", "Failed to seek because underlying stream could not be determined.");	
@@ -285,12 +285,14 @@ void tc::io::ConcatenatedStream::flush()
 		throw tc::ObjectDisposedException(kClassName+"flush()", "Stream was disposed.");
 	}
 
-	// TODO: determine if flushing should be done for all streams here, or automatically as streams are no longer the current stream.
 	mCurrentStream->stream->flush();
 }
 
 void tc::io::ConcatenatedStream::dispose()
 {
+	if (mCurrentStream != mStreamList.end())
+		mCurrentStream->stream->flush();
+
 	mCurrentStream = mStreamList.end();
 	mStreamList.clear();
 	mCurrentStream = mStreamList.end();
@@ -299,4 +301,15 @@ void tc::io::ConcatenatedStream::dispose()
 	mCanWrite = false;
 	mCanSeek = false;
 	mStreamLength = 0;
+}
+
+void tc::io::ConcatenatedStream::updateCurrentStream(std::vector<StreamInfo>::iterator stream_itr)
+{
+	if (mCurrentStream != stream_itr)
+	{
+		// if stream itr != end() flush the stream
+		if (mCurrentStream != mStreamList.end())
+			mCurrentStream->stream->flush();
+		mCurrentStream = stream_itr;
+	}
 }
