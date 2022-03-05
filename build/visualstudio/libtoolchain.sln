@@ -12,8 +12,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtoolchain-test", "libtoo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmbedtls", "..\..\deps\libmbedtls\build\visualstudio\libmbedtls\libmbedtls.vcxproj", "{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}"
 EndProject
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libfmt", "..\..\deps\libfmt\build\visualstudio\libfmt\libfmt.vcxproj", "{f4b0540e-0aae-4006-944b-356944ef61fa}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libfmt", "..\..\deps\libfmt\build\visualstudio\libfmt\libfmt.vcxproj", "{F4B0540E-0AAE-4006-944B-356944EF61FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +46,14 @@ Global
 		{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}.Release|x64.Build.0 = Release|x64
 		{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}.Release|x86.ActiveCfg = Release|Win32
 		{7A7C66F3-2B5B-4E23-85D8-2A74FEDAD92C}.Release|x86.Build.0 = Release|Win32
+		{F4B0540E-0AAE-4006-944B-356944EF61FA}.Debug|x64.ActiveCfg = Debug|x64
+		{F4B0540E-0AAE-4006-944B-356944EF61FA}.Debug|x64.Build.0 = Debug|x64
+		{F4B0540E-0AAE-4006-944B-356944EF61FA}.Debug|x86.ActiveCfg = Debug|Win32
+		{F4B0540E-0AAE-4006-944B-356944EF61FA}.Debug|x86.Build.0 = Debug|Win32
+		{F4B0540E-0AAE-4006-944B-356944EF61FA}.Release|x64.ActiveCfg = Release|x64
+		{F4B0540E-0AAE-4006-944B-356944EF61FA}.Release|x64.Build.0 = Release|x64
+		{F4B0540E-0AAE-4006-944B-356944EF61FA}.Release|x86.ActiveCfg = Release|Win32
+		{F4B0540E-0AAE-4006-944B-356944EF61FA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
