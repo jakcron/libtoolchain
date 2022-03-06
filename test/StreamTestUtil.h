@@ -34,13 +34,23 @@ public:
 			init(length, canRead, canWrite, canSeek, canSeekOnlyFromBegin, canSetLength);
 		}
 
+		DummyStreamBase(int64_t length, int64_t position, bool canRead, bool canWrite, bool canSeek, bool canSeekOnlyFromBegin, bool canSetLength)
+		{
+			init(length, position, canRead, canWrite, canSeek, canSeekOnlyFromBegin, canSetLength);
+		}
+
 		void init(int64_t length, bool canRead, bool canWrite, bool canSeek, bool canSeekOnlyFromBegin, bool canSetLength)
+		{
+			init(length, 0, canRead, canWrite, canSeek, canSeekOnlyFromBegin, canSetLength);
+		}
+
+		void init(int64_t length, int64_t position, bool canRead, bool canWrite, bool canSeek, bool canSeekOnlyFromBegin, bool canSetLength)
 		{
 			mCanRead = canRead;
 			mCanWrite = canWrite;
 			mCanSeek = canSeek;
 			mCanSeekOnlyFromBegin = canSeekOnlyFromBegin;
-			mPosition = 0;
+			mPosition = position;
 			mLength = length;
 		}
 
