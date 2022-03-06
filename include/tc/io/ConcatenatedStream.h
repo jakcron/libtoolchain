@@ -7,6 +7,7 @@
 	 **/
 #pragma once
 #include <tc/io/IStream.h>
+#include <tc/Optional.h>
 
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/NotSupportedException.h>
@@ -29,6 +30,11 @@ public:
 		 **/
 	ConcatenatedStream();
 
+		/**
+		 * @brief Move constructor
+		 **/
+	ConcatenatedStream(ConcatenatedStream&& other);
+
 		/** 
 		 * @brief Create ConcatenatedStream
 		 * 
@@ -42,6 +48,14 @@ public:
 		 * @throw tc::NotSupportedException List of streams combined to a stream with no length.
 		 **/
 	ConcatenatedStream(const std::vector<std::shared_ptr<tc::io::IStream>>& stream_list);
+
+		/// Destructor
+	~ConcatenatedStream();
+
+		/**
+		 * @brief Move assignment
+		 **/
+	ConcatenatedStream& operator=(ConcatenatedStream&& other);
 
 		/**
 		 * @brief Indicates whether the current stream supports reading.
@@ -147,6 +161,12 @@ public:
 private:
 	static const std::string kClassName;
 
+	// delete copy constructor
+	ConcatenatedStream(const ConcatenatedStream&);
+
+	// delete copy assignment
+	ConcatenatedStream& operator=(const ConcatenatedStream&);
+
 	struct StreamRange
 	{
 		int64_t offset;
@@ -170,9 +190,9 @@ private:
 
 	std::vector<StreamInfo> mStreamList;
 	std::map<StreamRange, size_t> mStreamListMap;
-	std::vector<StreamInfo>::iterator mCurrentStream;
+	tc::Optional<std::vector<StreamInfo>::iterator> mCurrentStream;
 
-	inline bool isStreamDisposed() const { return mStreamList.empty() || (mCurrentStream == mStreamList.end()); }
+	inline bool isStreamDisposed() const { return mStreamList.empty() || mCurrentStream.isNull() || mCurrentStream.get() == mStreamList.end(); }
 	void updateCurrentStream(std::vector<StreamInfo>::iterator stream_itr);
 
 	// static stream properties
