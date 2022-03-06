@@ -127,14 +127,17 @@ size_t tc::io::ConcatenatedStream::read(byte_t* ptr, size_t count)
 		// determine expected readable data count for the current stream
 		size_t readable_count_for_current_stream = IOUtil::getReadableCount(mCurrentStream->range.length, mCurrentStream->stream->position(), remaining_readable_count);
 
-		// read data and throw exception if unexpected read count is returned
-		if (readable_count_for_current_stream != mCurrentStream->stream->read(ptr + (readable_count - remaining_readable_count), readable_count_for_current_stream))
+		if (readable_count_for_current_stream != 0)
 		{
-			throw tc::io::IOException(kClassName+"read()", "Reading from one of the base streams returned less data than expected.");
-		}
+			// read data and throw exception if unexpected read count is returned
+			if (readable_count_for_current_stream != mCurrentStream->stream->read(ptr + (readable_count - remaining_readable_count), readable_count_for_current_stream))
+			{
+				throw tc::io::IOException(kClassName+"read()", "Reading from one of the base streams returned less data than expected.");
+			}
 
-		// decrement the remaining readable count
-		remaining_readable_count -= readable_count_for_current_stream;
+			// decrement the remaining readable count
+			remaining_readable_count -= readable_count_for_current_stream;
+		}
 
 		// if there is more data to be read, increment the current stream
 		if (remaining_readable_count != 0)
@@ -181,14 +184,17 @@ size_t tc::io::ConcatenatedStream::write(const byte_t* ptr, size_t count)
 		// determine expected writable data count for the current stream
 		size_t writable_count_for_current_stream = IOUtil::getWritableCount(mCurrentStream->range.length, mCurrentStream->stream->position(), remaining_writable_count);
 
-		// write data and throw exception if unexpected write count is returned
-		if (writable_count_for_current_stream != mCurrentStream->stream->write(ptr + (writable_count - remaining_writable_count), writable_count_for_current_stream))
+		if (writable_count_for_current_stream != 0)
 		{
-			throw tc::io::IOException(kClassName+"write()", "Writing from one of the base streams returned less data than expected.");
-		}
+			// write data and throw exception if unexpected write count is returned
+			if (writable_count_for_current_stream != mCurrentStream->stream->write(ptr + (writable_count - remaining_writable_count), writable_count_for_current_stream))
+			{
+				throw tc::io::IOException(kClassName+"write()", "Writing from one of the base streams returned less data than expected.");
+			}
 
-		// decrement the remaining writable count
-		remaining_writable_count -= writable_count_for_current_stream;
+			// decrement the remaining writable count
+			remaining_writable_count -= writable_count_for_current_stream;
+		}
 
 		// if there is more data to be write, increment the current stream
 		if (remaining_writable_count != 0)
