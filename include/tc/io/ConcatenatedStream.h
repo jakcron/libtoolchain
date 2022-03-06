@@ -172,6 +172,7 @@ private:
 	std::map<StreamRange, size_t> mStreamListMap;
 	std::vector<StreamInfo>::iterator mCurrentStream;
 
+	inline bool isStreamDisposed() const { return mStreamList.empty() || (mCurrentStream == mStreamList.end()); }
 	void updateCurrentStream(std::vector<StreamInfo>::iterator stream_itr);
 
 	// static stream properties

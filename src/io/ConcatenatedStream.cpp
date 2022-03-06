@@ -86,32 +86,32 @@ tc::io::ConcatenatedStream::ConcatenatedStream(const std::vector<std::shared_ptr
 
 bool tc::io::ConcatenatedStream::canRead() const
 {
-	return mStreamList.empty() ? false : mCanRead;
+	return isStreamDisposed() ? false : mCanRead;
 }
 
 bool tc::io::ConcatenatedStream::canWrite() const
 {
-	return mStreamList.empty() ? false : mCanWrite;
+	return isStreamDisposed() ? false : mCanWrite;
 }
 
 bool tc::io::ConcatenatedStream::canSeek() const
 {
-	return mStreamList.empty() ? false : mCanSeek;
+	return isStreamDisposed() ? false : mCanSeek;
 }
 
 int64_t tc::io::ConcatenatedStream::length()
 {
-	return mStreamList.empty() ? 0 : mStreamLength;
+	return isStreamDisposed() ? 0 : mStreamLength;
 }
 
 int64_t tc::io::ConcatenatedStream::position()
 {
-	return (mCurrentStream == mStreamList.end()) ? 0 : (mCurrentStream->range.offset + mCurrentStream->stream->position());
+	return isStreamDisposed() ? 0 : (mCurrentStream->range.offset + mCurrentStream->stream->position());
 }
 
 size_t tc::io::ConcatenatedStream::read(byte_t* ptr, size_t count)
 {
-	if (mCurrentStream == mStreamList.end())
+	if (isStreamDisposed())
 	{
 		throw tc::ObjectDisposedException(kClassName+"read()", "Stream was disposed.");
 	}
@@ -168,7 +168,7 @@ size_t tc::io::ConcatenatedStream::read(byte_t* ptr, size_t count)
 
 size_t tc::io::ConcatenatedStream::write(const byte_t* ptr, size_t count)
 {
-	if (mCurrentStream == mStreamList.end())
+	if (isStreamDisposed())
 	{
 		throw tc::ObjectDisposedException(kClassName+"write()", "Stream was disposed.");
 	}
@@ -225,7 +225,7 @@ size_t tc::io::ConcatenatedStream::write(const byte_t* ptr, size_t count)
 
 int64_t tc::io::ConcatenatedStream::seek(int64_t offset, SeekOrigin origin)
 {
-	if (mCurrentStream == mStreamList.end())
+	if (isStreamDisposed())
 	{
 		throw tc::ObjectDisposedException(kClassName+"seek()", "Stream was disposed.");
 	}
@@ -289,7 +289,7 @@ int64_t tc::io::ConcatenatedStream::seek(int64_t offset, SeekOrigin origin)
 
 void tc::io::ConcatenatedStream::setLength(int64_t length)
 {
-	if (mCurrentStream == mStreamList.end())
+	if (isStreamDisposed())
 	{
 		throw tc::ObjectDisposedException(kClassName+"setLength()", "Stream was disposed.");
 	}
@@ -299,7 +299,7 @@ void tc::io::ConcatenatedStream::setLength(int64_t length)
 
 void tc::io::ConcatenatedStream::flush()
 {
-	if (mCurrentStream == mStreamList.end())
+	if (isStreamDisposed())
 	{
 		throw tc::ObjectDisposedException(kClassName+"flush()", "Stream was disposed.");
 	}
