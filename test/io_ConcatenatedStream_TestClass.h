@@ -22,4 +22,24 @@ private:
 	10) For writable streams (that do not support seek), ensure read works for various kinds of ConcatenatedStreams (including base streams that do not are not at position==0 when they are iterated too, this is an error state)
 	11) Quality of life: The intended use case for ConcatenatedStream is when stored in std::shared_ptr<tc::io::IStream>, if copy/assignment/move operators/constructors aren't deleted, do they work as intended, if not fix behaviour or delete method...
 	*/
+
+	void test_DefaultConstructor(); // 1
+	void test_CreateConstructor_ThrowsOnBadInput(); // 2
+	void test_CreateConstructor_SetsCorrectStreamState(); // 3
+	void test_setLength_ThrowsOnUse(); // 4
+	void test_read_ThrowsOnUnsupported(); // 5
+	void test_write_ThrowsOnUnsupported(); // 5
+	void test_seek_ThrowsOnUnsupported(); // 5
+	void test_seek_SeeksToBeginOnNegativeSeek(); // 6
+	void test_seek_SeeksToEndOnTooLargeSeek(); // 6
+	void test_seek_CanFindCorrectStreamForSeek(); // 6
+	void test_read_CanReadFromSingleStream(); // 7
+	void test_read_CanReadFromMultipleStreamWithSeekSupport(); // 7
+	void test_read_CanReadFromMultipleStreamWithNoSeekSupport(); // 8
+	void test_read_ReadFromMultiStream_NoSeekSupport_ThrowsOnSeekRequired(); // 8
+	void test_write_CanWriteFromSingleStream(); // 9
+	void test_write_CanWriteFromMultipleStreamWithSeekSupport(); // 9
+	void test_write_CanWriteFromMultipleStreamWithNoSeekSupport(); // 10
+	void test_write_WriteFromMultiStream_NoSeekSupport_ThrowsOnSeekRequired(); // 10
+	void test_MoveObjectProperlyDisposesOrigin(); // 11
 };
