@@ -27,7 +27,12 @@ void io_ConcatenatedStream_TestClass::runAllTests(void)
 	test_write_CanWriteFromMultipleStreamWithSeekSupport();
 	test_write_CanWriteFromMultipleStreamWithNoSeekSupport();
 	test_write_WriteFromMultiStream_NoSeekSupport_ThrowsOnSeekRequired();
-	test_MoveObjectProperlyDisposesOrigin();
+	test_MoveOperator_MoveDisposedToDisposed();
+	test_MoveOperator_MoveInitializedToDisposed();
+	test_MoveOperator_MoveDisposedToInitialized();
+	test_MoveOperator_MoveInitializedToInitialized();
+	test_MoveConstructor_MoveDisposed();
+	test_MoveConstructor_MoveInitialized();
 	fmt::print("[tc::io::ConcatenatedStream] END\n");
 }
 
@@ -2054,70 +2059,129 @@ void io_ConcatenatedStream_TestClass::test_write_WriteFromMultiStream_NoSeekSupp
 	}
 }
 
-void io_ConcatenatedStream_TestClass::test_MoveObjectProperlyDisposesOrigin()
+void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToDisposed()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_MoveObjectProperlyDisposesOrigin : ");
+	fmt::print("[tc::io::ConcatenatedStream] test_MoveOperator_MoveDisposedToDisposed : ");
 	try
 	{
-		// Scenario 1) Moving between empty streams
+		// create streams a and b (both disposed)
+		tc::io::ConcatenatedStream stream_a;
+		tc::io::ConcatenatedStream stream_b;
 
-		// create stream_empty
-		tc::io::ConcatenatedStream stream_empty;
-
-		// ensure it had valid properties to begin with
+		// ensure stream a had valid properties to begin with
 		try
 		{
-			StreamTestUtil::constructor_TestHelper(stream_empty, 0x0, 0x0, false, false, false);
+			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
 		}
 		catch (const tc::Exception& e)
 		{
-			throw tc::Exception("stream_empty had wrong properies after default .ctor() ({})", e.error());
+			throw tc::Exception(fmt::format("stream_a had wrong properies after default .ctor() ({})", e.error()));
 		}
-
-		// create another empty stream by move assignment
-		tc::io::ConcatenatedStream stream_empty_a;
-		stream_empty_a = std::move(stream_empty);
-
 		try
 		{
-			StreamTestUtil::constructor_TestHelper(stream_empty_a, 0x0, 0x0, false, false, false);
+			stream_a.seek(0, tc::io::SeekOrigin::Current);
+			throw tc::Exception("stream_a was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			// do nothing
+		}
+
+		// ensure stream b had valid properties to begin with
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_b, 0x0, 0x0, false, false, false);
 		}
 		catch (const tc::Exception& e)
 		{
-			throw tc::Exception("stream_empty_a had wrong properies after being move assigned ({})", e.error());
+			throw tc::Exception(fmt::format("stream_b had wrong properies after default .ctor() ({})", e.error()));
 		}
-
-		// create another empty stream by move ctor
-		tc::io::ConcatenatedStream stream_empty_b = tc::io::ConcatenatedStream(std::move(stream_empty_a));
-
 		try
 		{
-			StreamTestUtil::constructor_TestHelper(stream_empty_b, 0x0, 0x0, false, false, false);
+			stream_b.seek(0, tc::io::SeekOrigin::Current);
+			throw tc::Exception("stream_b was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			// do nothing
+		}
+
+		// move stream_a to stream_b
+		stream_b = std::move(stream_a);
+
+		// ensure stream a had valid properties after being moved from
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
 		}
 		catch (const tc::Exception& e)
 		{
-			throw tc::Exception("stream_empty_b had wrong properies after being move assigned ({})", e.error());
+			throw tc::Exception(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.error()));
+		}
+		try
+		{
+			stream_a.seek(0, tc::io::SeekOrigin::Current);
+			throw tc::Exception("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			// do nothing
+		}
+
+		// ensure stream b had valid properties after being moved to
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_b, 0x0, 0x0, false, false, false);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.error()));
+		}
+		try
+		{
+			stream_b.seek(0, tc::io::SeekOrigin::Current);
+			throw tc::Exception("stream_b was disposed upon move assignment from stream_a, but failed throw tc::ObjectDisposedException when seek() was called");
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			// do nothing
 		}
 		
-		// Scenario 2) Moving valid streams to empty streams
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({:s})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+	}
+}
 
-		std::vector<std::shared_ptr<tc::io::IStream>> streams_a {
+void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToDisposed()
+{
+	fmt::print("[tc::io::ConcatenatedStream] test_MoveOperator_MoveInitializedToDisposed : ");
+	try
+	{
+		std::vector<std::shared_ptr<tc::io::IStream>> streams {
 			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x100, true, true, true, false, false)),
 			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x100, true, true, true, false, false)),
 			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x100, true, true, true, false, false))
 		};
 
-		// create stream_a
-		tc::io::ConcatenatedStream stream_a(streams_a);
+		// create streams a and b
+		tc::io::ConcatenatedStream stream_a(streams);
+		tc::io::ConcatenatedStream stream_b;
 
-		// ensure it had valid properties to begin with
+		// ensure stream a had valid properties to begin with
 		try
 		{
 			StreamTestUtil::constructor_TestHelper(stream_a, 0x300, 0x0, true, true, true);
 		}
 		catch (const tc::Exception& e)
 		{
-			throw tc::Exception("stream_a had wrong properies after create .ctor() ({})", e.error());
+			throw tc::Exception(fmt::format("stream_a had wrong properies after create .ctor() ({})", e.error()));
 		}
 		try
 		{
@@ -2125,89 +2189,447 @@ void io_ConcatenatedStream_TestClass::test_MoveObjectProperlyDisposesOrigin()
 		}
 		catch (const tc::ObjectDisposedException&)
 		{
-			throw tc::Exception("After create .ctor() stream_a, stream_a did throw tc::ObjectDisposedException when seek() was called");
-		}
-		
-		
-		// create another stream by move assignment
-		tc::io::ConcatenatedStream stream_b;
-		stream_b = std::move(stream_a);
-
-		// ensure stream_b behaves as usable stream
-		try
-		{
-			StreamTestUtil::constructor_TestHelper(stream_b, 0x300, 0x0, true, true, true);
-		}
-		catch (const tc::Exception&)
-		{
-			throw tc::Exception("After moving stream_a to stream_b, stream_b did not have expected properties");
-		}
-		try
-		{
-			stream_b.seek(0, tc::io::SeekOrigin::Current);
-		}
-		catch (const tc::ObjectDisposedException&)
-		{
-			throw tc::Exception("After moving stream_a, stream_b did throw tc::ObjectDisposedException when seek() was called");
+			throw tc::Exception("stream_a was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
 		}
 
-		// ensure stream_a behaves as disposed stream
-		try
-		{
-			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
-		}
-		catch (const tc::Exception&)
-		{
-			throw tc::Exception("After moving stream_a, stream_a did not have its properties cleared");
-		}
-		try
-		{
-			stream_a.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("After moving stream_a, stream_a did not throw tc::ObjectDisposedException when seek() was called");
-		}
-		catch (const tc::ObjectDisposedException&)
-		{
-			// do nothing
-		}
-
-		// create another stream by move ctor
-		tc::io::ConcatenatedStream stream_c(std::move(stream_b));
-
-		// ensure stream_c behaves as usable stream
-		try
-		{
-			StreamTestUtil::constructor_TestHelper(stream_c, 0x300, 0x0, true, true, true);
-		}
-		catch (const tc::Exception&)
-		{
-			throw tc::Exception("After moving stream_b to stream_c, stream_c did not have expected properties");
-		}
-		try
-		{
-			stream_c.seek(0, tc::io::SeekOrigin::Current);
-		}
-		catch (const tc::ObjectDisposedException&)
-		{
-			throw tc::Exception("After moving stream_b to stream_c, stream_c did throw tc::ObjectDisposedException when seek() was called");
-		}
-
-		// ensure stream_b behaves as disposed stream
+		// ensure stream b had valid properties to begin with
 		try
 		{
 			StreamTestUtil::constructor_TestHelper(stream_b, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception&)
+		catch (const tc::Exception& e)
 		{
-			throw tc::Exception("After moving from stream_b, stream_b did not have its properties cleared");
+			throw tc::Exception(fmt::format("stream_b had wrong properies after default .ctor() ({})", e.error()));
 		}
 		try
 		{
 			stream_b.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("After moving from stream_b, stream_b did not throw tc::ObjectDisposedException when seek() was called");
+			throw tc::Exception("stream_b was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&)
 		{
 			// do nothing
+		}
+
+		// move stream_a to stream_b
+		stream_b = std::move(stream_a);
+
+		// ensure stream a had valid properties after being moved from
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.error()));
+		}
+		try
+		{
+			stream_a.seek(0, tc::io::SeekOrigin::Current);
+			throw tc::Exception("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			// do nothing
+		}
+
+		// ensure stream b had valid properties after being moved to
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_b, 0x300, 0x0, true, true, true);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.error()));
+		}
+		try
+		{
+			stream_b.seek(0, tc::io::SeekOrigin::Current);
+			
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			throw tc::Exception("stream_b was initialized upon move assignment from stream_a, but threw tc::ObjectDisposedException when seek() was called");
+		}
+		
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({:s})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+	}
+}
+
+void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToInitialized()
+{
+	fmt::print("[tc::io::ConcatenatedStream] test_MoveOperator_MoveDisposedToInitialized : ");
+	try
+	{
+		std::vector<std::shared_ptr<tc::io::IStream>> streams {
+			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x100, true, true, true, false, false)),
+			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x100, true, true, true, false, false)),
+			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x100, true, true, true, false, false))
+		};
+
+		// create streams a and b
+		tc::io::ConcatenatedStream stream_a;
+		tc::io::ConcatenatedStream stream_b(streams);
+
+		// ensure stream b had valid properties to begin with
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_a had wrong properies after default .ctor() ({})", e.error()));
+		}
+		try
+		{
+			stream_a.seek(0, tc::io::SeekOrigin::Current);
+			throw tc::Exception("stream_a was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			// do nothing
+		}
+
+		// ensure stream a had valid properties to begin with
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_b, 0x300, 0x0, true, true, true);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_b had wrong properies after create .ctor() ({})", e.error()));
+		}
+		try
+		{
+			stream_b.seek(0, tc::io::SeekOrigin::Current);
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			throw tc::Exception("stream_b was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
+		}
+
+		// move stream_a to stream_b
+		stream_b = std::move(stream_a);
+
+		// ensure stream a had valid properties after being moved from
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.error()));
+		}
+		try
+		{
+			stream_a.seek(0, tc::io::SeekOrigin::Current);
+			throw tc::Exception("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			// do nothing
+		}
+
+		// ensure stream b had valid properties after being moved to
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_b, 0x0, 0x0, false, false, false);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.error()));
+		}
+		try
+		{
+			stream_b.seek(0, tc::io::SeekOrigin::Current);
+			throw tc::Exception("stream_b was disposed upon move assignment from stream_a, but failed throw tc::ObjectDisposedException when seek() was called");
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			// do nothing
+		}
+		
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({:s})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+	}
+}
+
+void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToInitialized()
+{
+	fmt::print("[tc::io::ConcatenatedStream] test_MoveOperator_MoveInitializedToInitialized : ");
+	try
+	{
+		std::vector<std::shared_ptr<tc::io::IStream>> streams_a {
+			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x100, true, true, true, false, false)),
+			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x100, true, true, true, false, false)),
+			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x100, true, true, true, false, false))
+		};
+
+		std::vector<std::shared_ptr<tc::io::IStream>> streams_b {
+			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x200, true, true, true, false, false)),
+			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x200, true, true, true, false, false)),
+			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x200, true, true, true, false, false))
+		};
+
+		// create streams a and b
+		tc::io::ConcatenatedStream stream_a(streams_a);
+		tc::io::ConcatenatedStream stream_b(streams_b);
+
+		// ensure stream a had valid properties to begin with
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_a, 0x300, 0x0, true, true, true);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_a had wrong properies after create .ctor() ({})", e.error()));
+		}
+		try
+		{
+			stream_a.seek(0, tc::io::SeekOrigin::Current);
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			throw tc::Exception("stream_a was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
+		}
+
+		// ensure stream a had valid properties to begin with
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_b, 0x600, 0x0, true, true, true);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_b had wrong properies after create .ctor() ({})", e.error()));
+		}
+		try
+		{
+			stream_b.seek(0, tc::io::SeekOrigin::Current);
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			throw tc::Exception("stream_b was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
+		}
+
+		// move stream_a to stream_b
+		stream_b = std::move(stream_a);
+
+		// ensure stream a had valid properties after being moved from
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.error()));
+		}
+		try
+		{
+			stream_a.seek(0, tc::io::SeekOrigin::Current);
+			throw tc::Exception("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			// do nothing
+		}
+
+		// ensure stream b had valid properties after being moved to
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_b, 0x300, 0x0, true, true, true);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.error()));
+		}
+		try
+		{
+			stream_b.seek(0, tc::io::SeekOrigin::Current);
+			
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			throw tc::Exception("stream_b was initialized upon move assignment from stream_a, but threw tc::ObjectDisposedException when seek() was called");
+		}
+		
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({:s})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+	}
+}
+
+void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveDisposed()
+{
+	fmt::print("[tc::io::ConcatenatedStream] test_MoveConstructor_MoveDisposed : ");
+	try
+	{
+		// create stream a
+		tc::io::ConcatenatedStream stream_a;
+
+		// ensure stream a had valid properties to begin with
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_a had wrong properies after default .ctor() ({})", e.error()));
+		}
+		try
+		{
+			stream_a.seek(0, tc::io::SeekOrigin::Current);
+			throw tc::Exception("stream_a was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			// do nothing
+		}
+
+		// move stream_a to stream_b
+		tc::io::ConcatenatedStream stream_b(std::move(stream_a));
+
+		// ensure stream a had valid properties after being moved from
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.error()));
+		}
+		try
+		{
+			stream_a.seek(0, tc::io::SeekOrigin::Current);
+			throw tc::Exception("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			// do nothing
+		}
+
+		// ensure stream b had valid properties after being moved to
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_b, 0x0, 0x0, false, false, false);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.error()));
+		}
+		try
+		{
+			stream_b.seek(0, tc::io::SeekOrigin::Current);
+			throw tc::Exception("stream_b was disposed upon move assignment from stream_a, but failed throw tc::ObjectDisposedException when seek() was called");
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			// do nothing
+		}
+		
+		fmt::print("PASS\n");
+	}
+	catch (const tc::Exception& e)
+	{
+		fmt::print("FAIL ({:s})\n", e.error());
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+	}
+}
+
+void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveInitialized()
+{
+	fmt::print("[tc::io::ConcatenatedStream] test_MoveConstructor_MoveInitialized : ");
+	try
+	{
+		std::vector<std::shared_ptr<tc::io::IStream>> streams {
+			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x100, true, true, true, false, false)),
+			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x100, true, true, true, false, false)),
+			std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0x100, true, true, true, false, false))
+		};
+
+		// create stream a
+		tc::io::ConcatenatedStream stream_a(streams);
+
+		// ensure stream a had valid properties to begin with
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_a, 0x300, 0x0, true, true, true);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_a had wrong properies after create .ctor() ({})", e.error()));
+		}
+		try
+		{
+			stream_a.seek(0, tc::io::SeekOrigin::Current);
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			throw tc::Exception("stream_a was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
+		}
+
+		// move stream_a to stream_b
+		tc::io::ConcatenatedStream stream_b(std::move(stream_a));
+
+		// ensure stream a had valid properties after being moved from
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.error()));
+		}
+		try
+		{
+			stream_a.seek(0, tc::io::SeekOrigin::Current);
+			throw tc::Exception("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			// do nothing
+		}
+
+		// ensure stream b had valid properties after being moved to
+		try
+		{
+			StreamTestUtil::constructor_TestHelper(stream_b, 0x300, 0x0, true, true, true);
+		}
+		catch (const tc::Exception& e)
+		{
+			throw tc::Exception(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.error()));
+		}
+		try
+		{
+			stream_b.seek(0, tc::io::SeekOrigin::Current);
+			
+		}
+		catch (const tc::ObjectDisposedException&)
+		{
+			throw tc::Exception("stream_b was initialized upon move assignment from stream_a, but threw tc::ObjectDisposedException when seek() was called");
 		}
 		
 		fmt::print("PASS\n");

@@ -41,5 +41,10 @@ private:
 	void test_write_CanWriteFromMultipleStreamWithSeekSupport(); // 9
 	void test_write_CanWriteFromMultipleStreamWithNoSeekSupport(); // 10
 	void test_write_WriteFromMultiStream_NoSeekSupport_ThrowsOnSeekRequired(); // 10
-	void test_MoveObjectProperlyDisposesOrigin(); // 11
+	void test_MoveOperator_MoveDisposedToDisposed(); // 11
+	void test_MoveOperator_MoveInitializedToDisposed(); // 11
+	void test_MoveOperator_MoveDisposedToInitialized(); // 11
+	void test_MoveOperator_MoveInitializedToInitialized(); // 11
+	void test_MoveConstructor_MoveDisposed(); // 11
+	void test_MoveConstructor_MoveInitialized(); // 11
 };
