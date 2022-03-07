@@ -19,6 +19,7 @@
 #include <tc/os.h>
 #include <tc/crypto.h>
 #include <tc/cli.h>
+#include <tc/bn.h>
 
 // exceptions
 #include <tc/Exception.h>

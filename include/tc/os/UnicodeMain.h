@@ -47,7 +47,9 @@ int main(int argc, char* argv[], char* envp[])
 	for (size_t i = 0; i < (size_t)argc; i++)
 	{
 #ifdef _WIN32
-		args.push_back(tc::string::TranscodeUtil::UTF16ToUTF8(std::u16string((char16_t*)argv[i])));
+		std::string u8_arg;
+		tc::string::TranscodeUtil::UTF16ToUTF8(std::u16string((char16_t*)argv[i]), u8_arg);
+		args.push_back(u8_arg);
 #else
 		args.push_back(argv[i]);
 #endif
@@ -57,7 +59,9 @@ int main(int argc, char* argv[], char* envp[])
 	for (; *envp != nullptr; envp++)
 	{
 #ifdef _WIN32
-		env.push_back(tc::string::TranscodeUtil::UTF16ToUTF8(std::u16string((char16_t*)*envp)));
+		std::string u8_env;
+		tc::string::TranscodeUtil::UTF16ToUTF8(std::u16string((char16_t*)*envp), u8_env);
+		env.push_back(u8_env);
 #else
 		env.push_back(std::string(*envp));
 #endif

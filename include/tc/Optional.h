@@ -54,10 +54,16 @@ public:
 	T& get() const;
 
 		/**
-		 * @brief Determine if the Optional value exists
-		 * @return bool true if the value exists
+		 * @brief Determine if the Optional value doesn't exist
+		 * @return bool true if the value does not exist.
 		 **/
 	bool isNull() const;
+
+		/**
+		 * @brief Determine if the Optional value exists
+		 * @return bool true if the value exists.
+		 **/
+	bool isSet() const;
 
 		/**
 		 * @brief Release the wrapped value
@@ -128,6 +134,12 @@ template <class T>
 inline bool Optional<T>::isNull() const
 {
 	return mValue == nullptr;
+}
+
+template <class T>
+inline bool Optional<T>::isSet() const
+{
+	return mValue != nullptr;
 }
 
 template <class T>

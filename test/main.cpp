@@ -1,13 +1,23 @@
 #include "string_TranscodeUtil_TestClass.h"
 #include "ByteData_TestClass.h"
-#include "endian_TestClass.h"
+#include "bn_binaryutils_TestClass.h"
+#include "bn_pad_TestClass.h"
+#include "bn_string_TestClass.h"
+#include "bn_endian_TestClass.h"
+#include "bn_bitarrayByteBEBitBE_TestClass.h"
+#include "bn_bitarrayByteBEBitLE_TestClass.h"
+#include "bn_bitarrayByteLEBitBE_TestClass.h"
+#include "bn_bitarrayByteLEBitLE_TestClass.h"
 #include "Optional_TestClass.h"
 #include "io_Path_TestClass.h"
-#include "io_LocalStorage_TestClass.h"
+#include "io_BasicPathResolver_TestClass.h"
+#include "io_LocalFileSystem_TestClass.h"
 #include "io_FileStream_TestClass.h"
 #include "io_MemoryStream_TestClass.h"
 #include "io_SubStream_TestClass.h"
-#include "io_SubStorage_TestClass.h"
+#include "io_ConcatenatedStream_TestClass.h"
+#include "io_SubFileSystem_TestClass.h"
+#include "io_VirtualFileSystem_TestClass.h"
 #include "io_PaddingSource_TestClass.h"
 #include "io_MemorySource_TestClass.h"
 #include "io_OverlayedSource_TestClass.h"
@@ -16,6 +26,7 @@
 #include "io_StreamSource_TestClass.h"
 #include "io_StreamSink_TestClass.h"
 #include "cli_FormatUtil_TestClass.h"
+#include "cli_OptionParser_TestClass.h"
 #include "crypto_Md5Generator_TestClass.h"
 #include "crypto_Sha1Generator_TestClass.h"
 #include "crypto_Sha256Generator_TestClass.h"
@@ -39,9 +50,11 @@
 #include "crypto_Aes128CbcEncryptor_TestClass.h"
 #include "crypto_Aes192CbcEncryptor_TestClass.h"
 #include "crypto_Aes256CbcEncryptor_TestClass.h"
+#include "crypto_Aes128CbcEncryptedStream_TestClass.h"
 #include "crypto_Aes128CtrEncryptor_TestClass.h"
 #include "crypto_Aes192CtrEncryptor_TestClass.h"
 #include "crypto_Aes256CtrEncryptor_TestClass.h"
+#include "crypto_Aes128CtrEncryptedStream_TestClass.h"
 #include "crypto_Aes128XtsEncryptor_TestClass.h"
 #include "crypto_Aes256XtsEncryptor_TestClass.h"
 #include "crypto_Rsa1024OaepSha256Encryptor_TestClass.h"
@@ -96,14 +109,24 @@ int main(int argc, char** argv)
 
 	runTest(new string_TranscodeUtil_TestClass());
 	runTest(new ByteData_TestClass());
-	runTest(new endian_TestClass());
+	runTest(new bn_binaryutils_TestClass());
+	runTest(new bn_pad_TestClass());
+	runTest(new bn_string_TestClass());
+	runTest(new bn_endian_TestClass());
+	runTest(new bn_bitarrayByteBEBitBE_TestClass());
+	runTest(new bn_bitarrayByteBEBitLE_TestClass());
+	runTest(new bn_bitarrayByteLEBitBE_TestClass());
+	runTest(new bn_bitarrayByteLEBitLE_TestClass());
 	runTest(new Optional_TestClass());
 	runTest(new io_Path_TestClass());
-	runTest(new io_LocalStorage_TestClass());
+	runTest(new io_BasicPathResolver_TestClass());
+	runTest(new io_LocalFileSystem_TestClass());
 	runTest(new io_FileStream_TestClass());
 	runTest(new io_MemoryStream_TestClass());
 	runTest(new io_SubStream_TestClass());
-	runTest(new io_SubStorage_TestClass());
+	runTest(new io_ConcatenatedStream_TestClass());
+	runTest(new io_SubFileSystem_TestClass());
+	runTest(new io_VirtualFileSystem_TestClass());
 	runTest(new io_PaddingSource_TestClass());
 	runTest(new io_MemorySource_TestClass());
 	runTest(new io_OverlayedSource_TestClass());
@@ -112,6 +135,7 @@ int main(int argc, char** argv)
 	runTest(new io_StreamSource_TestClass());
 	runTest(new io_StreamSink_TestClass());
 	runTest(new cli_FormatUtil_TestClass());
+	runTest(new cli_OptionParser_TestClass());
 	runTest(new crypto_Md5Generator_TestClass());
 	runTest(new crypto_Sha1Generator_TestClass());
 	runTest(new crypto_Sha256Generator_TestClass());
@@ -138,9 +162,11 @@ int main(int argc, char** argv)
 	runTest(new crypto_Aes128CbcEncryptor_TestClass());
 	runTest(new crypto_Aes192CbcEncryptor_TestClass());
 	runTest(new crypto_Aes256CbcEncryptor_TestClass());
+	runTest(new crypto_Aes128CbcEncryptedStream_TestClass());
 	runTest(new crypto_Aes128CtrEncryptor_TestClass());
 	runTest(new crypto_Aes192CtrEncryptor_TestClass());
 	runTest(new crypto_Aes256CtrEncryptor_TestClass());
+	runTest(new crypto_Aes128CtrEncryptedStream_TestClass());
 	runTest(new crypto_Aes128XtsEncryptor_TestClass());
 	runTest(new crypto_Aes256XtsEncryptor_TestClass());
 	runTest(new crypto_Rsa1024OaepSha256Encryptor_TestClass());

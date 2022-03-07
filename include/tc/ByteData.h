@@ -2,8 +2,8 @@
 	 * @file ByteData.h
 	 * @brief Declaration of tc::ByteData
 	 * @author Jack (jakcron)
-	 * @version 0.4
-	 * @date 2020/06/07
+	 * @version 0.5
+	 * @date 2020/10/31
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -70,6 +70,16 @@ public:
 		 * @brief Const Element access operator
 		 **/
 	byte_t operator[](size_t index) const;
+
+		/**
+		 * @brief Equality operator
+		 */
+	bool operator==(const ByteData& other) const;
+
+		/**
+		 * @brief Inequality operator
+		 */
+	bool operator!=(const ByteData& other) const;
 
 		/**
 		 * @brief Get data pointer

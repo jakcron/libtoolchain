@@ -1,3 +1,6 @@
 [submodule "deps/libmbedtls"]
 	path = deps/libmbedtls
-	url = git@github.com:jakcron/libmbedtls.git
+	url = git://github.com/jakcron/libmbedtls.git
+[submodule "deps/libfmt"]
+	path = deps/libfmt
+	url = git://github.com/jakcron/libfmt.git

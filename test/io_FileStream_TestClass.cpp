@@ -2053,18 +2053,18 @@ void io_FileStream_TestClass::helper_ValidateFileContents(const std::string& pat
 
 void io_FileStream_TestClass::helper_DeleteFile(const std::string& path)
 {
-	tc::io::LocalStorage s;
+	tc::io::LocalFileSystem s;
 	s.removeFile(path);
 }
 
 void io_FileStream_TestClass::helper_CreateDirectory(const std::string& path)
 {
-	tc::io::LocalStorage s;
+	tc::io::LocalFileSystem s;
 	s.createDirectory(path);
 }
 
 void io_FileStream_TestClass::helper_DeleteDirectory(const std::string& path)
 {
-	tc::io::LocalStorage s;
+	tc::io::LocalFileSystem s;
 	s.removeDirectory(path);
 }

@@ -15,6 +15,13 @@ tc::io::MemorySource::MemorySource(const tc::ByteData& byte_data) :
 
 }
 
+tc::io::MemorySource::MemorySource(tc::ByteData&& byte_data) :
+	mData(std::move(byte_data))
+{
+
+}
+
+
 tc::io::MemorySource::MemorySource(const byte_t* data, size_t len) :
 	mData(data, len)
 {

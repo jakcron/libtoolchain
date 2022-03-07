@@ -7,7 +7,7 @@
 	 **/
 #pragma once
 #include <tc/types.h>
-#include <tc/crypto/detail/Sha256Impl.h>
+#include <tc/crypto/detail/Sha2Impl.h>
 
 namespace tc { namespace crypto {
 
@@ -102,7 +102,7 @@ public:
 		 * - State is None. @ref initialize() must be called before use.
 		 */
 	Sha256Generator() :
-		mImpl()
+		mImpl(detail::Sha2Impl::SHA2BitSize_256)
 	{}
 
 		/**
@@ -191,7 +191,7 @@ public:
 	}
 
 private:
-	detail::Sha256Impl mImpl;
+	detail::Sha2Impl mImpl;
 };
 
 	/**

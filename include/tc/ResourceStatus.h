@@ -18,7 +18,7 @@ enum ResourceStatusFlag
 {
 	RESFLAG_READY, /**< Resource is ready for use */
 	RESFLAG_ERROR, /**< Resource encountered an error */
-	RESFLAG_NOINIT, /**< Resource is not initialised */
+	RESFLAG_NOINIT, /**< Resource is not initialized */
 };
 
 	/**

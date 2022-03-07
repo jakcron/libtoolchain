@@ -18,4 +18,6 @@ private:
 	void test_ImplicitCopy_CopyOntoInitiallisedByteData();
 	void test_ImplicitMove_CopyInSameScope();
 	void test_ImplicitMove_MoveOntoInitiallisedByteData();
+	void test_EqualityOperator();
+	void test_InequalityOperator();
 };

@@ -12,8 +12,9 @@ void io_MemoryStream_TestClass::runAllTests(void)
 	testCreateEmptyStream_DefaultConstructor();
 	testCreateEmptyStream_SizedConstructor();
 	testCreatePopulatedStream();
-	testCreateFromByteData();
-	testCreateFromMemoryPointer();
+	testInitializeByCopyWithByteData();
+	testInitializeByMoveWithByteData();
+	testInitializeByCopyWithMemoryPointer();
 	testSeekBeginToZero();
 	testSeekBeginToMiddle();
 	testSeekBeginToEnd();
@@ -117,9 +118,9 @@ void io_MemoryStream_TestClass::testCreatePopulatedStream()
 	}
 }
 
-void io_MemoryStream_TestClass::testCreateFromByteData()
+void io_MemoryStream_TestClass::testInitializeByCopyWithByteData()
 {
-	std::cout << "[tc::io::MemoryStream] testCreateFromByteData : " << std::flush;
+	std::cout << "[tc::io::MemoryStream] testInitializeByCopyWithByteData : " << std::flush;
 	try
 	{
 		try
@@ -154,9 +155,57 @@ void io_MemoryStream_TestClass::testCreateFromByteData()
 	}
 }
 
-void io_MemoryStream_TestClass::testCreateFromMemoryPointer()
+void io_MemoryStream_TestClass::testInitializeByMoveWithByteData()
 {
-	std::cout << "[tc::io::MemoryStream] testCreateFromMemoryPointer : " << std::flush;
+	std::cout << "[tc::io::MemoryStream] testInitializeByMoveWithByteData : " << std::flush;
+	try
+	{
+		try
+		{
+			int64_t length = 0xcafe;
+
+			tc::ByteData control_data(length);
+			memset(control_data.data(), 0xff, control_data.size());
+
+			tc::ByteData experiment_data = control_data;
+
+			tc::io::MemoryStream stream = tc::io::MemoryStream(std::move(experiment_data));
+
+			if (experiment_data.size() != 0)
+			{
+				throw tc::Exception("experiment_data.size() != 0 after being moved from.");
+			}
+			if (experiment_data.data() != nullptr)
+			{
+				throw tc::Exception("experiment_data.data() != nullptr after being moved from.");
+			}
+
+			StreamTestUtil::constructor_TestHelper(stream, 0xcafe, 0, true, true, true);
+
+			tc::ByteData output_data(stream.length());
+			stream.read(output_data.data(), output_data.size());
+
+			if (memcmp(output_data.data(), control_data.data(), length) != 0)
+			{
+				throw tc::Exception("Data in memory stream was not correct after being constructed from a ByteData object");
+			}
+
+			std::cout << "PASS" << std::endl;	
+		}
+		catch (const tc::Exception& e)
+		{
+			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+	}
+}
+
+void io_MemoryStream_TestClass::testInitializeByCopyWithMemoryPointer()
+{
+	std::cout << "[tc::io::MemoryStream] testInitializeByCopyWithMemoryPointer : " << std::flush;
 	try
 	{
 		try

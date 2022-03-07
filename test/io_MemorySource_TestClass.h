@@ -9,8 +9,9 @@ public:
 	void runAllTests();
 private:
 	void testDefaultConstructor();
-	void testCreateFromByteData();
-	void testCreateFromMemoryPointer();
+	void testInitializeByCopyWithByteData();
+	void testInitializeByMoveWithByteData();
+	void testInitializeByCopyWithMemoryPointer();
 	void testNegativeOffset();
 	void testTooLargeOffset();
 };

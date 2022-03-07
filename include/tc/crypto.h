@@ -35,6 +35,11 @@
 #include <tc/crypto/Aes128XtsEncryptor.h>
 #include <tc/crypto/Aes256XtsEncryptor.h>
 
+// AES Encryption Streams
+#include <tc/crypto/Aes128CtrEncryptedStream.h>
+#include <tc/crypto/Aes128CbcEncryptedStream.h>
+
+
 // Hash Calculator
 #include <tc/crypto/Md5Generator.h>
 #include <tc/crypto/Sha1Generator.h>

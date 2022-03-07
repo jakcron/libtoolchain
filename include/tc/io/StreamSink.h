@@ -51,7 +51,7 @@ public:
 		 * 
 		 * @param[in] length The desired length of the sink in bytes.
 		 * 
-		 * @throw tc::ObjectDisposedException The base stream was not initialised.
+		 * @throw tc::ObjectDisposedException The base stream was not initialized.
 		 **/
 	void setLength(int64_t length);
 
@@ -63,7 +63,7 @@ public:
 		 * 
 		 * @return Number of bytes pushed to sink.
 		 * 
-		 * @throw tc::ObjectDisposedException The base stream was not initialised.
+		 * @throw tc::ObjectDisposedException The base stream was not initialized.
 		 * @throw tc::io::IOException Data was not written to base stream successfully.
 		 **/
 	size_t pushData(const tc::ByteData& data, int64_t offset);

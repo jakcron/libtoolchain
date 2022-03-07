@@ -249,14 +249,14 @@ private:
 
 	inline void set_tweak_le(byte_t* tweak, uint64_t sector_number)
 	{
-		((le_uint64_t*)tweak)[0].wrap(sector_number);
-		((le_uint64_t*)tweak)[1].wrap(0x0);
+		((tc::bn::le64<uint64_t>*)tweak)[0].wrap(sector_number);
+		((tc::bn::le64<uint64_t>*)tweak)[1].wrap(0x0);
 	}
 
 	inline void set_tweak_be(byte_t* tweak, uint64_t sector_number)
 	{
-		((be_uint64_t*)tweak)[1].wrap(sector_number);
-		((be_uint64_t*)tweak)[0].wrap(0x0);
+		((tc::bn::be64<uint64_t>*)tweak)[1].wrap(sector_number);
+		((tc::bn::be64<uint64_t>*)tweak)[0].wrap(0x0);
 	}
 
 	inline void set_tweak(byte_t* tweak, uint64_t sector_number)
@@ -266,7 +266,7 @@ private:
 
 	inline void incr_tweak_be(byte_t* tweak, uint64_t incr)
 	{
-		be_uint64_t* tweak_words = (be_uint64_t*)tweak;
+		tc::bn::be64<uint64_t>* tweak_words = (tc::bn::be64<uint64_t>*)tweak;
 
 		uint64_t carry = incr;
 		for (size_t i = 0; carry != 0 ; i = ((i + 1) % 2))
@@ -289,7 +289,7 @@ private:
 
 	inline void incr_tweak_le(byte_t* tweak, uint64_t incr)
 	{
-		le_uint64_t* tweak_words = (le_uint64_t*)tweak;
+		tc::bn::le64<uint64_t>* tweak_words = (tc::bn::le64<uint64_t>*)tweak;
 
 		uint64_t carry = incr;
 		for (size_t i = 0; carry != 0 ; i = ((i + 1) % 2))
@@ -317,7 +317,7 @@ private:
 
 	inline void galois_func(byte_t* tweak)
 	{
-		le_uint64_t* tweak_u64 = (le_uint64_t*)tweak; 
+		tc::bn::le64<uint64_t>* tweak_u64 = (tc::bn::le64<uint64_t>*)tweak; 
 
 		uint64_t ra = ( tweak_u64[0].unwrap() << 1 )  ^ 0x0087 >> ( 8 - ( ( tweak_u64[1].unwrap() >> 63 ) << 3 ) );
 		uint64_t rb = ( tweak_u64[0].unwrap() >> 63 ) | ( tweak_u64[1].unwrap() << 1 );

@@ -89,6 +89,32 @@ public:
 	}
 
 		/**
+		 * @brief Updates the CBC initialization vector.
+		 * 
+		 * @param[in] iv Pointer to initialization vector.
+		 * @param[in] iv_size Size in bytes of initialization vector.
+		 * 
+		 * @pre
+		 * - @p iv_size == @ref kBlockSize.
+		 * - Instance is in a Initialized state.
+		 * 
+		 * @post
+		 * - Initialization vector is updated.
+		 * 
+		 * @details
+		 * This updates the CBC state, initializing the initialization vector. The intended use is when data is encrypted/decrypted out of order, so the initialization vector needs to be updated manually.
+		 * 
+		 * @throw tc::ArgumentNullException @p key was null.
+		 * @throw tc::ArgumentOutOfRangeException @p key_size did not equal kKeySize.
+		 * @throw tc::ArgumentNullException @p iv was null.
+		 * @throw tc::ArgumentOutOfRangeException @p iv_size did not equal kBlockSize.
+		 */
+	void update_iv(const byte_t* iv, size_t iv_size)
+	{
+		mImpl.update_iv(iv, iv_size);
+	}
+
+		/**
 		 * @brief Encrypt data.
 		 * 
 		 * @param[out] dst Buffer where encrypted data will be written.

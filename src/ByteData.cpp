@@ -39,7 +39,7 @@ tc::ByteData::ByteData(size_t size, bool clear_memory)
 		{
 			mPtr = std::unique_ptr<byte_t>(new byte_t[size]);
 		} 
-		catch (std::bad_alloc) 
+		catch (const std::bad_alloc&) 
 		{
 			throw tc::OutOfMemoryException(kClassName, "std::bad_alloc thrown");
 		}
@@ -87,6 +87,16 @@ byte_t& tc::ByteData::operator[](size_t index)
 byte_t tc::ByteData::operator[](size_t index) const
 {
 	return mPtr.get()[index];
+}
+
+bool tc::ByteData::operator==(const ByteData& other) const
+{
+	return (this->mSize == other.mSize && memcmp(this->mPtr.get(), other.mPtr.get(), this->mSize) == 0);
+}
+
+bool tc::ByteData::operator!=(const ByteData& other) const
+{
+	return !(*this == other);
 }
 
 byte_t* tc::ByteData::data() const

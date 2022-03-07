@@ -1,5 +1,4 @@
 #include <tc/io/FileStream.h>
-#include <tc/io/PathUtil.h>
 #include <tc/PlatformErrorHandlingUtil.h>
 
 #ifdef _WIN32
@@ -198,11 +197,13 @@ void tc::io::FileStream::dispose()
 }
 
 #ifdef _WIN32
+
+#pragma warning(disable : 4065) // disable warning for switch case with only default case
+
 void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, FileAccess access)
 {
 	// convert Path to unicode string
-	std::u16string unicode_path;
-	PathUtil::pathToWindowsUTF16(path, unicode_path);
+	std::u16string unicode_path = path.to_u16string(tc::io::Path::Format::Win32);
 
 	DWORD access_flag = 0;
 	DWORD share_mode_flag = 0;
@@ -292,6 +293,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 		switch (error)
 		{
 			case (ERROR_FILE_NOT_FOUND):
+			case (ERROR_PATH_NOT_FOUND):
 				throw tc::io::FileNotFoundException(kClassName+"::open()", PlatformErrorHandlingUtil::GetLastErrorString(error));
 			case (ERROR_FILE_EXISTS):
 				throw tc::io::FileExistsException(kClassName+"::open()", PlatformErrorHandlingUtil::GetLastErrorString(error));
@@ -440,12 +442,14 @@ void tc::io::FileStream::flush_impl()
 		FlushFileBuffers(mFileHandle->handle);
 	}
 }
+
+#pragma warning(default : 4065)  // reenable warning for switch case with only default case
+
 #else
 void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, FileAccess access)
 {
 	// convert Path to unicode string
-	std::string unicode_path;
-	PathUtil::pathToUnixUTF8(path, unicode_path);
+	std::string unicode_path = path.to_string(tc::io::Path::Format::POSIX);
 
 	// open file
 	int open_flag = 0;
@@ -577,7 +581,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	// if this is a directory throw an exception
 	if (S_ISDIR(stat_buf.st_mode))
 	{
-		throw tc::io::IOException(kClassName+"::open()", "Path refers to a directory not a file");
+		throw tc::io::FileNotFoundException(kClassName+"::open()", "Path refers to a directory not a file");
 	}
 
 	// set state flags

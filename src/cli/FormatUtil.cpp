@@ -1,9 +1,6 @@
 #include <tc/cli/FormatUtil.h>
 
-#include <cstdio>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
+#include <fmt/core.h>
 
 inline int charToByte(char chr)
 {
@@ -46,60 +43,69 @@ tc::ByteData tc::cli::FormatUtil::hexStringToBytes(const std::string& str)
 	return bytes;
 }
 
-std::string tc::cli::FormatUtil::formatBytesAsStringWithLineLimit(const byte_t* data, size_t len, bool upper_case, const std::string& delimiter, size_t row_len, size_t indent_len)
+std::string tc::cli::FormatUtil::formatBytesAsStringWithLineLimit(const byte_t* data, size_t len, bool upper_case, const std::string& delimiter, size_t row_len, size_t indent_len, bool print_first_indent)
 {
-	std::stringstream ss;
+	// create indentation string
+	std::string indent_str = "";
+	for (size_t i = 0; i < indent_len; i++)
+	{
+		indent_str += " ";
+	}
+
+	const byte_t* original_data = data;
+
+	// create output string
+	std::string output_str = "";
 
 	for (size_t print_len = 0; len > 0; len -= print_len, data += print_len)
 	{
-		for (size_t j = 0; j < indent_len; j++)
-			ss << " ";
+		if (data != original_data || print_first_indent)
+		{
+			output_str += indent_str;
+		}
 
 		print_len = std::min<size_t>(len, row_len);  
 
-		ss << formatBytesAsString(data, print_len, upper_case, delimiter);
+		output_str += formatBytesAsString(data, print_len, upper_case, delimiter);
 
-		ss << std::endl;
+		output_str += fmt::format("\n");
 	}
 
-	return ss.str();
-}
-
-std::string tc::cli::FormatUtil::formatBytesAsStringWithLineLimit(const tc::ByteData& data, bool is_upper_case, const std::string& delimiter, size_t row_len, size_t indent_len)
-{
-	return formatBytesAsStringWithLineLimit(data.data(), data.size(), is_upper_case, delimiter, row_len, indent_len);
+	return output_str;
 }
 
 std::string tc::cli::FormatUtil::formatBytesAsString(const byte_t* data, size_t size, bool upper_case, const std::string& delimiter)
 {
-	std::stringstream ss;
+	// create output string
+	std::string output_str;
 
-	if (upper_case)
-			ss << std::uppercase;
 	for (size_t i = 0; i < size; i++)
 	{
-		ss << std::hex << std::setw(2) << std::setfill('0') << (uint32_t)data[i];
+		output_str += fmt::format((upper_case ? "{:02X}" : "{:02x}"), data[i]);
 		if (i+1 < size)
-			ss << delimiter;
+		{
+			output_str += delimiter;
+		}	
 	}
 
-	return ss.str();
+	return output_str;
 }
 
-std::string tc::cli::FormatUtil::formatBytesAsString(const tc::ByteData& data, bool is_upper_case, const std::string& delimiter)
+std::string tc::cli::FormatUtil::formatBytesAsString(const tc::ByteData& data, bool upper_case, const std::string& delimiter)
 {
-	return formatBytesAsString(data.data(), data.size(), is_upper_case, delimiter);
+	return formatBytesAsString(data.data(), data.size(), upper_case, delimiter);
 }
 
-std::string tc::cli::FormatUtil::formatListWithLineLimit(const std::vector<std::string>& str_list, size_t row_len, size_t indent_len)
+
+std::string tc::cli::FormatUtil::formatListWithLineLimit(const std::vector<std::string>& str_list, size_t row_len, size_t indent_len, bool print_first_indent)
 {
 	if (str_list.size() == 0)
 	{
 		return "";
 	}
 
-	// create output stream
-	std::stringstream ss;
+	// create output string
+	std::string output_str = "";
 
 	// create indentation string
 	std::string indent_str = "";
@@ -120,10 +126,15 @@ std::string tc::cli::FormatUtil::formatListWithLineLimit(const std::vector<std::
 		{
 			// don't print the new line if this is the first string
 			if (itr != str_list.begin())
-				ss << delimiter_str << std::endl;
+			{
+				output_str += fmt::format("{:s}\n", delimiter_str);
+			}	
 
-			// print indent
-			ss << indent_str;
+			// print indent if this isn't the first string or the user has opted into printing the indent regardless
+			if (itr != str_list.begin() || print_first_indent)
+			{
+				output_str += indent_str;
+			}
 
 			// reset printed_len
 			printed_len = 0;
@@ -131,18 +142,19 @@ std::string tc::cli::FormatUtil::formatListWithLineLimit(const std::vector<std::
 		// within a line we want to separate the next string from the last one with a comma and a space
 		else
 		{
-			ss << delimiter_str;
+			//ss << delimiter_str;
+			output_str += delimiter_str;
 		}
 		
 		// print string
-		ss << *itr;
+		output_str += *itr;
 
 		// note the length of the string printed
 		printed_len += itr->size() + delimiter_str.size();
 	}
-	ss << std::endl;
+	output_str += fmt::format("\n");
 
-	return ss.str();
+	return output_str;
 }
 
 std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const byte_t* data, size_t size, size_t bytes_per_row, size_t byte_group_size)
@@ -152,72 +164,59 @@ std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const byte_t* data, s
 		return "";
 	}
 
-	std::stringstream ss;
+	// create output string
+	std::string output_str = "";
 
 	// iterate over blocks
 	for (size_t i = 0; size > 0; i++)
 	{
 		size_t row_print_len = std::min<size_t>(size, bytes_per_row);
 
-		//printf("%08" PRIx64 " | ", (uint64_t)(i * bytes_per_row));
-		ss << std::hex << std::setw(8) << std::setfill('0') << std::nouppercase << (uint64_t(i) * uint64_t(bytes_per_row)) << " | ";
-		
+		output_str += fmt::format("{:08x} | ", uint64_t(i) * uint64_t(bytes_per_row));
+
 		// for block i print each byte
 		for (size_t j = 0; j < bytes_per_row; j++)
 		{
-			//printf("%02X", data[(i * bytes_per_row) + j]);
 			if (j < row_print_len)
-				ss << std::hex << std::setw(2) << std::setfill('0') << std::uppercase << (uint32_t)data[(i * bytes_per_row) + j];
+			{
+				output_str += fmt::format("{:02X}", data[(i * bytes_per_row) + j]);
+			}
 			else
-				ss << "  ";
+			{
+				output_str += "  ";
+			}
+				
 
 			if (((j+1) % byte_group_size) == 0) 
 			{
-				//putchar(' ');
-				ss << " ";
+				output_str += " ";
 			}
 		}
 
-		//printf(" ");
-		ss << " ";
+		output_str += " "; 
 
 		for (size_t j = 0; j < bytes_per_row; j++)
 		{
-			//printf("%c", iscntrl(data[(i * bytes_per_row) + j]) ? '.' : data[(i * bytes_per_row) + j]);
 			if (j < row_print_len)
 			{
 				byte_t byte = data[(i * bytes_per_row) + j];
-				char chr = '.';
-				if (iscntrl(byte) == 0 && byte < 0x7f)
-					chr = byte;
-				ss << char(chr);
+				output_str += fmt::format("{:c}", (iscntrl(byte) == 0 && byte < 0x7f) ? (char)byte : '.');
 			}
 			else
 			{
-				ss << ' ';
+				output_str += " ";
 			}
 		}
-		
-		//printf("\n");
-		ss << std::endl;
+
+		output_str += fmt::format("\n");
 
 		size -= row_print_len;
 	}
 
-	return ss.str();
-}
-
-std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const tc::ByteData& data, size_t bytes_per_row, size_t byte_group_size)
-{
-	return formatBytesAsHxdHexString(data.data(), data.size(), bytes_per_row, byte_group_size);
+	return output_str;
 }
 
 std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const byte_t* data, size_t size)
 {
 	return formatBytesAsHxdHexString(data, size, 0x10, 1);
-}
-
-std::string tc::cli::FormatUtil::formatBytesAsHxdHexString(const tc::ByteData& data)
-{
-	return formatBytesAsHxdHexString(data.data(), data.size());
 }

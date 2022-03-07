@@ -56,6 +56,15 @@ public:
 		mState = State::Initialized;
 	}
 
+	void update_iv(const byte_t* iv, size_t iv_size)
+	{
+		if (mState != State::Initialized) { return ; }
+		if (iv == nullptr) { throw tc::ArgumentNullException("CbcModeImpl::update_iv()", "iv was null."); }
+		if (iv_size != kBlockSize) { throw tc::ArgumentOutOfRangeException("CbcModeImpl::update_iv()", "iv_size did not equal kBlockSize."); }
+
+		memcpy(mIv.data(), iv, mIv.size());
+	}
+
 	void encrypt(byte_t* dst, const byte_t* src, size_t size)
 	{
 		if (mState != State::Initialized) { return ; }

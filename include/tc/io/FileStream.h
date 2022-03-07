@@ -19,6 +19,7 @@
 #include <tc/ObjectDisposedException.h>
 #include <tc/OverflowException.h>
 #include <tc/UnauthorisedAccessException.h>
+#include <tc/SecurityException.h>
 #include <tc/io/IOException.h>
 #include <tc/io/FileExistsException.h>
 #include <tc/io/FileNotFoundException.h>
@@ -171,7 +172,6 @@ public:
 		 * @note Use @ref canWrite to determine if this stream supports writing.
 		 * @note Use @ref canSeek to determine if this stream supports seeking.
 		 * 
-		 * @throw tc::NotImplementedException @ref setLength is not implemented for @ref FileStream
 		 * @throw tc::NotSupportedException The stream does not support both writing and seeking, such as if the stream is constructed from a pipe or console output.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/

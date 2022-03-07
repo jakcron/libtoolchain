@@ -22,32 +22,32 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{12EFBD9F-6A4F-4B2C-AFCA-165A64CC2B45}</ProjectGuid>
     <RootNamespace>libtoolchaintest</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -76,7 +76,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(SolutionDir)..\..\deps\libfmt\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -85,7 +86,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(SolutionDir)..\..\deps\libfmt\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -96,7 +98,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(SolutionDir)..\..\deps\libfmt\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -111,7 +114,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\deps\libmbedtls\include;$(SolutionDir)..\..\deps\libfmt\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -122,14 +126,28 @@
     <ProjectReference Include="..\..\..\deps\libmbedtls\build\visualstudio\libmbedtls\libmbedtls.vcxproj">
       <Project>{7a7c66f3-2b5b-4e23-85d8-2a74fedad92c}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\deps\libfmt\build\visualstudio\libfmt\libfmt.vcxproj">
+      <Project>{f4b0540e-0aae-4006-944b-356944ef61fa}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\libtoolchain\libtoolchain.vcxproj">
       <Project>{e194e4b8-1482-40a2-901b-75d4387822e9}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\test\bn_binaryutils_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_bitarrayByteBEBitBE_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_bitarrayByteBEBitLE_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_bitarrayByteLEBitBE_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_bitarrayByteLEBitLE_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_endian_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_pad_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\bn_string_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\ByteData_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\cli_FormatUtil_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\cli_OptionParser_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes128CbcEncryptedStream_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_Aes128CtrEncryptedStream_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes128CtrEncryptor_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes128EcbEncryptor_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes128Encryptor_TestClass.cpp" />
@@ -187,11 +205,12 @@
     <ClCompile Include="..\..\..\test\RsaPssUtil.cpp" />
     <ClCompile Include="..\..\..\test\SinkTestUtil.cpp" />
     <ClCompile Include="..\..\..\test\SourceTestUtil.cpp" />
-    <ClCompile Include="..\..\..\test\StorageTestUtil.cpp" />
+    <ClCompile Include="..\..\..\test\FileSystemTestUtil.cpp" />
     <ClCompile Include="..\..\..\test\StreamTestUtil.cpp" />
-    <ClCompile Include="..\..\..\test\endian_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_BasicPathResolver_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_ConcatenatedStream_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_FileStream_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\io_LocalStorage_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_LocalFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_MemorySource_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_MemoryStream_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_OverlayedSource_TestClass.cpp" />
@@ -201,15 +220,27 @@
     <ClCompile Include="..\..\..\test\io_StreamSource_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_SubSink_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_SubSource_TestClass.cpp" />
-    <ClCompile Include="..\..\..\test\io_SubStorage_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_SubFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\io_SubStream_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\io_VirtualFileSystem_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\main.cpp" />
     <ClCompile Include="..\..\..\test\string_TranscodeUtil_TestClass.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\test\bn_binaryutils_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_bitarrayByteBEBitBE_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_bitarrayByteBEBitLE_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_bitarrayByteLEBitBE_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_bitarrayByteLEBitLE_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_endian_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_pad_TestClass.h" />
+    <ClInclude Include="..\..\..\test\bn_string_TestClass.h" />
     <ClInclude Include="..\..\..\test\ByteData_TestClass.h" />
     <ClInclude Include="..\..\..\test\cli_FormatUtil_TestClass.h" />
+    <ClInclude Include="..\..\..\test\cli_OptionParser_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes128CbcEncryptedStream_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_Aes128CtrEncryptedStream_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes128CtrEncryptor_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes128EcbEncryptor_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes128Encryptor_TestClass.h" />
@@ -268,11 +299,12 @@
     <ClInclude Include="..\..\..\test\RsaPssUtil.h" />
     <ClInclude Include="..\..\..\test\SinkTestUtil.h" />
     <ClInclude Include="..\..\..\test\SourceTestUtil.h" />
-    <ClInclude Include="..\..\..\test\StorageTestUtil.h" />
+    <ClInclude Include="..\..\..\test\FileSystemTestUtil.h" />
     <ClInclude Include="..\..\..\test\StreamTestUtil.h" />
-    <ClInclude Include="..\..\..\test\endian_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_BasicPathResolver_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_ConcatenatedStream_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_FileStream_TestClass.h" />
-    <ClInclude Include="..\..\..\test\io_LocalStorage_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_LocalFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_MemorySource_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_MemoryStream_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_OverlayedSource_TestClass.h" />
@@ -282,8 +314,9 @@
     <ClInclude Include="..\..\..\test\io_StreamSource_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_SubSink_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_SubSource_TestClass.h" />
-    <ClInclude Include="..\..\..\test\io_SubStorage_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_SubFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\io_SubStream_TestClass.h" />
+    <ClInclude Include="..\..\..\test\io_VirtualFileSystem_TestClass.h" />
     <ClInclude Include="..\..\..\test\string_TranscodeUtil_TestClass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
