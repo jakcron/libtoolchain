@@ -8,27 +8,6 @@
 #pragma once
 #include <tc/types.h>
 
-	/**
-	 * @brief Round a value up to an alignment value.
-	 */
-template <typename T>
-inline T roundup(T value, T alignment)
-{
-	return value + alignment - value % alignment;
-}
-
-	/**
-	 * @brief Align a value to an alignment value.
-	 */
-template <typename T>
-inline T align(T value, T alignment)
-{
-	if(value % alignment != 0)
-		return roundup(value,alignment);
-	else
-		return value;
-}
-
 namespace tc { namespace bn {
 
 	/**

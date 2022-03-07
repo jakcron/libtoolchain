@@ -24,7 +24,7 @@ public:
 	MemorySource();
 
 		/** 
-		 * @brief Initializw MemorySource (by copy) with a tc::ByteData object.
+		 * @brief Initialize MemorySource (by copy) with a tc::ByteData object.
 		 * 
 		 * @param[in] byte_data The base data to create the MemorySource from.
 		 **/

@@ -25,6 +25,27 @@
 	/// Alias uint8_t to byte_t to more explicity indicate its role in memory related contexts
 using byte_t = uint8_t;
 
+	/**
+	 * @brief Round a value up to an alignment value.
+	 */
+template <typename T>
+inline T roundup(T value, T alignment)
+{
+	return value + alignment - value % alignment;
+}
+
+	/**
+	 * @brief Align a value to an alignment value.
+	 */
+template <typename T>
+inline T align(T value, T alignment)
+{
+	if(value % alignment != 0)
+		return roundup(value,alignment);
+	else
+		return value;
+}
+
 namespace tc {
 		/// Returns if type size_t is not 64bit.
 	bool is_size_t_not_64bit();
