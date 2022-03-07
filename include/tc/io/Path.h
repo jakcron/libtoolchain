@@ -236,10 +236,10 @@ public:
 		/// Implicit conversion to a natively formatted std::string
 	operator std::string() const;
 
-		/// Implicit conversion to a natively formatted std::string
+		/// Implicit conversion to a natively formatted std::u16string
 	operator std::u16string() const;
 
-		/// Implicit conversion to a natively formatted std::string
+		/// Implicit conversion to a natively formatted std::u32string
 	operator std::u32string() const;
 private:
 	static const std::string kClassName;
