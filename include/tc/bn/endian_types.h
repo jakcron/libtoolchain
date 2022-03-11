@@ -43,14 +43,14 @@ static inline uint64_t __local_bswap64(uint64_t x)
 
 static inline void __local_bswap64(void* x) {
 	uint64_t tmp = *((uint64_t*)x);
-	*((uint64_t*)x) =	((tmp << 54) & 0xff00000000000000ULL ) |
-						((tmp << 40) & 0x00ff000000000000ULL ) |
-						((tmp << 24) & 0x0000ff0000000000ULL ) |
-						((tmp <<  8) & 0x000000ff00000000ULL ) |
-						((tmp >>  8) & 0x00000000ff000000ULL ) |
-						((tmp >> 24) & 0x0000000000ff0000ULL ) |
-						((tmp >> 40) & 0x000000000000ff00ULL ) |
-						((tmp >> 54) & 0x00000000000000ffULL );
+	*((uint64_t*)x) =	((uint64_t)(tmp << 56) & (uint64_t)0xff00000000000000ULL ) |
+						((uint64_t)(tmp << 40) & (uint64_t)0x00ff000000000000ULL ) |
+						((uint64_t)(tmp << 24) & (uint64_t)0x0000ff0000000000ULL ) |
+						((uint64_t)(tmp <<  8) & (uint64_t)0x000000ff00000000ULL ) |
+						((uint64_t)(tmp >>  8) & (uint64_t)0x00000000ff000000ULL ) |
+						((uint64_t)(tmp >> 24) & (uint64_t)0x0000000000ff0000ULL ) |
+						((uint64_t)(tmp >> 40) & (uint64_t)0x000000000000ff00ULL ) |
+						((uint64_t)(tmp >> 56) & (uint64_t)0x00000000000000ffULL );
 }
 
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
@@ -67,7 +67,6 @@ static inline void __be_swap16(void* a) { __local_bswap16(a); }
 static inline void __le_swap64(void* a) { return; }
 static inline void __le_swap32(void* a) { return; }
 static inline void __le_swap16(void* a) { return; }
-
 #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 static inline uint64_t __be_uint64(uint64_t a) { return a; }
 static inline uint32_t __be_uint32(uint32_t a) { return a; }
