@@ -1,9 +1,10 @@
 # libtoolchain - Toolchain Development Library
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 ![Language](https://img.shields.io/badge/langauge-c++11-blue.svg)
-![Platform](https://img.shields.io/badge/platform-linux:%20x86__64,%20i386%20%7C%20win:%20x86__64,%20i386%20%7C%20macos:%20x86__64,%20arm64-lightgrey.svg)
 
-![Version](https://img.shields.io/badge/version-0.5.0%20%7C%20prerelease-green.svg)
+![Platform](https://img.shields.io/badge/platform-linux:%20x86__64,%20i386%20%7C%20windows:%20x86__64,%20i386%20%7C%20macOS:%20x86__64,%20arm64-lightgrey.svg)
+
+![Version](https://img.shields.io/badge/version-0.5.1%20%7C%20prerelease-green.svg)
 
 Library to ease the development of toolchain applications.
 
