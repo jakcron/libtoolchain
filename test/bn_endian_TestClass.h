@@ -15,6 +15,14 @@ private:
 	void testLeUint64Inline();
 	void testLeUint32Inline();
 	void testLeUint16Inline();
+
+	void testBeSwap64Inline();
+	void testBeSwap32Inline();
+	void testBeSwap16Inline();
+	void testLeSwap64Inline();
+	void testLeSwap32Inline();
+	void testLeSwap16Inline();
+
 	void testBe64TemplateClass();
 	void testBe32TemplateClass();
 	void testBe16TemplateClass();
