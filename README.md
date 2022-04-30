@@ -41,7 +41,7 @@ For GNU/unix systems `make` can be used. For native Windows, Visual Studio proje
 See more [here](./BUILDING.md).
 
 # Documentation
-The documentation is available at docs/index.html. Or alternatively at https://jakcron.github.io/libtoolchain.
+The documentation can be generated using Doxygen, and created at docs/index.html. Alternatively documentation for the current stable version is available at https://jakcron.github.io/libtoolchain-docs.
 
 # License 
 This source code is made available under the [MIT license](./LICENSE).
