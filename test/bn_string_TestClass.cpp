@@ -97,7 +97,7 @@ void bn_string_TestClass::test_StringSizeNeverExceedsLogicalSize()
 			} test;
 
 			// fill underlying data with different characters
-			for (char chr_idx = 0; chr_idx < test.char_array.size(); chr_idx++)
+			for (size_t chr_idx = 0; chr_idx < test.char_array.size(); chr_idx++)
 			{
 				test.char_array[chr_idx] = ((chr_idx / 26) & 1) ? ('a' + (chr_idx % 26)) : ('A' + (chr_idx % 26));
 			}
