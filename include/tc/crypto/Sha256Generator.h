@@ -102,7 +102,7 @@ public:
 		 * - State is None. @ref initialize() must be called before use.
 		 */
 	Sha256Generator() :
-		mImpl(detail::Sha2Impl::SHA2BitSize_256)
+		mImpl(256)
 	{}
 
 		/**

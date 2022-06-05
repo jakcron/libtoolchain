@@ -15,23 +15,25 @@ namespace tc { namespace crypto { namespace detail {
 	/**
 	 * @class Sha2Impl
 	 * @brief This class implements the SHA2 family of hash algorithms.
+	 * 
+	 * @details 
+	 * SHA2 unlike SHA1 is a family of hash algoritms:
+	 * * SHA2-224 : HashSize 28 bytes (224 bit), BlockSize 64 bytes
+	 * * SHA2-256 : HashSize 32 bytes (256 bit), BlockSize 64 bytes
+	 * * SHA2-384 : HashSize 48 bytes (384 bit), BlockSize 128 bytes
+	 * * SHA2-512 : HashSize 64 bytes (512 bit), BlockSize 128 bytes
 	 */
 class Sha2Impl
 {
 public:
-	enum SHA2BitSize
-	{
-		SHA2BitSize_256 = 256,
-		SHA2BitSize_512 = 512
-	};
-
-	static const size_t kSha2_256_HashSize = 32;
-	static const size_t kSha2_256_BlockSize = 64;
-
-	static const size_t kSha2_512_HashSize = 64;
-	static const size_t kSha2_512_BlockSize = 128;
-
-	Sha2Impl(SHA2BitSize algo = SHA2BitSize_256);
+		/**
+		 * @brief Construct a new Sha2Impl object
+		 * 
+		 * @param bitsize Size in bits of the SHA2 hash
+		 * 
+		 * @throws tc::crypto::CryptoException @p bitsize was not 224, 256, 384, or 512.
+		 */
+	Sha2Impl(size_t bitsize);
 	~Sha2Impl();
 
 	void initialize();
@@ -48,7 +50,8 @@ private:
 	State mState;
 
 	size_t mHashSize;
-	std::array<byte_t, kSha2_512_HashSize> mHash;
+	static const size_t kMaxHashSize = 64;
+	std::array<byte_t, kMaxHashSize> mHash;
 
 	struct ImplCtx;
 	std::unique_ptr<ImplCtx> mImplCtx;
