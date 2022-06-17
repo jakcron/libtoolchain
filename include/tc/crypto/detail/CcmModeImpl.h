@@ -34,6 +34,8 @@ template <class BlockCipher>
 class CcmModeImpl
 {
 public:
+	static_assert(BlockCipher::kBlockSize == 16, "CcmModeImpl only supports BlockCiphers with block size 16.");
+
 	static const size_t kKeySize = BlockCipher::kKeySize;
 	static const size_t kBlockSize = BlockCipher::kBlockSize;
 
@@ -66,17 +68,9 @@ public:
 		auto ctr = std::array<byte_t, kBlockSize>();
 		auto block = std::array<byte_t, kBlockSize>();
 		auto tag_tmp = std::array<byte_t, kBlockSize>();
-    	byte_t q;
 
 
-		/*
-		 * Check length requirements: SP800-38C A.1
-		 * Additional requirement: a < 2^16 - 2^8 to simplify the code.
-		 * 'length' checked later (when writing it to the first block)
-		 *
-		 * Also, loosen the requirements to enable support for CCM* (IEEE 802.15.4).
-		 */
-		if (tag_size == 2 || tag_size > 16 || tag_size % 2 != 0)
+		if (tag_size <= 2 || tag_size > 16 || tag_size % 2 != 0)
 		{
 			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "tag_size was not valid.");
 		}
@@ -89,84 +83,24 @@ public:
 
 		if (add_size > 0xFF00)
 		{
-			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "add_size was not valid.");
+			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "add_size was too large.");
 		}
 		
-		// q is between 2 and 8
-		q = 16 - 1 - (byte_t)iv_size;
-
-		 /*
-		 * First block B_0:
-		 * 0        .. 0        flags
-		 * 1        .. iv_len   nonce (aka iv)
-		 * iv_len+1 .. 15       length
-		 *
-		 * With flags as (bits):
-		 * 7        0
-		 * 6        add present?
-		 * 5 .. 3   (t - 2) / 2
-		 * 2 .. 0   q - 1
-		 */
-		// encode flag into block
-		block[0] = 0;
-		block[0] |= ( add_size > 0 ) << 6;
-		block[0] |= ( ( tag_len - 2 ) / 2 ) << 3;
-		block[0] |= q - 1;
-
-		// encode iv into block
-		memcpy(block.data() + 1, iv, iv_size);
-
-		// encoded payload size (big endian, in the free space as defined by q)
+		if (size > calculate_max_encodable_payload(iv_size))
 		{
-			size_t size_encodable = size;
-			for (size_t i = 0; i < q; i++, size_encodable >>= 8)
-			{
-				block[15-i] = (byte_t)(size_encodeable & 0xFF);
-			}
-
-			if (size_encodable != 0)
-			{
-				throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "size was too large.");
-			}
+			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "size was too large.");
 		}
 
-		 /* Start CBC-MAC with first block */
+		create_tag_block0(block.data(), iv, iv_size, add_size, tag_size, size);
+
+		/* Start CBC-MAC with first block */
 		memset(tag_tmp.data(), 0, tag_tmp.size());
 		update_cbc_mac(block.data(), tag_tmp.data());
 
-		/*
-		 * If there is additional data, update CBC-MAC with
-		 * add_size, add, 0 (padding to a block boundary)
-		 */
+		
 		if (add_size > 0)
 		{
-			size_t use_size;
-			size_t add_remaining_size = add_size;
-			const byte_t* add_ptr = add;
-
-			memset(block.data(), 0, 16);
-			block[0] = (byte_t)( ( add_size >> 8 ) & 0xFF );
-			block[1] = (byte_t)( ( add_size      ) & 0xFF );
-
-			use_size = std::min<size_t>(add_remaining_size, 16 - 2);
-			memcpy(block.data() + 2, add_ptr, use_size);
-			add_remaining_size -= use_size;
-			add_ptr += use_size;
-
-			update_cbc_mac(block.data(), tag_tmp.data());
-
-			while (add_remaining_size > 0)
-			{
-				use_size = std::min<size_t>(add_remaining_size, 16);
-
-				memset(block.data(), 0, 16);
-				memcpy(block.data(), add_ptr, use_size);
-				
-				update_cbc_mac(block.data(), tag_tmp.data());
-
-				add_remaining_size -= use_size;
-				add_ptr += use_size;
-			}
+			update_cbc_mac_with_add(tag_tmp.data(), add, add_size);
 		}
 
 		/*
@@ -222,7 +156,92 @@ private:
 	State mState;
 	
 	BlockCipher mCipher;
+	std::array<byte_t, kBlockSize> mTag;
 	std::array<byte_t, kBlockSize> mIv;
+
+	inline size_t calculate_q(size_t iv_size)
+	{
+		return kBlockSize - sizeof(byte_t) - iv_size;
+	}
+
+	inline size_t calculate_max_encodable_payload(size_t iv_size)
+	{
+		return (((size_t)1) << (calculate_q(iv_size) * 8)) - 1;
+	}
+
+	inline void create_tag_block0(const byte_t* block, const byte_t* iv, size_t iv_size, size_t add_size, size_t tag_size, size_t payload_size)
+	{
+		/*
+		 * First block B_0:
+		 * 0         .. 0        flags
+		 * 1         .. iv_size  nonce (aka iv)
+		 * iv_size+1 .. 15       payload_size
+		 *
+		 * With flags as (bits):
+		 * 7        0
+		 * 6        add present?
+		 * 5 .. 3   (t - 2) / 2
+		 * 2 .. 0   q - 1
+		 */
+
+		size_t q = calculate_q(iv_size);
+		
+		// encode flag into block
+		block[0] = 0;
+		//block[0] |= (0 & 1)                    << 7;
+		block[0] |= ((add_size != 0) & 1)      << 6;
+		block[0] |= (((tag_size - 2) / 2) & 7) << 3;
+		block[0] |= ((q - 1) & 7)              << 0;
+
+		// encode iv into block
+		memcpy(block + 1, iv, iv_size);
+
+		// encoded payload size (big endian, in the free space as defined by q)
+		{
+			size_t size_encodable = payload_size;
+			for (size_t i = 0; i < q; i++, size_encodable >>= 8)
+			{
+				block[kBlockSize - 1 - i] = (byte_t)(size_encodeable & 0xFF);
+			}
+		}
+	}
+
+	inline void update_cbc_mac_with_add(byte_t* tag, const byte_t* add, size_t add_size)
+	{
+		/*
+		 * If there is additional data, update CBC-MAC with
+		 * add_size, add, 0 (padding to a block boundary)
+		 */
+		auto block = std::array<byte_t, kBlockSize>();
+		if (add_size > 0)
+		{
+			size_t use_size;
+			size_t add_pos = 0;
+			const byte_t* add_ptr = add;
+
+			memset(block.data(), 0, block.size());
+			block[0] = (byte_t)( ( add_size >> 8 ) & 0xFF );
+			block[1] = (byte_t)( ( add_size      ) & 0xFF );
+
+			use_size = std::min<size_t>(add_size - add_pos, block.size() - 2);
+			memcpy(block.data() + 2, add + add_pos, use_size);
+			add_pos += use_size;
+
+			update_cbc_mac(block.data(), tag);
+
+			while (add_pos < add_size)
+			{
+				use_size = std::min<size_t>(add_size - add_pos, block.size());
+
+				memset(block.data(), 0, block.size());
+				memcpy(block.data(), add + add_pos, use_size);
+				
+				update_cbc_mac(block.data(), tag);
+
+				add_pos += use_size;
+			}
+		}
+	}
 
 	//template <size_t BlockSize>
 	inline void update_cbc_mac(const byte_t* block, byte_t* tag)
