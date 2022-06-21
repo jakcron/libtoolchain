@@ -120,9 +120,9 @@ void tc::io::LocalFileSystem::createDirectory(const tc::io::Path& path)
 				throw tc::UnauthorisedAccessException(kClassName+"::createDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENOTDIR): // A component of the path prefix is not a directory.
 			case (ENOENT): // A component of the path prefix does not exist or path is an empty string.
-				throw tc::io::DirectoryNotFoundException(kClassName+"::removeFile()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
+				throw tc::io::DirectoryNotFoundException(kClassName+"::createDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENAMETOOLONG): // A component of a pathname exceeded {NAME_MAX} characters, or an entire path name exceeded {PATH_MAX} characters.
-				throw tc::io::PathTooLongException(kClassName+"::removeFile()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
+				throw tc::io::PathTooLongException(kClassName+"::createDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EISDIR): // The named file is the root directory.
 			case (EDQUOT): // The new directory cannot be created because the user's quota of disk blocks on the file system that will contain the directory has been exhausted. -OR- The user's quota of inodes on the file system on which the directory is being created has been exhausted.
 			//case (EEXIST): // The named file exists
