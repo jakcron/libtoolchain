@@ -2,8 +2,8 @@
 	 * @file CcmModeImpl.h
 	 * @brief Declaration of tc::crypto::detail::CcmModeImpl
 	 * @author Jack (jakcron)
-	 * @version 0.2
-	 * @date 2020/10/04
+	 * @version 0.1
+	 * @date 2022/07/12
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -61,43 +61,48 @@ public:
 		if (dst == nullptr) { throw tc::ArgumentNullException("CcmModeImpl::encrypt()", "dst was null."); }
 		if (src == nullptr) { throw tc::ArgumentNullException("CcmModeImpl::encrypt()", "src was null."); }
 		if (size == 0) { throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "size was 0."); }
-		if (iv_size != 0 && iv == nullptr) { throw tc::ArgumentNullException("CcmModeImpl::encrypt()", "iv_size was non-zero, but iv was null."); }
-		if (add_size != 0 && add == nullptr) { throw tc::ArgumentNullException("CcmModeImpl::encrypt()", "add_size was non-zero, but add was null."); }
-		if (tag_size != 0 && tag == nullptr) { throw tc::ArgumentNullException("CcmModeImpl::encrypt()", "tag_size was non-zero, but iv was null."); }
+		if (iv_size == 0 != iv == nullptr) { throw tc::ArgumentNullException("CcmModeImpl::encrypt()", "iv_size was non-zero, when iv was null. Or vice versa."); }
+		if (add_size == 0 != add == nullptr) { throw tc::ArgumentNullException("CcmModeImpl::encrypt()", "add_size was non-zero, when add was null. Or vice versa."); }
+		if (tag_size == 0 != tag == nullptr) { throw tc::ArgumentNullException("CcmModeImpl::encrypt()", "tag_size was non-zero, when iv was null. Or vice versa."); }
 
+		/* Declare temp variables */
 		auto ctr = std::array<byte_t, kBlockSize>();
+		auto enc_ctr = std::array<byte_t, kBlockSize>();
 		auto block = std::array<byte_t, kBlockSize>();
 		auto tag_tmp = std::array<byte_t, kBlockSize>();
 
-
+		/* Check tag_size */
 		if (tag_size <= 2 || tag_size > 16 || tag_size % 2 != 0)
 		{
 			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "tag_size was not valid.");
 		}
 
-		/* Also implies q is within bounds */
+		/* Check iv_size (Also implies q is within bounds) */
 		if (iv_size < 7 || iv_size > 13)
 		{
 			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "iv_size was not valid.");
 		}
 
+		/* Check add_size */
 		if (add_size > 0xFF00)
 		{
 			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "add_size was too large.");
 		}
 		
+		/* Determine if payload size can be encoded given length of iv */
 		if (size > calculate_max_encodable_payload(iv_size))
 		{
 			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "size was too large.");
 		}
 
+		/* Generate first block for CBC-MAC */
 		create_tag_block0(block.data(), iv, iv_size, add_size, tag_size, size);
 
 		/* Start CBC-MAC with first block */
 		memset(tag_tmp.data(), 0, tag_tmp.size());
 		update_cbc_mac(block.data(), tag_tmp.data());
 
-		
+		/* Update CBC-MAC with additional data if present */
 		if (add_size > 0)
 		{
 			update_cbc_mac_with_add(tag_tmp.data(), add, add_size);
@@ -113,38 +118,187 @@ public:
 		 * 7 .. 3   0
 		 * 2 .. 0   q - 1
 		 */
-		ctr[0] = q - 1;
-		memcpy(ctr.data() + 1, iv, iv_len );
-		memset(ctr.data() + 1 + iv_len, 0, q );
-		ctr[15] = 1;
-
-
-		// iterate through blocks
-		for (size_t block_idx = 0, block_num = (size / kBlockSize); block_idx < block_num; block_idx++)
 		{
-			// encrypt IV
-			mCipher.encrypt(enc_iv.data(), iv.data());
-
-			// dst = src ^ enc_iv
-			xor_block<kBlockSize>(dst + (block_idx * kBlockSize), src + (block_idx * kBlockSize), enc_iv.data());
-
-			// increment counter
-			incr_counter<kBlockSize>(iv.data(), 1);
+			ctr[0] = q - 1;
+			memcpy(ctr.data() + 1, iv, iv_len );
+			memset(ctr.data() + 1 + iv_len, 0, q );
+			ctr[15] = 1;
 		}
 
-		// process partial block
+		/* Iterate through blocks */
+		for (size_t block_idx = 0, block_num = (size / kBlockSize); block_idx < block_num; block_idx++)
+		{
+			/* Update CBC-MAC with data block */
+			memcpy(block.data(), src + (block_idx * kBlockSize), kBlockSize);
+			update_cbc_mac(block.data(), tag_tmp.data());
+
+			/* Encrypt block counter */
+			mCipher.encrypt(enc_ctr.data(), ctr.data());
+
+			/* XOR src block with encrypted block counter (dst = src ^ enc_ctr) */
+			xor_block<kBlockSize>(dst + (block_idx * kBlockSize), src + (block_idx * kBlockSize), enc_ctr.data());
+
+			/* Increment block counter */
+			incr_counter<kBlockSize>(ctr.data(), 1);
+		}
+
+		/* Process partial block */
 		size_t block_remaining = (size % kBlockSize);
 		if (block_remaining > 0)
 		{
-			// encrypt IV
-			mCipher.encrypt(enc_iv.data(), iv.data());
+			/* Update CBC-MAC with partial data block */
+			memset(block.data(), 0, kBlockSize);
+			memcpy(block.data(), src + (block_idx * kBlockSize), kBlockSize);
+			update_cbc_mac(block.data(), tag_tmp.data());
 
-			// dst = src ^ enc_iv
+			/* Encrypt block counter */
+			mCipher.encrypt(enc_ctr.data(), ctr.data());
+
+			/* XOR src block with encrypted block counter (dst = src ^ enc_ctr) */
 			for (size_t i = 0; i < block_remaining; i++)
 			{
-				dst[((size / kBlockSize) * kBlockSize) + i] = src[((size / kBlockSize) * kBlockSize) + i] ^ enc_iv[i];
+				dst[((size / kBlockSize) * kBlockSize) + i] = src[((size / kBlockSize) * kBlockSize) + i] ^ enc_ctr[i];
 			}
 		}
+
+		/* Finialise CBC-MAC */
+		{
+			/* Clear Block Counter */
+			memset(ctr.data(), 0, kBlockSize);
+
+			/* Encrypt block counter */
+			mCipher.encrypt(enc_ctr.data(), ctr.data());
+
+			/* XOR CBC-MAC with encrypted block counter */
+			xor_block<kBlockSize>(tmp_tag.data(), tmp_tag.data(), enc_ctr.data());
+		}
+		
+
+		/* Write CBC-MAC to output */
+		memcpy(tag, tmp_tag.data(), tag_size);
+	}
+
+	void decrypt(byte_t* dst, const byte_t* src, size_t size, const byte_t* iv, size_t iv_size, const byte_t* add, size_t add_size, byte_t* tag, size_t tag_size)
+	{
+		if (mState != State::Initialized) { return ; }
+		if (dst == nullptr) { throw tc::ArgumentNullException("CcmModeImpl::decrypt()", "dst was null."); }
+		if (src == nullptr) { throw tc::ArgumentNullException("CcmModeImpl::decrypt()", "src was null."); }
+		if (size == 0) { throw tc::ArgumentOutOfRangeException("CcmModeImpl::decrypt()", "size was 0."); }
+		if (iv_size == 0 != iv == nullptr) { throw tc::ArgumentNullException("CcmModeImpl::decrypt()", "iv_size was non-zero, when iv was null. Or vice versa."); }
+		if (add_size == 0 != add == nullptr) { throw tc::ArgumentNullException("CcmModeImpl::decrypt()", "add_size was non-zero, when add was null. Or vice versa."); }
+		if (tag_size == 0 != tag == nullptr) { throw tc::ArgumentNullException("CcmModeImpl::decrypt()", "tag_size was non-zero, when iv was null. Or vice versa."); }
+
+		/* Declare temp variables */
+		auto ctr = std::array<byte_t, kBlockSize>();
+		auto enc_ctr = std::array<byte_t, kBlockSize>();
+		auto block = std::array<byte_t, kBlockSize>();
+		auto tag_tmp = std::array<byte_t, kBlockSize>();
+
+		/* Check tag_size */
+		if (tag_size <= 2 || tag_size > 16 || tag_size % 2 != 0)
+		{
+			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "tag_size was not valid.");
+		}
+
+		/* Check iv_size (Also implies q is within bounds) */
+		if (iv_size < 7 || iv_size > 13)
+		{
+			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "iv_size was not valid.");
+		}
+
+		/* Check add_size */
+		if (add_size > 0xFF00)
+		{
+			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "add_size was too large.");
+		}
+		
+		/* Determine if payload size can be encoded given length of iv */
+		if (size > calculate_max_encodable_payload(iv_size))
+		{
+			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "size was too large.");
+		}
+
+		/* Generate first block for CBC-MAC */
+		create_tag_block0(block.data(), iv, iv_size, add_size, tag_size, size);
+
+		/* Start CBC-MAC with first block */
+		memset(tag_tmp.data(), 0, tag_tmp.size());
+		update_cbc_mac(block.data(), tag_tmp.data());
+
+		/* Update CBC-MAC with additional data if present */
+		if (add_size > 0)
+		{
+			update_cbc_mac_with_add(tag_tmp.data(), add, add_size);
+		}
+
+		/*
+		 * Prepare counter block for encryption:
+		 * 0        .. 0        flags
+		 * 1        .. iv_len   nonce (aka iv)
+		 * iv_len+1 .. 15       counter (initially 1)
+		 *
+		 * With flags as (bits):
+		 * 7 .. 3   0
+		 * 2 .. 0   q - 1
+		 */
+		{
+			ctr[0] = q - 1;
+			memcpy(ctr.data() + 1, iv, iv_len );
+			memset(ctr.data() + 1 + iv_len, 0, q );
+			ctr[15] = 1;
+		}
+
+		/* Iterate through blocks */
+		for (size_t block_idx = 0, block_num = (size / kBlockSize); block_idx < block_num; block_idx++)
+		{
+			/* Encrypt block counter */
+			mCipher.encrypt(enc_ctr.data(), ctr.data());
+
+			/* XOR src block with encrypted block counter (dst = src ^ enc_ctr) */
+			xor_block<kBlockSize>(dst + (block_idx * kBlockSize), src + (block_idx * kBlockSize), enc_ctr.data());
+
+			/* Update CBC-MAC with decrypted data block */
+			memcpy(block.data(), dst + (block_idx * kBlockSize), kBlockSize);
+			update_cbc_mac(block.data(), tag_tmp.data());
+
+			/* Increment block counter */
+			incr_counter<kBlockSize>(ctr.data(), 1);
+		}
+
+		/* Process partial block */
+		size_t block_remaining = (size % kBlockSize);
+		if (block_remaining > 0)
+		{
+			/* Encrypt block counter */
+			mCipher.encrypt(enc_ctr.data(), ctr.data());
+
+			/* XOR src block with encrypted block counter (dst = src ^ enc_ctr) */
+			for (size_t i = 0; i < block_remaining; i++)
+			{
+				dst[((size / kBlockSize) * kBlockSize) + i] = src[((size / kBlockSize) * kBlockSize) + i] ^ enc_ctr[i];
+			}
+
+			/* Update CBC-MAC with partial decrypted data block */
+			memset(block.data(), 0, kBlockSize);
+			memcpy(block.data(), dst + (block_idx * kBlockSize), kBlockSize);
+			update_cbc_mac(block.data(), tag_tmp.data());
+		}
+
+		/* Finialise CBC-MAC */
+		{
+			/* Clear Block Counter */
+			memset(ctr.data(), 0, kBlockSize);
+
+			/* Encrypt block counter */
+			mCipher.encrypt(enc_ctr.data(), ctr.data());
+
+			/* XOR CBC-MAC with encrypted block counter */
+			xor_block<kBlockSize>(tmp_tag.data(), tmp_tag.data(), enc_ctr.data());
+		}
+		
+
+		/* Write CBC-MAC to output */
+		memcpy(tag, tmp_tag.data(), tag_size);
 	}
 private:
 	enum State
@@ -248,17 +402,6 @@ private:
 	{
 		xor_block<kBlockSize>(tag, tag, block);
 		mCipher.encrypt(tag, tag);
-	}
-
-	inline void ctr_crypt(byte_t* dst_block, const byte_t* src_block, size_t crypt_len)
-	{
-		// encrypt ctr to temp block
-		mCipher.encrypt(mTempBlock.data(), mIv.data());
-
-		// crypt block
-		crypt_len = std::min<size_t>(crypt_len, kBlockSize);
-		for (size_t i = 0; i < crypt_len; i++)
-			dst_block[i] = src_block[i] ^ mTempBlock[i];
 	}
 };
 
