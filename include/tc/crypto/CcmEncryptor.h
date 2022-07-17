@@ -235,13 +235,16 @@ public:
 		
 		try {
 			tc::ByteData calc_tag = tc::ByteData(tag_size);
+			
 			mImpl.decrypt(dst, src, size, iv, iv_size, add, add_size, calc_tag.data(), calc_tag.size());
+
+			return memcmp(calc_tag.data(), tag, tag_size) == 0;
 		}
 		catch (...) {
 			return false;
 		}
 
-		return memcmp(calc_tag.data(), tag, tag_size) == 0;
+		return false;
 	}
 
 private:
