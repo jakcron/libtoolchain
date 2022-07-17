@@ -31,7 +31,10 @@ public:
 		 * 
 		 * @param bitsize Size in bits of the SHA2 hash
 		 * 
-		 * @throws tc::crypto::CryptoException @p bitsize was not 224, 256, 384, or 512.
+		 * @pre
+		 * - @p bitsize is 224, 256, 384, or 512.
+		 * 
+		 * @throws tc::crypto::CryptoException @p bitsize was invalid.
 		 */
 	Sha2Impl(size_t bitsize);
 	~Sha2Impl();
