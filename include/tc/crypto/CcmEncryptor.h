@@ -232,9 +232,9 @@ public:
 		{
 			return false;
 		}
-		tc::ByteData calc_tag = tc::ByteData(tag_size);
-
+		
 		try {
+			tc::ByteData calc_tag = tc::ByteData(tag_size);
 			mImpl.decrypt(dst, src, size, iv, iv_size, add, add_size, calc_tag.data(), calc_tag.size());
 		}
 		catch (...) {
