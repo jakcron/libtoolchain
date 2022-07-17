@@ -150,7 +150,8 @@ public:
 		/* Finialise CBC-MAC */
 		{
 			/* Clear Block Counter */
-			memset(ctr.data(), 0, kBlockSize);
+			for (size_t i = 0, q = calculate_q(iv_size); i < q; i++)
+				ctr[15 - i] = 0;
 
 			/* Encrypt block counter */
 			mCipher.encrypt(enc_ctr.data(), ctr.data());
@@ -258,7 +259,8 @@ public:
 		/* Finialise CBC-MAC */
 		{
 			/* Clear Block Counter */
-			memset(ctr.data(), 0, kBlockSize);
+			for (size_t i = 0, q = calculate_q(iv_size); i < q; i++)
+				ctr[15 - i] = 0;
 
 			/* Encrypt block counter */
 			mCipher.encrypt(enc_ctr.data(), ctr.data());
@@ -290,7 +292,7 @@ private:
 
 	inline size_t calculate_max_encodable_payload(size_t iv_size)
 	{
-		return (((size_t)1) << (calculate_q(iv_size) * 8)) - 1;
+		return ((uint64_t)-1) >> ((sizeof(uint64_t) - calculate_q(iv_size)) * 8);
 	}
 
 	inline void create_tag_block0(byte_t* block, const byte_t* iv, size_t iv_size, size_t add_size, size_t tag_size, size_t payload_size)
