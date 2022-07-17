@@ -57,6 +57,7 @@
 #include "crypto_Aes128CtrEncryptedStream_TestClass.h"
 #include "crypto_Aes128XtsEncryptor_TestClass.h"
 #include "crypto_Aes256XtsEncryptor_TestClass.h"
+#include "crypto_Aes128CcmEncryptor_TestClass.h"
 #include "crypto_Rsa1024OaepSha256Encryptor_TestClass.h"
 #include "crypto_Rsa2048OaepSha256Encryptor_TestClass.h"
 #include "crypto_Rsa4096OaepSha256Encryptor_TestClass.h"
@@ -106,7 +107,7 @@ int main(int argc, char** argv)
 		}
 		
 	}
-
+	
 	runTest(new string_TranscodeUtil_TestClass());
 	runTest(new ByteData_TestClass());
 	runTest(new bn_binaryutils_TestClass());
@@ -169,6 +170,7 @@ int main(int argc, char** argv)
 	runTest(new crypto_Aes128CtrEncryptedStream_TestClass());
 	runTest(new crypto_Aes128XtsEncryptor_TestClass());
 	runTest(new crypto_Aes256XtsEncryptor_TestClass());
+	runTest(new crypto_Aes128CcmEncryptor_TestClass());
 	runTest(new crypto_Rsa1024OaepSha256Encryptor_TestClass());
 	runTest(new crypto_Rsa2048OaepSha256Encryptor_TestClass());
 	runTest(new crypto_Rsa4096OaepSha256Encryptor_TestClass());
