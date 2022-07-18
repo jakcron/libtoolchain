@@ -20,7 +20,6 @@ private:
 	void test_EncryptThrowsExceptionOnBadInput();
 	void test_DecryptThrowsExceptionOnBadInput();
 
-	// adapted from https://datatracker.ietf.org/doc/html/rfc3610#section-8
 	struct TestCase
 	{
 		std::string test_name;
