@@ -134,7 +134,7 @@ public:
 		{
 			/* Update CBC-MAC with partial data block */
 			memset(block.data(), 0, kBlockSize);
-			memcpy(block.data(), src + ((size / kBlockSize) * kBlockSize), kBlockSize);
+			memcpy(block.data(), src + ((size / kBlockSize) * kBlockSize), block_remaining);
 			update_cbc_mac(block.data(), tag_tmp.data());
 
 			/* Encrypt block counter */
@@ -309,6 +309,7 @@ private:
 		 * 5 .. 3   (t - 2) / 2
 		 * 2 .. 0   q - 1
 		 */
+		memset(block, 0, kBlockSize);
 
 		size_t q = calculate_q(iv_size);
 		
@@ -344,6 +345,8 @@ private:
 		 * 7 .. 3   0
 		 * 2 .. 0   q - 1
 		 */
+
+		memset(ctr, 0, kBlockSize);
 		
 		// just in case
 		iv_size = std::min<size_t>(iv_size, 13);
