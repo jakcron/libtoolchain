@@ -84,11 +84,13 @@
 
 #include <fmt/core.h>
 
-void runTest(ITestClass* testClass)
+template <class T>
+void runTest()
 {
-	testClass->runAllTests();
-	delete testClass;
+	T test_class;
+	test_class.runAllTests();
 }
+
 
 int main(int argc, char** argv)
 {
@@ -108,90 +110,90 @@ int main(int argc, char** argv)
 		
 	}
 	
-	runTest(new string_TranscodeUtil_TestClass());
-	runTest(new ByteData_TestClass());
-	runTest(new bn_binaryutils_TestClass());
-	runTest(new bn_pad_TestClass());
-	runTest(new bn_string_TestClass());
-	runTest(new bn_endian_TestClass());
-	runTest(new bn_bitarrayByteBEBitBE_TestClass());
-	runTest(new bn_bitarrayByteBEBitLE_TestClass());
-	runTest(new bn_bitarrayByteLEBitBE_TestClass());
-	runTest(new bn_bitarrayByteLEBitLE_TestClass());
-	runTest(new Optional_TestClass());
-	runTest(new io_Path_TestClass());
-	runTest(new io_BasicPathResolver_TestClass());
-	runTest(new io_LocalFileSystem_TestClass());
-	runTest(new io_FileStream_TestClass());
-	runTest(new io_MemoryStream_TestClass());
-	runTest(new io_SubStream_TestClass());
-	runTest(new io_ConcatenatedStream_TestClass());
-	runTest(new io_SubFileSystem_TestClass());
-	runTest(new io_VirtualFileSystem_TestClass());
-	runTest(new io_PaddingSource_TestClass());
-	runTest(new io_MemorySource_TestClass());
-	runTest(new io_OverlayedSource_TestClass());
-	runTest(new io_SubSource_TestClass());
-	runTest(new io_SubSink_TestClass());
-	runTest(new io_StreamSource_TestClass());
-	runTest(new io_StreamSink_TestClass());
-	runTest(new cli_FormatUtil_TestClass());
-	runTest(new cli_OptionParser_TestClass());
-	runTest(new crypto_Md5Generator_TestClass());
-	runTest(new crypto_Sha1Generator_TestClass());
-	runTest(new crypto_Sha256Generator_TestClass());
-	runTest(new crypto_Sha512Generator_TestClass());
-	runTest(new crypto_HmacMd5Generator_TestClass());
-	runTest(new crypto_HmacSha1Generator_TestClass());
-	runTest(new crypto_HmacSha256Generator_TestClass());
-	runTest(new crypto_HmacSha512Generator_TestClass());
+	runTest<string_TranscodeUtil_TestClass>();
+	runTest<ByteData_TestClass>();
+	runTest<bn_binaryutils_TestClass>();
+	runTest<bn_pad_TestClass>();
+	runTest<bn_string_TestClass>();
+	runTest<bn_endian_TestClass>();
+	runTest<bn_bitarrayByteBEBitBE_TestClass>();
+	runTest<bn_bitarrayByteBEBitLE_TestClass>();
+	runTest<bn_bitarrayByteLEBitBE_TestClass>();
+	runTest<bn_bitarrayByteLEBitLE_TestClass>();
+	runTest<Optional_TestClass>();
+	runTest<io_Path_TestClass>();
+	runTest<io_BasicPathResolver_TestClass>();
+	runTest<io_LocalFileSystem_TestClass>();
+	runTest<io_FileStream_TestClass>();
+	runTest<io_MemoryStream_TestClass>();
+	runTest<io_SubStream_TestClass>();
+	runTest<io_ConcatenatedStream_TestClass>();
+	runTest<io_SubFileSystem_TestClass>();
+	runTest<io_VirtualFileSystem_TestClass>();
+	runTest<io_PaddingSource_TestClass>();
+	runTest<io_MemorySource_TestClass>();
+	runTest<io_OverlayedSource_TestClass>();
+	runTest<io_SubSource_TestClass>();
+	runTest<io_SubSink_TestClass>();
+	runTest<io_StreamSource_TestClass>();
+	runTest<io_StreamSink_TestClass>();
+	runTest<cli_FormatUtil_TestClass>();
+	runTest<cli_OptionParser_TestClass>();
+	runTest<crypto_Md5Generator_TestClass>();
+	runTest<crypto_Sha1Generator_TestClass>();
+	runTest<crypto_Sha256Generator_TestClass>();
+	runTest<crypto_Sha512Generator_TestClass>();
+	runTest<crypto_HmacMd5Generator_TestClass>();
+	runTest<crypto_HmacSha1Generator_TestClass>();
+	runTest<crypto_HmacSha256Generator_TestClass>();
+	runTest<crypto_HmacSha512Generator_TestClass>();
 	if (includeSlowTests)
 	{
-		runTest(new crypto_Pbkdf1Md5KeyDeriver_TestClass());
-		runTest(new crypto_Pbkdf1Sha1KeyDeriver_TestClass());
-		runTest(new crypto_Pbkdf2Sha1KeyDeriver_TestClass());
-		runTest(new crypto_Pbkdf2Sha256KeyDeriver_TestClass());
-		runTest(new crypto_Pbkdf2Sha512KeyDeriver_TestClass());
+		runTest<crypto_Pbkdf1Md5KeyDeriver_TestClass>();
+		runTest<crypto_Pbkdf1Sha1KeyDeriver_TestClass>();
+		runTest<crypto_Pbkdf2Sha1KeyDeriver_TestClass>();
+		runTest<crypto_Pbkdf2Sha256KeyDeriver_TestClass>();
+		runTest<crypto_Pbkdf2Sha512KeyDeriver_TestClass>();
 	}
-	runTest(new crypto_PseudoRandomByteGenerator_TestClass());
-	runTest(new crypto_Aes128Encryptor_TestClass());
-	runTest(new crypto_Aes192Encryptor_TestClass());
-	runTest(new crypto_Aes256Encryptor_TestClass());
-	runTest(new crypto_Aes128EcbEncryptor_TestClass());
-	runTest(new crypto_Aes192EcbEncryptor_TestClass());
-	runTest(new crypto_Aes256EcbEncryptor_TestClass());
-	runTest(new crypto_Aes128CbcEncryptor_TestClass());
-	runTest(new crypto_Aes192CbcEncryptor_TestClass());
-	runTest(new crypto_Aes256CbcEncryptor_TestClass());
-	runTest(new crypto_Aes128CbcEncryptedStream_TestClass());
-	runTest(new crypto_Aes128CtrEncryptor_TestClass());
-	runTest(new crypto_Aes192CtrEncryptor_TestClass());
-	runTest(new crypto_Aes256CtrEncryptor_TestClass());
-	runTest(new crypto_Aes128CtrEncryptedStream_TestClass());
-	runTest(new crypto_Aes128XtsEncryptor_TestClass());
-	runTest(new crypto_Aes256XtsEncryptor_TestClass());
-	runTest(new crypto_Aes128CcmEncryptor_TestClass());
-	runTest(new crypto_Rsa1024OaepSha256Encryptor_TestClass());
-	runTest(new crypto_Rsa2048OaepSha256Encryptor_TestClass());
-	runTest(new crypto_Rsa4096OaepSha256Encryptor_TestClass());
-	runTest(new crypto_Rsa2048OaepSha512Encryptor_TestClass());
-	runTest(new crypto_Rsa4096OaepSha512Encryptor_TestClass());
-	runTest(new crypto_Rsa1024Pkcs1Md5Signer_TestClass());
-	runTest(new crypto_Rsa2048Pkcs1Md5Signer_TestClass());
-	runTest(new crypto_Rsa4096Pkcs1Md5Signer_TestClass());
-	runTest(new crypto_Rsa1024Pkcs1Sha1Signer_TestClass());
-	runTest(new crypto_Rsa2048Pkcs1Sha1Signer_TestClass());
-	runTest(new crypto_Rsa4096Pkcs1Sha1Signer_TestClass());
-	runTest(new crypto_Rsa1024Pkcs1Sha256Signer_TestClass());
-	runTest(new crypto_Rsa2048Pkcs1Sha256Signer_TestClass());
-	runTest(new crypto_Rsa4096Pkcs1Sha256Signer_TestClass());
-	runTest(new crypto_Rsa1024Pkcs1Sha512Signer_TestClass());
-	runTest(new crypto_Rsa2048Pkcs1Sha512Signer_TestClass());
-	runTest(new crypto_Rsa4096Pkcs1Sha512Signer_TestClass());
-	runTest(new crypto_Rsa1024PssSha256Signer_TestClass());
-	runTest(new crypto_Rsa1024PssSha512Signer_TestClass());
-	runTest(new crypto_Rsa2048PssSha256Signer_TestClass());
-	runTest(new crypto_Rsa2048PssSha512Signer_TestClass());
-	runTest(new crypto_Rsa4096PssSha256Signer_TestClass());
-	runTest(new crypto_Rsa4096PssSha512Signer_TestClass());
+	runTest<crypto_PseudoRandomByteGenerator_TestClass>();
+	runTest<crypto_Aes128Encryptor_TestClass>();
+	runTest<crypto_Aes192Encryptor_TestClass>();
+	runTest<crypto_Aes256Encryptor_TestClass>();
+	runTest<crypto_Aes128EcbEncryptor_TestClass>();
+	runTest<crypto_Aes192EcbEncryptor_TestClass>();
+	runTest<crypto_Aes256EcbEncryptor_TestClass>();
+	runTest<crypto_Aes128CbcEncryptor_TestClass>();
+	runTest<crypto_Aes192CbcEncryptor_TestClass>();
+	runTest<crypto_Aes256CbcEncryptor_TestClass>();
+	runTest<crypto_Aes128CbcEncryptedStream_TestClass>();
+	runTest<crypto_Aes128CtrEncryptor_TestClass>();
+	runTest<crypto_Aes192CtrEncryptor_TestClass>();
+	runTest<crypto_Aes256CtrEncryptor_TestClass>();
+	runTest<crypto_Aes128CtrEncryptedStream_TestClass>();
+	runTest<crypto_Aes128XtsEncryptor_TestClass>();
+	runTest<crypto_Aes256XtsEncryptor_TestClass>();
+	runTest<crypto_Aes128CcmEncryptor_TestClass>();
+	runTest<crypto_Rsa1024OaepSha256Encryptor_TestClass>();
+	runTest<crypto_Rsa2048OaepSha256Encryptor_TestClass>();
+	runTest<crypto_Rsa4096OaepSha256Encryptor_TestClass>();
+	runTest<crypto_Rsa2048OaepSha512Encryptor_TestClass>();
+	runTest<crypto_Rsa4096OaepSha512Encryptor_TestClass>();
+	runTest<crypto_Rsa1024Pkcs1Md5Signer_TestClass>();
+	runTest<crypto_Rsa2048Pkcs1Md5Signer_TestClass>();
+	runTest<crypto_Rsa4096Pkcs1Md5Signer_TestClass>();
+	runTest<crypto_Rsa1024Pkcs1Sha1Signer_TestClass>();
+	runTest<crypto_Rsa2048Pkcs1Sha1Signer_TestClass>();
+	runTest<crypto_Rsa4096Pkcs1Sha1Signer_TestClass>();
+	runTest<crypto_Rsa1024Pkcs1Sha256Signer_TestClass>();
+	runTest<crypto_Rsa2048Pkcs1Sha256Signer_TestClass>();
+	runTest<crypto_Rsa4096Pkcs1Sha256Signer_TestClass>();
+	runTest<crypto_Rsa1024Pkcs1Sha512Signer_TestClass>();
+	runTest<crypto_Rsa2048Pkcs1Sha512Signer_TestClass>();
+	runTest<crypto_Rsa4096Pkcs1Sha512Signer_TestClass>();
+	runTest<crypto_Rsa1024PssSha256Signer_TestClass>();
+	runTest<crypto_Rsa1024PssSha512Signer_TestClass>();
+	runTest<crypto_Rsa2048PssSha256Signer_TestClass>();
+	runTest<crypto_Rsa2048PssSha512Signer_TestClass>();
+	runTest<crypto_Rsa4096PssSha256Signer_TestClass>();
+	runTest<crypto_Rsa4096PssSha512Signer_TestClass>();
 }
