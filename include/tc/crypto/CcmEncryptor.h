@@ -225,26 +225,35 @@ public:
 		 * @note
 		 * - @p dst and @p src can be the same pointer.
 		 */
-	bool decrypt_and_verify(byte_t* dst, const byte_t* src, size_t size, const byte_t* iv, size_t iv_size, const byte_t* add, size_t add_size, const byte_t* tag, size_t tag_size)
+	bool decrypt_and_verify(byte_t* dst, const byte_t* src, size_t size, const byte_t* iv, size_t iv_size, const byte_t* add, size_t add_size, const byte_t* tag, size_t tag_size) noexcept
 	{
-		/* Check tag_size before allocating memory */
-		if (tag_size <= 2 || tag_size > 16 || tag_size % 2 != 0)
+		bool valid_data = false;
+
+		try 
 		{
-			return false;
-		}
-		
-		try {
+			/* Check tag_size before allocating memory */
+			if (tag_size <= 2 || tag_size > 16 || tag_size % 2 != 0)
+			{
+				throw tc::Exception();
+			}
+
 			tc::ByteData calc_tag = tc::ByteData(tag_size);
 			
 			mImpl.decrypt(dst, src, size, iv, iv_size, add, add_size, calc_tag.data(), calc_tag.size());
 
-			return memcmp(calc_tag.data(), tag, tag_size) == 0;
+			if (memcmp(calc_tag.data(), tag, tag_size) != 0)
+			{
+				throw tc::Exception();
+			}
+
+			valid_data = true;
 		}
-		catch (...) {
-			return false;
+		catch (...) 
+		{
+			valid_data = false;
 		}
 
-		return false;
+		return valid_data;
 	}
 
 private:
