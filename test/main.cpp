@@ -82,7 +82,7 @@
 #include "crypto_Rsa4096PssSha256Signer_TestClass.h"
 #include "crypto_Rsa4096PssSha512Signer_TestClass.h"
 
-#include <iostream>
+#include <fmt/core.h>
 
 void runTest(ITestClass* testClass)
 {
@@ -102,7 +102,7 @@ int main(int argc, char** argv)
 		}
 		else
 		{
-			std::cout << "usage: " << std::string(argv[0]) << " [--slow]" << std::endl;
+			fmt::print("usage: {} [--slow]\n", std::string(argv[0]));
 			return 1;
 		}
 		
