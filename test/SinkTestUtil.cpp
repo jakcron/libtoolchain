@@ -1,16 +1,14 @@
 #include "SinkTestUtil.h"
-#include <sstream>
+#include <fmt/format.h>
 
 const std::string SinkTestUtil::DummySinkBase::kClassName = "DummySinkBase";
 
 void SinkTestUtil::testSinkLength(tc::io::ISink& sink, int64_t expected_len)
 {
-	std::stringstream error_ss;
 	int64_t actual_len = sink.length();
 	if (actual_len != expected_len)
 	{
-		error_ss << "length() returned: " << actual_len << ", when it should have been " << expected_len << ".";
-		throw tc::Exception(error_ss.str());
+		throw tc::Exception(fmt::format("length() returned: {:d}, when it should have been {:d}.", actual_len, expected_len));
 	}
 }
 
@@ -67,18 +65,14 @@ void SinkTestUtil::DummySinkTestablePushData::setExpectedPushDataCfg(const tc::B
 
 size_t SinkTestUtil::DummySinkTestablePushData::pushData(const tc::ByteData& data, int64_t offset)
 {
-	std::stringstream error_ss;
-
 	if (offset != *expected_offset)
 	{
-		error_ss << "pushData() was called on base_sink with offset " << offset << ", when it should have been " << *expected_offset << ".";
-		throw tc::Exception(error_ss.str());
+		throw tc::Exception(fmt::format("pushData() was called on base_sink with offset {:d}, when it should have been {:d}.", offset, *expected_offset));
 	}
 
 	if (data.size() != expected_data->size())
 	{
-		error_ss << "pushData() passed a ByteData to base_sink with size " << data.size() << ", when it should have been " << expected_data->size() << ".";
-		throw tc::Exception(error_ss.str());
+		throw tc::Exception(fmt::format("pushData() passed a ByteData to base_sink with size {:d}, when it should have been {:d}.", data.size(), expected_data->size()));
 	}
 
 	if (memcmp(data.data(), expected_data->data(), data.size()) != 0)
