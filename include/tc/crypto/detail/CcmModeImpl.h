@@ -252,7 +252,7 @@ public:
 
 			/* Update CBC-MAC with partial decrypted data block */
 			memset(block.data(), 0, kBlockSize);
-			memcpy(block.data(), dst + ((size / kBlockSize) * kBlockSize), kBlockSize);
+			memcpy(block.data(), dst + ((size / kBlockSize) * kBlockSize), block_remaining);
 			update_cbc_mac(block.data(), tag_tmp.data());
 		}
 
