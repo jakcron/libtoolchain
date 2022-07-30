@@ -91,7 +91,6 @@ void runTest()
 	test_class.runAllTests();
 }
 
-
 int main(int argc, char** argv)
 {
 	bool includeSlowTests = false;
