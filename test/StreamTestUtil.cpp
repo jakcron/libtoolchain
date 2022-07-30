@@ -1,5 +1,5 @@
 #include "StreamTestUtil.h"
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <tc/cli.h>
 
 const std::string StreamTestUtil::DummyStreamBase::kClassName = "DummyStreamBase";
