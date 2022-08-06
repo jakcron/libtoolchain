@@ -1,200 +1,275 @@
-#include <iostream>
-#include <sstream>
-
 #include "io_MemorySource_TestClass.h"
 #include "SourceTestUtil.h"
 
-#include <tc.h>
+#include <tc/io/MemorySource.h>
+
+//---------------------------------------------------------
+
+io_MemorySource_TestClass::io_MemorySource_TestClass() :
+	mTestTag("tc::io::MemorySource"),
+	mTestResults()
+{
+}
 
 void io_MemorySource_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::io::MemorySource] START" << std::endl;
 	testDefaultConstructor();
 	testInitializeByCopyWithByteData();
 	testInitializeByMoveWithByteData();
 	testInitializeByCopyWithMemoryPointer();
 	testNegativeOffset();
 	testTooLargeOffset();
-	std::cout << "[tc::io::MemorySource] END" << std::endl;
 }
+
+const std::string& io_MemorySource_TestClass::getTestTag() const
+{
+	return mTestTag;
+}
+
+const std::vector<ITestClass::TestResult>& io_MemorySource_TestClass::getTestResults() const
+{
+	return mTestResults;
+}
+
+//---------------------------------------------------------
 
 void io_MemorySource_TestClass::testDefaultConstructor()
 {
-	std::cout << "[tc::io::MemorySource] testDefaultConstructor : " << std::flush;
+	TestResult test;
+	test.test_name = "testDefaultConstructor";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
-		try
-		{
-			tc::io::MemorySource source;
+		tc::io::MemorySource source;
 
-			SourceTestUtil::testSourceLength(source, 0);
-			SourceTestUtil::pullTestHelper(source, 0, 0xdead, 0, nullptr);
+		SourceTestUtil::testSourceLength(source, 0);
+		SourceTestUtil::pullTestHelper(source, 0, 0xdead, 0, nullptr);
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_MemorySource_TestClass::testInitializeByCopyWithByteData()
 {
-	std::cout << "[tc::io::MemorySource] testInitializeByCopyWithByteData : " << std::flush;
+	TestResult test;
+	test.test_name = "testInitializeByCopyWithByteData";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
-		try
-		{
-			int64_t length = 0xcafe;
-			tc::ByteData data(length);
-			memset(data.data(), 0xff, data.size());
+		int64_t length = 0xcafe;
+		tc::ByteData data(length);
+		memset(data.data(), 0xff, data.size());
 
-			tc::io::MemorySource source = tc::io::MemorySource(data);
+		tc::io::MemorySource source = tc::io::MemorySource(data);
 
-			SourceTestUtil::testSourceLength(source, length);
-			SourceTestUtil::pullTestHelper(source, 0, data.size(), data.size(), data.data());
-			SourceTestUtil::pullTestHelper(source, 0, data.size()*2, data.size(), data.data());
+		SourceTestUtil::testSourceLength(source, length);
+		SourceTestUtil::pullTestHelper(source, 0, data.size(), data.size(), data.data());
+		SourceTestUtil::pullTestHelper(source, 0, data.size()*2, data.size(), data.data());
 
-			std::cout << "PASS" << std::endl;	
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_MemorySource_TestClass::testInitializeByMoveWithByteData()
 {
-	std::cout << "[tc::io::MemorySource] testInitializeByMoveWithByteData : " << std::flush;
+	TestResult test;
+	test.test_name = "testInitializeByMoveWithByteData";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
-		try
+		int64_t length = 0xcafe;
+		tc::ByteData control_data(length);
+		memset(control_data.data(), 0xff, control_data.size());
+		tc::ByteData experiment_data = control_data;
+
+		tc::io::MemorySource source = tc::io::MemorySource(std::move(experiment_data));
+
+		if (experiment_data.size() != 0)
 		{
-			int64_t length = 0xcafe;
-			tc::ByteData control_data(length);
-			memset(control_data.data(), 0xff, control_data.size());
-			tc::ByteData experiment_data = control_data;
-
-			tc::io::MemorySource source = tc::io::MemorySource(std::move(experiment_data));
-
-			if (experiment_data.size() != 0)
-			{
-				throw tc::Exception("experiment_data.size() != 0 after being moved from.");
-			}
-			if (experiment_data.data() != nullptr)
-			{
-				throw tc::Exception("experiment_data.data() != nullptr after being moved from.");
-			}
-
-			SourceTestUtil::testSourceLength(source, length);
-			SourceTestUtil::pullTestHelper(source, 0, control_data.size(), control_data.size(), control_data.data());
-			SourceTestUtil::pullTestHelper(source, 0, control_data.size()*2, control_data.size(), control_data.data());
-
-			std::cout << "PASS" << std::endl;	
+			throw tc::Exception("experiment_data.size() != 0 after being moved from.");
 		}
-		catch (const tc::Exception& e)
+		if (experiment_data.data() != nullptr)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			throw tc::Exception("experiment_data.data() != nullptr after being moved from.");
 		}
+
+		SourceTestUtil::testSourceLength(source, length);
+		SourceTestUtil::pullTestHelper(source, 0, control_data.size(), control_data.size(), control_data.data());
+		SourceTestUtil::pullTestHelper(source, 0, control_data.size()*2, control_data.size(), control_data.data());
+
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_MemorySource_TestClass::testInitializeByCopyWithMemoryPointer()
 {
-	std::cout << "[tc::io::MemorySource] testInitializeByCopyWithMemoryPointer : " << std::flush;
+	TestResult test;
+	test.test_name = "testInitializeByCopyWithMemoryPointer";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
-		try
-		{
-			int64_t length = 0xcafe;
-			tc::ByteData data(length);
-			memset(data.data(), 0xff, data.size());
+		int64_t length = 0xcafe;
+		tc::ByteData data(length);
+		memset(data.data(), 0xff, data.size());
 
-			tc::io::MemorySource source = tc::io::MemorySource(data.data(), data.size());
+		tc::io::MemorySource source = tc::io::MemorySource(data.data(), data.size());
 
-			SourceTestUtil::testSourceLength(source, length);
-			SourceTestUtil::pullTestHelper(source, 0, data.size(), data.size(), data.data());
-			SourceTestUtil::pullTestHelper(source, 0, data.size()*2, data.size(), data.data());
+		SourceTestUtil::testSourceLength(source, length);
+		SourceTestUtil::pullTestHelper(source, 0, data.size(), data.size(), data.data());
+		SourceTestUtil::pullTestHelper(source, 0, data.size()*2, data.size(), data.data());
 
-			std::cout << "PASS" << std::endl;	
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_MemorySource_TestClass::testNegativeOffset()
 {
-	std::cout << "[tc::io::MemorySource] testNegativeOffset : " << std::flush;
+	TestResult test;
+	test.test_name = "testNegativeOffset";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
-		try
-		{
-			// create source
-			size_t source_len = 0xbabe;
-			tc::io::MemorySource source = tc::io::MemorySource(tc::ByteData(source_len));
+		// create source
+		size_t source_len = 0xbabe;
+		tc::io::MemorySource source = tc::io::MemorySource(tc::ByteData(source_len));
 
-			// test
-			SourceTestUtil::testSourceLength(source, source_len);
-			SourceTestUtil::pullTestHelper(source, -10, 20, 0, nullptr);
+		// test
+		SourceTestUtil::testSourceLength(source, source_len);
+		SourceTestUtil::pullTestHelper(source, -10, 20, 0, nullptr);
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_MemorySource_TestClass::testTooLargeOffset()
 {
-	std::cout << "[tc::io::MemorySource] testTooLargeOffset : " << std::flush;
+	TestResult test;
+	test.test_name = "testTooLargeOffset";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
-		try
-		{
-			// create source
-			size_t source_len = 0xbabe;
-			tc::io::MemorySource source = tc::io::MemorySource(tc::ByteData(source_len));
+		// create source
+		size_t source_len = 0xbabe;
+		tc::io::MemorySource source = tc::io::MemorySource(tc::ByteData(source_len));
 
-			// test
-			SourceTestUtil::testSourceLength(source, source_len);
-			SourceTestUtil::pullTestHelper(source, source_len * 2, 20, 0, nullptr);
-			
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// test
+		SourceTestUtil::testSourceLength(source, source_len);
+		SourceTestUtil::pullTestHelper(source, source_len * 2, 20, 0, nullptr);
+		
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }

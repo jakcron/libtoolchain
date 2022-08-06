@@ -1,14 +1,19 @@
-#include <iostream>
-#include <sstream>
-
 #include "io_OverlayedSource_TestClass.h"
 #include "SourceTestUtil.h"
 
-#include <tc.h>
+#include <tc/io/OverlayedSource.h>
+#include <tc/io/PaddingSource.h>
+
+//---------------------------------------------------------
+
+io_OverlayedSource_TestClass::io_OverlayedSource_TestClass() :
+	mTestTag("tc::io::OverlayedSource"),
+	mTestResults()
+{
+}
 
 void io_OverlayedSource_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::io::OverlayedSource] START" << std::endl;
 	testDefaultConstructor();
 	testSingleOverlayConstructor();
 	testMultiOverlayConstructor();
@@ -19,168 +24,212 @@ void io_OverlayedSource_TestClass::runAllTests(void)
 	testOverlayRegionPartlyBeforeBaseStream();
 	testOverlayRegionAfterBaseStream();
 	testOverlayRegionPartlyAfterBaseStream();
-	std::cout << "[tc::io::OverlayedSource] END" << std::endl;
 }
+
+const std::string& io_OverlayedSource_TestClass::getTestTag() const
+{
+	return mTestTag;
+}
+
+const std::vector<ITestClass::TestResult>& io_OverlayedSource_TestClass::getTestResults() const
+{
+	return mTestResults;
+}
+
+//---------------------------------------------------------
 
 void io_OverlayedSource_TestClass::testDefaultConstructor()
 {
-	std::cout << "[tc::io::OverlayedSource] testDefaultConstructor : " << std::flush;
+	TestResult test;
+	test.test_name = "testDefaultConstructor";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
-		try
-		{
-			tc::io::OverlayedSource source;
+		tc::io::OverlayedSource source;
 
-			SourceTestUtil::testSourceLength(source, 0);
-			SourceTestUtil::pullTestHelper(source, 0, 0xdead, 0, nullptr);
+		SourceTestUtil::testSourceLength(source, 0);
+		SourceTestUtil::pullTestHelper(source, 0, 0xdead, 0, nullptr);
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_OverlayedSource_TestClass::testSingleOverlayConstructor()
 {
-	std::cout << "[tc::io::OverlayedSource] testSingleOverlayConstructor : " << std::flush;
+	TestResult test;
+	test.test_name = "testSingleOverlayConstructor";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
-		try
-		{
-			// ## create overlay source
-			size_t overlay_offset = 0x80;
-			tc::io::PaddingSource base_source = tc::io::PaddingSource(0xff, 0x1000);
-			tc::io::PaddingSource overlay_source = tc::io::PaddingSource(0xaa, 0x100);
+		// ## create overlay source
+		size_t overlay_offset = 0x80;
+		tc::io::PaddingSource base_source = tc::io::PaddingSource(0xff, 0x1000);
+		tc::io::PaddingSource overlay_source = tc::io::PaddingSource(0xaa, 0x100);
 
-			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), std::make_shared<tc::io::PaddingSource>(overlay_source), overlay_offset, overlay_source.length());
+		tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), std::make_shared<tc::io::PaddingSource>(overlay_source), overlay_offset, overlay_source.length());
 
-			// ## create ByteData with expected data to test against
-			tc::ByteData expected_data = base_source.pullData(0, base_source.length());
-			tc::ByteData overlay_data = overlay_source.pullData(0, overlay_source.length());
-			
-			memcpy(expected_data.data() + overlay_offset, overlay_data.data(), overlay_data.size());
+		// ## create ByteData with expected data to test against
+		tc::ByteData expected_data = base_source.pullData(0, base_source.length());
+		tc::ByteData overlay_data = overlay_source.pullData(0, overlay_source.length());
+		
+		memcpy(expected_data.data() + overlay_offset, overlay_data.data(), overlay_data.size());
 
-			// ## validate overlay source
-			// source length
-			SourceTestUtil::testSourceLength(source, base_source.length());
+		// ## validate overlay source
+		// source length
+		SourceTestUtil::testSourceLength(source, base_source.length());
 
-			// pullData tests
-			size_t pull_size;
-			int64_t pull_offset;
+		// pullData tests
+		size_t pull_size;
+		int64_t pull_offset;
 
-			// pull full contents of source
-			pull_size = base_source.length();
-			pull_offset = 0;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
+		// pull full contents of source
+		pull_size = base_source.length();
+		pull_offset = 0;
+		SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
 
-			// try to pull double the length of source
-			pull_size = base_source.length() * 2;
-			pull_offset = 0;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size/2, expected_data.data() + pull_offset);
-			
-			// pull source up to overlay source
-			pull_size = overlay_offset;
-			pull_offset = 0;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
+		// try to pull double the length of source
+		pull_size = base_source.length() * 2;
+		pull_offset = 0;
+		SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size/2, expected_data.data() + pull_offset);
+		
+		// pull source up to overlay source
+		pull_size = overlay_offset;
+		pull_offset = 0;
+		SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
 
-			// pull just overlay source
-			pull_size = overlay_source.length();
-			pull_offset = overlay_offset;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
+		// pull just overlay source
+		pull_size = overlay_source.length();
+		pull_offset = overlay_offset;
+		SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
 
-			// pull part of overlay
-			pull_size = 0x20;
-			pull_offset = overlay_offset - 0x30;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
+		// pull part of overlay
+		pull_size = 0x20;
+		pull_offset = overlay_offset - 0x30;
+		SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
 
-			// pull part of base and part of overlay
-			pull_size = 0x20;
-			pull_offset = overlay_offset - 0x10;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
+		// pull part of base and part of overlay
+		pull_size = 0x20;
+		pull_offset = overlay_offset - 0x10;
+		SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
 
-			// pull part of overlay and part of base
-			pull_size = 0x20;
-			pull_offset = overlay_offset + overlay_source.length() - 0x10;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
+		// pull part of overlay and part of base
+		pull_size = 0x20;
+		pull_offset = overlay_offset + overlay_source.length() - 0x10;
+		SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_OverlayedSource_TestClass::testMultiOverlayConstructor()
 {
-	std::cout << "[tc::io::OverlayedSource] testMultiOverlayConstructor : " << std::flush;
+	TestResult test;
+	test.test_name = "testMultiOverlayConstructor";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
+	{			
+		// ## create overlay source
+		tc::io::PaddingSource base_source = tc::io::PaddingSource(0xff, 0x1000);
+
+		std::vector<tc::io::OverlayedSource::OverlaySourceInfo> overlay_info = {
+			{ std::shared_ptr<tc::io::PaddingSource>(new tc::io::PaddingSource(0xaa, 0x1000)), 0x20, 0x100 },
+			{ std::shared_ptr<tc::io::PaddingSource>(new tc::io::PaddingSource(0xbb, 0x1000)), 0x100, 0x100 },
+			{ std::shared_ptr<tc::io::PaddingSource>(new tc::io::PaddingSource(0xcc, 0x1000)), 0x320, 0x100 },
+			{ std::shared_ptr<tc::io::PaddingSource>(new tc::io::PaddingSource(0xdd, 0x1000)), 0x420, 0x100 },
+			{ std::shared_ptr<tc::io::PaddingSource>(new tc::io::PaddingSource(0xee, 0x1000)), 0x520, 0x100 },
+		};
+
+		tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), overlay_info);
+
+		// ## create ByteData with expected data to test against
+		tc::ByteData expected_data = base_source.pullData(0, base_source.length());
+		for (auto itr = overlay_info.begin(); itr != overlay_info.end(); itr++)
+		{
+			tc::ByteData tmp = itr->overlay_source->pullData(0, itr->length);
+			memcpy(expected_data.data() + itr->offset, tmp.data(), tmp.size());
+		}
+				
+		// ## validate overlay source
+		// source length
+		SourceTestUtil::testSourceLength(source, base_source.length());
+
+		// pullData tests
+		size_t pull_size;
+		int64_t pull_offset;
+
+		// pull full contents of source
+		pull_size = base_source.length();
+		pull_offset = 0;
+		SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
+
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
 	{
-		try
-		{
-			
-			// ## create overlay source
-			tc::io::PaddingSource base_source = tc::io::PaddingSource(0xff, 0x1000);
-
-			std::vector<tc::io::OverlayedSource::OverlaySourceInfo> overlay_info = {
-				{ std::shared_ptr<tc::io::PaddingSource>(new tc::io::PaddingSource(0xaa, 0x1000)), 0x20, 0x100 },
-				{ std::shared_ptr<tc::io::PaddingSource>(new tc::io::PaddingSource(0xbb, 0x1000)), 0x100, 0x100 },
-				{ std::shared_ptr<tc::io::PaddingSource>(new tc::io::PaddingSource(0xcc, 0x1000)), 0x320, 0x100 },
-				{ std::shared_ptr<tc::io::PaddingSource>(new tc::io::PaddingSource(0xdd, 0x1000)), 0x420, 0x100 },
-				{ std::shared_ptr<tc::io::PaddingSource>(new tc::io::PaddingSource(0xee, 0x1000)), 0x520, 0x100 },
-			};
-
-			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), overlay_info);
-
-			// ## create ByteData with expected data to test against
-			tc::ByteData expected_data = base_source.pullData(0, base_source.length());
-			for (auto itr = overlay_info.begin(); itr != overlay_info.end(); itr++)
-			{
-				tc::ByteData tmp = itr->overlay_source->pullData(0, itr->length);
-				memcpy(expected_data.data() + itr->offset, tmp.data(), tmp.size());
-			}
-					
-			// ## validate overlay source
-			// source length
-			SourceTestUtil::testSourceLength(source, base_source.length());
-
-			// pullData tests
-			size_t pull_size;
-			int64_t pull_offset;
-
-			// pull full contents of source
-			pull_size = base_source.length();
-			pull_offset = 0;
-			SourceTestUtil::pullTestHelper(source, pull_offset, pull_size, pull_size, expected_data.data() + pull_offset);
-
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_OverlayedSource_TestClass::testNullBaseStream()
 {
-	std::cout << "[tc::io::OverlayedSource] testNullBaseStream : " << std::flush;
+	TestResult test;
+	test.test_name = "testNullBaseStream";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -197,23 +246,42 @@ void io_OverlayedSource_TestClass::testNullBaseStream()
 
 			tc::io::OverlayedSource source(std::shared_ptr<tc::io::PaddingSource>(nullptr), overlay_info);
 
-
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException("Constructor did not throw tc::ArgumentNullException where base_source was null");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ArgumentNullException&) { /* do nothing */ }
+		catch (tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException("Constructor threw the wrong exception where base_source was null");
 		}
+
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_OverlayedSource_TestClass::testNullOverlayStream()
 {
-	std::cout << "[tc::io::OverlayedSource] testNullOverlayStream : " << std::flush;
+	TestResult test;
+	test.test_name = "testNullOverlayStream";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -230,23 +298,42 @@ void io_OverlayedSource_TestClass::testNullOverlayStream()
 
 			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), overlay_info);
 
-
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException("Constructor did not throw tc::ArgumentNullException where an overlay source was null");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ArgumentNullException&) { /* do nothing */ }
+		catch (tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException("Constructor threw the wrong exception where an overlay source was null");
 		}
+
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_OverlayedSource_TestClass::testOverlayStreamTooSmallForOverlayRegion()
 {
-	std::cout << "[tc::io::OverlayedSource] testOverlayStreamTooSmallForOverlayRegion : " << std::flush;
+	TestResult test;
+	test.test_name = "testOverlayStreamTooSmallForOverlayRegion";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -263,22 +350,39 @@ void io_OverlayedSource_TestClass::testOverlayStreamTooSmallForOverlayRegion()
 
 			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), overlay_info);
 
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException("Constructor did not throw tc::ArgumentOutOfRangeException where an overlay source was smaller than the region it was supposed to overlay");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ArgumentOutOfRangeException&) { /* do nothing */ }
+		catch (tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException("Constructor threw the wrong exception where an overlay source was smaller than the region it was supposed to overlay");
 		}
+
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
 }
 
 void io_OverlayedSource_TestClass::testOverlayRegionBeforeBaseStream()
 {
-	std::cout << "[tc::io::OverlayedSource] testOverlayRegionBeforeBaseStream : " << std::flush;
+	TestResult test;
+	test.test_name = "testOverlayRegionBeforeBaseStream";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -288,22 +392,39 @@ void io_OverlayedSource_TestClass::testOverlayRegionBeforeBaseStream()
 
 			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), std::make_shared<tc::io::PaddingSource>(padding_source), -1, 1);
 
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException("Constructor did not throw tc::ArgumentOutOfRangeException where the overlay region entirely doesn't exist in the base");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ArgumentOutOfRangeException&) { /* do nothing */ }
+		catch (tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException("Constructor threw the wrong exception where the overlay region entirely doesn't exist in the base");
 		}
+
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
 }
 
 void io_OverlayedSource_TestClass::testOverlayRegionPartlyBeforeBaseStream()
 {
-	std::cout << "[tc::io::OverlayedSource] testOverlayRegionPartlyBeforeBaseStream : " << std::flush;
+	TestResult test;
+	test.test_name = "testOverlayRegionPartlyBeforeBaseStream";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -313,22 +434,39 @@ void io_OverlayedSource_TestClass::testOverlayRegionPartlyBeforeBaseStream()
 
 			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), std::make_shared<tc::io::PaddingSource>(padding_source), -1, 20);
 
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException("Constructor did not throw tc::ArgumentOutOfRangeException where overlay region partly exists before in the base");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ArgumentOutOfRangeException&) { /* do nothing */ }
+		catch (tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException("Constructor threw the wrong exception where overlay region partly exists before in the base");
 		}
+
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
 }
 
 void io_OverlayedSource_TestClass::testOverlayRegionAfterBaseStream()
 {
-	std::cout << "[tc::io::OverlayedSource] testOverlayRegionAfterBaseStream : " << std::flush;
+	TestResult test;
+	test.test_name = "testOverlayRegionAfterBaseStream";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -338,22 +476,39 @@ void io_OverlayedSource_TestClass::testOverlayRegionAfterBaseStream()
 
 			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), std::make_shared<tc::io::PaddingSource>(padding_source), 0x1000, 0x100);
 
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException("Constructor did not throw tc::ArgumentOutOfRangeException where overlay region exists after in the base");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ArgumentOutOfRangeException&) { /* do nothing */ }
+		catch (tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException("Constructor threw the wrong exception where overlay region exists after in the base");
 		}
+
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
 }
 
 void io_OverlayedSource_TestClass::testOverlayRegionPartlyAfterBaseStream()
 {
-	std::cout << "[tc::io::OverlayedSource] testOverlayRegionPartlyAfterBaseStream : " << std::flush;
+	TestResult test;
+	test.test_name = "testOverlayRegionPartlyAfterBaseStream";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -363,15 +518,28 @@ void io_OverlayedSource_TestClass::testOverlayRegionPartlyAfterBaseStream()
 
 			tc::io::OverlayedSource source(std::make_shared<tc::io::PaddingSource>(base_source), std::make_shared<tc::io::PaddingSource>(padding_source), 0xfff, 0x100);
 
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException("Constructor did not throw tc::ArgumentOutOfRangeException where overlay region exists partly after in the base");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ArgumentOutOfRangeException&) { /* do nothing */ }
+		catch (tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException("Constructor threw the wrong exception where overlay region exists partly after in the base");
 		}
+
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
 }
