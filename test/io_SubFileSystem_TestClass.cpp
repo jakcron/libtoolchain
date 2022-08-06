@@ -1,13 +1,17 @@
-#include <tc/Exception.h>
-#include <iostream>
-
 #include "io_SubFileSystem_TestClass.h"
 #include "FileSystemTestUtil.h"
 #include "StreamTestUtil.h"
 
+//---------------------------------------------------------
+
+io_SubFileSystem_TestClass::io_SubFileSystem_TestClass() :
+	mTestTag("tc::io::SubFileSystem"),
+	mTestResults()
+{
+}
+
 void io_SubFileSystem_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::io::SubFileSystem] START" << std::endl;
 	testBaseFileSystemRetainsWorkingDirectory();
 	testGetSetWorkingDirectory();
 	testCreateFile();
@@ -18,12 +22,27 @@ void io_SubFileSystem_TestClass::runAllTests(void)
 	testGetDirectoryListing();
 	testNavigateUpSubFileSystemEscape();
 	testOpenFileOutsideSubFileSystem();
-	std::cout << "[tc::io::SubFileSystem] END" << std::endl;
 }
+
+const std::string& io_SubFileSystem_TestClass::getTestTag() const
+{
+	return mTestTag;
+}
+
+const std::vector<ITestClass::TestResult>& io_SubFileSystem_TestClass::getTestResults() const
+{
+	return mTestResults;
+}
+
+//---------------------------------------------------------
 
 void io_SubFileSystem_TestClass::testBaseFileSystemRetainsWorkingDirectory()
 {
-	std::cout << "[tc::io::SubFileSystem] testBaseFileSystemRetainsWorkingDirectory : " << std::flush;
+	TestResult test;
+	test.test_name = "testBaseFileSystemRetainsWorkingDirectory";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -58,24 +77,35 @@ void io_SubFileSystem_TestClass::testBaseFileSystemRetainsWorkingDirectory()
 				throw tc::Exception("SubFileSystem constructor did not preserve the base file system working directory.");
 			}
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
-
-	
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testGetSetWorkingDirectory()
 {
-	std::cout << "[tc::io::SubFileSystem] testGetSetWorkingDirectory : " << std::flush;
+	TestResult test;
+	test.test_name = "testGetSetWorkingDirectory";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -149,24 +179,35 @@ void io_SubFileSystem_TestClass::testGetSetWorkingDirectory()
 				}
 			}
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
-
-	
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testCreateFile()
 {
-	std::cout << "[tc::io::SubFileSystem] testCreateFile : " << std::flush;
+	TestResult test;
+	test.test_name = "testCreateFile";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -215,22 +256,35 @@ void io_SubFileSystem_TestClass::testCreateFile()
 			// attempt to create file
 			sub_filesystem.createFile(tc::io::Path("/a_dir/testfile"));
 			
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testOpenFile()
 {
-	std::cout << "[tc::io::SubFileSystem] testOpenFile : " << std::flush;
+	TestResult test;
+	test.test_name = "testOpenFile";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -297,22 +351,35 @@ void io_SubFileSystem_TestClass::testOpenFile()
 				throw tc::Exception("openFile() did not populate stream pointer correctly");
 			}
 			
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testRemoveFile()
 {
-	std::cout << "[tc::io::SubFileSystem] testRemoveFile : " << std::flush;
+	TestResult test;
+	test.test_name = "testRemoveFile";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -361,23 +428,36 @@ void io_SubFileSystem_TestClass::testRemoveFile()
 			// attempt to delete file
 			sub_filesystem.removeFile(tc::io::Path("/a_dir/testfile"));
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 
 void io_SubFileSystem_TestClass::testCreateDirectory()
 {
-	std::cout << "[tc::io::SubFileSystem] testCreateDirectory : " << std::flush;
+	TestResult test;
+	test.test_name = "testCreateDirectory";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -426,22 +506,35 @@ void io_SubFileSystem_TestClass::testCreateDirectory()
 			// attempt to create directory
 			sub_filesystem.createDirectory(tc::io::Path("/a_dir/testdir/hey"));
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testRemoveDirectory()
 {
-	std::cout << "[tc::io::SubFileSystem] testRemoveDirectory : " << std::flush;
+	TestResult test;
+	test.test_name = "testRemoveDirectory";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -490,22 +583,35 @@ void io_SubFileSystem_TestClass::testRemoveDirectory()
 			// attempt to remove directory
 			sub_filesystem.removeDirectory(tc::io::Path("/a_dir/testdir/hey"));
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testGetDirectoryListing()
 {
-	std::cout << "[tc::io::SubFileSystem] testGetDirectoryListing : " << std::flush;
+	TestResult test;
+	test.test_name = "testGetDirectoryListing";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -589,23 +695,36 @@ void io_SubFileSystem_TestClass::testGetDirectoryListing()
 				throw tc::Exception("DummyFileSystem", "Directory absolute path was not as expected");
 			}
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 
 void io_SubFileSystem_TestClass::testNavigateUpSubFileSystemEscape()
 {
-	std::cout << "[tc::io::SubFileSystem] testNavigateUpSubFileSystemEscape : " << std::flush;
+	TestResult test;
+	test.test_name = "testNavigateUpSubFileSystemEscape";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -659,22 +778,35 @@ void io_SubFileSystem_TestClass::testNavigateUpSubFileSystemEscape()
 				throw tc::Exception("Real directory path not as expected");
 			}
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testOpenFileOutsideSubFileSystem()
 {
-	std::cout << "[tc::io::SubFileSystem] testOpenFileOutsideSubFileSystem : " << std::flush;
+	TestResult test;
+	test.test_name = "testOpenFileOutsideSubFileSystem";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -722,15 +854,24 @@ void io_SubFileSystem_TestClass::testOpenFileOutsideSubFileSystem()
 			std::shared_ptr<tc::io::IStream> inaccessible_file;
 			sub_filesystem.openFile(tc::io::Path("../inaccessible_file0"), tc::io::FileMode::Open, tc::io::FileAccess::Read, inaccessible_file);
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }

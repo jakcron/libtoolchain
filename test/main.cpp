@@ -18,13 +18,12 @@
 #include "io_MemoryStream_TestClass.h"
 #include "io_SubStream_TestClass.h"
 #include "io_ConcatenatedStream_TestClass.h"
-
+#include "io_SubFileSystem_TestClass.h"
 
 
 /*
 
 
-#include "io_SubFileSystem_TestClass.h"
 #include "io_VirtualFileSystem_TestClass.h"
 #include "io_PaddingSource_TestClass.h"
 #include "io_MemorySource_TestClass.h"
@@ -237,10 +236,11 @@ int main(int argc, char** argv)
 	runTest<io_MemoryStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<io_SubStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<io_ConcatenatedStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+	runTest<io_SubFileSystem_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 
 	/*
 	
-	runTest<io_SubFileSystem_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+	
 	runTest<io_VirtualFileSystem_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<io_PaddingSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<io_MemorySource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
