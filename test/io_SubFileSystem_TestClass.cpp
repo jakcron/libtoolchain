@@ -74,7 +74,7 @@ void io_SubFileSystem_TestClass::testBaseFileSystemRetainsWorkingDirectory()
 			filesystem.getWorkingDirectory(base_current_working_dir_path);
 			if (base_initial_working_dir_path != base_current_working_dir_path)
 			{
-				throw tc::Exception("SubFileSystem constructor did not preserve the base file system working directory.");
+				throw tc::TestException("SubFileSystem constructor did not preserve the base file system working directory.");
 			}
 
 			// record result
@@ -140,7 +140,7 @@ void io_SubFileSystem_TestClass::testGetSetWorkingDirectory()
 				sub_filesystem.getWorkingDirectory(sub_current_working_dir_path);
 				if (sub_current_working_dir_path != tc::io::Path("/"))
 				{
-					throw tc::Exception("SubFileSystem initial working directory was not root.");
+					throw tc::TestException("SubFileSystem initial working directory was not root.");
 				}
 			}
 			
@@ -151,7 +151,7 @@ void io_SubFileSystem_TestClass::testGetSetWorkingDirectory()
 				filesystem.getWorkingDirectory(base_current_working_dir_path);
 				if (base_initial_working_dir_path != base_current_working_dir_path)
 				{
-					throw tc::Exception("SubFileSystem getWorkingDirectory did not preserve the base file system working directory.");
+					throw tc::TestException("SubFileSystem getWorkingDirectory did not preserve the base file system working directory.");
 				}
 			}
 
@@ -165,7 +165,7 @@ void io_SubFileSystem_TestClass::testGetSetWorkingDirectory()
 
 				if (sub_current_working_dir_path != sub_test_path)
 				{
-					throw tc::Exception("SubFileSystem setWorkingDirectory() failed to set working directory as getWorkingDirectory() returned unexpected path.");
+					throw tc::TestException("SubFileSystem setWorkingDirectory() failed to set working directory as getWorkingDirectory() returned unexpected path.");
 				}
 			}
 
@@ -175,7 +175,7 @@ void io_SubFileSystem_TestClass::testGetSetWorkingDirectory()
 				filesystem.getWorkingDirectory(base_current_working_dir_path);
 				if (base_initial_working_dir_path != base_current_working_dir_path)
 				{
-					throw tc::Exception("SubFileSystem getWorkingDirectory did not preserve the base file system working directory.");
+					throw tc::TestException("SubFileSystem getWorkingDirectory did not preserve the base file system working directory.");
 				}
 			}
 
@@ -227,13 +227,13 @@ void io_SubFileSystem_TestClass::testCreateFile()
 
 				if (cur_dir != mInitialWorkingDirectoryPath)
 				{
-					throw tc::Exception("DummyFileSystem", "Working directory was not preserved by SubFileSystem.");
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
 				}
 
 				// check input was correct
 				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testfile"))
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect path");
+					throw tc::TestException("DummyFileSystem: file had incorrect path");
 				}
 			}
 		private:
@@ -304,17 +304,17 @@ void io_SubFileSystem_TestClass::testOpenFile()
 
 				if (cur_dir != mInitialWorkingDirectoryPath)
 				{
-					throw tc::Exception("DummyFileSystem", "Working directory was not preserved by SubFileSystem.");
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
 				}
 				
 				// check input was correct
 				if (mode != tc::io::FileMode::Open || access != tc::io::FileAccess::Read)
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect access permissions");
+					throw tc::TestException("DummyFileSystem: file had incorrect access permissions");
 				}
 				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testfile"))
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect path");
+					throw tc::TestException("DummyFileSystem: file had incorrect path");
 				}
 
 				// popualate file stream pointer
@@ -344,11 +344,11 @@ void io_SubFileSystem_TestClass::testOpenFile()
 			// check file was opened and correct
 			if (file == nullptr)
 			{
-				throw tc::Exception("openFile() did not populate stream pointer");
+				throw tc::TestException("openFile() did not populate stream pointer");
 			}
 			if (file->length() != 0xdeadbeef)
 			{
-				throw tc::Exception("openFile() did not populate stream pointer correctly");
+				throw tc::TestException("openFile() did not populate stream pointer correctly");
 			}
 			
 			// record result
@@ -399,13 +399,13 @@ void io_SubFileSystem_TestClass::testRemoveFile()
 
 				if (cur_dir != mInitialWorkingDirectoryPath)
 				{
-					throw tc::Exception("DummyFileSystem", "Working directory was not preserved by SubFileSystem.");
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
 				}
 
 				// check input was correct
 				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testfile"))
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect path");
+					throw tc::TestException("DummyFileSystem: file had incorrect path");
 				}
 			}
 		private:
@@ -477,13 +477,13 @@ void io_SubFileSystem_TestClass::testCreateDirectory()
 
 				if (cur_dir != mInitialWorkingDirectoryPath)
 				{
-					throw tc::Exception("DummyFileSystem", "Working directory was not preserved by SubFileSystem.");
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
 				}
 
 				// check input was correct
 				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testdir/hey"))
 				{
-					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
+					throw tc::TestException("DummyFileSystem: dir had incorrect path");
 				}
 			}
 		private:
@@ -554,13 +554,13 @@ void io_SubFileSystem_TestClass::testRemoveDirectory()
 
 				if (cur_dir != mInitialWorkingDirectoryPath)
 				{
-					throw tc::Exception("DummyFileSystem", "Working directory was not preserved by SubFileSystem.");
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
 				}
 
 				// check input was correct
 				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testdir/hey"))
 				{
-					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
+					throw tc::TestException("DummyFileSystem: dir had incorrect path");
 				}
 			}
 		private:
@@ -631,13 +631,13 @@ void io_SubFileSystem_TestClass::testGetDirectoryListing()
 
 				if (cur_dir != mInitialWorkingDirectoryPath)
 				{
-					throw tc::Exception("DummyFileSystem", "Working directory was not preserved by SubFileSystem.");
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
 				}
 
 				// check input was correct
 				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testdir/hey"))
 				{
-					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
+					throw tc::TestException("DummyFileSystem: dir had incorrect path");
 				}
 
 				dir_info.abs_path = path;
@@ -671,12 +671,12 @@ void io_SubFileSystem_TestClass::testGetDirectoryListing()
 
 			if (sb_dir_info.file_list != real_dir_info.file_list)
 			{
-				throw tc::Exception("DummyFileSystem", "File list was not as expected");
+				throw tc::TestException("DummyFileSystem: File list was not as expected");
 			}
 
 			if (sb_dir_info.dir_list != real_dir_info.dir_list)
 			{
-				throw tc::Exception("DummyFileSystem", "Directory list was not as expected");
+				throw tc::TestException("DummyFileSystem: Directory list was not as expected");
 			}
 
 			tc::io::Path fixed_sub_filesystem_path;
@@ -692,7 +692,7 @@ void io_SubFileSystem_TestClass::testGetDirectoryListing()
 
 			if ((subfilesystem_base_path + fixed_sub_filesystem_path) != real_dir_info.abs_path)
 			{
-				throw tc::Exception("DummyFileSystem", "Directory absolute path was not as expected");
+				throw tc::TestException("DummyFileSystem: Directory absolute path was not as expected");
 			}
 
 			// record result
@@ -770,12 +770,12 @@ void io_SubFileSystem_TestClass::testNavigateUpSubFileSystemEscape()
 			
 			if (dir_info.abs_path != tc::io::Path("/"))
 			{
-				throw tc::Exception("SubFileSystem directory path not as expected");
+				throw tc::TestException("SubFileSystem directory path not as expected");
 			}
 
 			if (filesystem.getLastUsedPath() != dummyio_curdir + sub_filesystem_relative_root)
 			{
-				throw tc::Exception("Real directory path not as expected");
+				throw tc::TestException("Real directory path not as expected");
 			}
 
 			// record result
@@ -822,15 +822,15 @@ void io_SubFileSystem_TestClass::testOpenFileOutsideSubFileSystem()
 				getWorkingDirectory(mCurDir);
 				if (mode != tc::io::FileMode::Open || access != tc::io::FileAccess::Read)
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect access mode");
+					throw tc::TestException("DummyFileSystem: file had incorrect access mode");
 				}
 				if (path == tc::io::Path("/home/jakcron/source/LibToolChain/testdir/inaccessible_file0"))
 				{
-					throw tc::Exception("DummyFileSystem", "escaped sub filesystem");
+					throw tc::TestException("DummyFileSystem: escaped sub filesystem");
 				}
 				if (path != tc::io::Path("/home/jakcron/source/LibToolChain/testdir/subfilesystem/inaccessible_file0"))
 				{
-					throw tc::Exception("DummyFileSystem", "sub filesystem path was not as expected");
+					throw tc::TestException("DummyFileSystem: sub filesystem path was not as expected");
 				}
 			}
 		};
