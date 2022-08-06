@@ -1,7 +1,7 @@
 #include "io_ConcatenatedStream_TestClass.h"
 #include "StreamTestUtil.h"
 
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include <tc/io/ConcatenatedStream.h>
 #include <tc/io/IOUtil.h>
