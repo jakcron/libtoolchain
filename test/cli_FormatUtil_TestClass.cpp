@@ -1,26 +1,45 @@
 #include "cli_FormatUtil_TestClass.h"
-#include <iostream>
-#include <iomanip>
-#include <sstream>
 
-void cli_FormatUtil_TestClass::runAllTests()
+#include <fmt/format.h>
+
+//---------------------------------------------------------
+
+cli_FormatUtil_TestClass::cli_FormatUtil_TestClass() :
+	mTestTag("tc::cli::FormatUtil"),
+	mTestResults()
 {
-	std::cout << "[tc::cli::FormatUtil] START" << std::endl;
+}
+
+void cli_FormatUtil_TestClass::runAllTests(void)
+{
 	testHexStringToBytes();
 	testFormatBytesAsString();
 	testFormatBytesAsStringWithLineLimit();
 	testFormatListWithLineLimit();
 	testFormatBytesAsHxdHexString();
-	std::cout << "[tc::cli::FormatUtil] END" << std::endl;
 }
+
+const std::string& cli_FormatUtil_TestClass::getTestTag() const
+{
+	return mTestTag;
+}
+
+const std::vector<ITestClass::TestResult>& cli_FormatUtil_TestClass::getTestResults() const
+{
+	return mTestResults;
+}
+
+//---------------------------------------------------------
 
 void cli_FormatUtil_TestClass::testHexStringToBytes()
 {
-	std::cout << "[tc::cli::FormatUtil] testHexStringToBytes : " << std::flush;
-	try
-	{
-		std::stringstream ss;
+	TestResult test;
+	test.test_name = "testHexStringToBytes";
+	test.result = "NOT RUN";
+	test.comments = "";
 
+	try 
+	{
 		struct TestCase
 		{
 			std::string test_name;
@@ -88,32 +107,45 @@ void cli_FormatUtil_TestClass::testHexStringToBytes()
 
 			if (out.size() != test->out_data.size())
 			{
-				ss << "Test(" << test->test_name << ") to convert str(" << test->in_string << ") returned ByteData with wrong size: " << out.size() << " (should be: " << test->out_data.size() << ")";
-				throw tc::Exception(ss.str());
+				throw tc::TestException(fmt::format("Test({:s}) to convert str({:s}) returned ByteData with wrong size: {:d} (should be: {:d})", test->test_name, test->in_string, out.size(), test->out_data.size()));
 			}
 
 			if (out.size() != 0 && memcmp(out.data(), test->out_data.data(), out.size()) != 0)
 			{
-				ss << "Test(" << test->test_name << ") to convert str(" << test->in_string << ") returned ByteData with wrong data";
-				throw tc::Exception(ss.str());
+				throw tc::TestException(fmt::format("Test({:s}) to convert str({:s}) returned ByteData with wrong data", test->test_name, test->in_string));
 			}
 		}
 
-		std::cout << "PASS" << std::endl;
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl; 
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void cli_FormatUtil_TestClass::testFormatBytesAsString()
 {
-	std::cout << "[tc::cli::FormatUtil] testFormatBytesAsString : " << std::flush;
-	try
-	{
-		std::stringstream ss;
+	TestResult test;
+	test.test_name = "testFormatBytesAsString";
+	test.result = "NOT RUN";
+	test.comments = "";
 
+	try 
+	{
 		// test recipe
 		struct TestCase
 		{
@@ -144,26 +176,40 @@ void cli_FormatUtil_TestClass::testFormatBytesAsString()
 
 			if (res != test->out_string)
 			{
-				ss << "Test(" << test->test_name << ") Failed to format data correctly. Output: \"" << res << "\", Expected: \"" << test->out_string << "\"";
-				throw tc::Exception(ss.str());
+				throw tc::TestException(fmt::format("Test({:s}) Failed to format data correctly. Output: \"{:s}\", Expected: \"{:s}\"", test->test_name, res, test->out_string));
 			}
 		}
 
-		std::cout << "PASS" << std::endl;
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl; 
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void cli_FormatUtil_TestClass::testFormatBytesAsStringWithLineLimit()
 {
-	std::cout << "[tc::cli::FormatUtil] testFormatBytesAsStringWithLineLimit : " << std::flush;
-	try
-	{
-		std::stringstream ss;
+	TestResult test;
+	test.test_name = "testFormatBytesAsStringWithLineLimit";
+	test.result = "NOT RUN";
+	test.comments = "";
 
+	try 
+	{
 		// test recipe
 		struct TestCase
 		{
@@ -207,26 +253,40 @@ void cli_FormatUtil_TestClass::testFormatBytesAsStringWithLineLimit()
 					expected.replace(pos, 1, "\\n");
 				}
 				
-				ss << "Test(" << test->test_name << ") Failed to format data correctly. Output: \"" << res << "\", Expected: \"" << expected << "\"";
-				throw tc::Exception(ss.str());
+				throw tc::TestException(fmt::format("Test({:s}) Failed to format data correctly. Output: \"{:s}\", Expected: \"{:s}\"", test->test_name, res, expected));
 			}
 		}
 
-		std::cout << "PASS" << std::endl;
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl; 
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void cli_FormatUtil_TestClass::testFormatListWithLineLimit()
 {
-	std::cout << "[tc::cli::FormatUtil] testFormatListWithLineLimit : " << std::flush;
-	try
-	{
-		std::stringstream ss;
+	TestResult test;
+	test.test_name = "testFormatListWithLineLimit";
+	test.result = "NOT RUN";
+	test.comments = "";
 
+	try 
+	{
 		// test recipe
 		struct TestCase
 		{
@@ -273,26 +333,40 @@ void cli_FormatUtil_TestClass::testFormatListWithLineLimit()
 					expected.replace(pos, 1, "\\n");
 				}
 				
-				ss << "Test(" << test->test_name << ") Failed to format data correctly. Output: \"" << res << "\", Expected: \"" << expected << "\"";
-				throw tc::Exception(ss.str());
+				throw tc::TestException(fmt::format("Test({:s}) Failed to format data correctly. Output: \"{:s}\", Expected: \"{:s}\"", test->test_name, res, expected));
 			}
 		}
 
-		std::cout << "PASS" << std::endl;
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl; 
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void cli_FormatUtil_TestClass::testFormatBytesAsHxdHexString()
 {
-	std::cout << "[tc::cli::FormatUtil] testFormatBytesAsHxdHexString : " << std::flush;
-	try
-	{
-		std::stringstream ss;
+	TestResult test;
+	test.test_name = "testFormatBytesAsHxdHexString";
+	test.result = "NOT RUN";
+	test.comments = "";
 
+	try 
+	{
 		// test recipe
 		struct TestCase
 		{
@@ -352,15 +426,27 @@ void cli_FormatUtil_TestClass::testFormatBytesAsHxdHexString()
 					expected.replace(pos, 1, "\\n");
 				}
 				
-				ss << "Test(" << test->test_name << ") Failed to format data correctly. Output: \"" << res << "\", Expected: \"" << expected << "\"";
-				throw tc::Exception(ss.str());
+				throw tc::TestException(fmt::format("Test({:s}) Failed to format data correctly. Output: \"{:s}\", Expected: \"{:s}\"", test->test_name, res, expected));
 			}
 		}
 
-		std::cout << "PASS" << std::endl;
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		std::cout << "FAIL (" << e.error() << ")" << std::endl; 
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }

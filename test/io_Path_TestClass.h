@@ -6,8 +6,20 @@
 class io_Path_TestClass : public ITestClass
 {
 public:
+	io_Path_TestClass();
+
+		// this will run the tests
 	void runAllTests();
+
+		// this is the label for this test (for filtering purposes)
+	const std::string& getTestTag() const;
+
+		// this is where the test results are written
+	const std::vector<ITestClass::TestResult>& getTestResults() const;
 private:
+	std::string mTestTag;
+	std::vector<TestResult> mTestResults;
+
 	void test_Constructor_Default();
 	void test_Constructor_InitializerList();
 	void test_Constructor_u8string();

@@ -6,8 +6,20 @@
 class io_ConcatenatedStream_TestClass : public ITestClass
 {
 public:
+	io_ConcatenatedStream_TestClass();
+
+		// this will run the tests
 	void runAllTests();
+
+		// this is the label for this test (for filtering purposes)
+	const std::string& getTestTag() const;
+
+		// this is where the test results are written
+	const std::vector<ITestClass::TestResult>& getTestResults() const;
 private:
+	std::string mTestTag;
+	std::vector<TestResult> mTestResults;
+
 	/*
 	test plan:
 	1) Ensure default constructor creates an object that return 0/false for property methods and throw tc::ObjectDisposedException for actions other than dispose

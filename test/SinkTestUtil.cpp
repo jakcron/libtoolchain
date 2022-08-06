@@ -1,4 +1,5 @@
 #include "SinkTestUtil.h"
+#include "TestException.h"
 #include <fmt/format.h>
 
 const std::string SinkTestUtil::DummySinkBase::kClassName = "DummySinkBase";
@@ -67,17 +68,17 @@ size_t SinkTestUtil::DummySinkTestablePushData::pushData(const tc::ByteData& dat
 {
 	if (offset != *expected_offset)
 	{
-		throw tc::Exception(fmt::format("pushData() was called on base_sink with offset {:d}, when it should have been {:d}.", offset, *expected_offset));
+		throw tc::TestException(fmt::format("pushData() was called on base_sink with offset {:d}, when it should have been {:d}.", offset, *expected_offset));
 	}
 
 	if (data.size() != expected_data->size())
 	{
-		throw tc::Exception(fmt::format("pushData() passed a ByteData to base_sink with size {:d}, when it should have been {:d}.", data.size(), expected_data->size()));
+		throw tc::TestException(fmt::format("pushData() passed a ByteData to base_sink with size {:d}, when it should have been {:d}.", data.size(), expected_data->size()));
 	}
 
 	if (memcmp(data.data(), expected_data->data(), data.size()) != 0)
 	{
-		throw tc::Exception("ByteData pushed to base sink did not have expected data.");
+		throw tc::TestException("ByteData pushed to base sink did not have expected data.");
 	}
 
 	return data.size();

@@ -1,4 +1,5 @@
 #include "StreamTestUtil.h"
+#include "TestException.h"
 #include <fmt/format.h>
 #include <tc/cli.h>
 
@@ -14,27 +15,27 @@ void StreamTestUtil::constructor_TestHelper(tc::io::IStream& stream, int64_t str
 
 	if (length_res != stream_length)
 	{		
-		throw tc::Exception(fmt::format("Stream did not have length {:d} (actual {:d})", stream_length, length_res));
+		throw tc::TestException(fmt::format("Stream did not have length {:d} (actual {:d})", stream_length, length_res));
 	}
 
 	if (pos_res != exp_pos_res)
 	{
-		throw tc::Exception(fmt::format("Stream did not have position {:d} (actual {:d})", exp_pos_res, pos_res));
+		throw tc::TestException(fmt::format("Stream did not have position {:d} (actual {:d})", exp_pos_res, pos_res));
 	}
 
 	if (can_read != exp_canread_res)
 	{
-		throw tc::Exception(fmt::format("Stream property canRead() was not {} (actual {})", exp_canread_res, can_read));
+		throw tc::TestException(fmt::format("Stream property canRead() was not {} (actual {})", exp_canread_res, can_read));
 	}
 
 	if (can_write != exp_canwrite_res)
 	{
-		throw tc::Exception(fmt::format("Stream property canWrite() was not {} (actual {})", exp_canwrite_res, can_write));
+		throw tc::TestException(fmt::format("Stream property canWrite() was not {} (actual {})", exp_canwrite_res, can_write));
 	}
 
 	if (can_seek != exp_canseek_res)
 	{
-		throw tc::Exception(fmt::format("Stream property canSeek() was not {} (actual {})", exp_canseek_res, can_seek));
+		throw tc::TestException(fmt::format("Stream property canSeek() was not {} (actual {})", exp_canseek_res, can_seek));
 	}
 }
 
@@ -45,12 +46,12 @@ void StreamTestUtil::seek_TestHelper(tc::io::IStream& stream, int64_t seek_offse
 
 	if (seek_res != exp_seek_res)
 	{
-		throw tc::Exception(fmt::format("Stream did not return position from seek {:d} (actual {:d})", exp_seek_res, seek_res));
+		throw tc::TestException(fmt::format("Stream did not return position from seek {:d} (actual {:d})", exp_seek_res, seek_res));
 	}
 
 	if (pos_res != exp_pos_res)
 	{
-		throw tc::Exception(fmt::format("Stream did not have position {:d} (actual {:d})", exp_pos_res, pos_res));
+		throw tc::TestException(fmt::format("Stream did not have position {:d} (actual {:d})", exp_pos_res, pos_res));
 	}
 }
 
@@ -70,19 +71,19 @@ void StreamTestUtil::read_TestHelper(tc::io::IStream& stream, int64_t seek_offse
 	// validate read result
 	if (read_res != exp_read_res)
 	{
-		throw tc::Exception(fmt::format("Stream did not read expected number of bytes {:d} (actual {:d})", exp_read_res, read_res));
+		throw tc::TestException(fmt::format("Stream did not read expected number of bytes {:d} (actual {:d})", exp_read_res, read_res));
 	}
 	
 	// validate read data
 	if (expected_data != nullptr && memcmp(data.data(), expected_data, exp_read_res) != 0)
 	{
-		throw tc::Exception(fmt::format("Stream did not read expected bytes (read: \"{}\", expected: \"{}\"", tc::cli::FormatUtil::formatBytesAsString(data.data(), data.size(), true, ""), tc::cli::FormatUtil::formatBytesAsString(expected_data, exp_read_res, true, "")));
+		throw tc::TestException(fmt::format("Stream did not read expected bytes (read: \"{}\", expected: \"{}\"", tc::cli::FormatUtil::formatBytesAsString(data.data(), data.size(), true, ""), tc::cli::FormatUtil::formatBytesAsString(expected_data, exp_read_res, true, "")));
 	}
 
 	// validate pos result
 	if (pos_res != exp_pos_res)
 	{
-		throw tc::Exception(fmt::format("Stream did not have position {:d} (actual {:d})", exp_pos_res, pos_res));
+		throw tc::TestException(fmt::format("Stream did not have position {:d} (actual {:d})", exp_pos_res, pos_res));
 	}
 }
 
@@ -108,7 +109,7 @@ void StreamTestUtil::write_TestHelper(tc::io::IStream& stream, int64_t seek_offs
 	// validate pos result
 	if (pos_res != exp_pos_res)
 	{
-		throw tc::Exception(fmt::format("Stream did not have position {:d} (actual {:d})", exp_pos_res, pos_res));
+		throw tc::TestException(fmt::format("Stream did not have position {:d} (actual {:d})", exp_pos_res, pos_res));
 	}
 }
 
@@ -120,6 +121,6 @@ void StreamTestUtil::write_TestHelper(tc::io::IStream& stream, int64_t seek_offs
 	int64_t length_res = stream.length();
 	if (length_res != exp_length_res)
 	{
-		throw tc::Exception(fmt::format("Stream did not have length {:d} (actual {:d})", exp_length_res, length_res));
+		throw tc::TestException(fmt::format("Stream did not have length {:d} (actual {:d})", exp_length_res, length_res));
 	}
 }

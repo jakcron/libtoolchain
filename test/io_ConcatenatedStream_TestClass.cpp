@@ -1,14 +1,21 @@
 #include "io_ConcatenatedStream_TestClass.h"
-
-#include <fmt/core.h>
 #include "StreamTestUtil.h"
 
-#include <tc.h>
+#include <fmt/core.h>
+
+#include <tc/io/ConcatenatedStream.h>
 #include <tc/io/IOUtil.h>
+
+//---------------------------------------------------------
+
+io_ConcatenatedStream_TestClass::io_ConcatenatedStream_TestClass() :
+	mTestTag("tc::io::ConcatenatedStream"),
+	mTestResults()
+{
+}
 
 void io_ConcatenatedStream_TestClass::runAllTests(void)
 {
-	fmt::print("[tc::io::ConcatenatedStream] START\n");
 	test_DefaultConstructor();
 	test_CreateConstructor_ThrowsOnBadInput();
 	test_CreateConstructor_SetsCorrectStreamState();
@@ -33,12 +40,27 @@ void io_ConcatenatedStream_TestClass::runAllTests(void)
 	test_MoveOperator_MoveInitializedToInitialized();
 	test_MoveConstructor_MoveDisposed();
 	test_MoveConstructor_MoveInitialized();
-	fmt::print("[tc::io::ConcatenatedStream] END\n");
 }
+
+const std::string& io_ConcatenatedStream_TestClass::getTestTag() const
+{
+	return mTestTag;
+}
+
+const std::vector<ITestClass::TestResult>& io_ConcatenatedStream_TestClass::getTestResults() const
+{
+	return mTestResults;
+}
+
+//---------------------------------------------------------
 
 void io_ConcatenatedStream_TestClass::test_DefaultConstructor()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_DefaultConstructor : ");
+	TestResult test;
+	test.test_name = "test_DefaultConstructor";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		tc::io::ConcatenatedStream stream = tc::io::ConcatenatedStream();
@@ -49,68 +71,86 @@ void io_ConcatenatedStream_TestClass::test_DefaultConstructor()
 		try
 		{
 			stream.read(nullptr, 0);
-			throw tc::Exception(".read() failed to throw tc::ObjectDisposedException when class was not initilaized.");
+			throw tc::TestException(".read() failed to throw tc::ObjectDisposedException when class was not initilaized.");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".read() threw the wrong exception when class was not initilaized.");
 		}
 
 		try
 		{
 			stream.write(nullptr, 0);
-			throw tc::Exception(".write() failed to throw tc::ObjectDisposedException when class was not initilaized.");
+			throw tc::TestException(".write() failed to throw tc::ObjectDisposedException when class was not initilaized.");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".write() threw the wrong exception when class was not initilaized.");
 		}
 
 		try
 		{
 			stream.seek(0, tc::io::SeekOrigin::Begin);
-			throw tc::Exception(".seek() failed to throw tc::ObjectDisposedException when class was not initilaized.");
+			throw tc::TestException(".seek() failed to throw tc::ObjectDisposedException when class was not initilaized.");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".seek() threw the wrong exception when class was not initilaized.");
 		}
 
 		try
 		{
 			stream.setLength(0);
-			throw tc::Exception(".setLength() failed to throw tc::ObjectDisposedException when class was not initilaized.");
+			throw tc::TestException(".setLength() failed to throw tc::ObjectDisposedException when class was not initilaized.");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".setLength() threw the wrong exception when class was not initilaized.");
 		}
 
 		try
 		{
 			stream.flush();
-			throw tc::Exception(".flush() failed to throw tc::ObjectDisposedException when class was not initilaized.");
+			throw tc::TestException(".flush() failed to throw tc::ObjectDisposedException when class was not initilaized.");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".flush() threw the wrong exception when class was not initilaized.");
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_CreateConstructor_ThrowsOnBadInput()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_CreateConstructor_ThrowsOnBadInput : ");
+	TestResult test;
+	test.test_name = "test_CreateConstructor_ThrowsOnBadInput";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		try
@@ -121,11 +161,12 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_ThrowsOnBadInput()
 
 			tc::io::ConcatenatedStream stream = tc::io::ConcatenatedStream(streams);
 			
-			throw tc::Exception(".ctor() did not throw tc::NotSupportedException where there were no input streams");
+			throw tc::TestException(".ctor() did not throw tc::NotSupportedException where there were no input streams");
 		}
-		catch (tc::NotSupportedException&)
+		catch (tc::NotSupportedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".ctor() threw the wrong exception where there were no input streams");
 		}
 
 		try
@@ -138,11 +179,12 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_ThrowsOnBadInput()
 
 			tc::io::ConcatenatedStream stream = tc::io::ConcatenatedStream(streams);
 			
-			throw tc::Exception(".ctor() did not throw tc::NotSupportedException where there were null input streams");
+			throw tc::TestException(".ctor() did not throw tc::NotSupportedException where there were null input streams");
 		}
-		catch (tc::NotSupportedException&)
+		catch (tc::NotSupportedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".ctor() threw the wrong exception where there were null input streams");
 		}
 
 		try
@@ -155,11 +197,12 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_ThrowsOnBadInput()
 
 			tc::io::ConcatenatedStream stream = tc::io::ConcatenatedStream(streams);
 			
-			throw tc::Exception(".ctor() did not throw tc::NotSupportedException where there total length of input streams was 0.");
+			throw tc::TestException(".ctor() did not throw tc::NotSupportedException where there total length of input streams was 0.");
 		}
-		catch (tc::NotSupportedException&)
+		catch (tc::NotSupportedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".ctor() threw the wrong exception where there total length of input streams was 0.");
 		}
 
 		try
@@ -172,28 +215,42 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_ThrowsOnBadInput()
 
 			tc::io::ConcatenatedStream stream = tc::io::ConcatenatedStream(streams);
 			
-			throw tc::Exception(".ctor() did not throw tc::NotSupportedException where the input streams did not all support atleast either read or write.");
+			throw tc::TestException(".ctor() did not throw tc::NotSupportedException where the input streams did not all support atleast either read or write.");
 		}
-		catch (tc::NotSupportedException&)
+		catch (tc::NotSupportedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".ctor() threw the wrong exception where the input streams did not all support atleast either read or write.");
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_CreateConstructor_SetsCorrectStreamState()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_CreateConstructor_SetsCorrectStreamState : ");
+	TestResult test;
+	test.test_name = "test_CreateConstructor_SetsCorrectStreamState";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		// test 1) (all input streams, length=0x100, canRead=true, canWrite=false, canSeek=false)
@@ -209,9 +266,9 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_SetsCorrectStreamSt
 
 			StreamTestUtil::constructor_TestHelper(stream, 0x300, 0, true, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("Test 1 Failed: {}", e.error()));
+			throw tc::TestException(fmt::format("Test 1 Failed: {}", e.what()));
 		}
 
 		// test 2) (all input streams, length=0x100, canRead=true, canWrite=mixed, canSeek=false)
@@ -227,9 +284,9 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_SetsCorrectStreamSt
 
 			StreamTestUtil::constructor_TestHelper(stream, 0x300, 0, true, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("Test 2 Failed: {}", e.error()));
+			throw tc::TestException(fmt::format("Test 2 Failed: {}", e.what()));
 		}
 
 		// test 3) (all input streams, length=0x100, canRead=true, canWrite=true, canSeek=false)
@@ -245,9 +302,9 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_SetsCorrectStreamSt
 
 			StreamTestUtil::constructor_TestHelper(stream, 0x300, 0, true, true, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("Test 3 Failed: {}", e.error()));
+			throw tc::TestException(fmt::format("Test 3 Failed: {}", e.what()));
 		}
 
 		// test 4) (all input streams, length=0x100, canRead=true, canWrite=true, canSeek=mixed)
@@ -263,9 +320,9 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_SetsCorrectStreamSt
 
 			StreamTestUtil::constructor_TestHelper(stream, 0x300, 0, true, true, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("Test 4 Failed: {}", e.error()));
+			throw tc::TestException(fmt::format("Test 4 Failed: {}", e.what()));
 		}
 
 		// test 5) (all input streams, length=0x100, canRead=true, canWrite=true, canSeek=true)
@@ -281,9 +338,9 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_SetsCorrectStreamSt
 
 			StreamTestUtil::constructor_TestHelper(stream, 0x300, 0, true, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("Test 5 Failed: {}", e.error()));
+			throw tc::TestException(fmt::format("Test 5 Failed: {}", e.what()));
 		}
 
 		// test 6) (all input streams, length=0x100, canRead=mixed, canWrite=true, canSeek=true)
@@ -299,9 +356,9 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_SetsCorrectStreamSt
 
 			StreamTestUtil::constructor_TestHelper(stream, 0x300, 0, false, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("Test 6 Failed: {}", e.error()));
+			throw tc::TestException(fmt::format("Test 6 Failed: {}", e.what()));
 		}
 
 		// test 7) (all input streams, length=0x100, canRead=false, canWrite=true, canSeek=true)
@@ -317,9 +374,9 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_SetsCorrectStreamSt
 
 			StreamTestUtil::constructor_TestHelper(stream, 0x300, 0, false, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("Test 7 Failed: {}", e.error()));
+			throw tc::TestException(fmt::format("Test 7 Failed: {}", e.what()));
 		}
 
 		// test 8) (all input streams, length=0x100, canRead=false, canWrite=true, canSeek=mixed)
@@ -335,9 +392,9 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_SetsCorrectStreamSt
 
 			StreamTestUtil::constructor_TestHelper(stream, 0x300, 0, false, true, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("Test 8 Failed: {}", e.error()));
+			throw tc::TestException(fmt::format("Test 8 Failed: {}", e.what()));
 		}
 
 		// test 9) (all input streams, length=0x100, canRead=false, canWrite=true, canSeek=false)
@@ -353,9 +410,9 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_SetsCorrectStreamSt
 
 			StreamTestUtil::constructor_TestHelper(stream, 0x300, 0, false, true, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("Test 9 Failed: {}", e.error()));
+			throw tc::TestException(fmt::format("Test 9 Failed: {}", e.what()));
 		}
 
 		// test 10) (all input streams, length=0x100, canRead=true, canWrite=true, canSeek=true) & one empty stream with only read
@@ -372,9 +429,9 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_SetsCorrectStreamSt
 
 			StreamTestUtil::constructor_TestHelper(stream, 0x300, 0, true, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("Test 10 Failed: {}", e.error()));
+			throw tc::TestException(fmt::format("Test 10 Failed: {}", e.what()));
 		}
 
 		// test 11) (all input streams, length=0x100, canRead=true, canWrite=true, canSeek=true) & one populated stream with only no read/write
@@ -391,9 +448,9 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_SetsCorrectStreamSt
 
 			StreamTestUtil::constructor_TestHelper(stream, 0x300, 0, true, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("Test 11 Failed: {}", e.error()));
+			throw tc::TestException(fmt::format("Test 11 Failed: {}", e.what()));
 		}
 
 		// test 12) (all input streams, length=0x100, canRead=true, canWrite=true, canSeek=true) & one nullptr stream
@@ -410,26 +467,39 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_SetsCorrectStreamSt
 
 			StreamTestUtil::constructor_TestHelper(stream, 0x300, 0, true, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("Test 12 Failed: {}", e.error()));
+			throw tc::TestException(fmt::format("Test 12 Failed: {}", e.what()));
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_setLength_ThrowsOnUse()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_setLength_ThrowsOnUse : ");
+	TestResult test;
+	test.test_name = "test_setLength_ThrowsOnUse";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		std::vector<std::shared_ptr<tc::io::IStream>> streams {
@@ -443,29 +513,43 @@ void io_ConcatenatedStream_TestClass::test_setLength_ThrowsOnUse()
 		try
 		{
 			stream.setLength(0);
-			throw tc::Exception(".setLength() did not throw tc::NotImplementedException when called from an initalized class.");
+			throw tc::TestException(".setLength() did not throw tc::NotImplementedException when called from an initalized class.");
 		}
-		catch (const tc::NotImplementedException&)
+		catch (const tc::NotImplementedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".setLength() threw the wrong exception when called from an initalized class.");
 		}
 		
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_read_ThrowsOnUnsupported()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_read_ThrowsOnUnsupported : ");
+	TestResult test;
+	test.test_name = "test_read_ThrowsOnUnsupported";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		
@@ -480,29 +564,43 @@ void io_ConcatenatedStream_TestClass::test_read_ThrowsOnUnsupported()
 		try
 		{
 			stream.read(nullptr, 0);
-			throw tc::Exception(".read() did not throw tc::NotSupportedException when canRead() == false.");
+			throw tc::TestException(".read() did not throw tc::NotSupportedException when canRead() == false.");
 		}
-		catch (const tc::NotSupportedException&)
+		catch (const tc::NotSupportedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".read() threw the wrong exception when canRead() == false.");
 		}
 		
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_write_ThrowsOnUnsupported()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_write_ThrowsOnUnsupported : ");
+	TestResult test;
+	test.test_name = "test_write_ThrowsOnUnsupported";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		
@@ -517,29 +615,43 @@ void io_ConcatenatedStream_TestClass::test_write_ThrowsOnUnsupported()
 		try
 		{
 			stream.write(nullptr, 0);
-			throw tc::Exception(".write() did not throw tc::NotSupportedException when canWrite() == false.");
+			throw tc::TestException(".write() did not throw tc::NotSupportedException when canWrite() == false.");
 		}
-		catch (const tc::NotSupportedException&)
+		catch (const tc::NotSupportedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".write() threw the wrong exception when canWrite() == false.");
 		}
 		
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_seek_ThrowsOnUnsupported()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_seek_ThrowsOnUnsupported : ");
+	TestResult test;
+	test.test_name = "test_seek_ThrowsOnUnsupported";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		
@@ -554,29 +666,43 @@ void io_ConcatenatedStream_TestClass::test_seek_ThrowsOnUnsupported()
 		try
 		{
 			stream.seek(0, tc::io::SeekOrigin::Begin);
-			throw tc::Exception(".seek() did not throw tc::NotSupportedException when canSeek() == false.");
+			throw tc::TestException(".seek() did not throw tc::NotSupportedException when canSeek() == false.");
 		}
-		catch (const tc::NotSupportedException&)
+		catch (const tc::NotSupportedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".seek() threw the wrong exception when canSeek() == false.");
 		}
 		
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_seek_SeeksToBeginOnNegativeSeek()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_seek_SeeksToBeginOnNegativeSeek : ");
+	TestResult test;
+	test.test_name = "test_seek_SeeksToBeginOnNegativeSeek";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class ValidateSeekParamDummyStream : public StreamTestUtil::DummyStreamBase
@@ -592,7 +718,7 @@ void io_ConcatenatedStream_TestClass::test_seek_SeeksToBeginOnNegativeSeek()
 			{
 				if (offset != mExpectedSeekOffset)
 				{
-					throw tc::Exception(fmt::format("offset passed to seek() was 0x{:x} (expected 0x{:x}", offset, mExpectedSeekOffset));
+					throw tc::TestException(fmt::format("offset passed to seek() was 0x{:x} (expected 0x{:x}", offset, mExpectedSeekOffset));
 				}
 
 				if (origin != mExpectedSeekOrigin)
@@ -625,7 +751,7 @@ void io_ConcatenatedStream_TestClass::test_seek_SeeksToBeginOnNegativeSeek()
 						break;
 					}
 
-					throw tc::Exception(fmt::format("origin passed to seek() was {:s} (expected {:s}", origin_str, expected_origin_str));
+					throw tc::TestException(fmt::format("origin passed to seek() was {:s} (expected {:s}", origin_str, expected_origin_str));
 				}
 
 				return DummyStreamBase::seek(offset, origin);
@@ -662,25 +788,38 @@ void io_ConcatenatedStream_TestClass::test_seek_SeeksToBeginOnNegativeSeek()
 			int64_t seek_res = stream.seek(test->seek_pos, tc::io::SeekOrigin::Begin);
 			if (seek_res != test->exp_seek_res)
 			{
-				throw tc::Exception(fmt::format(".seek({}, tc::io::SeekOrigin::Begin) returned {} (expected {})", test->seek_pos, seek_res, test->exp_seek_res));
+				throw tc::TestException(fmt::format(".seek({}, tc::io::SeekOrigin::Begin) returned {} (expected {})", test->seek_pos, seek_res, test->exp_seek_res));
 			}
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_seek_SeeksToEndOnTooLargeSeek()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_seek_SeeksToEndOnTooLargeSeek : ");
+	TestResult test;
+	test.test_name = "test_seek_SeeksToEndOnTooLargeSeek";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class ValidateSeekParamDummyStream : public StreamTestUtil::DummyStreamBase
@@ -696,7 +835,7 @@ void io_ConcatenatedStream_TestClass::test_seek_SeeksToEndOnTooLargeSeek()
 			{
 				if (offset != mExpectedSeekOffset)
 				{
-					throw tc::Exception(fmt::format("offset passed to seek() was 0x{:x} (expected 0x{:x}", offset, mExpectedSeekOffset));
+					throw tc::TestException(fmt::format("offset passed to seek() was 0x{:x} (expected 0x{:x}", offset, mExpectedSeekOffset));
 				}
 
 				if (origin != mExpectedSeekOrigin)
@@ -729,7 +868,7 @@ void io_ConcatenatedStream_TestClass::test_seek_SeeksToEndOnTooLargeSeek()
 						break;
 					}
 
-					throw tc::Exception(fmt::format("origin passed to seek() was {:s} (expected {:s}", origin_str, expected_origin_str));
+					throw tc::TestException(fmt::format("origin passed to seek() was {:s} (expected {:s}", origin_str, expected_origin_str));
 				}
 
 				return DummyStreamBase::seek(offset, origin);
@@ -766,25 +905,38 @@ void io_ConcatenatedStream_TestClass::test_seek_SeeksToEndOnTooLargeSeek()
 			int64_t seek_res = stream.seek(test->seek_pos, tc::io::SeekOrigin::Begin);
 			if (seek_res != test->exp_seek_res)
 			{
-				throw tc::Exception(fmt::format(".seek({}, tc::io::SeekOrigin::Begin) returned {} (expected {})", test->seek_pos, seek_res, test->exp_seek_res));
+				throw tc::TestException(fmt::format(".seek({}, tc::io::SeekOrigin::Begin) returned {} (expected {})", test->seek_pos, seek_res, test->exp_seek_res));
 			}
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_seek_CanFindCorrectStreamForSeek()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_seek_CanFindCorrectStreamForSeek : ");
+	TestResult test;
+	test.test_name = "test_seek_CanFindCorrectStreamForSeek";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		struct SeekReport
@@ -860,30 +1012,43 @@ void io_ConcatenatedStream_TestClass::test_seek_CanFindCorrectStreamForSeek()
 			int64_t seek_res = stream.seek(test->seek_pos, tc::io::SeekOrigin::Begin);
 			if (seek_res != test->exp_seek_res)
 			{
-				throw tc::Exception(fmt::format(".seek({}) returned {} (expected {})", test->seek_pos, seek_res, test->exp_seek_res));
+				throw tc::TestException(fmt::format(".seek({}) returned {} (expected {})", test->seek_pos, seek_res, test->exp_seek_res));
 			}
 
 			if (seek_report.seek_pos != test->exp_seek_report.seek_pos || seek_report.stream_id != test->exp_seek_report.stream_id)
 			{
-				throw tc::Exception(fmt::format(".seek({}) triggered .seek({}) in stream {} (expected .seek({}) in stream {})", test->seek_pos, test->exp_seek_report.seek_pos, test->exp_seek_report.stream_id, seek_report.seek_pos, seek_report.stream_id));
+				throw tc::TestException(fmt::format(".seek({}) triggered .seek({}) in stream {} (expected .seek({}) in stream {})", test->seek_pos, test->exp_seek_report.seek_pos, test->exp_seek_report.stream_id, seek_report.seek_pos, seek_report.stream_id));
 			}
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_read_CanReadFromSingleStream()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_read_CanReadFromSingleStream : ");
+	TestResult test;
+	test.test_name = "test_read_CanReadFromSingleStream";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 
 	class ReportDummyStream : public StreamTestUtil::DummyStreamBase
 	{
@@ -1015,30 +1180,43 @@ void io_ConcatenatedStream_TestClass::test_read_CanReadFromSingleStream()
 
 			if (read_report != test->exp_read_report)
 			{
-				throw tc::Exception(fmt::format("Test \"{}\" Failed: .read() issued to base streams were not as expected", test->test_name));
+				throw tc::TestException(fmt::format("Test \"{}\" Failed: .read() issued to base streams were not as expected", test->test_name));
 			}
 
 			if (seek_report != test->exp_seek_report)
 			{
-				throw tc::Exception(fmt::format("Test \"{}\" Failed: .seek() issued to base streams were not as expected", test->test_name));
+				throw tc::TestException(fmt::format("Test \"{}\" Failed: .seek() issued to base streams were not as expected", test->test_name));
 			}
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_read_CanReadFromMultipleStreamWithSeekSupport()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_read_CanReadFromMultipleStreamWithSeekSupport : ");
+	TestResult test;
+	test.test_name = "test_read_CanReadFromMultipleStreamWithSeekSupport";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 
 	class ReportDummyStream : public StreamTestUtil::DummyStreamBase
 	{
@@ -1174,30 +1352,43 @@ void io_ConcatenatedStream_TestClass::test_read_CanReadFromMultipleStreamWithSee
 
 			if (read_report != test->exp_read_report)
 			{
-				throw tc::Exception(fmt::format("Test \"{}\" Failed: .read() issued to base streams were not as expected", test->test_name));
+				throw tc::TestException(fmt::format("Test \"{}\" Failed: .read() issued to base streams were not as expected", test->test_name));
 			}
 
 			if (seek_report != test->exp_seek_report)
 			{
-				throw tc::Exception(fmt::format("Test \"{}\" Failed: .seek() issued to base streams were not as expected", test->test_name));
+				throw tc::TestException(fmt::format("Test \"{}\" Failed: .seek() issued to base streams were not as expected", test->test_name));
 			}
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_read_CanReadFromMultipleStreamWithNoSeekSupport()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_read_CanReadFromMultipleStreamWithNoSeekSupport : ");
+	TestResult test;
+	test.test_name = "test_read_CanReadFromMultipleStreamWithNoSeekSupport";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 
 	class ReportDummyStream : public StreamTestUtil::DummyStreamBase
 	{
@@ -1340,30 +1531,43 @@ void io_ConcatenatedStream_TestClass::test_read_CanReadFromMultipleStreamWithNoS
 				{
 					fmt::print("ReadReport (ptr: 0x{:x}, count: 0x{:x}, stream: {:d})\n", (size_t)itr->read_ptr, itr->read_count, itr->stream_id);
 				}
-				throw tc::Exception(fmt::format("Test \"{}\" Failed: .read() issued to base streams were not as expected", test->test_name));
+				throw tc::TestException(fmt::format("Test \"{}\" Failed: .read() issued to base streams were not as expected", test->test_name));
 			}
 
 			if (seek_report != test->exp_seek_report)
 			{
-				throw tc::Exception(fmt::format("Test \"{}\" Failed: .seek() issued to base streams were not as expected", test->test_name));
+				throw tc::TestException(fmt::format("Test \"{}\" Failed: .seek() issued to base streams were not as expected", test->test_name));
 			}
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_read_ReadFromMultiStream_NoSeekSupport_ThrowsOnSeekRequired()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_read_ReadFromMultiStream_NoSeekSupport_ThrowsOnSeekRequired : ");
+	TestResult test;
+	test.test_name = "test_read_ReadFromMultiStream_NoSeekSupport_ThrowsOnSeekRequired";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 
 	class ReportDummyStream : public StreamTestUtil::DummyStreamBase
 	{
@@ -1451,28 +1655,42 @@ void io_ConcatenatedStream_TestClass::test_read_ReadFromMultiStream_NoSeekSuppor
 		try
 		{
 			stream.read((byte_t*)0x1000, 0x200);
-			throw tc::Exception(".read() did not throw tc::io::IOException where stream required seeking to begining but did not support seeking.");
+			throw tc::TestException(".read() did not throw tc::io::IOException where stream required seeking to begining but did not support seeking.");
 		}
-		catch (const tc::io::IOException&)
+		catch (const tc::io::IOException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".read() threw the wrong exception where stream required seeking to begining but did not support seeking.");
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_write_CanWriteFromSingleStream()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_write_CanWriteFromSingleStream : ");
+	TestResult test;
+	test.test_name = "test_write_CanWriteFromSingleStream";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 
 	class ReportDummyStream : public StreamTestUtil::DummyStreamBase
 	{
@@ -1604,30 +1822,43 @@ void io_ConcatenatedStream_TestClass::test_write_CanWriteFromSingleStream()
 
 			if (write_report != test->exp_write_report)
 			{
-				throw tc::Exception(fmt::format("Test \"{}\" Failed: .write() issued to base streams were not as expected", test->test_name));
+				throw tc::TestException(fmt::format("Test \"{}\" Failed: .write() issued to base streams were not as expected", test->test_name));
 			}
 
 			if (seek_report != test->exp_seek_report)
 			{
-				throw tc::Exception(fmt::format("Test \"{}\" Failed: .seek() issued to base streams were not as expected", test->test_name));
+				throw tc::TestException(fmt::format("Test \"{}\" Failed: .seek() issued to base streams were not as expected", test->test_name));
 			}
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_write_CanWriteFromMultipleStreamWithSeekSupport()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_write_CanWriteFromMultipleStreamWithSeekSupport : ");
+	TestResult test;
+	test.test_name = "test_write_CanWriteFromMultipleStreamWithSeekSupport";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 
 	class ReportDummyStream : public StreamTestUtil::DummyStreamBase
 	{
@@ -1763,30 +1994,43 @@ void io_ConcatenatedStream_TestClass::test_write_CanWriteFromMultipleStreamWithS
 
 			if (write_report != test->exp_write_report)
 			{
-				throw tc::Exception(fmt::format("Test \"{}\" Failed: .write() issued to base streams were not as expected", test->test_name));
+				throw tc::TestException(fmt::format("Test \"{}\" Failed: .write() issued to base streams were not as expected", test->test_name));
 			}
 
 			if (seek_report != test->exp_seek_report)
 			{
-				throw tc::Exception(fmt::format("Test \"{}\" Failed: .seek() issued to base streams were not as expected", test->test_name));
+				throw tc::TestException(fmt::format("Test \"{}\" Failed: .seek() issued to base streams were not as expected", test->test_name));
 			}
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_write_CanWriteFromMultipleStreamWithNoSeekSupport()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_write_CanWriteFromMultipleStreamWithNoSeekSupport : ");
+	TestResult test;
+	test.test_name = "test_write_CanWriteFromMultipleStreamWithNoSeekSupport";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 
 	class ReportDummyStream : public StreamTestUtil::DummyStreamBase
 	{
@@ -1929,30 +2173,43 @@ void io_ConcatenatedStream_TestClass::test_write_CanWriteFromMultipleStreamWithN
 				{
 					fmt::print("WriteReport (ptr: 0x{:x}, count: 0x{:x}, stream: {:d})\n", (size_t)itr->write_ptr, itr->write_count, itr->stream_id);
 				}
-				throw tc::Exception(fmt::format("Test \"{}\" Failed: .write() issued to base streams were not as expected", test->test_name));
+				throw tc::TestException(fmt::format("Test \"{}\" Failed: .write() issued to base streams were not as expected", test->test_name));
 			}
 
 			if (seek_report != test->exp_seek_report)
 			{
-				throw tc::Exception(fmt::format("Test \"{}\" Failed: .seek() issued to base streams were not as expected", test->test_name));
+				throw tc::TestException(fmt::format("Test \"{}\" Failed: .seek() issued to base streams were not as expected", test->test_name));
 			}
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_write_WriteFromMultiStream_NoSeekSupport_ThrowsOnSeekRequired()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_write_WriteFromMultiStream_NoSeekSupport_ThrowsOnSeekRequired : ");
+	TestResult test;
+	test.test_name = "test_write_WriteFromMultiStream_NoSeekSupport_ThrowsOnSeekRequired";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 
 	class ReportDummyStream : public StreamTestUtil::DummyStreamBase
 	{
@@ -2040,28 +2297,42 @@ void io_ConcatenatedStream_TestClass::test_write_WriteFromMultiStream_NoSeekSupp
 		try
 		{
 			stream.write((byte_t*)0x1000, 0x200);
-			throw tc::Exception(".write() did not throw tc::io::IOException where stream required seeking to begining but did not support seeking.");
+			throw tc::TestException(".write() did not throw tc::io::IOException where stream required seeking to begining but did not support seeking.");
 		}
-		catch (const tc::io::IOException&)
+		catch (const tc::io::IOException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException(".write() threw the wrong exception where stream required seeking to begining but did not support seeking.");
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToDisposed()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_MoveOperator_MoveDisposedToDisposed : ");
+	TestResult test;
+	test.test_name = "test_MoveOperator_MoveDisposedToDisposed";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		// create streams a and b (both disposed)
@@ -2073,18 +2344,19 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToDisposed()
 		{
 			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_a had wrong properies after default .ctor() ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_a had wrong properies after default .ctor() ({})", e.what()));
 		}
 		try
 		{
 			stream_a.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_a was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_a was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_a was disposed upon construction, but threw the wrong exception when seek() was called");
 		}
 
 		// ensure stream b had valid properties to begin with
@@ -2092,18 +2364,19 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToDisposed()
 		{
 			StreamTestUtil::constructor_TestHelper(stream_b, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_b had wrong properies after default .ctor() ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_b had wrong properies after default .ctor() ({})", e.what()));
 		}
 		try
 		{
 			stream_b.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_b was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_b was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_b was disposed upon construction, but threw the wrong exception when seek() was called");
 		}
 
 		// move stream_a to stream_b
@@ -2114,18 +2387,19 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToDisposed()
 		{
 			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.what()));
 		}
 		try
 		{
 			stream_a.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but threw the wrong exception when seek() was called");
 		}
 
 		// ensure stream b had valid properties after being moved to
@@ -2133,35 +2407,49 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToDisposed()
 		{
 			StreamTestUtil::constructor_TestHelper(stream_b, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.what()));
 		}
 		try
 		{
 			stream_b.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_b was disposed upon move assignment from stream_a, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_b was disposed upon move assignment from stream_a, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_b was disposed upon move assignment from stream_a, but threw the wrong exception when seek() was called");
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToDisposed()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_MoveOperator_MoveInitializedToDisposed : ");
+	TestResult test;
+	test.test_name = "test_MoveOperator_MoveInitializedToDisposed";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		std::vector<std::shared_ptr<tc::io::IStream>> streams {
@@ -2179,9 +2467,9 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToDispose
 		{
 			StreamTestUtil::constructor_TestHelper(stream_a, 0x300, 0x0, true, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_a had wrong properies after create .ctor() ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_a had wrong properies after create .ctor() ({})", e.what()));
 		}
 		try
 		{
@@ -2189,7 +2477,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToDispose
 		}
 		catch (const tc::ObjectDisposedException&)
 		{
-			throw tc::Exception("stream_a was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_a was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
 		}
 
 		// ensure stream b had valid properties to begin with
@@ -2197,18 +2485,19 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToDispose
 		{
 			StreamTestUtil::constructor_TestHelper(stream_b, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_b had wrong properies after default .ctor() ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_b had wrong properies after default .ctor() ({})", e.what()));
 		}
 		try
 		{
 			stream_b.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_b was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_b was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_b was disposed upon construction, but threw the wrong exception when seek() was called");
 		}
 
 		// move stream_a to stream_b
@@ -2219,18 +2508,19 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToDispose
 		{
 			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.what()));
 		}
 		try
 		{
 			stream_a.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but threw the wrong exception when seek() was called");
 		}
 
 		// ensure stream b had valid properties after being moved to
@@ -2238,9 +2528,9 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToDispose
 		{
 			StreamTestUtil::constructor_TestHelper(stream_b, 0x300, 0x0, true, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.what()));
 		}
 		try
 		{
@@ -2249,24 +2539,37 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToDispose
 		}
 		catch (const tc::ObjectDisposedException&)
 		{
-			throw tc::Exception("stream_b was initialized upon move assignment from stream_a, but threw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_b was initialized upon move assignment from stream_a, but threw tc::ObjectDisposedException when seek() was called");
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToInitialized()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_MoveOperator_MoveDisposedToInitialized : ");
+	TestResult test;
+	test.test_name = "test_MoveOperator_MoveDisposedToInitialized";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		std::vector<std::shared_ptr<tc::io::IStream>> streams {
@@ -2284,18 +2587,19 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToInitialize
 		{
 			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_a had wrong properies after default .ctor() ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_a had wrong properies after default .ctor() ({})", e.what()));
 		}
 		try
 		{
 			stream_a.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_a was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_a was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_a was disposed upon construction, but threw the wrong exception when seek() was called");
 		}
 
 		// ensure stream a had valid properties to begin with
@@ -2303,9 +2607,9 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToInitialize
 		{
 			StreamTestUtil::constructor_TestHelper(stream_b, 0x300, 0x0, true, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_b had wrong properies after create .ctor() ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_b had wrong properies after create .ctor() ({})", e.what()));
 		}
 		try
 		{
@@ -2313,7 +2617,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToInitialize
 		}
 		catch (const tc::ObjectDisposedException&)
 		{
-			throw tc::Exception("stream_b was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_b was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
 		}
 
 		// move stream_a to stream_b
@@ -2324,18 +2628,19 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToInitialize
 		{
 			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.what()));
 		}
 		try
 		{
 			stream_a.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but threw the wrong exception when seek() was called");
 		}
 
 		// ensure stream b had valid properties after being moved to
@@ -2343,35 +2648,49 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToInitialize
 		{
 			StreamTestUtil::constructor_TestHelper(stream_b, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.what()));
 		}
 		try
 		{
 			stream_b.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_b was disposed upon move assignment from stream_a, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_b was disposed upon move assignment from stream_a, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_b was disposed upon move assignment from stream_a, but threw the wrong exception when seek() was called");
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToInitialized()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_MoveOperator_MoveInitializedToInitialized : ");
+	TestResult test;
+	test.test_name = "test_MoveOperator_MoveInitializedToInitialized";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		std::vector<std::shared_ptr<tc::io::IStream>> streams_a {
@@ -2395,9 +2714,9 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToInitial
 		{
 			StreamTestUtil::constructor_TestHelper(stream_a, 0x300, 0x0, true, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_a had wrong properies after create .ctor() ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_a had wrong properies after create .ctor() ({})", e.what()));
 		}
 		try
 		{
@@ -2405,7 +2724,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToInitial
 		}
 		catch (const tc::ObjectDisposedException&)
 		{
-			throw tc::Exception("stream_a was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_a was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
 		}
 
 		// ensure stream a had valid properties to begin with
@@ -2413,9 +2732,9 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToInitial
 		{
 			StreamTestUtil::constructor_TestHelper(stream_b, 0x600, 0x0, true, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_b had wrong properies after create .ctor() ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_b had wrong properies after create .ctor() ({})", e.what()));
 		}
 		try
 		{
@@ -2423,7 +2742,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToInitial
 		}
 		catch (const tc::ObjectDisposedException&)
 		{
-			throw tc::Exception("stream_b was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_b was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
 		}
 
 		// move stream_a to stream_b
@@ -2434,18 +2753,19 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToInitial
 		{
 			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.what()));
 		}
 		try
 		{
 			stream_a.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but threw the wrong exception when seek() was called");
 		}
 
 		// ensure stream b had valid properties after being moved to
@@ -2453,9 +2773,9 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToInitial
 		{
 			StreamTestUtil::constructor_TestHelper(stream_b, 0x300, 0x0, true, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.what()));
 		}
 		try
 		{
@@ -2464,24 +2784,37 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToInitial
 		}
 		catch (const tc::ObjectDisposedException&)
 		{
-			throw tc::Exception("stream_b was initialized upon move assignment from stream_a, but threw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_b was initialized upon move assignment from stream_a, but threw tc::ObjectDisposedException when seek() was called");
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveDisposed()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_MoveConstructor_MoveDisposed : ");
+	TestResult test;
+	test.test_name = "test_MoveConstructor_MoveDisposed";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		// create stream a
@@ -2492,18 +2825,19 @@ void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveDisposed()
 		{
 			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_a had wrong properies after default .ctor() ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_a had wrong properies after default .ctor() ({})", e.what()));
 		}
 		try
 		{
 			stream_a.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_a was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_a was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_a was disposed upon construction, but threw the wrong exception when seek() was called");
 		}
 
 		// move stream_a to stream_b
@@ -2514,18 +2848,19 @@ void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveDisposed()
 		{
 			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.what()));
 		}
 		try
 		{
 			stream_a.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but threw the wrong exception when seek() was called");
 		}
 
 		// ensure stream b had valid properties after being moved to
@@ -2533,35 +2868,49 @@ void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveDisposed()
 		{
 			StreamTestUtil::constructor_TestHelper(stream_b, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.what()));
 		}
 		try
 		{
 			stream_b.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_b was disposed upon move assignment from stream_a, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_b was disposed upon move assignment from stream_a, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_b was disposed upon move assignment from stream_a, but threw the wrong exception when seek() was called");
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveInitialized()
 {
-	fmt::print("[tc::io::ConcatenatedStream] test_MoveConstructor_MoveInitialized : ");
+	TestResult test;
+	test.test_name = "test_MoveConstructor_MoveInitialized";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		std::vector<std::shared_ptr<tc::io::IStream>> streams {
@@ -2578,9 +2927,9 @@ void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveInitialized()
 		{
 			StreamTestUtil::constructor_TestHelper(stream_a, 0x300, 0x0, true, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_a had wrong properies after create .ctor() ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_a had wrong properies after create .ctor() ({})", e.what()));
 		}
 		try
 		{
@@ -2588,7 +2937,7 @@ void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveInitialized()
 		}
 		catch (const tc::ObjectDisposedException&)
 		{
-			throw tc::Exception("stream_a was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_a was initialized upon construction, but threw tc::ObjectDisposedException when seek() was called");
 		}
 
 		// move stream_a to stream_b
@@ -2599,18 +2948,19 @@ void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveInitialized()
 		{
 			StreamTestUtil::constructor_TestHelper(stream_a, 0x0, 0x0, false, false, false);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_a had wrong properies after it was move assigned to stream_b ({})", e.what()));
 		}
 		try
 		{
 			stream_a.seek(0, tc::io::SeekOrigin::Current);
-			throw tc::Exception("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
-		catch (const tc::ObjectDisposedException&)
+		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception& e)
 		{
-			// do nothing
+			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but threw the wrong exception when seek() was called");
 		}
 
 		// ensure stream b had valid properties after being moved to
@@ -2618,9 +2968,9 @@ void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveInitialized()
 		{
 			StreamTestUtil::constructor_TestHelper(stream_b, 0x300, 0x0, true, true, true);
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			throw tc::Exception(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.error()));
+			throw tc::TestException(fmt::format("stream_b has wrong properties after being move assigned from stream_a ({})", e.what()));
 		}
 		try
 		{
@@ -2629,17 +2979,26 @@ void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveInitialized()
 		}
 		catch (const tc::ObjectDisposedException&)
 		{
-			throw tc::Exception("stream_b was initialized upon move assignment from stream_a, but threw tc::ObjectDisposedException when seek() was called");
+			throw tc::TestException("stream_b was initialized upon move assignment from stream_a, but threw tc::ObjectDisposedException when seek() was called");
 		}
 		
-		fmt::print("PASS\n");
+		// record result
+		test.result = "PASS";
+		test.comments = "";
 	}
-	catch (const tc::Exception& e)
+	catch (const tc::TestException& e)
 	{
-		fmt::print("FAIL ({:s})\n", e.error());
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("FAIL (unhandled exception) ({})\n", e.what());
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
