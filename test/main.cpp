@@ -28,6 +28,7 @@
 #include "io_StreamSource_TestClass.h"
 #include "io_StreamSink_TestClass.h"
 #include "crypto_Md5Generator_TestClass.h"
+#include "crypto_Sha1Generator_TestClass.h"
 
 
 /*
@@ -35,7 +36,6 @@
 
 
 
-#include "crypto_Sha1Generator_TestClass.h"
 #include "crypto_Sha256Generator_TestClass.h"
 #include "crypto_Sha512Generator_TestClass.h"
 #include "crypto_HmacMd5Generator_TestClass.h"
@@ -249,12 +249,12 @@ int main(int argc, char** argv)
 
 	// namespace tc::crypto
 	runTest<crypto_Md5Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+	runTest<crypto_Sha1Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 
 	/*
 	
 	
 	
-	runTest<crypto_Sha1Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<crypto_Sha256Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<crypto_Sha512Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<crypto_HmacMd5Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
