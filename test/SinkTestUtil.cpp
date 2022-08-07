@@ -9,7 +9,7 @@ void SinkTestUtil::testSinkLength(tc::io::ISink& sink, int64_t expected_len)
 	int64_t actual_len = sink.length();
 	if (actual_len != expected_len)
 	{
-		throw tc::Exception(fmt::format("length() returned: {:d}, when it should have been {:d}.", actual_len, expected_len));
+		throw tc::TestException(fmt::format("length() returned: {:d}, when it should have been {:d}.", actual_len, expected_len));
 	}
 }
 

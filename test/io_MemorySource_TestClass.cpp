@@ -126,11 +126,11 @@ void io_MemorySource_TestClass::testInitializeByMoveWithByteData()
 
 		if (experiment_data.size() != 0)
 		{
-			throw tc::Exception("experiment_data.size() != 0 after being moved from.");
+			throw tc::TestException("experiment_data.size() != 0 after being moved from.");
 		}
 		if (experiment_data.data() != nullptr)
 		{
-			throw tc::Exception("experiment_data.data() != nullptr after being moved from.");
+			throw tc::TestException("experiment_data.data() != nullptr after being moved from.");
 		}
 
 		SourceTestUtil::testSourceLength(source, length);
