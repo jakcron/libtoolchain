@@ -273,13 +273,13 @@ public:
 		memcpy(tag, tag_tmp.data(), tag_size);
 	}
 private:
-	static const size_t kMinTagSize = 4;
-	static const size_t kMaxTagSize = 16;
+	const size_t kMinTagSize = 4;
+	const size_t kMaxTagSize = 16;
 
-	static const size_t kMinIvSize = 7;
-	static const size_t kMaxIvSize = 13;
+	const size_t kMinIvSize = 7;
+	const size_t kMaxIvSize = 13;
 
-	static const size_t kMaxAddSize = 0xff00;
+	const size_t kMaxAddSize = 0xff00;
 
 	enum State
 	{
