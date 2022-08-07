@@ -1,9 +1,7 @@
 #include "crypto_Sha256Generator_TestClass.h"
 
 #include <fmt/format.h>
-#include <iostream>
 
-#include <tc/Exception.h>
 #include <tc/crypto/Sha256Generator.h>
 #include <tc/cli/FormatUtil.h>
 #include <tc/ByteData.h>

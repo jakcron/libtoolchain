@@ -1,9 +1,7 @@
 #include "crypto_Md5Generator_TestClass.h"
 
 #include <fmt/format.h>
-#include <iostream>
 
-#include <tc/Exception.h>
 #include <tc/crypto/Md5Generator.h>
 #include <tc/cli/FormatUtil.h>
 #include <tc/ByteData.h>
