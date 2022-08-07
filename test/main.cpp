@@ -24,12 +24,13 @@
 #include "io_MemorySource_TestClass.h"
 #include "io_OverlayedSource_TestClass.h"
 #include "io_SubSource_TestClass.h"
+#include "io_SubSink_TestClass.h"
+
 
 /*
 
 
 
-#include "io_SubSink_TestClass.h"
 #include "io_StreamSource_TestClass.h"
 #include "io_StreamSink_TestClass.h"
 
@@ -242,11 +243,12 @@ int main(int argc, char** argv)
 	runTest<io_MemorySource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<io_OverlayedSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<io_SubSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+	runTest<io_SubSink_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+
 
 	/*
 	
 	
-	runTest<io_SubSink_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<io_StreamSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<io_StreamSink_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	

@@ -57,6 +57,11 @@ int64_t tc::io::SubSink::length()
 
 void tc::io::SubSink::setLength(int64_t length)
 {
+	if (mBaseSink == nullptr)
+	{
+		throw tc::ObjectDisposedException(kClassName+"::setLength()", "Failed to set length (no base sink)");
+	}
+
 	throw tc::NotImplementedException(kClassName+"::setLength()", "setLength is not implemented for SubSink.");
 }
 
