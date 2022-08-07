@@ -72,19 +72,19 @@ public:
 		auto tag_tmp = std::array<byte_t, kBlockSize>();
 
 		/* Check tag_size */
-		if (tag_size <= 2 || tag_size > 16 || tag_size % 2 != 0)
+		if (tag_size < kMinTagSize || tag_size > kMaxTagSize || tag_size % 2 != 0)
 		{
 			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "tag_size was not valid.");
 		}
 
 		/* Check iv_size (Also implies q is within bounds) */
-		if (iv_size < 7 || iv_size > 13)
+		if (iv_size < kMinIvSize || iv_size > kMaxIvSize)
 		{
 			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "iv_size was not valid.");
 		}
 
 		/* Check add_size */
-		if (add_size > 0xFF00)
+		if (add_size > kMaxAddSize)
 		{
 			throw tc::ArgumentOutOfRangeException("CcmModeImpl::encrypt()", "add_size was too large.");
 		}
@@ -181,19 +181,19 @@ public:
 		auto tag_tmp = std::array<byte_t, kBlockSize>();
 
 		/* Check tag_size */
-		if (tag_size <= 2 || tag_size > 16 || tag_size % 2 != 0)
+		if (tag_size < kMinTagSize || tag_size > kMaxTagSize || tag_size % 2 != 0)
 		{
 			throw tc::ArgumentOutOfRangeException("CcmModeImpl::decrypt()", "tag_size was not valid.");
 		}
 
 		/* Check iv_size (Also implies q is within bounds) */
-		if (iv_size < 7 || iv_size > 13)
+		if (iv_size < kMinIvSize || iv_size > kMaxIvSize)
 		{
 			throw tc::ArgumentOutOfRangeException("CcmModeImpl::decrypt()", "iv_size was not valid.");
 		}
 
 		/* Check add_size */
-		if (add_size > 0xFF00)
+		if (add_size > kMaxAddSize)
 		{
 			throw tc::ArgumentOutOfRangeException("CcmModeImpl::decrypt()", "add_size was too large.");
 		}
@@ -273,6 +273,14 @@ public:
 		memcpy(tag, tag_tmp.data(), tag_size);
 	}
 private:
+	static const size_t kMinTagSize = 4;
+	static const size_t kMaxTagSize = 16;
+
+	static const size_t kMinIvSize = 7;
+	static const size_t kMaxIvSize = 13;
+
+	static const size_t kMaxAddSize = 0xff00;
+
 	enum State
 	{
 		None,
@@ -311,7 +319,10 @@ private:
 		 */
 		memset(block, 0, kBlockSize);
 
-		size_t q = calculate_q(iv_size);
+		// just in case
+		iv_size = std::min<size_t>(iv_size, kMaxIvSize);
+
+		byte_t q = (byte_t)calculate_q(iv_size);
 		
 		// encode flag into block
 		block[0] = 0;
@@ -349,9 +360,9 @@ private:
 		memset(ctr, 0, kBlockSize);
 		
 		// just in case
-		iv_size = std::min<size_t>(iv_size, 13);
+		iv_size = std::min<size_t>(iv_size, kMaxIvSize);
 
-		size_t q = calculate_q(iv_size);
+		byte_t q = (byte_t)calculate_q(iv_size);
 
 		ctr[0] = q - 1;
 		memcpy(ctr + 1, iv, iv_size);
