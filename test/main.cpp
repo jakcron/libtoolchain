@@ -25,13 +25,12 @@
 #include "io_OverlayedSource_TestClass.h"
 #include "io_SubSource_TestClass.h"
 #include "io_SubSink_TestClass.h"
-
+#include "io_StreamSource_TestClass.h"
 
 /*
 
 
 
-#include "io_StreamSource_TestClass.h"
 #include "io_StreamSink_TestClass.h"
 
 #include "crypto_Md5Generator_TestClass.h"
@@ -244,12 +243,12 @@ int main(int argc, char** argv)
 	runTest<io_OverlayedSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<io_SubSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<io_SubSink_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+	runTest<io_StreamSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 
 
 	/*
 	
 	
-	runTest<io_StreamSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	runTest<io_StreamSink_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
 	
 	runTest<crypto_Md5Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
