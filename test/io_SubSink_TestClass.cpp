@@ -529,6 +529,6 @@ void io_SubSink_TestClass::pushDataTestHelper(tc::io::ISink& sub_sink, const std
 	size_t push_ret = sub_sink.pushData(push_data, sub_push_offset);
 	if (push_ret != expected_data.size())
 	{
-		throw tc::Exception(fmt::format("pushData(offset: {:d}) returned: {:d}, when it should have been {:d}", sub_push_offset, push_ret, expected_data.size()));
+		throw tc::TestException(fmt::format("pushData(offset: {:d}) returned: {:d}, when it should have been {:d}", sub_push_offset, push_ret, expected_data.size()));
 	}
 }
