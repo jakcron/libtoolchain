@@ -22,6 +22,9 @@
     <ClCompile Include="..\..\..\src\crypto\Aes128CbcEncryptor.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\Aes128CcmEncryptor.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\Aes128CtrEncryptedStream.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
@@ -313,6 +316,9 @@
       <Filter>Header Files\tc\cli</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\Aes128CbcEncryptor.h">
+      <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\Aes128CcmEncryptor.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\Aes128CtrEncryptedStream.h">

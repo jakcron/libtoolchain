@@ -84,6 +84,9 @@
     <ClCompile Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\crypto_Aes128CcmEncryptor_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\test\crypto_Aes128CtrEncryptor_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -288,6 +291,9 @@
     <ClCompile Include="..\..\..\test\io_ConcatenatedStream_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\TestException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\test\ByteData_TestClass.h">
@@ -357,6 +363,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\crypto_Aes128CcmEncryptor_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\crypto_Aes128CtrEncryptor_TestClass.h">
@@ -561,6 +570,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\io_ConcatenatedStream_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\TestException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

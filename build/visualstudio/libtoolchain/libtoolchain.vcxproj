@@ -153,6 +153,7 @@
     <ClInclude Include="..\..\..\include\tc\cli\OptionParser.h" />
     <ClInclude Include="..\..\..\include\tc\cli.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\Aes128CbcEncryptor.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\Aes128CcmEncryptor.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\Aes128CtrEncryptedStream.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\Aes128CtrEncryptor.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\Aes128EcbEncryptor.h" />
@@ -271,6 +272,7 @@
     <ClCompile Include="..\..\..\src\cli\FormatUtil.cpp" />
     <ClCompile Include="..\..\..\src\cli\OptionParser.cpp" />
     <ClCompile Include="..\..\..\src\crypto\Aes128CbcEncryptor.cpp" />
+    <ClCompile Include="..\..\..\src\crypto\Aes128CcmEncryptor.cpp" />
     <ClCompile Include="..\..\..\src\crypto\Aes128CtrEncryptedStream.cpp" />
     <ClCompile Include="..\..\..\src\crypto\Aes128CtrEncryptor.cpp" />
     <ClCompile Include="..\..\..\src\crypto\Aes128EcbEncryptor.cpp" />
