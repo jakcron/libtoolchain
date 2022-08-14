@@ -255,11 +255,6 @@ void crypto_Pbkdf1Md5KeyDeriver_TestClass::test_WillThrowExceptionOnTooLargeDkSi
 
 	try
 	{
-		if (sizeof(size_t) != 4 && sizeof(size_t) != 8)
-		{
-			throw tc::TestException("This test can only run on systems where size_t is 32bit or 64bit");
-		}
-
 		// create tests		
 		std::vector<PbkdfUtil::TestVector> tests;
 		PbkdfUtil::generatePbkdf1TestVectors_Custom(tests, PbkdfUtil::MD5);
@@ -268,7 +263,7 @@ void crypto_Pbkdf1Md5KeyDeriver_TestClass::test_WillThrowExceptionOnTooLargeDkSi
 			throw tc::TestException("No test vectors");
 		}
 
-		// derive a small key
+		// derive a key larger than the maximum derivable size
 		auto dk = tc::ByteData(tc::crypto::Pbkdf1Md5KeyDeriver::kMaxDerivableSize + 1);
 
 		try 

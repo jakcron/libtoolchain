@@ -263,7 +263,7 @@ void crypto_Pbkdf1Sha1KeyDeriver_TestClass::test_WillThrowExceptionOnTooLargeDkS
 			throw tc::TestException("No test vectors");
 		}
 
-		// derive a small key
+		// derive a key larger than the maximum derivable size
 		auto dk = tc::ByteData(tc::crypto::Pbkdf1Sha1KeyDeriver::kMaxDerivableSize + 1);
 
 		try 
