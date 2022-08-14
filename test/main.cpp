@@ -40,7 +40,6 @@
 
 
 /*
-
 #include "crypto_Pbkdf2Sha1KeyDeriver_TestClass.h"
 #include "crypto_Pbkdf2Sha256KeyDeriver_TestClass.h"
 #include "crypto_Pbkdf2Sha512KeyDeriver_TestClass.h"
@@ -99,13 +98,17 @@ struct TestClassResult
 };
 
 template <class T>
-void runTest(std::vector<TestClassResult>& global_test_results, const std::regex& include_test_regex, const std::regex& exclude_test_regex)
+void runTest(std::vector<TestClassResult>& global_test_results, const std::regex& include_test_regex, const std::regex& exclude_test_regex, bool run_slow_tests)
 {
 	TestClassResult local_test_results;
 
 	T test_class;
 
 	if (!std::regex_match(test_class.getTestTag(), include_test_regex) || std::regex_match(test_class.getTestTag(), exclude_test_regex))
+	{
+		return;
+	}
+	if (test_class.isSlowTest() == true && run_slow_tests == false)
 	{
 		return;
 	}
@@ -147,7 +150,7 @@ void outputResultsToStdout(const std::vector<TestClassResult>& global_test_resul
 
 int main(int argc, char** argv)
 {
-	bool includeSlowTests = false;
+	bool include_slow_tests = false;
 	std::regex include_test_regex = std::regex("(.)*");
 	std::regex exclude_test_regex = std::regex("");
 	std::regex include_result_regex = std::regex("^.*((\\W|^)PASS(\\W|$)){0}.*$");
@@ -164,7 +167,7 @@ int main(int argc, char** argv)
 		{
 			if (std::string(argv[i]) == kNoSlowTestFlag)
 			{
-				includeSlowTests = true;
+				include_slow_tests = true;
 				i += 1;
 			}
 			else if (std::string(argv[i]) == kIncludeTestRegex && i+1 < argc)
@@ -205,113 +208,110 @@ int main(int argc, char** argv)
 	// do tests
 
 	// namespace tc
-	runTest<Optional_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<ByteData_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+	runTest<Optional_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<ByteData_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 
 	// namespace tc::string
-	runTest<string_TranscodeUtil_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+	runTest<string_TranscodeUtil_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 
 	// namespace tc::cli
-	runTest<cli_FormatUtil_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<cli_OptionParser_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+	runTest<cli_FormatUtil_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<cli_OptionParser_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 
 	// namespace tc::bn
-	runTest<bn_binaryutils_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<bn_pad_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<bn_string_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<bn_endian_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<bn_bitarrayByteBEBitBE_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<bn_bitarrayByteBEBitLE_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<bn_bitarrayByteLEBitBE_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<bn_bitarrayByteLEBitLE_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+	runTest<bn_binaryutils_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<bn_pad_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<bn_string_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<bn_endian_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<bn_bitarrayByteBEBitBE_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<bn_bitarrayByteBEBitLE_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<bn_bitarrayByteLEBitBE_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<bn_bitarrayByteLEBitLE_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 
 	// namespace tc::io
-	runTest<io_Path_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_BasicPathResolver_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+	runTest<io_Path_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_BasicPathResolver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	// IS THERE A CORRECT ORDER TO LocalFileSystem and FileStream (since LocalFileSystem uses FileStream internally?)
-	runTest<io_LocalFileSystem_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_FileStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_MemoryStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_SubStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_ConcatenatedStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_SubFileSystem_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_VirtualFileSystem_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_PaddingSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_MemorySource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_OverlayedSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_SubSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_SubSink_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_StreamSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<io_StreamSink_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+	runTest<io_LocalFileSystem_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_FileStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_MemoryStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_SubStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_ConcatenatedStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_SubFileSystem_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_VirtualFileSystem_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_PaddingSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_MemorySource_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_OverlayedSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_SubSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_SubSink_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_StreamSource_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<io_StreamSink_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 
 	// namespace tc::crypto
-	runTest<crypto_Md5Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Sha1Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Sha256Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Sha512Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_HmacMd5Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_HmacSha1Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_HmacSha256Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_HmacSha512Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+	runTest<crypto_Md5Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Sha1Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Sha256Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Sha512Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_HmacMd5Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_HmacSha1Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_HmacSha256Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_HmacSha512Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 
-	if (includeSlowTests)
-	{
-		runTest<crypto_Pbkdf1Md5KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-		runTest<crypto_Pbkdf1Sha1KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	}
+	runTest<crypto_Pbkdf1Md5KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Pbkdf1Sha1KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 
 
 	/*
 	
 	
 	
-	if (includeSlowTests)
+	if (include_slow_tests)
 	{
-		runTest<crypto_Pbkdf2Sha1KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-		runTest<crypto_Pbkdf2Sha256KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-		runTest<crypto_Pbkdf2Sha512KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+		runTest<crypto_Pbkdf2Sha1KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+		runTest<crypto_Pbkdf2Sha256KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+		runTest<crypto_Pbkdf2Sha512KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	}
-	runTest<crypto_PseudoRandomByteGenerator_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes128Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes192Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes128EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes192EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes256EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes128CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes192CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes256CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes128CbcEncryptedStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes128CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes192CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes256CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes128CtrEncryptedStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes128XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes256XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Aes128CcmEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa1024OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa2048OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa4096OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa2048OaepSha512Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa4096OaepSha512Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa1024Pkcs1Md5Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa2048Pkcs1Md5Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa4096Pkcs1Md5Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa1024Pkcs1Sha1Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa2048Pkcs1Sha1Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa4096Pkcs1Sha1Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa1024Pkcs1Sha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa2048Pkcs1Sha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa4096Pkcs1Sha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa1024Pkcs1Sha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa2048Pkcs1Sha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa4096Pkcs1Sha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa1024PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa1024PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa2048PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa2048PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa4096PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
-	runTest<crypto_Rsa4096PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex);
+	runTest<crypto_PseudoRandomByteGenerator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes128Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes192Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes128EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes192EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes256EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes128CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes192CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes256CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes128CbcEncryptedStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes128CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes192CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes256CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes128CtrEncryptedStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes128XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes256XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes128CcmEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa1024OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048OaepSha512Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096OaepSha512Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa1024Pkcs1Md5Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048Pkcs1Md5Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096Pkcs1Md5Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa1024Pkcs1Sha1Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048Pkcs1Sha1Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096Pkcs1Sha1Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa1024Pkcs1Sha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048Pkcs1Sha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096Pkcs1Sha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa1024Pkcs1Sha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048Pkcs1Sha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096Pkcs1Sha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa1024PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa1024PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	*/
 
 	// output results

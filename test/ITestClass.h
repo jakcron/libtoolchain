@@ -22,4 +22,6 @@ public:
 
 		// these are the test results (only populated after running runAllTests())
 	virtual const std::vector<ITestClass::TestResult>& getTestResults() const = 0;
+
+	virtual bool isSlowTest() const { return false; }
 };
