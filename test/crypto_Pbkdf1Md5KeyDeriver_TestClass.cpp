@@ -248,20 +248,10 @@ void crypto_Pbkdf1Md5KeyDeriver_TestClass::test_WillThrowExceptionOnZeroRounds()
 
 void crypto_Pbkdf1Md5KeyDeriver_TestClass::test_WillThrowExceptionOnTooLargeDkSize()
 {
-	return;
-
 	TestResult test_result;
 	test_result.test_name = "test_WillThrowExceptionOnTooLargeDkSize";
 	test_result.result = "NOT RUN";
 	test_result.comments = "";
-
-	// this needs a better way to test
-
-	//if (std::numeric_limits<size_t>::max() > std::numeric_limits<uint32_t>::max())
-	//{
-	//	
-	//}
-	
 
 	try
 	{
@@ -279,25 +269,20 @@ void crypto_Pbkdf1Md5KeyDeriver_TestClass::test_WillThrowExceptionOnTooLargeDkSi
 		}
 
 		// derive a small key
-		auto dk = tc::ByteData(0x10);
+		auto dk = tc::ByteData(tc::crypto::Pbkdf1Md5KeyDeriver::kMaxDerivableSize + 1);
 
-
-		// because this test can only generate data in one call, we can't tell it to read more than the max tc::crypto::Pbkdf1Md5KeyDeriver::kMaxDerivableSize = (uint32_t)-1 if size_t is 32bit or less
-		if (std::numeric_limits<size_t>::max() > std::numeric_limits<uint32_t>::max())
+		try 
 		{
-			try 
-			{
-				// telling DeriveKeyPbkdf1Md5() to read more than the array size is dangerous, but an exception should be thrown before any data is written
-				tc::crypto::DeriveKeyPbkdf1Md5(dk.data(), dk.size() + tc::crypto::Pbkdf1Md5KeyDeriver::kMaxDerivableSize, (const byte_t*)tests[0].in_password.c_str(), tests[0].in_password.size(), (const byte_t*)tests[0].in_salt.c_str(), tests[0].in_salt.size(), tests[0].in_rounds);
+			tc::crypto::DeriveKeyPbkdf1Md5(dk.data(), dk.size(), (const byte_t*)tests[0].in_password.c_str(), tests[0].in_password.size(), (const byte_t*)tests[0].in_salt.c_str(), tests[0].in_salt.size(), tests[0].in_rounds);
 
-				throw tc::TestException("DeriveKeyPbkdf1Md5() Did not throw tc::crypto::CryptoException where the derived data length would exceed the maximum.");
-			}
-			catch (const tc::crypto::CryptoException&) { /* do nothing */ }
-			catch (const tc::Exception&)
-			{
-				throw tc::TestException("DeriveKeyPbkdf1Md5() Threw the wrong exception where the derived data length would exceed the maximum.");
-			}	
+			throw tc::TestException("DeriveKeyPbkdf1Md5() Did not throw tc::crypto::CryptoException where the derived data length would exceed the maximum.");
 		}
+		catch (const tc::crypto::CryptoException&) { /* do nothing */ }
+		catch (const tc::Exception&)
+		{
+			throw tc::TestException("DeriveKeyPbkdf1Md5() Threw the wrong exception where the derived data length would exceed the maximum.");
+		}	
+		
 
 		try 
 		{
@@ -305,8 +290,6 @@ void crypto_Pbkdf1Md5KeyDeriver_TestClass::test_WillThrowExceptionOnTooLargeDkSi
 
 			keydev.initialize((const byte_t*)tests[0].in_password.c_str(), tests[0].in_password.size(), (const byte_t*)tests[0].in_salt.c_str(), tests[0].in_salt.size(), tests[0].in_rounds);
 			keydev.getBytes(dk.data(), dk.size());
-			// telling getBytes() to read more than the array size is dangerous, but an exception should be thrown before any data is written
-			keydev.getBytes(dk.data(), tc::crypto::Pbkdf1Md5KeyDeriver::kMaxDerivableSize);
 
 			throw tc::TestException("Pbkdf1Md5KeyDeriver::getBytes() Did not throw tc::crypto::CryptoException where the derived data length would exceed the maximum.");
 		} 
