@@ -37,10 +37,10 @@
 #include "crypto_HmacSha512Generator_TestClass.h"
 #include "crypto_Pbkdf1Md5KeyDeriver_TestClass.h"
 #include "crypto_Pbkdf1Sha1KeyDeriver_TestClass.h"
+#include "crypto_Pbkdf2Sha1KeyDeriver_TestClass.h"
 
 
 /*
-#include "crypto_Pbkdf2Sha1KeyDeriver_TestClass.h"
 #include "crypto_Pbkdf2Sha256KeyDeriver_TestClass.h"
 #include "crypto_Pbkdf2Sha512KeyDeriver_TestClass.h"
 #include "crypto_PseudoRandomByteGenerator_TestClass.h"
@@ -259,6 +259,7 @@ int main(int argc, char** argv)
 
 	runTest<crypto_Pbkdf1Md5KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Pbkdf1Sha1KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Pbkdf2Sha1KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 
 
 	/*
@@ -267,7 +268,6 @@ int main(int argc, char** argv)
 	
 	if (include_slow_tests)
 	{
-		runTest<crypto_Pbkdf2Sha1KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 		runTest<crypto_Pbkdf2Sha256KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 		runTest<crypto_Pbkdf2Sha512KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	}
