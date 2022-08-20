@@ -100,7 +100,7 @@ void io_BasicPathResolver_TestClass::test_setCurrentDirectory()
 			throw tc::TestException(".setCurrentDirectory() failed to throw tc::ArgumentOutOfRangeException when passed an empty path");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".setCurrentDirectory() threw the wrong exception when passed an empty path");
 		}

@@ -74,7 +74,7 @@ void io_ConcatenatedStream_TestClass::test_DefaultConstructor()
 			throw tc::TestException(".read() failed to throw tc::ObjectDisposedException when class was not initilaized.");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".read() threw the wrong exception when class was not initilaized.");
 		}
@@ -85,7 +85,7 @@ void io_ConcatenatedStream_TestClass::test_DefaultConstructor()
 			throw tc::TestException(".write() failed to throw tc::ObjectDisposedException when class was not initilaized.");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".write() threw the wrong exception when class was not initilaized.");
 		}
@@ -96,7 +96,7 @@ void io_ConcatenatedStream_TestClass::test_DefaultConstructor()
 			throw tc::TestException(".seek() failed to throw tc::ObjectDisposedException when class was not initilaized.");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".seek() threw the wrong exception when class was not initilaized.");
 		}
@@ -107,7 +107,7 @@ void io_ConcatenatedStream_TestClass::test_DefaultConstructor()
 			throw tc::TestException(".setLength() failed to throw tc::ObjectDisposedException when class was not initilaized.");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".setLength() threw the wrong exception when class was not initilaized.");
 		}
@@ -118,7 +118,7 @@ void io_ConcatenatedStream_TestClass::test_DefaultConstructor()
 			throw tc::TestException(".flush() failed to throw tc::ObjectDisposedException when class was not initilaized.");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".flush() threw the wrong exception when class was not initilaized.");
 		}
@@ -164,7 +164,7 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_ThrowsOnBadInput()
 			throw tc::TestException(".ctor() did not throw tc::NotSupportedException where there were no input streams");
 		}
 		catch (tc::NotSupportedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".ctor() threw the wrong exception where there were no input streams");
 		}
@@ -182,7 +182,7 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_ThrowsOnBadInput()
 			throw tc::TestException(".ctor() did not throw tc::NotSupportedException where there were null input streams");
 		}
 		catch (tc::NotSupportedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".ctor() threw the wrong exception where there were null input streams");
 		}
@@ -200,7 +200,7 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_ThrowsOnBadInput()
 			throw tc::TestException(".ctor() did not throw tc::NotSupportedException where there total length of input streams was 0.");
 		}
 		catch (tc::NotSupportedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".ctor() threw the wrong exception where there total length of input streams was 0.");
 		}
@@ -218,7 +218,7 @@ void io_ConcatenatedStream_TestClass::test_CreateConstructor_ThrowsOnBadInput()
 			throw tc::TestException(".ctor() did not throw tc::NotSupportedException where the input streams did not all support atleast either read or write.");
 		}
 		catch (tc::NotSupportedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".ctor() threw the wrong exception where the input streams did not all support atleast either read or write.");
 		}
@@ -516,7 +516,7 @@ void io_ConcatenatedStream_TestClass::test_setLength_ThrowsOnUse()
 			throw tc::TestException(".setLength() did not throw tc::NotImplementedException when called from an initalized class.");
 		}
 		catch (const tc::NotImplementedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".setLength() threw the wrong exception when called from an initalized class.");
 		}
@@ -567,7 +567,7 @@ void io_ConcatenatedStream_TestClass::test_read_ThrowsOnUnsupported()
 			throw tc::TestException(".read() did not throw tc::NotSupportedException when canRead() == false.");
 		}
 		catch (const tc::NotSupportedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".read() threw the wrong exception when canRead() == false.");
 		}
@@ -618,7 +618,7 @@ void io_ConcatenatedStream_TestClass::test_write_ThrowsOnUnsupported()
 			throw tc::TestException(".write() did not throw tc::NotSupportedException when canWrite() == false.");
 		}
 		catch (const tc::NotSupportedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".write() threw the wrong exception when canWrite() == false.");
 		}
@@ -669,7 +669,7 @@ void io_ConcatenatedStream_TestClass::test_seek_ThrowsOnUnsupported()
 			throw tc::TestException(".seek() did not throw tc::NotSupportedException when canSeek() == false.");
 		}
 		catch (const tc::NotSupportedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".seek() threw the wrong exception when canSeek() == false.");
 		}
@@ -1658,7 +1658,7 @@ void io_ConcatenatedStream_TestClass::test_read_ReadFromMultiStream_NoSeekSuppor
 			throw tc::TestException(".read() did not throw tc::io::IOException where stream required seeking to begining but did not support seeking.");
 		}
 		catch (const tc::io::IOException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".read() threw the wrong exception where stream required seeking to begining but did not support seeking.");
 		}
@@ -2300,7 +2300,7 @@ void io_ConcatenatedStream_TestClass::test_write_WriteFromMultiStream_NoSeekSupp
 			throw tc::TestException(".write() did not throw tc::io::IOException where stream required seeking to begining but did not support seeking.");
 		}
 		catch (const tc::io::IOException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".write() threw the wrong exception where stream required seeking to begining but did not support seeking.");
 		}
@@ -2354,7 +2354,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToDisposed()
 			throw tc::TestException("stream_a was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_a was disposed upon construction, but threw the wrong exception when seek() was called");
 		}
@@ -2374,7 +2374,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToDisposed()
 			throw tc::TestException("stream_b was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_b was disposed upon construction, but threw the wrong exception when seek() was called");
 		}
@@ -2397,7 +2397,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToDisposed()
 			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but threw the wrong exception when seek() was called");
 		}
@@ -2417,7 +2417,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToDisposed()
 			throw tc::TestException("stream_b was disposed upon move assignment from stream_a, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_b was disposed upon move assignment from stream_a, but threw the wrong exception when seek() was called");
 		}
@@ -2495,7 +2495,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToDispose
 			throw tc::TestException("stream_b was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_b was disposed upon construction, but threw the wrong exception when seek() was called");
 		}
@@ -2518,7 +2518,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToDispose
 			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but threw the wrong exception when seek() was called");
 		}
@@ -2597,7 +2597,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToInitialize
 			throw tc::TestException("stream_a was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_a was disposed upon construction, but threw the wrong exception when seek() was called");
 		}
@@ -2638,7 +2638,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToInitialize
 			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but threw the wrong exception when seek() was called");
 		}
@@ -2658,7 +2658,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveDisposedToInitialize
 			throw tc::TestException("stream_b was disposed upon move assignment from stream_a, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_b was disposed upon move assignment from stream_a, but threw the wrong exception when seek() was called");
 		}
@@ -2763,7 +2763,7 @@ void io_ConcatenatedStream_TestClass::test_MoveOperator_MoveInitializedToInitial
 			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but threw the wrong exception when seek() was called");
 		}
@@ -2835,7 +2835,7 @@ void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveDisposed()
 			throw tc::TestException("stream_a was disposed upon construction, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_a was disposed upon construction, but threw the wrong exception when seek() was called");
 		}
@@ -2858,7 +2858,7 @@ void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveDisposed()
 			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but threw the wrong exception when seek() was called");
 		}
@@ -2878,7 +2878,7 @@ void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveDisposed()
 			throw tc::TestException("stream_b was disposed upon move assignment from stream_a, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_b was disposed upon move assignment from stream_a, but threw the wrong exception when seek() was called");
 		}
@@ -2958,7 +2958,7 @@ void io_ConcatenatedStream_TestClass::test_MoveConstructor_MoveInitialized()
 			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but failed throw tc::ObjectDisposedException when seek() was called");
 		}
 		catch (const tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("stream_a was disposed upon being move assigned to stream_b, but threw the wrong exception when seek() was called");
 		}

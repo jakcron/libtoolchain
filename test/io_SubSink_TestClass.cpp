@@ -141,7 +141,7 @@ void io_SubSink_TestClass::testCreateFromNullBase()
 			throw tc::TestException("Create Constructor did not throw tc::ArgumentNullException where base sink was null");
 		}
 		catch (tc::ArgumentNullException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("Create Constructor threw the wrong exception where base sink was null");
 		}
@@ -193,7 +193,7 @@ void io_SubSink_TestClass::testCreateWithNegativeSubSinkOffset()
 			throw tc::TestException("Create Constructor did not throw tc::ArgumentOutOfRangeException sub sink offset was negative");
 		}
 		catch (tc::ArgumentOutOfRangeException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("Create Constructor threw the wrong exception sub sink offset was negative");
 		}
@@ -245,7 +245,7 @@ void io_SubSink_TestClass::testCreateWithNegativeSubSinkLength()
 			throw tc::TestException("Create Constructor did not throw tc::ArgumentOutOfRangeException where sub sink size was negative");
 		}
 		catch (tc::ArgumentOutOfRangeException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("Create Constructor threw the wrong exception where sub sink size was negative");
 		}
@@ -297,7 +297,7 @@ void io_SubSink_TestClass::testCreateWithExcessiveSubSink()
 			throw tc::TestException("Create Constructor did not throw tc::ArgumentOutOfRangeException where sub sink partially past the end of the base sink");
 		}
 		catch (tc::ArgumentOutOfRangeException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("Create Constructor threw the wrong exception where sub sink partially past the end of the base sink");
 		}
@@ -355,7 +355,7 @@ void io_SubSink_TestClass::testCreateThenSetLength()
 			throw tc::TestException(".setLength() did not throw tc::NotImplementedException where SubSink was initialised");
 		}
 		catch (tc::NotImplementedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".setLength() threw the wrong exception where SubSink was initialised");
 		}
@@ -400,7 +400,7 @@ void io_SubSink_TestClass::testSetLengthOnDisposedBase()
 			throw tc::TestException(".setLength() did not throw tc::ObjectDisposedException where SubSink was disposed");
 		}
 		catch (tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".setLength() threw the wrong exception where SubSink was disposed");
 		}
@@ -445,7 +445,7 @@ void io_SubSink_TestClass::testPushDataOnDisposedBase()
 			throw tc::TestException(".pushData() did not throw tc::ObjectDisposedException where SubSink was disposed");
 		}
 		catch (tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".pushData() threw the wrong exception where SubSink was disposed");
 		}

@@ -130,7 +130,7 @@ void io_StreamSource_TestClass::testCreateFromStreamWithoutSeek()
 			throw tc::TestException("Create Constructor failed to throw tc::NotSupportedException where base stream did not support seeking");
 		}
 		catch (tc::NotSupportedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("Create Constructor threw the wrong exception where base stream did not support seeking");
 		}
@@ -173,7 +173,7 @@ void io_StreamSource_TestClass::testCreateFromStreamWithoutRead()
 			throw tc::TestException("Create Constructor failed to throw tc::NotSupportedException where base stream did not support reading");
 		}
 		catch (tc::NotSupportedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("Create Constructor threw the wrong exception where base stream did not support reading");
 		}

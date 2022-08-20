@@ -177,7 +177,7 @@ void io_FileStream_TestClass::test_Constructor_CreateNew_Read_FileExists()
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::CreateNew & FileAccess::Read) did not throw tc::ArgumentException");
 			}
 			catch (const tc::ArgumentException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::CreateNew & FileAccess::Read) threw the wrong exception");
 			}
@@ -228,7 +228,7 @@ void io_FileStream_TestClass::test_Constructor_CreateNew_Read_FileNotExist()
 				throw tc::TestException("Constructor when supplied invalid arg combination (FileMode::CreateNew & FileAccess::Read) did not throw tc::ArgumentException");
 			}
 			catch (const tc::ArgumentException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Constructor when supplied invalid arg combination (FileMode::CreateNew & FileAccess::Read) threw the wrong exception");
 			}
@@ -279,7 +279,7 @@ void io_FileStream_TestClass::test_Constructor_CreateNew_Write_FileExists()
 				throw tc::TestException("Attempting to (FileMode::CreateNew,FileAccess::Write) when the file already exists did not throw tc::io::FileExistsException");
 			}
 			catch (const tc::io::FileExistsException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Attempting to (FileMode::CreateNew,FileAccess::Write) when the file already exists threw the wrong exception");
 			}
@@ -374,7 +374,7 @@ void io_FileStream_TestClass::test_Constructor_CreateNew_ReadWrite_FileExists()
 				throw tc::TestException("Attempting to (FileMode::CreateNew,FileAccess::ReadWrite) when the file already exists did not throw tc::io::FileExistsException");
 			}
 			catch (const tc::io::FileExistsException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Attempting to (FileMode::CreateNew,FileAccess::ReadWrite) when the file already exists threw the wrong exception");
 			}
@@ -471,7 +471,7 @@ void io_FileStream_TestClass::test_Constructor_Create_Read_FileExists()
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Create & FileAccess::Read) did not throw tc::ArgumentException");
 			}
 			catch (const tc::ArgumentException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Create & FileAccess::Read) threw the wrong exception");
 			}
@@ -522,7 +522,7 @@ void io_FileStream_TestClass::test_Constructor_Create_Read_FileNotExist()
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Create & FileAccess::Read) did not throw tc::ArgumentException");
 			}
 			catch (const tc::ArgumentException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Create & FileAccess::Read) threw the wrong exception");
 			}
@@ -786,7 +786,7 @@ void io_FileStream_TestClass::test_Constructor_Open_Read_FileNotExist()
 				throw tc::TestException("Attempting to (FileMode::Open,FileAccess::Read) when the file does not exist did not throw tc::io::FileNotFoundException");
 			}
 			catch (const tc::io::FileNotFoundException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Attempting to (FileMode::Open,FileAccess::Read) when the file does not exist threw the wrong exception");
 			}
@@ -878,7 +878,7 @@ void io_FileStream_TestClass::test_Constructor_Open_Write_FileNotExist()
 				throw tc::TestException("Attempting to (FileMode::Open,FileAccess::Write) when the file does not exist did not throw tc::io::FileNotFoundException");
 			}
 			catch (const tc::io::FileNotFoundException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Attempting to (FileMode::Open,FileAccess::Write) when the file does not exist threw the wrong exception");
 			}
@@ -970,7 +970,7 @@ void io_FileStream_TestClass::test_Constructor_Open_ReadWrite_FileNotExist()
 				throw tc::TestException("Attempting to (FileMode::Open,FileAccess::ReadWrite) when the file does not exist did not throw tc::io::FileNotFoundException");
 			}
 			catch (const tc::io::FileNotFoundException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Attempting to (FileMode::Open,FileAccess::ReadWrite) when the file does not exist threw the wrong exception");
 			}
@@ -1064,7 +1064,7 @@ void io_FileStream_TestClass::test_Constructor_OpenOrCreate_Read_FileNotExist()
 				throw tc::TestException("Attempting to (FileMode::OpenOrCreate,FileAccess::Read) when the file does not exist did not throw tc::io::FileNotFoundException");
 			}
 			catch (const tc::io::FileNotFoundException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Attempting to (FileMode::OpenOrCreate,FileAccess::Read) when the file does not exist threw the wrong exception");
 			}
@@ -1287,7 +1287,7 @@ void io_FileStream_TestClass::test_Constructor_Truncate_Read_FileExists()
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Truncate & FileAccess::Read) did not throw tc::ArgumentException");
 			}
 			catch (const tc::ArgumentException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Truncate & FileAccess::Read) threw the wrong exception");
 			}
@@ -1338,7 +1338,7 @@ void io_FileStream_TestClass::test_Constructor_Truncate_Read_FileNotExist()
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Truncate & FileAccess::Read) did not throw tc::ArgumentException");
 			}
 			catch (const tc::ArgumentException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Truncate & FileAccess::Read) threw the wrong exception");
 			}
@@ -1430,7 +1430,7 @@ void io_FileStream_TestClass::test_Constructor_Truncate_Write_FileNotExist()
 				throw tc::TestException("Attempting to (FileMode::Truncate,FileAccess::Write) when the file does not exist did not throw tc::io::FileNotFoundException");
 			}
 			catch (const tc::io::FileNotFoundException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Attempting to (FileMode::Truncate,FileAccess::Write) when the file does not exist threw the wrong exception");
 			}
@@ -1522,7 +1522,7 @@ void io_FileStream_TestClass::test_Constructor_Truncate_ReadWrite_FileNotExist()
 				throw tc::TestException("Attempting to (FileMode::Truncate,FileAccess::ReadWrite) when the file does not exist did not throw tc::io::FileNotFoundException");
 			}
 			catch (const tc::io::FileNotFoundException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Attempting to (FileMode::Truncate,FileAccess::ReadWrite) when the file does not exist threw the wrong exception");
 			}
@@ -1573,7 +1573,7 @@ void io_FileStream_TestClass::test_Constructor_Append_Read_FileExists()
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Append & FileAccess::Read) did not throw tc::ArgumentException");
 			}
 			catch (const tc::ArgumentException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Append & FileAccess::Read) threw the wrong exception");
 			}
@@ -1622,7 +1622,7 @@ void io_FileStream_TestClass::test_Constructor_Append_Read_FileNotExist()
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Append & FileAccess::Read) did not throw tc::ArgumentException");
 			}
 			catch (const tc::ArgumentException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Append & FileAccess::Read) threw the wrong exception");
 			}
@@ -1756,7 +1756,7 @@ void io_FileStream_TestClass::test_Constructor_Append_ReadWrite_FileExists()
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Append & FileAccess::ReadWrite) did not throw tc::ArgumentException");
 			}
 			catch (const tc::ArgumentException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Append & FileAccess::ReadWrite) threw the wrong exception");
 			}
@@ -1805,7 +1805,7 @@ void io_FileStream_TestClass::test_Constructor_Append_ReadWrite_FileNotExist()
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Append & FileAccess::ReadWrite) did not throw tc::ArgumentException");
 			}
 			catch (const tc::ArgumentException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Constructor with invalid arg combination (FileMode::Append & FileAccess::ReadWrite) threw the wrong exception");
 			}
@@ -1853,7 +1853,7 @@ void io_FileStream_TestClass::test_Constructor_IllegalMode()
 				throw tc::TestException("Constructor with an unrecognised value for FileMode did not throw tc::ArgumentOutOfRangeException");
 			}
 			catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Constructor with an unrecognised value for FileMode threw the wrong exception");
 			}
@@ -1899,7 +1899,7 @@ void io_FileStream_TestClass::test_Constructor_IllegalAccess()
 				throw tc::TestException("Constructor with an unrecognised value for FileAccess did not throw tc::ArgumentOutOfRangeException");
 			}
 			catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Constructor with an unrecognised value for FileAccess threw the wrong exception");
 			}
@@ -1949,7 +1949,7 @@ void io_FileStream_TestClass::test_Constructor_DirectoryPath()
 			}
 			catch (const tc::io::IOException&) { /* do nothing */ }
 			catch (const tc::UnauthorisedAccessException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Attempting to open a directory as a file threw the wrong exception");
 			}
@@ -2146,7 +2146,7 @@ void io_FileStream_TestClass::test_Seek_AppendMode()
 				throw tc::TestException(".seek() when stream was opened in FileMode::Append did not throw tc::io::IOException");
 			}
 			catch (const tc::io::IOException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException(".seek() when stream was opened in FileMode::Append threw the wrong exception");
 			}
@@ -2200,7 +2200,7 @@ void io_FileStream_TestClass::test_Seek_PositionBeforeFileBegin()
 				throw tc::TestException(".seek() when attempting to seek before the start of the file did not throw tc::ArgumentOutOfRangeException");
 			}
 			catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException(".seek() when attempting to seek before the start of the file threw the wrong exception");
 			}
@@ -2581,7 +2581,7 @@ void io_FileStream_TestClass::test_Read_CanReadFalse()
 				throw tc::TestException("Using .read() on a file with no read permissions did not throw tc::NotSupportedException");
 			}
 			catch (const tc::NotSupportedException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Using .read() on a file with no read permissions threw the wrong exception");
 			}
@@ -2635,7 +2635,7 @@ void io_FileStream_TestClass::test_Read_NullDstPointer()
 				throw tc::TestException(".read() when passed a nullptr did not throw tc::ArgumentNullException");
 			}
 			catch (const tc::ArgumentNullException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException(".read() when passed a nullptr threw the wrong exception");
 			}
@@ -3043,7 +3043,7 @@ void io_FileStream_TestClass::test_Write_CanWriteFalse()
 				throw tc::TestException("Using .write() on a file with no write permissions did not throw tc::NotSupportedException");
 			}
 			catch (const tc::NotSupportedException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException("Using .write() on a file with no write permissions threw the wrong exception");
 			}
@@ -3097,7 +3097,7 @@ void io_FileStream_TestClass::test_Write_NullSrcPointer()
 				throw tc::TestException(".write() when passed a nullptr did not throw tc::ArgumentNullException");
 			}
 			catch (const tc::ArgumentNullException&) { /* do nothing */ }
-			catch (const tc::Exception& e)
+			catch (const tc::Exception&)
 			{
 				throw tc::TestException(".write() when passed a nullptr threw the wrong exception");
 			}

@@ -137,7 +137,7 @@ void io_StreamSink_TestClass::testCreateFromNullStream()
 			throw tc::TestException("Create Constructor did not throw tc::ArgumentNullException where base stream was null");
 		}
 		catch (tc::ArgumentNullException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("Create Constructor threw the wrong exception where base stream was null");
 		}
@@ -181,7 +181,7 @@ void io_StreamSink_TestClass::testCreateFromStreamWithoutSeek()
 			throw tc::TestException("Create Constructor did not throw tc::NotSupportedException where base stream did not support seeking");
 		}
 		catch (tc::NotSupportedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("Create Constructor threw the wrong exception where base stream did not support seeking");
 		}
@@ -259,7 +259,7 @@ void io_StreamSink_TestClass::testCreateFromStreamWithoutWrite()
 			throw tc::TestException("Create Constructor did not throw tc::NotSupportedException where base stream did not support writing");
 		}
 		catch (tc::NotSupportedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("Create Constructor threw the wrong exception where base stream did not support writing");
 		}
@@ -304,7 +304,7 @@ void io_StreamSink_TestClass::testSetLengthOnDisposedBase()
 			throw tc::TestException("setLength() did not throw tc::ObjectDisposedException where StreamSink was disposed");
 		}
 		catch (tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException("setLength() threw the wrong exception where StreamSink was disposed");
 		}
@@ -349,7 +349,7 @@ void io_StreamSink_TestClass::testPushDataOnDisposedBase()
 			throw tc::TestException(".pushData() did not throw tc::ObjectDisposedException where StreamSink was disposed");
 		}
 		catch (tc::ObjectDisposedException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".pushData() threw the wrong exception where StreamSink was disposed");
 		}
