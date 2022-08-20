@@ -14,6 +14,8 @@ public:
 
 		// this is where the test results are written
 	const std::vector<ITestClass::TestResult>& getTestResults() const;
+
+	bool isSlowTest() const { return true; }
 private:
 	std::string mTestTag;
 	std::vector<TestResult> mTestResults;
