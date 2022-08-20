@@ -123,7 +123,7 @@ void cli_OptionParser_TestClass::test_ProcessOptionsWithNoHandlers()
 			throw tc::TestException("Did not throw an ArgumentException for unhandled option");
 		}
 		catch (const tc::ArgumentException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".processOptions() threw the wrong exception when an unhandled option was detected");
 		}
@@ -487,7 +487,7 @@ void cli_OptionParser_TestClass::test_NullHandlerSupplied()
 			throw tc::TestException(".registerOptionHandler() did not throw ArgumentNullException when passed a nullptr.");
 		}
 		catch (const tc::ArgumentNullException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".registerOptionHandler() threw the wrong exception when passed a nullptr.");
 		}
@@ -498,7 +498,7 @@ void cli_OptionParser_TestClass::test_NullHandlerSupplied()
 			throw tc::TestException(".registerUnrecognisedOptionHandler() did not throw ArgumentNullException when passed a nullptr.");
 		}
 		catch (const tc::ArgumentNullException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".registerUnrecognisedOptionHandler() threw the wrong exception when passed a nullptr.");
 		}
@@ -542,7 +542,7 @@ void cli_OptionParser_TestClass::test_RegularHandlerProvidesNoOptionLiteralOrReg
 			throw tc::TestException(".registerOptionHandler() Did not throw tc::ArgumentOutOfRangeException when option handler had no option literals or option regex.");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".registerOptionHandler() threw the wrong exception when option handler had no option literals or option regex.");
 		}
@@ -584,7 +584,7 @@ void cli_OptionParser_TestClass::test_ProcessMalformedOptions()
 			throw tc::TestException(".processOptions() did not throw exception for dangling parameter");
 		}
 		catch (const tc::ArgumentException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".processOptions() threw the wrong exception for dangling parameter");
 		}
@@ -598,7 +598,7 @@ void cli_OptionParser_TestClass::test_ProcessMalformedOptions()
 			throw tc::TestException(".processOptions() did not throw exception for dangling parameter located after compound option");
 		}
 		catch (const tc::ArgumentException&) { /* do nothing */ }
-		catch (const tc::Exception& e)
+		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".processOptions() threw the wrong exception for dangling parameter located after compound option");
 		}
