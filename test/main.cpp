@@ -42,6 +42,11 @@
 #include "crypto_Pbkdf2Sha512KeyDeriver_TestClass.h"
 #include "crypto_PseudoRandomByteGenerator_TestClass.h"
 
+#include "crypto_Rsa1024PssSha256Signer_TestClass.h"
+#include "crypto_Rsa2048PssSha256Signer_TestClass.h"
+#include "crypto_Rsa4096PssSha256Signer_TestClass.h"
+#include "crypto_Rsa1024PssSha512Signer_TestClass.h"
+#include "crypto_Rsa2048PssSha512Signer_TestClass.h"
 #include "crypto_Rsa4096PssSha512Signer_TestClass.h"
 
 /*
@@ -79,11 +84,8 @@
 #include "crypto_Rsa1024Pkcs1Sha512Signer_TestClass.h"
 #include "crypto_Rsa2048Pkcs1Sha512Signer_TestClass.h"
 #include "crypto_Rsa4096Pkcs1Sha512Signer_TestClass.h"
-#include "crypto_Rsa1024PssSha256Signer_TestClass.h"
-#include "crypto_Rsa1024PssSha512Signer_TestClass.h"
-#include "crypto_Rsa2048PssSha256Signer_TestClass.h"
-#include "crypto_Rsa2048PssSha512Signer_TestClass.h"
-#include "crypto_Rsa4096PssSha256Signer_TestClass.h"
+
+
 */
 
 #include "ITestClass.h"
@@ -264,6 +266,11 @@ int main(int argc, char** argv)
 	runTest<crypto_Pbkdf2Sha512KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_PseudoRandomByteGenerator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 
+	runTest<crypto_Rsa1024PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa1024PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa4096PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 
 
@@ -307,11 +314,7 @@ int main(int argc, char** argv)
 	runTest<crypto_Rsa1024Pkcs1Sha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa2048Pkcs1Sha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa4096Pkcs1Sha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa1024PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa1024PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa2048PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa2048PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa4096PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	
 	*/
 
 	// output results
