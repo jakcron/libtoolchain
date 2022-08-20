@@ -516,13 +516,13 @@ void crypto_Rsa4096PssSha512Signer_TestClass::test_SignReturnsFalseOnBadInput()
 		result = signer.sign(nullptr, tests[0].message_digest.data());
 		if (result != false)
 		{
-			throw tc::TestException("sign() did not return false where signature==nullptr"); // ArgumentNullException
+			throw tc::TestException("sign() did not return false where signature==nullptr");
 		}
 
 		result = signer.sign(signature.data(), nullptr);
 		if (result != false)
 		{
-			throw tc::TestException("sign() did not return false where message_digest==nullptr"); // ArgumentNullException
+			throw tc::TestException("sign() did not return false where message_digest==nullptr");
 		}
 
 		// record result
