@@ -50,8 +50,14 @@
 #include "crypto_Aes128CbcEncryptor_TestClass.h"
 #include "crypto_Aes192CbcEncryptor_TestClass.h"
 #include "crypto_Aes256CbcEncryptor_TestClass.h"
-
-
+//#include "crypto_Aes128CbcEncryptedStream_TestClass.h"
+#include "crypto_Aes128CtrEncryptor_TestClass.h"
+#include "crypto_Aes192CtrEncryptor_TestClass.h"
+#include "crypto_Aes256CtrEncryptor_TestClass.h"
+//#include "crypto_Aes128CtrEncryptedStream_TestClass.h"
+#include "crypto_Aes128XtsEncryptor_TestClass.h"
+#include "crypto_Aes256XtsEncryptor_TestClass.h"
+//#include "crypto_Aes128CcmEncryptor_TestClass.h"
 #include "crypto_Rsa1024OaepSha256Encryptor_TestClass.h"
 #include "crypto_Rsa2048OaepSha256Encryptor_TestClass.h"
 #include "crypto_Rsa4096OaepSha256Encryptor_TestClass.h"
@@ -75,24 +81,6 @@
 #include "crypto_Rsa1024PssSha512Signer_TestClass.h"
 #include "crypto_Rsa2048PssSha512Signer_TestClass.h"
 #include "crypto_Rsa4096PssSha512Signer_TestClass.h"
-
-
-/*
-
-
-#include "crypto_Aes128CbcEncryptedStream_TestClass.h"
-#include "crypto_Aes128CtrEncryptor_TestClass.h"
-#include "crypto_Aes192CtrEncryptor_TestClass.h"
-#include "crypto_Aes256CtrEncryptor_TestClass.h"
-#include "crypto_Aes128CtrEncryptedStream_TestClass.h"
-#include "crypto_Aes128XtsEncryptor_TestClass.h"
-#include "crypto_Aes256XtsEncryptor_TestClass.h"
-#include "crypto_Aes128CcmEncryptor_TestClass.h"
-
-
-
-
-*/
 
 #include "ITestClass.h"
 
@@ -279,8 +267,14 @@ int main(int argc, char** argv)
 	runTest<crypto_Aes128CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes192CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes256CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-
-
+	//runTest<crypto_Aes128CbcEncryptedStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes128CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes192CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes256CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	//runTest<crypto_Aes128CtrEncryptedStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes128XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes256XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	//runTest<crypto_Aes128CcmEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa1024OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa2048OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa4096OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
@@ -304,24 +298,6 @@ int main(int argc, char** argv)
 	runTest<crypto_Rsa1024PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa2048PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa4096PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-
-
-	/*
-	
-
-	runTest<crypto_Aes128CbcEncryptedStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Aes128CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Aes192CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Aes256CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Aes128CtrEncryptedStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Aes128XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Aes256XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Aes128CcmEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-
-	
-	
-	
-	*/
 
 	// output results
 	outputResultsToStdout(global_test_results, include_result_regex, exclude_result_regex);
