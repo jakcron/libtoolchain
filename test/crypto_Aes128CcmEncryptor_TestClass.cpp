@@ -21,7 +21,7 @@ void crypto_Aes128CcmEncryptor_TestClass::runAllTests(void)
 	test_UseClassEnc();
 	test_UseClassDec();
 	test_UseUtilFuncEnc();
-	//test_UseUtilFuncDec();
+	test_UseUtilFuncDec();
 
 	//test_DoesNothingWhenNotInit();
 	//test_InitializeThrowsExceptionOnBadInput();
