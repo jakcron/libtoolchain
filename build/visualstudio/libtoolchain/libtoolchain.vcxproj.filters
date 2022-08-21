@@ -64,10 +64,10 @@
     <ClCompile Include="..\..\..\src\crypto\HmacSha1Generator.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\HmacSha256Generator.cpp">
+    <ClCompile Include="..\..\..\src\crypto\HmacSha2256Generator.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\HmacSha512Generator.cpp">
+    <ClCompile Include="..\..\..\src\crypto\HmacSha2512Generator.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\Pbkdf1Md5KeyDeriver.cpp">
@@ -79,10 +79,10 @@
     <ClCompile Include="..\..\..\src\crypto\Pbkdf2Sha1KeyDeriver.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\Pbkdf2Sha256KeyDeriver.cpp">
+    <ClCompile Include="..\..\..\src\crypto\Pbkdf2Sha2256KeyDeriver.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\Pbkdf2Sha512KeyDeriver.cpp">
+    <ClCompile Include="..\..\..\src\crypto\Pbkdf2Sha2512KeyDeriver.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\Md5Generator.cpp">
@@ -97,37 +97,37 @@
     <ClCompile Include="..\..\..\src\crypto\RsaKeyGenerator.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\RsaOaepSha256Encryptor.cpp">
+    <ClCompile Include="..\..\..\src\crypto\RsaOaepSha2256Encryptor.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\RsaOaepSha512Encryptor.cpp">
+    <ClCompile Include="..\..\..\src\crypto\RsaOaepSha2512Encryptor.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\RsaPkcs1Md5Signer.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\RsaPkcs1Sha256Signer.cpp">
+    <ClCompile Include="..\..\..\src\crypto\RsaPkcs1Sha2256Signer.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\RsaPkcs1Sha1Signer.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\RsaPkcs1Sha512Signer.cpp">
+    <ClCompile Include="..\..\..\src\crypto\RsaPkcs1Sha2512Signer.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\RsaPssSha256Signer.cpp">
+    <ClCompile Include="..\..\..\src\crypto\RsaPssSha2256Signer.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\Sha1Generator.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\RsaPssSha512Signer.cpp">
+    <ClCompile Include="..\..\..\src\crypto\RsaPssSha2512Signer.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\Sha256Generator.cpp">
+    <ClCompile Include="..\..\..\src\crypto\Sha2256Generator.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\crypto\Sha512Generator.cpp">
+    <ClCompile Include="..\..\..\src\crypto\Sha2512Generator.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\detail\AesImpl.cpp">
@@ -378,10 +378,10 @@
     <ClInclude Include="..\..\..\include\tc\crypto\HmacSha1Generator.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\HmacSha256Generator.h">
+    <ClInclude Include="..\..\..\include\tc\crypto\HmacSha2256Generator.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\HmacSha512Generator.h">
+    <ClInclude Include="..\..\..\include\tc\crypto\HmacSha2512Generator.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\Md5Generator.h">
@@ -402,10 +402,10 @@
     <ClInclude Include="..\..\..\include\tc\crypto\Pbkdf2Sha1KeyDeriver.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\Pbkdf2Sha256KeyDeriver.h">
+    <ClInclude Include="..\..\..\include\tc\crypto\Pbkdf2Sha2256KeyDeriver.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\Pbkdf2Sha512KeyDeriver.h">
+    <ClInclude Include="..\..\..\include\tc\crypto\Pbkdf2Sha2512KeyDeriver.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\PseudoRandomByteGenerator.h">
@@ -420,10 +420,10 @@
     <ClInclude Include="..\..\..\include\tc\crypto\RsaOaepEncryptor.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\RsaOaepSha256Encryptor.h">
+    <ClInclude Include="..\..\..\include\tc\crypto\RsaOaepSha2256Encryptor.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\RsaOaepSha512Encryptor.h">
+    <ClInclude Include="..\..\..\include\tc\crypto\RsaOaepSha2512Encryptor.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\RsaPkcs1Md5Signer.h">
@@ -432,19 +432,19 @@
     <ClInclude Include="..\..\..\include\tc\crypto\RsaPkcs1Sha1Signer.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\RsaPkcs1Sha256Signer.h">
+    <ClInclude Include="..\..\..\include\tc\crypto\RsaPkcs1Sha2256Signer.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\RsaPkcs1Sha512Signer.h">
+    <ClInclude Include="..\..\..\include\tc\crypto\RsaPkcs1Sha2512Signer.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\RsaPkcs1Signer.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\RsaPssSha256Signer.h">
+    <ClInclude Include="..\..\..\include\tc\crypto\RsaPssSha2256Signer.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\RsaPssSha512Signer.h">
+    <ClInclude Include="..\..\..\include\tc\crypto\RsaPssSha2512Signer.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\RsaPssSigner.h">
@@ -453,10 +453,10 @@
     <ClInclude Include="..\..\..\include\tc\crypto\Sha1Generator.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\Sha256Generator.h">
+    <ClInclude Include="..\..\..\include\tc\crypto\Sha2256Generator.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tc\crypto\Sha512Generator.h">
+    <ClInclude Include="..\..\..\include\tc\crypto\Sha2512Generator.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\XtsEncryptor.h">

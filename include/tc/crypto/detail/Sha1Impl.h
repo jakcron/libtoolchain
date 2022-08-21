@@ -12,7 +12,7 @@ namespace tc { namespace crypto { namespace detail {
 
 	/**
 	 * @class Sha1Impl
-	 * @brief This class implements the SHA-1 hash algorithm.
+	 * @brief This class implements the SHA1 hash algorithm.
 	 */
 class Sha1Impl
 {

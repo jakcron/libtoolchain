@@ -22,7 +22,7 @@ namespace tc { namespace crypto {
 	 * As such this template class requires @p HashFunction to implement one of the following hash functions to be compliant with RFC 8018.
 	 * -# MD4
 	 * -# MD5 (see @ref Md5Generator)
-	 * -# SHA-1 (see @ref Sha1Generator)
+	 * -# SHA1 (see @ref Sha1Generator)
 	 * 
 	 * The implementation of <var>HashFunction</var> must satisfies the following conditions.
 	 * See @ref Sha1Generator or similar class, for more information including parameters to each function.

@@ -29,17 +29,17 @@
 #include "io_StreamSink_TestClass.h"
 #include "crypto_Md5Generator_TestClass.h"
 #include "crypto_Sha1Generator_TestClass.h"
-#include "crypto_Sha256Generator_TestClass.h"
-#include "crypto_Sha512Generator_TestClass.h"
+#include "crypto_Sha2256Generator_TestClass.h"
+#include "crypto_Sha2512Generator_TestClass.h"
 #include "crypto_HmacMd5Generator_TestClass.h"
 #include "crypto_HmacSha1Generator_TestClass.h"
-#include "crypto_HmacSha256Generator_TestClass.h"
-#include "crypto_HmacSha512Generator_TestClass.h"
+#include "crypto_HmacSha2256Generator_TestClass.h"
+#include "crypto_HmacSha2512Generator_TestClass.h"
 #include "crypto_Pbkdf1Md5KeyDeriver_TestClass.h"
 #include "crypto_Pbkdf1Sha1KeyDeriver_TestClass.h"
 #include "crypto_Pbkdf2Sha1KeyDeriver_TestClass.h"
-#include "crypto_Pbkdf2Sha256KeyDeriver_TestClass.h"
-#include "crypto_Pbkdf2Sha512KeyDeriver_TestClass.h"
+#include "crypto_Pbkdf2Sha2256KeyDeriver_TestClass.h"
+#include "crypto_Pbkdf2Sha2512KeyDeriver_TestClass.h"
 #include "crypto_PseudoRandomByteGenerator_TestClass.h"
 #include "crypto_Aes128Encryptor_TestClass.h"
 #include "crypto_Aes192Encryptor_TestClass.h"
@@ -58,29 +58,29 @@
 #include "crypto_Aes128XtsEncryptor_TestClass.h"
 #include "crypto_Aes256XtsEncryptor_TestClass.h"
 #include "crypto_Aes128CcmEncryptor_TestClass.h"
-#include "crypto_Rsa1024OaepSha256Encryptor_TestClass.h"
-#include "crypto_Rsa2048OaepSha256Encryptor_TestClass.h"
-#include "crypto_Rsa4096OaepSha256Encryptor_TestClass.h"
-#include "crypto_Rsa2048OaepSha512Encryptor_TestClass.h"
-#include "crypto_Rsa4096OaepSha512Encryptor_TestClass.h"
+#include "crypto_Rsa1024OaepSha2256Encryptor_TestClass.h"
+#include "crypto_Rsa2048OaepSha2256Encryptor_TestClass.h"
+#include "crypto_Rsa4096OaepSha2256Encryptor_TestClass.h"
+#include "crypto_Rsa2048OaepSha2512Encryptor_TestClass.h"
+#include "crypto_Rsa4096OaepSha2512Encryptor_TestClass.h"
 #include "crypto_Rsa1024Pkcs1Md5Signer_TestClass.h"
 #include "crypto_Rsa2048Pkcs1Md5Signer_TestClass.h"
 #include "crypto_Rsa4096Pkcs1Md5Signer_TestClass.h"
 #include "crypto_Rsa1024Pkcs1Sha1Signer_TestClass.h"
 #include "crypto_Rsa2048Pkcs1Sha1Signer_TestClass.h"
 #include "crypto_Rsa4096Pkcs1Sha1Signer_TestClass.h"
-#include "crypto_Rsa1024Pkcs1Sha256Signer_TestClass.h"
-#include "crypto_Rsa2048Pkcs1Sha256Signer_TestClass.h"
-#include "crypto_Rsa4096Pkcs1Sha256Signer_TestClass.h"
-#include "crypto_Rsa1024Pkcs1Sha512Signer_TestClass.h"
-#include "crypto_Rsa2048Pkcs1Sha512Signer_TestClass.h"
-#include "crypto_Rsa4096Pkcs1Sha512Signer_TestClass.h"
-#include "crypto_Rsa1024PssSha256Signer_TestClass.h"
-#include "crypto_Rsa2048PssSha256Signer_TestClass.h"
-#include "crypto_Rsa4096PssSha256Signer_TestClass.h"
-#include "crypto_Rsa1024PssSha512Signer_TestClass.h"
-#include "crypto_Rsa2048PssSha512Signer_TestClass.h"
-#include "crypto_Rsa4096PssSha512Signer_TestClass.h"
+#include "crypto_Rsa1024Pkcs1Sha2256Signer_TestClass.h"
+#include "crypto_Rsa2048Pkcs1Sha2256Signer_TestClass.h"
+#include "crypto_Rsa4096Pkcs1Sha2256Signer_TestClass.h"
+#include "crypto_Rsa1024Pkcs1Sha2512Signer_TestClass.h"
+#include "crypto_Rsa2048Pkcs1Sha2512Signer_TestClass.h"
+#include "crypto_Rsa4096Pkcs1Sha2512Signer_TestClass.h"
+#include "crypto_Rsa1024PssSha2256Signer_TestClass.h"
+#include "crypto_Rsa2048PssSha2256Signer_TestClass.h"
+#include "crypto_Rsa4096PssSha2256Signer_TestClass.h"
+#include "crypto_Rsa1024PssSha2512Signer_TestClass.h"
+#include "crypto_Rsa2048PssSha2512Signer_TestClass.h"
+#include "crypto_Rsa4096PssSha2512Signer_TestClass.h"
 
 #include "ITestClass.h"
 
@@ -246,17 +246,17 @@ int main(int argc, char** argv)
 	// namespace tc::crypto
 	runTest<crypto_Md5Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Sha1Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Sha256Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Sha512Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Sha2256Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Sha2512Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_HmacMd5Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_HmacSha1Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_HmacSha256Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_HmacSha512Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_HmacSha2256Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_HmacSha2512Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Pbkdf1Md5KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Pbkdf1Sha1KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Pbkdf2Sha1KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Pbkdf2Sha256KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Pbkdf2Sha512KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Pbkdf2Sha2256KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Pbkdf2Sha2512KeyDeriver_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_PseudoRandomByteGenerator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes128Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes192Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
@@ -275,29 +275,29 @@ int main(int argc, char** argv)
 	runTest<crypto_Aes128XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes256XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes128CcmEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa1024OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa2048OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa4096OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa2048OaepSha512Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa4096OaepSha512Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa1024OaepSha2256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048OaepSha2256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096OaepSha2256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048OaepSha2512Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096OaepSha2512Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa1024Pkcs1Md5Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa2048Pkcs1Md5Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa4096Pkcs1Md5Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa1024Pkcs1Sha1Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa2048Pkcs1Sha1Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa4096Pkcs1Sha1Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa1024Pkcs1Sha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa2048Pkcs1Sha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa4096Pkcs1Sha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa1024Pkcs1Sha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa2048Pkcs1Sha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa4096Pkcs1Sha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa1024PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa2048PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa4096PssSha256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa1024PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa2048PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Rsa4096PssSha512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa1024Pkcs1Sha2256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048Pkcs1Sha2256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096Pkcs1Sha2256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa1024Pkcs1Sha2512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048Pkcs1Sha2512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096Pkcs1Sha2512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa1024PssSha2256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048PssSha2256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096PssSha2256Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa1024PssSha2512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa2048PssSha2512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Rsa4096PssSha2512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 
 	// output results
 	outputResultsToStdout(global_test_results, include_result_regex, exclude_result_regex);
