@@ -862,7 +862,7 @@ void io_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_DoesExist()
 
 		// teardown env
 		local_storage.setWorkingDirectory(old_dir);
-		local_storage.removeDirectory(tc::io::Path(kDirPath));	
+		local_storage.removeDirectory(tc::io::Path(kDirPath));
 	}
 	catch (const std::exception& e)
 	{
@@ -953,7 +953,7 @@ void io_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_UnicodePath()
 
 		// env teardown
 		local_storage.setWorkingDirectory(old_dir);
-		local_storage.removeDirectory(kUtf8DirPath);	
+		local_storage.removeDirectory(kUtf8DirPath);
 	}
 	catch (const std::exception& e)
 	{

@@ -104,7 +104,7 @@ void crypto_Aes192Encryptor_TestClass::test_UseClassEnc()
 
 		for (auto test = tests.begin(); test != tests.end(); test++)
 		{
-			tc::ByteData data = tc::ByteData(test->plaintext.size());	
+			tc::ByteData data = tc::ByteData(test->plaintext.size());
 
 			// initialize key
 			cryptor.initialize(test->key.data(), test->key.size());

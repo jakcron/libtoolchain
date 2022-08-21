@@ -87,7 +87,7 @@ void io_StreamSink_TestClass::testCreateConstructor()
 		size_t expected_data_len = 0x1000;
 		tc::ByteData expected_data(expected_data_len);
 		int64_t base_stream_len = 0x100000;
-		auto base_stream = std::shared_ptr<tc::io::MemoryStream>(new tc::io::MemoryStream(base_stream_len));	
+		auto base_stream = std::shared_ptr<tc::io::MemoryStream>(new tc::io::MemoryStream(base_stream_len));
 		tc::io::StreamSink sink = tc::io::StreamSink(base_stream);
 
 		// test
@@ -388,7 +388,7 @@ void io_StreamSink_TestClass::testPushDataOutsideOfBaseRange()
 		size_t data_len = 0x1000;
 		tc::ByteData data(data_len);
 		int64_t base_stream_len = 0x100000;
-		auto base_stream = std::shared_ptr<tc::io::MemoryStream>(new tc::io::MemoryStream(base_stream_len));	
+		auto base_stream = std::shared_ptr<tc::io::MemoryStream>(new tc::io::MemoryStream(base_stream_len));
 		tc::io::StreamSink sink = tc::io::StreamSink(base_stream);
 
 		// test

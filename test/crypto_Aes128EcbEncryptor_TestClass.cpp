@@ -106,7 +106,7 @@ void crypto_Aes128EcbEncryptor_TestClass::test_UseClassEnc()
 
 		for (auto test = tests.begin(); test != tests.end(); test++)
 		{
-			tc::ByteData data = tc::ByteData(test->plaintext.size());	
+			tc::ByteData data = tc::ByteData(test->plaintext.size());
 
 			// initialize key
 			cryptor.initialize(test->key.data(), test->key.size());
@@ -224,7 +224,7 @@ void crypto_Aes128EcbEncryptor_TestClass::test_UseUtilFuncEnc()
 
 		for (auto test = tests.begin(); test != tests.end(); test++)
 		{
-			tc::ByteData data = tc::ByteData(test->plaintext.size());	
+			tc::ByteData data = tc::ByteData(test->plaintext.size());
 			
 			// clear data
 			memset(data.data(), 0xff, data.size());
