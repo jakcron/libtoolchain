@@ -177,7 +177,7 @@ void crypto_Aes256EcbEncryptor_TestClass::test_UseClassDec()
 			// decrypt data
 			cryptor.decrypt(data.data(), test->ciphertext.data(), data.size());
 
-			// test plain text			
+			// test plain text
 			if (memcmp(data.data(), test->plaintext.data(), data.size()) != 0)
 			{
 				throw tc::TestException(fmt::format("Test \"{:s}\" Failed: {:s} (expected {:s})", test->test_name, tc::cli::FormatUtil::formatBytesAsString(data, true, ""), tc::cli::FormatUtil::formatBytesAsString(test->plaintext, true, "")));
@@ -289,7 +289,7 @@ void crypto_Aes256EcbEncryptor_TestClass::test_UseUtilFuncDec()
 			// decrypt data
 			tc::crypto::DecryptAes256Ecb(data.data(), test->ciphertext.data(), data.size(), test->key.data(), test->key.size());
 
-			// test plain text			
+			// test plain text
 			if (memcmp(data.data(), test->plaintext.data(), data.size()) != 0)
 			{
 				throw tc::TestException(fmt::format("Test \"{:s}\" Failed: {:s} (expected {:s})", test->test_name, tc::cli::FormatUtil::formatBytesAsString(data, true, ""), tc::cli::FormatUtil::formatBytesAsString(test->plaintext, true, "")));
@@ -335,7 +335,7 @@ void crypto_Aes256EcbEncryptor_TestClass::test_DoesNothingWhenNotInit()
 		// try to decrypt without calling initialize()
 		cryptor.decrypt(data.data(), data.data(), data.size());
 
-		// test plain text			
+		// test plain text
 		if (memcmp(data.data(), control_data.data(), data.size()) != 0)
 		{
 			throw tc::TestException("Failed: decrypt() operated on data when not initialized");
@@ -344,7 +344,7 @@ void crypto_Aes256EcbEncryptor_TestClass::test_DoesNothingWhenNotInit()
 		// try to encrypt without calling initialize()
 		cryptor.encrypt(data.data(), data.data(), data.size());
 
-		// test plain text			
+		// test plain text
 		if (memcmp(data.data(), control_data.data(), data.size()) != 0)
 		{
 			throw tc::TestException("Failed: encrypt() operated on data when not initialized");
