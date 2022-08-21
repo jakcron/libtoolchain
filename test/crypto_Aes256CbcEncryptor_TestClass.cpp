@@ -570,6 +570,17 @@ void crypto_Aes256CbcEncryptor_TestClass::test_EncryptThrowsExceptionOnBadInput(
 			throw tc::TestException("Failed to throw correct exception where size==kBlockSize-1");
 		}
 
+		try
+		{
+			cryptor.encrypt(data.data(), tests[0].plaintext.data(), tc::crypto::Aes256CbcEncryptor::kBlockSize+1);
+			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where size==kBlockSize+1");
+		}
+		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
+		catch (const tc::Exception&)
+		{
+			throw tc::TestException("Failed to throw correct exception where size==kBlockSize+1");
+		}
+
 		// record result
 		test_result.result = "PASS";
 		test_result.comments = "";
@@ -641,7 +652,7 @@ void crypto_Aes256CbcEncryptor_TestClass::test_DecryptThrowsExceptionOnBadInput(
 
 		try
 		{
-			cryptor.encrypt(data.data(), tests[0].plaintext.data(), 0);
+			cryptor.decrypt(data.data(), tests[0].plaintext.data(), 0);
 			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where size==0");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
@@ -652,13 +663,24 @@ void crypto_Aes256CbcEncryptor_TestClass::test_DecryptThrowsExceptionOnBadInput(
 
 		try
 		{
-			cryptor.encrypt(data.data(), tests[0].plaintext.data(), tc::crypto::Aes256CbcEncryptor::kBlockSize-1);
+			cryptor.decrypt(data.data(), tests[0].plaintext.data(), tc::crypto::Aes256CbcEncryptor::kBlockSize-1);
 			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where size==kBlockSize-1");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
 		catch (const tc::Exception&)
 		{
 			throw tc::TestException("Failed to throw correct exception where size==kBlockSize-1");
+		}
+
+		try
+		{
+			cryptor.decrypt(data.data(), tests[0].plaintext.data(), tc::crypto::Aes256CbcEncryptor::kBlockSize+1);
+			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where size==kBlockSize+1");
+		}
+		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
+		catch (const tc::Exception&)
+		{
+			throw tc::TestException("Failed to throw correct exception where size==kBlockSize+1");
 		}
 
 		// record result

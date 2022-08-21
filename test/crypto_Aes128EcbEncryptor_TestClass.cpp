@@ -596,7 +596,7 @@ void crypto_Aes128EcbEncryptor_TestClass::test_DecryptThrowsExceptionOnBadInput(
 
 		try
 		{
-			cryptor.encrypt(data.data(), tests[0].plaintext.data(), 0);
+			cryptor.decrypt(data.data(), tests[0].plaintext.data(), 0);
 			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where size==0");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
@@ -607,7 +607,7 @@ void crypto_Aes128EcbEncryptor_TestClass::test_DecryptThrowsExceptionOnBadInput(
 
 		try
 		{
-			cryptor.encrypt(data.data(), tests[0].plaintext.data(), tc::crypto::Aes128EcbEncryptor::kBlockSize-1);
+			cryptor.decrypt(data.data(), tests[0].plaintext.data(), tc::crypto::Aes128EcbEncryptor::kBlockSize-1);
 			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where size==kBlockSize-1");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
