@@ -95,7 +95,11 @@ void crypto_Aes128Encryptor_TestClass::test_UseClassEnc()
 		// create tests
 		std::vector<AesEncryptorUtil::TestVector> tests;
 		AesEncryptorUtil::generateAesTestVectors_Nist(tests, 128);
-
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
+		
 		tc::crypto::Aes128Encryptor cryptor;
 
 		for (auto test = tests.begin(); test != tests.end(); test++)
@@ -151,6 +155,10 @@ void crypto_Aes128Encryptor_TestClass::test_UseClassDec()
 		// create tests
 		std::vector<AesEncryptorUtil::TestVector> tests;
 		AesEncryptorUtil::generateAesTestVectors_Nist(tests, 128);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
 
 		tc::crypto::Aes128Encryptor cryptor;
 
@@ -261,6 +269,10 @@ void crypto_Aes128Encryptor_TestClass::test_InitializeThrowsExceptionOnBadInput(
 		// create tests
 		std::vector<AesEncryptorUtil::TestVector> tests;
 		AesEncryptorUtil::generateAesTestVectors_Nist(tests, 128);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
 
 		tc::crypto::Aes128Encryptor cryptor;
 
@@ -341,6 +353,10 @@ void crypto_Aes128Encryptor_TestClass::test_EncryptThrowsExceptionOnBadInput()
 		// create tests
 		std::vector<AesEncryptorUtil::TestVector> tests;
 		AesEncryptorUtil::generateAesTestVectors_Nist(tests, 128);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
 
 		tc::crypto::Aes128Encryptor cryptor;
 
@@ -406,6 +422,10 @@ void crypto_Aes128Encryptor_TestClass::test_DecryptThrowsExceptionOnBadInput()
 		// create tests
 		std::vector<AesEncryptorUtil::TestVector> tests;
 		AesEncryptorUtil::generateAesTestVectors_Nist(tests, 128);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
 
 		tc::crypto::Aes128Encryptor cryptor;
 

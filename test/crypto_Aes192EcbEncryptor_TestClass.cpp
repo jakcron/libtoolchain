@@ -97,6 +97,10 @@ void crypto_Aes192EcbEncryptor_TestClass::test_UseClassEnc()
 		// create tests
 		std::vector<AesEcbEncryptorUtil::TestVector> tests;
 		AesEcbEncryptorUtil::generateAesEcbTestVectors_Nist(tests, 192);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
 
 		tc::crypto::Aes192EcbEncryptor cryptor;
 
@@ -153,6 +157,10 @@ void crypto_Aes192EcbEncryptor_TestClass::test_UseClassDec()
 		// create tests
 		std::vector<AesEcbEncryptorUtil::TestVector> tests;
 		AesEcbEncryptorUtil::generateAesEcbTestVectors_Nist(tests, 192);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
 
 		tc::crypto::Aes192EcbEncryptor cryptor;
 
@@ -209,6 +217,10 @@ void crypto_Aes192EcbEncryptor_TestClass::test_UseUtilFuncEnc()
 		// create tests
 		std::vector<AesEcbEncryptorUtil::TestVector> tests;
 		AesEcbEncryptorUtil::generateAesEcbTestVectors_Nist(tests, 192);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
 
 		for (auto test = tests.begin(); test != tests.end(); test++)
 		{
@@ -260,6 +272,10 @@ void crypto_Aes192EcbEncryptor_TestClass::test_UseUtilFuncDec()
 		// create tests
 		std::vector<AesEcbEncryptorUtil::TestVector> tests;
 		AesEcbEncryptorUtil::generateAesEcbTestVectors_Nist(tests, 192);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
 
 		tc::crypto::Aes192EcbEncryptor cryptor;
 
@@ -367,6 +383,10 @@ void crypto_Aes192EcbEncryptor_TestClass::test_InitializeThrowsExceptionOnBadInp
 		// create tests
 		std::vector<AesEcbEncryptorUtil::TestVector> tests;
 		AesEcbEncryptorUtil::generateAesEcbTestVectors_Nist(tests, 192);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
 
 		tc::crypto::Aes192EcbEncryptor cryptor;
 
@@ -447,6 +467,10 @@ void crypto_Aes192EcbEncryptor_TestClass::test_EncryptThrowsExceptionOnBadInput(
 		// create tests
 		std::vector<AesEcbEncryptorUtil::TestVector> tests;
 		AesEcbEncryptorUtil::generateAesEcbTestVectors_Nist(tests, 192);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
 
 		tc::crypto::Aes192EcbEncryptor cryptor;
 
@@ -534,6 +558,10 @@ void crypto_Aes192EcbEncryptor_TestClass::test_DecryptThrowsExceptionOnBadInput(
 		// create tests
 		std::vector<AesEcbEncryptorUtil::TestVector> tests;
 		AesEcbEncryptorUtil::generateAesEcbTestVectors_Nist(tests, 192);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
 
 		tc::crypto::Aes192EcbEncryptor cryptor;
 
