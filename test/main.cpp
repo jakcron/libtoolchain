@@ -70,11 +70,12 @@
 #include "crypto_Rsa1024PssSha512Signer_TestClass.h"
 #include "crypto_Rsa2048PssSha512Signer_TestClass.h"
 #include "crypto_Rsa4096PssSha512Signer_TestClass.h"
-
-/*
 #include "crypto_Aes128EcbEncryptor_TestClass.h"
 #include "crypto_Aes192EcbEncryptor_TestClass.h"
 #include "crypto_Aes256EcbEncryptor_TestClass.h"
+
+/*
+
 #include "crypto_Aes128CbcEncryptor_TestClass.h"
 #include "crypto_Aes192CbcEncryptor_TestClass.h"
 #include "crypto_Aes256CbcEncryptor_TestClass.h"
@@ -271,7 +272,10 @@ int main(int argc, char** argv)
 	runTest<crypto_Aes128Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes192Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	
+	runTest<crypto_Aes128EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes192EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes256EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+
 
 	runTest<crypto_Rsa1024OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa2048OaepSha256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
@@ -300,10 +304,6 @@ int main(int argc, char** argv)
 
 	/*
 	
-	
-	runTest<crypto_Aes128EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Aes192EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	runTest<crypto_Aes256EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes128CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes192CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes256CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
