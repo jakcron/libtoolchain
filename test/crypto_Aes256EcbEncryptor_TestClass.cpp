@@ -395,23 +395,23 @@ void crypto_Aes256EcbEncryptor_TestClass::test_InitializeThrowsExceptionOnBadInp
 		try
 		{
 			cryptor.initialize(tests[0].key.data(), tc::crypto::Aes256EcbEncryptor::kKeySize-1);
-			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where key_size==tc::crypto::Aes256EcbEncryptor::kKeySize-1");
+			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where key_size==kKeySize-1");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
 		catch (const tc::Exception&)
 		{
-			throw tc::TestException("Failed to throw correct exception where key_size==tc::crypto::Aes256EcbEncryptor::kKeySize-1");
+			throw tc::TestException("Failed to throw correct exception where key_size==kKeySize-1");
 		}
 
 		try
 		{
 			cryptor.initialize(tests[0].key.data(), tc::crypto::Aes256EcbEncryptor::kKeySize+1);
-			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where key_size==tc::crypto::Aes256EcbEncryptor::kKeySize+1");
+			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where key_size==kKeySize+1");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
 		catch (const tc::Exception&)
 		{
-			throw tc::TestException("Failed to throw correct exception where key_size==tc::crypto::Aes256EcbEncryptor::kKeySize+1");
+			throw tc::TestException("Failed to throw correct exception where key_size==kKeySize+1");
 		}
 
 		// record result
@@ -482,23 +482,23 @@ void crypto_Aes256EcbEncryptor_TestClass::test_EncryptThrowsExceptionOnBadInput(
 		try
 		{
 			cryptor.encrypt(data.data(), tests[0].plaintext.data(), 0);
-			throw tc::Exception("Failed to throw ArgumentOutOfRangeException where size==0");
+			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where size==0");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
 		catch (const tc::Exception&)
 		{
-			throw tc::Exception("Failed to throw correct exception where size==0");
+			throw tc::TestException("Failed to throw correct exception where size==0");
 		}
 
 		try
 		{
 			cryptor.encrypt(data.data(), tests[0].plaintext.data(), tc::crypto::Aes256EcbEncryptor::kBlockSize-1);
-			throw tc::Exception("Failed to throw ArgumentOutOfRangeException where size==tc::crypto::Aes256EcbEncryptor::kBlockSize-1");
+			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where size==kBlockSize-1");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
 		catch (const tc::Exception&)
 		{
-			throw tc::Exception("Failed to throw correct exception where size==tc::crypto::Aes256EcbEncryptor::kBlockSize-1");
+			throw tc::TestException("Failed to throw correct exception where size==kBlockSize-1");
 		}
 
 		// record result
@@ -569,23 +569,23 @@ void crypto_Aes256EcbEncryptor_TestClass::test_DecryptThrowsExceptionOnBadInput(
 		try
 		{
 			cryptor.encrypt(data.data(), tests[0].plaintext.data(), 0);
-			throw tc::Exception("Failed to throw ArgumentOutOfRangeException where size==0");
+			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where size==0");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
 		catch (const tc::Exception&)
 		{
-			throw tc::Exception("Failed to throw correct exception where size==0");
+			throw tc::TestException("Failed to throw correct exception where size==0");
 		}
 
 		try
 		{
 			cryptor.encrypt(data.data(), tests[0].plaintext.data(), tc::crypto::Aes256EcbEncryptor::kBlockSize-1);
-			throw tc::Exception("Failed to throw ArgumentOutOfRangeException where size==tc::crypto::Aes256EcbEncryptor::kBlockSize-1");
+			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where size==kBlockSize-1");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
 		catch (const tc::Exception&)
 		{
-			throw tc::Exception("Failed to throw correct exception where size==tc::crypto::Aes256EcbEncryptor::kBlockSize-1");
+			throw tc::TestException("Failed to throw correct exception where size==kBlockSize-1");
 		}
 
 		// record result
