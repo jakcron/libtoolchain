@@ -335,7 +335,7 @@ void crypto_Aes256XtsEncryptor_TestClass::test_DoesNothingWhenNotInit()
 		// check sector size is zero when not initialized
 		if (cryptor.sector_size() != 0)
 		{
-			throw tc::Exception("Failed: sector_size() reported a non-zero answer when not initialized");
+			throw tc::TestException("Failed: sector_size() reported a non-zero answer when not initialized");
 		}
 
 		// try to decrypt without calling initialize()
@@ -490,23 +490,23 @@ void crypto_Aes256XtsEncryptor_TestClass::test_InitializeThrowsExceptionOnBadInp
 		try
 		{
 			cryptor.initialize(tests[0].key1.data(), tests[0].key1.size(), tests[0].key2.data(), tests[0].key2.size(), 0, true);
-			throw tc::Exception("Failed to throw ArgumentOutOfRangeException where sector_size==0");
+			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where sector_size==0");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
 		catch (const tc::Exception&)
 		{
-			throw tc::Exception("Failed to throw correct exception where sector_size==0");
+			throw tc::TestException("Failed to throw correct exception where sector_size==0");
 		}
 
 		try
 		{
 			cryptor.initialize(tests[0].key1.data(), tests[0].key1.size(), tests[0].key2.data(), tests[0].key2.size(), tc::crypto::Aes256XtsEncryptor::kBlockSize-1, true);
-			throw tc::Exception("Failed to throw ArgumentOutOfRangeException where sector_size==kBlockSize-1");
+			throw tc::TestException("Failed to throw ArgumentOutOfRangeException where sector_size==kBlockSize-1");
 		}
 		catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
 		catch (const tc::Exception&)
 		{
-			throw tc::Exception("Failed to throw correct exception where sector_size==kBlockSize-1");
+			throw tc::TestException("Failed to throw correct exception where sector_size==kBlockSize-1");
 		}
 
 		// record result

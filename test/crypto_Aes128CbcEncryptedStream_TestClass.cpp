@@ -50,56 +50,56 @@ void crypto_Aes128CbcEncryptedStream_TestClass::test_CreateEmptyStream_DefaultCo
 		try
 		{
 			stream.read(nullptr, 0);
-			throw tc::Exception(".read() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".read() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
 		}
 		catch (tc::ObjectDisposedException&) { /* do nothing */ }
 		catch (tc::Exception&)
 		{
-			throw tc::Exception(".read() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".read() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
 		}
 
 		try
 		{
 			stream.write(nullptr, 0);
-			throw tc::Exception(".write() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".write() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
 		}
 		catch (tc::ObjectDisposedException&) { /* do nothing */ }
 		catch (tc::Exception&)
 		{
-			throw tc::Exception(".write() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".write() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
 		}
 
 		try
 		{
 			stream.seek(0, tc::io::SeekOrigin::Begin);
-			throw tc::Exception(".seek() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".seek() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
 		}
 		catch (tc::ObjectDisposedException&) { /* do nothing */ }
 		catch (tc::Exception&)
 		{
-			throw tc::Exception(".seek() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".seek() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
 		}
 
 		try
 		{
 			stream.setLength(0);
-			throw tc::Exception(".setLength() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".setLength() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
 		}
 		catch (tc::ObjectDisposedException&) { /* do nothing */ }
 		catch (tc::Exception&)
 		{
-			throw tc::Exception(".setLength() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".setLength() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
 		}
 
 		try
 		{
 			stream.flush();
-			throw tc::Exception(".flush() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".flush() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
 		}
 		catch (tc::ObjectDisposedException&) { /* do nothing */ }
 		catch (tc::Exception&)
 		{
-			throw tc::Exception(".flush() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".flush() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
 		}
 
 		// record result
@@ -143,23 +143,23 @@ void crypto_Aes128CbcEncryptedStream_TestClass::test_CreateValidStream_CreateCon
 		try
 		{
 			stream.write(nullptr, 0);
-			throw tc::Exception(".write() did not throw tc::NotImplementedException for initialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".write() did not throw tc::NotImplementedException for initialized Aes128CbcEncryptedStream");
 		}
 		catch (tc::NotImplementedException&) { /* do nothing */ }
 		catch (tc::Exception&)
 		{
-			throw tc::Exception(".write() did not throw correct exception for initialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".write() did not throw correct exception for initialized Aes128CbcEncryptedStream");
 		}
 
 		try
 		{
 			stream.setLength(0);
-			throw tc::Exception(".setLength() did not throw tc::NotImplementedException for initialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".setLength() did not throw tc::NotImplementedException for initialized Aes128CbcEncryptedStream");
 		}
 		catch (tc::NotImplementedException&) { /* do nothing */ }
 		catch (tc::Exception&)
 		{
-			throw tc::Exception(".setLength() did not throw correct exception for initialized Aes128CbcEncryptedStream");
+			throw tc::TestException(".setLength() did not throw correct exception for initialized Aes128CbcEncryptedStream");
 		}
 
 		// record result
@@ -217,7 +217,7 @@ void crypto_Aes128CbcEncryptedStream_TestClass::test_RunTestCases()
 			}
 			catch (const tc::Exception& e)
 			{
-				throw tc::Exception(fmt::format("{} Failed: {}", itr->test_name, e.error()));
+				throw tc::TestException(fmt::format("{} Failed: {}", itr->test_name, e.error()));
 			}
 			
 		}
