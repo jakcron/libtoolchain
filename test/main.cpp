@@ -50,7 +50,7 @@
 #include "crypto_Aes128CbcEncryptor_TestClass.h"
 #include "crypto_Aes192CbcEncryptor_TestClass.h"
 #include "crypto_Aes256CbcEncryptor_TestClass.h"
-//#include "crypto_Aes128CbcEncryptedStream_TestClass.h"
+#include "crypto_Aes128CbcEncryptedStream_TestClass.h"
 #include "crypto_Aes128CtrEncryptor_TestClass.h"
 #include "crypto_Aes192CtrEncryptor_TestClass.h"
 #include "crypto_Aes256CtrEncryptor_TestClass.h"
@@ -267,7 +267,7 @@ int main(int argc, char** argv)
 	runTest<crypto_Aes128CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes192CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes256CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
-	//runTest<crypto_Aes128CbcEncryptedStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Aes128CbcEncryptedStream_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes128CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes192CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes256CtrEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
