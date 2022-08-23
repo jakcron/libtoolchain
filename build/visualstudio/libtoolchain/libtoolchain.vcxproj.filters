@@ -160,6 +160,9 @@
     <ClCompile Include="..\..\..\src\io\ConcatenatedStream.cpp">
       <Filter>Source Files\io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\io\EmptyStream.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\io\IOUtil.cpp">
       <Filter>Source Files\io</Filter>
     </ClCompile>
@@ -520,6 +523,9 @@
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\io\ConcatenatedStream.h">
+      <Filter>Header Files\tc\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\io\EmptyStream.h">
       <Filter>Header Files\tc\io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\io\DirectoryNotEmptyException.h">
