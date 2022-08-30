@@ -2630,7 +2630,7 @@ void io_FileStream_TestClass::test_Read_NullDstPointer()
 			{
 				auto stream = tc::io::FileStream(kAsciiFilePath, tc::io::FileMode::Open, tc::io::FileAccess::Read);
 
-				StreamTestUtil::read_TestHelper(stream, 0, tc::io::SeekOrigin::Begin, 0, kRandomString.size(), 0, kRandomString.size(), (const byte_t*)kRandomString.c_str());
+				stream.read(nullptr, kRandomString.size());
 				
 				throw tc::TestException(".read() when passed a nullptr did not throw tc::ArgumentNullException");
 			}

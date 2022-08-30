@@ -57,7 +57,7 @@ void StreamTestUtil::seek_TestHelper(tc::io::IStream& stream, int64_t seek_offse
 
 void StreamTestUtil::read_TestHelper(tc::io::IStream& stream, int64_t seek_offset, tc::io::SeekOrigin seek_origin, size_t dst_size, size_t read_count, size_t exp_read_res, int64_t exp_pos_res, const byte_t* expected_data)
 {
-	tc::ByteData data(dst_size);
+	tc::ByteData data(dst_size == 0 ? 0x10 : dst_size);
 
 	// offset the position
 	stream.seek(seek_offset, seek_origin);
@@ -77,7 +77,7 @@ void StreamTestUtil::read_TestHelper(tc::io::IStream& stream, int64_t seek_offse
 	// validate read data
 	if (expected_data != nullptr && memcmp(data.data(), expected_data, exp_read_res) != 0)
 	{
-		throw tc::TestException(fmt::format("Stream did not read expected bytes (read: \"{}\", expected: \"{}\"", tc::cli::FormatUtil::formatBytesAsString(data.data(), data.size(), true, ""), tc::cli::FormatUtil::formatBytesAsString(expected_data, exp_read_res, true, "")));
+		throw tc::TestException(fmt::format("Stream did not read expected bytes (read: \"{}\", expected: \"{}\"", tc::cli::FormatUtil::formatBytesAsString(data.data(), read_res, true, ""), tc::cli::FormatUtil::formatBytesAsString(expected_data, exp_read_res, true, "")));
 	}
 
 	// validate pos result
