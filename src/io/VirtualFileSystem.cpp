@@ -96,17 +96,22 @@ void tc::io::VirtualFileSystem::openFile(const tc::io::Path& path, tc::io::FileM
 	// if resolved_path does not exist in the map, throw exception
 	if (file_itr == mFsSnapshot.file_entry_path_map.end())
 	{
-		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist.");
+		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist. (Path to File Index map had no match)");
 	}
-	// if the file_entry index isn't valid or leads to a null IStream pointer, throw exception
-	if (file_itr->second >= mFsSnapshot.file_entries.size() || mFsSnapshot.file_entries.at(file_itr->second).stream == nullptr)
+	// if the file_entry index isn't valid, throw exception
+	if (file_itr->second >= mFsSnapshot.file_entries.size())
 	{
-		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist.");
+		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist. (Invalid File Index)");
+	}
+	// if the file_entry index leads to a null IStream pointer, throw exception
+	if (mFsSnapshot.file_entries.at(file_itr->second).stream == nullptr)
+	{
+		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist. (File stream was null)");
 	}
 	// if the stream has invalid properties, throw exception
 	if ( !(mFsSnapshot.file_entries.at(file_itr->second).stream->canRead() == true && mFsSnapshot.file_entries.at(file_itr->second).stream->canWrite() == false) )
 	{
-		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist.");
+		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist. (File stream had invalid permissions)");
 	}
 
 	stream = mFsSnapshot.file_entries.at(file_itr->second).stream;
