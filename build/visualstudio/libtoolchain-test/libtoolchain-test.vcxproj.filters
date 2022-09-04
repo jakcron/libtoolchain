@@ -291,6 +291,9 @@
     <ClCompile Include="..\..\..\test\io_ConcatenatedStream_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\io_EmptyStream_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\test\TestException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -588,6 +591,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\io_ConcatenatedStream_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\io_EmptyStream_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\TestException.h">
