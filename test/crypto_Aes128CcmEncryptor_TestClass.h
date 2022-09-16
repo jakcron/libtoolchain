@@ -21,11 +21,15 @@ private:
 	void test_Constants();
 	void test_UseClassEnc();
 	void test_UseClassDec();
+	void test_UseClassDecVerify();
 	void test_UseUtilFuncEnc();
 	void test_UseUtilFuncDec();
+	void test_UseUtilFuncDecVerify();
 
 	void test_DoesNothingWhenNotInit();
 	void test_InitializeThrowsExceptionOnBadInput();
 	void test_EncryptThrowsExceptionOnBadInput();
 	void test_DecryptThrowsExceptionOnBadInput();
+	void test_DecryptVerifyClassReturnsFalseOnBadInput();
+	void test_DecryptVerifyUtilFuncReturnsFalseOnBadInput();
 };

@@ -20,13 +20,17 @@ void crypto_Aes128CcmEncryptor_TestClass::runAllTests(void)
 	test_Constants();
 	test_UseClassEnc();
 	test_UseClassDec();
+	test_UseClassDecVerify();
 	test_UseUtilFuncEnc();
 	test_UseUtilFuncDec();
+	test_UseUtilFuncDecVerify();
 
 	test_DoesNothingWhenNotInit();
 	test_InitializeThrowsExceptionOnBadInput();
 	test_EncryptThrowsExceptionOnBadInput();
 	test_DecryptThrowsExceptionOnBadInput();
+	test_DecryptVerifyClassReturnsFalseOnBadInput();
+	test_DecryptVerifyUtilFuncReturnsFalseOnBadInput();
 }
 
 const std::string& crypto_Aes128CcmEncryptor_TestClass::getTestTag() const
@@ -221,6 +225,72 @@ void crypto_Aes128CcmEncryptor_TestClass::test_UseClassDec()
 	mTestResults.push_back(std::move(test_result));
 }
 
+void crypto_Aes128CcmEncryptor_TestClass::test_UseClassDecVerify()
+{
+	TestResult test_result;
+	test_result.test_name = "test_UseClassDecVerify";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
+	try
+	{
+		// create tests
+		std::vector<AesCcmEncryptorUtil::TestVector> tests;
+		AesCcmEncryptorUtil::generateAesCcmTestVectors_Nist(tests, 128);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
+
+		tc::crypto::Aes128CcmEncryptor cryptor;
+
+		for (auto test = tests.begin(); test != tests.end(); test++)
+		{
+			tc::ByteData payload = tc::ByteData(test->ciphertext.size());
+
+			// initialize key
+			cryptor.initialize(test->key.data(), test->key.size());
+			
+			// clear data
+			memset(payload.data(), 0xff, payload.size());
+
+			// decrypt data
+			bool decrypt_verify_result = cryptor.decrypt_and_verify(payload.data(), test->ciphertext.data(), payload.size(), test->nonce.data(), test->nonce.size(), test->aad.data(), test->aad.size(), test->mac.data(), test->mac.size());
+			
+			// confirm result was true (indicating valid mac and other params)
+			if (decrypt_verify_result != true)
+			{
+				throw tc::TestException(fmt::format("Test \"{:s}\" Failed: decrypt_and_verify() returned {} (expected {})", test->test_name, decrypt_verify_result, true));
+			}
+
+			// validate plain text
+			if (memcmp(payload.data(), test->plaintext.data(), payload.size()) != 0)
+			{
+				throw tc::TestException(fmt::format("Test \"{:s}\" Failed: Plaintext {:s} (expected {:s})", test->test_name, tc::cli::FormatUtil::formatBytesAsString(payload, true, ""), tc::cli::FormatUtil::formatBytesAsString(test->ciphertext, true, "")));
+			}
+		}
+
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
+}
+
 void crypto_Aes128CcmEncryptor_TestClass::test_UseUtilFuncEnc()
 {
 	TestResult test_result;
@@ -323,6 +393,67 @@ void crypto_Aes128CcmEncryptor_TestClass::test_UseUtilFuncDec()
 			if (memcmp(mac.data(), test->mac.data(), mac.size()) != 0)
 			{
 				throw tc::TestException(fmt::format("Test \"{:s}\" Failed: MAC {:s} (expected {:s})", test->test_name, tc::cli::FormatUtil::formatBytesAsString(mac, true, ""), tc::cli::FormatUtil::formatBytesAsString(test->mac, true, "")));
+			}
+		}
+
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
+}
+
+void crypto_Aes128CcmEncryptor_TestClass::test_UseUtilFuncDecVerify()
+{
+	TestResult test_result;
+	test_result.test_name = "test_UseUtilFuncDecVerify";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
+	try
+	{
+		// create tests
+		std::vector<AesCcmEncryptorUtil::TestVector> tests;
+		AesCcmEncryptorUtil::generateAesCcmTestVectors_Nist(tests, 128);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
+
+		for (auto test = tests.begin(); test != tests.end(); test++)
+		{
+			tc::ByteData payload = tc::ByteData(test->ciphertext.size());
+			
+			// clear data
+			memset(payload.data(), 0xff, payload.size());
+
+			// decrypt data			
+			bool decrypt_verify_result = tc::crypto::DecryptVerifyAes128Ccm(payload.data(), test->ciphertext.data(), payload.size(), test->key.data(), test->key.size(), test->nonce.data(), test->nonce.size(), test->aad.data(), test->aad.size(), test->mac.data(), test->mac.size());
+
+			// confirm result was true (indicating valid mac and other params)
+			if (decrypt_verify_result != true)
+			{
+				throw tc::TestException(fmt::format("Test \"{:s}\" Failed: DecryptVerifyAes128Ccm() returned {} (expected {})", test->test_name, decrypt_verify_result, true));
+			}
+
+			// validate plain text
+			if (memcmp(payload.data(), test->plaintext.data(), payload.size()) != 0)
+			{
+				throw tc::TestException(fmt::format("Test \"{:s}\" Failed: Plaintext {:s} (expected {:s})", test->test_name, tc::cli::FormatUtil::formatBytesAsString(payload, true, ""), tc::cli::FormatUtil::formatBytesAsString(test->ciphertext, true, "")));
 			}
 		}
 
@@ -964,6 +1095,292 @@ void crypto_Aes128CcmEncryptor_TestClass::test_DecryptThrowsExceptionOnBadInput(
 			catch (const tc::Exception&)
 			{
 				throw tc::TestException(fmt::format("Failed to throw correct exception where tag_size=={}", invalid_mac_sizes[i]));
+			}
+		}
+
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
+}
+
+void crypto_Aes128CcmEncryptor_TestClass::test_DecryptVerifyClassReturnsFalseOnBadInput()
+{
+	TestResult test_result;
+	test_result.test_name = "test_DecryptVerifyClassReturnsFalseOnBadInput";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
+	try
+	{
+		// create tests
+		std::vector<AesCcmEncryptorUtil::TestVector> tests;
+		AesCcmEncryptorUtil::generateAesCcmTestVectors_Nist(tests, 128);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
+
+		tc::crypto::Aes128CcmEncryptor cryptor;
+
+		cryptor.initialize(tests[0].key.data(), tests[0].key.size());
+
+		tc::ByteData payload = tc::ByteData(tests[0].plaintext.size());
+		tc::ByteData mac = tc::ByteData(tests[0].mac.size());
+		tc::ByteData aad = tc::ByteData(0x10);
+
+		// reference decrypt call
+		//cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size());
+
+		if (false != cryptor.decrypt_and_verify(nullptr, tests[0].plaintext.data(), payload.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("decrypt_and_verify() did not return false where dst==nullptr");
+		}
+
+		if (false != cryptor.decrypt_and_verify(payload.data(), nullptr, payload.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("decrypt_and_verify() did not return false where src==nullptr");
+		}
+
+		if (false != cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), 0, tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("decrypt_and_verify() did not return false where size==0");
+		}
+
+		if (false != cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), payload.size(), nullptr, tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("decrypt_and_verify() did not return false where iv==nullptr but iv_size!=0");
+		}
+			
+		if (false != cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].nonce.data(), 0, tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("decrypt_and_verify() did not return false where iv!=nullptr but iv_size==0");
+		}
+		
+		if (false != cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].nonce.data(), tests[0].nonce.size(), nullptr, aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("decrypt_and_verify() did not return false where add==nullptr but add_size!=0");
+		}
+
+		if (false != cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].nonce.data(), tests[0].nonce.size(), aad.data(), 0, mac.data(), mac.size()))
+		{
+			throw tc::TestException("decrypt_and_verify() did not return false where add!=nullptr but add_size==0");
+		}
+
+		if (false != cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), nullptr, mac.size()))
+		{
+			throw tc::TestException("decrypt_and_verify() did not return false where tag==nullptr but tag_size!=0");
+		}
+	
+		if (false != cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), 0))
+		{
+			throw tc::TestException("decrypt_and_verify() did not return false where tag!=nullptr but tag_size==0");
+		}
+
+		std::vector<size_t> invalid_iv_sizes = {1,2,3,4,5,6,14,15,16};
+
+		for (size_t i = 0; i <= invalid_iv_sizes.size(); i++)
+		{
+			if (false != cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].nonce.data(), invalid_iv_sizes[i], tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+			{
+				throw tc::TestException(fmt::format("decrypt_and_verify() did not return false where iv_size=={}", invalid_iv_sizes[i]));
+			}
+		}
+
+		std::vector<size_t> valid_iv_sizes = {7,8,9,10,11,12,13};
+		uint64_t native_sizet_max = std::numeric_limits<size_t>::max();
+
+		for (size_t i = 0; i <= valid_iv_sizes.size(); i++)
+		{
+			uint64_t max_payload_size = (uint64_t)0xffffffffffffffff >> (8 * (valid_iv_sizes[i] - 7));
+			
+			// skip tests where the native size_t can't exceed the maximum payload size
+			if (max_payload_size >= native_sizet_max) continue;
+
+			if (false != cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), size_t(max_payload_size) + 1, tests[0].nonce.data(), valid_iv_sizes[i], tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+			{
+				throw tc::TestException(fmt::format("decrypt_and_verify() did not return false where size > 0x{:x} given iv_size == 0x{:x}", max_payload_size, valid_iv_sizes[i]));
+			}
+		}
+
+		if (false != cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].nonce.data(), tests[0].nonce.size(), aad.data(), 0xff01, mac.data(), mac.size()))
+		{
+			throw tc::TestException("decrypt_and_verify() did not return false where add_size > 0xff00");
+		}
+
+		std::vector<size_t> invalid_mac_sizes = {1,2,3,5,7,9,11,13,15};
+
+		for (size_t i = 0; i <= invalid_mac_sizes.size(); i++)
+		{
+			if (false != cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), invalid_mac_sizes[i]))
+			{
+				throw tc::TestException(fmt::format("decrypt_and_verify() did not return false where tag_size=={}", invalid_mac_sizes[i]));
+			}
+		}
+
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
+}
+
+void crypto_Aes128CcmEncryptor_TestClass::test_DecryptVerifyUtilFuncReturnsFalseOnBadInput()
+{
+	TestResult test_result;
+	test_result.test_name = "test_DecryptVerifyUtilFuncReturnsFalseOnBadInput";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
+	try
+	{
+		// create tests
+		std::vector<AesCcmEncryptorUtil::TestVector> tests;
+		AesCcmEncryptorUtil::generateAesCcmTestVectors_Nist(tests, 128);
+		if (tests.begin() == tests.end())
+		{
+			throw tc::TestException("No test vectors");
+		}
+
+		tc::ByteData payload = tc::ByteData(tests[0].plaintext.size());
+		tc::ByteData mac = tc::ByteData(tests[0].mac.size());
+		tc::ByteData aad = tc::ByteData(0x10);
+
+		// reference decrypt call
+		//tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size());
+
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), nullptr, tests[0].key.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where key==nullptr");
+		}
+
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), 0, tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where key_size==0");
+		}
+
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tc::crypto::Aes128CcmEncryptor::kKeySize-1, tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where key_size==kKeySize-1");
+		}
+
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tc::crypto::Aes128CcmEncryptor::kKeySize+1, tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where key_size==kKeySize+1");
+		}
+
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(nullptr, tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where dst==nullptr");
+		}
+
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), nullptr, payload.size(), tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where src==nullptr");
+		}
+
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), 0, tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where size==0");
+		}
+
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tests[0].key.size(), nullptr, tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where iv==nullptr but iv_size!=0");
+		}
+			
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), 0, tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where iv!=nullptr but iv_size==0");
+		}
+		
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), tests[0].nonce.size(), nullptr, aad.size(), mac.data(), mac.size()))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where add==nullptr but add_size!=0");
+		}
+
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), tests[0].nonce.size(), aad.data(), 0, mac.data(), mac.size()))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where add!=nullptr but add_size==0");
+		}
+
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), nullptr, mac.size()))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where tag==nullptr but tag_size!=0");
+		}
+	
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), 0))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where tag!=nullptr but tag_size==0");
+		}
+
+		std::vector<size_t> invalid_iv_sizes = {1,2,3,4,5,6,14,15,16};
+
+		for (size_t i = 0; i <= invalid_iv_sizes.size(); i++)
+		{
+			if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), invalid_iv_sizes[i], tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+			{
+				throw tc::TestException(fmt::format("tc::crypto::DecryptVerifyAes128Ccm() did not return false where iv_size=={}", invalid_iv_sizes[i]));
+			}
+		}
+
+		std::vector<size_t> valid_iv_sizes = {7,8,9,10,11,12,13};
+		uint64_t native_sizet_max = std::numeric_limits<size_t>::max();
+
+		for (size_t i = 0; i <= valid_iv_sizes.size(); i++)
+		{
+			uint64_t max_payload_size = (uint64_t)0xffffffffffffffff >> (8 * (valid_iv_sizes[i] - 7));
+			
+			// skip tests where the native size_t can't exceed the maximum payload size
+			if (max_payload_size >= native_sizet_max) continue;
+
+			if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), size_t(max_payload_size) + 1, tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), valid_iv_sizes[i], tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
+			{
+				throw tc::TestException(fmt::format("tc::crypto::DecryptVerifyAes128Ccm() did not return false where size > 0x{:x} given iv_size == 0x{:x}", max_payload_size, valid_iv_sizes[i]));
+			}
+		}
+
+		if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), tests[0].nonce.size(), aad.data(), 0xff01, mac.data(), mac.size()))
+		{
+			throw tc::TestException("tc::crypto::DecryptVerifyAes128Ccm() did not return false where add_size > 0xff00");
+		}
+
+		std::vector<size_t> invalid_mac_sizes = {1,2,3,5,7,9,11,13,15};
+
+		for (size_t i = 0; i <= invalid_mac_sizes.size(); i++)
+		{
+			if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), invalid_mac_sizes[i]))
+			{
+				throw tc::TestException(fmt::format("tc::crypto::DecryptVerifyAes128Ccm() did not return false where tag_size=={}", invalid_mac_sizes[i]));
 			}
 		}
 
