@@ -231,15 +231,15 @@ public:
 
 		try 
 		{
-			/* Check tag_size before allocating memory */
-			if (tag_size <= 2 || tag_size > 16 || tag_size % 2 != 0)
+			/* Check tag_size/tag before allocating memory */
+			if (tag_size <= 2 || tag_size > 16 || tag_size % 2 != 0 || tag == nullptr)
 			{
 				throw tc::Exception();
 			}
 
-			tc::ByteData calc_tag = tc::ByteData(tag_size);
+			tc::ByteData calc_tag = tc::ByteData(kBlockSize);
 			
-			mImpl.decrypt(dst, src, size, iv, iv_size, add, add_size, calc_tag.data(), calc_tag.size());
+			mImpl.decrypt(dst, src, size, iv, iv_size, add, add_size, calc_tag.data(), tag_size);
 
 			if (memcmp(calc_tag.data(), tag, tag_size) != 0)
 			{
