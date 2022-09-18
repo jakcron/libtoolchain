@@ -64,7 +64,18 @@ public:
 
 		virtual void getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path)
 		{
-			throw tc::NotImplementedException(kClassName, "getAbsolutePath() not implemented");
+			// save current dir for later
+			tc::io::Path prev_current_dir;
+			getWorkingDirectory(prev_current_dir);
+
+			// change the directory
+			setWorkingDirectory(path);
+
+			// save the path
+			getWorkingDirectory(abs_path);
+
+			// restore current directory
+			setWorkingDirectory(prev_current_dir);
 		}
 
 		virtual void getWorkingDirectory(tc::io::Path& path)

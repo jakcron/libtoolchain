@@ -275,14 +275,24 @@ void tc::io::LocalFileSystem::setWorkingDirectory(const tc::io::Path& path)
 
 void tc::io::LocalFileSystem::getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path)
 {
-	
+	// save current dir for later
+	Path prev_current_dir;
+	getWorkingDirectory(prev_current_dir);
+
+	// change the directory
+	setWorkingDirectory(path);
+
+	// save the path
+	getWorkingDirectory(abs_path);
+
+	// restore current directory
+	setWorkingDirectory(prev_current_dir);
 }
 
 void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
 {
 	std::vector<std::string> child_dir_name_list;
 	std::vector<std::string> child_file_name_list;
-	Path current_directory_path;
 #ifdef _WIN32
 	Path wildcard_path = path + tc::io::Path("*");
 
@@ -390,18 +400,8 @@ void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDir
 	// close dp
 	closedir(dp);
 #endif
-	// save current dir for later
-	Path prev_current_dir;
-	getWorkingDirectory(prev_current_dir);
-
-	// change the directory
-	setWorkingDirectory(path);
-
-	// save the path
-	getWorkingDirectory(current_directory_path);
-
-	// restore current directory
-	setWorkingDirectory(prev_current_dir);
+	Path current_directory_path;
+	getAbsolutePath(path, current_directory_path);
 
 	info.abs_path = current_directory_path;
 	info.dir_list = child_dir_name_list;

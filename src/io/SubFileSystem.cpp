@@ -22,19 +22,11 @@ tc::io::SubFileSystem::SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>&
 	else if (mBaseFileSystem->state().test(RESFLAG_READY) == false)
 	{
 		throw tc::InvalidOperationException(kClassName, "file_system is not ready");
-	}	
-
-	// save current path
-	tc::io::Path prev_canonical_base_path;
-	mBaseFileSystem->getWorkingDirectory(prev_canonical_base_path);
+	}
 
 	// get full path of root
 	tc::io::Path canonical_base_path;
-	mBaseFileSystem->setWorkingDirectory(base_path);
-	mBaseFileSystem->getWorkingDirectory(canonical_base_path);
-
-	// restore current path
-	mBaseFileSystem->setWorkingDirectory(prev_canonical_base_path);
+	mBaseFileSystem->getAbsolutePath(base_path, canonical_base_path);
 
 	// set state for path resolvers
 	mBasePathResolver.setCurrentDirectory(canonical_base_path);
@@ -173,19 +165,12 @@ void tc::io::SubFileSystem::setWorkingDirectory(const tc::io::Path& path)
 	}
 
 	// convert sub filesystem path to real path
+	tc::io::Path base_path;
+	subPathToRealPath(path, base_path);
+
+	// get absolute base path
 	tc::io::Path canonical_base_path;
-	subPathToRealPath(path, canonical_base_path);
-
-	// save previous basefs working directory path
-	tc::io::Path prev_canonical_base_path;
-	mBaseFileSystem->getWorkingDirectory(prev_canonical_base_path);
-
-	// set and get working directory path so that canonical_base_path is populated with the full real path
-	mBaseFileSystem->setWorkingDirectory(canonical_base_path);
-	mBaseFileSystem->getWorkingDirectory(canonical_base_path);
-
-	// restore previous basefs working directory path
-	mBaseFileSystem->setWorkingDirectory(prev_canonical_base_path);
+	mBaseFileSystem->getAbsolutePath(base_path, canonical_base_path);
 
 	// save current directory
 	tc::io::Path canonical_sub_path;
