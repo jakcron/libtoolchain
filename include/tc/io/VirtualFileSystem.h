@@ -2,8 +2,8 @@
 	 * @file VirtualFileSystem.h
 	 * @brief Declaration of tc::io::VirtualFileSystem
 	 * @author Jack (jakcron)
-	 * @version 0.2
-	 * @date 2022/02/08
+	 * @version 0.3
+	 * @date 2022/09/18
 	 **/
 #pragma once
 #include <tc/io/IFileSystem.h>
@@ -165,6 +165,17 @@ public:
 	void createDirectory(const tc::io::Path& path);
 
 		/** 
+		 * @brief Create a directory path. This is similar to @ref createDirectory() but it will create a directory for each element in the path.
+		 * @details This method is not implemented for VirtualFileSystem.
+		 * 
+		 * @param[in] path A relative or absolute path to directory.
+		 * 
+		 * @throw tc::NotImplementedException This method is not implemented for VirtualFileSystem.
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
+		 **/
+	void createDirectoryPath(const tc::io::Path& path);
+
+		/** 
 		 * @brief Remove a directory
 		 * @details This method is not implemented for VirtualFileSystem.
 		 * 
@@ -174,6 +185,16 @@ public:
 		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
 		 **/
 	void removeDirectory(const tc::io::Path& path);
+
+		/**
+		 * @brief Get absolute path from a relative path
+		 * 
+		 * @param[in]  path A path to a directory or file.
+		 * @param[out] abs_path The absolute version of @p path to populate.
+		 * 
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
+		 */
+	void getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path);
 
 		/** 
 		 * @brief Get the full path of the working directory

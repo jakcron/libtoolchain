@@ -2,8 +2,8 @@
 	 * @file IFileSystem.h
 	 * @brief Declaration of tc::io::IFileSystem
 	 * @author Jack (jakcron)
-	 * @version 0.6
-	 * @date 2019/06/18
+	 * @version 0.7
+	 * @date 2022/09/17
 	 **/
 #pragma once
 #include <tc/types.h>
@@ -96,10 +96,23 @@ public:
 	virtual void createDirectory(const tc::io::Path& path) = 0;
 
 		/** 
+		 * @brief Create a directory path. This is similar to @ref createDirectory() but it will create a directory for each element in the path.
+		 * @param[in] path A relative or absolute path to directory.
+		 **/
+	virtual void createDirectoryPath(const tc::io::Path& path) = 0;
+
+		/** 
 		 * @brief Remove a directory
 		 * @param[in] path A relative or absolute path to directory.
 		 **/
 	virtual void removeDirectory(const tc::io::Path& path) = 0;
+
+		/**
+		 * @brief Get absolute path from a relative path
+		 * @param[in]  path A path to a directory or file.
+		 * @param[out] abs_path The absolute version of @p path to populate.
+		 */
+	virtual void getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path) = 0;
 
 		/** 
 		 * @brief Get the full path of the working directory

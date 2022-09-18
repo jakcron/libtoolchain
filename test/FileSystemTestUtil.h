@@ -52,9 +52,19 @@ public:
 			throw tc::NotImplementedException(kClassName, "createDirectory() not implemented");
 		}
 
+		virtual void createDirectoryPath(const tc::io::Path& path)
+		{
+			throw tc::NotImplementedException(kClassName, "createDirectory() not implemented");
+		}
+
 		virtual void removeDirectory(const tc::io::Path& path)
 		{
 			throw tc::NotImplementedException(kClassName, "removeDirectory() not implemented");
+		}
+
+		virtual void getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path)
+		{
+			throw tc::NotImplementedException(kClassName, "getAbsolutePath() not implemented");
 		}
 
 		virtual void getWorkingDirectory(tc::io::Path& path)

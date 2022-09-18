@@ -2,8 +2,8 @@
 	 * @file SubFileSystem.h
 	 * @brief Declaration of tc::io::SubFileSystem
 	 * @author Jack (jakcron)
-	 * @version 0.5
-	 * @date 2022/01/23
+	 * @version 0.6
+	 * @date 2022/09/18
 	 **/
 #pragma once
 #include <tc/io/IFileSystem.h>
@@ -86,15 +86,36 @@ public:
 	void createDirectory(const tc::io::Path& path);
 
 		/** 
+		 * @brief Create a directory path. This is similar to @ref createDirectory() but it will create a directory for each element in the path.
+		 * 
+		 * @param[in] path A relative or absolute path to directory.
+		 * 
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
+		 **/
+	void createDirectoryPath(const tc::io::Path& path);
+
+		/** 
 		 * @brief Remove a directory
+		 * 
 		 * @param[in] path A relative or absolute path to directory.
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
 		 **/
 	void removeDirectory(const tc::io::Path& path);
 
+		/**
+		 * @brief Get absolute path from a relative path
+		 * 
+		 * @param[in]  path A path to a directory or file.
+		 * @param[out] abs_path The absolute version of @p path to populate.
+		 * 
+		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
+		 */
+	void getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path);
+
 		/** 
 		 * @brief Get the full path of the working directory
+		 * 
 		 * @param[out] path Path object to populate
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
@@ -105,6 +126,7 @@ public:
 
 		/** 
 		 * @brief Change the working directory
+		 * 
 		 * @param[in] path A relative or absolute path to directory.
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
@@ -114,6 +136,7 @@ public:
 
 		/** 
 		 * @brief Get directory listing a directory
+		 * 
 		 * @param[in] path A relative or absolute path to directory.
 		 * @param[out] info The sDirectoryListing object to populate
 		 * 

@@ -2,8 +2,8 @@
 	 * @file LocalFileSystem.h
 	 * @brief Declaration of tc::io::LocalFileSystem
 	 * @author Jack (jakcron)
-	 * @version 0.6
-	 * @date 2022/01/23
+	 * @version 0.7
+	 * @date 2022/09/18
 	 **/
 #pragma once
 #include <tc/io/IFileSystem.h>
@@ -88,6 +88,16 @@ public:
 	void createDirectory(const tc::io::Path& path);
 
 		/** 
+		 * @brief Create a directory path. This is similar to @ref createDirectory() but it will create a directory for each element in the path.
+		 * 
+		 * @param[in] path A relative or absolute path to directory.
+		 * 
+		 * @throw tc::io::IOException An I/O error has occured.
+		 * @throw tc::io::PathTooLongException The specified path, directory name, or both exceed the system-defined maximum length.
+		 **/
+	void createDirectoryPath(const tc::io::Path& path);
+
+		/** 
 		 * @brief Remove a directory
 		 * @param[in] path Path to directory
 		 * 
@@ -101,6 +111,17 @@ public:
 		 * @throw tc::io::DirectoryNotFoundException The named directory does not exist.
 		 **/
 	void removeDirectory(const tc::io::Path& path);
+
+		/**
+		 * @brief Get absolute path from a relative path
+		 * 
+		 * @param[in]  path A path to a directory or file.
+		 * @param[out] abs_path The absolute version of @p path to populate.
+		 * 
+		 * @throw tc::UnauthorisedAccessException Read or search permission was denied for a component of the pathname.
+		 * @throw tc::io::IOException An I/O error has occured.
+		 */
+	void getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path);
 
 		/** 
 		 * @brief Get the full path of the working directory

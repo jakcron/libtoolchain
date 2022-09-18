@@ -57,9 +57,9 @@ void tc::io::SubFileSystem::dispose()
 
 void tc::io::SubFileSystem::createFile(const tc::io::Path& path)
 {
-	if (mBaseFileSystem == nullptr)
+	if (this->state().test(RESFLAG_READY) == false)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::createFile()", "Failed to create file (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::createFile()", "Failed to create file (file system was not ready)");
 	}
 
 	// convert sub filesystem path to real path
@@ -72,9 +72,9 @@ void tc::io::SubFileSystem::createFile(const tc::io::Path& path)
 
 void tc::io::SubFileSystem::removeFile(const tc::io::Path& path)
 {
-	if (mBaseFileSystem == nullptr)
+	if (this->state().test(RESFLAG_READY) == false)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::removeFile()", "Failed to remove file (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::removeFile()", "Failed to remove file (file system was not ready)");
 	}
 
 	// convert sub filesystem path to real path
@@ -87,9 +87,9 @@ void tc::io::SubFileSystem::removeFile(const tc::io::Path& path)
 
 void tc::io::SubFileSystem::openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream)
 {
-	if (mBaseFileSystem == nullptr)
+	if (this->state().test(RESFLAG_READY) == false)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::openFile()", "Failed to open file (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::openFile()", "Failed to open file (file system was not ready)");
 	}
 
 	// convert sub filesystem path to real path
@@ -102,9 +102,9 @@ void tc::io::SubFileSystem::openFile(const tc::io::Path& path, tc::io::FileMode 
 
 void tc::io::SubFileSystem::createDirectory(const tc::io::Path& path)
 {
-	if (mBaseFileSystem == nullptr)
+	if (this->state().test(RESFLAG_READY) == false)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::createDirectory()", "Failed to create directory (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::createDirectory()", "Failed to create directory (file system was not ready)");
 	}
 
 	// convert sub filesystem path to real path
@@ -115,11 +115,26 @@ void tc::io::SubFileSystem::createDirectory(const tc::io::Path& path)
 	mBaseFileSystem->createDirectory(real_path);
 }
 
+void tc::io::SubFileSystem::createDirectoryPath(const tc::io::Path& path)
+{
+	if (this->state().test(RESFLAG_READY) == false)
+	{
+		throw tc::ObjectDisposedException(kClassName+"::createDirectory()", "Failed to create directory path (file system was not ready)");
+	}
+
+	// convert sub filesystem path to real path
+	tc::io::Path real_path;
+	subPathToRealPath(path, real_path);
+
+	// create directory path
+	mBaseFileSystem->createDirectoryPath(real_path);
+}
+
 void tc::io::SubFileSystem::removeDirectory(const tc::io::Path& path)
 {
-	if (mBaseFileSystem == nullptr)
+	if (this->state().test(RESFLAG_READY) == false)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::removeDirectory()", "Failed to remove directory (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::removeDirectory()", "Failed to remove directory (file system was not ready)");
 	}
 
 	// convert sub filesystem path to real path
@@ -130,11 +145,21 @@ void tc::io::SubFileSystem::removeDirectory(const tc::io::Path& path)
 	mBaseFileSystem->removeDirectory(real_path);
 }
 
+void tc::io::SubFileSystem::getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path)
+{
+	if (this->state().test(RESFLAG_READY) == false)
+	{
+		throw tc::ObjectDisposedException(kClassName+"::getWorkingDirectory()", "Failed to get absolute path (file system was not ready)");
+	}
+
+	mSubPathResolver.resolveCanonicalPath(path, abs_path);
+}
+
 void tc::io::SubFileSystem::getWorkingDirectory(tc::io::Path& path)
 {
-	if (mBaseFileSystem == nullptr)
+	if (this->state().test(RESFLAG_READY) == false)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::getWorkingDirectory()", "Failed to get current working directory (file system was not ready)");
 	}
 
 	path = mSubPathResolver.getCurrentDirectory();
@@ -142,9 +167,9 @@ void tc::io::SubFileSystem::getWorkingDirectory(tc::io::Path& path)
 
 void tc::io::SubFileSystem::setWorkingDirectory(const tc::io::Path& path)
 {
-	if (mBaseFileSystem == nullptr)
+	if (this->state().test(RESFLAG_READY) == false)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::setWorkingDirectory()", "Failed to set current working directory (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::setWorkingDirectory()", "Failed to set current working directory (file system was not ready)");
 	}
 
 	// convert sub filesystem path to real path
@@ -170,9 +195,9 @@ void tc::io::SubFileSystem::setWorkingDirectory(const tc::io::Path& path)
 
 void tc::io::SubFileSystem::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
 {
-	if (mBaseFileSystem == nullptr)
+	if (this->state().test(RESFLAG_READY) == false)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::getDirectoryListing()", "Failed to get directory listing (no base file system)");
+		throw tc::ObjectDisposedException(kClassName+"::getDirectoryListing()", "Failed to get directory listing (file system was not ready)");
 	}
 
 	// convert sub filesystem path to real path

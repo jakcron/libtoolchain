@@ -127,6 +127,16 @@ void tc::io::VirtualFileSystem::createDirectory(const tc::io::Path& path)
 	throw tc::NotImplementedException(kClassName+"::createDirectory()", "createDirectory is not supported for VirtualFileSystem");
 }
 
+void tc::io::VirtualFileSystem::createDirectoryPath(const tc::io::Path& path)
+{
+	if (mCurDir == nullptr)
+	{
+		throw tc::ObjectDisposedException(kClassName+"::createDirectoryPath()", "VirtualFileSystem not initialized");
+	}
+
+	throw tc::NotImplementedException(kClassName+"::createDirectoryPath()", "createDirectoryPath is not supported for VirtualFileSystem");
+}
+
 void tc::io::VirtualFileSystem::removeDirectory(const tc::io::Path& path)
 {
 	if (mCurDir == nullptr)
@@ -135,6 +145,16 @@ void tc::io::VirtualFileSystem::removeDirectory(const tc::io::Path& path)
 	}
 
 	throw tc::NotImplementedException(kClassName+"::removeDirectory()", "removeDirectory is not supported for VirtualFileSystem");
+}
+
+void tc::io::VirtualFileSystem::getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path)
+{
+	if (mCurDir == nullptr)
+	{
+		throw tc::ObjectDisposedException(kClassName+"::getAbsolutePath()", "VirtualFileSystem not initialized");
+	}
+
+	mPathResolver->resolveCanonicalPath(path, abs_path);
 }
 
 void tc::io::VirtualFileSystem::getWorkingDirectory(tc::io::Path& path)
