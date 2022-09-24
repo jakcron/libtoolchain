@@ -92,6 +92,10 @@ public:
 		 * 
 		 * @param[in] path A relative or absolute path to directory.
 		 * 
+		 * @throw tc::UnauthorisedAccessException Write permission is denied for a parent direcory.
+		 * @throw tc::UnauthorisedAccessException Parent directory resides in a read-only file system.
+		 * @throw tc::UnauthorisedAccessException The caller does not have the required permission.
+		 * 
 		 * @throw tc::io::IOException An I/O error has occured.
 		 * @throw tc::io::PathTooLongException The specified path, directory name, or both exceed the system-defined maximum length.
 		 **/
@@ -120,6 +124,9 @@ public:
 		 * 
 		 * @throw tc::UnauthorisedAccessException Read or search permission was denied for a component of the pathname.
 		 * @throw tc::io::IOException An I/O error has occured.
+		 * @throw tc::io::PathTooLongException The specified path, directory name, or both exceed the system-defined maximum length.
+		 * @throw tc::io::DirectoryNotFoundException A component of the path prefix is not a directory.
+		 * @throw tc::io::DirectoryNotFoundException The named directory does not exist.
 		 */
 	void getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path);
 

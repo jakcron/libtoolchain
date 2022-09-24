@@ -140,7 +140,38 @@ void tc::io::LocalFileSystem::createDirectory(const tc::io::Path& path)
 
 void tc::io::LocalFileSystem::createDirectoryPath(const tc::io::Path& path)
 {
+	tc::io::Path tmp_path;
 
+	for (size_t i = 0; i <= path.size(); i++)
+	{
+		tmp_path = path.subpath(0, i);
+
+		// skip empty or contextual path subjects
+		if (tmp_path.empty() || tmp_path.back().empty() || tmp_path.back() == "." || tmp_path.back() == "..")
+			continue;
+
+		try 
+		{
+			createDirectory(tmp_path);
+		}
+		// preserve createDirectory() exceptions but rename the module name
+		catch (tc::io::PathTooLongException& e)
+		{
+			throw tc::io::PathTooLongException(kClassName+"::createDirectoryPath()", e.error());
+		}
+		catch (tc::io::IOException& e)
+		{
+			throw tc::io::IOException(kClassName+"::createDirectoryPath()", e.error());
+		}
+		catch (tc::UnauthorisedAccessException& e)
+		{
+			throw tc::UnauthorisedAccessException(kClassName+"::createDirectoryPath()", e.error());
+		}
+		catch (tc::Exception& e)
+		{
+			throw tc::Exception(kClassName+"::createDirectoryPath()", e.error());
+		}
+	}
 }
 
 void tc::io::LocalFileSystem::removeDirectory(const tc::io::Path& path)
