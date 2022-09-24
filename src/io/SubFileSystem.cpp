@@ -144,7 +144,16 @@ void tc::io::SubFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io::P
 		throw tc::ObjectDisposedException(kClassName+"::getCanonicalPath()", "Failed to get absolute path (file system was not ready)");
 	}
 
-	mSubPathResolver.resolveCanonicalPath(path, canon_path);
+	// convert sub filesystem path to real path
+	tc::io::Path real_path;
+	subPathToRealPath(path, real_path);
+
+	// get canononical real path
+	tc::io::Path real_canon_path;
+	mBaseFileSystem->getCanonicalPath(real_path, real_canon_path);
+
+	// save sub canonical path
+	realPathToSubPath(real_canon_path, canon_path);
 }
 
 void tc::io::SubFileSystem::getWorkingDirectory(tc::io::Path& path)
