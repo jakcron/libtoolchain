@@ -275,15 +275,58 @@ void tc::io::LocalFileSystem::setWorkingDirectory(const tc::io::Path& path)
 
 void tc::io::LocalFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path)
 {
-	// save current dir for later
+	// save current dir for restoring later
 	Path prev_current_dir;
 	getWorkingDirectory(prev_current_dir);
 
-	// change the directory
-	setWorkingDirectory(path);
+	try
+	{
+		// change the directory
+		setWorkingDirectory(path);
 
-	// save the path
-	getWorkingDirectory(canon_path);
+		// save the path
+		Path temp_canon_path;
+		getWorkingDirectory(temp_canon_path);
+
+		// only write to canon path now as exceptions could be thrown before now
+		canon_path = temp_canon_path;
+	}
+	// preserve exception types
+	catch (tc::io::PathTooLongException& e)
+	{
+		// restore current directory
+		setWorkingDirectory(prev_current_dir);
+
+		throw tc::io::PathTooLongException(kClassName+"::getCanonicalPath()", e.error());
+	}
+	catch (tc::io::DirectoryNotFoundException& e)
+	{
+		// restore current directory
+		setWorkingDirectory(prev_current_dir);
+
+		throw tc::io::DirectoryNotFoundException(kClassName+"::getCanonicalPath()", e.error());
+	}
+	catch (tc::io::IOException& e)
+	{
+		// restore current directory
+		setWorkingDirectory(prev_current_dir);
+
+		throw tc::io::IOException(kClassName+"::getCanonicalPath()", e.error());
+	}
+	catch (tc::UnauthorisedAccessException& e)
+	{
+		// restore current directory
+		setWorkingDirectory(prev_current_dir);
+
+		throw tc::UnauthorisedAccessException(kClassName+"::getCanonicalPath()", e.error());
+	}
+	catch (tc::Exception& e)
+	{
+		// restore current directory
+		setWorkingDirectory(prev_current_dir);
+
+		throw tc::Exception(kClassName+"::getCanonicalPath()", e.error());
+	}
 
 	// restore current directory
 	setWorkingDirectory(prev_current_dir);
