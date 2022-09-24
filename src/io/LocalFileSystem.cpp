@@ -3,6 +3,7 @@
 #include <tc/PlatformErrorHandlingUtil.h>
 #include <tc/Exception.h>
 #include <tc/string.h>
+#include <fmt/format.h>
 
 #ifdef _WIN32
 #include <direct.h>
@@ -308,7 +309,14 @@ void tc::io::LocalFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io:
 {
 	// save current dir for restoring later
 	Path prev_current_dir;
-	getWorkingDirectory(prev_current_dir);
+	try
+	{
+		getWorkingDirectory(prev_current_dir);
+	}
+	catch (tc::Exception& e)
+	{
+		throw tc::io::IOException(kClassName+"::getCanonicalPath()", fmt::format("Failed to save current directory ({})", e.error()));
+	}
 
 	try
 	{
@@ -322,7 +330,7 @@ void tc::io::LocalFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io:
 		// only write to canon path now as exceptions could be thrown before now
 		canon_path = temp_canon_path;
 	}
-	// preserve exception types
+	// preserve getWorkingDirectory()/setWorkingDirectory() exceptions but rename the module name
 	catch (tc::io::PathTooLongException& e)
 	{
 		// restore current directory
@@ -360,7 +368,14 @@ void tc::io::LocalFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io:
 	}
 
 	// restore current directory
-	setWorkingDirectory(prev_current_dir);
+	try
+	{
+		setWorkingDirectory(prev_current_dir);
+	}
+	catch (tc::Exception& e)
+	{
+		throw tc::io::IOException(kClassName+"::getCanonicalPath()", fmt::format("Failed to restore current directory ({})", e.error()));
+	}
 }
 
 void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
