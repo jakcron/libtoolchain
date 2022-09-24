@@ -26,7 +26,7 @@ tc::io::SubFileSystem::SubFileSystem(const std::shared_ptr<tc::io::IFileSystem>&
 
 	// get full path of root
 	tc::io::Path canonical_base_path;
-	mBaseFileSystem->getAbsolutePath(base_path, canonical_base_path);
+	mBaseFileSystem->getCanonicalPath(base_path, canonical_base_path);
 
 	// set state for path resolvers
 	mBasePathResolver.setCurrentDirectory(canonical_base_path);
@@ -111,7 +111,7 @@ void tc::io::SubFileSystem::createDirectoryPath(const tc::io::Path& path)
 {
 	if (this->state().test(RESFLAG_READY) == false)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::createDirectory()", "Failed to create directory path (file system was not ready)");
+		throw tc::ObjectDisposedException(kClassName+"::createDirectoryPath()", "Failed to create directory path (file system was not ready)");
 	}
 
 	// convert sub filesystem path to real path
@@ -137,14 +137,14 @@ void tc::io::SubFileSystem::removeDirectory(const tc::io::Path& path)
 	mBaseFileSystem->removeDirectory(real_path);
 }
 
-void tc::io::SubFileSystem::getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path)
+void tc::io::SubFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path)
 {
 	if (this->state().test(RESFLAG_READY) == false)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::getWorkingDirectory()", "Failed to get absolute path (file system was not ready)");
+		throw tc::ObjectDisposedException(kClassName+"::getCanonicalPath()", "Failed to get absolute path (file system was not ready)");
 	}
 
-	mSubPathResolver.resolveCanonicalPath(path, abs_path);
+	mSubPathResolver.resolveCanonicalPath(path, canon_path);
 }
 
 void tc::io::SubFileSystem::getWorkingDirectory(tc::io::Path& path)
@@ -170,7 +170,7 @@ void tc::io::SubFileSystem::setWorkingDirectory(const tc::io::Path& path)
 
 	// get absolute base path
 	tc::io::Path canonical_base_path;
-	mBaseFileSystem->getAbsolutePath(base_path, canonical_base_path);
+	mBaseFileSystem->getCanonicalPath(base_path, canonical_base_path);
 
 	// save current directory
 	tc::io::Path canonical_sub_path;

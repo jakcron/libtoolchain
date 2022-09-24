@@ -147,14 +147,14 @@ void tc::io::VirtualFileSystem::removeDirectory(const tc::io::Path& path)
 	throw tc::NotImplementedException(kClassName+"::removeDirectory()", "removeDirectory is not supported for VirtualFileSystem");
 }
 
-void tc::io::VirtualFileSystem::getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path)
+void tc::io::VirtualFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path)
 {
 	if (mCurDir == nullptr)
 	{
-		throw tc::ObjectDisposedException(kClassName+"::getAbsolutePath()", "VirtualFileSystem not initialized");
+		throw tc::ObjectDisposedException(kClassName+"::getCanonicalPath()", "VirtualFileSystem not initialized");
 	}
 
-	mPathResolver->resolveCanonicalPath(path, abs_path);
+	mPathResolver->resolveCanonicalPath(path, canon_path);
 }
 
 void tc::io::VirtualFileSystem::getWorkingDirectory(tc::io::Path& path)

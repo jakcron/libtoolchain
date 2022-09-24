@@ -237,7 +237,7 @@ void tc::io::LocalFileSystem::setWorkingDirectory(const tc::io::Path& path)
 	// convert Path to unicode string
 	std::u16string unicode_path = path.to_u16string(tc::io::Path::Format::Win32);
 
-	// delete file
+	// set current directory
 	if (SetCurrentDirectoryW((LPCWSTR)unicode_path.c_str()) == false)
 	{
 		DWORD error = GetLastError();
@@ -251,7 +251,7 @@ void tc::io::LocalFileSystem::setWorkingDirectory(const tc::io::Path& path)
 	// convert Path to unicode string
 	std::string unicode_path = path.to_string(tc::io::Path::Format::POSIX);
 
-	// get full path to directory
+	// change dir
 	if (chdir(unicode_path.c_str()) != 0)
 	{
 		switch (errno) 
@@ -273,7 +273,7 @@ void tc::io::LocalFileSystem::setWorkingDirectory(const tc::io::Path& path)
 #endif
 }
 
-void tc::io::LocalFileSystem::getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path)
+void tc::io::LocalFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path)
 {
 	// save current dir for later
 	Path prev_current_dir;
@@ -283,7 +283,7 @@ void tc::io::LocalFileSystem::getAbsolutePath(const tc::io::Path& path, tc::io::
 	setWorkingDirectory(path);
 
 	// save the path
-	getWorkingDirectory(abs_path);
+	getWorkingDirectory(canon_path);
 
 	// restore current directory
 	setWorkingDirectory(prev_current_dir);
@@ -401,7 +401,7 @@ void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDir
 	closedir(dp);
 #endif
 	Path current_directory_path;
-	getAbsolutePath(path, current_directory_path);
+	getCanonicalPath(path, current_directory_path);
 
 	info.abs_path = current_directory_path;
 	info.dir_list = child_dir_name_list;

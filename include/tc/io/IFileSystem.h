@@ -108,14 +108,14 @@ public:
 	virtual void removeDirectory(const tc::io::Path& path) = 0;
 
 		/**
-		 * @brief Get absolute path from a relative path
-		 * @param[in]  path A path to a directory or file.
-		 * @param[out] abs_path The absolute version of @p path to populate.
+		 * @brief Get the canonical form of a path
+		 * @param[in]  path A relative or absolute path to a directory or file.
+		 * @param[out] canon_path The canonical version of @p path to populate.
 		 */
-	virtual void getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path) = 0;
+	virtual void getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path) = 0;
 
 		/** 
-		 * @brief Get the full path of the working directory
+		 * @brief Get the canonical path of the working directory
 		 * @param[out] path Path object to populate
 		 **/
 	virtual void getWorkingDirectory(tc::io::Path& path) = 0;

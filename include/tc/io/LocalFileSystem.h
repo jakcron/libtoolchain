@@ -113,15 +113,15 @@ public:
 	void removeDirectory(const tc::io::Path& path);
 
 		/**
-		 * @brief Get absolute path from a relative path
+		 * @brief Get the canonical form of a path
 		 * 
-		 * @param[in]  path A path to a directory or file.
-		 * @param[out] abs_path The absolute version of @p path to populate.
+		 * @param[in]  path A relative or absolute path to a directory or file.
+		 * @param[out] canon_path The canonical version of @p path to populate.
 		 * 
 		 * @throw tc::UnauthorisedAccessException Read or search permission was denied for a component of the pathname.
 		 * @throw tc::io::IOException An I/O error has occured.
 		 */
-	void getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path);
+	void getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path);
 
 		/** 
 		 * @brief Get the full path of the working directory

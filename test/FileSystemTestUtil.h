@@ -62,7 +62,7 @@ public:
 			throw tc::NotImplementedException(kClassName, "removeDirectory() not implemented");
 		}
 
-		virtual void getAbsolutePath(const tc::io::Path& path, tc::io::Path& abs_path)
+		virtual void getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path)
 		{
 			// save current dir for later
 			tc::io::Path prev_current_dir;
@@ -72,7 +72,7 @@ public:
 			setWorkingDirectory(path);
 
 			// save the path
-			getWorkingDirectory(abs_path);
+			getWorkingDirectory(canon_path);
 
 			// restore current directory
 			setWorkingDirectory(prev_current_dir);
