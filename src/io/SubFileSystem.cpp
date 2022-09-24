@@ -152,7 +152,7 @@ void tc::io::SubFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io::P
 	tc::io::Path real_canon_path;
 	mBaseFileSystem->getCanonicalPath(real_path, real_canon_path);
 
-	// save sub canonical path
+	// save canonical sub path
 	realPathToSubPath(real_canon_path, canon_path);
 }
 
