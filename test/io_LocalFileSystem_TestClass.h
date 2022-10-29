@@ -24,6 +24,7 @@ private:
 	void test_RemoveFile_DoesExist();
 	void test_RemoveFile_NotExist();
 	void test_RemoveFile_UnicodePath();
+
 	void test_CreateDirectory_NotExist();
 	void test_CreateDirectory_DoesExist();
 	void test_CreateDirectory_UnicodePath();
@@ -33,6 +34,7 @@ private:
 	void test_RemoveDirectory_HasChildren();
 	void test_RemoveDirectory_NotDirectoryActuallyFile();
 	void test_CreateDirectoryPath();
+
 	void test_GetDirectoryListing_DoesExist();
 	void test_GetDirectoryListing_NotExist();
 	void test_GetDirectoryListing_UnicodePath();
