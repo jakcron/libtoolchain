@@ -37,6 +37,8 @@ void io_LocalFileSystem_TestClass::runAllTests(void)
 	test_RemoveDirectory_UnicodePath();
 	test_RemoveDirectory_HasChildren();
 	test_RemoveDirectory_NotDirectoryActuallyFile();
+	test_CreateDirectoryPath();
+
 	test_GetDirectoryListing_DoesExist();
 	test_GetDirectoryListing_NotExist();
 	test_GetDirectoryListing_UnicodePath();
@@ -589,6 +591,49 @@ void io_LocalFileSystem_TestClass::test_RemoveDirectory_NotDirectoryActuallyFile
 
 		// env teardown
 		local_storage.removeFile(kAsciiFilePath);
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
+}
+
+void io_LocalFileSystem_TestClass::test_CreateDirectoryPath()
+{
+	TestResult test;
+	test.test_name = "test_CreateDirectoryPath";
+	test.result = "NOT RUN";
+	test.comments = "";
+
+	try 
+	{
+		tc::io::LocalFileSystem local_storage;
+
+		// create directory path
+		std::string long_dir_path = "./a/path/with///./many/elements/../hey/../oi";
+		local_storage.createDirectoryPath(long_dir_path);
+
+		// cleanup created directories
+		std::vector<std::string> remove_dir_paths = {"./a/path/with/many/elements", "./a/path/with/many/hey", "./a/path/with/many/oi", "./a/path/with/many", "./a/path/with", "./a/path", "./a"};
+		for (auto itr = remove_dir_paths.begin(); itr != remove_dir_paths.end(); itr++)
+		{
+			local_storage.removeDirectory(*itr);
+		}
+
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::Exception& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.error();
 	}
 	catch (const std::exception& e)
 	{

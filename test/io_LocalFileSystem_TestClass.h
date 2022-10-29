@@ -32,6 +32,7 @@ private:
 	void test_RemoveDirectory_UnicodePath();
 	void test_RemoveDirectory_HasChildren();
 	void test_RemoveDirectory_NotDirectoryActuallyFile();
+	void test_CreateDirectoryPath();
 	void test_GetDirectoryListing_DoesExist();
 	void test_GetDirectoryListing_NotExist();
 	void test_GetDirectoryListing_UnicodePath();
