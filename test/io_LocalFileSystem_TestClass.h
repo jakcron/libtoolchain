@@ -41,7 +41,9 @@ private:
 	void test_ChangeWorkingDirectory_NotExist();
 	void test_ChangeWorkingDirectory_UnicodePath();
 
-	void test_CreateDirectoryPath();
+	void test_CreateDirectoryPath_NotExist();
+	void test_CreateDirectoryPath_DoesExist();
+	void test_CreateDirectoryPath_UnicodePath();
 
 	static std::string kDirPath;
 	static std::string kUtf8DirPath;
