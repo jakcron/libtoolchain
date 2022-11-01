@@ -603,49 +603,6 @@ void io_LocalFileSystem_TestClass::test_RemoveDirectory_NotDirectoryActuallyFile
 	mTestResults.push_back(std::move(test));
 }
 
-void io_LocalFileSystem_TestClass::test_CreateDirectoryPath()
-{
-	TestResult test;
-	test.test_name = "test_CreateDirectoryPath";
-	test.result = "NOT RUN";
-	test.comments = "";
-
-	try 
-	{
-		tc::io::LocalFileSystem local_fs;
-
-		// create directory path
-		std::string long_dir_path = "./a/path/with///./many/elements/../hey/../oi";
-		local_fs.createDirectoryPath(long_dir_path);
-
-		// cleanup created directories
-		std::vector<std::string> remove_dir_paths = {"./a/path/with/many/elements", "./a/path/with/many/hey", "./a/path/with/many/oi", "./a/path/with/many", "./a/path/with", "./a/path", "./a"};
-		for (auto itr = remove_dir_paths.begin(); itr != remove_dir_paths.end(); itr++)
-		{
-			local_fs.removeDirectory(*itr);
-		}
-
-		// record result
-		test.result = "PASS";
-		test.comments = "";
-	}
-	catch (const tc::Exception& e)
-	{
-		// record result
-		test.result = "FAIL";
-		test.comments = e.error();
-	}
-	catch (const std::exception& e)
-	{
-		// record result
-		test.result = "UNHANDLED EXCEPTION";
-		test.comments = e.what();
-	}
-
-	// add result to list
-	mTestResults.push_back(std::move(test));
-}
-
 void io_LocalFileSystem_TestClass::test_GetDirectoryListing_DoesExist()
 {
 	TestResult test;
@@ -999,6 +956,88 @@ void io_LocalFileSystem_TestClass::test_ChangeWorkingDirectory_UnicodePath()
 		// env teardown
 		local_fs.setWorkingDirectory(old_dir);
 		local_fs.removeDirectory(kUtf8DirPath);
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
+}
+
+
+
+void io_LocalFileSystem_TestClass::test_CreateDirectoryPath()
+{
+	TestResult test;
+	test.test_name = "test_CreateDirectoryPath";
+	test.result = "NOT RUN";
+	test.comments = "";
+
+	try 
+	{
+		tc::io::LocalFileSystem local_fs;
+
+		std::string long_dir_path = "./a/path/with///./many/elements/../hey/../oi";
+		std::vector<std::string> created_dir_paths = {"./a/path/with/many/elements", "./a/path/with/many/hey", "./a/path/with/many/oi", "./a/path/with/many", "./a/path/with", "./a/path", "./a"};
+
+		
+		// because this test requires cleanup, we want to still attempt a cleanup even if a test fails
+		try
+		{
+			// create directory path
+			try 
+			{
+				local_fs.createDirectoryPath(long_dir_path);
+			}
+			catch (const tc::Exception& e)
+			{
+				throw tc::TestException(fmt::format("Failed to create directory path (error: {:s})", e.what()));
+			}
+			
+
+			// confirm directories were created
+			tc::io::sDirectoryListing tmp_dir_listing;
+			for (auto itr = created_dir_paths.begin(); itr != created_dir_paths.end(); itr++)
+			{
+				try
+				{
+					local_fs.getDirectoryListing(*itr, tmp_dir_listing);
+				}
+				catch (const tc::io::DirectoryNotFoundException&)
+				{
+					// test failed!
+					throw tc::TestException(fmt::format("Directory was not created: \"{:s}\"", *itr));
+				}
+			}
+
+			// record result
+			test.result = "PASS";
+			test.comments = "";
+		}
+		catch (const tc::TestException& e)
+		{
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
+		}
+
+		// cleanup created directories
+		for (auto itr = created_dir_paths.begin(); itr != created_dir_paths.end(); itr++)
+		{
+			try
+			{
+				local_fs.removeDirectory(*itr);
+			}
+			catch (const tc::io::DirectoryNotFoundException&)
+			{
+				// ignore where directories were not created 
+			}
+			
+		}
 	}
 	catch (const std::exception& e)
 	{

@@ -33,7 +33,6 @@ private:
 	void test_RemoveDirectory_UnicodePath();
 	void test_RemoveDirectory_HasChildren();
 	void test_RemoveDirectory_NotDirectoryActuallyFile();
-	void test_CreateDirectoryPath();
 
 	void test_GetDirectoryListing_DoesExist();
 	void test_GetDirectoryListing_NotExist();
@@ -41,6 +40,8 @@ private:
 	void test_ChangeWorkingDirectory_DoesExist();
 	void test_ChangeWorkingDirectory_NotExist();
 	void test_ChangeWorkingDirectory_UnicodePath();
+
+	void test_CreateDirectoryPath();
 
 	static std::string kDirPath;
 	static std::string kUtf8DirPath;
