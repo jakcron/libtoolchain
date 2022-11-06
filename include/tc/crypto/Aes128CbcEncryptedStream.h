@@ -2,8 +2,8 @@
 	 * @file    Aes128CbcEncryptedStream.h
 	 * @brief   Declaration of tc::crypto::Aes128CbcEncryptedStream
 	 * @author  Jack (jakcron)
-	 * @version 0.2
-	 * @date    2022/02/13
+	 * @version 0.3
+	 * @date    2022/11/06
 	 **/
 #pragma once
 #include <list>
