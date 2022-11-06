@@ -513,9 +513,9 @@ void io_ConcatenatedStream_TestClass::test_setLength_ThrowsOnUse()
 		try
 		{
 			stream.setLength(0);
-			throw tc::TestException(".setLength() did not throw tc::NotImplementedException when called from an initalized class.");
+			throw tc::TestException(".setLength() did not throw tc::NotSupportedException when called from an initalized class.");
 		}
-		catch (const tc::NotImplementedException&) { /* do nothing */ }
+		catch (const tc::NotSupportedException&) { /* do nothing */ }
 		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".setLength() threw the wrong exception when called from an initalized class.");
