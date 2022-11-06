@@ -143,9 +143,9 @@ void crypto_Aes128CtrEncryptedStream_TestClass::test_CreateValidStream_CreateCon
 		try
 		{
 			stream.write(nullptr, 0);
-			throw tc::TestException(".write() did not throw tc::NotImplementedException for initialized Aes128CtrEncryptedStream");
+			throw tc::TestException(".write() did not throw tc::NotSupportedException for initialized Aes128CtrEncryptedStream");
 		}
-		catch (tc::NotImplementedException&) { /* do nothing */ }
+		catch (tc::NotSupportedException&) { /* do nothing */ }
 		catch (tc::Exception&)
 		{
 			throw tc::TestException(".write() did not throw correct exception for initialized Aes128CtrEncryptedStream");
@@ -154,9 +154,9 @@ void crypto_Aes128CtrEncryptedStream_TestClass::test_CreateValidStream_CreateCon
 		try
 		{
 			stream.setLength(0);
-			throw tc::TestException(".setLength() did not throw tc::NotImplementedException for initialized Aes128CtrEncryptedStream");
+			throw tc::TestException(".setLength() did not throw tc::NotSupportedException for initialized Aes128CtrEncryptedStream");
 		}
-		catch (tc::NotImplementedException&) { /* do nothing */ }
+		catch (tc::NotSupportedException&) { /* do nothing */ }
 		catch (tc::Exception&)
 		{
 			throw tc::TestException(".setLength() did not throw correct exception for initialized Aes128CtrEncryptedStream");
