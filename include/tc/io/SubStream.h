@@ -2,8 +2,8 @@
 	 * @file SubStream.h
 	 * @brief Declaration of tc::io::SubStream
 	 * @author Jack (jakcron)
-	 * @version 0.4
-	 * @date 2020/01/26
+	 * @version 0.5
+	 * @date 2022/11/06
 	 **/
 #pragma once
 #include <tc/io/IStream.h>
@@ -11,7 +11,6 @@
 #include <tc/ArgumentNullException.h>
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/NotSupportedException.h>
-#include <tc/NotImplementedException.h>
 #include <tc/ObjectDisposedException.h>
 
 namespace tc { namespace io {
@@ -124,8 +123,8 @@ public:
 	int64_t seek(int64_t offset, SeekOrigin origin);
 
 		/**
-		 * @brief Sets the length of the current stream. This is not implemented for @ref SubStream.
-		 * @throw tc::NotImplementedException @ref setLength is not implemented for @ref SubStream
+		 * @brief Sets the length of the current stream. This is not supported for @ref SubStream.
+		 * @throw tc::NotSupportedException @ref setLength is not supported for @ref SubStream
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	void setLength(int64_t length);
