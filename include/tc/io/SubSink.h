@@ -2,8 +2,8 @@
 	 * @file SubSink.h
 	 * @brief Declaration of tc::io::SubSink
 	 * @author Jack (jakcron)
-	 * @version 0.3
-	 * @date 2022/08/07
+	 * @version 0.4
+	 * @date 2022/11/06
 	 **/
 #pragma once
 #include <tc/io/ISink.h>
@@ -12,7 +12,7 @@
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/OutOfMemoryException.h>
 #include <tc/ObjectDisposedException.h>
-#include <tc/NotImplementedException.h>
+#include <tc/NotSupportedException.h>
 
 namespace tc { namespace io {
 
@@ -50,7 +50,7 @@ public:
 		 * @brief Sets the length of the sink. This is not supported for SubSink. 
 		 * 
 		 * @throw tc::ObjectDisposedException The base sink was not initialized.
-		 * @throw tc::NotImplementedException setLength is not implemented for SubSink.
+		 * @throw tc::NotSupportedException setLength is not supported for SubSink.
 		 **/
 	void setLength(int64_t length);
 

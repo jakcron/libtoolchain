@@ -352,9 +352,9 @@ void io_SubSink_TestClass::testCreateThenSetLength()
 
 			SinkTestUtil::testSinkLength(sub_sink, new_length);
 			
-			throw tc::TestException(".setLength() did not throw tc::NotImplementedException where SubSink was initialised");
+			throw tc::TestException(".setLength() did not throw tc::NotSupportedException where SubSink was initialised");
 		}
-		catch (tc::NotImplementedException&) { /* do nothing */ }
+		catch (tc::NotSupportedException&) { /* do nothing */ }
 		catch (const tc::Exception&)
 		{
 			throw tc::TestException(".setLength() threw the wrong exception where SubSink was initialised");
