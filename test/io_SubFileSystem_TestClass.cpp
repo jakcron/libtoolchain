@@ -1,29 +1,51 @@
-#include <tc/Exception.h>
-#include <iostream>
-
 #include "io_SubFileSystem_TestClass.h"
 #include "FileSystemTestUtil.h"
 #include "StreamTestUtil.h"
 
+#include <fmt/format.h>
+
+//---------------------------------------------------------
+
+io_SubFileSystem_TestClass::io_SubFileSystem_TestClass() :
+	mTestTag("tc::io::SubFileSystem"),
+	mTestResults()
+{
+}
+
 void io_SubFileSystem_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::io::SubFileSystem] START" << std::endl;
 	testBaseFileSystemRetainsWorkingDirectory();
 	testGetSetWorkingDirectory();
 	testCreateFile();
 	testOpenFile();
 	testRemoveFile();
 	testCreateDirectory();
+	testCreateDirectoryPath();
 	testRemoveDirectory();
 	testGetDirectoryListing();
 	testNavigateUpSubFileSystemEscape();
 	testOpenFileOutsideSubFileSystem();
-	std::cout << "[tc::io::SubFileSystem] END" << std::endl;
 }
+
+const std::string& io_SubFileSystem_TestClass::getTestTag() const
+{
+	return mTestTag;
+}
+
+const std::vector<ITestClass::TestResult>& io_SubFileSystem_TestClass::getTestResults() const
+{
+	return mTestResults;
+}
+
+//---------------------------------------------------------
 
 void io_SubFileSystem_TestClass::testBaseFileSystemRetainsWorkingDirectory()
 {
-	std::cout << "[tc::io::SubFileSystem] testBaseFileSystemRetainsWorkingDirectory : " << std::flush;
+	TestResult test;
+	test.test_name = "testBaseFileSystemRetainsWorkingDirectory";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -55,27 +77,38 @@ void io_SubFileSystem_TestClass::testBaseFileSystemRetainsWorkingDirectory()
 			filesystem.getWorkingDirectory(base_current_working_dir_path);
 			if (base_initial_working_dir_path != base_current_working_dir_path)
 			{
-				throw tc::Exception("SubFileSystem constructor did not preserve the base file system working directory.");
+				throw tc::TestException("SubFileSystem constructor did not preserve the base file system working directory.");
 			}
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
-
-	
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testGetSetWorkingDirectory()
 {
-	std::cout << "[tc::io::SubFileSystem] testGetSetWorkingDirectory : " << std::flush;
+	TestResult test;
+	test.test_name = "testGetSetWorkingDirectory";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -110,7 +143,7 @@ void io_SubFileSystem_TestClass::testGetSetWorkingDirectory()
 				sub_filesystem.getWorkingDirectory(sub_current_working_dir_path);
 				if (sub_current_working_dir_path != tc::io::Path("/"))
 				{
-					throw tc::Exception("SubFileSystem initial working directory was not root.");
+					throw tc::TestException("SubFileSystem initial working directory was not root.");
 				}
 			}
 			
@@ -121,7 +154,7 @@ void io_SubFileSystem_TestClass::testGetSetWorkingDirectory()
 				filesystem.getWorkingDirectory(base_current_working_dir_path);
 				if (base_initial_working_dir_path != base_current_working_dir_path)
 				{
-					throw tc::Exception("SubFileSystem getWorkingDirectory did not preserve the base file system working directory.");
+					throw tc::TestException("SubFileSystem getWorkingDirectory did not preserve the base file system working directory.");
 				}
 			}
 
@@ -135,7 +168,7 @@ void io_SubFileSystem_TestClass::testGetSetWorkingDirectory()
 
 				if (sub_current_working_dir_path != sub_test_path)
 				{
-					throw tc::Exception("SubFileSystem setWorkingDirectory() failed to set working directory as getWorkingDirectory() returned unexpected path.");
+					throw tc::TestException("SubFileSystem setWorkingDirectory() failed to set working directory as getWorkingDirectory() returned unexpected path.");
 				}
 			}
 
@@ -145,28 +178,39 @@ void io_SubFileSystem_TestClass::testGetSetWorkingDirectory()
 				filesystem.getWorkingDirectory(base_current_working_dir_path);
 				if (base_initial_working_dir_path != base_current_working_dir_path)
 				{
-					throw tc::Exception("SubFileSystem getWorkingDirectory did not preserve the base file system working directory.");
+					throw tc::TestException("SubFileSystem getWorkingDirectory did not preserve the base file system working directory.");
 				}
 			}
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
-
-	
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testCreateFile()
 {
-	std::cout << "[tc::io::SubFileSystem] testCreateFile : " << std::flush;
+	TestResult test;
+	test.test_name = "testCreateFile";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -186,13 +230,13 @@ void io_SubFileSystem_TestClass::testCreateFile()
 
 				if (cur_dir != mInitialWorkingDirectoryPath)
 				{
-					throw tc::Exception("DummyFileSystem", "Working directory was not preserved by SubFileSystem.");
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
 				}
 
 				// check input was correct
 				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testfile"))
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect path");
+					throw tc::TestException("DummyFileSystem: file had incorrect path");
 				}
 			}
 		private:
@@ -215,22 +259,35 @@ void io_SubFileSystem_TestClass::testCreateFile()
 			// attempt to create file
 			sub_filesystem.createFile(tc::io::Path("/a_dir/testfile"));
 			
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testOpenFile()
 {
-	std::cout << "[tc::io::SubFileSystem] testOpenFile : " << std::flush;
+	TestResult test;
+	test.test_name = "testOpenFile";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -250,17 +307,17 @@ void io_SubFileSystem_TestClass::testOpenFile()
 
 				if (cur_dir != mInitialWorkingDirectoryPath)
 				{
-					throw tc::Exception("DummyFileSystem", "Working directory was not preserved by SubFileSystem.");
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
 				}
 				
 				// check input was correct
 				if (mode != tc::io::FileMode::Open || access != tc::io::FileAccess::Read)
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect access permissions");
+					throw tc::TestException("DummyFileSystem: file had incorrect access permissions");
 				}
 				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testfile"))
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect path");
+					throw tc::TestException("DummyFileSystem: file had incorrect path");
 				}
 
 				// popualate file stream pointer
@@ -290,29 +347,42 @@ void io_SubFileSystem_TestClass::testOpenFile()
 			// check file was opened and correct
 			if (file == nullptr)
 			{
-				throw tc::Exception("openFile() did not populate stream pointer");
+				throw tc::TestException("openFile() did not populate stream pointer");
 			}
 			if (file->length() != 0xdeadbeef)
 			{
-				throw tc::Exception("openFile() did not populate stream pointer correctly");
+				throw tc::TestException("openFile() did not populate stream pointer correctly");
 			}
 			
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testRemoveFile()
 {
-	std::cout << "[tc::io::SubFileSystem] testRemoveFile : " << std::flush;
+	TestResult test;
+	test.test_name = "testRemoveFile";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -332,13 +402,13 @@ void io_SubFileSystem_TestClass::testRemoveFile()
 
 				if (cur_dir != mInitialWorkingDirectoryPath)
 				{
-					throw tc::Exception("DummyFileSystem", "Working directory was not preserved by SubFileSystem.");
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
 				}
 
 				// check input was correct
 				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testfile"))
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect path");
+					throw tc::TestException("DummyFileSystem: file had incorrect path");
 				}
 			}
 		private:
@@ -361,23 +431,35 @@ void io_SubFileSystem_TestClass::testRemoveFile()
 			// attempt to delete file
 			sub_filesystem.removeFile(tc::io::Path("/a_dir/testfile"));
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
-}
 
+	// add result to list
+	mTestResults.push_back(std::move(test));
+}
 
 void io_SubFileSystem_TestClass::testCreateDirectory()
 {
-	std::cout << "[tc::io::SubFileSystem] testCreateDirectory : " << std::flush;
+	TestResult test;
+	test.test_name = "testCreateDirectory";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -397,13 +479,13 @@ void io_SubFileSystem_TestClass::testCreateDirectory()
 
 				if (cur_dir != mInitialWorkingDirectoryPath)
 				{
-					throw tc::Exception("DummyFileSystem", "Working directory was not preserved by SubFileSystem.");
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
 				}
 
 				// check input was correct
 				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testdir/hey"))
 				{
-					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
+					throw tc::TestException("DummyFileSystem: dir had incorrect path");
 				}
 			}
 		private:
@@ -426,22 +508,112 @@ void io_SubFileSystem_TestClass::testCreateDirectory()
 			// attempt to create directory
 			sub_filesystem.createDirectory(tc::io::Path("/a_dir/testdir/hey"));
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
+}
+
+void io_SubFileSystem_TestClass::testCreateDirectoryPath()
+{
+	TestResult test;
+	test.test_name = "testCreateDirectoryPath";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
+	try
+	{
+		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
+		{
+		public:
+			DummyFileSystem(const tc::io::Path& expected_subfs_base) :
+				mExpectedSubfsBasePath(expected_subfs_base)
+			{
+				getWorkingDirectory(mInitialWorkingDirectoryPath);
+			}
+
+			void createDirectoryPath(const tc::io::Path& path)
+			{
+				// validate base working directory was preserved
+				tc::io::Path cur_dir;
+				getWorkingDirectory(cur_dir);
+
+				if (cur_dir != mInitialWorkingDirectoryPath)
+				{
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
+				}
+
+				// check input was correct
+				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testdir/hey"))
+				{
+					throw tc::TestException("DummyFileSystem: dir had incorrect path");
+				}
+			}
+		private:
+			tc::io::Path mInitialWorkingDirectoryPath;
+			tc::io::Path mExpectedSubfsBasePath;
+		};
+	
+		// define sub filesystem base path
+		tc::io::Path subfilesystem_base_path = tc::io::Path("/home/jakcron/source/LibToolChain/testdir");
+
+		// define base filesystem
+		DummyFileSystem filesystem = DummyFileSystem(subfilesystem_base_path);
+
+		// test sub filesystem creation & test translation of input to base filesystem
+		try
+		{
+			// create sub filesystem
+			tc::io::SubFileSystem sub_filesystem(std::make_shared<DummyFileSystem>(filesystem), subfilesystem_base_path);
+
+			// attempt to create directory
+			sub_filesystem.createDirectoryPath(tc::io::Path("/a_dir/testdir/hey"));
+
+			// record result
+			test.result = "PASS";
+			test.comments = "";
+		}
+		catch (const tc::TestException& e)
+		{
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
+		}
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testRemoveDirectory()
 {
-	std::cout << "[tc::io::SubFileSystem] testRemoveDirectory : " << std::flush;
+	TestResult test;
+	test.test_name = "testRemoveDirectory";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -461,13 +633,13 @@ void io_SubFileSystem_TestClass::testRemoveDirectory()
 
 				if (cur_dir != mInitialWorkingDirectoryPath)
 				{
-					throw tc::Exception("DummyFileSystem", "Working directory was not preserved by SubFileSystem.");
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
 				}
 
 				// check input was correct
 				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testdir/hey"))
 				{
-					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
+					throw tc::TestException("DummyFileSystem: dir had incorrect path");
 				}
 			}
 		private:
@@ -490,22 +662,122 @@ void io_SubFileSystem_TestClass::testRemoveDirectory()
 			// attempt to remove directory
 			sub_filesystem.removeDirectory(tc::io::Path("/a_dir/testdir/hey"));
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
+}
+
+void io_SubFileSystem_TestClass::testGetCanonicalPath()
+{
+	TestResult test;
+	test.test_name = "testGetCanonicalPath";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
+	try
+	{
+		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
+		{
+		public:
+			DummyFileSystem(const tc::io::Path& expected_subfs_base) :
+				mExpectedSubfsBasePath(expected_subfs_base)
+			{
+				getWorkingDirectory(mInitialWorkingDirectoryPath);
+			}
+
+			void getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path)
+			{
+				// validate base working directory was preserved
+				tc::io::Path cur_dir;
+				getWorkingDirectory(cur_dir);
+
+				if (cur_dir != mInitialWorkingDirectoryPath)
+				{
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
+				}
+
+				// check input was correct
+				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testdir/hey"))
+				{
+					throw tc::TestException("DummyFileSystem: dir had incorrect path");
+				}
+
+				canon_path = mExpectedSubfsBasePath + tc::io::Path("a_dir/canondir/hey");
+			}
+		private:
+			tc::io::Path mInitialWorkingDirectoryPath;
+			tc::io::Path mExpectedSubfsBasePath;
+		};
+	
+		// define sub filesystem base path
+		tc::io::Path subfilesystem_base_path = tc::io::Path("/home/jakcron/source/LibToolChain/testdir");
+
+		// define base filesystem
+		DummyFileSystem filesystem = DummyFileSystem(subfilesystem_base_path);
+
+		// test sub filesystem creation & test translation of input to base filesystem
+		try
+		{
+			// create sub filesystem
+			tc::io::SubFileSystem sub_filesystem(std::make_shared<DummyFileSystem>(filesystem), subfilesystem_base_path);
+
+			// get canon path
+			tc::io::Path canonised_path;
+			sub_filesystem.getCanonicalPath(tc::io::Path("/a_dir/testdir/hey"), canonised_path);
+
+			// to be clear, this is not an example of how getCanonicalPath() should be treating paths, but rather the passthrough behaviour of SubFileSystem
+			tc::io::Path expected_canonised_path = tc::io::Path("/a_dir/canondir/hey");
+			if (canonised_path != expected_canonised_path)
+			{
+				throw tc::TestException(fmt::format("SubFileSystem: Sub canon path was not as expected (returned: \"{:s}\", expected: \"{:s}\"", canonised_path.to_string(), expected_canonised_path.to_string()));
+			}
+
+			// record result
+			test.result = "PASS";
+			test.comments = "";
+		}
+		catch (const tc::TestException& e)
+		{
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
+		}
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testGetDirectoryListing()
 {
-	std::cout << "[tc::io::SubFileSystem] testGetDirectoryListing : " << std::flush;
+	TestResult test;
+	test.test_name = "testGetDirectoryListing";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -525,13 +797,13 @@ void io_SubFileSystem_TestClass::testGetDirectoryListing()
 
 				if (cur_dir != mInitialWorkingDirectoryPath)
 				{
-					throw tc::Exception("DummyFileSystem", "Working directory was not preserved by SubFileSystem.");
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
 				}
 
 				// check input was correct
 				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testdir/hey"))
 				{
-					throw tc::Exception("DummyFileSystem", "dir had incorrect path");
+					throw tc::TestException("DummyFileSystem: dir had incorrect path");
 				}
 
 				dir_info.abs_path = path;
@@ -565,12 +837,12 @@ void io_SubFileSystem_TestClass::testGetDirectoryListing()
 
 			if (sb_dir_info.file_list != real_dir_info.file_list)
 			{
-				throw tc::Exception("DummyFileSystem", "File list was not as expected");
+				throw tc::TestException("DummyFileSystem: File list was not as expected");
 			}
 
 			if (sb_dir_info.dir_list != real_dir_info.dir_list)
 			{
-				throw tc::Exception("DummyFileSystem", "Directory list was not as expected");
+				throw tc::TestException("DummyFileSystem: Directory list was not as expected");
 			}
 
 			tc::io::Path fixed_sub_filesystem_path;
@@ -586,26 +858,38 @@ void io_SubFileSystem_TestClass::testGetDirectoryListing()
 
 			if ((subfilesystem_base_path + fixed_sub_filesystem_path) != real_dir_info.abs_path)
 			{
-				throw tc::Exception("DummyFileSystem", "Directory absolute path was not as expected");
+				throw tc::TestException("DummyFileSystem: Directory absolute path was not as expected");
 			}
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
-}
 
+	// add result to list
+	mTestResults.push_back(std::move(test));
+}
 
 void io_SubFileSystem_TestClass::testNavigateUpSubFileSystemEscape()
 {
-	std::cout << "[tc::io::SubFileSystem] testNavigateUpSubFileSystemEscape : " << std::flush;
+	TestResult test;
+	test.test_name = "testNavigateUpSubFileSystemEscape";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -651,30 +935,43 @@ void io_SubFileSystem_TestClass::testNavigateUpSubFileSystemEscape()
 			
 			if (dir_info.abs_path != tc::io::Path("/"))
 			{
-				throw tc::Exception("SubFileSystem directory path not as expected");
+				throw tc::TestException("SubFileSystem directory path not as expected");
 			}
 
 			if (filesystem.getLastUsedPath() != dummyio_curdir + sub_filesystem_relative_root)
 			{
-				throw tc::Exception("Real directory path not as expected");
+				throw tc::TestException("Real directory path not as expected");
 			}
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubFileSystem_TestClass::testOpenFileOutsideSubFileSystem()
 {
-	std::cout << "[tc::io::SubFileSystem] testOpenFileOutsideSubFileSystem : " << std::flush;
+	TestResult test;
+	test.test_name = "testOpenFileOutsideSubFileSystem";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
 	try
 	{
 		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
@@ -690,15 +987,15 @@ void io_SubFileSystem_TestClass::testOpenFileOutsideSubFileSystem()
 				getWorkingDirectory(mCurDir);
 				if (mode != tc::io::FileMode::Open || access != tc::io::FileAccess::Read)
 				{
-					throw tc::Exception("DummyFileSystem", "file had incorrect access mode");
+					throw tc::TestException("DummyFileSystem: file had incorrect access mode");
 				}
 				if (path == tc::io::Path("/home/jakcron/source/LibToolChain/testdir/inaccessible_file0"))
 				{
-					throw tc::Exception("DummyFileSystem", "escaped sub filesystem");
+					throw tc::TestException("DummyFileSystem: escaped sub filesystem");
 				}
 				if (path != tc::io::Path("/home/jakcron/source/LibToolChain/testdir/subfilesystem/inaccessible_file0"))
 				{
-					throw tc::Exception("DummyFileSystem", "sub filesystem path was not as expected");
+					throw tc::TestException("DummyFileSystem: sub filesystem path was not as expected");
 				}
 			}
 		};
@@ -722,15 +1019,24 @@ void io_SubFileSystem_TestClass::testOpenFileOutsideSubFileSystem()
 			std::shared_ptr<tc::io::IStream> inaccessible_file;
 			sub_filesystem.openFile(tc::io::Path("../inaccessible_file0"), tc::io::FileMode::Open, tc::io::FileAccess::Read, inaccessible_file);
 
-			std::cout << "PASS" << std::endl;
+			// record result
+			test.result = "PASS";
+			test.comments = "";
 		}
-		catch (const tc::Exception& e)
+		catch (const tc::TestException& e)
 		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
 		}
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }

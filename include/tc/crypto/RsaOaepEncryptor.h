@@ -24,12 +24,12 @@ namespace tc { namespace crypto {
 	 * 
 	 * @details
 	 * This class is a template class that takes a key size and a hash function implementation class as template parameter.
-	 * See @ref Rsa2048OaepSha256Encryptor or similar for supplied realizations of this template class.
+	 * See @ref Rsa2048OaepSha2256Encryptor or similar for supplied realizations of this template class.
 	 * 
 	 * The <var>KeyBitSize</var> is the size in bits of the RSA key, this only supports key sizes aligned to 8 bits.
 	 * 
 	 * The implementation of <var>HashFunction</var> must satisfies the following conditions.
-	 * See @ref Sha256Generator or similar class, for more information including parameters to each function.
+	 * See @ref Sha2256Generator or similar class, for more information including parameters to each function.
 	 * 
 	 * -# Has a <tt>kBlockSize</tt> constant that defines the size of the block to process.
 	 * -# Has a <tt>kHashSize</tt> constant that defines the output size of the hash value.

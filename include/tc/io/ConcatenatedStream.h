@@ -2,8 +2,8 @@
 	 * @file ConcatenatedStream.h
 	 * @brief Declaration of tc::io::ConcatenatedStream
 	 * @author Jack (jakcron)
-	 * @version 0.1
-	 * @date 2022/02/28
+	 * @version 0.2
+	 * @date 2022/11/06
 	 **/
 #pragma once
 #include <tc/io/IStream.h>
@@ -11,7 +11,6 @@
 
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/NotSupportedException.h>
-#include <tc/NotImplementedException.h>
 #include <tc/ObjectDisposedException.h>
 #include <tc/io/IOException.h>
 
@@ -140,8 +139,8 @@ public:
 	int64_t seek(int64_t offset, SeekOrigin origin);
 
 		/**
-		 * @brief Sets the length of the current stream. This is not implemented for @ref ConcatenatedStream.
-		 * @throw tc::NotImplementedException @ref setLength is not implemented for @ref ConcatenatedStream
+		 * @brief Sets the length of the current stream. This is not supported for @ref ConcatenatedStream.
+		 * @throw tc::NotSupportedException @ref setLength is not supported for @ref ConcatenatedStream
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	void setLength(int64_t length);

@@ -3,8 +3,8 @@
 #include <tc/cli/FormatUtil.h>
 
 #include <tc/crypto/Sha1Generator.h>
-#include <tc/crypto/Sha256Generator.h>
-#include <tc/crypto/Sha512Generator.h>
+#include <tc/crypto/Sha2256Generator.h>
+#include <tc/crypto/Sha2512Generator.h>
 
 void RsaOaepUtil::generateRsaOaepTestVectors_Custom(std::vector<RsaOaepUtil::TestVector>& test_list, size_t key_size, RsaOaepUtil::HashAlgo hash_algo)
 {
@@ -74,15 +74,15 @@ void RsaOaepUtil::generateRsaOaepTestVectors_Custom(std::vector<RsaOaepUtil::Tes
 			}
 			else if (hash_algo == SHA256)
 			{
-				auto hash = tc::ByteData(tc::crypto::Sha256Generator::kHashSize, false);
-				tc::crypto::GenerateSha256Hash(hash.data(), tests[i].label.data(), tests[i].label.size());
+				auto hash = tc::ByteData(tc::crypto::Sha2256Generator::kHashSize, false);
+				tc::crypto::GenerateSha2256Hash(hash.data(), tests[i].label.data(), tests[i].label.size());
 
 				tests[i].label = hash;
 			}
 			else if (hash_algo == SHA512)
 			{
-				auto hash = tc::ByteData(tc::crypto::Sha512Generator::kHashSize, false);
-				tc::crypto::GenerateSha512Hash(hash.data(), tests[i].label.data(), tests[i].label.size());
+				auto hash = tc::ByteData(tc::crypto::Sha2512Generator::kHashSize, false);
+				tc::crypto::GenerateSha2512Hash(hash.data(), tests[i].label.data(), tests[i].label.size());
 
 				tests[i].label = hash;
 			}

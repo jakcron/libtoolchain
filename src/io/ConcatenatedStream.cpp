@@ -327,7 +327,7 @@ void tc::io::ConcatenatedStream::setLength(int64_t length)
 		throw tc::ObjectDisposedException(kClassName+"setLength()", "Stream was disposed.");
 	}
 
-	throw tc::NotImplementedException(kClassName+"setLength()", "setLength() is not implemented for tc::io::ConcatenatedStream.");
+	throw tc::NotSupportedException(kClassName+"setLength()", "setLength() is not supported for tc::io::ConcatenatedStream.");
 }
 
 void tc::io::ConcatenatedStream::flush()

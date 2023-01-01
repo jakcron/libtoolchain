@@ -2,8 +2,8 @@
 	 * @file    Aes128CtrEncryptedStream.h
 	 * @brief   Declaration of tc::crypto::Aes128CtrEncryptedStream
 	 * @author  Jack (jakcron)
-	 * @version 0.2
-	 * @date    2022/02/13
+	 * @version 0.3
+	 * @date    2022/11/06
 	 **/
 #pragma once
 #include <list>
@@ -14,7 +14,6 @@
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/ObjectDisposedException.h>
 #include <tc/NotSupportedException.h>
-#include <tc/NotImplementedException.h>
 #include <tc/io/IOException.h>
 
 namespace tc { namespace crypto {
@@ -111,8 +110,8 @@ public:
 	size_t read(byte_t* ptr, size_t count);
 
 		/**
-		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written. @ref write is not implemented for @ref Aes128CtrEncryptedStream.
-		 * @throw tc::NotImplementedException @ref write is not implemented for @ref Aes128CtrEncryptedStream.
+		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written. @ref write is not supported for @ref Aes128CtrEncryptedStream.
+		 * @throw tc::NotSupportedException @ref write is not supported for @ref Aes128CtrEncryptedStream.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	size_t write(const byte_t* ptr, size_t count);
@@ -135,8 +134,8 @@ public:
 	int64_t seek(int64_t offset, tc::io::SeekOrigin origin);
 
 		/**
-		 * @brief Sets the length of the current stream. This is not implemented for @ref Aes128CtrEncryptedStream.
-		 * @throw tc::NotImplementedException @ref setLength is not implemented for @ref Aes128CtrEncryptedStream.
+		 * @brief Sets the length of the current stream. This is not supported for @ref Aes128CtrEncryptedStream.
+		 * @throw tc::NotSupportedException @ref setLength is not supported for @ref Aes128CtrEncryptedStream.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	void setLength(int64_t length);

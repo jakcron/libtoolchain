@@ -2,8 +2,8 @@
 	 * @file LocalFileSystem.h
 	 * @brief Declaration of tc::io::LocalFileSystem
 	 * @author Jack (jakcron)
-	 * @version 0.6
-	 * @date 2022/01/23
+	 * @version 0.7
+	 * @date 2022/09/18
 	 **/
 #pragma once
 #include <tc/io/IFileSystem.h>
@@ -88,6 +88,20 @@ public:
 	void createDirectory(const tc::io::Path& path);
 
 		/** 
+		 * @brief Create a directory path. This is similar to @ref createDirectory() but it will create a directory for each element in the path.
+		 * 
+		 * @param[in] path A relative or absolute path to directory.
+		 * 
+		 * @throw tc::UnauthorisedAccessException Write permission is denied for a parent direcory.
+		 * @throw tc::UnauthorisedAccessException Parent directory resides in a read-only file system.
+		 * @throw tc::UnauthorisedAccessException The caller does not have the required permission.
+		 * 
+		 * @throw tc::io::IOException An I/O error has occured.
+		 * @throw tc::io::PathTooLongException The specified path, directory name, or both exceed the system-defined maximum length.
+		 **/
+	void createDirectoryPath(const tc::io::Path& path);
+
+		/** 
 		 * @brief Remove a directory
 		 * @param[in] path Path to directory
 		 * 
@@ -101,6 +115,20 @@ public:
 		 * @throw tc::io::DirectoryNotFoundException The named directory does not exist.
 		 **/
 	void removeDirectory(const tc::io::Path& path);
+
+		/**
+		 * @brief Get the canonical form of a path
+		 * 
+		 * @param[in]  path A relative or absolute path to a directory or file.
+		 * @param[out] canon_path The canonical version of @p path to populate.
+		 * 
+		 * @throw tc::UnauthorisedAccessException Read or search permission was denied for a component of the pathname.
+		 * @throw tc::io::IOException An I/O error has occured.
+		 * @throw tc::io::PathTooLongException The specified path, directory name, or both exceed the system-defined maximum length.
+		 * @throw tc::io::DirectoryNotFoundException A component of the path prefix is not a directory.
+		 * @throw tc::io::DirectoryNotFoundException The named directory does not exist.
+		 */
+	void getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path);
 
 		/** 
 		 * @brief Get the full path of the working directory
@@ -138,6 +166,8 @@ private:
 	static const std::string kClassName;
 
 	tc::ResourceStatus mState;
+
+	void getDirectoryChildren(const std::string& method_name, const tc::io::Path& path, std::vector<std::string>& child_dirs, std::vector<std::string>& child_files);
 };
 
 }} // namespace tc::io

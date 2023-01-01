@@ -12,12 +12,6 @@
 #include <tc/ArgumentNullException.h>
 #include <tc/ArgumentOutOfRangeException.h>
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <cstdio>
-#endif
-
 namespace tc { namespace io {
 
 	/**

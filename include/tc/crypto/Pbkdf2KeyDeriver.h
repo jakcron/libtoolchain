@@ -20,14 +20,14 @@ namespace tc { namespace crypto {
 	 * @details
 	 * PBKDF2 is a hmac based key derivation function, as defined in RFC 8018.
 	 * As such this template class requires @p HashFunction to implement one of the following hash functions to be compliant with RFC 8018.
-	 * -# SHA-1 (see @ref Sha1Generator)
-	 * -# SHA-224
-	 * -# SHA-256 (see @ref Sha256Generator)
-	 * -# SHA-384
-	 * -# SHA-512 (see @ref Sha512Generator)
+	 * -# SHA1 (see @ref Sha1Generator)
+	 * -# SHA2-224
+	 * -# SHA2-256 (see @ref Sha2256Generator)
+	 * -# SHA2-384
+	 * -# SHA2-512 (see @ref Sha2512Generator)
 	 * 
 	 * The implementation of <var>HashFunction</var> must satisfies the following conditions.
-	 * See @ref Sha256Generator or similar class, for more information including parameters to each function.
+	 * See @ref Sha2256Generator or similar class, for more information including parameters to each function.
 	 * 
 	 * -# Has a <tt>kBlockSize</tt> constant that defines the size of the block to process.
 	 * -# Has a <tt>kHashSize</tt> constant that defines the output size of the hash value.

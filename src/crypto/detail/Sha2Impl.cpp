@@ -6,26 +6,34 @@ struct tc::crypto::detail::Sha2Impl::ImplCtx
 	mbedtls_md_context_t mMdContext;
 };
 
-tc::crypto::detail::Sha2Impl::Sha2Impl(SHA2BitSize algo) :
+tc::crypto::detail::Sha2Impl::Sha2Impl(size_t bitsize) :
 	mState(State::None),
 	mHashSize(0),
 	mImplCtx(new ImplCtx())
 {
 	mbedtls_md_init(&(mImplCtx->mMdContext));
-	switch(algo)
+
+	const mbedtls_md_info_t* md_info = nullptr;
+	switch(bitsize)
 	{
-		case (SHA2BitSize_256):
-			mHashSize = kSha2_256_HashSize;
-			mbedtls_md_setup(&(mImplCtx->mMdContext), mbedtls_md_info_from_type(MBEDTLS_MD_SHA256), 0);
+		case (224):
+			md_info = mbedtls_md_info_from_type(MBEDTLS_MD_SHA224);
 			break;
-		case (SHA2BitSize_512):
-			mHashSize = kSha2_512_HashSize;
-			mbedtls_md_setup(&(mImplCtx->mMdContext), mbedtls_md_info_from_type(MBEDTLS_MD_SHA512), 0);
+		case (256):
+			md_info = mbedtls_md_info_from_type(MBEDTLS_MD_SHA256);
+			break;
+		case (384):
+			md_info = mbedtls_md_info_from_type(MBEDTLS_MD_SHA384);
+			break;
+		case (512):
+			md_info = mbedtls_md_info_from_type(MBEDTLS_MD_SHA512);
 			break;
 		default:
 			throw tc::crypto::CryptoException("tc::crypto::detail::Sha2Impl", "Invalid value for SHA2BitSize");
 	}
-	
+
+	mHashSize = mbedtls_md_get_size(md_info);	
+	mbedtls_md_setup(&(mImplCtx->mMdContext), md_info, 0);
 }
 
 tc::crypto::detail::Sha2Impl::~Sha2Impl()

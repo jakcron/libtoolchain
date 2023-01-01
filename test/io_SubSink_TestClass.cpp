@@ -1,16 +1,20 @@
-#include <iostream>
-
 #include "io_SubSink_TestClass.h"
-#include "SinkTestUtil.h"
 
-#include <tc.h>
+#include <fmt/format.h>
+
+#include <tc/io/SubSink.h>
 #include <tc/io/IOUtil.h>
-#include <sstream>
-#include <iomanip>
+
+//---------------------------------------------------------
+
+io_SubSink_TestClass::io_SubSink_TestClass() :
+	mTestTag("tc::io::SubSink"),
+	mTestResults()
+{
+}
 
 void io_SubSink_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::io::SubSink] START" << std::endl;
 	testDefaultConstructor();
 	testCreateConstructor();
 	testCreateFromNullBase();
@@ -21,77 +25,112 @@ void io_SubSink_TestClass::runAllTests(void)
 	testSetLengthOnDisposedBase();
 	testPushDataOnDisposedBase();
 	testPushDataOutsideOfBaseRange();
-	std::cout << "[tc::io::SubSink] END" << std::endl;
 }
+
+const std::string& io_SubSink_TestClass::getTestTag() const
+{
+	return mTestTag;
+}
+
+const std::vector<ITestClass::TestResult>& io_SubSink_TestClass::getTestResults() const
+{
+	return mTestResults;
+}
+
+//---------------------------------------------------------
 
 void io_SubSink_TestClass::testDefaultConstructor()
 {
-	std::cout << "[tc::io::SubSink] testDefaultConstructor : " << std::flush;
+	TestResult test;
+	test.test_name = "testDefaultConstructor";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
-		try
-		{
-			tc::io::SubSink sink;
+		tc::io::SubSink sink;
 
-			SinkTestUtil::testSinkLength(sink, 0);
+		SinkTestUtil::testSinkLength(sink, 0);
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubSink_TestClass::testCreateConstructor()
 {
-	std::cout << "[tc::io::SubSink] testCreateConstructor : " << std::flush;
+	TestResult test;
+	test.test_name = "testCreateConstructor";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
-		try
-		{
-			// create data to push
-			auto data = tc::ByteData(0x100);
+		// create data to push
+		auto data = tc::ByteData(0x100);
 
-			// create base sink
-			auto base_sink = std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>(new SinkTestUtil::DummySinkTestablePushData());
-			base_sink->setLength(0x10000);
+		// create base sink
+		auto base_sink = std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>(new SinkTestUtil::DummySinkTestablePushData());
+		base_sink->setLength(0x10000);
 
-			// create sub sink
-			int64_t sub_sink_offset = 0xcafe;
-			int64_t sub_sink_size = 0x1000;
-			auto sub_sink = tc::io::SubSink(base_sink, sub_sink_offset, sub_sink_size);
+		// create sub sink
+		int64_t sub_sink_offset = 0xcafe;
+		int64_t sub_sink_size = 0x1000;
+		auto sub_sink = tc::io::SubSink(base_sink, sub_sink_offset, sub_sink_size);
 
-			// test
-			SinkTestUtil::testSinkLength(sub_sink, sub_sink_size);
+		// test
+		SinkTestUtil::testSinkLength(sub_sink, sub_sink_size);
 
-			memset(data.data(), 0x33, data.size());
-			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0, data, data);
-			
-			memset(data.data(), 0xea, data.size());
-			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0x200, data, data);
+		memset(data.data(), 0x33, data.size());
+		pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0, data, data);
+		
+		memset(data.data(), 0xea, data.size());
+		pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, 0x200, data, data);
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubSink_TestClass::testCreateFromNullBase()
 {
-	std::cout << "[tc::io::SubSink] testCreateFromNullBase : " << std::flush;
+	TestResult test;
+	test.test_name = "testCreateFromNullBase";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -99,22 +138,42 @@ void io_SubSink_TestClass::testCreateFromNullBase()
 			// create sink
 			auto sub_sink = tc::io::SubSink(nullptr, 0, 0);
 
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException("Create Constructor did not throw tc::ArgumentNullException where base sink was null");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ArgumentNullException&) { /* do nothing */ }
+		catch (const tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException("Create Constructor threw the wrong exception where base sink was null");
 		}
+		
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubSink_TestClass::testCreateWithNegativeSubSinkOffset()
 {
-	std::cout << "[tc::io::SubSink] testCreateWithNegativeSubSinkOffset : " << std::flush;
+	TestResult test;
+	test.test_name = "testCreateWithNegativeSubSinkOffset";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -131,22 +190,42 @@ void io_SubSink_TestClass::testCreateWithNegativeSubSinkOffset()
 			int64_t sub_sink_size = 0x1000;
 			auto sub_sink = tc::io::SubSink(base_sink, sub_sink_offset, sub_sink_size);
 
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException("Create Constructor did not throw tc::ArgumentOutOfRangeException sub sink offset was negative");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ArgumentOutOfRangeException&) { /* do nothing */ }
+		catch (const tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException("Create Constructor threw the wrong exception sub sink offset was negative");
 		}
+		
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubSink_TestClass::testCreateWithNegativeSubSinkLength()
 {
-	std::cout << "[tc::io::SubSink] testCreateWithNegativeSubSinkLength : " << std::flush;
+	TestResult test;
+	test.test_name = "testCreateWithNegativeSubSinkLength";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -163,22 +242,42 @@ void io_SubSink_TestClass::testCreateWithNegativeSubSinkLength()
 			int64_t sub_sink_size = -1;
 			auto sub_sink = tc::io::SubSink(base_sink, sub_sink_offset, sub_sink_size);
 
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException("Create Constructor did not throw tc::ArgumentOutOfRangeException where sub sink size was negative");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ArgumentOutOfRangeException&) { /* do nothing */ }
+		catch (const tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException("Create Constructor threw the wrong exception where sub sink size was negative");
 		}
+		
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubSink_TestClass::testCreateWithExcessiveSubSink()
 {
-	std::cout << "[tc::io::SubSink] testCreateWithExcessiveSubSink : " << std::flush;
+	TestResult test;
+	test.test_name = "testCreateWithExcessiveSubSink";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -195,22 +294,42 @@ void io_SubSink_TestClass::testCreateWithExcessiveSubSink()
 			int64_t sub_sink_size = 2;
 			auto sub_sink = tc::io::SubSink(base_sink, sub_sink_offset, sub_sink_size);
 
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException("Create Constructor did not throw tc::ArgumentOutOfRangeException where sub sink partially past the end of the base sink");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ArgumentOutOfRangeException&) { /* do nothing */ }
+		catch (const tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException("Create Constructor threw the wrong exception where sub sink partially past the end of the base sink");
 		}
+		
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubSink_TestClass::testCreateThenSetLength()
 {
-	std::cout << "[tc::io::SubSink] testCreateThenSetLength : " << std::flush;
+	TestResult test;
+	test.test_name = "testCreateThenSetLength";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -233,23 +352,42 @@ void io_SubSink_TestClass::testCreateThenSetLength()
 
 			SinkTestUtil::testSinkLength(sub_sink, new_length);
 			
-
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException(".setLength() did not throw tc::NotSupportedException where SubSink was initialised");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::NotSupportedException&) { /* do nothing */ }
+		catch (const tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException(".setLength() threw the wrong exception where SubSink was initialised");
 		}
+		
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubSink_TestClass::testSetLengthOnDisposedBase()
 {
-	std::cout << "[tc::io::SubSink] testSetLengthOnDisposedBase : " << std::flush;
+	TestResult test;
+	test.test_name = "testSetLengthOnDisposedBase";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -259,22 +397,42 @@ void io_SubSink_TestClass::testSetLengthOnDisposedBase()
 
 			sink.setLength(0xdeadcafe);
 
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException(".setLength() did not throw tc::ObjectDisposedException where SubSink was disposed");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException(".setLength() threw the wrong exception where SubSink was disposed");
 		}
+		
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubSink_TestClass::testPushDataOnDisposedBase()
 {
-	std::cout << "[tc::io::SubSink] testPushDataOnDisposedBase : " << std::flush;
+	TestResult test;
+	test.test_name = "testPushDataOnDisposedBase";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
 		try
@@ -284,59 +442,85 @@ void io_SubSink_TestClass::testPushDataOnDisposedBase()
 
 			sink.pushData(tc::ByteData(0xff), 0);
 
-			std::cout << "FAIL" << std::endl;
+			throw tc::TestException(".pushData() did not throw tc::ObjectDisposedException where SubSink was disposed");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (const tc::Exception&)
 		{
-			std::cout << "PASS (" << e.error() << ")" << std::endl;
+			throw tc::TestException(".pushData() threw the wrong exception where SubSink was disposed");
 		}
+		
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubSink_TestClass::testPushDataOutsideOfBaseRange()
 {
-	std::cout << "[tc::io::SubSink] testPushDataOutsideOfBaseRange : " << std::flush;
+	TestResult test;
+	test.test_name = "testPushDataOutsideOfBaseRange";
+	test.result = "NOT RUN";
+	test.comments = "";
+
 	try
 	{
-		try
-		{
-			// create base sink
-			auto base_sink = std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>(new SinkTestUtil::DummySinkTestablePushData());
-			base_sink->setLength(0x10000);
+		// create base sink
+		auto base_sink = std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>(new SinkTestUtil::DummySinkTestablePushData());
+		base_sink->setLength(0x10000);
 
-			// create sub sink
-			int64_t sub_sink_offset = 0xcafe;
-			int64_t sub_sink_size = 0x1000;
-			auto sub_sink = tc::io::SubSink(base_sink, sub_sink_offset, sub_sink_size);
+		// create sub sink
+		int64_t sub_sink_offset = 0xcafe;
+		int64_t sub_sink_size = 0x1000;
+		auto sub_sink = tc::io::SubSink(base_sink, sub_sink_offset, sub_sink_size);
 
-			// test
-			SinkTestUtil::testSinkLength(sub_sink, sub_sink_size);
+		// test
+		SinkTestUtil::testSinkLength(sub_sink, sub_sink_size);
 
-			// create data to push
-			auto push_data = tc::ByteData(0x100);
-			memset(push_data.data(), 0x08, push_data.size());
+		// create data to push
+		auto push_data = tc::ByteData(0x100);
+		memset(push_data.data(), 0x08, push_data.size());
 
-			// create data to expect
-			int64_t push_offset = sub_sink_size - 0x20;
-			auto expected_data = tc::ByteData(push_data.data(), tc::io::IOUtil::getWritableCount(sub_sink_size, push_offset, push_data.size()));
+		// create data to expect
+		int64_t push_offset = sub_sink_size - 0x20;
+		auto expected_data = tc::ByteData(push_data.data(), tc::io::IOUtil::getWritableCount(sub_sink_size, push_offset, push_data.size()));
 
-			pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, push_offset, push_data, expected_data);
+		pushDataTestHelper(sub_sink, base_sink, sub_sink_offset, push_offset, push_data, expected_data);
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test.result = "PASS";
+		test.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test.result = "FAIL";
+		test.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
 }
 
 void io_SubSink_TestClass::pushDataTestHelper(tc::io::ISink& sub_sink, const std::shared_ptr<SinkTestUtil::DummySinkTestablePushData>& base_sink, int64_t sub_base_offset, int64_t sub_push_offset, tc::ByteData& push_data, tc::ByteData& expected_data)
@@ -345,8 +529,6 @@ void io_SubSink_TestClass::pushDataTestHelper(tc::io::ISink& sub_sink, const std
 	size_t push_ret = sub_sink.pushData(push_data, sub_push_offset);
 	if (push_ret != expected_data.size())
 	{
-		std::stringstream error_ss;
-		error_ss << "pushData(offset: " << sub_push_offset << ") returned: " << push_ret << ", when it should have been " << expected_data.size();;
-		throw tc::Exception(error_ss.str());
+		throw tc::TestException(fmt::format("pushData(offset: {:d}) returned: {:d}, when it should have been {:d}", sub_push_offset, push_ret, expected_data.size()));
 	}
 }

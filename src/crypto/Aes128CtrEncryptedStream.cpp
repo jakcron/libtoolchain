@@ -236,7 +236,7 @@ size_t tc::crypto::Aes128CtrEncryptedStream::write(const byte_t* ptr, size_t cou
 		throw tc::ObjectDisposedException(kClassName+"::write()", "Failed to set stream position (stream is disposed)");
 	}
 
-	throw tc::NotImplementedException(kClassName+"::write()", "write is not implemented for Aes128CtrEncryptedStream");
+	throw tc::NotSupportedException(kClassName+"::write()", "write is not supported for Aes128CtrEncryptedStream");
 }
 
 int64_t tc::crypto::Aes128CtrEncryptedStream::seek(int64_t offset, tc::io::SeekOrigin origin)
@@ -256,7 +256,7 @@ void tc::crypto::Aes128CtrEncryptedStream::setLength(int64_t length)
 		throw tc::ObjectDisposedException(kClassName+"::setLength()", "Failed to set stream length (stream is disposed)");
 	}
 
-	throw tc::NotImplementedException(kClassName+"::setLength()", "setLength is not implemented for Aes128CtrEncryptedStream");
+	throw tc::NotSupportedException(kClassName+"::setLength()", "setLength is not supported for Aes128CtrEncryptedStream");
 }
 
 void tc::crypto::Aes128CtrEncryptedStream::flush()

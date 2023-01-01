@@ -2,8 +2,8 @@
 	 * @file    Aes128CbcEncryptedStream.h
 	 * @brief   Declaration of tc::crypto::Aes128CbcEncryptedStream
 	 * @author  Jack (jakcron)
-	 * @version 0.2
-	 * @date    2022/02/13
+	 * @version 0.3
+	 * @date    2022/11/06
 	 **/
 #pragma once
 #include <list>
@@ -14,7 +14,6 @@
 #include <tc/ArgumentOutOfRangeException.h>
 #include <tc/ObjectDisposedException.h>
 #include <tc/NotSupportedException.h>
-#include <tc/NotImplementedException.h>
 #include <tc/io/IOException.h>
 
 namespace tc { namespace crypto {
@@ -113,7 +112,7 @@ public:
 
 		/**
 		 * @brief Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written. @ref write is not implemented for @ref Aes128CbcEncryptedStream.
-		 * @throw tc::NotImplementedException @ref write is not implemented for @ref Aes128CbcEncryptedStream.
+		 * @throw tc::NotSupportedException @ref write is not supported for @ref Aes128CbcEncryptedStream.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	size_t write(const byte_t* ptr, size_t count);
@@ -137,7 +136,7 @@ public:
 
 		/**
 		 * @brief Sets the length of the current stream. This is not implemented for @ref Aes128CbcEncryptedStream.
-		 * @throw tc::NotImplementedException @ref setLength is not implemented for @ref Aes128CbcEncryptedStream.
+		 * @throw tc::NotSupportedException @ref setLength is not supported for @ref Aes128CbcEncryptedStream.
 		 * @throw tc::ObjectDisposedException Methods were called after the stream was closed.
 		 **/
 	void setLength(int64_t length);

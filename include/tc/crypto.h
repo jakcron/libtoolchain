@@ -43,15 +43,15 @@
 // Hash Calculator
 #include <tc/crypto/Md5Generator.h>
 #include <tc/crypto/Sha1Generator.h>
-#include <tc/crypto/Sha256Generator.h>
-#include <tc/crypto/Sha512Generator.h>
+#include <tc/crypto/Sha2256Generator.h>
+#include <tc/crypto/Sha2512Generator.h>
 
 // HMAC Calculator
 #include <tc/crypto/HmacGenerator.h>
 #include <tc/crypto/HmacMd5Generator.h>
 #include <tc/crypto/HmacSha1Generator.h>
-#include <tc/crypto/HmacSha256Generator.h>
-#include <tc/crypto/HmacSha512Generator.h>
+#include <tc/crypto/HmacSha2256Generator.h>
+#include <tc/crypto/HmacSha2512Generator.h>
 
 // Password-based Key Derivation Function
 #include <tc/crypto/Pbkdf1KeyDeriver.h>
@@ -60,8 +60,8 @@
 
 #include <tc/crypto/Pbkdf2KeyDeriver.h>
 #include <tc/crypto/Pbkdf2Sha1KeyDeriver.h>
-#include <tc/crypto/Pbkdf2Sha256KeyDeriver.h>
-#include <tc/crypto/Pbkdf2Sha512KeyDeriver.h>
+#include <tc/crypto/Pbkdf2Sha2256KeyDeriver.h>
+#include <tc/crypto/Pbkdf2Sha2512KeyDeriver.h>
 
 // Psuedo-random Byte Generation
 #include <tc/crypto/PseudoRandomByteGenerator.h>
@@ -73,13 +73,13 @@
 #include <tc/crypto/RsaPkcs1Signer.h>
 #include <tc/crypto/RsaPkcs1Md5Signer.h>
 #include <tc/crypto/RsaPkcs1Sha1Signer.h>
-#include <tc/crypto/RsaPkcs1Sha256Signer.h>
-#include <tc/crypto/RsaPkcs1Sha512Signer.h>
+#include <tc/crypto/RsaPkcs1Sha2256Signer.h>
+#include <tc/crypto/RsaPkcs1Sha2512Signer.h>
 
 #include <tc/crypto/RsaPssSigner.h>
-#include <tc/crypto/RsaPssSha256Signer.h>
-#include <tc/crypto/RsaPssSha512Signer.h>
+#include <tc/crypto/RsaPssSha2256Signer.h>
+#include <tc/crypto/RsaPssSha2512Signer.h>
 
 #include <tc/crypto/RsaOaepEncryptor.h>
-#include <tc/crypto/RsaOaepSha256Encryptor.h>
-#include <tc/crypto/RsaOaepSha512Encryptor.h>
+#include <tc/crypto/RsaOaepSha2256Encryptor.h>
+#include <tc/crypto/RsaOaepSha2512Encryptor.h>

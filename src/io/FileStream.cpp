@@ -739,7 +739,7 @@ void tc::io::FileStream::setLength_impl(int64_t length)
 			case (EIO):
 			case (EBADF):
 			default:
-				throw tc::io::IOException(kClassName+"::seek()", "Failed to set stream position (" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
+				throw tc::io::IOException(kClassName+"::setLength()", "Failed to set stream position (" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 	

@@ -1,183 +1,246 @@
-#include <tc/Exception.h>
-#include <tc/io.h>
-#include <tc/cli.h>
-#include <fmt/core.h>
-
 #include "crypto_Aes128CbcEncryptedStream_TestClass.h"
 #include "StreamTestUtil.h"
 
+#include <fmt/format.h>
+
+#include <tc/crypto/Aes128CbcEncryptedStream.h>
+#include <tc/io.h>
+#include <tc/cli.h>
+
+//---------------------------------------------------------
+
+crypto_Aes128CbcEncryptedStream_TestClass::crypto_Aes128CbcEncryptedStream_TestClass() :
+	mTestTag("tc::crypto::Aes128CbcEncryptedStream"),
+	mTestResults()
+{
+}
+
 void crypto_Aes128CbcEncryptedStream_TestClass::runAllTests(void)
 {
-	fmt::print("[tc::crypto::Aes128CbcEncryptedStream] START\n");
 	test_CreateEmptyStream_DefaultConstructor();
 	test_CreateValidStream_CreateConstructor();
 	test_RunTestCases();
-	fmt::print("[tc::crypto::Aes128CbcEncryptedStream] END\n");
 }
+
+const std::string& crypto_Aes128CbcEncryptedStream_TestClass::getTestTag() const
+{
+	return mTestTag;
+}
+
+const std::vector<ITestClass::TestResult>& crypto_Aes128CbcEncryptedStream_TestClass::getTestResults() const
+{
+	return mTestResults;
+}
+
+//---------------------------------------------------------
 
 void crypto_Aes128CbcEncryptedStream_TestClass::test_CreateEmptyStream_DefaultConstructor()
 {
-	fmt::print("[tc::crypto::Aes128CbcEncryptedStream] test_CreateEmptyStream_DefaultConstructor : ");
+	TestResult test_result;
+	test_result.test_name = "test_CreateEmptyStream_DefaultConstructor";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
 	try
 	{
-		try 
+		auto stream = tc::crypto::Aes128CbcEncryptedStream();
+
+		StreamTestUtil::constructor_TestHelper(stream, 0, 0, false, false, false);
+
+		try
 		{
-			auto stream = tc::crypto::Aes128CbcEncryptedStream();
-
-			StreamTestUtil::constructor_TestHelper(stream, 0, 0, false, false, false);
-
-			try
-			{
-				stream.read(nullptr, 0);
-				throw tc::Exception(".read() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
-			}
-			catch (tc::ObjectDisposedException&) {
-				// do nothing
-			}
-
-			try
-			{
-				stream.write(nullptr, 0);
-				throw tc::Exception(".write() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
-			}
-			catch (tc::ObjectDisposedException&) {
-				// do nothing
-			}
-
-			try
-			{
-				stream.seek(0, tc::io::SeekOrigin::Begin);
-				throw tc::Exception(".seek() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
-			}
-			catch (tc::ObjectDisposedException&) {
-				// do nothing
-			}
-
-			try
-			{
-				stream.setLength(0);
-				throw tc::Exception(".setLength() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
-			}
-			catch (tc::ObjectDisposedException&) {
-				// do nothing
-			}
-
-			try
-			{
-				stream.flush();
-				throw tc::Exception(".flush() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
-			}
-			catch (tc::ObjectDisposedException&) {
-				// do nothing
-			}
-
-			fmt::print("PASS\n");
+			stream.read(nullptr, 0);
+			throw tc::TestException(".read() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (tc::Exception&)
 		{
-			fmt::print("FAIL ({:s})\n", e.error());
+			throw tc::TestException(".read() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
 		}
+
+		try
+		{
+			stream.write(nullptr, 0);
+			throw tc::TestException(".write() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
+		}
+		catch (tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (tc::Exception&)
+		{
+			throw tc::TestException(".write() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
+		}
+
+		try
+		{
+			stream.seek(0, tc::io::SeekOrigin::Begin);
+			throw tc::TestException(".seek() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
+		}
+		catch (tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (tc::Exception&)
+		{
+			throw tc::TestException(".seek() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
+		}
+
+		try
+		{
+			stream.setLength(0);
+			throw tc::TestException(".setLength() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
+		}
+		catch (tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (tc::Exception&)
+		{
+			throw tc::TestException(".setLength() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
+		}
+
+		try
+		{
+			stream.flush();
+			throw tc::TestException(".flush() did not throw tc::ObjectDisposedException for uninitialized Aes128CbcEncryptedStream");
+		}
+		catch (tc::ObjectDisposedException&) { /* do nothing */ }
+		catch (tc::Exception&)
+		{
+			throw tc::TestException(".flush() did not throw correct exception for uninitialized Aes128CbcEncryptedStream");
+		}
+
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("UNHANDLED EXCEPTION ({:s})\n", e.what());
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
 }
 
 void crypto_Aes128CbcEncryptedStream_TestClass::test_CreateValidStream_CreateConstructor()
 {
-	fmt::print("[tc::crypto::Aes128CbcEncryptedStream] test_CreateValidStream_CreateConstructor : ");
+	TestResult test_result;
+	test_result.test_name = "test_CreateValidStream_CreateConstructor";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
 	try
 	{
-		try 
+		tc::crypto::Aes128CbcEncryptedStream::key_t key;
+		tc::crypto::Aes128CbcEncryptedStream::iv_t iv;
+
+		std::shared_ptr<tc::io::IStream> base_stream;
+		base_stream = std::shared_ptr<tc::io::MemoryStream>(new tc::io::MemoryStream(tc::ByteData(0x100)));
+
+		auto stream = tc::crypto::Aes128CbcEncryptedStream(base_stream, key, iv);
+
+		try
 		{
-			tc::crypto::Aes128CbcEncryptedStream::key_t key;
-			tc::crypto::Aes128CbcEncryptedStream::iv_t iv;
-
-			std::shared_ptr<tc::io::IStream> base_stream;
-			base_stream = std::shared_ptr<tc::io::MemoryStream>(new tc::io::MemoryStream(tc::ByteData(0x100)));
-
-			auto stream = tc::crypto::Aes128CbcEncryptedStream(base_stream, key, iv);
-
-			try
-			{
-				stream.write(nullptr, 0);
-				throw tc::Exception(".write() did not throw tc::NotImplementedException for initialized Aes128CbcEncryptedStream");
-			}
-			catch (tc::NotImplementedException&) {
-				// do nothing
-			}
-
-			try
-			{
-				stream.setLength(0);
-				throw tc::Exception(".setLength() did not throw tc::NotImplementedException for initialized Aes128CbcEncryptedStream");
-			}
-			catch (tc::NotImplementedException&) {
-				// do nothing
-			}
-
-			fmt::print("PASS\n");
+			stream.write(nullptr, 0);
+			throw tc::TestException(".write() did not throw tc::NotSupportedException for initialized Aes128CbcEncryptedStream");
 		}
-		catch (const tc::Exception& e)
+		catch (tc::NotSupportedException&) { /* do nothing */ }
+		catch (tc::Exception&)
 		{
-			fmt::print("FAIL ({:s})\n", e.error());
+			throw tc::TestException(".write() did not throw correct exception for initialized Aes128CbcEncryptedStream");
 		}
+
+		try
+		{
+			stream.setLength(0);
+			throw tc::TestException(".setLength() did not throw tc::NotSupportedException for initialized Aes128CbcEncryptedStream");
+		}
+		catch (tc::NotSupportedException&) { /* do nothing */ }
+		catch (tc::Exception&)
+		{
+			throw tc::TestException(".setLength() did not throw correct exception for initialized Aes128CbcEncryptedStream");
+		}
+
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("UNHANDLED EXCEPTION ({:s})\n", e.what());
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
 }
 
 void crypto_Aes128CbcEncryptedStream_TestClass::test_RunTestCases()
 {
-	fmt::print("[tc::crypto::Aes128CbcEncryptedStream] test_RunTestCases : ");
+	TestResult test_result;
+	test_result.test_name = "test_RunTestCases";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
 	try
 	{
-		try 
-		{
-			// get test cases
-			std::vector<crypto_Aes128CbcEncryptedStream_TestClass::TestCase> test_cases;
-			util_Setup_TestCases(test_cases);
+		// get test cases
+		std::vector<crypto_Aes128CbcEncryptedStream_TestClass::TestCase> test_cases;
+		util_Setup_TestCases(test_cases);
 
-			for (auto itr = test_cases.begin(); itr != test_cases.end(); itr++)
+		for (auto itr = test_cases.begin(); itr != test_cases.end(); itr++)
+		{
+			tc::crypto::Aes128CbcEncryptedStream::key_t key;
+			memcpy(key.data(), itr->key.data(), itr->key.size());
+
+			tc::crypto::Aes128CbcEncryptedStream::iv_t iv;
+			memcpy(iv.data(), itr->iv.data(), itr->iv.size());
+
+			std::shared_ptr<tc::io::IStream> base_stream;
+			base_stream = std::shared_ptr<tc::io::MemoryStream>(new tc::io::MemoryStream(itr->ciphertext));
+
+
+			auto stream = tc::crypto::Aes128CbcEncryptedStream(base_stream, key, iv);
+
+			try 
 			{
-				tc::crypto::Aes128CbcEncryptedStream::key_t key;
-				memcpy(key.data(), itr->key.data(), itr->key.size());
-
-				tc::crypto::Aes128CbcEncryptedStream::iv_t iv;
-				memcpy(iv.data(), itr->iv.data(), itr->iv.size());
-
-				std::shared_ptr<tc::io::IStream> base_stream;
-				base_stream = std::shared_ptr<tc::io::MemoryStream>(new tc::io::MemoryStream(itr->ciphertext));
-
-
-				auto stream = tc::crypto::Aes128CbcEncryptedStream(base_stream, key, iv);
-
-				try 
-				{
-					StreamTestUtil::constructor_TestHelper(stream, itr->ciphertext.size(), 0, true, false, true);
-					StreamTestUtil::read_TestHelper(stream, itr->read_offset, tc::io::SeekOrigin::Begin, itr->read_size, itr->read_size, itr->read_plaintext.size(), itr->read_offset + int64_t(itr->read_size), itr->read_plaintext.data());
-				}
-				catch (const tc::Exception& e)
-				{
-					throw tc::Exception(fmt::format("{} Failed: {}", itr->test_name, e.error()));
-				}
-				
+				StreamTestUtil::constructor_TestHelper(stream, itr->ciphertext.size(), 0, true, false, true);
+				StreamTestUtil::read_TestHelper(stream, itr->read_offset, tc::io::SeekOrigin::Begin, itr->read_size, itr->read_size, itr->read_plaintext.size(), itr->read_offset + int64_t(itr->read_size), itr->read_plaintext.data());
 			}
+			catch (const tc::Exception& e)
+			{
+				throw tc::TestException(fmt::format("{} Failed: {}", itr->test_name, e.error()));
+			}
+			
+		}
 
-			fmt::print("PASS\n");
-		}
-		catch (const tc::Exception& e)
-		{
-			fmt::print("FAIL ({:s})\n", e.error());
-		}
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("UNHANDLED EXCEPTION ({:s})\n", e.what());
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
 }
 
 void crypto_Aes128CbcEncryptedStream_TestClass::util_Setup_TestCases(std::vector<crypto_Aes128CbcEncryptedStream_TestClass::TestCase>& test_cases)

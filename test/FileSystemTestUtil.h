@@ -52,9 +52,30 @@ public:
 			throw tc::NotImplementedException(kClassName, "createDirectory() not implemented");
 		}
 
+		virtual void createDirectoryPath(const tc::io::Path& path)
+		{
+			throw tc::NotImplementedException(kClassName, "createDirectory() not implemented");
+		}
+
 		virtual void removeDirectory(const tc::io::Path& path)
 		{
 			throw tc::NotImplementedException(kClassName, "removeDirectory() not implemented");
+		}
+
+		virtual void getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path)
+		{
+			// save current dir for later
+			tc::io::Path prev_current_dir;
+			getWorkingDirectory(prev_current_dir);
+
+			// change the directory
+			setWorkingDirectory(path);
+
+			// save the path
+			getWorkingDirectory(canon_path);
+
+			// restore current directory
+			setWorkingDirectory(prev_current_dir);
 		}
 
 		virtual void getWorkingDirectory(tc::io::Path& path)

@@ -23,12 +23,12 @@ namespace tc { namespace crypto {
 	 * 
 	 * @details
 	 * This class is a template class that takes a hash function implementation class as template parameter.
-	 * See @ref Rsa2048Pkcs1Sha256Signer or similar for supplied realizations of this template class.
+	 * See @ref Rsa2048Pkcs1Sha2256Signer or similar for supplied realizations of this template class.
 	 * 
 	 * The <var>KeyBitSize</var> is the size in bits of the RSA key, this only supports key sizes aligned to 8 bits.
 	 * 
 	 * The implementation of <var>HashFunction</var> must satisfies the following conditions.
-	 * See @ref Sha256Generator or similar class, for more information including parameters to each function.
+	 * See @ref Sha2256Generator or similar class, for more information including parameters to each function.
 	 * 
 	 * -# Has a <tt>kAsn1OidDataSize</tt> constant that defines the size of the ASN.1 encoded OID for the hash algorithm
 	 * -# Has a <tt>kAsn1OidData</tt> constant that defines the ASN.1 encoded OID for the hash algorithm
@@ -97,7 +97,7 @@ public:
 		 * @return true if signature calculation was successful.
 		 * 
 		 * @pre
-		 * - Size of the signature buffer must >= <tt>Rsa1024Pkcs1Sha256Signer::kSignatureSize</tt>.
+		 * - Size of the signature buffer must >= <tt>Rsa1024Pkcs1Sha2256Signer::kSignatureSize</tt>.
 		 * 
 		 * @post
 		 * - The signature is written to <tt><var>signature</var></tt>.

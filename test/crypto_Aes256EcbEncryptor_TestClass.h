@@ -1,14 +1,23 @@
 #pragma once
 #include "ITestClass.h"
 
-#include <vector>
-#include <tc/ByteData.h>
-
 class crypto_Aes256EcbEncryptor_TestClass : public ITestClass
 {
 public:
+	crypto_Aes256EcbEncryptor_TestClass();
+
+		// this will run the tests
 	void runAllTests();
+
+		// this is the label for this test (for filtering purposes)
+	const std::string& getTestTag() const;
+
+		// this is where the test results are written
+	const std::vector<ITestClass::TestResult>& getTestResults() const;
 private:
+	std::string mTestTag;
+	std::vector<TestResult> mTestResults;
+
 	void test_Constants();
 	void test_UseClassEnc();
 	void test_UseClassDec();
@@ -19,14 +28,4 @@ private:
 	void test_InitializeThrowsExceptionOnBadInput();
 	void test_EncryptThrowsExceptionOnBadInput();
 	void test_DecryptThrowsExceptionOnBadInput();
-	
-	struct TestCase
-	{
-		std::string test_name;
-		tc::ByteData key;
-		tc::ByteData plaintext;
-		tc::ByteData ciphertext;
-	};
-
-	void util_Setup_TestCases(std::vector<crypto_Aes256EcbEncryptor_TestClass::TestCase>& test_cases);
 };

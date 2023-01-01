@@ -3,6 +3,7 @@
 #include <tc/PlatformErrorHandlingUtil.h>
 #include <tc/Exception.h>
 #include <tc/string.h>
+#include <fmt/format.h>
 
 #ifdef _WIN32
 #include <direct.h>
@@ -120,9 +121,9 @@ void tc::io::LocalFileSystem::createDirectory(const tc::io::Path& path)
 				throw tc::UnauthorisedAccessException(kClassName+"::createDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENOTDIR): // A component of the path prefix is not a directory.
 			case (ENOENT): // A component of the path prefix does not exist or path is an empty string.
-				throw tc::io::DirectoryNotFoundException(kClassName+"::removeFile()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
+				throw tc::io::DirectoryNotFoundException(kClassName+"::createDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENAMETOOLONG): // A component of a pathname exceeded {NAME_MAX} characters, or an entire path name exceeded {PATH_MAX} characters.
-				throw tc::io::PathTooLongException(kClassName+"::removeFile()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
+				throw tc::io::PathTooLongException(kClassName+"::createDirectory()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EISDIR): // The named file is the root directory.
 			case (EDQUOT): // The new directory cannot be created because the user's quota of disk blocks on the file system that will contain the directory has been exhausted. -OR- The user's quota of inodes on the file system on which the directory is being created has been exhausted.
 			//case (EEXIST): // The named file exists
@@ -136,6 +137,42 @@ void tc::io::LocalFileSystem::createDirectory(const tc::io::Path& path)
 		}
 	}
 #endif
+}
+
+void tc::io::LocalFileSystem::createDirectoryPath(const tc::io::Path& path)
+{
+	tc::io::Path tmp_path;
+
+	for (size_t i = 0; i <= path.size(); i++)
+	{
+		tmp_path = path.subpath(0, i);
+
+		// skip empty or contextual path subjects
+		if (tmp_path.empty() || tmp_path.back().empty() || tmp_path.back() == "." || tmp_path.back() == "..")
+			continue;
+
+		try 
+		{
+			createDirectory(tmp_path);
+		}
+		// preserve createDirectory() exceptions but rename the module name
+		catch (tc::io::PathTooLongException& e)
+		{
+			throw tc::io::PathTooLongException(kClassName+"::createDirectoryPath()", e.error());
+		}
+		catch (tc::io::IOException& e)
+		{
+			throw tc::io::IOException(kClassName+"::createDirectoryPath()", e.error());
+		}
+		catch (tc::UnauthorisedAccessException& e)
+		{
+			throw tc::UnauthorisedAccessException(kClassName+"::createDirectoryPath()", e.error());
+		}
+		catch (tc::Exception& e)
+		{
+			throw tc::Exception(kClassName+"::createDirectoryPath()", e.error());
+		}
+	}
 }
 
 void tc::io::LocalFileSystem::removeDirectory(const tc::io::Path& path)
@@ -232,7 +269,7 @@ void tc::io::LocalFileSystem::setWorkingDirectory(const tc::io::Path& path)
 	// convert Path to unicode string
 	std::u16string unicode_path = path.to_u16string(tc::io::Path::Format::Win32);
 
-	// delete file
+	// set current directory
 	if (SetCurrentDirectoryW((LPCWSTR)unicode_path.c_str()) == false)
 	{
 		DWORD error = GetLastError();
@@ -246,7 +283,7 @@ void tc::io::LocalFileSystem::setWorkingDirectory(const tc::io::Path& path)
 	// convert Path to unicode string
 	std::string unicode_path = path.to_string(tc::io::Path::Format::POSIX);
 
-	// get full path to directory
+	// change dir
 	if (chdir(unicode_path.c_str()) != 0)
 	{
 		switch (errno) 
@@ -268,11 +305,169 @@ void tc::io::LocalFileSystem::setWorkingDirectory(const tc::io::Path& path)
 #endif
 }
 
+void tc::io::LocalFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path)
+{
+	if (path.empty())
+	{
+		// throw exception for empty path
+		throw tc::io::DirectoryNotFoundException(kClassName+"::getCanonicalPath()", "Directory path was empty.");
+	}
+
+	// save current dir for restoring later
+	Path prev_current_dir;
+	try
+	{
+		getWorkingDirectory(prev_current_dir);
+	}
+	catch (tc::Exception& e)
+	{
+		throw tc::io::IOException(kClassName+"::getCanonicalPath()", fmt::format("Failed to save current directory ({})", e.error()));
+	}
+
+	// try to open as file
+	bool path_exists_as_file = false;
+	try 
+	{
+		std::shared_ptr<tc::io::IStream> dummy_stream;
+		openFile(path, tc::io::FileMode::Open, tc::io::FileAccess::Read, dummy_stream);
+
+		path_exists_as_file = true;
+	}
+	catch (tc::io::FileNotFoundException&)
+	{
+		// not an issue as we are just testing if the file exists
+	}
+
+	// try to open as dir
+	bool path_exists_as_directory = false;
+	try 
+	{
+		std::vector<std::string> child_dir_name_list;
+		std::vector<std::string> child_file_name_list;
+
+		getDirectoryChildren("::getCanonicalPath()", path, child_dir_name_list, child_file_name_list);
+
+		path_exists_as_directory = true;
+	}
+	catch (tc::io::DirectoryNotFoundException&)
+	{
+		// not an issue as we are just testing if the directory exists
+	}
+
+	// parameters for resolution
+	std::string child_leaf_element = "";
+	tc::io::Path resolvable_path_relative = tc::io::Path();
+	tc::io::Path resolvable_path_canonical = tc::io::Path();
+
+	if (path_exists_as_file)
+	{
+		// if file, and single element path, presume relative, and use parent "."
+		if (path.size() == 1)
+		{
+			child_leaf_element = path.back();
+			resolvable_path_relative = tc::io::Path(".");
+		}
+		// if file and not single element path, 
+		else if (path.size() > 1)
+		{
+			child_leaf_element = path.back();
+			resolvable_path_relative = path.subpath(path.begin(), --(path.end()));
+		}
+	}
+	else if (path_exists_as_directory)
+	{
+		child_leaf_element = "";
+		resolvable_path_relative = path;
+	}
+	else
+	{
+		// throw exception for cannot find path
+		throw tc::io::DirectoryNotFoundException(kClassName+"::getCanonicalPath()", fmt::format("Directory \"{:s}\" was not found.", path.to_string()));
+	}
+
+	// resolve path
+	try
+	{
+		// change the directory
+		setWorkingDirectory(resolvable_path_relative);
+
+		// save the path
+		getWorkingDirectory(resolvable_path_canonical);
+
+		// append child leaf element if applicable
+		if (child_leaf_element.empty() == false)
+		{
+			resolvable_path_canonical += tc::io::Path(child_leaf_element);
+		}
+	}
+	// preserve getWorkingDirectory()/setWorkingDirectory() exceptions but rename the module name
+	catch (tc::io::PathTooLongException& e)
+	{
+		// restore current directory
+		setWorkingDirectory(prev_current_dir);
+
+		throw tc::io::PathTooLongException(kClassName+"::getCanonicalPath()", e.error());
+	}
+	catch (tc::io::DirectoryNotFoundException& e)
+	{
+		// restore current directory
+		setWorkingDirectory(prev_current_dir);
+
+		throw tc::io::DirectoryNotFoundException(kClassName+"::getCanonicalPath()", e.error());
+	}
+	catch (tc::io::IOException& e)
+	{
+		// restore current directory
+		setWorkingDirectory(prev_current_dir);
+
+		throw tc::io::IOException(kClassName+"::getCanonicalPath()", e.error());
+	}
+	catch (tc::UnauthorisedAccessException& e)
+	{
+		// restore current directory
+		setWorkingDirectory(prev_current_dir);
+
+		throw tc::UnauthorisedAccessException(kClassName+"::getCanonicalPath()", e.error());
+	}
+	catch (tc::Exception& e)
+	{
+		// restore current directory
+		setWorkingDirectory(prev_current_dir);
+
+		throw tc::Exception(kClassName+"::getCanonicalPath()", e.error());
+	}
+	
+	// save canon path
+	canon_path = resolvable_path_canonical;
+
+	// restore current directory
+	try
+	{
+		setWorkingDirectory(prev_current_dir);
+	}
+	catch (tc::Exception& e)
+	{
+		throw tc::io::IOException(kClassName+"::getCanonicalPath()", fmt::format("Failed to restore current directory ({})", e.error()));
+	}
+}
+
 void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDirectoryListing& info)
 {
 	std::vector<std::string> child_dir_name_list;
 	std::vector<std::string> child_file_name_list;
+	
+	getDirectoryChildren("::getDirectoryListing()", path, child_dir_name_list, child_file_name_list);
+
 	Path current_directory_path;
+	getCanonicalPath(path, current_directory_path);
+
+	info.abs_path = current_directory_path;
+	info.dir_list = child_dir_name_list;
+	info.file_list = child_file_name_list;
+}
+
+void tc::io::LocalFileSystem::getDirectoryChildren(const std::string& method_name, const tc::io::Path& path, std::vector<std::string>& child_dir_name_list, std::vector<std::string>& child_file_name_list)
+{
 #ifdef _WIN32
 	Path wildcard_path = path + tc::io::Path("*");
 
@@ -289,7 +484,7 @@ void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDir
 		switch (error)
 		{
 			default:
-				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to open directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
+				throw tc::io::IOException(kClassName+method_name, "Failed to open directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 
@@ -316,25 +511,11 @@ void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDir
 		switch (error)
 		{
 			default:
-				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to open directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
+				throw tc::io::IOException(kClassName+method_name, "Failed to open directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 
 	FindClose(dir_handle);
-	
-
-	// save current dir for later
-	Path prev_current_dir;
-	getWorkingDirectory(prev_current_dir);
-
-	// change the directory
-	setWorkingDirectory(path);
-
-	// save the path
-	getWorkingDirectory(current_directory_path);
-
-	// restore current directory
-	setWorkingDirectory(prev_current_dir);
 #else
 	// convert Path to unicode string
 	std::string unicode_path = path.to_string(tc::io::Path::Format::POSIX);
@@ -347,16 +528,16 @@ void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDir
 		switch (errno) 
 		{
 			case (EACCES): // Permission denied.
-				throw tc::UnauthorisedAccessException(kClassName+"::getDirectoryListing()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
+				throw tc::UnauthorisedAccessException(kClassName+method_name, PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENOTDIR): // A component of the path prefix is not a directory. // name is not a directory.
 			case (ENOENT): // Directory does not exist, or name is an empty string.
-				throw tc::io::DirectoryNotFoundException(kClassName+"::getDirectoryListing()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
+				throw tc::io::DirectoryNotFoundException(kClassName+method_name, PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EBADF): // fd is not a valid file descriptor open for reading.
 			case (EMFILE):
 			case (ENFILE):
 			case (ENOMEM):
 			default:
-				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to get directory info (opendir)(" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
+				throw tc::io::IOException(kClassName+method_name, "Failed to get directory info (opendir)(" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 
@@ -386,31 +567,16 @@ void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDir
 			case (EBADF): // fd is not a valid file descriptor open for reading.
 			case (EIO): // An I/O error occurred while reading from or writing to the file system.
 			default:
-				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to get directory info (readdir)(" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
+				throw tc::io::IOException(kClassName+method_name, "Failed to get directory info (readdir)(" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 	
 
 	// close dp
 	closedir(dp);
-
-	// save current dir for later
-	Path prev_current_dir;
-	getWorkingDirectory(prev_current_dir);
-
-	// change the directory
-	setWorkingDirectory(path);
-
-	// save the path
-	getWorkingDirectory(current_directory_path);
-
-	// restore current directory
-	setWorkingDirectory(prev_current_dir);
 #endif
-	info.abs_path = current_directory_path;
-	info.dir_list = child_dir_name_list;
-	info.file_list = child_file_name_list;
 }
+
 
 #ifdef _WIN32
 

@@ -24,12 +24,12 @@ namespace tc { namespace crypto {
 	 * 
 	 * @details
 	 * This class is a template class that takes a hash function implementation class as template parameter.
-	 * See @ref Rsa2048PssSha256Signer or similar for supplied realizations of this template class.
+	 * See @ref Rsa2048PssSha2256Signer or similar for supplied realizations of this template class.
 	 * 
 	 * The <var>KeyBitSize</var> is the size in bits of the RSA key, this only supports key sizes aligned to 8 bits.
 	 * 
 	 * The implementation of <var>HashFunction</var> must satisfies the following conditions.
-	 * See @ref Sha256Generator or similar class, for more information including parameters to each function.
+	 * See @ref Sha2256Generator or similar class, for more information including parameters to each function.
 	 * 
 	 * -# Has a <tt>kBlockSize</tt> constant that defines the size of the block to process.
 	 * -# Has a <tt>kHashSize</tt> constant that defines the output size of the hash value.
@@ -97,7 +97,7 @@ public:
 		 * @return true if signature calculation was successful.
 		 * 
 		 * @pre
-		 * - Size of the signature buffer must >= <tt>Rsa1024PssSha256Signer::kSignatureSize</tt>.
+		 * - Size of the signature buffer must >= <tt>Rsa1024PssSha2256Signer::kSignatureSize</tt>.
 		 * 
 		 * @post
 		 * - The signature is written to <tt><var>signature</var></tt>.
@@ -129,7 +129,7 @@ public:
 		 * @return true if signature calculation was successful.
 		 * 
 		 * @pre
-		 * - Size of the signature buffer must >= <tt>Rsa1024PssSha256Signer::kSignatureSize</tt>.
+		 * - Size of the signature buffer must >= <tt>Rsa1024PssSha2256Signer::kSignatureSize</tt>.
 		 * - The data in @p salt should be random, otherwise the signature strength is reduced.
 		 * - Where KeySize >= (HashCalculator::kHashSize * 2 + 2) @p salt_size = HashCalculator::kHashSize. Otherwise @p salt_size = KeySize - (HashCalculator::kHashSize + 2). However the minimum legal salt size is (HashCalculator::kHashSize - 2), if the salt_size falls below this consider a larger KeySize as this operation will not complete successfully.
 		 * 

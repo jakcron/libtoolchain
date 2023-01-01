@@ -22,11 +22,11 @@ namespace tc { namespace crypto { namespace detail {
 	 * @details
 	 * PBKDF2 is a hmac based key derivation function, as defined in RFC 8018.
 	 * Applicable hash functions to use with PBKDF2 include.
-	 * -# SHA-1
-	 * -# SHA-224
-	 * -# SHA-256
-	 * -# SHA-384
-	 * -# SHA-512
+	 * -# SHA1
+	 * -# SHA2-224
+	 * -# SHA2-256
+	 * -# SHA2-384
+	 * -# SHA2-512
 	 */
 template <typename HashFunction>
 class Pbkdf2Impl

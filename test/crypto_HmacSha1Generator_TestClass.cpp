@@ -1,16 +1,21 @@
-#include <iostream>
-#include <sstream>
-#include <fstream>
-
 #include "crypto_HmacSha1Generator_TestClass.h"
 
-#include <tc/Exception.h>
+#include <fmt/format.h>
+
 #include <tc/crypto/HmacSha1Generator.h>
 #include <tc/cli/FormatUtil.h>
+#include <tc/ByteData.h>
+
+//---------------------------------------------------------
+
+crypto_HmacSha1Generator_TestClass::crypto_HmacSha1Generator_TestClass() :
+	mTestTag("tc::crypto::HmacSha1Generator"),
+	mTestResults()
+{
+}
 
 void crypto_HmacSha1Generator_TestClass::runAllTests(void)
 {
-	std::cout << "[tc::crypto::HmacSha1Generator] START" << std::endl;
 	test_Constants();
 	test_SingleUpdateCall();
 	test_MultiUpdateCall();
@@ -23,478 +28,558 @@ void crypto_HmacSha1Generator_TestClass::runAllTests(void)
 	test_DoInitNoKeyNoUpdateDoMac();
 
 	test_CallGetMacRepeatedly();
-	std::cout << "[tc::crypto::HmacSha1Generator] END" << std::endl;
 }
+
+const std::string& crypto_HmacSha1Generator_TestClass::getTestTag() const
+{
+	return mTestTag;
+}
+
+const std::vector<ITestClass::TestResult>& crypto_HmacSha1Generator_TestClass::getTestResults() const
+{
+	return mTestResults;
+}
+
+//---------------------------------------------------------
 
 void crypto_HmacSha1Generator_TestClass::test_Constants()
 {
-	std::cout << "[tc::crypto::HmacSha1Generator] test_Constants : " << std::flush;
+	TestResult test_result;
+	test_result.test_name = "test_Constants";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
 	try
 	{
-		try 
-		{
-			std::stringstream ss;
-
-			// check mac size
-			static const size_t kExpectedHashSize = 20;
-			if (tc::crypto::HmacSha1Generator::kMacSize != kExpectedHashSize)
-			{
-				ss << "kMacSize had value " << std::dec << tc::crypto::HmacSha1Generator::kMacSize << " (expected " << kExpectedHashSize << ")";
-				throw tc::Exception(ss.str());
-			}
-
-			// check block size
-			static const size_t kExpectedBlockSize = 64;
-			if (tc::crypto::HmacSha1Generator::kBlockSize != kExpectedBlockSize)
-			{
-				ss << "kBlockSize had value " << std::dec << tc::crypto::HmacSha1Generator::kBlockSize << " (expected " << kExpectedBlockSize << ")";
-				throw tc::Exception(ss.str());
-			}
-
-			std::cout << "PASS" << std::endl;
+		// check mac size
+		static const size_t kExpectedMacSize = 20;
+		if (tc::crypto::HmacSha1Generator::kMacSize != kExpectedMacSize)
+		{				
+			throw tc::TestException(fmt::format("kMacSize had value {:d} (expected {:d})", tc::crypto::HmacSha1Generator::kMacSize, kExpectedMacSize));
 		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
+
+		// check block size
+		static const size_t kExpectedBlockSize = 64;
+		if (tc::crypto::HmacSha1Generator::kBlockSize != kExpectedBlockSize)
+		{				
+			throw tc::TestException(fmt::format("kBlockSize had value {:d} (expected {:d})", tc::crypto::HmacSha1Generator::kBlockSize, kExpectedBlockSize));
 		}
+
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
 }
 
 void crypto_HmacSha1Generator_TestClass::test_SingleUpdateCall()
 {
-	std::cout << "[tc::crypto::HmacSha1Generator] test_SingleUpdateCall : " << std::flush;
+	TestResult test_result;
+	test_result.test_name = "test_SingleUpdateCall";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
 	try
 	{
-		try 
+		// create tests
+		std::vector<TestCase> test_cases;
+		util_Setup_Rfc2202_TestCases(test_cases);
+
+		tc::crypto::HmacSha1Generator calc;
+		tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
+
+		for (auto test_case = test_cases.begin(); test_case != test_cases.end(); test_case++)
 		{
-			std::stringstream ss;
-
-			// create tests
-			std::vector<TestCase> tests;
-			util_Setup_Rfc2202_TestCases(tests);
-
-			tc::crypto::HmacSha1Generator calc;
-			tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
-
-			for (auto test = tests.begin(); test != tests.end(); test++)
-			{
-				calc.initialize(test->in_key.data(), test->in_key.size());
-				calc.update(test->in_data.data(), test->in_data.size());
-				memset(mac.data(), 0xff, mac.size());
-				calc.getMac(mac.data());
-				if (memcmp(mac.data(), test->out_mac.data(), mac.size()) != 0)
-				{
-					ss << "Test \"" << test->test_name << "\" Failed. Had wrong MAC: " << tc::cli::FormatUtil::formatBytesAsString(mac, true, "") << " (expected " << tc::cli::FormatUtil::formatBytesAsString(test->out_mac, true, "");
-					throw tc::Exception(ss.str());
-				}
+			calc.initialize(test_case->in_key.data(), test_case->in_key.size());
+			calc.update(test_case->in_data.data(), test_case->in_data.size());
+			memset(mac.data(), 0xff, mac.size());
+			calc.getMac(mac.data());
+			if (memcmp(mac.data(), test_case->out_mac.data(), mac.size()) != 0)
+			{					
+				throw tc::TestException(fmt::format("Test \"{:s}\" Failed. Had wrong MAC: {:s} (expected {:s})", test_case->test_name, tc::cli::FormatUtil::formatBytesAsString(mac, true, ""), tc::cli::FormatUtil::formatBytesAsString(test_case->out_mac, true, "")));
 			}
+		}
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
 }
 
 void crypto_HmacSha1Generator_TestClass::test_MultiUpdateCall()
 {
-	std::cout << "[tc::crypto::HmacSha1Generator] test_MultiUpdateCall : " << std::flush;
+	TestResult test_result;
+	test_result.test_name = "test_MultiUpdateCall";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
 	try
 	{
-		try 
+		// create tests
+		std::vector<TestCase> test_cases;
+		util_Setup_Rfc2202_TestCases(test_cases);
+
+		tc::crypto::HmacSha1Generator calc;
+		tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
+
+		for (auto test_case = test_cases.begin(); test_case != test_cases.end(); test_case++)
 		{
-			std::stringstream ss;
+			calc.initialize(test_case->in_key.data(), test_case->in_key.size());
 
-			// create tests
-			std::vector<TestCase> tests;
-			util_Setup_Rfc2202_TestCases(tests);
+			// pick an offset to split the in_data at
+			size_t offset = test_case->in_data.size() / 2;
 
-			tc::crypto::HmacSha1Generator calc;
-			tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
+			// update with first half
+			calc.update(test_case->in_data.data(), offset);
 
-			for (auto test = tests.begin(); test != tests.end(); test++)
+			// update with second half
+			calc.update(test_case->in_data.data() + offset, test_case->in_data.size() - offset);
+			
+			memset(mac.data(), 0xff, mac.size());
+			calc.getMac(mac.data());
+			if (memcmp(mac.data(), test_case->out_mac.data(), mac.size()) != 0)
 			{
-				calc.initialize(test->in_key.data(), test->in_key.size());
-
-				// pick an offset to split the in_string at
-				size_t offset = test->in_data.size() / 2;
-
-				// update with first half
-				calc.update(test->in_data.data(), offset);
-
-				// update with second half
-				calc.update(test->in_data.data() + offset, test->in_data.size() - offset);
-				
-				memset(mac.data(), 0xff, mac.size());
-				calc.getMac(mac.data());
-				if (memcmp(mac.data(), test->out_mac.data(), mac.size()) != 0)
-				{
-					ss << "Test \"" << test->test_name << "\" Failed. Had wrong MAC: " << tc::cli::FormatUtil::formatBytesAsString(mac, true, "") << " (expected " << tc::cli::FormatUtil::formatBytesAsString(test->out_mac, true, "");
-					throw tc::Exception(ss.str());
-				}
+				throw tc::TestException(fmt::format("Test \"{:s}\" Failed. Had wrong MAC: {:s} (expected {:s})", test_case->test_name, tc::cli::FormatUtil::formatBytesAsString(mac, true, ""), tc::cli::FormatUtil::formatBytesAsString(test_case->out_mac, true, "")));
 			}
+		}
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
 }
 
 void crypto_HmacSha1Generator_TestClass::test_UtilFunc()
 {
-	std::cout << "[tc::crypto::HmacSha1Generator] test_UtilFunc : " << std::flush;
+	TestResult test_result;
+	test_result.test_name = "test_UtilFunc";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
 	try
 	{
-		try 
+		// create tests
+		std::vector<TestCase> test_cases;
+		util_Setup_Rfc2202_TestCases(test_cases);
+
+		tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
+
+		for (auto test_case = test_cases.begin(); test_case != test_cases.end(); test_case++)
 		{
-			std::stringstream ss;
-
-			// create tests
-			std::vector<TestCase> tests;
-			util_Setup_Rfc2202_TestCases(tests);
-
-			tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
-
-			for (auto test = tests.begin(); test != tests.end(); test++)
+			memset(mac.data(), 0xff, mac.size());
+			tc::crypto::GenerateHmacSha1Mac(mac.data(), test_case->in_data.data(), test_case->in_data.size(), test_case->in_key.data(), test_case->in_key.size());
+			if (memcmp(mac.data(), test_case->out_mac.data(), mac.size()) != 0)
 			{
-				memset(mac.data(), 0xff, mac.size());
-				tc::crypto::GenerateHmacSha1Mac(mac.data(), (const byte_t*)test->in_data.data(), test->in_data.size(), test->in_key.data(), test->in_key.size());
-				if (memcmp(mac.data(), test->out_mac.data(), mac.size()) != 0)
-				{
-					ss << "Test \"" << test->test_name << "\" Failed. Had wrong MAC: " << tc::cli::FormatUtil::formatBytesAsString(mac, true, "") << " (expected " << tc::cli::FormatUtil::formatBytesAsString(test->out_mac, true, "");
-					throw tc::Exception(ss.str());
-				}
+				throw tc::TestException(fmt::format("Test \"{:s}\" Failed. Had wrong MAC: {:s} (expected {:s})", test_case->test_name, tc::cli::FormatUtil::formatBytesAsString(mac, true, ""), tc::cli::FormatUtil::formatBytesAsString(test_case->out_mac, true, "")));
 			}
+		}
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
 }
 
 void crypto_HmacSha1Generator_TestClass::test_NoInitNoUpdateDoMac()
 {
-	std::cout << "[tc::crypto::HmacSha1Generator] test_NoInitNoUpdateDoMac : " << std::flush;
+	TestResult test_result;
+	test_result.test_name = "test_NoInitNoUpdateDoMac";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
 	try
 	{
-		try 
+		// create tests
+		std::vector<TestCase> test_cases;
+		util_Setup_Rfc2202_TestCases(test_cases);
+
+		tc::crypto::HmacSha1Generator calc;
+		tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
+		tc::ByteData expected_uninitialized_mac = tc::ByteData(mac.size());
+		memset(expected_uninitialized_mac.data(), 0xff, expected_uninitialized_mac.size());
+
+		for (auto test_case = test_cases.begin(); test_case != test_cases.end(); test_case++)
 		{
-			std::stringstream ss;
-
-			// create tests
-			std::vector<TestCase> tests;
-			util_Setup_Rfc2202_TestCases(tests);
-
-			tc::crypto::HmacSha1Generator calc;
-			tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
-			tc::ByteData expected_uninitialized_mac = tc::ByteData(mac.size());
-			memset(expected_uninitialized_mac.data(), 0xff, expected_uninitialized_mac.size());
-
-			for (auto test = tests.begin(); test != tests.end(); test++)
+			//calc.initialize(test_case->in_key.data(), test_case->in_key.size());
+			//calc.update(test_case->in_data.data(), test_case->in_data.size());
+			memcpy(mac.data(), expected_uninitialized_mac.data(), mac.size());
+			calc.getMac(mac.data());
+			if (memcmp(mac.data(), expected_uninitialized_mac.data(), mac.size()) != 0)
 			{
-				//calc.initialize(test->in_key.data(), test->in_key.size());
-				//calc.update(test->in_data.size(), test->in_data.size());
-				memcpy(mac.data(), expected_uninitialized_mac.data(), mac.size());
-				calc.getMac(mac.data());
-				if (memcmp(mac.data(), expected_uninitialized_mac.data(), mac.size()) != 0)
-				{
-					ss << "Test \"" << test->test_name << "\" Failed. Had wrong MAC: " << tc::cli::FormatUtil::formatBytesAsString(mac, true, "") << " (expected " << tc::cli::FormatUtil::formatBytesAsString(expected_uninitialized_mac, true, "");
-					throw tc::Exception(ss.str());
-				}
+				throw tc::TestException(fmt::format("Test \"{:s}\" Failed. Had wrong MAC: {:s} (expected {:s})", test_case->test_name, tc::cli::FormatUtil::formatBytesAsString(mac, true, ""), tc::cli::FormatUtil::formatBytesAsString(test_case->out_mac, true, "")));
 			}
+		}
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
 }
 
 void crypto_HmacSha1Generator_TestClass::test_NoInitDoUpdateDoMac()
 {
-	std::cout << "[tc::crypto::HmacSha1Generator] test_NoInitDoUpdateDoMac : " << std::flush;
+	TestResult test_result;
+	test_result.test_name = "test_NoInitDoUpdateDoMac";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
 	try
 	{
-		try 
+		// create tests
+		std::vector<TestCase> test_cases;
+		util_Setup_Rfc2202_TestCases(test_cases);
+
+		tc::crypto::HmacSha1Generator calc;
+		tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
+		tc::ByteData expected_uninitialized_mac = tc::ByteData(mac.size());
+		memset(expected_uninitialized_mac.data(), 0xff, expected_uninitialized_mac.size());
+
+		for (auto test_case = test_cases.begin(); test_case != test_cases.end(); test_case++)
 		{
-			std::stringstream ss;
-
-			// create tests
-			std::vector<TestCase> tests;
-			util_Setup_Rfc2202_TestCases(tests);
-
-			tc::crypto::HmacSha1Generator calc;
-			tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
-			tc::ByteData expected_uninitialized_mac = tc::ByteData(mac.size());
-			memset(expected_uninitialized_mac.data(), 0xff, expected_uninitialized_mac.size());
-
-			for (auto test = tests.begin(); test != tests.end(); test++)
+			//calc.initialize(test_case->in_key.data(), test_case->in_key.size());
+			calc.update(test_case->in_data.data(), test_case->in_data.size());
+			memcpy(mac.data(), expected_uninitialized_mac.data(), mac.size());
+			calc.getMac(mac.data());
+			if (memcmp(mac.data(), expected_uninitialized_mac.data(), mac.size()) != 0)
 			{
-				//calc.initialize(test->in_key.data(), test->in_key.size());
-				calc.update(test->in_data.data(), test->in_data.size());
-				memcpy(mac.data(), expected_uninitialized_mac.data(), mac.size());
-				calc.getMac(mac.data());
-				if (memcmp(mac.data(), expected_uninitialized_mac.data(), mac.size()) != 0)
-				{
-					ss << "Test \"" << test->test_name << "\" Failed. Had wrong MAC: " << tc::cli::FormatUtil::formatBytesAsString(mac, true, "") << " (expected " << tc::cli::FormatUtil::formatBytesAsString(expected_uninitialized_mac, true, "");
-					throw tc::Exception(ss.str());
-				}
+				throw tc::TestException(fmt::format("Test \"{:s}\" Failed. Had wrong MAC: {:s} (expected {:s})", test_case->test_name, tc::cli::FormatUtil::formatBytesAsString(mac, true, ""), tc::cli::FormatUtil::formatBytesAsString(test_case->out_mac, true, "")));
 			}
+		}
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
 }
 
 void crypto_HmacSha1Generator_TestClass::test_DoInitNoUpdateDoMac()
 {
-	std::cout << "[tc::crypto::HmacSha1Generator] test_DoInitNoUpdateDoMac : " << std::flush;
+	TestResult test_result;
+	test_result.test_name = "test_DoInitNoUpdateDoMac";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
 	try
 	{
-		try 
+		// create tests
+		std::vector<TestCase> test_cases;
+		util_Setup_Rfc2202_TestCases(test_cases);
+
+		tc::crypto::HmacSha1Generator calc;
+		tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
+
+		// override expected MAC for when no update() is called
+		test_cases[0].out_mac = tc::cli::FormatUtil::hexStringToBytes("123FD78BDA0100786AE86B76F50F01BD18E477F3");
+		test_cases[1].out_mac = tc::cli::FormatUtil::hexStringToBytes("09D9E59D72239E62A8155C583D52743DE9B7231A");
+		test_cases[2].out_mac = tc::cli::FormatUtil::hexStringToBytes("4C2E4B8144C34521B2487190F0862E7E0978D42A");
+		test_cases[3].out_mac = tc::cli::FormatUtil::hexStringToBytes("932C2468DB83EEB23B6B8F1EDE8BE57136BA9C99");
+		test_cases[4].out_mac = tc::cli::FormatUtil::hexStringToBytes("3DF4B2ABD4FCFE0FF5EFA57D0E98CCA85F4B8C17");
+		test_cases[5].out_mac = tc::cli::FormatUtil::hexStringToBytes("6FB70A345B84A347A0CA3B58B4F8DDC6AB1EC61F");
+		test_cases[6].out_mac = tc::cli::FormatUtil::hexStringToBytes("6FB70A345B84A347A0CA3B58B4F8DDC6AB1EC61F");
+
+		for (auto test_case = test_cases.begin(); test_case != test_cases.end(); test_case++)
 		{
-			std::stringstream ss;
-
-			// create tests
-			std::vector<TestCase> tests;
-			util_Setup_Rfc2202_TestCases(tests);
-
-			tc::crypto::HmacSha1Generator calc;
-			tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
-			
-			// override expected MAC for when no update() is called
-			tests[0].out_mac = tc::cli::FormatUtil::hexStringToBytes("123FD78BDA0100786AE86B76F50F01BD18E477F3");
-			tests[1].out_mac = tc::cli::FormatUtil::hexStringToBytes("09D9E59D72239E62A8155C583D52743DE9B7231A");
-			tests[2].out_mac = tc::cli::FormatUtil::hexStringToBytes("4C2E4B8144C34521B2487190F0862E7E0978D42A");
-			tests[3].out_mac = tc::cli::FormatUtil::hexStringToBytes("932C2468DB83EEB23B6B8F1EDE8BE57136BA9C99");
-			tests[4].out_mac = tc::cli::FormatUtil::hexStringToBytes("3DF4B2ABD4FCFE0FF5EFA57D0E98CCA85F4B8C17");
-			tests[5].out_mac = tc::cli::FormatUtil::hexStringToBytes("6FB70A345B84A347A0CA3B58B4F8DDC6AB1EC61F");
-			tests[6].out_mac = tc::cli::FormatUtil::hexStringToBytes("6FB70A345B84A347A0CA3B58B4F8DDC6AB1EC61F");
-
-			for (auto test = tests.begin(); test != tests.end(); test++)
+			calc.initialize(test_case->in_key.data(), test_case->in_key.size());
+			//calc.update(test_case->in_data.data(), test_case->in_data.size());
+			memset(mac.data(), 0xff, mac.size());
+			calc.getMac(mac.data());
+			if (memcmp(mac.data(), test_case->out_mac.data(), mac.size()) != 0)
 			{
-				calc.initialize(test->in_key.data(), test->in_key.size());
-				//calc.update(test->in_data.size(), test->in_data.size());
-				memset(mac.data(), 0xff, mac.size());
-				calc.getMac(mac.data());
-				if (memcmp(mac.data(), test->out_mac.data(), mac.size()) != 0)
-				{
-					ss << "Test \"" << test->test_name << "\" Failed. Had wrong MAC: " << tc::cli::FormatUtil::formatBytesAsString(mac, true, "") << " (expected " << tc::cli::FormatUtil::formatBytesAsString(test->out_mac, true, "");
-					throw tc::Exception(ss.str());
-				}
+				throw tc::TestException(fmt::format("Test \"{:s}\" Failed. Had wrong MAC: {:s} (expected {:s})", test_case->test_name, tc::cli::FormatUtil::formatBytesAsString(mac, true, ""), tc::cli::FormatUtil::formatBytesAsString(test_case->out_mac, true, "")));
 			}
+		}
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
 }
 
 void crypto_HmacSha1Generator_TestClass::test_DoInitNoKeyDoUpdateDoMac()
 {
-	std::cout << "[tc::crypto::HmacSha1Generator] test_DoInitNoKeyDoUpdateDoMac : " << std::flush;
+	TestResult test_result;
+	test_result.test_name = "test_DoInitNoKeyDoUpdateDoMac";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
 	try
 	{
-		try 
+		// create tests
+		std::vector<TestCase> test_cases;
+		util_Setup_Rfc2202_TestCases(test_cases);
+
+		tc::crypto::HmacSha1Generator calc;
+		tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
+	
+		// override expected MAC for when no key is used during initialize()
+		test_cases[0].in_key = tc::ByteData();
+		test_cases[0].out_mac = tc::cli::FormatUtil::hexStringToBytes("69536CC84EEE5FE51C5B051AFF8485F5C9EF0B58");
+		test_cases[1].in_key = tc::ByteData();
+		test_cases[1].out_mac = tc::cli::FormatUtil::hexStringToBytes("22E999C60F94D0F2D635CA4CF1B174E5CB514D38");
+		test_cases[2].in_key = tc::ByteData();
+		test_cases[2].out_mac = tc::cli::FormatUtil::hexStringToBytes("3EA23ADD7131920CEDD9FA0B7ED130F9E0320B1B");
+		test_cases[3].in_key = tc::ByteData();
+		test_cases[3].out_mac = tc::cli::FormatUtil::hexStringToBytes("74C78AEB607055FF54D8DFCCF1A82CA011ED7A77");
+		test_cases[4].in_key = tc::ByteData();
+		test_cases[4].out_mac = tc::cli::FormatUtil::hexStringToBytes("4ED74D69F9942A1852037F4D8F4F8D0AA680AFDC");
+		test_cases[5].in_key = tc::ByteData();
+		test_cases[5].out_mac = tc::cli::FormatUtil::hexStringToBytes("061B442BBD9AAC68E1AC811EDD8CA83D0586C766");
+		test_cases[6].in_key = tc::ByteData();
+		test_cases[6].out_mac = tc::cli::FormatUtil::hexStringToBytes("69C4969EBA33E494509E07AE006234EEF4CD7624");
+
+		for (auto test_case = test_cases.begin(); test_case != test_cases.end(); test_case++)
 		{
-			std::stringstream ss;
-
-			// create tests
-			std::vector<TestCase> tests;
-			util_Setup_Rfc2202_TestCases(tests);
-
-			tc::crypto::HmacSha1Generator calc;
-			tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
-			
-			// override expected MAC for when no key is used during initialize()
-			tests[0].in_key = tc::ByteData();
-			tests[0].out_mac = tc::cli::FormatUtil::hexStringToBytes("69536CC84EEE5FE51C5B051AFF8485F5C9EF0B58");
-			tests[1].in_key = tc::ByteData();
-			tests[1].out_mac = tc::cli::FormatUtil::hexStringToBytes("22E999C60F94D0F2D635CA4CF1B174E5CB514D38");
-			tests[2].in_key = tc::ByteData();
-			tests[2].out_mac = tc::cli::FormatUtil::hexStringToBytes("3EA23ADD7131920CEDD9FA0B7ED130F9E0320B1B");
-			tests[3].in_key = tc::ByteData();
-			tests[3].out_mac = tc::cli::FormatUtil::hexStringToBytes("74C78AEB607055FF54D8DFCCF1A82CA011ED7A77");
-			tests[4].in_key = tc::ByteData();
-			tests[4].out_mac = tc::cli::FormatUtil::hexStringToBytes("4ED74D69F9942A1852037F4D8F4F8D0AA680AFDC");
-			tests[5].in_key = tc::ByteData();
-			tests[5].out_mac = tc::cli::FormatUtil::hexStringToBytes("061B442BBD9AAC68E1AC811EDD8CA83D0586C766");
-			tests[6].in_key = tc::ByteData();
-			tests[6].out_mac = tc::cli::FormatUtil::hexStringToBytes("69C4969EBA33E494509E07AE006234EEF4CD7624");
-
-			for (auto test = tests.begin(); test != tests.end(); test++)
+			calc.initialize(test_case->in_key.data(), test_case->in_key.size());
+			calc.update(test_case->in_data.data(), test_case->in_data.size());
+			memset(mac.data(), 0xff, mac.size());
+			calc.getMac(mac.data());
+			if (memcmp(mac.data(), test_case->out_mac.data(), mac.size()) != 0)
 			{
-				calc.initialize(test->in_key.data(), test->in_key.size());
-				calc.update(test->in_data.data(), test->in_data.size());
-				memset(mac.data(), 0xff, mac.size());
-				calc.getMac(mac.data());
-				if (memcmp(mac.data(), test->out_mac.data(), mac.size()) != 0)
-				{
-					ss << "Test \"" << test->test_name << "\" Failed. Had wrong MAC: " << tc::cli::FormatUtil::formatBytesAsString(mac, true, "") << " (expected " << tc::cli::FormatUtil::formatBytesAsString(test->out_mac, true, "");
-					throw tc::Exception(ss.str());
-				}
+				throw tc::TestException(fmt::format("Test \"{:s}\" Failed. Had wrong MAC: {:s} (expected {:s})", test_case->test_name, tc::cli::FormatUtil::formatBytesAsString(mac, true, ""), tc::cli::FormatUtil::formatBytesAsString(test_case->out_mac, true, "")));
 			}
+		}
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
 }
 
 void crypto_HmacSha1Generator_TestClass::test_DoInitNoKeyNoUpdateDoMac()
 {
-	std::cout << "[tc::crypto::HmacSha1Generator] test_DoInitNoKeyNoUpdateDoMac : " << std::flush;
+	TestResult test_result;
+	test_result.test_name = "test_DoInitNoKeyNoUpdateDoMac";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
 	try
 	{
-		try 
+		// create tests
+		std::vector<TestCase> test_cases;
+		util_Setup_Rfc2202_TestCases(test_cases);
+
+		tc::crypto::HmacSha1Generator calc;
+		tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
+	
+		// override expected MAC for when no key is used during initialize() and update is not called
+		test_cases[0].in_key = tc::ByteData();
+		test_cases[0].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
+		test_cases[1].in_key = tc::ByteData();
+		test_cases[1].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
+		test_cases[2].in_key = tc::ByteData();
+		test_cases[2].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
+		test_cases[3].in_key = tc::ByteData();
+		test_cases[3].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
+		test_cases[4].in_key = tc::ByteData();
+		test_cases[4].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
+		test_cases[5].in_key = tc::ByteData();
+		test_cases[5].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
+		test_cases[6].in_key = tc::ByteData();
+		test_cases[6].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
+
+		for (auto test_case = test_cases.begin(); test_case != test_cases.end(); test_case++)
 		{
-			std::stringstream ss;
-
-			// create tests
-			std::vector<TestCase> tests;
-			util_Setup_Rfc2202_TestCases(tests);
-
-			tc::crypto::HmacSha1Generator calc;
-			tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
-			
-			// override expected MAC for when no key is used during initialize() and update is not called
-			tests[0].in_key = tc::ByteData();
-			tests[0].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
-			tests[1].in_key = tc::ByteData();
-			tests[1].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
-			tests[2].in_key = tc::ByteData();
-			tests[2].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
-			tests[3].in_key = tc::ByteData();
-			tests[3].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
-			tests[4].in_key = tc::ByteData();
-			tests[4].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
-			tests[5].in_key = tc::ByteData();
-			tests[5].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
-			tests[6].in_key = tc::ByteData();
-			tests[6].out_mac = tc::cli::FormatUtil::hexStringToBytes("FBDB1D1B18AA6C08324B7D64B71FB76370690E1D");
-
-			for (auto test = tests.begin(); test != tests.end(); test++)
+			calc.initialize(test_case->in_key.data(), test_case->in_key.size());
+			//calc.update(test_case->in_data.data(), test_case->in_data.size());
+			memset(mac.data(), 0xff, mac.size());
+			calc.getMac(mac.data());
+			if (memcmp(mac.data(), test_case->out_mac.data(), mac.size()) != 0)
 			{
-				calc.initialize(test->in_key.data(), test->in_key.size());
-				//calc.update(test->in_data.data(), test->in_data.size());
-				memset(mac.data(), 0xff, mac.size());
-				calc.getMac(mac.data());
-				if (memcmp(mac.data(), test->out_mac.data(), mac.size()) != 0)
-				{
-					ss << "Test \"" << test->test_name << "\" Failed. Had wrong MAC: " << tc::cli::FormatUtil::formatBytesAsString(mac, true, "") << " (expected " << tc::cli::FormatUtil::formatBytesAsString(test->out_mac, true, "");
-					throw tc::Exception(ss.str());
-				}
+				throw tc::TestException(fmt::format("Test \"{:s}\" Failed. Had wrong MAC: {:s} (expected {:s})", test_case->test_name, tc::cli::FormatUtil::formatBytesAsString(mac, true, ""), tc::cli::FormatUtil::formatBytesAsString(test_case->out_mac, true, "")));
 			}
+		}
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
 }
 
 void crypto_HmacSha1Generator_TestClass::test_CallGetMacRepeatedly()
 {
-	std::cout << "[tc::crypto::HmacSha1Generator] test_CallGetMacRepeatedly : " << std::flush;
+	TestResult test_result;
+	test_result.test_name = "test_CallGetMacRepeatedly";
+	test_result.result = "NOT RUN";
+	test_result.comments = "";
+
 	try
 	{
-		try 
+		// create tests
+		std::vector<TestCase> test_cases;
+		util_Setup_Rfc2202_TestCases(test_cases);
+
+		tc::crypto::HmacSha1Generator calc;
+		tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
+
+		for (auto test_case = test_cases.begin(); test_case != test_cases.end(); test_case++)
 		{
-			std::stringstream ss;
-
-			// create tests
-			std::vector<TestCase> tests;
-			util_Setup_Rfc2202_TestCases(tests);
-
-			tc::crypto::HmacSha1Generator calc;
-			tc::ByteData mac = tc::ByteData(tc::crypto::HmacSha1Generator::kMacSize);
-
-			for (auto test = tests.begin(); test != tests.end(); test++)
+			calc.initialize(test_case->in_key.data(), test_case->in_key.size());
+			calc.update(test_case->in_data.data(), test_case->in_data.size());
+			for (size_t i = 0; i < 100; i++)
 			{
-				calc.initialize(test->in_key.data(), test->in_key.size());
-				calc.update(test->in_data.data(), test->in_data.size());
-				for (size_t i = 0; i < 100; i++)
+				// by resetting the mac here we can tell if it is updated each time
+				memset(mac.data(), 0xff, mac.size());
+				calc.getMac(mac.data());
+				if (memcmp(mac.data(), test_case->out_mac.data(), mac.size()) != 0)
 				{
-					// by resetting the MAC here we can tell if it is updated each time
-					memset(mac.data(), 0xff, mac.size());
-					calc.getMac(mac.data());
-					if (memcmp(mac.data(), test->out_mac.data(), mac.size()) != 0)
-					{
-						ss << "Test \"" << test->test_name << "\" Failed. Had wrong MAC: " << tc::cli::FormatUtil::formatBytesAsString(mac, true, "") << " (expected " << tc::cli::FormatUtil::formatBytesAsString(test->out_mac, true, "");
-						throw tc::Exception(ss.str());
-					}
+					throw tc::TestException(fmt::format("Test \"{:s}\" Failed. Had wrong MAC: {:s} (expected {:s})", test_case->test_name, tc::cli::FormatUtil::formatBytesAsString(mac, true, ""), tc::cli::FormatUtil::formatBytesAsString(test_case->out_mac, true, "")));
 				}
 			}
+		}
 
-			std::cout << "PASS" << std::endl;
-		}
-		catch (const tc::Exception& e)
-		{
-			std::cout << "FAIL (" << e.error() << ")" << std::endl;
-		}
+		// record result
+		test_result.result = "PASS";
+		test_result.comments = "";
+	}
+	catch (const tc::TestException& e)
+	{
+		// record result
+		test_result.result = "FAIL";
+		test_result.comments = e.what();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << "UNHANDLED EXCEPTION (" << e.what() << ")" << std::endl;
+		// record result
+		test_result.result = "UNHANDLED EXCEPTION";
+		test_result.comments = e.what();
 	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test_result));
 }
 
 void crypto_HmacSha1Generator_TestClass::util_Setup_Rfc2202_TestCases(std::vector<crypto_HmacSha1Generator_TestClass::TestCase>& test_cases)

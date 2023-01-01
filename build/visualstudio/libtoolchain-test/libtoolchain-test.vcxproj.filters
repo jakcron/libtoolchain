@@ -84,6 +84,9 @@
     <ClCompile Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\crypto_Aes128CcmEncryptor_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\test\crypto_Aes128CtrEncryptor_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -129,10 +132,10 @@
     <ClCompile Include="..\..\..\test\crypto_HmacSha1Generator_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_HmacSha256Generator_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_HmacSha2256Generator_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_HmacSha512Generator_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_HmacSha2512Generator_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\crypto_Md5Generator_TestClass.cpp">
@@ -147,16 +150,16 @@
     <ClCompile Include="..\..\..\test\crypto_Pbkdf2Sha1KeyDeriver_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Pbkdf2Sha256KeyDeriver_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Pbkdf2Sha2256KeyDeriver_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Pbkdf2Sha512KeyDeriver_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Pbkdf2Sha2512KeyDeriver_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\crypto_PseudoRandomByteGenerator_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa1024OaepSha256Encryptor_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa1024OaepSha2256Encryptor_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\crypto_Rsa1024Pkcs1Md5Signer_TestClass.cpp">
@@ -165,22 +168,22 @@
     <ClCompile Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha1Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha256Signer_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha2256Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha512Signer_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha2512Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa1024PssSha256Signer_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa1024PssSha2256Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa1024PssSha512Signer_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa1024PssSha2512Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa2048OaepSha256Encryptor_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048OaepSha2256Encryptor_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa2048OaepSha512Encryptor_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048OaepSha2512Encryptor_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\crypto_Rsa2048Pkcs1Md5Signer_TestClass.cpp">
@@ -189,22 +192,22 @@
     <ClCompile Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha1Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha256Signer_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha2256Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha512Signer_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha2512Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa2048PssSha256Signer_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048PssSha2256Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa2048PssSha512Signer_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa2048PssSha2512Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa4096OaepSha256Encryptor_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096OaepSha2256Encryptor_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa4096OaepSha512Encryptor_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096OaepSha2512Encryptor_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\crypto_Rsa4096Pkcs1Md5Signer_TestClass.cpp">
@@ -213,25 +216,25 @@
     <ClCompile Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha1Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha256Signer_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha2256Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha512Signer_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha2512Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa4096PssSha256Signer_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096PssSha2256Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Rsa4096PssSha512Signer_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Rsa4096PssSha2512Signer_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\crypto_Sha1Generator_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Sha256Generator_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Sha2256Generator_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\test\crypto_Sha512Generator_TestClass.cpp">
+    <ClCompile Include="..\..\..\test\crypto_Sha2512Generator_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\PbkdfUtil.cpp">
@@ -286,6 +289,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\io_ConcatenatedStream_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\io_EmptyStream_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\TestException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\AesEncryptorUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\AesEcbEncryptorUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\AesCbcEncryptorUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\AesCcmEncryptorUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\AesCtrEncryptorUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\AesXtsEncryptorUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -359,6 +386,9 @@
     <ClInclude Include="..\..\..\test\crypto_Aes128CbcEncryptor_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\test\crypto_Aes128CcmEncryptor_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\test\crypto_Aes128CtrEncryptor_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -404,10 +434,10 @@
     <ClInclude Include="..\..\..\test\crypto_HmacSha1Generator_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_HmacSha256Generator_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_HmacSha2256Generator_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_HmacSha512Generator_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_HmacSha2512Generator_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\crypto_Md5Generator_TestClass.h">
@@ -422,16 +452,16 @@
     <ClInclude Include="..\..\..\test\crypto_Pbkdf2Sha1KeyDeriver_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Pbkdf2Sha256KeyDeriver_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Pbkdf2Sha2256KeyDeriver_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Pbkdf2Sha512KeyDeriver_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Pbkdf2Sha2512KeyDeriver_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\crypto_PseudoRandomByteGenerator_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa1024OaepSha256Encryptor_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa1024OaepSha2256Encryptor_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\crypto_Rsa1024Pkcs1Md5Signer_TestClass.h">
@@ -440,22 +470,22 @@
     <ClInclude Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha1Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha256Signer_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha2256Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha512Signer_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa1024Pkcs1Sha2512Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa1024PssSha256Signer_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa1024PssSha2256Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa1024PssSha512Signer_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa1024PssSha2512Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa2048OaepSha256Encryptor_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048OaepSha2256Encryptor_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa2048OaepSha512Encryptor_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048OaepSha2512Encryptor_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\crypto_Rsa2048Pkcs1Md5Signer_TestClass.h">
@@ -464,22 +494,22 @@
     <ClInclude Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha1Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha256Signer_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha2256Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha512Signer_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048Pkcs1Sha2512Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa2048PssSha256Signer_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048PssSha2256Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa2048PssSha512Signer_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa2048PssSha2512Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa4096OaepSha256Encryptor_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096OaepSha2256Encryptor_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa4096OaepSha512Encryptor_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096OaepSha2512Encryptor_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\crypto_Rsa4096Pkcs1Md5Signer_TestClass.h">
@@ -488,25 +518,25 @@
     <ClInclude Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha1Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha256Signer_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha2256Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha512Signer_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096Pkcs1Sha2512Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa4096PssSha256Signer_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096PssSha2256Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Rsa4096PssSha512Signer_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Rsa4096PssSha2512Signer_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\crypto_Sha1Generator_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Sha256Generator_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Sha2256Generator_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\test\crypto_Sha512Generator_TestClass.h">
+    <ClInclude Include="..\..\..\test\crypto_Sha2512Generator_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\PbkdfUtil.h">
@@ -561,6 +591,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\io_ConcatenatedStream_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\io_EmptyStream_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\TestException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\AesEncryptorUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\AesEcbEncryptorUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\AesCbcEncryptorUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\AesCcmEncryptorUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\AesCtrEncryptorUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\AesXtsEncryptorUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -24,7 +24,7 @@ namespace tc { namespace crypto { namespace detail {
 	 * Applicable hash functions to use with PBKDF1 include.
 	 * -# MD4
 	 * -# MD5
-	 * -# SHA-1
+	 * -# SHA1
 	 */
 template <typename HashFunction>
 class Pbkdf1Impl

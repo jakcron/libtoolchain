@@ -18,6 +18,27 @@ namespace tc { namespace io {
 	 * @brief Represents a unicode path for a filesystem
 	 *
 	 * This stores a path as a list of path elements.
+	 * 
+	 * @details
+	 * A path describe the location of a resource on a file system.
+	 * A resource is usually a file or directory. When operating a
+	 * program, users specify the path of the file they want to open,
+	 * or where they want to save a file. Complex programs often create,
+	 * and maintain files for internal use. By convention paths can be
+	 * specific naming the exact path from the root of the file system, 
+	 * or relative to the current working directory.
+	 * 
+	 * Broadly speaking a path consists of these elements:
+	 * * Root Name (optional) - This is collection of reserved path elements that identifies the root or one of the roots on the file system.
+	 * 	 * Examples of a root name include "" (root for unix/linux systems), "C:" (drive indentifier for windows)
+	 * * Path Hierarchy (optional) - These specify how the file system heirarchy should be navigated to reach the subject
+	 * 	 * These can be real directories like "foo", or contextual directories like "." (current directory), ".." (parent directory)
+	 * * Subject - This is the final element in the path, it names the resource that is the subject of the path
+	 * 
+	 * Broadly speaking there are three types of paths:
+	 * * Absolute - These paths are relative to the root of the file system
+	 * * Relative - These paths are relative to the current working directory/context
+	 * * Canonical - This is similar to an absolute path, but it is the simplest possible absolute path, containing no contextual path elements
 	 **/
 class Path
 {
