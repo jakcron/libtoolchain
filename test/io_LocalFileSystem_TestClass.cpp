@@ -1310,7 +1310,7 @@ void io_LocalFileSystem_TestClass::test_GetCanonicalPath_DoesExist()
 
 					if (canonised_path != itr->out_path)
 					{
-						throw tc::TestException(fmt::format("Failed to translate \"{:s}\" to \"{:s}\" (expected: \"{:s}\")", itr->in_path.to_string(), canonised_path.to_string(), itr->out_path.to_string()));
+						throw tc::TestException(fmt::format(".getCanonicalPath() Incorrectly translated \"{:s}\" to \"{:s}\" (expected: \"{:s}\")", itr->in_path.to_string(), canonised_path.to_string(), itr->out_path.to_string()));
 					}
 				}
 				catch (tc::Exception& e)
