@@ -1225,10 +1225,10 @@ void io_LocalFileSystem_TestClass::test_CreateDirectoryPath_UnicodePath()
 	mTestResults.push_back(std::move(test));
 }
 
-void io_LocalFileSystem_TestClass::test_GetCanonicalPath_NotExist()
+void io_LocalFileSystem_TestClass::test_GetCanonicalPath_DoesExist()
 {
 	TestResult test;
-	test.test_name = "test_GetCanonicalPath_NotExist";
+	test.test_name = "test_GetCanonicalPath_DoesExist";
 	test.result = "NOT RUN";
 	test.comments = "";
 
@@ -1311,7 +1311,6 @@ void io_LocalFileSystem_TestClass::test_GetCanonicalPath_NotExist()
 					if (canonised_path != itr->out_path)
 					{
 						throw tc::TestException(fmt::format("Failed to translate \"{:s}\" to \"{:s}\" (expected: \"{:s}\")", itr->in_path.to_string(), canonised_path.to_string(), itr->out_path.to_string()));
-
 					}
 				}
 				catch (tc::Exception& e)
@@ -1351,10 +1350,10 @@ void io_LocalFileSystem_TestClass::test_GetCanonicalPath_NotExist()
 	mTestResults.push_back(std::move(test));
 }
 
-void io_LocalFileSystem_TestClass::test_GetCanonicalPath_DoesExist()
+void io_LocalFileSystem_TestClass::test_GetCanonicalPath_NotExist()
 {
 	TestResult test;
-	test.test_name = "test_GetCanonicalPath_DoesExist";
+	test.test_name = "test_GetCanonicalPath_NotExist";
 	test.result = "NOT RUN";
 	test.comments = "";
 
