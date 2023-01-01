@@ -45,6 +45,9 @@ private:
 	void test_CreateDirectoryPath_DoesExist();
 	void test_CreateDirectoryPath_UnicodePath();
 
+	void test_GetCanonicalPath_DoesExist();
+	void test_GetCanonicalPath_NotExist();
+
 	static std::string kDirPath;
 	static std::string kUtf8DirPath;
 	static std::string kAsciiFilePath;

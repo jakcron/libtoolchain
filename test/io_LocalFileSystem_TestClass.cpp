@@ -51,6 +51,9 @@ void io_LocalFileSystem_TestClass::runAllTests(void)
 	test_CreateDirectoryPath_NotExist();
 	test_CreateDirectoryPath_DoesExist();
 	test_CreateDirectoryPath_UnicodePath();
+
+	test_GetCanonicalPath_DoesExist();
+	test_GetCanonicalPath_NotExist();
 }
 
 const std::string& io_LocalFileSystem_TestClass::getTestTag() const
@@ -1210,6 +1213,236 @@ void io_LocalFileSystem_TestClass::test_CreateDirectoryPath_UnicodePath()
 			}
 			
 		}
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
+}
+
+void io_LocalFileSystem_TestClass::test_GetCanonicalPath_NotExist()
+{
+	TestResult test;
+	test.test_name = "test_GetCanonicalPath_NotExist";
+	test.result = "NOT RUN";
+	test.comments = "";
+
+	/**
+	 * This test will 
+	 * 1) create a base directory, 
+	 * 2) get the canonical path of it using getDirectoryListing(), 
+	 * 3) create some directories/files under the base directory using canonical paths
+	 * * it's important that both files & directories are tested, incase the impl for finding canonical path is just set/get directory
+	 * 4) generate some relative/absolute paths that will resolve to the canonical path as tests
+	 * 5) run those tests against getCanonicalPath()
+	 */
+
+	try 
+	{
+		tc::io::LocalFileSystem local_fs;
+
+		// save current directory pre-test
+		tc::io::Path pre_test_dir;
+		local_fs.getWorkingDirectory(pre_test_dir);
+
+		// create base dir path
+		tc::io::Path base_dir_relative_path = tc::io::Path("./test_canonical_path");
+		local_fs.createDirectory(base_dir_relative_path);
+
+		// get absolute path of base dir
+		tc::io::Path base_dir_absolute_path;
+		local_fs.setWorkingDirectory(base_dir_relative_path);
+		local_fs.getWorkingDirectory(base_dir_absolute_path);
+
+		// create children in base dir
+		tc::io::Path subdirA_path = base_dir_absolute_path + tc::io::Path("subdirA");
+		tc::io::Path subfileA_path = base_dir_absolute_path + tc::io::Path("subfileA");
+		tc::io::Path subdirB_path = base_dir_absolute_path + tc::io::Path("subdirB");
+		tc::io::Path subfileB_path = subdirB_path + tc::io::Path("subfileB");
+		local_fs.createDirectory(subdirA_path);
+		local_fs.createDirectory(subdirB_path);
+		local_fs.createFile(subfileA_path);
+		local_fs.createFile(subfileB_path);
+
+		// create tests
+		struct CanonicalPathTest
+		{
+			tc::io::Path in_path;
+			tc::io::Path out_path;
+		};
+		std::vector<CanonicalPathTest> canonical_path_tests = {
+			// subdirA tests
+			{ tc::io::Path("./subdirA"), subdirA_path },
+			{ tc::io::Path("subdirA"), subdirA_path },
+			{ tc::io::Path("././././subdirA"), subdirA_path },
+			{ tc::io::Path("./subdirA/../subdirA/./."), subdirA_path },
+			// subfileA tests
+			{ tc::io::Path("./subfileA"), subfileA_path },
+			{ tc::io::Path("subfileA"), subfileA_path },
+			{ tc::io::Path("././././subfileA"), subfileA_path },
+			// subdirB tests
+			{ tc::io::Path("./subdirB"), subdirB_path },
+			{ tc::io::Path("subdirB"), subdirB_path },
+			{ tc::io::Path("././././subdirB"), subdirB_path },
+			{ tc::io::Path("./subdirB/../subdirB/./."), subdirB_path },
+			// subfileB tests
+			{ tc::io::Path("./subdirB/subfileB"), subfileB_path },
+			{ tc::io::Path("subdirB/subfileB"), subfileB_path },
+			{ tc::io::Path("././././subdirB/subfileB"), subfileB_path },
+			{ tc::io::Path("././././subdirB/././././subfileB"), subfileB_path },
+			{ tc::io::Path("././subdirB/././../subdirB/././subfileB"), subfileB_path },
+		};
+
+		// because this test requires cleanup, we want to still attempt a cleanup even if a test fails
+		try
+		{
+			for (auto itr = canonical_path_tests.begin(); itr != canonical_path_tests.end(); itr ++ )
+			{
+				try
+				{
+					tc::io::Path canonised_path = tc::io::Path();
+					local_fs.getCanonicalPath(itr->in_path, canonised_path);
+
+					if (canonised_path != itr->out_path)
+					{
+						throw tc::TestException(fmt::format("Failed to translate \"{:s}\" to \"{:s}\" (expected: \"{:s}\")", itr->in_path.to_string(), canonised_path.to_string(), itr->out_path.to_string()));
+
+					}
+				}
+				catch (tc::Exception& e)
+				{
+					throw tc::TestException(fmt::format("Failed to translate \"{:s}\" to \"{:s}\" ({:s})", itr->in_path.to_string(), itr->out_path.to_string(), e.error()));
+				}
+			}
+
+			// record result
+			test.result = "PASS";
+			test.comments = "";
+		}
+		catch (const tc::TestException& e)
+		{
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
+		}
+
+		// cleanup created files/directories
+		local_fs.removeFile(subfileB_path);
+		local_fs.removeFile(subfileA_path);
+		local_fs.removeDirectory(subdirB_path);
+		local_fs.removeDirectory(subdirA_path);
+
+		// restore pre-test directory
+		local_fs.setWorkingDirectory(pre_test_dir);
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
+}
+
+void io_LocalFileSystem_TestClass::test_GetCanonicalPath_DoesExist()
+{
+	TestResult test;
+	test.test_name = "test_GetCanonicalPath_DoesExist";
+	test.result = "NOT RUN";
+	test.comments = "";
+
+	/**
+	 * This test will 
+	 * 1) try to get the canonical paths for directories/files that do not exist
+	 * 2) get the canonical path of it using getDirectoryListing(), 
+	 * 3) create some directories/files under the base directory using canonical paths
+	 * * it's important that both files & directories are tested, incase the impl for finding canonical path is just set/get directory
+	 * 4) generate some tests that contain invalid paths that are close to the real paths
+	 * 5) run those tests against getCanonicalPath() (they should all fail)
+	 */
+
+	try 
+	{
+		tc::io::LocalFileSystem local_fs;
+
+		// save current directory pre-test
+		tc::io::Path pre_test_dir;
+		local_fs.getWorkingDirectory(pre_test_dir);
+
+		// create base dir path
+		tc::io::Path base_dir_relative_path = tc::io::Path("./test_canonical_path");
+		local_fs.createDirectory(base_dir_relative_path);
+
+		// get absolute path of base dir
+		tc::io::Path base_dir_absolute_path;
+		local_fs.setWorkingDirectory(base_dir_relative_path);
+		local_fs.getWorkingDirectory(base_dir_absolute_path);
+
+		// create children in base dir
+		tc::io::Path subdirA_path = base_dir_absolute_path + tc::io::Path("subdirA");
+		tc::io::Path subfileA_path = base_dir_absolute_path + tc::io::Path("subfileA");
+		tc::io::Path subdirB_path = base_dir_absolute_path + tc::io::Path("subdirB");
+		tc::io::Path subfileB_path = subdirB_path + tc::io::Path("subfileB");
+		local_fs.createDirectory(subdirA_path);
+		local_fs.createDirectory(subdirB_path);
+		local_fs.createFile(subfileA_path);
+		local_fs.createFile(subfileB_path);
+
+		// create tests
+		std::vector<tc::io::Path> canonical_phony_path_tests = {
+			// empty path
+			tc::io::Path(),
+			// real parent path, but leaf not exist
+			tc::io::Path("./subdirA/notexistA"),
+			// directory not exist
+			tc::io::Path("./subdirC"),
+			// real parent path, but leaf not exist
+			tc::io::Path("./subdirB/notexistB"),
+			// path has 1 element
+			tc::io::Path("single_element_not_exist"),
+		};
+
+		// because this test requires cleanup, we want to still attempt a cleanup even if a test fails
+		try
+		{
+			for (auto itr = canonical_phony_path_tests.begin(); itr != canonical_phony_path_tests.end(); itr ++ )
+			{
+				try
+				{
+					tc::io::Path canonised_path = tc::io::Path();
+					local_fs.getCanonicalPath(*itr, canonised_path);
+
+					throw tc::TestException(fmt::format("Failed to throw tc::io::DirectoryNotFoundException for invalid path \"{:s}\"", itr->to_string()));
+				} 
+				catch (tc::io::DirectoryNotFoundException&) { /* do nothing */ }
+			}
+
+			// record result
+			test.result = "PASS";
+			test.comments = "";
+		}
+		catch (const tc::TestException& e)
+		{
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
+		}
+
+		// cleanup created files/directories
+		local_fs.removeFile(subfileB_path);
+		local_fs.removeFile(subfileA_path);
+		local_fs.removeDirectory(subdirB_path);
+		local_fs.removeDirectory(subdirA_path);
+
+		// restore pre-test directory
+		local_fs.setWorkingDirectory(pre_test_dir);
 	}
 	catch (const std::exception& e)
 	{
