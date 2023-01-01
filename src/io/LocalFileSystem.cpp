@@ -333,7 +333,7 @@ void tc::io::LocalFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io:
 
 		path_exists_as_file = true;
 	}
-	catch (tc::io::FileNotFoundException& e_file)
+	catch (tc::io::FileNotFoundException&)
 	{
 		// not an issue as we are just testing if the file exists
 	}
@@ -349,7 +349,7 @@ void tc::io::LocalFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io:
 
 		path_exists_as_directory = true;
 	}
-	catch (tc::io::DirectoryNotFoundException& e_file)
+	catch (tc::io::DirectoryNotFoundException&)
 	{
 		// not an issue as we are just testing if the directory exists
 	}
