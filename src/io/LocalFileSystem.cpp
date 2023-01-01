@@ -307,6 +307,12 @@ void tc::io::LocalFileSystem::setWorkingDirectory(const tc::io::Path& path)
 
 void tc::io::LocalFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path)
 {
+	if (path.empty())
+	{
+		// throw exception for empty path
+		throw tc::io::DirectoryNotFoundException(kClassName+"::getCanonicalPath()", "Directory path was empty.");
+	}
+
 	// save current dir for restoring later
 	Path prev_current_dir;
 	try
@@ -318,17 +324,81 @@ void tc::io::LocalFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io:
 		throw tc::io::IOException(kClassName+"::getCanonicalPath()", fmt::format("Failed to save current directory ({})", e.error()));
 	}
 
+	// try to open as file
+	bool path_exists_as_file = false;
+	try 
+	{
+		std::shared_ptr<tc::io::IStream> dummy_stream;
+		openFile(path, tc::io::FileMode::Open, tc::io::FileAccess::Read, dummy_stream);
+
+		path_exists_as_file = true;
+	}
+	catch (tc::io::FileNotFoundException& e_file)
+	{
+		// not an issue as we are just testing if the file exists
+	}
+
+	// try to open as dir
+	bool path_exists_as_directory = false;
+	try 
+	{
+		std::vector<std::string> child_dir_name_list;
+		std::vector<std::string> child_file_name_list;
+
+		getDirectoryChildren(path, child_dir_name_list, child_file_name_list);
+
+		path_exists_as_directory = true;
+	}
+	catch (tc::io::DirectoryNotFoundException& e_file)
+	{
+		// not an issue as we are just testing if the directory exists
+	}
+
+	// parameters for resolution
+	std::string child_leaf_element = "";
+	tc::io::Path resolvable_path_relative = tc::io::Path();
+	tc::io::Path resolvable_path_canonical = tc::io::Path();
+
+	if (path_exists_as_file)
+	{
+		// if file, and single element path, presume relative, and use parent "."
+		if (path.size() == 1)
+		{
+			child_leaf_element = path.back();
+			resolvable_path_relative = tc::io::Path(".");
+		}
+		// if file and not single element path, 
+		else if (path.size() > 1)
+		{
+			child_leaf_element = path.back();
+			resolvable_path_relative = path.subpath(path.begin(), --(path.end()));
+		}
+	}
+	else if (path_exists_as_directory)
+	{
+		child_leaf_element = "";
+		resolvable_path_relative = path;
+	}
+	else
+	{
+		// throw exception for cannot find path
+		throw tc::io::DirectoryNotFoundException(kClassName+"::getCanonicalPath()", fmt::format("Directory \"{:s}\" was not found.", path.to_string()));
+	}
+
+	// resolve path
 	try
 	{
 		// change the directory
-		setWorkingDirectory(path);
+		setWorkingDirectory(resolvable_path_relative);
 
 		// save the path
-		Path temp_canon_path;
-		getWorkingDirectory(temp_canon_path);
+		getWorkingDirectory(resolvable_path_canonical);
 
-		// only write to canon path now as exceptions could be thrown before now
-		canon_path = temp_canon_path;
+		// append child leaf element if applicable
+		if (child_leaf_element.empty() == false)
+		{
+			resolvable_path_canonical += tc::io::Path(child_leaf_element);
+		}
 	}
 	// preserve getWorkingDirectory()/setWorkingDirectory() exceptions but rename the module name
 	catch (tc::io::PathTooLongException& e)
@@ -366,6 +436,9 @@ void tc::io::LocalFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io:
 
 		throw tc::Exception(kClassName+"::getCanonicalPath()", e.error());
 	}
+	
+	// save canon path
+	canon_path = resolvable_path_canonical;
 
 	// restore current directory
 	try
@@ -382,6 +455,19 @@ void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDir
 {
 	std::vector<std::string> child_dir_name_list;
 	std::vector<std::string> child_file_name_list;
+	
+	getDirectoryChildren(path, child_dir_name_list, child_file_name_list);
+
+	Path current_directory_path;
+	getCanonicalPath(path, current_directory_path);
+
+	info.abs_path = current_directory_path;
+	info.dir_list = child_dir_name_list;
+	info.file_list = child_file_name_list;
+}
+
+void tc::io::LocalFileSystem::getDirectoryChildren(const tc::io::Path& path, std::vector<std::string>& child_dir_name_list, std::vector<std::string>& child_file_name_list)
+{
 #ifdef _WIN32
 	Path wildcard_path = path + tc::io::Path("*");
 
@@ -489,13 +575,8 @@ void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDir
 	// close dp
 	closedir(dp);
 #endif
-	Path current_directory_path;
-	getCanonicalPath(path, current_directory_path);
-
-	info.abs_path = current_directory_path;
-	info.dir_list = child_dir_name_list;
-	info.file_list = child_file_name_list;
 }
+
 
 #ifdef _WIN32
 

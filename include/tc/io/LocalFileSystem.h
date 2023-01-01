@@ -166,6 +166,8 @@ private:
 	static const std::string kClassName;
 
 	tc::ResourceStatus mState;
+
+	void getDirectoryChildren(const tc::io::Path& path, std::vector<std::string>& child_dirs, std::vector<std::string>& child_files);
 };
 
 }} // namespace tc::io
