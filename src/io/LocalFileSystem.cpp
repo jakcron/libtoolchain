@@ -345,7 +345,7 @@ void tc::io::LocalFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io:
 		std::vector<std::string> child_dir_name_list;
 		std::vector<std::string> child_file_name_list;
 
-		getDirectoryChildren(path, child_dir_name_list, child_file_name_list);
+		getDirectoryChildren("::getCanonicalPath()", path, child_dir_name_list, child_file_name_list);
 
 		path_exists_as_directory = true;
 	}
@@ -456,7 +456,7 @@ void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDir
 	std::vector<std::string> child_dir_name_list;
 	std::vector<std::string> child_file_name_list;
 	
-	getDirectoryChildren(path, child_dir_name_list, child_file_name_list);
+	getDirectoryChildren("::getDirectoryListing()", path, child_dir_name_list, child_file_name_list);
 
 	Path current_directory_path;
 	getCanonicalPath(path, current_directory_path);
@@ -466,7 +466,7 @@ void tc::io::LocalFileSystem::getDirectoryListing(const tc::io::Path& path, sDir
 	info.file_list = child_file_name_list;
 }
 
-void tc::io::LocalFileSystem::getDirectoryChildren(const tc::io::Path& path, std::vector<std::string>& child_dir_name_list, std::vector<std::string>& child_file_name_list)
+void tc::io::LocalFileSystem::getDirectoryChildren(const std::string& method_name, const tc::io::Path& path, std::vector<std::string>& child_dir_name_list, std::vector<std::string>& child_file_name_list)
 {
 #ifdef _WIN32
 	Path wildcard_path = path + tc::io::Path("*");
@@ -484,7 +484,7 @@ void tc::io::LocalFileSystem::getDirectoryChildren(const tc::io::Path& path, std
 		switch (error)
 		{
 			default:
-				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to open directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
+				throw tc::io::IOException(kClassName+method_name, "Failed to open directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 
@@ -511,7 +511,7 @@ void tc::io::LocalFileSystem::getDirectoryChildren(const tc::io::Path& path, std
 		switch (error)
 		{
 			default:
-				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to open directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
+				throw tc::io::IOException(kClassName+method_name, "Failed to open directory (" + PlatformErrorHandlingUtil::GetLastErrorString(error) + ")");
 		}
 	}
 
@@ -528,16 +528,16 @@ void tc::io::LocalFileSystem::getDirectoryChildren(const tc::io::Path& path, std
 		switch (errno) 
 		{
 			case (EACCES): // Permission denied.
-				throw tc::UnauthorisedAccessException(kClassName+"::getDirectoryListing()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
+				throw tc::UnauthorisedAccessException(kClassName+method_name, PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (ENOTDIR): // A component of the path prefix is not a directory. // name is not a directory.
 			case (ENOENT): // Directory does not exist, or name is an empty string.
-				throw tc::io::DirectoryNotFoundException(kClassName+"::getDirectoryListing()", PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
+				throw tc::io::DirectoryNotFoundException(kClassName+method_name, PlatformErrorHandlingUtil::GetGnuErrorNumString(errno));
 			case (EBADF): // fd is not a valid file descriptor open for reading.
 			case (EMFILE):
 			case (ENFILE):
 			case (ENOMEM):
 			default:
-				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to get directory info (opendir)(" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
+				throw tc::io::IOException(kClassName+method_name, "Failed to get directory info (opendir)(" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 
@@ -567,7 +567,7 @@ void tc::io::LocalFileSystem::getDirectoryChildren(const tc::io::Path& path, std
 			case (EBADF): // fd is not a valid file descriptor open for reading.
 			case (EIO): // An I/O error occurred while reading from or writing to the file system.
 			default:
-				throw tc::io::IOException(kClassName+"::getDirectoryListing()", "Failed to get directory info (readdir)(" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
+				throw tc::io::IOException(kClassName+method_name, "Failed to get directory info (readdir)(" + PlatformErrorHandlingUtil::GetGnuErrorNumString(errno) + ")");
 		}
 	}
 	

@@ -167,7 +167,7 @@ private:
 
 	tc::ResourceStatus mState;
 
-	void getDirectoryChildren(const tc::io::Path& path, std::vector<std::string>& child_dirs, std::vector<std::string>& child_files);
+	void getDirectoryChildren(const std::string& method_name, const tc::io::Path& path, std::vector<std::string>& child_dirs, std::vector<std::string>& child_files);
 };
 
 }} // namespace tc::io
