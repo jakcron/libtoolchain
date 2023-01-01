@@ -23,19 +23,21 @@ tc::io::VirtualFileSystem::VirtualFileSystem(const FileSystemSnapshot& fs_snapsh
 		mPathResolver = std::shared_ptr<tc::io::BasicPathResolver>(new tc::io::BasicPathResolver());
 	}
 	
-	// get root directory
+	// resolve root canonical path
 	tc::io::Path canonical_root_path = mPathResolver->resolveCanonicalPath(tc::io::Path("/"));
 
+	// get root directory from filesystem snapshot
 	auto root_itr = mFsSnapshot.dir_entry_path_map.find(canonical_root_path);
+
 	// if the path was not found in the map, throw exception
 	if (root_itr == mFsSnapshot.dir_entry_path_map.end())
 	{
-		throw tc::InvalidOperationException(kClassName, "Failed to located root directory");
+		throw tc::InvalidOperationException(kClassName, "Failed to located root directory. (Root path was not found in Path to Index map)");
 	}
 	// if the dir_entry index isn't valid, throw exception
 	if (root_itr->second >= mFsSnapshot.dir_entries.size())
 	{
-		throw tc::InvalidOperationException(kClassName, "Failed to located root directory");
+		throw tc::InvalidOperationException(kClassName, "Failed to located root directory. (Root directory index was invalid)");
 	}
 
 	mCurDir = &mFsSnapshot.dir_entries.at(root_itr->second);
@@ -83,8 +85,10 @@ void tc::io::VirtualFileSystem::openFile(const tc::io::Path& path, tc::io::FileM
 		throw tc::ObjectDisposedException(kClassName+"::openFile()", "VirtualFileSystem not initialized");
 	}
 
+	// resolve file path
 	tc::io::Path resolved_path = mPathResolver->resolveCanonicalPath(path);
 
+	// check input file permissions
 	if (mode != tc::io::FileMode::Open)
 	{
 		throw tc::NotSupportedException(kClassName+"::openFile()", "This file-system is read-only, only FileMode::Open is supported.");
@@ -94,29 +98,11 @@ void tc::io::VirtualFileSystem::openFile(const tc::io::Path& path, tc::io::FileM
 		throw tc::NotSupportedException(kClassName+"::openFile()", "This file-system is read-only, only FileAccess::Read is supported.");
 	}
 
-	auto file_itr = mFsSnapshot.file_entry_path_map.find(resolved_path);
-	// if resolved_path does not exist in the map, throw exception
-	if (file_itr == mFsSnapshot.file_entry_path_map.end())
-	{
-		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist. (Path to File Index map had no match)");
-	}
-	// if the file_entry index isn't valid, throw exception
-	if (file_itr->second >= mFsSnapshot.file_entries.size())
-	{
-		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist. (Invalid File Index)");
-	}
-	// if the file_entry index leads to a null IStream pointer, throw exception
-	if (mFsSnapshot.file_entries.at(file_itr->second).stream == nullptr)
-	{
-		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist. (File stream was null)");
-	}
-	// if the stream has invalid properties, throw exception
-	if ( !(mFsSnapshot.file_entries.at(file_itr->second).stream->canRead() == true && mFsSnapshot.file_entries.at(file_itr->second).stream->canWrite() == false) )
-	{
-		throw tc::io::FileNotFoundException(kClassName+"::openFile()", "File does not exist. (File stream had invalid permissions)");
-	}
+	// get file from filesystem snapshot 
+	auto file_entry = getFileFromFsSnapshot("::openFile()", resolved_path);
 
-	stream = mFsSnapshot.file_entries.at(file_itr->second).stream;
+	// assign stream from file entry
+	stream = file_entry->stream;
 }
 
 void tc::io::VirtualFileSystem::createDirectory(const tc::io::Path& path)
@@ -164,16 +150,21 @@ void tc::io::VirtualFileSystem::getCanonicalPath(const tc::io::Path& path, tc::i
 	bool path_exists_as_dir = false;
 	bool path_exists_as_file = false;
 
-	if (mFsSnapshot.dir_entry_path_map.find(tmp_canon_path) == mFsSnapshot.dir_entry_path_map.end())
+	try
 	{
+		getDirectoryFromFsSnapshot("::getCanonicalPath()", tmp_canon_path);
 		path_exists_as_dir = true;
 	}
-
-	if (mFsSnapshot.file_entry_path_map.find(tmp_canon_path) == mFsSnapshot.file_entry_path_map.end())
+	catch (const tc::io::DirectoryNotFoundException&) { /* do nothing */ }
+	
+	try
 	{
+		getFileFromFsSnapshot("::getCanonicalPath()", tmp_canon_path);
 		path_exists_as_file = true;
 	}
+	catch (const tc::io::FileNotFoundException&) { /* do nothing */ }
 
+	// if path doesn't exist as a directory or file, throw not found exception
 	if (!path_exists_as_dir && !path_exists_as_file)
 	{
 		throw tc::io::DirectoryNotFoundException(kClassName+"::getCanonicalPath()", fmt::format("Directory \"{:s}\" was not found.", path.to_string()));
@@ -200,21 +191,14 @@ void tc::io::VirtualFileSystem::setWorkingDirectory(const tc::io::Path& path)
 		throw tc::ObjectDisposedException(kClassName+"::setWorkingDirectory()", "VirtualFileSystem not initialized");
 	}
 
+	// resolve directory path
 	tc::io::Path resolved_path = mPathResolver->resolveCanonicalPath(path);
 
-	auto dir_itr = mFsSnapshot.dir_entry_path_map.find(resolved_path);
-	// if the path was not found in the map, throw exception
-	if (dir_itr == mFsSnapshot.dir_entry_path_map.end())
-	{
-		throw tc::io::DirectoryNotFoundException(kClassName+"::setWorkingDirectory()", "Directory does not exist.");
-	}
-	// if the dir_entry index isn't valid, throw exception
-	if (dir_itr->second >= mFsSnapshot.dir_entries.size())
-	{
-		throw tc::io::DirectoryNotFoundException(kClassName+"::setWorkingDirectory()", "Directory does not exist.");
-	}
+	// get directory from filesystem snapshot
+	auto dir_entry = getDirectoryFromFsSnapshot("::setWorkingDirectory()", resolved_path);
 
-	mCurDir = &mFsSnapshot.dir_entries.at(dir_itr->second);
+	// set current directory
+	mCurDir = dir_entry;
 	mPathResolver->setCurrentDirectory(mCurDir->dir_listing.abs_path);
 }
 
@@ -225,19 +209,56 @@ void tc::io::VirtualFileSystem::getDirectoryListing(const tc::io::Path& path, tc
 		throw tc::ObjectDisposedException(kClassName+"::getDirectoryListing()", "VirtualFileSystem not initialized");
 	}
 
+	// resolve directory path
 	tc::io::Path resolved_path = mPathResolver->resolveCanonicalPath(path);
 
+	// get directory from filesystem snapshot
+	auto dir_entry = getDirectoryFromFsSnapshot("::getDirectoryListing()", resolved_path);
+
+	// set directory info
+	info = dir_entry->dir_listing;
+}
+
+tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry* tc::io::VirtualFileSystem::getFileFromFsSnapshot(const std::string& method_name, const tc::io::Path& resolved_path)
+{
+	auto file_itr = mFsSnapshot.file_entry_path_map.find(resolved_path);
+	// if resolved_path does not exist in the map, throw exception
+	if (file_itr == mFsSnapshot.file_entry_path_map.end())
+	{
+		throw tc::io::FileNotFoundException(kClassName + method_name, "File does not exist. (Path to File Index map had no match)");
+	}
+	// if the file_entry index isn't valid, throw exception
+	if (file_itr->second >= mFsSnapshot.file_entries.size())
+	{
+		throw tc::io::FileNotFoundException(kClassName + method_name, "File does not exist. (Invalid File Index)");
+	}
+	// if the file_entry index leads to a null IStream pointer, throw exception
+	if (mFsSnapshot.file_entries.at(file_itr->second).stream == nullptr)
+	{
+		throw tc::io::FileNotFoundException(kClassName + method_name, "File does not exist. (File stream was null)");
+	}
+	// if the stream has invalid properties, throw exception
+	if ( !(mFsSnapshot.file_entries.at(file_itr->second).stream->canRead() == true && mFsSnapshot.file_entries.at(file_itr->second).stream->canWrite() == false) )
+	{
+		throw tc::io::FileNotFoundException(kClassName + method_name, "File does not exist. (File stream had invalid permissions)");
+	}
+
+	return &(mFsSnapshot.file_entries.at(file_itr->second));
+}
+
+tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry* tc::io::VirtualFileSystem::getDirectoryFromFsSnapshot(const std::string& method_name, const tc::io::Path& resolved_path)
+{
 	auto dir_itr = mFsSnapshot.dir_entry_path_map.find(resolved_path);
 	// if the path was not found in the map, throw exception
 	if (dir_itr == mFsSnapshot.dir_entry_path_map.end())
 	{
-		throw tc::io::DirectoryNotFoundException(kClassName+"::getDirectoryListing()", "Directory does not exist.");
+		throw tc::io::DirectoryNotFoundException(kClassName + method_name, "Directory does not exist. (Path to Directory Index map had no match)");
 	}
 	// if the dir_entry index isn't valid, throw exception
 	if (dir_itr->second >= mFsSnapshot.dir_entries.size())
 	{
-		throw tc::io::DirectoryNotFoundException(kClassName+"::getDirectoryListing()", "Directory does not exist.");
+		throw tc::io::DirectoryNotFoundException(kClassName + method_name, "Directory does not exist. (Invalid Directory Index)");
 	}
 
-	info = mFsSnapshot.dir_entries.at(dir_itr->second).dir_listing;
+	return &(mFsSnapshot.dir_entries.at(dir_itr->second));
 }

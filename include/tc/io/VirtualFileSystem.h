@@ -228,6 +228,9 @@ private:
 	FileSystemSnapshot::DirEntry* mCurDir;
 	FileSystemSnapshot mFsSnapshot;
 	std::shared_ptr<tc::io::IPortablePathResolver> mPathResolver;
+
+	FileSystemSnapshot::FileEntry* getFileFromFsSnapshot(const std::string& method_name, const tc::io::Path& resolved_path);
+	FileSystemSnapshot::DirEntry* getDirectoryFromFsSnapshot(const std::string& method_name, const tc::io::Path& resolved_path);
 };
 
 }} // namespace tc::io
