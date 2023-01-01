@@ -2,6 +2,8 @@
 #include "FileSystemTestUtil.h"
 #include "StreamTestUtil.h"
 
+#include <fmt/format.h>
+
 //---------------------------------------------------------
 
 io_SubFileSystem_TestClass::io_SubFileSystem_TestClass() :
@@ -18,6 +20,7 @@ void io_SubFileSystem_TestClass::runAllTests(void)
 	testOpenFile();
 	testRemoveFile();
 	testCreateDirectory();
+	testCreateDirectoryPath();
 	testRemoveDirectory();
 	testGetDirectoryListing();
 	testNavigateUpSubFileSystemEscape();
@@ -450,7 +453,6 @@ void io_SubFileSystem_TestClass::testRemoveFile()
 	mTestResults.push_back(std::move(test));
 }
 
-
 void io_SubFileSystem_TestClass::testCreateDirectory()
 {
 	TestResult test;
@@ -528,6 +530,83 @@ void io_SubFileSystem_TestClass::testCreateDirectory()
 	mTestResults.push_back(std::move(test));
 }
 
+void io_SubFileSystem_TestClass::testCreateDirectoryPath()
+{
+	TestResult test;
+	test.test_name = "testCreateDirectoryPath";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
+	try
+	{
+		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
+		{
+		public:
+			DummyFileSystem(const tc::io::Path& expected_subfs_base) :
+				mExpectedSubfsBasePath(expected_subfs_base)
+			{
+				getWorkingDirectory(mInitialWorkingDirectoryPath);
+			}
+
+			void createDirectoryPath(const tc::io::Path& path)
+			{
+				// validate base working directory was preserved
+				tc::io::Path cur_dir;
+				getWorkingDirectory(cur_dir);
+
+				if (cur_dir != mInitialWorkingDirectoryPath)
+				{
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
+				}
+
+				// check input was correct
+				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testdir/hey"))
+				{
+					throw tc::TestException("DummyFileSystem: dir had incorrect path");
+				}
+			}
+		private:
+			tc::io::Path mInitialWorkingDirectoryPath;
+			tc::io::Path mExpectedSubfsBasePath;
+		};
+	
+		// define sub filesystem base path
+		tc::io::Path subfilesystem_base_path = tc::io::Path("/home/jakcron/source/LibToolChain/testdir");
+
+		// define base filesystem
+		DummyFileSystem filesystem = DummyFileSystem(subfilesystem_base_path);
+
+		// test sub filesystem creation & test translation of input to base filesystem
+		try
+		{
+			// create sub filesystem
+			tc::io::SubFileSystem sub_filesystem(std::make_shared<DummyFileSystem>(filesystem), subfilesystem_base_path);
+
+			// attempt to create directory
+			sub_filesystem.createDirectoryPath(tc::io::Path("/a_dir/testdir/hey"));
+
+			// record result
+			test.result = "PASS";
+			test.comments = "";
+		}
+		catch (const tc::TestException& e)
+		{
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
+		}
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
+}
+
 void io_SubFileSystem_TestClass::testRemoveDirectory()
 {
 	TestResult test;
@@ -582,6 +661,93 @@ void io_SubFileSystem_TestClass::testRemoveDirectory()
 
 			// attempt to remove directory
 			sub_filesystem.removeDirectory(tc::io::Path("/a_dir/testdir/hey"));
+
+			// record result
+			test.result = "PASS";
+			test.comments = "";
+		}
+		catch (const tc::TestException& e)
+		{
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
+		}
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
+}
+
+void io_SubFileSystem_TestClass::testGetCanonicalPath()
+{
+	TestResult test;
+	test.test_name = "testGetCanonicalPath";
+	test.result = "NOT RUN";
+	test.comments = "";
+	
+	try
+	{
+		class DummyFileSystem : public FileSystemTestUtil::DummyFileSystemBase
+		{
+		public:
+			DummyFileSystem(const tc::io::Path& expected_subfs_base) :
+				mExpectedSubfsBasePath(expected_subfs_base)
+			{
+				getWorkingDirectory(mInitialWorkingDirectoryPath);
+			}
+
+			void getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path)
+			{
+				// validate base working directory was preserved
+				tc::io::Path cur_dir;
+				getWorkingDirectory(cur_dir);
+
+				if (cur_dir != mInitialWorkingDirectoryPath)
+				{
+					throw tc::TestException("DummyFileSystem: Working directory was not preserved by SubFileSystem.");
+				}
+
+				// check input was correct
+				if (path != mExpectedSubfsBasePath + tc::io::Path("a_dir/testdir/hey"))
+				{
+					throw tc::TestException("DummyFileSystem: dir had incorrect path");
+				}
+
+				canon_path = mExpectedSubfsBasePath + tc::io::Path("a_dir/canondir/hey");
+			}
+		private:
+			tc::io::Path mInitialWorkingDirectoryPath;
+			tc::io::Path mExpectedSubfsBasePath;
+		};
+	
+		// define sub filesystem base path
+		tc::io::Path subfilesystem_base_path = tc::io::Path("/home/jakcron/source/LibToolChain/testdir");
+
+		// define base filesystem
+		DummyFileSystem filesystem = DummyFileSystem(subfilesystem_base_path);
+
+		// test sub filesystem creation & test translation of input to base filesystem
+		try
+		{
+			// create sub filesystem
+			tc::io::SubFileSystem sub_filesystem(std::make_shared<DummyFileSystem>(filesystem), subfilesystem_base_path);
+
+			// get canon path
+			tc::io::Path canonised_path;
+			sub_filesystem.getCanonicalPath(tc::io::Path("/a_dir/testdir/hey"), canonised_path);
+
+			// to be clear, this is not an example of how getCanonicalPath() should be treating paths, but rather the passthrough behaviour of SubFileSystem
+			tc::io::Path expected_canonised_path = tc::io::Path("/a_dir/canondir/hey");
+			if (canonised_path != expected_canonised_path)
+			{
+				throw tc::TestException(fmt::format("SubFileSystem: Sub canon path was not as expected (returned: \"{:s}\", expected: \"{:s}\"", canonised_path.to_string(), expected_canonised_path.to_string()));
+			}
 
 			// record result
 			test.result = "PASS";
@@ -716,7 +882,6 @@ void io_SubFileSystem_TestClass::testGetDirectoryListing()
 	// add result to list
 	mTestResults.push_back(std::move(test));
 }
-
 
 void io_SubFileSystem_TestClass::testNavigateUpSubFileSystemEscape()
 {

@@ -24,7 +24,9 @@ private:
 	void testOpenFile();
 	void testRemoveFile();
 	void testCreateDirectory();
+	void testCreateDirectoryPath();
 	void testRemoveDirectory();
+	void testGetCanonicalPath();
 	void testGetDirectoryListing();
 	void testNavigateUpSubFileSystemEscape();
 	void testOpenFileOutsideSubFileSystem();
