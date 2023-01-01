@@ -192,6 +192,7 @@ public:
 		 * @param[out] canon_path The canonical version of @p path to populate.
 		 * 
 		 * @throw tc::ObjectDisposedException Methods were called after the file-system was closed.
+		 * @throw tc::io::DirectoryNotFoundException Directory or file was not found.
 		 */
 	void getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path);
 

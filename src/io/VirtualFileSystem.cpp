@@ -1,5 +1,7 @@
 #include <tc/io/VirtualFileSystem.h>
 
+#include <fmt/format.h>
+
 const std::string tc::io::VirtualFileSystem::kClassName = "tc::io::VirtualFileSystem";
 
 tc::io::VirtualFileSystem::VirtualFileSystem() :
@@ -154,7 +156,31 @@ void tc::io::VirtualFileSystem::getCanonicalPath(const tc::io::Path& path, tc::i
 		throw tc::ObjectDisposedException(kClassName+"::getCanonicalPath()", "VirtualFileSystem not initialized");
 	}
 
-	mPathResolver->resolveCanonicalPath(path, canon_path);
+	// get logical canon path
+	tc::io::Path tmp_canon_path = tc::io::Path();
+	mPathResolver->resolveCanonicalPath(path, tmp_canon_path);
+
+	// check if path exists
+	bool path_exists_as_dir = false;
+	bool path_exists_as_file = false;
+
+	if (mFsSnapshot.dir_entry_path_map.find(tmp_canon_path) == mFsSnapshot.dir_entry_path_map.end())
+	{
+		path_exists_as_dir = true;
+	}
+
+	if (mFsSnapshot.file_entry_path_map.find(tmp_canon_path) == mFsSnapshot.file_entry_path_map.end())
+	{
+		path_exists_as_file = true;
+	}
+
+	if (!path_exists_as_dir && !path_exists_as_file)
+	{
+		throw tc::io::DirectoryNotFoundException(kClassName+"::getCanonicalPath()", fmt::format("Directory \"{:s}\" was not found.", path.to_string()));
+	}
+
+	// save canon path
+	canon_path = tmp_canon_path;
 }
 
 void tc::io::VirtualFileSystem::getWorkingDirectory(tc::io::Path& path)
