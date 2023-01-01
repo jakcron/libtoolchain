@@ -481,13 +481,13 @@ void io_VirtualFileSystem_TestClass::test_CreateFs_CreateConstructor()
 				throw tc::TestException(fmt::format(".state().test(tc::RESFLAG_NOINIT) returned {} (expected {})", state_test_noinit, expected_state_test_noinit));
 			}
 
-			// Test using methods that should throw NotImplementedException, since this is initialized
+			// Test using methods that should throw NotSupportedException, since this is initialized
 			try
 			{
 				filesystem.createFile(tc::io::Path());
-				throw tc::TestException(".createFile() did not throw tc::NotImplementedException for initialized VirtualFileSystem");
+				throw tc::TestException(".createFile() did not throw tc::NotSupportedException for initialized VirtualFileSystem");
 			}
-			catch (tc::NotImplementedException&) { /* do nothing*/ }
+			catch (tc::NotSupportedException&) { /* do nothing*/ }
 			catch (tc::Exception&)
 			{
 				throw tc::TestException(".createFile() threw the wrong exception for initialized VirtualFileSystem");
@@ -496,9 +496,9 @@ void io_VirtualFileSystem_TestClass::test_CreateFs_CreateConstructor()
 			try
 			{
 				filesystem.removeFile(tc::io::Path());
-				throw tc::TestException(".removeFile() did not throw tc::NotImplementedException for initialized VirtualFileSystem");
+				throw tc::TestException(".removeFile() did not throw tc::NotSupportedException for initialized VirtualFileSystem");
 			}
-			catch (tc::NotImplementedException&) { /* do nothing*/ }
+			catch (tc::NotSupportedException&) { /* do nothing*/ }
 			catch (tc::Exception&)
 			{
 				throw tc::TestException(".removeFile() threw the wrong exception for initialized VirtualFileSystem");
@@ -507,9 +507,9 @@ void io_VirtualFileSystem_TestClass::test_CreateFs_CreateConstructor()
 			try
 			{
 				filesystem.createDirectory(tc::io::Path());
-				throw tc::TestException(".createDirectory() did not throw tc::NotImplementedException for initialized VirtualFileSystem");
+				throw tc::TestException(".createDirectory() did not throw tc::NotSupportedException for initialized VirtualFileSystem");
 			}
-			catch (tc::NotImplementedException&) { /* do nothing*/ }
+			catch (tc::NotSupportedException&) { /* do nothing*/ }
 			catch (tc::Exception&)
 			{
 				throw tc::TestException(".createDirectory() threw the wrong exception for initialized VirtualFileSystem");
@@ -518,9 +518,9 @@ void io_VirtualFileSystem_TestClass::test_CreateFs_CreateConstructor()
 			try
 			{
 				filesystem.removeDirectory(tc::io::Path());
-				throw tc::TestException(".removeDirectory() did not throw tc::NotImplementedException for initialized VirtualFileSystem");
+				throw tc::TestException(".removeDirectory() did not throw tc::NotSupportedException for initialized VirtualFileSystem");
 			}
-			catch (tc::NotImplementedException&) { /* do nothing*/ }
+			catch (tc::NotSupportedException&) { /* do nothing*/ }
 			catch (tc::Exception&)
 			{
 				throw tc::TestException(".removeDirectory() threw the wrong exception for initialized VirtualFileSystem");

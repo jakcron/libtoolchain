@@ -61,7 +61,7 @@ void tc::io::VirtualFileSystem::createFile(const tc::io::Path& path)
 		throw tc::ObjectDisposedException(kClassName+"::createFile()", "VirtualFileSystem not initialized");
 	}
 
-	throw tc::NotImplementedException(kClassName+"::createFile()", "createFile is not supported for VirtualFileSystem");
+	throw tc::NotSupportedException(kClassName+"::createFile()", "createFile is not supported for VirtualFileSystem");
 }
 
 void tc::io::VirtualFileSystem::removeFile(const tc::io::Path& path)
@@ -71,7 +71,7 @@ void tc::io::VirtualFileSystem::removeFile(const tc::io::Path& path)
 		throw tc::ObjectDisposedException(kClassName+"::removeFile()", "VirtualFileSystem not initialized");
 	}
 
-	throw tc::NotImplementedException(kClassName+"::removeFile()", "removeFile is not supported for VirtualFileSystem");
+	throw tc::NotSupportedException(kClassName+"::removeFile()", "removeFile is not supported for VirtualFileSystem");
 }
 
 void tc::io::VirtualFileSystem::openFile(const tc::io::Path& path, tc::io::FileMode mode, tc::io::FileAccess access, std::shared_ptr<tc::io::IStream>& stream)
@@ -124,7 +124,7 @@ void tc::io::VirtualFileSystem::createDirectory(const tc::io::Path& path)
 		throw tc::ObjectDisposedException(kClassName+"::createDirectory()", "VirtualFileSystem not initialized");
 	}
 
-	throw tc::NotImplementedException(kClassName+"::createDirectory()", "createDirectory is not supported for VirtualFileSystem");
+	throw tc::NotSupportedException(kClassName+"::createDirectory()", "createDirectory is not supported for VirtualFileSystem");
 }
 
 void tc::io::VirtualFileSystem::createDirectoryPath(const tc::io::Path& path)
@@ -134,7 +134,7 @@ void tc::io::VirtualFileSystem::createDirectoryPath(const tc::io::Path& path)
 		throw tc::ObjectDisposedException(kClassName+"::createDirectoryPath()", "VirtualFileSystem not initialized");
 	}
 
-	throw tc::NotImplementedException(kClassName+"::createDirectoryPath()", "createDirectoryPath is not supported for VirtualFileSystem");
+	throw tc::NotSupportedException(kClassName+"::createDirectoryPath()", "createDirectoryPath is not supported for VirtualFileSystem");
 }
 
 void tc::io::VirtualFileSystem::removeDirectory(const tc::io::Path& path)
@@ -144,7 +144,7 @@ void tc::io::VirtualFileSystem::removeDirectory(const tc::io::Path& path)
 		throw tc::ObjectDisposedException(kClassName+"::removeDirectory()", "VirtualFileSystem not initialized");
 	}
 
-	throw tc::NotImplementedException(kClassName+"::removeDirectory()", "removeDirectory is not supported for VirtualFileSystem");
+	throw tc::NotSupportedException(kClassName+"::removeDirectory()", "removeDirectory is not supported for VirtualFileSystem");
 }
 
 void tc::io::VirtualFileSystem::getCanonicalPath(const tc::io::Path& path, tc::io::Path& canon_path)
