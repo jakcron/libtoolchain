@@ -1418,9 +1418,13 @@ void io_LocalFileSystem_TestClass::test_GetCanonicalPath_NotExist()
 					tc::io::Path canonised_path = tc::io::Path();
 					local_fs.getCanonicalPath(*itr, canonised_path);
 
-					throw tc::TestException(fmt::format("Failed to throw tc::io::DirectoryNotFoundException for invalid path \"{:s}\"", itr->to_string()));
+					throw tc::TestException(fmt::format(".getCanonicalPath() failed to throw tc::io::DirectoryNotFoundException for invalid path \"{:s}\"", itr->to_string()));
 				} 
 				catch (tc::io::DirectoryNotFoundException&) { /* do nothing */ }
+				catch (tc::Exception&)
+				{
+					throw tc::TestException(fmt::format(".getCanonicalPath() threw the wrong exception for invalid path \"{:s}\"", itr->to_string()));
+				}
 			}
 
 			// record result
