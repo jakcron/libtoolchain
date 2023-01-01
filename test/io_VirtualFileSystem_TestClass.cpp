@@ -23,10 +23,12 @@ void io_VirtualFileSystem_TestClass::runAllTests(void)
 	test_ThrowsOnBadFileEntry_OpenFile();
 	test_ThrowsOnBadFileEntry_GetDirectoryListing();
 	test_ThrowsOnBadFileEntry_SetWorkingDirectory();
+	test_ThrowsOnBadFileEntry_GetCanonicalPath();
 	test_WorksForAllValidPaths_OpenFile();
 	test_WorksForAllValidPaths_GetDirectoryListing();
 	test_WorksForAllValidPaths_SetWorkingDirectory();
 	test_WorksForAllValidPaths_GetWorkingDirectory();
+	test_WorksForAllValidPaths_GetCanonicalPath();
 	test_DisposeWillChangeStateToUninitialized();
 }
 
@@ -134,6 +136,17 @@ void io_VirtualFileSystem_TestClass::test_CreateUninitializedFs_DefaultConstruct
 
 			try
 			{
+				filesystem.createDirectoryPath(tc::io::Path());
+				throw tc::TestException(".createDirectoryPath() did not throw tc::ObjectDisposedException for uninitialized VirtualFileSystem");
+			}
+			catch (tc::ObjectDisposedException&) { /* do nothing*/ }
+			catch (tc::Exception&)
+			{
+				throw tc::TestException(".createDirectoryPath() threw the wrong exception for uninitialized VirtualFileSystem");
+			}
+
+			try
+			{
 				filesystem.removeDirectory(tc::io::Path());
 				throw tc::TestException(".removeDirectory() did not throw tc::ObjectDisposedException for uninitialized VirtualFileSystem");
 			}
@@ -141,6 +154,19 @@ void io_VirtualFileSystem_TestClass::test_CreateUninitializedFs_DefaultConstruct
 			catch (tc::Exception&)
 			{
 				throw tc::TestException(".removeDirectory() threw the wrong exception for uninitialized VirtualFileSystem");
+			}
+
+			try
+			{
+				tc::io::Path tmp_path;
+
+				filesystem.getCanonicalPath(tc::io::Path(), tmp_path);
+				throw tc::TestException(".getCanonicalPath() did not throw tc::ObjectDisposedException for uninitialized VirtualFileSystem");
+			}
+			catch (tc::ObjectDisposedException&) { /* do nothing*/ }
+			catch (tc::Exception&)
+			{
+				throw tc::TestException(".getCanonicalPath() threw the wrong exception for uninitialized VirtualFileSystem");
 			}
 
 			try
@@ -513,6 +539,17 @@ void io_VirtualFileSystem_TestClass::test_CreateFs_CreateConstructor()
 			catch (tc::Exception&)
 			{
 				throw tc::TestException(".createDirectory() threw the wrong exception for initialized VirtualFileSystem");
+			}
+
+			try
+			{
+				filesystem.createDirectoryPath(tc::io::Path());
+				throw tc::TestException(".createDirectoryPath() did not throw tc::NotSupportedException for initialized VirtualFileSystem");
+			}
+			catch (tc::NotSupportedException&) { /* do nothing*/ }
+			catch (tc::Exception&)
+			{
+				throw tc::TestException(".createDirectoryPath() threw the wrong exception for initialized VirtualFileSystem");
 			}
 
 			try
@@ -1786,6 +1823,484 @@ void io_VirtualFileSystem_TestClass::test_ThrowsOnBadFileEntry_SetWorkingDirecto
 	mTestResults.push_back(std::move(test));
 }
 
+void io_VirtualFileSystem_TestClass::test_ThrowsOnBadFileEntry_GetCanonicalPath()
+{
+	TestResult test;
+	test.test_name = "test_ThrowsOnBadFileEntry_GetCanonicalPath";
+	test.result = "NOT RUN";
+	test.comments = "";
+
+	try
+	{
+		try 
+		{
+			try 
+			{
+				tc::io::VirtualFileSystem::FileSystemSnapshot snapshot;
+				
+				// create snapshot data
+			
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirRoot_entry;
+				dirRoot_entry.dir_listing.abs_path = tc::io::Path("/");
+				dirRoot_entry.dir_listing.dir_list = {"dirA", "dirB", "dirC"};
+				dirRoot_entry.dir_listing.file_list = {"fileA", "fileB", "fileC"};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirA_entry;
+				dirA_entry.dir_listing.abs_path = tc::io::Path("/dirA/");
+				dirA_entry.dir_listing.dir_list = {};
+				dirA_entry.dir_listing.file_list = {};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirB_entry;
+				dirB_entry.dir_listing.abs_path = tc::io::Path("/dirB/");
+				dirB_entry.dir_listing.dir_list = {};
+				dirB_entry.dir_listing.file_list = {};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirC_entry;
+				dirC_entry.dir_listing.abs_path = tc::io::Path("/dirC/");
+				dirC_entry.dir_listing.dir_list = {};
+				dirC_entry.dir_listing.file_list = {};
+				
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileA_entry;
+				fileA_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xA, true, false, true, false, false));
+				
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileB_entry;
+				fileB_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xB, true, false, true, false, false));
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileC_entry;
+				fileC_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xC, true, false, true, false, false));
+
+				// add data to snapshot
+				snapshot.dir_entries.push_back(dirRoot_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirA_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirA_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirB_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirB_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				// error: dir entry not created
+				//snapshot.dir_entries.push_back(dirC_entry);
+				//snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirC_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileA_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileA"), snapshot.file_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileB_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileB"), snapshot.file_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileC_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileC"), snapshot.file_entries.size()-1));
+			
+				// create filesystem
+				auto filesystem = tc::io::VirtualFileSystem(snapshot);
+
+				// set working directory
+				tc::io::Path path = tc::io::Path("/dirC");
+				tc::io::Path canonised_path = tc::io::Path();
+				filesystem.getCanonicalPath(path, canonised_path);
+				
+				throw tc::TestException(".getCanonicalPath() did not throw tc::io::DirectoryNotFoundException where dir entry did not exist");
+			}
+			catch (tc::io::DirectoryNotFoundException&) { /* do nothing*/ }
+			catch (tc::Exception&)
+			{
+				throw tc::TestException(".getCanonicalPath() threw the wrong exception where dir entry did not exist");
+			}
+
+			try 
+			{
+				tc::io::VirtualFileSystem::FileSystemSnapshot snapshot;
+				
+				// create snapshot data
+			
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirRoot_entry;
+				dirRoot_entry.dir_listing.abs_path = tc::io::Path("/");
+				dirRoot_entry.dir_listing.dir_list = {"dirA", "dirB", "dirC"};
+				dirRoot_entry.dir_listing.file_list = {"fileA", "fileB", "fileC"};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirA_entry;
+				dirA_entry.dir_listing.abs_path = tc::io::Path("/dirA/");
+				dirA_entry.dir_listing.dir_list = {};
+				dirA_entry.dir_listing.file_list = {};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirB_entry;
+				dirB_entry.dir_listing.abs_path = tc::io::Path("/dirB/");
+				dirB_entry.dir_listing.dir_list = {};
+				dirB_entry.dir_listing.file_list = {};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirC_entry;
+				dirC_entry.dir_listing.abs_path = tc::io::Path("/dirC/");
+				dirC_entry.dir_listing.dir_list = {};
+				dirC_entry.dir_listing.file_list = {};
+				
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileA_entry;
+				fileA_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xA, true, false, true, false, false));
+				
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileB_entry;
+				fileB_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xB, true, false, true, false, false));
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileC_entry;
+				fileC_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xC, true, false, true, false, false));
+
+				// add data to snapshot
+				snapshot.dir_entries.push_back(dirRoot_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirA_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirA_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirB_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirB_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				// error: dir entry created, but not mapped to a path
+				snapshot.dir_entries.push_back(dirC_entry);
+				//snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirC_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileA_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileA"), snapshot.file_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileB_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileB"), snapshot.file_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileC_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileC"), snapshot.file_entries.size()-1));
+			
+				// create filesystem
+				auto filesystem = tc::io::VirtualFileSystem(snapshot);
+
+				// set working directory
+				tc::io::Path path = tc::io::Path("/dirC");
+				tc::io::Path canonised_path = tc::io::Path();
+				filesystem.getCanonicalPath(path, canonised_path);
+				
+				throw tc::TestException(".getCanonicalPath() did not throw tc::io::DirectoryNotFoundException where dir entry did exist, but not mapped to a path");
+			}
+			catch (tc::io::DirectoryNotFoundException&) { /* do nothing*/ }
+			catch (tc::Exception&)
+			{
+				throw tc::TestException(".getCanonicalPath() threw the wrong exception where dir entry did exist, but not mapped to a path");
+			}
+			
+			try 
+			{
+				tc::io::VirtualFileSystem::FileSystemSnapshot snapshot;
+				
+				// create snapshot data
+			
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirRoot_entry;
+				dirRoot_entry.dir_listing.abs_path = tc::io::Path("/");
+				dirRoot_entry.dir_listing.dir_list = {"dirA", "dirB", "dirC"};
+				dirRoot_entry.dir_listing.file_list = {"fileA", "fileB", "fileC"};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirA_entry;
+				dirA_entry.dir_listing.abs_path = tc::io::Path("/dirA/");
+				dirA_entry.dir_listing.dir_list = {};
+				dirA_entry.dir_listing.file_list = {};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirB_entry;
+				dirB_entry.dir_listing.abs_path = tc::io::Path("/dirB/");
+				dirB_entry.dir_listing.dir_list = {};
+				dirB_entry.dir_listing.file_list = {};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirC_entry;
+				dirC_entry.dir_listing.abs_path = tc::io::Path("/dirC/");
+				dirC_entry.dir_listing.dir_list = {};
+				dirC_entry.dir_listing.file_list = {};
+				
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileA_entry;
+				fileA_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xA, true, false, true, false, false));
+				
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileB_entry;
+				fileB_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xB, true, false, true, false, false));
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileC_entry;
+				fileC_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xC, true, false, true, false, false));
+
+				// add data to snapshot
+				snapshot.dir_entries.push_back(dirRoot_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirA_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirA_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirB_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirB_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				// error: dir entry created, but not mapped correctly (index == -1)
+				snapshot.dir_entries.push_back(dirC_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirC_entry.dir_listing.abs_path, -1));
+
+				snapshot.file_entries.push_back(fileA_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileA"), snapshot.file_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileB_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileB"), snapshot.file_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileC_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileC"), snapshot.file_entries.size()-1));
+			
+				// create filesystem
+				auto filesystem = tc::io::VirtualFileSystem(snapshot);
+
+				// set working directory
+				tc::io::Path path = tc::io::Path("/dirC");
+				tc::io::Path canonised_path = tc::io::Path();
+				filesystem.getCanonicalPath(path, canonised_path);
+				
+				throw tc::TestException(".getCanonicalPath() did not throw tc::io::DirectoryNotFoundException where dir entry did exist, but not mapped correctly.");
+			}
+			catch (tc::io::DirectoryNotFoundException&) { /* do nothing*/ }
+			catch (tc::Exception&)
+			{
+				throw tc::TestException(".getCanonicalPath() threw the wrong exception where dir entry did exist, but not mapped correctly.");
+			}
+
+			try 
+			{
+				tc::io::VirtualFileSystem::FileSystemSnapshot snapshot;
+				
+				// create snapshot data
+			
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirRoot_entry;
+				dirRoot_entry.dir_listing.abs_path = tc::io::Path("/");
+				dirRoot_entry.dir_listing.dir_list = {"dirA", "dirB", "dirC"};
+				dirRoot_entry.dir_listing.file_list = {"fileA", "fileB", "fileC"};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirA_entry;
+				dirA_entry.dir_listing.abs_path = tc::io::Path("/dirA/");
+				dirA_entry.dir_listing.dir_list = {};
+				dirA_entry.dir_listing.file_list = {};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirB_entry;
+				dirB_entry.dir_listing.abs_path = tc::io::Path("/dirB/");
+				dirB_entry.dir_listing.dir_list = {};
+				dirB_entry.dir_listing.file_list = {};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirC_entry;
+				dirC_entry.dir_listing.abs_path = tc::io::Path("/dirC/");
+				dirC_entry.dir_listing.dir_list = {};
+				dirC_entry.dir_listing.file_list = {};
+				
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileA_entry;
+				fileA_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xA, true, false, true, false, false));
+				
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileB_entry;
+				fileB_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xB, true, false, true, false, false));
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileC_entry;
+				fileC_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xC, true, false, true, false, false));
+
+				// add data to snapshot
+				snapshot.dir_entries.push_back(dirRoot_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirA_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirA_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirB_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirB_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirC_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirC_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileA_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileA"), snapshot.file_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileB_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileB"), snapshot.file_entries.size()-1));
+
+				// error: dir entry not created
+				//snapshot.file_entries.push_back(fileC_entry);
+				//snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileC"), snapshot.file_entries.size()-1));
+			
+				// create filesystem
+				auto filesystem = tc::io::VirtualFileSystem(snapshot);
+
+				// set working directory
+				tc::io::Path path = tc::io::Path("/fileC");
+				tc::io::Path canonised_path = tc::io::Path();
+				filesystem.getCanonicalPath(path, canonised_path);
+				
+				throw tc::TestException(".getCanonicalPath() did not throw tc::io::DirectoryNotFoundException where file entry did not exist");
+			}
+			catch (tc::io::DirectoryNotFoundException&) { /* do nothing*/ }
+			catch (tc::Exception&)
+			{
+				throw tc::TestException(".getCanonicalPath() threw the wrong exception where file entry did not exist");
+			}
+
+			try 
+			{
+				tc::io::VirtualFileSystem::FileSystemSnapshot snapshot;
+				
+				// create snapshot data
+			
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirRoot_entry;
+				dirRoot_entry.dir_listing.abs_path = tc::io::Path("/");
+				dirRoot_entry.dir_listing.dir_list = {"dirA", "dirB", "dirC"};
+				dirRoot_entry.dir_listing.file_list = {"fileA", "fileB", "fileC"};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirA_entry;
+				dirA_entry.dir_listing.abs_path = tc::io::Path("/dirA/");
+				dirA_entry.dir_listing.dir_list = {};
+				dirA_entry.dir_listing.file_list = {};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirB_entry;
+				dirB_entry.dir_listing.abs_path = tc::io::Path("/dirB/");
+				dirB_entry.dir_listing.dir_list = {};
+				dirB_entry.dir_listing.file_list = {};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirC_entry;
+				dirC_entry.dir_listing.abs_path = tc::io::Path("/dirC/");
+				dirC_entry.dir_listing.dir_list = {};
+				dirC_entry.dir_listing.file_list = {};
+				
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileA_entry;
+				fileA_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xA, true, false, true, false, false));
+				
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileB_entry;
+				fileB_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xB, true, false, true, false, false));
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileC_entry;
+				fileC_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xC, true, false, true, false, false));
+
+				// add data to snapshot
+				snapshot.dir_entries.push_back(dirRoot_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirA_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirA_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirB_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirB_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirC_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirC_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileA_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileA"), snapshot.file_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileB_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileB"), snapshot.file_entries.size()-1));
+
+				// error: dir entry created, but not mapped to a path
+				snapshot.file_entries.push_back(fileC_entry);
+				//snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileC"), snapshot.file_entries.size()-1));
+			
+				// create filesystem
+				auto filesystem = tc::io::VirtualFileSystem(snapshot);
+
+				// set working directory
+				tc::io::Path path = tc::io::Path("/fileC");
+				tc::io::Path canonised_path = tc::io::Path();
+				filesystem.getCanonicalPath(path, canonised_path);
+				
+				throw tc::TestException(".getCanonicalPath() did not throw tc::io::DirectoryNotFoundException where file entry did exist, but not mapped to a path");
+			}
+			catch (tc::io::DirectoryNotFoundException&) { /* do nothing*/ }
+			catch (tc::Exception&)
+			{
+				throw tc::TestException(".getCanonicalPath() threw the wrong exception where file entry did exist, but not mapped to a path");
+			}
+			
+			try 
+			{
+				tc::io::VirtualFileSystem::FileSystemSnapshot snapshot;
+				
+				// create snapshot data
+			
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirRoot_entry;
+				dirRoot_entry.dir_listing.abs_path = tc::io::Path("/");
+				dirRoot_entry.dir_listing.dir_list = {"dirA", "dirB", "dirC"};
+				dirRoot_entry.dir_listing.file_list = {"fileA", "fileB", "fileC"};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirA_entry;
+				dirA_entry.dir_listing.abs_path = tc::io::Path("/dirA/");
+				dirA_entry.dir_listing.dir_list = {};
+				dirA_entry.dir_listing.file_list = {};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirB_entry;
+				dirB_entry.dir_listing.abs_path = tc::io::Path("/dirB/");
+				dirB_entry.dir_listing.dir_list = {};
+				dirB_entry.dir_listing.file_list = {};
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirC_entry;
+				dirC_entry.dir_listing.abs_path = tc::io::Path("/dirC/");
+				dirC_entry.dir_listing.dir_list = {};
+				dirC_entry.dir_listing.file_list = {};
+				
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileA_entry;
+				fileA_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xA, true, false, true, false, false));
+				
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileB_entry;
+				fileB_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xB, true, false, true, false, false));
+
+				tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileC_entry;
+				fileC_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xC, true, false, true, false, false));
+
+				// add data to snapshot
+				snapshot.dir_entries.push_back(dirRoot_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirA_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirA_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirB_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirB_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.dir_entries.push_back(dirC_entry);
+				snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirC_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileA_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileA"), snapshot.file_entries.size()-1));
+
+				snapshot.file_entries.push_back(fileB_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileB"), snapshot.file_entries.size()-1));
+
+				// error: file entry created, but not mapped correctly (index == -1)
+				snapshot.file_entries.push_back(fileC_entry);
+				snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileC"), -1));
+			
+				// create filesystem
+				auto filesystem = tc::io::VirtualFileSystem(snapshot);
+
+				// set working directory
+				tc::io::Path path = tc::io::Path("/fileC");
+				tc::io::Path canonised_path = tc::io::Path();
+				filesystem.getCanonicalPath(path, canonised_path);
+				
+				throw tc::TestException(".getCanonicalPath() did not throw tc::io::DirectoryNotFoundException where file entry did exist, but not mapped correctly.");
+			}
+			catch (tc::io::DirectoryNotFoundException&) { /* do nothing*/ }
+			catch (tc::Exception&)
+			{
+				throw tc::TestException(".getCanonicalPath() threw the wrong exception where file entry did exist, but not mapped correctly.");
+			}
+			
+			
+			// record result
+			test.result = "PASS";
+			test.comments = "";
+		}
+		catch (const tc::TestException& e)
+		{
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
+		}
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
+}
+
 void io_VirtualFileSystem_TestClass::test_WorksForAllValidPaths_OpenFile()
 {
 	TestResult test;
@@ -2452,9 +2967,7 @@ void io_VirtualFileSystem_TestClass::test_WorksForAllValidPaths_GetWorkingDirect
 				{
 					std::string expected_working_directory_string;
 					std::string working_directory_string;
-					tc::io::PathUtil::pathToUnixUTF8(expected_working_directory, expected_working_directory_string);
-					tc::io::PathUtil::pathToUnixUTF8(working_directory, working_directory_string);
-					throw tc::TestException(fmt::format("getWorkingDirectory() returned a path that was not root after the filesystem was created. (returned: \"{:s}\", expected: \"{:s}\")", working_directory_string, expected_working_directory_string));
+					throw tc::TestException(fmt::format("getWorkingDirectory() returned a path that was not root after the filesystem was created. (returned: \"{:s}\", expected: \"{:s}\")", working_directory.to_string(), expected_working_directory.to_string()));
 				}
 			}
 
@@ -2474,9 +2987,7 @@ void io_VirtualFileSystem_TestClass::test_WorksForAllValidPaths_GetWorkingDirect
 				{
 					std::string expected_working_directory_string;
 					std::string working_directory_string;
-					tc::io::PathUtil::pathToUnixUTF8(expected_working_directory, expected_working_directory_string);
-					tc::io::PathUtil::pathToUnixUTF8(working_directory, working_directory_string);
-					throw tc::TestException(fmt::format("getWorkingDirectory() did not return the expected path. (returned: \"{:s}\", expected: \"{:s}\")", working_directory_string, expected_working_directory_string));
+					throw tc::TestException(fmt::format("getWorkingDirectory() did not return the expected path. (returned: \"{:s}\", expected: \"{:s}\")", working_directory.to_string(), expected_working_directory.to_string()));
 				}
 			}
 			
@@ -2493,9 +3004,7 @@ void io_VirtualFileSystem_TestClass::test_WorksForAllValidPaths_GetWorkingDirect
 				{
 					std::string expected_working_directory_string;
 					std::string working_directory_string;
-					tc::io::PathUtil::pathToUnixUTF8(expected_working_directory, expected_working_directory_string);
-					tc::io::PathUtil::pathToUnixUTF8(working_directory, working_directory_string);
-					throw tc::TestException(fmt::format("getWorkingDirectory() did not return the expected path. (returned: \"{:s}\", expected: \"{:s}\")", working_directory_string, expected_working_directory_string));
+					throw tc::TestException(fmt::format("getWorkingDirectory() did not return the expected path. (returned: \"{:s}\", expected: \"{:s}\")", working_directory.to_string(), expected_working_directory.to_string()));
 				}
 			}
 
@@ -2511,9 +3020,7 @@ void io_VirtualFileSystem_TestClass::test_WorksForAllValidPaths_GetWorkingDirect
 				{
 					std::string expected_working_directory_string;
 					std::string working_directory_string;
-					tc::io::PathUtil::pathToUnixUTF8(expected_working_directory, expected_working_directory_string);
-					tc::io::PathUtil::pathToUnixUTF8(working_directory, working_directory_string);
-					throw tc::TestException(fmt::format("getWorkingDirectory() did not return the expected path. (returned: \"{:s}\", expected: \"{:s}\")", working_directory_string, expected_working_directory_string));
+					throw tc::TestException(fmt::format("getWorkingDirectory() did not return the expected path. (returned: \"{:s}\", expected: \"{:s}\")", working_directory.to_string(), expected_working_directory.to_string()));
 				}
 			}
 
@@ -2529,9 +3036,236 @@ void io_VirtualFileSystem_TestClass::test_WorksForAllValidPaths_GetWorkingDirect
 				{
 					std::string expected_working_directory_string;
 					std::string working_directory_string;
-					tc::io::PathUtil::pathToUnixUTF8(expected_working_directory, expected_working_directory_string);
-					tc::io::PathUtil::pathToUnixUTF8(working_directory, working_directory_string);
-					throw tc::TestException(fmt::format("getWorkingDirectory() did not return the expected path. (returned: \"{:s}\", expected: \"{:s}\")", working_directory_string, expected_working_directory_string));
+					throw tc::TestException(fmt::format("getWorkingDirectory() did not return the expected path. (returned: \"{:s}\", expected: \"{:s}\")", working_directory.to_string(), expected_working_directory.to_string()));
+				}
+			}
+			
+			// record result
+			test.result = "PASS";
+			test.comments = "";
+		}
+		catch (const tc::TestException& e)
+		{
+			// record result
+			test.result = "FAIL";
+			test.comments = e.what();
+		}
+	}
+	catch (const std::exception& e)
+	{
+		// record result
+		test.result = "UNHANDLED EXCEPTION";
+		test.comments = e.what();
+	}
+
+	// add result to list
+	mTestResults.push_back(std::move(test));
+}
+
+void io_VirtualFileSystem_TestClass::test_WorksForAllValidPaths_GetCanonicalPath()
+{
+	TestResult test;
+	test.test_name = "test_WorksForAllValidPaths_GetCanonicalPath";
+	test.result = "NOT RUN";
+	test.comments = "";
+
+	try
+	{
+		try 
+		{
+			tc::io::VirtualFileSystem::FileSystemSnapshot snapshot;
+				
+			// create snapshot data
+		
+			tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirRoot_entry;
+			dirRoot_entry.dir_listing.abs_path = tc::io::Path("/");
+			dirRoot_entry.dir_listing.dir_list = {"dirA", "dirB", "dirC"};
+			dirRoot_entry.dir_listing.file_list = {"fileA", "fileB", "fileC"};
+
+			tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirA_entry;
+			dirA_entry.dir_listing.abs_path = tc::io::Path("/dirA/");
+			dirA_entry.dir_listing.dir_list = {"dirD"};
+			dirA_entry.dir_listing.file_list = {"fileD"};
+
+			tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirB_entry;
+			dirB_entry.dir_listing.abs_path = tc::io::Path("/dirB/");
+			dirB_entry.dir_listing.dir_list = {"dirE"};
+			dirB_entry.dir_listing.file_list = {"fileE"};
+
+			tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirC_entry;
+			dirC_entry.dir_listing.abs_path = tc::io::Path("/dirC/");
+			dirC_entry.dir_listing.dir_list = {"dirF"};
+			dirC_entry.dir_listing.file_list = {"fileF"};
+
+			tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirD_entry;
+			dirD_entry.dir_listing.abs_path = dirA_entry.dir_listing.abs_path + tc::io::Path("dirD/");
+			dirD_entry.dir_listing.dir_list = {};
+			dirD_entry.dir_listing.file_list = {};
+
+			tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirE_entry;
+			dirE_entry.dir_listing.abs_path = dirB_entry.dir_listing.abs_path + tc::io::Path("dirE/");
+			dirE_entry.dir_listing.dir_list = {};
+			dirE_entry.dir_listing.file_list = {};
+
+			tc::io::VirtualFileSystem::FileSystemSnapshot::DirEntry dirF_entry;
+			dirF_entry.dir_listing.abs_path = dirC_entry.dir_listing.abs_path + tc::io::Path("dirF/");
+			dirF_entry.dir_listing.dir_list = {};
+			dirF_entry.dir_listing.file_list = {};
+			
+			tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileA_entry;
+			fileA_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xA, true, false, true, false, false));
+			
+			tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileB_entry;
+			fileB_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xB, true, false, true, false, false));
+
+			tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileC_entry;
+			fileC_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xC, true, false, true, false, false));
+
+			tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileD_entry;
+			fileD_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xC, true, false, true, false, false));
+
+			tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileE_entry;
+			fileE_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xC, true, false, true, false, false));
+
+			tc::io::VirtualFileSystem::FileSystemSnapshot::FileEntry fileF_entry;
+			fileF_entry.stream = std::make_shared<StreamTestUtil::DummyStreamBase>(StreamTestUtil::DummyStreamBase(0xC, true, false, true, false, false));
+
+			// add data to snapshot
+			snapshot.dir_entries.push_back(dirRoot_entry);
+			snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+			snapshot.dir_entries.push_back(dirA_entry);
+			snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirA_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+			snapshot.dir_entries.push_back(dirB_entry);
+			snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirB_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+			snapshot.dir_entries.push_back(dirC_entry);
+			snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirC_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+			snapshot.dir_entries.push_back(dirD_entry);
+			snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirD_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+			snapshot.dir_entries.push_back(dirE_entry);
+			snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirE_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+			snapshot.dir_entries.push_back(dirF_entry);
+			snapshot.dir_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirF_entry.dir_listing.abs_path, snapshot.dir_entries.size()-1));
+
+			snapshot.file_entries.push_back(fileA_entry);
+			snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileA"), snapshot.file_entries.size()-1));
+
+			snapshot.file_entries.push_back(fileB_entry);
+			snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileB"), snapshot.file_entries.size()-1));
+
+			snapshot.file_entries.push_back(fileC_entry);
+			snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirRoot_entry.dir_listing.abs_path + tc::io::Path("fileC"), snapshot.file_entries.size()-1));
+		
+			snapshot.file_entries.push_back(fileD_entry);
+			snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirA_entry.dir_listing.abs_path + tc::io::Path("fileD"), snapshot.file_entries.size()-1));
+
+			snapshot.file_entries.push_back(fileE_entry);
+			snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirB_entry.dir_listing.abs_path + tc::io::Path("fileE"), snapshot.file_entries.size()-1));
+		
+			snapshot.file_entries.push_back(fileF_entry);
+			snapshot.file_entry_path_map.insert(std::pair<tc::io::Path, size_t>(dirC_entry.dir_listing.abs_path + tc::io::Path("fileF"), snapshot.file_entries.size()-1));
+
+
+			// create filesystem
+			auto filesystem = tc::io::VirtualFileSystem(snapshot);
+		
+			// create tests (they do not have to be too comprehensive as getCanonicalPath() is *mostly a wrapper for the IPathResolver used)
+			struct CanonicalPathTest
+			{
+				tc::io::Path in_path;
+				tc::io::Path out_path;
+			};
+			std::vector<CanonicalPathTest> canonical_path_tests = {
+				// dirRoot tests
+				{ tc::io::Path("/"), tc::io::Path("/") },
+				{ tc::io::Path("."), tc::io::Path("/") },
+				{ tc::io::Path("../"), tc::io::Path("/") },
+				{ tc::io::Path("/././././///"), tc::io::Path("/") },
+				// dirA tests
+				{ tc::io::Path("/dirA/"), tc::io::Path("/dirA/") },
+				{ tc::io::Path("/dirA"), tc::io::Path("/dirA/") },
+				{ tc::io::Path("dirA"), tc::io::Path("/dirA/") },
+				{ tc::io::Path("./dirA/../../../../../dirA/."), tc::io::Path("/dirA/") },
+				{ tc::io::Path("/././.././../././//dirA"), tc::io::Path("/dirA/") },
+				// dirB tests
+				{ tc::io::Path("/dirB/"), tc::io::Path("/dirB/") },
+				{ tc::io::Path("/dirB"), tc::io::Path("/dirB/") },
+				{ tc::io::Path("dirB"), tc::io::Path("/dirB/") },
+				{ tc::io::Path("./dirB/../../../../../dirB/."), tc::io::Path("/dirB/") },
+				{ tc::io::Path("/././.././../././//dirB"), tc::io::Path("/dirB/") },
+				// dirC tests
+				{ tc::io::Path("/dirC/"), tc::io::Path("/dirC/") },
+				{ tc::io::Path("/dirC"), tc::io::Path("/dirC/") },
+				{ tc::io::Path("dirC"), tc::io::Path("/dirC/") },
+				{ tc::io::Path("./dirC/../../../../../dirC/."), tc::io::Path("/dirC/") },
+				{ tc::io::Path("/././.././../././//dirC"), tc::io::Path("/dirC/") },
+				// fileA tests
+				{ tc::io::Path("/fileA/"), tc::io::Path("/fileA") },
+				{ tc::io::Path("/fileA"), tc::io::Path("/fileA") },
+				{ tc::io::Path("fileA"), tc::io::Path("/fileA") },
+				{ tc::io::Path("/././.././../././//fileA"), tc::io::Path("/fileA") },
+				// fileB tests
+				{ tc::io::Path("/fileB/"), tc::io::Path("/fileB") },
+				{ tc::io::Path("/fileB"), tc::io::Path("/fileB") },
+				{ tc::io::Path("fileB"), tc::io::Path("/fileB") },
+				{ tc::io::Path("/././.././../././//fileB"), tc::io::Path("/fileB") },
+				// fileC tests
+				{ tc::io::Path("/fileC/"), tc::io::Path("/fileC") },
+				{ tc::io::Path("/fileC"), tc::io::Path("/fileC") },
+				{ tc::io::Path("fileC"), tc::io::Path("/fileC") },
+				{ tc::io::Path("/././.././../././//fileC"), tc::io::Path("/fileC") },
+				// dirD tests
+				{ tc::io::Path("/dirA/dirD/"), tc::io::Path("/dirA/dirD/") },
+				{ tc::io::Path("/dirA/dirD"), tc::io::Path("/dirA/dirD/") },
+				{ tc::io::Path("dirA/dirD"), tc::io::Path("/dirA/dirD/") },
+				{ tc::io::Path("./dirA/../../dirA/./dirD/../../dirA/dirD/."), tc::io::Path("/dirA/dirD/") },
+				{ tc::io::Path("/././.././../././/dirA/dirD"), tc::io::Path("/dirA/dirD/") },
+				// fileD tests
+				{ tc::io::Path("/dirA/fileD"), tc::io::Path("/dirA/fileD/") },
+				{ tc::io::Path("dirA/fileD"), tc::io::Path("/dirA/fileD/") },
+				{ tc::io::Path("/././../dirA/../././/dirA/fileD"), tc::io::Path("/dirA/fileD/") },
+				// dirE tests
+				{ tc::io::Path("/dirB/dirE/"), tc::io::Path("/dirB/dirE/") },
+				{ tc::io::Path("/dirB/dirE"), tc::io::Path("/dirB/dirE/") },
+				{ tc::io::Path("dirB/dirE"), tc::io::Path("/dirB/dirE/") },
+				{ tc::io::Path("./dirB/../../dirB/./dirE/../../dirB/dirE/."), tc::io::Path("/dirB/dirE/") },
+				{ tc::io::Path("/././.././../././/dirB/dirE"), tc::io::Path("/dirB/dirE/") },
+				// fileE tests
+				{ tc::io::Path("/dirB/fileE"), tc::io::Path("/dirB/fileE/") },
+				{ tc::io::Path("dirB/fileE"), tc::io::Path("/dirB/fileE/") },
+				{ tc::io::Path("/././../dirB/../././/dirB/fileE"), tc::io::Path("/dirB/fileE/") },
+				// dirF tests
+				{ tc::io::Path("/dirC/dirF/"), tc::io::Path("/dirC/dirF/") },
+				{ tc::io::Path("/dirC/dirF"), tc::io::Path("/dirC/dirF/") },
+				{ tc::io::Path("dirC/dirF"), tc::io::Path("/dirC/dirF/") },
+				{ tc::io::Path("./dirC/../../dirC/./dirF/../../dirC/dirF/."), tc::io::Path("/dirC/dirF/") },
+				{ tc::io::Path("/././.././../././/dirC/dirF"), tc::io::Path("/dirC/dirF/") },
+				// fileF tests
+				{ tc::io::Path("/dirC/fileF"), tc::io::Path("/dirC/fileF/") },
+				{ tc::io::Path("dirC/fileF"), tc::io::Path("/dirC/fileF/") },
+				{ tc::io::Path("/././../dirC/../././/dirC/fileF"), tc::io::Path("/dirC/fileF/") },
+			};
+
+			for (auto itr = canonical_path_tests.begin(); itr != canonical_path_tests.end(); itr ++ )
+			{
+				try
+				{
+					tc::io::Path canonised_path = tc::io::Path();
+					filesystem.getCanonicalPath(itr->in_path, canonised_path);
+
+					if (canonised_path != itr->out_path)
+					{
+						throw tc::TestException(fmt::format(".getCanonicalPath() Incorrectly translated \"{:s}\" to \"{:s}\" (expected: \"{:s}\")", itr->in_path.to_string(), canonised_path.to_string(), itr->out_path.to_string()));
+					}
+				}
+				catch (tc::Exception& e)
+				{
+					throw tc::TestException(fmt::format(".getCanonicalPath() Failed to translate \"{:s}\" to \"{:s}\" ({:s})", itr->in_path.to_string(), itr->out_path.to_string(), e.error()));
 				}
 			}
 			
@@ -2706,6 +3440,17 @@ void io_VirtualFileSystem_TestClass::test_DisposeWillChangeStateToUninitialized(
 
 			try
 			{
+				filesystem.createDirectoryPath(tc::io::Path());
+				throw tc::TestException(".createDirectoryPath() did not throw tc::ObjectDisposedException for disposed VirtualFileSystem");
+			}
+			catch (tc::ObjectDisposedException&) { /* do nothing*/ }
+			catch (tc::Exception&)
+			{
+				throw tc::TestException(".createDirectoryPath() threw the wrong exception for disposed VirtualFileSystem");
+			}
+
+			try
+			{
 				filesystem.removeDirectory(tc::io::Path());
 				throw tc::TestException(".removeDirectory() did not throw tc::ObjectDisposedException for disposed VirtualFileSystem");
 			}
@@ -2713,6 +3458,19 @@ void io_VirtualFileSystem_TestClass::test_DisposeWillChangeStateToUninitialized(
 			catch (tc::Exception&)
 			{
 				throw tc::TestException(".removeDirectory() threw the wrong exception for disposed VirtualFileSystem");
+			}
+
+			try
+			{
+				tc::io::Path tmp_path;
+
+				filesystem.getCanonicalPath(tc::io::Path(), tmp_path);
+				throw tc::TestException(".getCanonicalPath() did not throw tc::ObjectDisposedException for disposed VirtualFileSystem");
+			}
+			catch (tc::ObjectDisposedException&) { /* do nothing*/ }
+			catch (tc::Exception&)
+			{
+				throw tc::TestException(".getCanonicalPath() threw the wrong exception for disposed VirtualFileSystem");
 			}
 
 			try

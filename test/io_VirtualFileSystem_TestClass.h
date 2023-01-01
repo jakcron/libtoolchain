@@ -25,9 +25,11 @@ private:
 	void test_ThrowsOnBadFileEntry_OpenFile();
 	void test_ThrowsOnBadFileEntry_GetDirectoryListing();
 	void test_ThrowsOnBadFileEntry_SetWorkingDirectory();
+	void test_ThrowsOnBadFileEntry_GetCanonicalPath();
 	void test_WorksForAllValidPaths_OpenFile();
 	void test_WorksForAllValidPaths_GetDirectoryListing();
 	void test_WorksForAllValidPaths_SetWorkingDirectory();
 	void test_WorksForAllValidPaths_GetWorkingDirectory();
+	void test_WorksForAllValidPaths_GetCanonicalPath();
 	void test_DisposeWillChangeStateToUninitialized();
 };
