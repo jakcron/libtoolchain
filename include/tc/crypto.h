@@ -42,7 +42,6 @@
 #include <tc/crypto/Aes128CtrEncryptedStream.h>
 #include <tc/crypto/Aes128CbcEncryptedStream.h>
 
-
 // Hash Calculator
 #include <tc/crypto/Md5Generator.h>
 #include <tc/crypto/Sha1Generator.h>
