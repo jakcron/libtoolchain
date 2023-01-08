@@ -31,6 +31,9 @@
 #include <tc/crypto/Aes192CbcEncryptor.h>
 #include <tc/crypto/Aes256CbcEncryptor.h>
 
+#include <tc/crypto/CcmEncryptor.h>
+#include <tc/crypto/Aes128CcmEncryptor.h>
+
 #include <tc/crypto/XtsEncryptor.h>
 #include <tc/crypto/Aes128XtsEncryptor.h>
 #include <tc/crypto/Aes256XtsEncryptor.h>
