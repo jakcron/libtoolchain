@@ -2,9 +2,9 @@ name: Compile Main Branch
 
 on:
   push:
-    branches: [ main ]
+    branches: [ development-tip ]
   pull_request:
-    branches: [ main ]
+    branches: [ development-tip ]
   release:
     types: [ created ]
 
