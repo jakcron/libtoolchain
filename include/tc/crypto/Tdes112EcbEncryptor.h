@@ -14,7 +14,7 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @typedef Tdes112EcbEncryptor
-	 * @brief Class for TDES-ECB encryption/decryption with a keysize of 112 bits.
+	 * @brief Class for TDES-ECB encryption/decryption with a keysize of 112 bits (+ 16 parity bits = 128 bits).
 	 * 
 	 * @details This class encrypts/decrypts data using using TDES112-ECB.
 	 * For more information refer to @ref EcbEncryptor.

@@ -14,7 +14,7 @@ namespace tc { namespace crypto {
 
 	/**
 	 * @typedef Des56EcbEncryptor
-	 * @brief Class for DES-ECB encryption/decryption with a keysize of 56 bits.
+	 * @brief Class for DES-ECB encryption/decryption with a keysize of 56 bits (+ 8 parity bits = 64 bits).
 	 * 
 	 * @details This class encrypts/decrypts data using using DES56-ECB.
 	 * For more information refer to @ref EcbEncryptor.
