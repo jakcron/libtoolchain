@@ -59,6 +59,9 @@
 #include "crypto_Aes128XtsEncryptor_TestClass.h"
 #include "crypto_Aes256XtsEncryptor_TestClass.h"
 #include "crypto_Aes128CcmEncryptor_TestClass.h"
+#include "crypto_Des56EcbEncryptor_TestClass.h"
+#include "crypto_Tdes112EcbEncryptor_TestClass.h"
+#include "crypto_Tdes168EcbEncryptor_TestClass.h"
 #include "crypto_Rsa1024OaepSha2256Encryptor_TestClass.h"
 #include "crypto_Rsa2048OaepSha2256Encryptor_TestClass.h"
 #include "crypto_Rsa4096OaepSha2256Encryptor_TestClass.h"
@@ -291,6 +294,9 @@ int main(int argc, char** argv)
 	runTest<crypto_Aes128XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes256XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes128CcmEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Des56EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Tdes112EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Tdes168EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa1024OaepSha2256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa2048OaepSha2256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa4096OaepSha2256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
