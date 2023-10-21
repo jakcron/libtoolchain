@@ -58,6 +58,12 @@
     <ClCompile Include="..\..\..\src\crypto\Aes256XtsEncryptor.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\Des56CbcEncryptor.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\Des56EcbEncryptor.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\HmacMd5Generator.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
@@ -130,7 +136,22 @@
     <ClCompile Include="..\..\..\src\crypto\Sha2512Generator.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\Tdes112CbcEncryptor.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\Tdes112EcbEncryptor.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\Tdes168CbcEncryptor.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\Tdes168EcbEncryptor.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\detail\AesImpl.cpp">
+      <Filter>Source Files\crypto\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\detail\DesImpl.cpp">
       <Filter>Source Files\crypto\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\detail\Md5Impl.cpp">
@@ -149,6 +170,9 @@
       <Filter>Source Files\crypto\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\detail\Sha2Impl.cpp">
+      <Filter>Source Files\crypto\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\detail\TdesImpl.cpp">
       <Filter>Source Files\crypto\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\io\BasicPathResolver.cpp">
@@ -360,6 +384,15 @@
     <ClInclude Include="..\..\..\include\tc\crypto\AesEncryptor.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\Des56CbcEncryptor.h">
+      <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\Des56EcbEncryptor.h">
+      <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\DesEncryptor.h">
+      <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\CbcEncryptor.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
@@ -462,10 +495,28 @@
     <ClInclude Include="..\..\..\include\tc\crypto\Sha2512Generator.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\Tdes112CbcEncryptor.h">
+      <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\Tdes112EcbEncryptor.h">
+      <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\Tdes168CbcEncryptor.h">
+      <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\Tdes168EcbEncryptor.h">
+      <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\TdesEncryptor.h">
+      <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\XtsEncryptor.h">
       <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\detail\AesImpl.h">
+      <Filter>Header Files\tc\crypto\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\detail\DesImpl.h">
       <Filter>Header Files\tc\crypto\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\detail\BlockUtilImpl.h">
@@ -514,6 +565,9 @@
       <Filter>Header Files\tc\crypto\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\detail\Sha2Impl.h">
+      <Filter>Header Files\tc\crypto\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\detail\TdesImpl.h">
       <Filter>Header Files\tc\crypto\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\detail\XtsModeImpl.h">
