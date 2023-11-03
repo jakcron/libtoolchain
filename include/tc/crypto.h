@@ -13,34 +13,55 @@
 // Exceptions
 #include <tc/crypto/CryptoException.h>
 
-// AES Encryption & Modes
+// Encryption Modes
+#include <tc/crypto/EcbEncryptor.h>
+#include <tc/crypto/CtrEncryptor.h>
+#include <tc/crypto/CbcEncryptor.h>
+#include <tc/crypto/CcmEncryptor.h>
+#include <tc/crypto/XtsEncryptor.h>
+
+// AES Encryption
 #include <tc/crypto/AesEncryptor.h>
 
-#include <tc/crypto/EcbEncryptor.h>
+//  AES ECB Encryption
 #include <tc/crypto/Aes128EcbEncryptor.h>
 #include <tc/crypto/Aes192EcbEncryptor.h>
 #include <tc/crypto/Aes256EcbEncryptor.h>
 
-#include <tc/crypto/CtrEncryptor.h>
+//  AES-CTR Encryption
 #include <tc/crypto/Aes128CtrEncryptor.h>
 #include <tc/crypto/Aes192CtrEncryptor.h>
 #include <tc/crypto/Aes256CtrEncryptor.h>
 
-#include <tc/crypto/CbcEncryptor.h>
+//  AES-CBC Encryption
 #include <tc/crypto/Aes128CbcEncryptor.h>
 #include <tc/crypto/Aes192CbcEncryptor.h>
 #include <tc/crypto/Aes256CbcEncryptor.h>
 
-#include <tc/crypto/CcmEncryptor.h>
+//  AES-CCM Encryption
 #include <tc/crypto/Aes128CcmEncryptor.h>
 
-#include <tc/crypto/XtsEncryptor.h>
+//  AES-XTS Encryption
 #include <tc/crypto/Aes128XtsEncryptor.h>
 #include <tc/crypto/Aes256XtsEncryptor.h>
 
 // AES Encryption Streams
 #include <tc/crypto/Aes128CtrEncryptedStream.h>
 #include <tc/crypto/Aes128CbcEncryptedStream.h>
+
+// DES/TDES Encryption
+#include <tc/crypto/DesEncryptor.h>
+#include <tc/crypto/TdesEncryptor.h>
+
+//  DES/TDES ECB Encryption
+#include <tc/crypto/Des56EcbEncryptor.h>
+#include <tc/crypto/Tdes112EcbEncryptor.h>
+#include <tc/crypto/Tdes168EcbEncryptor.h>
+
+//  DES/TDES CBC Encryption
+#include <tc/crypto/Des56CbcEncryptor.h>
+#include <tc/crypto/Tdes112CbcEncryptor.h>
+#include <tc/crypto/Tdes168CbcEncryptor.h>
 
 // Hash Calculator
 #include <tc/crypto/Md5Generator.h>

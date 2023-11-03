@@ -126,6 +126,12 @@
     <ClCompile Include="..\..\..\test\crypto_Aes256XtsEncryptor_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\crypto_Des56CbcEncryptor_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\crypto_Des56EcbEncryptor_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\test\crypto_HmacMd5Generator_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -237,6 +243,18 @@
     <ClCompile Include="..\..\..\test\crypto_Sha2512Generator_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\crypto_Tdes112CbcEncryptor_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\crypto_Tdes112EcbEncryptor_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\crypto_Tdes168CbcEncryptor_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\crypto_Tdes168EcbEncryptor_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\test\PbkdfUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -292,6 +310,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\io_EmptyStream_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\TdesDesCbcEncryptorUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\TdesDesEcbEncryptorUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\test\TestException.cpp">
@@ -428,6 +452,12 @@
     <ClInclude Include="..\..\..\test\crypto_Aes256XtsEncryptor_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\test\crypto_Des56CbcEncryptor_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\crypto_Des56EcbEncryptor_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\test\crypto_HmacMd5Generator_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -539,6 +569,18 @@
     <ClInclude Include="..\..\..\test\crypto_Sha2512Generator_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\test\crypto_Tdes112CbcEncryptor_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\crypto_Tdes112EcbEncryptor_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\crypto_Tdes168CbcEncryptor_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\crypto_Tdes168EcbEncryptor_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\test\PbkdfUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -594,6 +636,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\io_EmptyStream_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\TdesDesCbcEncryptorUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\TdesDesEcbEncryptorUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\TestException.h">
