@@ -806,7 +806,7 @@ void crypto_Aes128CcmEncryptor_TestClass::test_EncryptThrowsExceptionOnBadInput(
 
 		std::vector<size_t> invalid_iv_sizes = {1,2,3,4,5,6,14,15,16};
 
-		for (size_t i = 0; i <= invalid_iv_sizes.size(); i++)
+		for (size_t i = 0; i < invalid_iv_sizes.size(); i++)
 		{
 			try
 			{
@@ -824,7 +824,7 @@ void crypto_Aes128CcmEncryptor_TestClass::test_EncryptThrowsExceptionOnBadInput(
 		std::vector<size_t> valid_iv_sizes = {7,8,9,10,11,12,13};
 		uint64_t native_sizet_max = std::numeric_limits<size_t>::max();
 
-		for (size_t i = 0; i <= valid_iv_sizes.size(); i++)
+		for (size_t i = 0; i < valid_iv_sizes.size(); i++)
 		{
 			uint64_t max_payload_size = (uint64_t)0xffffffffffffffff >> (8 * (valid_iv_sizes[i] - 7));
 			
@@ -858,7 +858,7 @@ void crypto_Aes128CcmEncryptor_TestClass::test_EncryptThrowsExceptionOnBadInput(
 
 		std::vector<size_t> invalid_mac_sizes = {1,2,3,5,7,9,11,13,15};
 
-		for (size_t i = 0; i <= invalid_mac_sizes.size(); i++)
+		for (size_t i = 0; i < invalid_mac_sizes.size(); i++)
 		{
 			try
 			{
@@ -1031,7 +1031,7 @@ void crypto_Aes128CcmEncryptor_TestClass::test_DecryptThrowsExceptionOnBadInput(
 
 		std::vector<size_t> invalid_iv_sizes = {1,2,3,4,5,6,14,15,16};
 
-		for (size_t i = 0; i <= invalid_iv_sizes.size(); i++)
+		for (size_t i = 0; i < invalid_iv_sizes.size(); i++)
 		{
 			try
 			{
@@ -1042,14 +1042,14 @@ void crypto_Aes128CcmEncryptor_TestClass::test_DecryptThrowsExceptionOnBadInput(
 			catch (const tc::ArgumentOutOfRangeException&) { /* do nothing */ }
 			catch (const tc::Exception&)
 			{
-				throw tc::TestException(fmt::format("Failed to throw correct exception where iv_size=={}", invalid_iv_sizes[i]));
+				throw tc::TestException(fmt::format("Failed to throw correct exception where iv_size=={:d}", invalid_iv_sizes[i]));
 			}
 		}
 
 		std::vector<size_t> valid_iv_sizes = {7,8,9,10,11,12,13};
 		uint64_t native_sizet_max = std::numeric_limits<size_t>::max();
 
-		for (size_t i = 0; i <= valid_iv_sizes.size(); i++)
+		for (size_t i = 0; i < valid_iv_sizes.size(); i++)
 		{
 			uint64_t max_payload_size = (uint64_t)0xffffffffffffffff >> (8 * (valid_iv_sizes[i] - 7));
 			
@@ -1083,7 +1083,7 @@ void crypto_Aes128CcmEncryptor_TestClass::test_DecryptThrowsExceptionOnBadInput(
 
 		std::vector<size_t> invalid_mac_sizes = {1,2,3,5,7,9,11,13,15};
 
-		for (size_t i = 0; i <= invalid_mac_sizes.size(); i++)
+		for (size_t i = 0; i < invalid_mac_sizes.size(); i++)
 		{
 			try
 			{
@@ -1194,7 +1194,7 @@ void crypto_Aes128CcmEncryptor_TestClass::test_DecryptVerifyClassReturnsFalseOnB
 
 		std::vector<size_t> invalid_iv_sizes = {1,2,3,4,5,6,14,15,16};
 
-		for (size_t i = 0; i <= invalid_iv_sizes.size(); i++)
+		for (size_t i = 0; i < invalid_iv_sizes.size(); i++)
 		{
 			if (false != cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].nonce.data(), invalid_iv_sizes[i], tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
 			{
@@ -1205,7 +1205,7 @@ void crypto_Aes128CcmEncryptor_TestClass::test_DecryptVerifyClassReturnsFalseOnB
 		std::vector<size_t> valid_iv_sizes = {7,8,9,10,11,12,13};
 		uint64_t native_sizet_max = std::numeric_limits<size_t>::max();
 
-		for (size_t i = 0; i <= valid_iv_sizes.size(); i++)
+		for (size_t i = 0; i < valid_iv_sizes.size(); i++)
 		{
 			uint64_t max_payload_size = (uint64_t)0xffffffffffffffff >> (8 * (valid_iv_sizes[i] - 7));
 			
@@ -1225,7 +1225,7 @@ void crypto_Aes128CcmEncryptor_TestClass::test_DecryptVerifyClassReturnsFalseOnB
 
 		std::vector<size_t> invalid_mac_sizes = {1,2,3,5,7,9,11,13,15};
 
-		for (size_t i = 0; i <= invalid_mac_sizes.size(); i++)
+		for (size_t i = 0; i < invalid_mac_sizes.size(); i++)
 		{
 			if (false != cryptor.decrypt_and_verify(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), invalid_mac_sizes[i]))
 			{
@@ -1345,7 +1345,7 @@ void crypto_Aes128CcmEncryptor_TestClass::test_DecryptVerifyUtilFuncReturnsFalse
 
 		std::vector<size_t> invalid_iv_sizes = {1,2,3,4,5,6,14,15,16};
 
-		for (size_t i = 0; i <= invalid_iv_sizes.size(); i++)
+		for (size_t i = 0; i < invalid_iv_sizes.size(); i++)
 		{
 			if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), invalid_iv_sizes[i], tests[0].aad.data(), tests[0].aad.size(), mac.data(), mac.size()))
 			{
@@ -1356,7 +1356,7 @@ void crypto_Aes128CcmEncryptor_TestClass::test_DecryptVerifyUtilFuncReturnsFalse
 		std::vector<size_t> valid_iv_sizes = {7,8,9,10,11,12,13};
 		uint64_t native_sizet_max = std::numeric_limits<size_t>::max();
 
-		for (size_t i = 0; i <= valid_iv_sizes.size(); i++)
+		for (size_t i = 0; i < valid_iv_sizes.size(); i++)
 		{
 			uint64_t max_payload_size = (uint64_t)0xffffffffffffffff >> (8 * (valid_iv_sizes[i] - 7));
 			
@@ -1376,7 +1376,7 @@ void crypto_Aes128CcmEncryptor_TestClass::test_DecryptVerifyUtilFuncReturnsFalse
 
 		std::vector<size_t> invalid_mac_sizes = {1,2,3,5,7,9,11,13,15};
 
-		for (size_t i = 0; i <= invalid_mac_sizes.size(); i++)
+		for (size_t i = 0; i < invalid_mac_sizes.size(); i++)
 		{
 			if (false != tc::crypto::DecryptVerifyAes128Ccm(payload.data(), tests[0].plaintext.data(), payload.size(), tests[0].key.data(), tests[0].key.size(), tests[0].nonce.data(), tests[0].nonce.size(), tests[0].aad.data(), tests[0].aad.size(), mac.data(), invalid_mac_sizes[i]))
 			{

@@ -59,6 +59,12 @@
 #include "crypto_Aes128XtsEncryptor_TestClass.h"
 #include "crypto_Aes256XtsEncryptor_TestClass.h"
 #include "crypto_Aes128CcmEncryptor_TestClass.h"
+#include "crypto_Des56EcbEncryptor_TestClass.h"
+#include "crypto_Des56CbcEncryptor_TestClass.h"
+#include "crypto_Tdes112EcbEncryptor_TestClass.h"
+#include "crypto_Tdes112CbcEncryptor_TestClass.h"
+#include "crypto_Tdes168EcbEncryptor_TestClass.h"
+#include "crypto_Tdes168CbcEncryptor_TestClass.h"
 #include "crypto_Rsa1024OaepSha2256Encryptor_TestClass.h"
 #include "crypto_Rsa2048OaepSha2256Encryptor_TestClass.h"
 #include "crypto_Rsa4096OaepSha2256Encryptor_TestClass.h"
@@ -162,39 +168,53 @@ int main(int argc, char** argv)
 		
 		for (int i = 1; i < argc;)
 		{
-			if (std::string(argv[i]) == kNoSlowTestFlag)
-			{
-				include_slow_tests = true;
-				i += 1;
+			try {
+				if (std::string(argv[i]) == kNoSlowTestFlag)
+				{
+					include_slow_tests = true;
+					i += 1;
+				}
+				else if (std::string(argv[i]) == kIncludeTestRegex && i+1 < argc)
+				{
+					include_test_regex = std::regex(std::string(argv[i+1]));
+					i += 2;
+				}
+				else if (std::string(argv[i]) == kExcludeTestRegex && i+1 < argc)
+				{
+					exclude_test_regex = std::regex(std::string(argv[i+1]));
+					i += 2;
+				}
+				else if (std::string(argv[i]) == kIncludeResultRegex && i+1 < argc)
+				{
+					include_result_regex = std::regex(std::string(argv[i+1]));
+					i += 2;
+				}
+				else if (std::string(argv[i]) == kExcludeResultRegex && i+1 < argc)
+				{
+					exclude_result_regex = std::regex(std::string(argv[i+1]));
+					i += 2;
+				}
+				else
+				{
+					throw tc::Exception(fmt::format("Argument \"{}\" is unrecognised", std::string(argv[i]) ));
+				}
 			}
-			else if (std::string(argv[i]) == kIncludeTestRegex && i+1 < argc)
+			catch (std::exception& e) 
 			{
-				include_test_regex = std::regex(std::string(argv[i+1]));
-				i += 2;
-			}
-			else if (std::string(argv[i]) == kExcludeTestRegex && i+1 < argc)
-			{
-				exclude_test_regex = std::regex(std::string(argv[i+1]));
-				i += 2;
-			}
-			else if (std::string(argv[i]) == kIncludeResultRegex && i+1 < argc)
-			{
-				include_result_regex = std::regex(std::string(argv[i+1]));
-				i += 2;
-			}
-			else if (std::string(argv[i]) == kExcludeResultRegex && i+1 < argc)
-			{
-				exclude_result_regex = std::regex(std::string(argv[i+1]));
-				i += 2;
-			}
-			else
-			{
+				fmt::print("error: {}\n\n", e.what());
 				fmt::print("usage: {} [{slowtest:s}] [{incltestregex:s} <regex>] [{excltestregex:s} <regex>] [{inclresultregex:s} <regex>] [{exclresultregex:s} <regex>]\n", std::string(argv[0]), 
 					fmt::arg("slowtest", kNoSlowTestFlag), 
 					fmt::arg("incltestregex", kIncludeTestRegex), 
 					fmt::arg("excltestregex", kExcludeTestRegex), 
 					fmt::arg("inclresultregex", kIncludeResultRegex), 
 					fmt::arg("exclresultregex", kExcludeResultRegex));
+				fmt::print("\n\nTest Regex Examples:\n");
+				fmt::print(" > \"(.*)Aes128(.*)\" - Select tests that include Aes128 in the name\n");
+				fmt::print(" > \"tc::io(.*)\" - Select tests that exist in the tc::io namespace\n");
+				fmt::print(" > \"tc::io::StreamSource\" - Select a specific test\n");
+				fmt::print("\nResult Regex Examples:\n");
+				fmt::print(" > \"PASS\" - Select results that passed\n");
+				fmt::print(" > \"FAIL\" - Select results that failed\n");
 				return 1;
 			}
 		}
@@ -277,6 +297,12 @@ int main(int argc, char** argv)
 	runTest<crypto_Aes128XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes256XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes128CcmEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Des56EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Des56CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Tdes112EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Tdes112CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Tdes168EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_Tdes168CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa1024OaepSha2256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa2048OaepSha2256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa4096OaepSha2256Encryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
