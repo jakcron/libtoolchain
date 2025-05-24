@@ -162,6 +162,11 @@
     <ClCompile Include="..\..\..\test\crypto_Aes256EcbEncryptor_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes256Encryptor_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Aes256XtsEncryptor_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_CmacAes128Generator_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_CmacAes192Generator_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_CmacAes256Generator_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_CmacTdes112Generator_TestClass.cpp" />
+    <ClCompile Include="..\..\..\test\crypto_CmacTdes168Generator_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Des56CbcEncryptor_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_Des56EcbEncryptor_TestClass.cpp" />
     <ClCompile Include="..\..\..\test\crypto_HmacMd5Generator_TestClass.cpp" />
@@ -273,6 +278,11 @@
     <ClInclude Include="..\..\..\test\crypto_Aes256EcbEncryptor_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes256Encryptor_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Aes256XtsEncryptor_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_CmacAes128Generator_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_CmacAes192Generator_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_CmacAes256Generator_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_CmacTdes112Generator_TestClass.h" />
+    <ClInclude Include="..\..\..\test\crypto_CmacTdes168Generator_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Des56CbcEncryptor_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_Des56EcbEncryptor_TestClass.h" />
     <ClInclude Include="..\..\..\test\crypto_HmacMd5Generator_TestClass.h" />

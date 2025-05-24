@@ -126,6 +126,21 @@
     <ClCompile Include="..\..\..\test\crypto_Aes256XtsEncryptor_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\crypto_CmacAes128Generator_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\crypto_CmacAes192Generator_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\crypto_CmacAes256Generator_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\crypto_CmacTdes112Generator_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\crypto_CmacTdes168Generator_TestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\test\crypto_Des56CbcEncryptor_TestClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -455,6 +470,23 @@
     <ClInclude Include="..\..\..\test\crypto_Aes256XtsEncryptor_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+
+    <ClInclude Include="..\..\..\test\crypto_CmacAes128Generator_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\crypto_CmacAes192Generator_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\crypto_CmacAes256Generator_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\crypto_CmacTdes112Generator_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\crypto_CmacTdes168Generator_TestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+
     <ClInclude Include="..\..\..\test\crypto_Des56CbcEncryptor_TestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>

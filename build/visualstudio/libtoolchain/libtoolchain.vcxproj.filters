@@ -61,6 +61,21 @@
     <ClCompile Include="..\..\..\src\crypto\Aes256XtsEncryptor.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\CmacAes128Generator.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\CmacAes192Generator.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\CmacAes256Generator.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\CmacTdes112Generator.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\CmacTdes168Generator.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\Des56CbcEncryptor.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
@@ -381,6 +396,24 @@
     <ClInclude Include="..\..\..\include\tc\crypto\CcmEncryptor.h" >
         <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\CmacAes128Generator.h" >
+        <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\CmacAes192Generator.h" >
+        <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\CmacAes256Generator.h" >
+        <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\CmacGenerator.h" >
+        <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\CmacTdes112Generator.h" >
+        <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\CmacTdes168Generator.h" >
+        <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\CryptoException.h" >
         <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
@@ -517,6 +550,9 @@
         <Filter>Header Files\tc\crypto\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\detail\CcmModeImpl.h" >
+        <Filter>Header Files\tc\crypto\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\detail\CmacImpl.h" >
         <Filter>Header Files\tc\crypto\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\detail\CtrModeImpl.h" >

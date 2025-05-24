@@ -167,6 +167,12 @@
     <ClInclude Include="..\..\..\include\tc\crypto\AesEncryptor.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\CbcEncryptor.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\CcmEncryptor.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\CmacAes128Generator.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\CmacAes192Generator.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\CmacAes256Generator.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\CmacGenerator.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\CmacTdes112Generator.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\CmacTdes168Generator.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\CryptoException.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\CtrEncryptor.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\Des56CbcEncryptor.h" />
@@ -213,6 +219,7 @@
     <ClInclude Include="..\..\..\include\tc\crypto\detail\BlockUtilImpl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\CbcModeImpl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\CcmModeImpl.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\detail\CmacImpl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\CtrModeImpl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\DesImpl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\EcbModeImpl.h" />
@@ -306,6 +313,11 @@
     <ClCompile Include="..\..\..\src\crypto\Aes256CtrEncryptor.cpp" />
     <ClCompile Include="..\..\..\src\crypto\Aes256EcbEncryptor.cpp" />
     <ClCompile Include="..\..\..\src\crypto\Aes256XtsEncryptor.cpp" />
+    <ClCompile Include="..\..\..\src\crypto\CmacAes128Generator.cpp" />
+    <ClCompile Include="..\..\..\src\crypto\CmacAes192Generator.cpp" />
+    <ClCompile Include="..\..\..\src\crypto\CmacAes256Generator.cpp" />
+    <ClCompile Include="..\..\..\src\crypto\CmacTdes112Generator.cpp" />
+    <ClCompile Include="..\..\..\src\crypto\CmacTdes168Generator.cpp" />
     <ClCompile Include="..\..\..\src\crypto\Des56CbcEncryptor.cpp" />
     <ClCompile Include="..\..\..\src\crypto\Des56EcbEncryptor.cpp" />
     <ClCompile Include="..\..\..\src\crypto\HmacMd5Generator.cpp" />

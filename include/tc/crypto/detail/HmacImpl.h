@@ -13,7 +13,7 @@ namespace tc { namespace crypto { namespace detail {
 
 	/**
 	 * @class HmacImpl
-	 * @brief This class implements HMAC as a template class.
+	 * @brief This class implements HMAC (<b>H</b>ash based <b>MAC</b>) as a template class.
 	 * 
 	 * @tparam HashFunction The class that implements the hash function used for HMAC calculation.
 	 */

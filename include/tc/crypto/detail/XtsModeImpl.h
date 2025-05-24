@@ -20,7 +20,7 @@ namespace tc { namespace crypto { namespace detail {
 	 * @tparam BlockCipher The class that implements the block cipher used for XTS mode encryption/decryption.
 	 * 
 	 * @details
-	 * The implementation of <var>BlockCipher</var> must satisfies the following conditions.
+	 * The implementation of <var>BlockCipher</var> must satisfy the following conditions.
 	 * 
 	 * -# Has a <tt>kBlockSize</tt> constant that defines the size of the block to process.
 	 * -# Has a <tt>kKeySize</tt> constant that defines the required key size to initialize the block cipher.

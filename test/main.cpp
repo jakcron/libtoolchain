@@ -60,6 +60,11 @@
 #include "crypto_Aes128XtsEncryptor_TestClass.h"
 #include "crypto_Aes256XtsEncryptor_TestClass.h"
 #include "crypto_Aes128CcmEncryptor_TestClass.h"
+#include "crypto_CmacAes128Generator_TestClass.h"
+#include "crypto_CmacAes192Generator_TestClass.h"
+#include "crypto_CmacAes256Generator_TestClass.h"
+#include "crypto_CmacTdes112Generator_TestClass.h"
+#include "crypto_CmacTdes168Generator_TestClass.h"
 #include "crypto_Des56EcbEncryptor_TestClass.h"
 #include "crypto_Des56CbcEncryptor_TestClass.h"
 #include "crypto_Tdes112EcbEncryptor_TestClass.h"
@@ -301,6 +306,11 @@ int main(int argc, char** argv)
 	runTest<crypto_Aes128XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes256XtsEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Aes128CcmEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_CmacAes128Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_CmacAes192Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_CmacAes256Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_CmacTdes112Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_CmacTdes168Generator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Des56EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Des56CbcEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Tdes112EcbEncryptor_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);

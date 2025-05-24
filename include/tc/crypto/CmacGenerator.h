@@ -1,28 +1,28 @@
 	/**
-	 * @file HmacGenerator.h
-	 * @brief Declaration of tc::crypto::HmacGenerator
+	 * @file CmacGenerator.h
+	 * @brief Declaration of tc::crypto::CmacGenerator
 	 * @author Jack (jakcron)
 	 * @version 0.1
-	 * @date 2020/05/30
+	 * @date 2024/12/10
 	 **/
 #pragma once
 #include <tc/types.h>
-#include <tc/crypto/detail/HmacImpl.h>
+#include <tc/crypto/detail/CmacImpl.h>
 
 namespace tc { namespace crypto {
 
 	/**
-	 * @class HmacGenerator
-	 * @brief Class for calculating an HMAC.
+	 * @class CmacGenerator
+	 * @brief Class for calculating an CMAC.
 	 * 
-	 * @tparam HashFunction The class that implements the hash function for generating HMAC.
+	 * @tparam BlockCipher The class that implements the CBC encryption operation for generating MAC.
 	 * 
 	 * @details
 	 * This class is a template class that takes a hash function implementation class as template parameter.
-	 * See @ref HmacSha2256Generator or similar for supplied realizations of this template class.
+	 * See @ref CmacAes128Generator or similar for supplied realizations of this template class.
 	 * 
-	 * The implementation of <var>HashFunction</var> must satisfy the following conditions.
-	 * See @ref Sha2256Generator or similar class, for more information including parameters to each function.
+	 * The implementation of <var>BlockCipher</var> must satisfy the following conditions.
+	 * See @ref Aes128Encryptor or similar class, for more information including parameters to each function.
 	 * 
 	 * -# Has a <tt>kBlockSize</tt> constant that defines the size of the block to process.
 	 * -# Has a <tt>kHashSize</tt> constant that defines the output size of the hash value.
@@ -42,17 +42,17 @@ namespace tc { namespace crypto {
 	 * 
 	 * Below is code sample for calculating MAC with one call to @ref update():
 	 * @code
-	 * std::string key = "i am an hmac key";
+	 * tc::ByteData key = tc::cli::FormatUtil::hexStringToBytes("2b7e151628aed2a6abf7158809cf4f3c");
 	 * 
 	 * // open file stream
 	 * auto stream = tc::io::FileStream("a_file.bin", tc::io::FileMode::Open, tc::io::FileAccess::Read);
 	 * 
 	 * // create array to store MAC
-	 * std::array<byte_t, tc::crypto::HmacGenerator<HashFunction>::kMacSize> mac;
+	 * std::array<byte_t, tc::crypto::CmacGenerator<BlockCipher>::kMacSize> mac;
 	 * 
-	 * // initialize generator. HmacGenerator<HashFunction> is now in a ready state. 
-	 * tc::crypto::HmacGenerator<HashFunction> impl;
-	 * impl.initialize((const byte_t*)key.c_str(), key.size());
+	 * // initialize generator. CmacGenerator<BlockCipher> is now in a ready state. 
+	 * tc::crypto::CmacGenerator<BlockCipher> impl;
+	 * impl.initialize(key.data(), key.size());
 	 * 
 	 * // reset stream position to beginning (not strictly necessary for an unused tc::io::FileStream)
 	 * stream.seek(0, tc::io::SeekOrigin::Begin);
@@ -70,7 +70,7 @@ namespace tc { namespace crypto {
 	 * 
 	 * Below is code sample for calculating MAC with sequential calls to @ref update():
 	 * @code
-	 * std::string key = "i am an hmac key";
+	 * tc::ByteData key = tc::cli::FormatUtil::hexStringToBytes("2b7e151628aed2a6abf7158809cf4f3c");
 	 * 
 	 * // open file stream
 	 * auto stream = tc::io::FileStream("a_file.bin", tc::io::FileMode::Open, tc::io::FileAccess::Read);
@@ -80,11 +80,11 @@ namespace tc { namespace crypto {
 	 * std::array<byte_t, kReadBlockSize> block;
 	 * 
 	 * // create array to store MAC
-	 * std::array<byte_t, tc::crypto::HmacGenerator<HashFunction>::kMacSize> mac;
+	 * std::array<byte_t, tc::crypto::CmacGenerator<BlockCipher>::kMacSize> mac;
 	 * 
-	 * // initialize generator. HmacGenerator<HashFunction> is now in a ready state. 
-	 * tc::crypto::HmacGenerator<HashFunction> impl;
-	 * impl.initialize((const byte_t*)key.c_str(), key.size());
+	 * // initialize generator. CmacGenerator<BlockCipher> is now in a ready state. 
+	 * tc::crypto::CmacGenerator<BlockCipher> impl;
+	 * impl.initialize(key.data(), key.size());
 	 * 
 	 * // reset stream position to beginning (not strictly necessary for an unused tc::io::FileStream)
 	 * stream.seek(0, tc::io::SeekOrigin::Begin);
@@ -104,12 +104,13 @@ namespace tc { namespace crypto {
 	 * impl.getMac(mac.data());
 	 * @endcode 
 	 */
-template <class HashFunction>
-class HmacGenerator
+template <class BlockCipher>
+class CmacGenerator
 {
 public:
-	static const size_t kMacSize   = HashFunction::kHashSize; /**< HMAC MAC size */
-	static const size_t kBlockSize = HashFunction::kBlockSize; /**< HMAC block processing size */
+	static const size_t kKeySize   = BlockCipher::kKeySize; /**< CMAC Key size */
+	static const size_t kMacSize   = BlockCipher::kBlockSize; /**< CMAC MAC size */
+	static const size_t kBlockSize = BlockCipher::kBlockSize; /**< CMAC block processing size */
 
 		/**
 		 * @brief Default constructor.
@@ -117,7 +118,7 @@ public:
 		 * @post
 		 * - State is None. @ref initialize() must be called before use.
 		 */
-	HmacGenerator() :
+	CmacGenerator() :
 		mImpl()
 	{}
 
@@ -126,6 +127,9 @@ public:
 		 * 
 		 * @param[in] key Pointer to key data.
 		 * @param[in] key_size Size in bytes of key data.
+		 * 
+		 * @pre
+		 * - @p key_size == @ref kKeySize.
 		 * 
 		 * @post
 		 * - Instance is now in a Initialized state
@@ -159,16 +163,16 @@ public:
 		 * memset(data.data(), 0xff, data.size());
 		 * 
 		 * // create generator instance
-		 * tc::crypto::HmacGenerator<HashFunction> impl;
+		 * tc::crypto::CmacGenerator<BlockCipher> impl;
 		 * 
 		 * // scenario 1 (one call to update() 0x30 bytes, totaling 0x30 bytes inputted)
-		 * std::array<byte_t, tc::crypto::HmacGenerator<HashFunction>::kMacSize> mac1;
+		 * std::array<byte_t, tc::crypto::CmacGenerator<BlockCipher>::kMacSize> mac1;
 		 * impl.initialize((const byte_t*)key.c_str(), key.size());
 		 * impl.update(data.data(), data.size());
 		 * impl.getMac(mac1.data());
 		 * 
 		 * // scenario 2 (three calls to update() 0x10 bytes each, totaling 0x30 bytes inputted)
-		 * std::array<byte_t, tc::crypto::HmacGenerator<HashFunction>::kMacSize> mac2;
+		 * std::array<byte_t, tc::crypto::CmacGenerator<BlockCipher>::kMacSize> mac2;
 		 * impl.initialize((const byte_t*)key.c_str(), key.size());
 		 * impl.update(data.data() + 0x00, 0x10);
 		 * impl.update(data.data() + 0x10, 0x10);
@@ -176,7 +180,7 @@ public:
 		 * impl.getMac(mac2.data());
 		 * 
 		 * // scenario 3 (two calls to update() one 0x10 bytes, the second 0x20 bytes, totaling 0x30 bytes inputted)
-		 * std::array<byte_t, tc::crypto::HmacGenerator<HashFunction>::kMacSize> mac3;
+		 * std::array<byte_t, tc::crypto::CmacGenerator<BlockCipher>::kMacSize> mac3;
 		 * impl.initialize((const byte_t*)key.c_str(), key.size());
 		 * impl.update(data.data() + 0x00, 0x10);
 		 * impl.update(data.data() + 0x10, 0x20);
@@ -213,7 +217,7 @@ public:
 	}
 
 private:
-	detail::HmacImpl<HashFunction> mImpl;
+	detail::CmacImpl<BlockCipher> mImpl;
 };
 
 }} // namespace tc::crypto
