@@ -87,11 +87,27 @@ public:
 				return;
 			}
 
-			// where update was called and there is an Unprocessed Block, address this before continuing block from previous update (if applicable)
+			// where update was called and there is data in mUnprocessedBlock (from previous call to update()), this must be handled first before processing new data
 			if (mUnprocessedBlockPos > 0)
 			{
-				// process unprocessed block if it is complete, and clear it
-				if (mUnprocessedBlockPos >= kBlockSize)
+				// try to complete block (with data if required)
+				size_t remaining_block_len = mUnprocessedBlock.size() - std::min<size_t>(mUnprocessedBlock.size(), mUnprocessedBlockPos);
+				size_t data_to_add_len = std::min<size_t>(remaining_block_len, data_size);
+
+				// only update block if there is data to add
+				if (data_to_add_len > 0)
+				{
+					memcpy(mUnprocessedBlock.data() + mUnprocessedBlockPos, data, data_to_add_len);
+					mUnprocessedBlockPos += data_to_add_len;
+
+					// update data & data_size
+					data_size -= data_to_add_len;
+					data += data_to_add_len;
+				}
+
+				// if unprocessed block is now complete, and there is more data to process -> update MAC and clear unprocessed block
+				// otherwise leave unprocessed block to be processed later
+				if (mUnprocessedBlockPos >= mUnprocessedBlock.size() && data_size > 0)
 				{
 					// update MAC
 					update_cbc_mac(mUnprocessedBlock.data());
@@ -99,33 +115,6 @@ public:
 					// clear unprocessed block
 					mUnprocessedBlockPos = 0;
 					memset(mUnprocessedBlock.data(), 0, mUnprocessedBlock.size());
-				}
-
-				// if the unprocessed block is partially complete AND there is enough data to complete the unprocessed block and more, then complete the unprocessed block
-				if (mUnprocessedBlockPos > 0 && data_size > 0)
-				{
-					// complete block
-					size_t remaining_block_len = mUnprocessedBlock.size() - mUnprocessedBlockPos;
-					size_t data_to_add_len = std::min<size_t>(remaining_block_len, data_size);
-
-					memcpy(mUnprocessedBlock.data() + mUnprocessedBlockPos, data, data_to_add_len);
-					mUnprocessedBlockPos += data_to_add_len;
-
-					// update data & data_size
-					data_size -= data_to_add_len;
-					data += data_to_add_len;
-
-					// if data_size is still > 0, then we need to process the Unprocessed Block
-					if (data_size > 0)
-					{
-						// update MAC
-						update_cbc_mac(mUnprocessedBlock.data());
-
-						// clear unprocessed block
-						mUnprocessedBlockPos = 0;
-						memset(mUnprocessedBlock.data(), 0, mUnprocessedBlock.size());
-					}
-					
 				}
 			}
 
@@ -144,8 +133,7 @@ public:
 				}
 
 				// process last block, however don't update the MAC, it needs to be preserved needs to be saved 
-				// mUnprocessedBlockPos will always be zero here, as will be cleared if was legitimately empty, or was cleared during the start of update
-				// mUnprocessedBlockPos will be non-zero if data is not long enough to complete the partial block at the beginning of update
+				// mUnprocessedBlockPos will always be zero/empty by this point as it must be cleared during the start of update
 				memcpy(mUnprocessedBlock.data(), data, std::min<size_t>(mBlockSize, data_size));
 				mUnprocessedBlockPos = std::min<size_t>(mBlockSize, data_size);
 			}
