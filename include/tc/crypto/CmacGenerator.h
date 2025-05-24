@@ -21,7 +21,7 @@ namespace tc { namespace crypto {
 	 * This class is a template class that takes a hash function implementation class as template parameter.
 	 * See @ref CmacAes128Generator or similar for supplied realizations of this template class.
 	 * 
-	 * The implementation of <var>BlockCipher</var> must satisfies the following conditions.
+	 * The implementation of <var>BlockCipher</var> must satisfy the following conditions.
 	 * See @ref Aes128Encryptor or similar class, for more information including parameters to each function.
 	 * 
 	 * -# Has a <tt>kBlockSize</tt> constant that defines the size of the block to process.
@@ -127,6 +127,9 @@ public:
 		 * 
 		 * @param[in] key Pointer to key data.
 		 * @param[in] key_size Size in bytes of key data.
+		 * 
+		 * @pre
+		 * - @p key_size == @ref kKeySize.
 		 * 
 		 * @post
 		 * - Instance is now in a Initialized state

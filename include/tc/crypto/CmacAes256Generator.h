@@ -32,6 +32,7 @@ using CmacAes256Generator = CmacGenerator<Aes256Encryptor>;
 	 * 
 	 * @pre
 	 * - Size of the MAC buffer must >= <tt>CmacAes256Generator::kMacSize</tt>.
+	 * - @p key_size == <tt>CmacAes256Generator::kMacSize</tt>.
 	 * 
 	 * @post
 	 * - The MAC is written to <tt><var>mac</var></tt>.

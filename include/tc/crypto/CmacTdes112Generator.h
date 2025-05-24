@@ -32,6 +32,7 @@ using CmacTdes112Generator = CmacGenerator<Tdes112Encryptor>;
 	 * 
 	 * @pre
 	 * - Size of the MAC buffer must >= <tt>CmacTdes112Generator::kMacSize</tt>.
+	 * - @p key_size == <tt>CmacTdes112Generator::kMacSize</tt>.
 	 * 
 	 * @post
 	 * - The MAC is written to <tt><var>mac</var></tt>.
