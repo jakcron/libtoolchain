@@ -23,7 +23,7 @@ namespace tc { namespace crypto {
 	 * This class is a template class that takes a block cipher implementation class as template parameter.
 	 * See @ref Aes128CbcEncryptor or similar for supplied realizations of this template class.
 	 * 
-	 * The implementation of @a BlockCipher must satisfies the following conditions.
+	 * The implementation of @a BlockCipher must satisfy the following conditions.
 	 * See @ref AesEncryptor or similar class, for more information including parameters to each function.
 	 * 
 	 * -# Has a @p kBlockSize constant that defines the size of the block to process.

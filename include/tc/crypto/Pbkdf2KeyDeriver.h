@@ -26,7 +26,7 @@ namespace tc { namespace crypto {
 	 * -# SHA2-384
 	 * -# SHA2-512 (see @ref Sha2512Generator)
 	 * 
-	 * The implementation of <var>HashFunction</var> must satisfies the following conditions.
+	 * The implementation of <var>HashFunction</var> must satisfy the following conditions.
 	 * See @ref Sha2256Generator or similar class, for more information including parameters to each function.
 	 * 
 	 * -# Has a <tt>kBlockSize</tt> constant that defines the size of the block to process.
