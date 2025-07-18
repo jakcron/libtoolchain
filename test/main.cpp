@@ -94,6 +94,7 @@
 #include "crypto_Rsa1024PssSha2512Signer_TestClass.h"
 #include "crypto_Rsa2048PssSha2512Signer_TestClass.h"
 #include "crypto_Rsa4096PssSha2512Signer_TestClass.h"
+#include "crypto_EccKeyGenerator_TestClass.h"
 
 #include "ITestClass.h"
 
@@ -340,6 +341,7 @@ int main(int argc, char** argv)
 	runTest<crypto_Rsa1024PssSha2512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa2048PssSha2512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 	runTest<crypto_Rsa4096PssSha2512Signer_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
+	runTest<crypto_EccKeyGenerator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 
 	// output results
 	outputResultsToStdout(global_test_results, include_result_regex, exclude_result_regex);
