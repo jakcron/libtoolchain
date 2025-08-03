@@ -9,7 +9,7 @@ size_t tc::crypto::EccUtil::eccIntegerBitLength(EccCurveType curve_type)
             ecc_int_bit_length = 192;
             break;
         case (ECC_CURVE_TYPE_SECP224R1):
-            ecc_int_bit_length = 244;
+            ecc_int_bit_length = 224;
             break;
         case (ECC_CURVE_TYPE_SECP256R1):
             ecc_int_bit_length = 256;
@@ -18,7 +18,7 @@ size_t tc::crypto::EccUtil::eccIntegerBitLength(EccCurveType curve_type)
             ecc_int_bit_length = 384;
             break;
         case (ECC_CURVE_TYPE_SECP521R1):
-            ecc_int_bit_length = 521;
+            ecc_int_bit_length = 521; 
             break;
         case (ECC_CURVE_TYPE_BP256R1):
             ecc_int_bit_length = 256;
