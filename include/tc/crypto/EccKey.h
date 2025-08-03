@@ -18,6 +18,8 @@ namespace tc { namespace crypto {
 	/**
 	 * @struct EccKey
 	 * @brief Struct for storing a ECC key. For use with ECC operations.
+	 * 
+	 * @note The public/private components are not compressed.
 	 */
 struct EccKey
 {
