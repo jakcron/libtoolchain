@@ -30,4 +30,4 @@ enum EccCurveType
     ECC_CURVE_TYPE_CURVE448,       /**< Curve448. */
 };
 
-}} // namespace tc::io
+}} // namespace tc::crypto
