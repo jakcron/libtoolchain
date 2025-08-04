@@ -58,7 +58,7 @@ public:
 		 * @throw tc::crypto::CryptoException Something failed during generation of a key.
 		 * @throw tc::crypto::CryptoException The random generator failed to generate non-zeros.
 		 * @throw tc::ArgumentException @p d was not null, but @p d_size was not large enough.
-		 * @throw tc::ArgumentException @p q was not null, but @p q_size was not large enough.
+		 * @throw tc::ArgumentException @p Q was not null, but @p Q_size was not large enough.
 		 */
 	void generateKey(EccCurveType ec_type, byte_t* d, size_t d_size, byte_t* Q, size_t Q_size);
 
@@ -82,9 +82,8 @@ public:
 		 * @throw tc::ArgumentOutOfRangeException @p ec_type was not of type @ref EccCurveType
 		 * @throw tc::crypto::CryptoException An unexpected error has occurred.
 		 * @throw tc::crypto::CryptoException Something failed during generation of a key.
-		 * @throw tc::crypto::CryptoException The random generator failed to generate non-zeros.
 		 * @throw tc::ArgumentException @p d was null, or @p d_size was not large enough.
-		 * @throw tc::ArgumentException @p q was not null, but @p q_size was not large enough.
+		 * @throw tc::ArgumentException @p Q was not null, but @p Q_size was not large enough.
 		 */
 	void generatePublicKey(EccCurveType ec_type, byte_t* d, size_t d_size, byte_t* Q, size_t Q_size);
 private:
