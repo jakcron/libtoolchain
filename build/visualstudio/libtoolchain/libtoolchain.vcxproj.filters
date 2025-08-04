@@ -82,6 +82,15 @@
     <ClCompile Include="..\..\..\src\crypto\Des56EcbEncryptor.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\EccKey.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\EccKeyGenerator.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\EccUtil.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\HmacMd5Generator.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
@@ -170,6 +179,9 @@
       <Filter>Source Files\crypto\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\detail\DesImpl.cpp">
+      <Filter>Source Files\crypto\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\detail\EccKeyGeneratorImpl.cpp">
       <Filter>Source Files\crypto\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\detail\Md5Impl.cpp">
@@ -432,6 +444,18 @@
     <ClInclude Include="..\..\..\include\tc\crypto\EcbEncryptor.h" >
         <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\EccCurveType.h" >
+        <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\EccKey.h" >
+        <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\EccKeyGenerator.h" >
+        <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\EccUtil.h" >
+        <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\HmacGenerator.h" >
         <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
@@ -562,6 +586,9 @@
         <Filter>Header Files\tc\crypto\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\detail\EcbModeImpl.h" >
+        <Filter>Header Files\tc\crypto\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\detail\EccKeyGeneratorImpl.h" >
         <Filter>Header Files\tc\crypto\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\detail\HmacImpl.h" >

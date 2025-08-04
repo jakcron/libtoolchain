@@ -179,6 +179,10 @@
     <ClInclude Include="..\..\..\include\tc\crypto\Des56EcbEncryptor.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\DesEncryptor.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\EcbEncryptor.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\EccCurveType.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\EccKey.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\EccKeyGenerator.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\EccUtil.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\HmacGenerator.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\HmacMd5Generator.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\HmacSha1Generator.h" />
@@ -223,6 +227,7 @@
     <ClInclude Include="..\..\..\include\tc\crypto\detail\CtrModeImpl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\DesImpl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\EcbModeImpl.h" />
+    <ClInclude Include="..\..\..\include\tc\crypto\detail\EccKeyGeneratorImpl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\HmacImpl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\Md5Impl.h" />
     <ClInclude Include="..\..\..\include\tc\crypto\detail\Pbkdf1Impl.h" />
@@ -320,6 +325,9 @@
     <ClCompile Include="..\..\..\src\crypto\CmacTdes168Generator.cpp" />
     <ClCompile Include="..\..\..\src\crypto\Des56CbcEncryptor.cpp" />
     <ClCompile Include="..\..\..\src\crypto\Des56EcbEncryptor.cpp" />
+    <ClCompile Include="..\..\..\src\crypto\EccKey.cpp" />
+    <ClCompile Include="..\..\..\src\crypto\EccKeyGenerator.cpp" />
+    <ClCompile Include="..\..\..\src\crypto\EccUtil.cpp" />
     <ClCompile Include="..\..\..\src\crypto\HmacMd5Generator.cpp" />
     <ClCompile Include="..\..\..\src\crypto\HmacSha1Generator.cpp" />
     <ClCompile Include="..\..\..\src\crypto\HmacSha2256Generator.cpp" />
@@ -350,6 +358,7 @@
     <ClCompile Include="..\..\..\src\crypto\Tdes168EcbEncryptor.cpp" />
     <ClCompile Include="..\..\..\src\crypto\detail\AesImpl.cpp" />
     <ClCompile Include="..\..\..\src\crypto\detail\DesImpl.cpp" />
+    <ClCompile Include="..\..\..\src\crypto\detail\EccKeyGeneratorImpl.cpp" />
     <ClCompile Include="..\..\..\src\crypto\detail\Md5Impl.cpp" />
     <ClCompile Include="..\..\..\src\crypto\detail\PrbgImpl.cpp" />
     <ClCompile Include="..\..\..\src\crypto\detail\RsaImpl.cpp" />
