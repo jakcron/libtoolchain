@@ -32,14 +32,15 @@ jobs:
     - name: Compile ${{ matrix.prog }}
       run: make PROJECT_PLATFORM_ARCH=${{ matrix.arch }} deps all
     - name: Run unit-tests ${{ matrix.prog }}
-      run: ./bin/${{ matrix.prog }}${{ matrix.bin_ext }}
+      run: ./bin/${{ matrix.prog }}${{ matrix.bin_ext }} --exres PASS --slow
   build_visualstudio:
     name: ${{ matrix.dist }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         dist: [win_x64, win_x86]
-        prog: [libtoolchain-test]
+        vs_sln: [libtoolchain]
+        bin_name: [libtoolchain-test]
         include:
          - dist: win_x64
            os: windows-latest
@@ -59,7 +60,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.3
     - name: Clone submodules
       run: git submodule init && git submodule update
-    - name: Compile ${{ matrix.prog }}
-      run: msbuild .\build\visualstudio\${{ matrix.prog }}.sln /p:configuration=${{ matrix.configuration }} /p:platform=${{ matrix.platform }} 
-    - name: Run unit-tests ${{ matrix.prog }}
-      run: .\build\visualstudio\${{ matrix.build_path }}\${{ matrix.prog }}${{ matrix.bin_ext }}
+    - name: Compile ${{ matrix.vs_sln }}
+      run: msbuild .\build\visualstudio\${{ matrix.vs_sln }}.sln /p:configuration=${{ matrix.configuration }} /p:platform=${{ matrix.platform }} 
+    - name: Run unit-tests ${{ matrix.bin_name }}
+      run: .\build\visualstudio\${{ matrix.build_path }}\${{ matrix.bin_name }}${{ matrix.bin_ext }} --exres PASS --slow
