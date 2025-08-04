@@ -63,4 +63,4 @@ jobs:
     - name: Compile ${{ matrix.vs_sln }}
       run: msbuild .\build\visualstudio\${{ matrix.vs_sln }}.sln /p:configuration=${{ matrix.configuration }} /p:platform=${{ matrix.platform }} 
     - name: Run unit-tests ${{ matrix.bin_name }}
-      run: .\build\visualstudio\${{ matrix.build_path }}\${{ matrix.bin_name }}${{ matrix.bin_ext }} --exres PASS --slow
+      run: .\build\visualstudio\${{ matrix.build_path }}\${{ matrix.bin_name }}${{ matrix.bin_ext }} --exres PASS
