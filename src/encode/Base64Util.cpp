@@ -8,18 +8,14 @@ inline std::string byteDataAsString(const tc::ByteData& data)
 {
 	std::string str = "";
 	
-	if (data.size() > 0)
+	for (size_t i = 0; i < data.size(); i++)
 	{
-		str = std::string((const char*)data.data());
-	}
-
-	for (size_t i = 0; i < str.size(); i++)
-	{
-		if ( ! std::isprint(static_cast<unsigned char>(str[i])) )
+		if ( ! std::isprint(static_cast<unsigned char>(data[i])) )
 		{
-			str = "";
 			break;
 		}
+
+		str.push_back(static_cast<char>(data[i]));
 	}
 
 	return str;
