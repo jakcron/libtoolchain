@@ -17,7 +17,7 @@ namespace tc { namespace crypto { namespace detail {
 
 	/**
 	 * @class EccKeyGeneratorImpl
-	 * @brief This class implements the RSA key generation.
+	 * @brief This class implements the ECC key generation.
 	 */
 class EccKeyGeneratorImpl
 {
@@ -25,7 +25,7 @@ public:
 		/**
 		 * @brief Default constructor
 		 * @details
-		 * This initializes RSA key generator state.
+		 * This initializes ECC key generator state.
 		 */
 	EccKeyGeneratorImpl();
 
