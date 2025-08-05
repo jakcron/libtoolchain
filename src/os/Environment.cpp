@@ -1,6 +1,12 @@
 #include <tc/os/Environment.h>
 #include <tc/string.h>
 
+#ifdef _WIN32
+#include <fileapi.h>
+#else
+
+#endif
+
 bool tc::os::getEnvVar(const std::string& name, std::string& value)
 {
 	bool did_find_variable = false;
