@@ -91,6 +91,9 @@
     <ClCompile Include="..\..\..\src\crypto\EccUtil.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\EcdhSharedSecretGenerator.cpp">
+      <Filter>Source Files\crypto</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\HmacMd5Generator.cpp">
       <Filter>Source Files\crypto</Filter>
     </ClCompile>
@@ -182,6 +185,9 @@
       <Filter>Source Files\crypto\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\detail\EccKeyGeneratorImpl.cpp">
+      <Filter>Source Files\crypto\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\crypto\detail\EcdhSharedSecretGeneratorImpl.cpp">
       <Filter>Source Files\crypto\detail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\crypto\detail\Md5Impl.cpp">
@@ -456,6 +462,9 @@
     <ClInclude Include="..\..\..\include\tc\crypto\EccUtil.h" >
         <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\EcdhSharedSecretGenerator.h" >
+        <Filter>Header Files\tc\crypto</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\HmacGenerator.h" >
         <Filter>Header Files\tc\crypto</Filter>
     </ClInclude>
@@ -589,6 +598,9 @@
         <Filter>Header Files\tc\crypto\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\detail\EccKeyGeneratorImpl.h" >
+        <Filter>Header Files\tc\crypto\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tc\crypto\detail\EcdhSharedSecretGeneratorImpl.h" >
         <Filter>Header Files\tc\crypto\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tc\crypto\detail\HmacImpl.h" >
