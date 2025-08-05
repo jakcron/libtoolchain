@@ -1,5 +1,5 @@
 #include <tc/os/Environment.h>
-#include <tc/io/LocalFileSystem.h>
+#include <tc/string.h>
 
 bool tc::os::getEnvVar(const std::string& name, std::string& value)
 {
