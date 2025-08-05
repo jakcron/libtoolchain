@@ -131,8 +131,10 @@ void runTest(std::vector<TestClassResult>& global_test_results, const std::regex
 	global_test_results.push_back(std::move(local_test_results));
 }
 
-void outputResultsToStdout(const std::vector<TestClassResult>& global_test_results, const std::regex& include_result_regex, const std::regex& exclude_result_regex)
+int outputResultsToStdout(const std::vector<TestClassResult>& global_test_results, const std::regex& include_result_regex, const std::regex& exclude_result_regex)
 {
+	int res = 0;
+
 	for (auto test_class_itr = global_test_results.begin(); test_class_itr != global_test_results.end(); test_class_itr++)
 	{
 		size_t total_tests = 0, total_passed_tests = 0;
@@ -155,7 +157,13 @@ void outputResultsToStdout(const std::vector<TestClassResult>& global_test_resul
 			fmt::print("\n");
 		}
 		fmt::print("[{:s}] END ({:d}/{:d} passed)\n", test_class_itr->tag, total_passed_tests, total_tests);
+		
+		// change return value if tests failed
+		if (total_passed_tests < total_tests)
+			res -= 1;
 	}
+
+	return res;
 }
 
 int main(int argc, char** argv)
@@ -344,5 +352,5 @@ int main(int argc, char** argv)
 	runTest<crypto_EccKeyGenerator_TestClass>(global_test_results, include_test_regex, exclude_test_regex, include_slow_tests);
 
 	// output results
-	outputResultsToStdout(global_test_results, include_result_regex, exclude_result_regex);
+	return outputResultsToStdout(global_test_results, include_result_regex, exclude_result_regex);
 }
