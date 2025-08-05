@@ -2,7 +2,7 @@
 #include <tc/string.h>
 
 #ifdef _WIN32
-#include <fileapi.h>
+#include <windows.h>
 #else
 
 #endif
