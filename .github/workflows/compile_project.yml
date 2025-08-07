@@ -3,8 +3,6 @@ name: Compile Project (Push/PR/Release)
 on:
   push:
     branches: [ development-tip, stable ]
-  pull_request:
-    branches: [ development-tip, stable ]
   release:
     types: [ created ]
 

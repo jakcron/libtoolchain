@@ -2,7 +2,7 @@ name: Run Unit-Tests (PR)
 
 on:
   pull_request:
-    branches: [ development-tip ]
+    branches: [ development-tip, stable ]
 
 jobs:
   build_makefile:
