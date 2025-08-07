@@ -43,7 +43,7 @@ static const std::vector<std::string> kOSTempDirEnvVarList = {"TMPDIR", "TMP", "
 
 void tc::os::getTempDirPath(tc::io::Path& dir_path)
 {
-#ifdef 0
+#if 0
 // #ifdef _WIN32
 	DWORD dir_buffer_size = MAX_PATH+1;
 	std::shared_ptr<wchar_t> dir_buffer(new wchar_t[dir_buffer_size]);
