@@ -1,12 +1,6 @@
 #include <tc/os/Environment.h>
 #include <tc/string.h>
 
-#ifdef _WIN32
-#include <windows.h>
-#else
-
-#endif
-
 bool tc::os::getEnvVar(const std::string& name, std::string& value)
 {
 	bool did_find_variable = false;
@@ -49,7 +43,8 @@ static const std::vector<std::string> kOSTempDirEnvVarList = {"TMPDIR", "TMP", "
 
 void tc::os::getTempDirPath(tc::io::Path& dir_path)
 {
-#ifdef _WIN32
+#ifdef 0
+// #ifdef _WIN32
 	DWORD dir_buffer_size = MAX_PATH+1;
 	std::shared_ptr<wchar_t> dir_buffer(new wchar_t[dir_buffer_size]);
 
