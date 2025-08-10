@@ -249,11 +249,6 @@
     <ClInclude Include="..\..\..\include\tc\encode.h" />
     <ClInclude Include="..\..\..\include\tc\io\BasicPathResolver.h" />
     <ClInclude Include="..\..\..\include\tc\io\ConcatenatedStream.h" />
-    <ClInclude Include="..\..\..\include\tc\io\EmptyStream.h" />
-    <ClInclude Include="..\..\..\include\tc\io\DirectoryNotEmptyException.h" />
-    <ClInclude Include="..\..\..\include\tc\io\DirectoryNotFoundException.h" />
-    <ClInclude Include="..\..\..\include\tc\io\BasicPathResolver.h" />
-    <ClInclude Include="..\..\..\include\tc\io\ConcatenatedStream.h" />
     <ClInclude Include="..\..\..\include\tc\io\DirectoryNotEmptyException.h" />
     <ClInclude Include="..\..\..\include\tc\io\DirectoryNotFoundException.h" />
     <ClInclude Include="..\..\..\include\tc\io\EmptyStream.h" />
