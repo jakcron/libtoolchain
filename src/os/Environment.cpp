@@ -38,3 +38,39 @@ bool tc::os::getEnvVar(const std::string& name, std::string& value)
 #endif
 	return did_find_variable;
 }
+
+static const std::vector<std::string> kOSTempDirEnvVarList = {"TMPDIR", "TMP", "TEMP", "TEMPDIR"};
+
+void tc::os::getTempDirPath(tc::io::Path& dir_path)
+{
+#if 0
+// #ifdef _WIN32
+	DWORD dir_buffer_size = MAX_PATH+1;
+	std::shared_ptr<wchar_t> dir_buffer(new wchar_t[dir_buffer_size]);
+
+	DWORD dir_string_size = GetTempPath2W(dir_buffer_size, dir_buffer.get());
+
+	if (dir_string_size == 0)
+	{
+		throw tc::io::DirectoryNotFoundException("Operating system could not provide temporary directory.");
+	}
+
+	dir_path = tc::io::Path(std::u16string(dir_buffer.get()));
+#else
+	std::string dir_path_str = "";
+	for (size_t i = 0; i < kOSTempDirEnvVarList.size(); i++)
+	{
+		if (tc::os::getEnvVar(kOSTempDirEnvVarList[i], dir_path_str) && dir_path_str != "")
+		{
+			break;
+		}
+	}
+
+	if (dir_path_str.size() == 0)
+	{
+		throw tc::io::DirectoryNotFoundException("Operating system could not provide temporary directory.");
+	}
+
+	dir_path = tc::io::Path(dir_path_str);
+#endif
+}

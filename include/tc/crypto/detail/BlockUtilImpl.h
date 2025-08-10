@@ -30,6 +30,30 @@ inline void incr_counter(byte_t* counter, uint64_t incr)
 }
 
 template <>
+inline void incr_counter<8>(byte_t* counter, uint64_t incr)
+{
+	tc::bn::be64<uint64_t>* counter_words = (tc::bn::be64<uint64_t>*)counter;
+
+	uint64_t carry = incr;
+	while (carry > 0)
+	{
+		uint64_t word = counter_words[0].unwrap();
+		uint64_t remaining = std::numeric_limits<uint64_t>::max() - word;
+
+		if (remaining > carry)
+		{
+			counter_words[0].wrap(word + carry);
+			carry = 0;
+		}
+		else
+		{
+			counter_words[0].wrap(carry - remaining - 1);
+			carry = 1;
+		}
+	}
+}
+
+template <>
 inline void incr_counter<16>(byte_t* counter, uint64_t incr)
 {
 	tc::bn::be64<uint64_t>* counter_words = (tc::bn::be64<uint64_t>*)counter;
@@ -57,6 +81,12 @@ template <size_t BlockSize>
 inline void xor_block(byte_t* dst, const byte_t* src_a, const byte_t* src_b)
 {
 	for (size_t i = 0; i < BlockSize; i++) { dst[i] = src_a[i] ^ src_b[i];}
+}
+
+template <>
+inline void xor_block<8>(byte_t* dst, const byte_t* src_a, const byte_t* src_b)
+{
+	((uint64_t*)dst)[0] = ((uint64_t*)src_a)[0] ^ ((uint64_t*)src_b)[0];
 }
 
 template <>
