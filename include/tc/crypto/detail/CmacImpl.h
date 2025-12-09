@@ -145,7 +145,7 @@ public:
 		if (mState == State::Initialized)
 		{
 			// finalise mac, and tranisition to done state
-			std::array<byte_t, kBlockSize> M_last;
+			std::array<byte_t, kBlockSize> M_last = {};
 	
 			// 1) transform last unprocessed to M_last block
 			if (mUnprocessedBlockPos == kBlockSize)
