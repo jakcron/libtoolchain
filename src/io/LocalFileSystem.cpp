@@ -9,7 +9,9 @@
 #include <direct.h>
 #include <cstdlib>
 
+#ifdef _MSC_VER
 #pragma warning(disable : 4065) // disable warning for switch case with only default case
+#endif
 
 #else
 #include <sys/stat.h>
@@ -580,6 +582,8 @@ void tc::io::LocalFileSystem::getDirectoryChildren(const std::string& method_nam
 
 #ifdef _WIN32
 
+#ifdef _MSC_VER
 #pragma warning(default : 4065) // reenable warning for switch case with only default case
+#endif
 
 #endif
