@@ -445,7 +445,9 @@ void tc::io::FileStream::flush_impl()
 	}
 }
 
+#ifdef _MSC_VER
 #pragma warning(default : 4065)  // reenable warning for switch case with only default case
+#endif
 
 #else
 void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, FileAccess access)
