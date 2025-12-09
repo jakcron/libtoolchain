@@ -26,7 +26,7 @@
 #include <tc/io/PathTooLongException.h>
 
 #ifdef _WIN32
-#include <Windows.h>
+#include <windows.h>
 #else
 #include <cstdio>
 #endif
