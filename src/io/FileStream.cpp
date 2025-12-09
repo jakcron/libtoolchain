@@ -274,7 +274,7 @@ void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, File
 	}
 
 	// append can only open in write only mode
-	if (mode == tc::io::FileMode::Append && (access_flag & GENERIC_READ | GENERIC_WRITE) != GENERIC_WRITE)
+	if (mode == tc::io::FileMode::Append && (access_flag & (GENERIC_READ | GENERIC_WRITE)) != GENERIC_WRITE)
 	{
 		throw tc::ArgumentException(kClassName + "::open()", "Stream opened in Append mode can only work with Write access. ReadWrite is not permitted");
 	}
