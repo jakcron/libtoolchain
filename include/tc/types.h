@@ -20,7 +20,9 @@
 #include <tc/bn.h>
 
 #ifdef _WIN32
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #endif
 
 	/// Alias uint8_t to byte_t to more explicity indicate its role in memory related contexts
