@@ -198,7 +198,9 @@ void tc::io::FileStream::dispose()
 
 #ifdef _WIN32
 
+#ifdef _MSC_VER
 #pragma warning(disable : 4065) // disable warning for switch case with only default case
+#endif
 
 void tc::io::FileStream::open_impl(const tc::io::Path& path, FileMode mode, FileAccess access)
 {
